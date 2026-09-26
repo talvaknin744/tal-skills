@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "book-response.schema.json",
+  "title": "Book selection response",
+  "description": "Echo the request identifiers. A replacement response contains one candidate, never the full accepted collection. Source availability and identity support require coordinator verification; a valid URL alone is not evidence. Do not claim exact training-set membership.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "role", "request_kind", "status"],
+  "properties": {
+    "request_id": { "$ref": "#/definitions/text" },
+    "role": { "$ref": "#/definitions/text" },
+    "request_kind": { "enum": ["initial", "replacement"] },
+    "status": { "enum": ["selected", "unavailable"] },
+    "books": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/definitions/book" }
+    },
+    "reason": { "$ref": "#/definitions/text" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "selected" } } },
+      "then": { "required": ["books"], "not": { "required": ["reason"] } },
+      "else": { "required": ["reason"], "not": { "required": ["books"] } }
+    },
+    {
+      "if": { "properties": { "request_kind": { "const": "replacement" } } },
+      "then": { "properties": { "books": { "type": "array", "maxItems": 1 } } }
+    }
+  ],
+  "definitions": {
+    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "book": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "author", "edition", "source_url", "locator", "fit"],
+      "properties": {
+        "title": { "$ref": "#/definitions/text" },
+        "author": { "$ref": "#/definitions/text" },
+        "edition": { "$ref": "#/definitions/text" },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://[^\\s/?#]+",
+          "description": "An available source supporting this exact title, author, and edition; prefer the author or publisher. The coordinator must open it before acceptance."
+        },
+        "locator": {
+          "$ref": "#/definitions/text",
+          "description": "Where the exact edition is supported in the cited source, such as its edition statement or bibliographic entry."
+        },
+        "fit": {
+          "$ref": "#/definitions/text",
+          "description": "Why this book helps this role answer the concrete question."
+        }
+      }
+    }
+  }
+}
