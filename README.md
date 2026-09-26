@@ -1,8 +1,13 @@
 # tal-skills
 
-Portable agent skills for practical software architecture decisions.
+Portable agent skills, organized by concern and backed by realistic evaluation cases.
 
-The first skill, **architecture**, plans new designs and reviews existing systems. It starts with the user's question and the available evidence. Independent specialists and book grounding are available when they improve the decision or are explicitly requested.
+## Skills
+
+| Concern | Skill | Use it for |
+|---|---|---|
+| Engineering | [architecture](skills/engineering/architecture/SKILL.md) | Architecture planning and review, with optional independent specialists and book grounding |
+| Engineering | [idempotency](skills/engineering/idempotency/SKILL.md) | Designing, implementing, and reviewing retry-safe APIs, webhooks, and queue workers |
 
 ## Install
 
@@ -10,13 +15,14 @@ Using the [skills CLI](https://github.com/vercel-labs/skills):
 
 ```sh
 npx skills@latest add talvaknin744/tal-skills --skill architecture
+npx skills@latest add talvaknin744/tal-skills --skill idempotency
 ```
 
-Alternatively, copy the entire `skills/engineering/architecture` directory into your agent's supported skills directory. Keep its references and `agents` directory together. The skill instructions require no npm installation, API key, specific model, or NanoClaw runtime. Optional independent panels need a host with subagents; current-source and book verification need access to relevant sources.
+Alternatively, copy a complete `skills/<concern>/<skill-name>` directory into your agent's supported skills directory. Keep its references and `agents` directory together. The instructions require no npm installation, API key, specific model, or NanoClaw runtime. Optional panels need subagents; source verification needs access to relevant sources. Implementation work uses the tools and dependencies of the target project.
 
 ## Use
 
-Invoke `$architecture` in Codex, or use your agent's skill invocation mechanism. It can also be selected for architecture requests by hosts supporting automatic discovery.
+Invoke `$architecture` or `$idempotency` in Codex, or use your agent's skill invocation mechanism. Hosts supporting automatic discovery can select a skill when its description matches the request.
 
 ```text
 Use $architecture to review our checkout architecture.
@@ -24,13 +30,13 @@ Prioritize data consistency and recovery. Cite the code behind each risk.
 ```
 
 ```text
-Use $architecture to plan a modular monolith for this product.
-We have two engineers and six weeks. Preserve the existing public API.
+Use $idempotency to review this webhook handler.
+Check concurrent deliveries, changed payloads, and crashes after downstream success.
 ```
 
 ```text
-Use $architecture with independent security and reliability perspectives.
-State disagreements and the evidence that would resolve them.
+Use $idempotency to fix duplicate invoice creation in this endpoint.
+Preserve its public contract and add regression tests in the existing framework.
 ```
 
 ```text
@@ -38,18 +44,16 @@ Use $architecture to evaluate this design against the named book and edition.
 Strictly verify each attribution and report anything you cannot substantiate.
 ```
 
-Routine implementation, debugging, and ordinary PR review are outside this skill's trigger. Architecture analysis is read-only unless implementation is authorized. A strict requirement remains explicitly unresolved when the necessary capability or evidence is unavailable.
+The architecture skill excludes routine implementation, debugging, and ordinary PR review. The idempotency skill handles focused design, review, and implementation of duplicate-suppression and recovery behavior. Reviews stay read-only unless execution is already authorized; implementation requests authorize their scoped changes. Required capabilities or evidence that are missing remain explicit limitations.
 
-## What changed from the original
+## Design principles
 
-- Direct evidence-based analysis is the default; specialist panels scale with material risks.
-- Research is tied to relevant changing facts. Ordinary reviews have no book quota.
-- Every correction or replacement stage has a bounded retry and a stated failure outcome.
-- The final answer leads with the decision, useful strengths, risks, and next steps.
-- Book replacement responses and complete accepted collections have separate contracts and stable IDs.
-- Structural checks and contract regressions run in CI; behavioral cases use real miniature fixtures and observable rubrics.
+- Keep triggers specific and the common workflow short; load conditional references only when relevant.
+- Work from concrete project evidence and preserve the user's scope and technology choices.
+- Give failure and recovery paths an observable outcome instead of claiming unsupported guarantees.
+- Test behavior with realistic inputs; distinguish deterministic repository checks from agent evaluations.
 
-The skill preserves the original's useful separation between architectural direction and operational proof. Source citations and agreement between agents do not prove a system works in production.
+Source citations, remembered patterns, and agreement between agents do not prove a system works in production.
 
 ## Repository map
 
@@ -60,30 +64,26 @@ keep each skill self-contained and its name unique across the repository.
 ```text
 skills/
 └── engineering/
-    └── architecture/
-        ├── SKILL.md
-        ├── LICENSE
-        ├── agents/
-        └── references/
+    ├── architecture/
+    └── idempotency/
 evals/
 ├── README.md
-└── architecture/
-    ├── cases.json
-    └── fixtures/
+├── architecture/
+└── idempotency/
 scripts/
 ├── check-skills.mjs
 └── architecture/
 tests/
-└── architecture/
+├── architecture/
+└── idempotency/
 ```
 
 | Path | Purpose |
 |---|---|
-| [skills/engineering/architecture/SKILL.md](skills/engineering/architecture/SKILL.md) | Entry point and shared workflow |
-| [skills/engineering/architecture/references](skills/engineering/architecture/references) | Planning, review, panels, book grounding, and book contracts |
-| [scripts/architecture](scripts/architecture) | Maintainer validation tools |
-| [tests/architecture](tests/architecture) | Deterministic regression and fixture-integrity tests |
-| [evals/architecture](evals/architecture) | Behavioral scenarios, source fixtures, and evaluation procedure |
+| [skills/engineering](skills/engineering) | Self-contained skills: each has SKILL.md, optional references, and UI metadata |
+| [scripts](scripts) | Shared packaging checks and skill-specific maintainer tools |
+| [tests](tests) | Deterministic regression and fixture-integrity tests, grouped by skill |
+| [evals](evals) | Behavioral scenarios and isolated project fixtures, grouped by skill |
 
 ## Validate changes
 
@@ -102,6 +102,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for adding the next skill.
 
 ## Attribution and license
 
-Revised from [NanoClaw's Code Architect](https://github.com/nanocoai/nanoclaw-templates/tree/7d3cb40409a4a7b8f2cf562b0d80fceb612b941b/engineering/code-architect), created by [zvi-fried](https://github.com/zvi-fried), under the MIT license. The upstream copyright notice is retained in [LICENSE](LICENSE).
+The architecture skill is revised from [NanoClaw's Code Architect](https://github.com/nanocoai/nanoclaw-templates/tree/7d3cb40409a4a7b8f2cf562b0d80fceb612b941b/engineering/code-architect), created by [zvi-fried](https://github.com/zvi-fried), under the MIT license. Its upstream copyright notice is retained in [LICENSE](LICENSE).
+
+The idempotency skill was prompted by Dochia's [Idempotency Is Easy Until the Second Request Is Different](https://blog.dochia.dev/blog/idempotency/). Its independently written instructions link to [primary technical references](skills/engineering/idempotency/references/sources.md); the article is not bundled or relicensed.
 
 Instruction design follows the principles described in Matt Pocock's [Writing for Agents](https://www.aihero.dev/skills-writing-for-agents): precise routing, progressive disclosure, observable completion, and removing instructions that do not change useful behavior. This repository is an independent revision and is not endorsed by those projects.

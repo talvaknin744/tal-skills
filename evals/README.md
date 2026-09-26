@@ -2,7 +2,7 @@
 
 These cases are authored evaluation inputs, **not evidence that the skill has passed a behavioral test**. The fixture code is deliberately small and sometimes flawed. It is material to inspect, not software to deploy.
 
-`architecture/cases.json` keeps prompts, available capabilities, and observable scoring criteria separate from the project fixtures. Give the agent only the selected prompt, its fixture directory, the candidate skill, and the stated capabilities. Do not include the rubric, other cases, or this evaluator guide in its context. Each fixture directory is a separate project.
+Each `<skill-name>/cases.json` keeps prompts, available capabilities, and observable scoring criteria separate from the project fixtures. Give the agent only the selected prompt, its fixture directory, the candidate skill, and the stated capabilities. Do not include the rubric, other cases, or this evaluator guide in its context. Each fixture directory is a separate project.
 
 ## Run a case
 
@@ -41,4 +41,4 @@ The zeros and placeholders above describe the record format; they are not measur
 
 ## Automated checks
 
-Run `node --test tests/architecture/evals.test.mjs` to validate case identifiers, rubric structure, capability declarations, and fixture existence and isolation. This is a **corpus integrity check**, not a behavioral evaluation of the agent. Contract recovery is tested separately by the repository's contract tests; it need not be inferred from a prose answer in this suite.
+Run `npm test` for all deterministic checks, or `node --test tests/<skill-name>/evals.test.mjs` to validate one corpus. These checks cover case identifiers, rubric structure, capability declarations, and fixture existence and isolation. A **corpus integrity check** is not a behavioral evaluation of the agent. Architecture's book-contract recovery is tested separately by its contract tests; idempotency fixtures are examples to inspect, not a production idempotency library.

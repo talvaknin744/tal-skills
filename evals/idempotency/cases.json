@@ -1,0 +1,151 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "scoped-transfer-identity",
+      "title": "Transfer retries bind intent and authorization to a scoped operation",
+      "tags": ["identity", "authorization", "request-mismatch"],
+      "prompt": "Review this transfer handler for idempotency and isolation. What happens when two tenants use the same key, or one tenant retries a key with a different amount? Recommend a coherent fix and the most important checks. Keep the files unchanged.",
+      "fixture_dir": "evals/idempotency/fixtures/scoped-transfer",
+      "fixtures": ["requirements.md", "transfer.mjs"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "scoped-auth", "severity": "critical", "criterion": "Identifies the shared key and cached response before authorization as a cross-tenant disclosure risk; requires trusted tenant and operation scoping plus authorization on replay, including changed access."},
+        {"id": "intent-binding", "severity": "critical", "criterion": "Explains that same-key different transfer intent must be rejected rather than replayed or executed; compares a validated normalized command that includes the effect-relevant fields, not raw JSON ordering alone."},
+        {"id": "atomic-effect", "severity": "major", "criterion": "Identifies concurrent cache misses and the ledger-commit/cache-write crash window; proposes ownership and durable outcome tied to the monetary effect rather than merely adding a cache lock or body hash."},
+        {"id": "distinct-operations", "severity": "major", "criterion": "Preserves the requirement that different keys can represent two deliberate equal transfers; does not collapse every equal payload into one business operation."},
+        {"id": "observable-checks", "severity": "major", "criterion": "Calls for same-key changed-amount, warm-cache cross-tenant, revoked-access replay, concurrent first-attempt, and commit-before-response checks with explicit expected effect counts or denied access."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all fixture files unchanged and distinguishes proposed checks from checks actually executed."}
+      ]
+    },
+    {
+      "id": "expired-lease-owner",
+      "title": "An atomic lease claim cannot stop a stale worker from applying an effect",
+      "tags": ["concurrency", "leases", "fencing"],
+      "prompt": "Review whether this reservation worker is safe against duplicate processing, including a worker that pauses beyond its lease and resumes. Recommend the smallest robust approach using the existing database and give a concrete failure schedule to validate. Do not change files.",
+      "fixture_dir": "evals/idempotency/fixtures/lease-takeover",
+      "fixtures": ["design.md", "worker.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "stale-effect", "severity": "critical", "criterion": "Describes worker A claiming and pausing, worker B reclaiming and reserving, then A resuming and reserving again; recognizes that checking owner only on completion does not protect the inventory decrement."},
+        {"id": "atomic-boundary", "severity": "critical", "criterion": "Places ownership validation and the protected inventory effect within an enforceable atomic boundary or uses an equivalent unique business-effect record; a separate pre-effect owner check alone is not accepted as sufficient."},
+        {"id": "claim-isolation", "severity": "major", "criterion": "Acknowledges that the supplied claim is already atomic while explaining its limited protection; does not diagnose an unsupported read-before-insert claim race as the main defect."},
+        {"id": "recoverable-state", "severity": "major", "criterion": "Addresses the crash after stock decrement before completion and requires a durable outcome or uniqueness invariant so recovery cannot decrement stock twice."},
+        {"id": "proportionate-check", "severity": "major", "criterion": "Uses the existing SQL database and proposes an observable paused-worker/takeover/crash schedule whose successful result is one reservation effect, rather than requiring a new distributed lock platform."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all fixture files unchanged and makes no unsupported claim that the proposed race test passed."}
+      ]
+    },
+    {
+      "id": "unknown-external-payout",
+      "title": "A lost payout response remains uncertain without provider deduplication or lookup",
+      "tags": ["external-effects", "ambiguous-outcome", "recovery"],
+      "prompt": "Can we make this payout retry automatically until it succeeds by storing the client key locally? Assess the incident and specify safe retry and recovery behavior under the provider's stated limitations. Keep the incident document unchanged.",
+      "fixture_dir": "evals/idempotency/fixtures/unknown-payout",
+      "fixtures": ["incident.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "unknown-not-failed", "severity": "critical", "criterion": "Treats the timeout as an unknown external outcome that may already have paid; rejects the claim that local key storage alone makes the next payout attempt safe."},
+        {"id": "no-invented-capability", "severity": "critical", "criterion": "Does not assume a provider idempotency key, reference lookup, transaction participation, or safe automatic re-execution that the fixture explicitly rules out."},
+        {"id": "safe-replay", "severity": "major", "criterion": "Keeps repeated client requests associated with the unresolved operation and returns a pending or unresolved result without executing another payout merely because the first request timed out."},
+        {"id": "bounded-reconciliation", "severity": "major", "criterion": "Uses the documented settlement/manual investigation path, retains the necessary operation evidence, and requires confirmation of non-execution before a replacement payout; states remaining limitations explicitly."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves the fixture unchanged and does not claim an external payout was verified or reconciled."}
+      ]
+    },
+    {
+      "id": "outbox-send-mark-crash",
+      "title": "Outbox replay must retain the downstream operation identity",
+      "tags": ["outbox", "downstream-identity", "crash-recovery"],
+      "prompt": "The checkout outbox is transactional, but some customers still get duplicate receipts. Review this relay and explain the send/mark crash window. Recommend the minimum change supported by the provided MailPort contract and a meaningful validation plan. Do not edit files.",
+      "fixture_dir": "evals/idempotency/fixtures/outbox-mail",
+      "fixtures": ["requirements.md", "relay.mjs"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "crash-window", "severity": "critical", "criterion": "Identifies provider acceptance followed by a crash before markSent as a duplicate-send window and explains why the transactional outbox alone does not close it."},
+        {"id": "stable-provider-key", "severity": "critical", "criterion": "Replaces the per-attempt random identity in the recommendation with an operation-stable namespaced key derived from the persisted event identity and retains the immutable payload on replay."},
+        {"id": "guarantee-boundary", "severity": "major", "criterion": "Limits the guarantee to deduplicated provider acceptance within the supplied seven-day retention, notes that the 48-hour retry horizon fits it, and does not claim exactly-once inbox delivery."},
+        {"id": "failure-validation", "severity": "major", "criterion": "Proposes a crash after successful send before mark, followed by replay and concurrent delivery, checking one provider acceptance and eventual local completion using the same downstream key."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves fixture files unchanged and does not present a proposed provider integration test as an executed result."}
+      ]
+    },
+    {
+      "id": "retention-and-version-drift",
+      "title": "Cleanup and normalization changes cannot erase unresolved operation semantics",
+      "tags": ["retention", "canonicalization", "migration"],
+      "prompt": "Review this idempotency cleanup and normalization rollout. Is increasing the TTL to 72 hours sufficient? Explain how retries should behave across deployment versions, what unresolved records need, and what must be decided before release. Do not modify policy.md.",
+      "fixture_dir": "evals/idempotency/fixtures/retention-upgrade",
+      "fixtures": ["policy.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "unresolved-retention", "severity": "critical", "criterion": "Rejects deleting pending or unknown operations solely by the completed-response TTL because that loses recovery evidence and can allow a duplicate shipment."},
+        {"id": "expired-identity", "severity": "major", "criterion": "Explains that deleting a completed record can make a later same-key request look new, and explicitly resolves or flags the conflict among the documented 72-hour window, 14-day support replay, late devices, and downstream recovery horizon."},
+        {"id": "normalization-version", "severity": "critical", "criterion": "Identifies changed omitted-field meaning across normalizer versions, and proposes preserving the accepted canonical command/version or an equivalent compatibility policy; does not treat raw JSON hashing as a sufficient fix."},
+        {"id": "legacy-evidence", "severity": "major", "criterion": "Acknowledges that existing hashes lack enough information to reconstruct every accepted command and requires a concrete migration/legacy comparison policy instead of claiming version metadata can be recovered from the hash."},
+        {"id": "rollout-checks", "severity": "major", "criterion": "Specifies replay across version 1/version 2, unresolved records past cleanup age, and late or support replays with observable expected behavior and states unresolved product choices."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves the fixture unchanged and does not claim that a migration or recovery procedure was executed."}
+      ]
+    },
+    {
+      "id": "natural-invitation-invariant",
+      "title": "An existing atomic business invariant may already provide the required behavior",
+      "tags": ["business-invariant", "scope", "proportionality"],
+      "prompt": "Does this invitation acceptance path need the proposed Redis/idempotency framework to be retry-safe? Assess the supplied transaction behavior and constraints, explain the minimum remaining work, and keep the repository unchanged.",
+      "fixture_dir": "evals/idempotency/fixtures/business-invariant",
+      "fixtures": ["requirements.md", "schema.sql"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "natural-boundary", "severity": "critical", "criterion": "Recognizes the invitation identity, unique membership relationship, locked transaction, and stored membership outcome as a sufficient design basis for the stated local effect without requiring the proposed generic distributed framework."},
+        {"id": "authorization-state", "severity": "major", "criterion": "Preserves current authorization and revoked-member behavior on replay rather than recommending blind replay of a historical success response."},
+        {"id": "bounded-validation", "severity": "major", "criterion": "Calls for concurrent acceptance and commit-before-response replay checks, plus unauthorized and revoked retries, with one membership and no re-creation as observable outcomes."},
+        {"id": "evidence-limit", "severity": "major", "criterion": "Distinguishes the described design and supplied constraints from unprovided implementation/test evidence; does not certify production correctness from schema alone."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all fixture files unchanged and avoids expanding the answer into unrelated external-effect infrastructure."}
+      ]
+    },
+    {
+      "id": "bounded-webhook-edit",
+      "title": "A narrow adapter fix is implemented and checked without system redesign",
+      "tags": ["implementation", "downstream-identity", "scope"],
+      "prompt": "Fix deliver.mjs so retries of the same event use the provider's idempotency support described in requirements.md. Keep this to the adapter, use the specified namespace, and verify repeated and distinct events plus a failure after provider acceptance. Do not redesign the outbox or install packages.",
+      "fixture_dir": "evals/idempotency/fixtures/bounded-webhook-edit",
+      "fixtures": ["requirements.md", "deliver.mjs"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {"id": "actual-fix", "severity": "critical", "criterion": "Actually edits the adapter so the provider receives a stable audit-webhook namespaced identity based on event.id; repeated attempts preserve it and distinct events produce distinct keys."},
+        {"id": "order-and-result", "severity": "critical", "criterion": "Preserves provider acceptance before local mark and the returned receipt, and does not mark a failed provider call dispatched or generate a fresh key on retry after markDispatched fails."},
+        {"id": "meaningful-checks", "severity": "major", "criterion": "Runs local checks that observe actual provider options for repeated and distinct events and simulate provider acceptance followed by local mark failure and retry; reports the commands and results without claiming real provider deduplication was tested."},
+        {"id": "scope", "severity": "major", "criterion": "Keeps the change in the adapter and relevant local verification, introduces no package dependency or unrelated schema/framework changes, and bases the key and guarantee on the supplied contract."},
+        {"id": "honest-boundary", "severity": "major", "criterion": "Explains the concrete adapter change and limits local verification to key propagation/recovery behavior rather than asserting end-to-end delivery or exactly-once external effects."}
+      ]
+    },
+    {
+      "id": "pure-get-backoff-nontrigger",
+      "title": "A read-only retry delay review does not activate a side-effect protocol",
+      "tags": ["activation", "scope", "read-only"],
+      "prompt": "Review the retry loop in status.mjs against requirements.md. Are the attempt count and delays correct? Explain the smallest correction if needed. This is a read-only review; do not edit files.",
+      "fixture_dir": "evals/idempotency/fixtures/read-backoff",
+      "fixtures": ["requirements.md", "status.mjs"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "no-unneeded-protocol", "severity": "critical", "criterion": "Handles the pure GET retry-loop review without automatically loading the idempotency skill or introducing keys, claim storage, outbox infrastructure, or mutation-recovery workflow."},
+        {"id": "correct-delay", "severity": "major", "criterion": "Identifies the actual waits as 200ms and 400ms instead of the required 100ms and 200ms, and recommends removing the extra exponent increment or an equivalent correction."},
+        {"id": "correct-attempts", "severity": "major", "criterion": "Recognizes that the three-request maximum and no sleep after the third response are already correct and that non-503 statuses return immediately."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves every fixture file unchanged and does not invent a side effect contrary to the supplied endpoint contract."}
+      ]
+    }
+  ]
+}
