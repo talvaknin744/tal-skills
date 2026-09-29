@@ -1,0 +1,778 @@
+{
+  "kind": "backend_driver_runtime_feasibility_research",
+  "checked_at": "2026-09-29T08:23:00Z",
+  "status": "completed",
+  "scope": "Research fixtures only; no final inventory API, skills, dependency changes, or implementation adapters added to repository.",
+  "inputs": [
+    "backend-contract-review.md",
+    "storage-probe-results.json"
+  ],
+  "environment": {
+    "postgres": "18.6",
+    "image_digest": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+    "architecture": "aarch64",
+    "fsync": "on",
+    "synchronous_commit": "on",
+    "transport": "plaintext loopback to disposable container",
+    "synthetic_data_only": true,
+    "pool_max_connections": 1
+  },
+  "pins": {
+    "node": {
+      "node": "v25.9.0",
+      "pg": "8.23.0",
+      "pg_pool": "3.14.0",
+      "pg_commit": "df274d1ba9ad9d11a8f1079314faeafde7208207",
+      "pg_pool_commit": "544b1ce8152bc280e398dc1e8a66920abe6a640e",
+      "pg_npm_integrity": "sha512-Ip2EQCngowJLGOfCwkFhPXU7/ljlhn6Rxlmy4XYfL2Y+vyRM59+8uR2xqRWKdYmbXmxCFOAmKxBuSUCdF34qLg==",
+      "pipeline": false,
+      "selection": "npm registry released versions inspected on research date; installed runtime used rather than claimed latest runtime"
+    },
+    "python": {
+      "python": "3.14.3",
+      "psycopg": "3.3.6",
+      "psycopg_pool": "3.3.3",
+      "libpq": 180006,
+      "psycopg_binary": "3.3.6",
+      "typing_extensions": "4.16.0",
+      "psycopg_commit": "a67654d1e7afbf9b3a619557838f62de1c790e7c",
+      "psycopg_pool_commit": "ab5646af17be1e90fb9b8a6a86ae17cfd2d10a22",
+      "selection": "PyPI available releases and upstream annotated tags inspected; development documentation version was not treated as the installed version"
+    },
+    "go": {
+      "runtime": "go1.27.1",
+      "module": "github.com/jackc/pgx/v5",
+      "version": "v5.11.0",
+      "module_sum": "h1:IzBBtyK9AHqf98cctWFifYSci2hgQR/cd56wB4p+ogg=",
+      "commit": "5e583fa7aabfa88b796292f849fc9d7d75ac159d",
+      "release_published_at": "2026-09-07T23:46:37Z",
+      "release_url": "https://github.com/jackc/pgx/releases/tag/v5.11.0",
+      "pool_dependency": {
+        "module": "github.com/jackc/puddle/v2",
+        "version": "v2.2.2",
+        "commit": "bd09d14bd4018b6d65a9d7770e2f3ddf8b00af1c"
+      }
+    }
+  },
+  "primary_sources": [
+    {
+      "id": "node_query_config",
+      "fact": "The pinned Query constructor does not consume an AbortSignal. Passing signal to query does not make it cancelable.",
+      "url": "https://github.com/brianc/node-postgres/blob/df274d1ba9ad9d11a8f1079314faeafde7208207/packages/pg/lib/query.js#L8-L28",
+      "evidence": "source inspection and live probe"
+    },
+    {
+      "id": "node_query_timeout",
+      "fact": "For a dispatched nonpipeline query, query_timeout delivers a client error without canceling the server query. The pipeline branch instead destroys the stream.",
+      "url": "https://github.com/brianc/node-postgres/blob/df274d1ba9ad9d11a8f1079314faeafde7208207/packages/pg/lib/client.js#L702-L731",
+      "evidence": "source inspection and live nonpipeline probe"
+    },
+    {
+      "id": "node_acquire_timeout",
+      "fact": "The pool connection timeout removes the pending acquire from its queue. Pool.connect does not accept an AbortSignal.",
+      "url": "https://github.com/brianc/node-postgres/blob/544b1ce8152bc280e398dc1e8a66920abe6a640e/packages/pg-pool/index.js#L190-L235",
+      "evidence": "source inspection and live full-pool probe"
+    },
+    {
+      "id": "node_release_once",
+      "fact": "The pooled client release wrapper rejects duplicate release; a truthy release argument removes the connection. Application abort and finally handlers need shared ownership.",
+      "url": "https://github.com/brianc/node-postgres/blob/544b1ce8152bc280e398dc1e8a66920abe6a640e/packages/pg-pool/index.js#L369-L397",
+      "evidence": "source inspection, live discard probe, scratch ownership assertions"
+    },
+    {
+      "id": "node_retirement_completion",
+      "fact": "release(true) returns void. Pool removal emits remove from the client.end completion callback; a listener must be registered before retirement and match the owned client.",
+      "url": "https://github.com/brianc/node-postgres/blob/544b1ce8152bc280e398dc1e8a66920abe6a640e/packages/pg-pool/index.js#L172-L187",
+      "evidence": "source inspection; live probe observed removal and backend absence but did not implement a general retirement helper"
+    },
+    {
+      "id": "node_pool_api",
+      "fact": "Transactions require a single checked-out connection, pool.end drains the pool, and release(true) discards a client.",
+      "url": "https://node-postgres.com/apis/pool",
+      "evidence": "official documentation"
+    },
+    {
+      "id": "node_abort_listener",
+      "fact": "AbortSignal is notification for APIs that support it; an already-aborted signal must be checked. Once-only listeners still require removal on normal completion.",
+      "url": "https://nodejs.org/api/globals.html#class-abortsignal",
+      "evidence": "official documentation and scratch ownership assertions"
+    },
+    {
+      "id": "python_cancel_wait",
+      "fact": "For cancellation during an active operation, the pinned async driver attempts cancellation with a five-second allowance and then waits up to a further five seconds for the operation; failure to finish closes the connection. These are internal allowances, not a complete end-to-end deadline guarantee.",
+      "url": "https://github.com/psycopg/psycopg/blob/a67654d1e7afbf9b3a619557838f62de1c790e7c/psycopg/psycopg/connection_async.py#L516-L553",
+      "evidence": "source inspection; only healthy local cancellation executed"
+    },
+    {
+      "id": "python_connection_context",
+      "fact": "Async connection context rollback/commit is awaited; pooled connections remain owned by their pool rather than being closed as standalone context-managed connections.",
+      "url": "https://github.com/psycopg/psycopg/blob/a67654d1e7afbf9b3a619557838f62de1c790e7c/psycopg/psycopg/connection_async.py#L182-L204",
+      "evidence": "source inspection and live transaction-context probe"
+    },
+    {
+      "id": "python_pool_ownership",
+      "fact": "Pool.connection wraps getconn with context-managed connection use and finally putconn. Canceled waiting slots are rejected when a returned connection reaches them.",
+      "url": "https://github.com/psycopg/psycopg/blob/ab5646af17be1e90fb9b8a6a86ae17cfd2d10a22/psycopg_pool/psycopg_pool/pool_async.py#L206-L229",
+      "additional_locator": "WaitingClient, lines 948-1000",
+      "evidence": "source inspection and live size-one pool probe"
+    },
+    {
+      "id": "python_pool_reset",
+      "fact": "Pool reset accepts idle connections, rolls back open/failed transactions, and closes active or unresettable connections.",
+      "url": "https://github.com/psycopg/psycopg/blob/ab5646af17be1e90fb9b8a6a86ae17cfd2d10a22/psycopg_pool/psycopg_pool/pool_async.py#L871-L898",
+      "evidence": "source inspection"
+    },
+    {
+      "id": "python_wait_for",
+      "fact": "wait_for waits for cancellation completion; timeout expiration does not imply cleanup has already finished.",
+      "url": "https://docs.python.org/3/library/asyncio-task.html#asyncio.wait_for",
+      "evidence": "official documentation and separate native runtime probe"
+    },
+    {
+      "id": "postgres_cancel",
+      "fact": "A successful cancellation dispatch does not establish the outcome of the target command; the command may already have finished.",
+      "url": "https://www.postgresql.org/docs/current/libpq-cancel.html",
+      "evidence": "official documentation; COMMIT response loss verified separately in storage-probe-results.json"
+    },
+    {
+      "id": "postgres_statement_timeout",
+      "fact": "statement_timeout is a server-side statement budget; zero disables it. It does not by itself implement a complete request or transaction budget.",
+      "url": "https://www.postgresql.org/docs/current/runtime-config-client.html#GUC-STATEMENT-TIMEOUT",
+      "evidence": "official documentation; positive local limits used in probes"
+    },
+    {
+      "id": "begin_context_scope",
+      "kind": "primary_source_fact",
+      "fact": "Pool.BeginTx uses the context for acquisition and BEGIN, but cancellation does not automatically roll back the returned transaction; Commit or Rollback remains required.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgxpool/pool.go#L811-L837",
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "rollback_failure_retirement",
+      "kind": "primary_source_fact",
+      "fact": "Real-transaction Rollback marks the transaction closed. If ROLLBACK execution fails, pgx kills the connection. A second Rollback sees ErrTxClosed; it cannot repair the same failed transaction.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/tx.go#L216-L234",
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "pool_tx_release",
+      "kind": "primary_source_fact",
+      "fact": "The pool transaction wrapper releases its connection after Commit or Rollback, including error returns.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgxpool/tx.go#L21-L44",
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "pool_release_guard",
+      "kind": "primary_source_fact",
+      "fact": "Pool connection Release destroys a closed, busy, or non-idle-transaction connection instead of returning it as reusable idle capacity.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgxpool/conn.go#L19-L40",
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "default_context_cancellation",
+      "kind": "primary_source_fact",
+      "fact": "The default watcher sets an immediate socket deadline on cancellation. Most canceled in-flight operations return promptly and close their connection; server CancelRequest-only behavior requires a different configuration.",
+      "urls": [
+        "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgconn/config.go#L472-L474",
+        "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgconn/doc.go#L52-L62",
+        "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgconn/pgconn.go#L3071-L3085"
+      ],
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "async_cleanup",
+      "kind": "primary_source_fact",
+      "fact": "A closed connection may still own network resources. asyncClose sends a cancellation, drains, and closes in a background task with an internal 15-second deadline; CleanupDone closes when those resources finish.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgconn/pgconn.go#L768-L813",
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "pool_cleanup_wait",
+      "kind": "primary_source_fact",
+      "fact": "The pool destructor gives connection close/CleanupDone a 15-second background allowance, independent of the request context.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgxpool/pool.go#L314-L326",
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "acquire_full_pool",
+      "kind": "primary_source_fact",
+      "fact": "Pool.Acquire delegates to puddle; a full pool waits on a context-aware semaphore and returns the context error on cancellation.",
+      "urls": [
+        "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgxpool/pool.go#L615-L635",
+        "https://github.com/jackc/puddle/blob/bd09d14bd4018b6d65a9d7770e2f3ddf8b00af1c/pool.go#L330-L365"
+      ],
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "late_connection_creation",
+      "kind": "primary_source_fact",
+      "fact": "Canceling an acquisition that has begun connection construction does not cancel construction. Puddle owns and returns a late successful connection to its pool. pgxpool supplies a default two-minute ConnectTimeout when none is configured. This differs from cancellation while the pool is full.",
+      "urls": [
+        "https://github.com/jackc/puddle/blob/bd09d14bd4018b6d65a9d7770e2f3ddf8b00af1c/pool.go#L411-L468",
+        "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/pgxpool/pool.go#L277-L280"
+      ],
+      "evidence": "source inspection; see matching observations and limitations"
+    },
+    {
+      "id": "transaction_helper_context",
+      "kind": "primary_source_fact",
+      "fact": "BeginTxFunc also reuses its supplied context for BEGIN, ROLLBACK, and COMMIT; it does not create an independent cleanup budget.",
+      "url": "https://github.com/jackc/pgx/blob/5e583fa7aabfa88b796292f849fc9d7d75ac159d/tx.go#L418-L462",
+      "evidence": "source inspection; see matching observations and limitations"
+    }
+  ],
+  "observed": {
+    "node": {
+      "signal_query_option": {
+        "aborted": true,
+        "query_command": "SELECT",
+        "query_completed": true
+      },
+      "already_aborted_signal_option": {
+        "query_succeeded": true
+      },
+      "client_query_timeout": {
+        "error": "Query read timeout",
+        "server_after_client_timeout": {
+          "state": "active",
+          "wait_event": "PgSleep"
+        },
+        "committed_effect_count": 1
+      },
+      "unowned_promise_race": {
+        "error": "request canceled",
+        "pending_after_abort": 1,
+        "late_client_arrived": true,
+        "checked_out_before_explicit_release": {
+          "total": 1,
+          "idle": 0,
+          "waiting": 0
+        },
+        "explicit_cleanup_performed": true
+      },
+      "pool_acquire_timeout": {
+        "error": "timeout exceeded when trying to connect",
+        "pending_after_timeout": 0,
+        "fresh_query": 1
+      },
+      "discard_on_abort": {
+        "error": "Connection terminated",
+        "removed_connection_count": 1,
+        "aborted_transaction_effects": 0,
+        "backend_gone": true,
+        "fresh_query": 1
+      },
+      "remaining_probe_sessions": 0
+    },
+    "python": {
+      "native_task_cancel": {
+        "native_cancel_propagated": true,
+        "cleanup_elapsed_ms": 11.0,
+        "effect_count": 0,
+        "same_connection_reused": true,
+        "transaction_status_before_fresh_query": "IDLE",
+        "fresh_query": 1,
+        "pool": {
+          "connections_num": 1,
+          "connections_ms": 18,
+          "requests_num": 2,
+          "usage_ms": 24,
+          "pool_min": 1,
+          "pool_max": 1,
+          "pool_size": 1,
+          "pool_available": 1,
+          "requests_waiting": 0
+        }
+      },
+      "canceled_pool_acquisition": {
+        "native_cancel_propagated": true,
+        "reported_waiters_before_holder_release": 1,
+        "after_release": {
+          "connections_num": 1,
+          "connections_ms": 18,
+          "requests_num": 5,
+          "usage_ms": 24,
+          "requests_queued": 1,
+          "requests_errors": 1,
+          "requests_wait_ms": 11,
+          "pool_min": 1,
+          "pool_max": 1,
+          "pool_size": 1,
+          "pool_available": 1,
+          "requests_waiting": 0
+        },
+        "fresh_query": 1
+      },
+      "wait_for_awaits_cleanup": {
+        "requested_timeout_ms": 30,
+        "observed_elapsed_ms": 132.4,
+        "scope": "native runtime cleanup demonstration, not database latency guarantee"
+      },
+      "remaining_probe_sessions": 0
+    },
+    "go": {
+      "begin_context_cancel": {
+        "externally_visible_effect": 0,
+        "pool": {
+          "acquired": 1,
+          "canceled_acquires": 0,
+          "constructing": 0,
+          "idle": 0,
+          "new_connections": 1,
+          "total": 1
+        },
+        "request_context_canceled": true,
+        "server_state": "idle in transaction",
+        "server_transaction_active": true
+      },
+      "full_pool_acquire_deadline": {
+        "elapsed_ms": 80.194,
+        "error": {
+          "conn_closed": false,
+          "context_canceled": false,
+          "deadline_exceeded": true,
+          "text": "context deadline exceeded",
+          "tx_closed": false,
+          "type": "context.deadlineExceededError"
+        },
+        "returned_nil_connection": true,
+        "stats_with_original_transaction_held": {
+          "acquired": 1,
+          "canceled_acquires": 1,
+          "constructing": 0,
+          "idle": 0,
+          "new_connections": 1,
+          "total": 1
+        }
+      },
+      "canceled_context_rollback": {
+        "cleanup_done": true,
+        "connection_replaced": true,
+        "effect_count": 0,
+        "error": {
+          "conn_closed": false,
+          "context_canceled": true,
+          "deadline_exceeded": false,
+          "text": "timeout: context already done: context canceled",
+          "tx_closed": false,
+          "type": "*pgconn.errTimeout"
+        },
+        "next_request": {
+          "elapsed_ms": 11.241,
+          "pid": 103,
+          "stats": {
+            "acquired": 0,
+            "canceled_acquires": 1,
+            "constructing": 0,
+            "idle": 1,
+            "new_connections": 2,
+            "total": 1
+          },
+          "value": 1
+        },
+        "old_connection_closed": true
+      },
+      "fresh_bounded_context_rollback": {
+        "cleanup_timeout_ms": 3000,
+        "connection_still_open": true,
+        "effect_count": 0,
+        "error": {
+          "conn_closed": false,
+          "context_canceled": false,
+          "deadline_exceeded": false,
+          "text": null,
+          "tx_closed": false
+        },
+        "next_request": {
+          "elapsed_ms": 0.286,
+          "pid": 103,
+          "stats": {
+            "acquired": 0,
+            "canceled_acquires": 1,
+            "constructing": 0,
+            "idle": 1,
+            "new_connections": 2,
+            "total": 1
+          },
+          "value": 1
+        },
+        "original_request_canceled": true,
+        "same_connection_reused": true
+      },
+      "in_flight_query_cancellation": [
+        {
+          "cancel_return_ms": 0.03,
+          "cleanup_done": true,
+          "connection_replaced": true,
+          "database_observed_lock_wait": true,
+          "effect_count": 0,
+          "iteration": 1,
+          "next_request": {
+            "elapsed_ms": 8.31,
+            "pid": 106,
+            "stats": {
+              "acquired": 0,
+              "canceled_acquires": 1,
+              "constructing": 0,
+              "idle": 1,
+              "new_connections": 3,
+              "total": 1
+            },
+            "value": 1
+          },
+          "old_connection_closed": true,
+          "query_error": {
+            "conn_closed": false,
+            "context_canceled": true,
+            "deadline_exceeded": false,
+            "text": "context canceled",
+            "tx_closed": false,
+            "type": "*errors.errorString"
+          },
+          "rollback_error": {
+            "conn_closed": true,
+            "context_canceled": false,
+            "deadline_exceeded": false,
+            "text": "conn closed",
+            "tx_closed": false,
+            "type": "*pgconn.connLockError"
+          },
+          "worker_joined": true
+        },
+        {
+          "cancel_return_ms": 0.013,
+          "cleanup_done": true,
+          "connection_replaced": true,
+          "database_observed_lock_wait": true,
+          "effect_count": 0,
+          "iteration": 2,
+          "next_request": {
+            "elapsed_ms": 8.869,
+            "pid": 108,
+            "stats": {
+              "acquired": 0,
+              "canceled_acquires": 1,
+              "constructing": 0,
+              "idle": 1,
+              "new_connections": 4,
+              "total": 1
+            },
+            "value": 1
+          },
+          "old_connection_closed": true,
+          "query_error": {
+            "conn_closed": false,
+            "context_canceled": true,
+            "deadline_exceeded": false,
+            "text": "context canceled",
+            "tx_closed": false,
+            "type": "*errors.errorString"
+          },
+          "rollback_error": {
+            "conn_closed": true,
+            "context_canceled": false,
+            "deadline_exceeded": false,
+            "text": "conn closed",
+            "tx_closed": false,
+            "type": "*pgconn.connLockError"
+          },
+          "worker_joined": true
+        },
+        {
+          "cancel_return_ms": 0.015,
+          "cleanup_done": true,
+          "connection_replaced": true,
+          "database_observed_lock_wait": true,
+          "effect_count": 0,
+          "iteration": 3,
+          "next_request": {
+            "elapsed_ms": 11.955,
+            "pid": 110,
+            "stats": {
+              "acquired": 0,
+              "canceled_acquires": 1,
+              "constructing": 0,
+              "idle": 1,
+              "new_connections": 5,
+              "total": 1
+            },
+            "value": 1
+          },
+          "old_connection_closed": true,
+          "query_error": {
+            "conn_closed": false,
+            "context_canceled": true,
+            "deadline_exceeded": false,
+            "text": "context canceled",
+            "tx_closed": false,
+            "type": "*errors.errorString"
+          },
+          "rollback_error": {
+            "conn_closed": true,
+            "context_canceled": false,
+            "deadline_exceeded": false,
+            "text": "conn closed",
+            "tx_closed": false,
+            "type": "*pgconn.connLockError"
+          },
+          "worker_joined": true
+        }
+      ],
+      "full_pool_acquire_cancel": {
+        "error": {
+          "conn_closed": false,
+          "context_canceled": true,
+          "deadline_exceeded": false,
+          "text": "context canceled",
+          "tx_closed": false,
+          "type": "*errors.errorString"
+        },
+        "next_request": {
+          "elapsed_ms": 0.296,
+          "pid": 110,
+          "stats": {
+            "acquired": 0,
+            "canceled_acquires": 2,
+            "constructing": 0,
+            "idle": 1,
+            "new_connections": 5,
+            "total": 1
+          },
+          "value": 1
+        },
+        "note": "Start channel confirms invocation begins; pool remains full until canceled acquire has returned. No wait-queue hook used.",
+        "worker_joined": true
+      },
+      "resources": {
+        "audit_connection_closed": true,
+        "blocker_closed": true,
+        "owned_acquire_workers_joined": 1,
+        "owned_acquire_workers_started": 1,
+        "owned_query_workers_joined": 3,
+        "owned_query_workers_started": 3,
+        "pool_closed": true,
+        "remaining_original_probe_sessions": 0,
+        "remaining_probe_sessions_excluding_observer": 0,
+        "remaining_probe_transactions_excluding_observer": 0,
+        "schema_dropped": true
+      },
+      "pool_before_close": {
+        "acquired": 0,
+        "canceled_acquires": 2,
+        "constructing": 0,
+        "idle": 1,
+        "new_connections": 5,
+        "total": 1
+      }
+    },
+    "node_ownership_model": {
+      "kind": "scratch_ownership_model",
+      "node": "v25.9.0",
+      "status": "passed",
+      "results": [
+        {
+          "name": "already_aborted_acquisition_does_not_call_pool",
+          "status": "passed"
+        },
+        {
+          "name": "late_acquisition_stays_owned_until_settlement_then_releases",
+          "status": "passed"
+        },
+        {
+          "name": "successful_acquisition_transfers_ownership",
+          "status": "passed"
+        },
+        {
+          "name": "failed_acquisition_settles_without_client",
+          "status": "passed"
+        },
+        {
+          "name": "already_aborted_before_listener_registration_is_observed",
+          "status": "passed"
+        },
+        {
+          "name": "normal_completion_removes_listener_before_late_abort",
+          "status": "passed"
+        },
+        {
+          "name": "active_abort_and_finally_release_exactly_once",
+          "status": "passed"
+        }
+      ],
+      "limitations": [
+        "Fake pool and lease; transport behavior is covered separately by node-results.json.",
+        "Acquisition cancellation is intentionally acknowledged only after bounded underlying acquisition settles.",
+        "No production wrapper, type checker, or COMMIT-phase injection is tested."
+      ]
+    }
+  },
+  "portable_acceptance_contract": [
+    {
+      "id": "one_owner",
+      "requirement": "A single owner retains the acquisition promise, connection, transaction, query, and cleanup tasks until completion or explicit handoff. Canceling the public request must not abandon their ownership.",
+      "counterexample": "Promise.race returns abort while pool.connect later hands out an unreleased client.",
+      "verification": "Late-acquire ownership assertion; live full-pool race; final pool capacity and session checks."
+    },
+    {
+      "id": "separate_outcome_from_cancellation",
+      "requirement": "Track not-dispatched, transaction-active, commit-dispatched, and commit-acknowledged phases independently from request cancellation. A transport error or discard after commit dispatch remains unknown unless authoritative evidence resolves it.",
+      "counterexample": "release(true), CancelledError, or context.Canceled after COMMIT dispatch is labeled rollback despite a potentially committed write.",
+      "verification": "Reuse prior COMMIT-response-suppression test for the final API in each language; not repeated in this research."
+    },
+    {
+      "id": "safe_reuse",
+      "requirement": "Return a connection only after acknowledged transaction finalization and usable protocol state; otherwise discard it and await owned cleanup.",
+      "counterexample": "Node query_timeout settles while SQL keeps running; next borrower inherits the unfinished transaction or query.",
+      "verification": "Size-one pool cancellation, fresh request, final sessions, and driver-specific idle/cleanup signals."
+    },
+    {
+      "id": "budget_cleanup_separately",
+      "requirement": "Give acquisition and SQL finite budgets and reserve shutdown capacity for cleanup. Cleanup may outlast the request timeout. Positive remaining SQL budgets must never accidentally become zero, which disables statement_timeout.",
+      "counterexample": "An already-canceled request context is reused for rollback; a timed-out response is reported as all work stopped.",
+      "verification": "Fresh Go cleanup context, Python cleanup overrun demonstration, owned tasks joined, source-inspected internal cleanup allowances."
+    },
+    {
+      "id": "stable_reconciliation",
+      "requirement": "Recover unknown outcomes using the same authenticated tenant, fixed namespace, request key, and validated intent within the retained reservation protocol.",
+      "counterexample": "A fresh key, changed tenant, expired record, changed payload, or external nontransactional effect defeats the same-key guarantee.",
+      "verification": "Shared contract and prior storage probe; final language implementations remain future work."
+    }
+  ],
+  "minimum_patterns": {
+    "typescript": [
+      "Use a finite connectionTimeoutMillis; check AbortSignal before acquire and immediately after awaited acquire. Release any late client before propagating cancellation. No acquisition listener is needed when owner deliberately waits for bounded acquire settlement.",
+      "Keep pipeline disabled for the initial example. Do not pass an invented query signal or mistake query_timeout for server cancellation.",
+      "On a checked-out lease, install an idempotent abort handler, then recheck signal.aborted. Share a release/discard gate with finally; remove the listener on success, failure, and cancellation. Check cancellation again before dispatching SQL.",
+      "On active cancellation, documented release(true) can retire the connection; still await the owned query and cleanup path. Server-side deadlines limit work continuing after socket teardown.",
+      "Awaiting release(true) does not join cleanup because it returns void. A completion helper can register an exact-client pool remove listener before retirement and remove it on settlement; this helper shape is source-derived, not implemented in the scratch model.",
+      "If public response cancellation must be immediate, keep a supervised cleanup promise and join it during drain; this alternative was not implemented or tested here."
+    ],
+    "python": [
+      "Open and await readiness of one application-owned AsyncConnectionPool. Use one checked-out connection for each concurrent transaction; the scratch path uses autocommit=True plus an explicit transaction context.",
+      "Let CancelledError propagate through awaited transaction and pool context exits. Cancel and then await owned tasks; do not convert cancellation into a successful return.",
+      "Budget for the pinned driver cancellation/drain allowances. The observed healthy 11 ms cleanup is not a network-failure guarantee.",
+      "If a transaction context implicitly commits on exit, record the commit-dispatch boundary conservatively before that exit and retain unknown outcome on cancellation there. Exact phase instrumentation remains final-implementation work."
+    ],
+    "go": [
+      "Pass the request context to acquisition, BEGIN, statements, and COMMIT. Beginning a transaction does not create automatic rollback on later context cancellation.",
+      "Create context.WithTimeout(context.Background(), cleanupBudget) inside deferred rollback, call its cancel function, and preserve primary request errors separately from cleanup errors.",
+      "Do not first call Rollback with the canceled request context and then try again with a fresh context: the first failed rollback closes the transaction.",
+      "When default in-flight cancellation already retired the connection, fresh rollback cannot repair it. Join application goroutines and observe CleanupDone or the pool shutdown boundary as appropriate.",
+      "Configure connection construction timeout separately; canceled acquisition can leave pool-owned construction running. This construction case was source-inspected only."
+    ]
+  },
+  "cleanup_safeguards": [
+    "Do not delete native cancellation propagation, late-acquisition ownership, exact-once release, listener disposal, transaction context exits, fresh cleanup contexts, owned task joins, or COMMIT phase tracking as apparent duplication.",
+    "Do not replace explicit rollback with unconditional release, combine awaited work into fire-and-forget callbacks, or replace server statement deadlines with client-only query timeouts.",
+    "Cleanup acceptance must preserve the same mutation, result, cancellation, and resource observations; lower line count alone is insufficient."
+  ],
+  "execution": {
+    "commands_with_scratch_directory_normalized": [
+      "npm install --ignore-scripts --save-exact pg@8.23.0",
+      "<scratch>/venv/bin/pip install psycopg[binary]==3.3.6 psycopg_pool==3.3.3",
+      "node node-probe.mjs",
+      "<scratch>/venv/bin/python python-probe.py",
+      "node ownership-shape-probe.mjs",
+      "GOMODCACHE=<scratch>/modcache GOCACHE=<scratch>/buildcache go mod download -json github.com/jackc/pgx/v5@v5.11.0",
+      "GOMODCACHE=<scratch>/modcache GOCACHE=<scratch>/buildcache go mod tidy",
+      "GOMODCACHE=<scratch>/modcache GOCACHE=<scratch>/buildcache go build -o probe probe.go",
+      "PROBE_DATABASE_URL=<disposable-loopback-url> ./probe > results.json"
+    ],
+    "assertion_note": "The seven ownership-model cases contain explicit assertions. Live driver fixtures record outcomes and exit after execution; their captured observations were inspected against the acceptance questions. Do not describe every recorded field as a separate assertion or a complete final-API test.",
+    "artifacts": [
+      {
+        "path_relative_to_scratch": "node-probe.mjs",
+        "sha256": "fcddebf097493da52900893f8fd859dd7d6e2bdbfb3993c8a56101106a791113",
+        "bytes": 5532
+      },
+      {
+        "path_relative_to_scratch": "node-results.json",
+        "sha256": "6653677125670c78c790ad5535b89e6431a60b6f09edd4e41e80cecb355574f7",
+        "bytes": 1234
+      },
+      {
+        "path_relative_to_scratch": "ownership-shape-probe.mjs",
+        "sha256": "b483e124df8ca818fb05b2200937ba529f59d3e1596bb179cd3eb00797180de2",
+        "bytes": 3800
+      },
+      {
+        "path_relative_to_scratch": "ownership-shape-results.json",
+        "sha256": "63043a6c61a63c532cdd8610dbe5a74f52fbd736efb7bc7aef4768ef8fc5ab69",
+        "bytes": 1143
+      },
+      {
+        "path_relative_to_scratch": "python-probe.py",
+        "sha256": "a6c86132c59ddd04528ca7a1695b535cec26aa93c5053b6aecb860cc71673249",
+        "bytes": 4513
+      },
+      {
+        "path_relative_to_scratch": "python-results.json",
+        "sha256": "563d05e9a23ebfbad03bfb196eaad2d613a4844f4461a4b9702cac67db0d9fea",
+        "bytes": 1435
+      },
+      {
+        "path_relative_to_scratch": "package-lock.json",
+        "sha256": "ae326c2f053c1a268c4b918cca9ee994e46e8d5c9bf48f2c8c050fafed5f5d1d",
+        "bytes": 5708
+      },
+      {
+        "path_relative_to_scratch": "go/probe.go",
+        "sha256": "0a89ca1d6ac3bcfae4fd985eb3dcc244a4ee792105b2b54903e6acddd7ae8995",
+        "bytes": 11752
+      },
+      {
+        "path_relative_to_scratch": "go/results.json",
+        "sha256": "3fc3a3360efc179512e69af9cc3982490739ff282d77ebb433c6c5b65523443c",
+        "bytes": 7216
+      },
+      {
+        "path_relative_to_scratch": "go/handoff.json",
+        "sha256": "ceeb8ed0e49d78ce748a758c88b8a9e62c2038b109561ff9238b382b6025f257",
+        "bytes": 15989
+      },
+      {
+        "path_relative_to_scratch": "go/go.mod",
+        "sha256": "09988f296ab0c136fc4029d3a061691e6d08c5a52fcb9d713c359b2ef1fbc94c",
+        "bytes": 338
+      },
+      {
+        "path_relative_to_scratch": "go/go.sum",
+        "sha256": "a5e7a8db07eba28dbde48bf9a54c4e9084a5a95ded581c0ff44c08b74e3dfe69",
+        "bytes": 2301
+      }
+    ],
+    "scratch_scripts_published": false
+  },
+  "cleanup": {
+    "all_probe_sessions_before_stop": 0,
+    "all_runtime_schemas_before_stop": 0,
+    "owned_container_stopped": true,
+    "label_filtered_container_list_after_stop": [],
+    "repository_dependency_files_changed": false,
+    "all_owned_go_workers_joined": 4,
+    "node_queries_and_acquisitions_awaited": true,
+    "python_tasks_awaited": true,
+    "verification_details": {
+      "node_python_final_database_observation": {
+        "session_application_filter": "tal_runtime_%",
+        "sessions": 0,
+        "schema_filter": "runtime_%",
+        "schemas": 0
+      },
+      "go_separate_observer_evidence": {
+        "remaining_original_probe_sessions": 0,
+        "schema_dropped": true
+      },
+      "owned_container_label": "tal-skills.research=backend-runtime-20260929"
+    }
+  },
+  "limitations": [
+    "One local PostgreSQL instance and one released driver version per language; no TLS, proxies, failover, network partition, process crash, restore, power loss, replication, or external-system atomicity tests.",
+    "Synthetic mutations isolate cancellation and pool ownership. The complete inventory reservation service and its equivalent language behavior have not been implemented by these probes.",
+    "COMMIT-phase cancellation/response loss was not repeated. storage-probe-results.json is separate synchronous Python evidence, not native TypeScript/Go/Python-async COMMIT coverage.",
+    "No repeated cancellation during cleanup, hostile listener interference, Node pipeline mode, custom pgx cancellation watcher, or production HTTP disconnect adapter was exercised.",
+    "Go connection construction continuing after acquisition cancellation and driver internal cleanup deadlines are source-only findings, not fault-injected timing guarantees.",
+    "Timings are local observations from a handful of cases and are not performance targets. Resource counts after completion do not prove every cancellation schedule is leak-free.",
+    "Package lock and Go sums remain in the named scratch directory; published JSON includes hashes and pins. Final runnable examples must carry their own locked dependencies and repeat their acceptance tests."
+  ]
+}

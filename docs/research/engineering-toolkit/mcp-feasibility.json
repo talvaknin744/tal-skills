@@ -1,0 +1,2031 @@
+{
+  "verified_at": "2026-09-29T08:30:56.576572+00:00",
+  "status": "executed_feasibility_research_not_final_example",
+  "target_skill": "mcp-engineering",
+  "protocol": {
+    "name": "MCP",
+    "version": "2026-07-28",
+    "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "source_commit": "5f5440bb26a62e2cf3440b92da5a667efa03b267"
+  },
+  "scratch_root": "/tmp/tal-mcp-research-20260929",
+  "environment": {
+    "platform": "darwin/arm64",
+    "node": "v25.9.0",
+    "python": "Python 3.14.3",
+    "go": "go version go1.27.1 darwin/arm64"
+  },
+  "installed": {
+    "npm": {
+      "@modelcontextprotocol/client": "2.2.0",
+      "@modelcontextprotocol/core": "2.2.0",
+      "zod": "4.2.0",
+      "cross-spawn": "7.0.6",
+      "path-key": "3.1.1",
+      "shebang-command": "2.0.0",
+      "shebang-regex": "3.0.0",
+      "which": "2.0.2",
+      "isexe": "2.0.0",
+      "eventsource-parser": "3.1.1",
+      "eventsource": "3.0.7",
+      "jose": "6.2.12",
+      "pkce-challenge": "5.0.1",
+      "@modelcontextprotocol/node": "2.1.0",
+      "@hono/node-server": "1.19.17",
+      "hono": "4.13.11",
+      "@modelcontextprotocol/server": "2.2.0"
+    },
+    "python_freeze": [
+      "annotated-types==0.8.0",
+      "anyio==4.15.1",
+      "attrs==26.1.0",
+      "cffi==2.1.1",
+      "click==8.5.0",
+      "cryptography==50.0.1",
+      "h11==0.16.0",
+      "httpcore2==2.13.1",
+      "httpx2==2.13.1",
+      "idna==3.20",
+      "jsonschema==4.26.0",
+      "jsonschema-specifications==2025.9.1",
+      "mcp==2.2.0",
+      "mcp-types==2.2.0",
+      "opentelemetry-api==1.45.0",
+      "pycparser==3.0",
+      "pydantic==2.13.5",
+      "pydantic_core==2.46.5",
+      "PyJWT==2.15.1",
+      "python-multipart==0.0.32",
+      "referencing==0.37.0",
+      "rpds-py==2026.6.3",
+      "sse-starlette==3.5.0",
+      "starlette==1.7.0",
+      "truststore==0.10.4",
+      "typing-inspection==0.4.4",
+      "typing_extensions==4.16.0",
+      "uvicorn==0.54.0"
+    ],
+    "go_modules": [
+      {
+        "Path": "cloud.google.com/go/compute/metadata",
+        "Version": "v0.3.0"
+      },
+      {
+        "Path": "github.com/golang-jwt/jwt/v5",
+        "Version": "v5.3.1",
+        "Sum": "h1:kYf81DTWFe7t+1VvL7eS+jKFVWaUnK9cB1qbwn63YCY=",
+        "GoModSum": "h1:fxCRLWMO43lRc8nhHWY6LGqRcf+1gQWArsqaEUEa5bE="
+      },
+      {
+        "Path": "github.com/google/go-cmp",
+        "Version": "v0.7.0",
+        "Sum": "h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=",
+        "GoModSum": "h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU="
+      },
+      {
+        "Path": "github.com/google/jsonschema-go",
+        "Version": "v0.4.3",
+        "Sum": "h1:/DBOLZTfDow7pe2GmaJNhltueGTtDKICi8V8p+DQPd0=",
+        "GoModSum": "h1:r5quNTdLOYEz95Ru18zA0ydNbBuYoo9tgaYcxEYhJVE="
+      },
+      {
+        "Path": "github.com/modelcontextprotocol/go-sdk",
+        "Version": "v1.8.0",
+        "Sum": "h1:KIvahhYqwtbeniWVPs3TcXEA7b8jEtwfBpOTAI+Urx4=",
+        "GoModSum": "h1:dL7u98E/zjJTGzEq+j30jQ8K2k1mb6LeAH4inEcSGts="
+      },
+      {
+        "Path": "github.com/segmentio/asm",
+        "Version": "v1.1.3",
+        "Sum": "h1:WM03sfUOENvvKexOLp+pCqgb/WDjsi7EK8gIsICtzhc=",
+        "GoModSum": "h1:Ld3L4ZXGNcSLRg4JBsZ3//1+f/TjYl0Mzen/DQy1EJg="
+      },
+      {
+        "Path": "github.com/segmentio/encoding",
+        "Version": "v0.5.4",
+        "Sum": "h1:OW1VRern8Nw6ITAtwSZ7Idrl3MXCFwXHPgqESYfvNt0=",
+        "GoModSum": "h1:HS1ZKa3kSN32ZHVZ7ZLPLXWvOVIiZtyJnO1gPH1sKt0="
+      },
+      {
+        "Path": "github.com/yosida95/uritemplate/v3",
+        "Version": "v3.0.2",
+        "Sum": "h1:Ed3Oyj9yrmi9087+NczuL5BwkIc4wvTb5zIM+UJPGz4=",
+        "GoModSum": "h1:ILOh0sOhIJR3+L/8afwt/kE++YT040gmv5BQTMR2HP4="
+      },
+      {
+        "Path": "golang.org/x/oauth2",
+        "Version": "v0.35.0",
+        "Sum": "h1:Mv2mzuHuZuY2+bkyWXIHMfhNdJAdwW3FuWeCPYN5GVQ=",
+        "GoModSum": "h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA="
+      },
+      {
+        "Path": "golang.org/x/sync",
+        "Version": "v0.20.0",
+        "Sum": "h1:e0PTpb7pjO8GAtTs2dQ6jYa5BWYlMuX047Dco/pItO4=",
+        "GoModSum": "h1:9xrNwdLfx4jkKbNva9FpL6vEN7evnE43NNNJQ2LF3+0="
+      },
+      {
+        "Path": "golang.org/x/sys",
+        "Version": "v0.41.0",
+        "Sum": "h1:Ivj+2Cp/ylzLiEU89QhWblYnOE9zerudt9Ftecq2C6k=",
+        "GoModSum": "h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks="
+      },
+      {
+        "Path": "golang.org/x/time",
+        "Version": "v0.15.0",
+        "Sum": "h1:bbrp8t3bGUeFOx08pvsMYRTCVSMk89u4tKbNOZbp88U=",
+        "GoModSum": "h1:Y4YMaQmXwGQZoFaVFk4YpCt4FLQMYKZe9oeV/f4MSno="
+      },
+      {
+        "Path": "golang.org/x/tools",
+        "Version": "v0.42.0",
+        "Sum": "h1:uNgphsn75Tdz5Ji2q36v/nsFSfR/9BRFvqhGBaJGd5k=",
+        "GoModSum": "h1:Ma6lCIwGZvHK6XtgbswSoWroEkhugApmsXyrUmBhfr0="
+      }
+    ]
+  },
+  "interfaces": {
+    "typescript_server": [
+      "McpServer from @modelcontextprotocol/server",
+      "McpServer.registerTool(name, {inputSchema, outputSchema}, handler)",
+      "createMcpHandler(() => freshServer, {responseMode: \"sse\"})",
+      "toNodeHandler from @modelcontextprotocol/node",
+      "localhostHostValidation() and localhostOriginValidation()",
+      "handler context.mcpReq.signal",
+      "context.mcpReq.notify({method: \"notifications/progress\", params})"
+    ],
+    "python_client": [
+      "from mcp import Client",
+      "async with Client(url, mode=\"auto\", read_timeout_seconds=3)",
+      "async with Client(url, mode=\"2026-07-28\", read_timeout_seconds=3)",
+      "await client.list_tools()",
+      "await client.call_tool(name, arguments, progress_callback=async_callback)",
+      "client.protocol_version",
+      "asyncio.Task.cancel() -> asyncio.CancelledError"
+    ],
+    "go_client": [
+      "mcp.NewClient(&mcp.Implementation{...}, &mcp.ClientOptions{ProgressNotificationHandler:...})",
+      "client.Connect(ctx, &mcp.StreamableClientTransport{Endpoint:url, MaxRetries:-1}, &mcp.ClientSessionOptions{ProtocolVersion:\"2026-07-28\"})",
+      "session.InitializeResult().ProtocolVersion",
+      "session.ListTools(ctx, &mcp.ListToolsParams{})",
+      "session.CallTool(ctx, &mcp.CallToolParams{Name:name, Arguments:args})",
+      "CallToolParams.SetProgressToken(token)",
+      "context.WithCancel -> errors.Is(error, context.Canceled)"
+    ],
+    "typescript_authorization_fixture": [
+      "Synthetic middleware validates a fixed fixture credential lookup before invoking the SDK; not OAuth/JWT verification.",
+      "Set req.auth = {token, clientId, scopes, extra:{principalId,tenantId,authorizationVersion}} before toNodeHandler.",
+      "toNodeHandler forwards req.auth as authInfo; the createMcpHandler factory receives authInfo and callbacks receive ctx.http.authInfo.",
+      "Use verified extra.principalId for the user; OAuth clientId identifies the client application, not necessarily the resource owner.",
+      "McpServer.registerResource(name, uri, {cacheHint:{cacheScope:\"private\",ttlMs:30000}}, callback).",
+      "ResourceNotFoundError is imported from @modelcontextprotocol/server in this installed version, not the schema-only @modelcontextprotocol/core public surface.",
+      "Raw resources/read requests require Mcp-Name matching params.uri, in addition to method/version metadata."
+    ]
+  },
+  "summary": {
+    "checks": 42,
+    "passed": 42,
+    "failed": 0,
+    "baseline_checks": 26,
+    "supplemental_checks": 16,
+    "cross_language_pairs": 2
+  },
+  "test_runs": [
+    {
+      "executed_at": "2026-09-29T08:20:22.219480+00:00",
+      "python": "3.14.3",
+      "packages": {
+        "mcp": "2.2.0",
+        "mcp-types": "2.2.0",
+        "httpx2": "2.13.1",
+        "pydantic": "2.13.5"
+      },
+      "checks": [
+        {
+          "name": "python-to-typescript-valid",
+          "passed": true,
+          "details": {
+            "protocol": "2026-07-28",
+            "tools": [
+              "add",
+              "fail",
+              "slow"
+            ],
+            "result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "scratch-feasibility",
+                  "version": "1.0.0"
+                }
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "7",
+                  "annotations": null,
+                  "_meta": null
+                }
+              ],
+              "structuredContent": {
+                "sum": 7
+              },
+              "isError": false,
+              "resultType": "complete"
+            }
+          }
+        },
+        {
+          "name": "invalid-arguments-tool-error",
+          "passed": true,
+          "details": {
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "scratch-feasibility",
+                "version": "1.0.0"
+              }
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Input validation error: Invalid arguments for tool add: a: Invalid input: expected number, received string",
+                "annotations": null,
+                "_meta": null
+              }
+            ],
+            "structuredContent": null,
+            "isError": true,
+            "resultType": "complete"
+          }
+        },
+        {
+          "name": "business-rejection-tool-error",
+          "passed": true,
+          "details": {
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "scratch-feasibility",
+                "version": "1.0.0"
+              }
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Deliberate business rejection",
+                "annotations": null,
+                "_meta": null
+              }
+            ],
+            "structuredContent": null,
+            "isError": true,
+            "resultType": "complete"
+          }
+        },
+        {
+          "name": "explicit-protocol-pin",
+          "passed": true,
+          "details": {
+            "protocol": "2026-07-28",
+            "result": {
+              "sum": 2
+            }
+          }
+        },
+        {
+          "name": "wrong-version",
+          "passed": true,
+          "details": {
+            "http_status": 400,
+            "response": {
+              "jsonrpc": "2.0",
+              "error": {
+                "code": -32022,
+                "message": "Unsupported protocol version: 2099-01-01",
+                "data": {
+                  "supported": [
+                    "2026-07-28"
+                  ],
+                  "requested": "2099-01-01"
+                }
+              },
+              "id": 100
+            }
+          }
+        },
+        {
+          "name": "header-body-version-mismatch",
+          "passed": true,
+          "details": {
+            "http_status": 400,
+            "response": {
+              "jsonrpc": "2.0",
+              "error": {
+                "code": -32020,
+                "message": "Bad Request: the request headers and body disagree: the body envelope names protocol version 2026-07-28 but the MCP-Protocol-Version header names 2025-11-25",
+                "data": {
+                  "mismatch": {
+                    "header": "2025-11-25",
+                    "body": "the body envelope names protocol version 2026-07-28 but the MCP-Protocol-Version header names 2025-11-25"
+                  }
+                }
+              },
+              "id": 100
+            }
+          }
+        },
+        {
+          "name": "header-body-method-mismatch",
+          "passed": true,
+          "details": {
+            "http_status": 400,
+            "response": {
+              "jsonrpc": "2.0",
+              "error": {
+                "code": -32020,
+                "message": "Bad Request: the request headers and body disagree: the body names method tools/call but the Mcp-Method header names tools/list",
+                "data": {
+                  "mismatch": {
+                    "header": "tools/list",
+                    "body": "the body names method tools/call but the Mcp-Method header names tools/list"
+                  }
+                }
+              },
+              "id": 100
+            }
+          }
+        },
+        {
+          "name": "header-body-name-mismatch",
+          "passed": true,
+          "details": {
+            "http_status": 400,
+            "response": {
+              "jsonrpc": "2.0",
+              "error": {
+                "code": -32020,
+                "message": "Bad Request: the request headers and body disagree: the body carries params.name=\"add\" but the Mcp-Name header names \"fail\"",
+                "data": {
+                  "mismatch": {
+                    "header": "fail",
+                    "body": "the body carries params.name=\"add\" but the Mcp-Name header names \"fail\""
+                  }
+                }
+              },
+              "id": 100
+            }
+          }
+        },
+        {
+          "name": "unknown-tool",
+          "passed": true,
+          "details": {
+            "http_status": 200,
+            "response": {
+              "jsonrpc": "2.0",
+              "id": 100,
+              "error": {
+                "code": -32602,
+                "message": "Tool missing not found"
+              }
+            }
+          }
+        },
+        {
+          "name": "missing-required-meta",
+          "passed": true,
+          "details": {
+            "http_status": 400,
+            "response": {
+              "jsonrpc": "2.0",
+              "error": {
+                "code": -32602,
+                "message": "Invalid params: the MCP-Protocol-Version header names protocol revision 2026-07-28, but the request is missing the required per-request envelope key(s): _meta",
+                "data": {
+                  "envelope": {
+                    "missing": [
+                      "_meta"
+                    ]
+                  }
+                }
+              },
+              "id": 100
+            }
+          }
+        },
+        {
+          "name": "http-disconnect-before-effect",
+          "passed": true,
+          "details": {
+            "first_event": {
+              "jsonrpc": "2.0",
+              "method": "notifications/progress",
+              "params": {
+                "progressToken": "before-effect",
+                "progress": 1,
+                "total": 2
+              }
+            },
+            "server_state": {
+              "started": true,
+              "committed": false,
+              "aborted": true,
+              "finished": false,
+              "abortedAt": 1790670022201
+            },
+            "abort_observed_after_ms": 6.05
+          }
+        },
+        {
+          "name": "http-disconnect-after-effect",
+          "passed": true,
+          "details": {
+            "first_event": {
+              "jsonrpc": "2.0",
+              "method": "notifications/progress",
+              "params": {
+                "progressToken": "after-effect",
+                "progress": 1,
+                "total": 2
+              }
+            },
+            "server_state": {
+              "started": true,
+              "committed": true,
+              "aborted": true,
+              "finished": false,
+              "abortedAt": 1790670022208
+            },
+            "abort_observed_after_ms": 6.07
+          }
+        },
+        {
+          "name": "invalid-envelope-no-add-effect",
+          "passed": true,
+          "details": {
+            "addInvocations": 2
+          }
+        },
+        {
+          "name": "modern-wire-has-no-initialize-or-session",
+          "passed": true,
+          "details": {
+            "request_count": 13,
+            "requests": [
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "server/discover",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/list",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "fail",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/list",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2099-01-01",
+                "mcpMethod": "tools/call",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 400,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2025-11-25",
+                "mcpMethod": "tools/call",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 400,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/list",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 400,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "fail",
+                "hasSessionHeader": false,
+                "responseStatus": 400,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "missing",
+                "hasSessionHeader": false,
+                "responseStatus": 200,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "add",
+                "hasSessionHeader": false,
+                "responseStatus": 400,
+                "responseFinished": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "slow",
+                "hasSessionHeader": false,
+                "responseDisconnected": true
+              },
+              {
+                "method": "POST",
+                "version": "2026-07-28",
+                "mcpMethod": "tools/call",
+                "name": "slow",
+                "hasSessionHeader": false,
+                "responseDisconnected": true
+              }
+            ]
+          }
+        }
+      ],
+      "passed": 14,
+      "failed": 0,
+      "name": "python-client-and-raw-http"
+    },
+    {
+      "checks": [
+        {
+          "name": "go-negotiated-version",
+          "passed": true,
+          "details": {
+            "actual": "2026-07-28",
+            "requested": "2026-07-28"
+          }
+        },
+        {
+          "name": "go-list-tools",
+          "passed": true,
+          "details": {
+            "resultType": "complete",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "scratch-feasibility",
+                "version": "1.0.0"
+              }
+            },
+            "ttlMs": 0,
+            "cacheScope": "private",
+            "tools": [
+              {
+                "description": "Add two bounded integers for protocol feasibility.",
+                "inputSchema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "properties": {
+                    "a": {
+                      "maximum": 1000,
+                      "minimum": -1000,
+                      "type": "integer"
+                    },
+                    "b": {
+                      "maximum": 1000,
+                      "minimum": -1000,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "a",
+                    "b"
+                  ],
+                  "type": "object"
+                },
+                "name": "add",
+                "outputSchema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sum": {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "sum"
+                  ],
+                  "type": "object"
+                }
+              },
+              {
+                "description": "Return a deliberate business rejection",
+                "inputSchema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "properties": {},
+                  "type": "object"
+                },
+                "name": "fail"
+              },
+              {
+                "description": "Scratch cancellation probe; optionally record an in-memory effect before cancellation.",
+                "inputSchema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "properties": {
+                    "commitFirst": {
+                      "type": "boolean"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "token",
+                    "commitFirst"
+                  ],
+                  "type": "object"
+                },
+                "name": "slow"
+              }
+            ]
+          }
+        },
+        {
+          "name": "go-valid-call",
+          "passed": true,
+          "details": {
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "scratch-feasibility",
+                "version": "1.0.0"
+              }
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "10"
+              }
+            ],
+            "structuredContent": {
+              "sum": 10
+            },
+            "resultType": "complete"
+          }
+        },
+        {
+          "name": "go-invalid-input",
+          "passed": true,
+          "details": {
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "scratch-feasibility",
+                "version": "1.0.0"
+              }
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Input validation error: Invalid arguments for tool add: a: Invalid input: expected number, received string"
+              }
+            ],
+            "isError": true,
+            "resultType": "complete"
+          }
+        },
+        {
+          "name": "go-business-rejection",
+          "passed": true,
+          "details": {
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "scratch-feasibility",
+                "version": "1.0.0"
+              }
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Deliberate business rejection"
+              }
+            ],
+            "isError": true,
+            "resultType": "complete"
+          }
+        },
+        {
+          "name": "go-unknown-tool",
+          "passed": true,
+          "details": {
+            "error": "calling \"tools/call\": Tool missing not found"
+          }
+        },
+        {
+          "name": "go-before-effect",
+          "passed": true,
+          "details": {
+            "error": "context canceled",
+            "state": {
+              "aborted": true,
+              "abortedAt": 1790670022521,
+              "committed": false,
+              "finished": false,
+              "started": true
+            }
+          }
+        },
+        {
+          "name": "go-after-effect",
+          "passed": true,
+          "details": {
+            "error": "context canceled",
+            "state": {
+              "aborted": true,
+              "abortedAt": 1790670022535,
+              "committed": true,
+              "finished": false,
+              "started": true
+            }
+          }
+        },
+        {
+          "name": "go-invalid-input-no-side-effect",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "name": "go-no-initialize-or-session",
+          "passed": true,
+          "details": [
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "server/discover",
+              "method": "POST",
+              "responseFinished": true,
+              "responseStatus": 200,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/list",
+              "method": "POST",
+              "responseFinished": true,
+              "responseStatus": 200,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/call",
+              "method": "POST",
+              "name": "add",
+              "responseFinished": true,
+              "responseStatus": 200,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/call",
+              "method": "POST",
+              "name": "add",
+              "responseFinished": true,
+              "responseStatus": 200,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/call",
+              "method": "POST",
+              "name": "fail",
+              "responseFinished": true,
+              "responseStatus": 200,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/call",
+              "method": "POST",
+              "name": "missing",
+              "responseFinished": true,
+              "responseStatus": 200,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/call",
+              "method": "POST",
+              "name": "slow",
+              "responseDisconnected": true,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "notifications/cancelled",
+              "method": "POST",
+              "responseFinished": true,
+              "responseStatus": 202,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "tools/call",
+              "method": "POST",
+              "name": "slow",
+              "responseDisconnected": true,
+              "version": "2026-07-28"
+            },
+            {
+              "hasSessionHeader": false,
+              "mcpMethod": "notifications/cancelled",
+              "method": "POST",
+              "responseFinished": true,
+              "responseStatus": 202,
+              "version": "2026-07-28"
+            }
+          ]
+        }
+      ],
+      "failed": 0,
+      "passed": 10,
+      "server_observations": {
+        "addInvocations": 1,
+        "requests": [
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "server/discover",
+            "method": "POST",
+            "responseFinished": true,
+            "responseStatus": 200,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/list",
+            "method": "POST",
+            "responseFinished": true,
+            "responseStatus": 200,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/call",
+            "method": "POST",
+            "name": "add",
+            "responseFinished": true,
+            "responseStatus": 200,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/call",
+            "method": "POST",
+            "name": "add",
+            "responseFinished": true,
+            "responseStatus": 200,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/call",
+            "method": "POST",
+            "name": "fail",
+            "responseFinished": true,
+            "responseStatus": 200,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/call",
+            "method": "POST",
+            "name": "missing",
+            "responseFinished": true,
+            "responseStatus": 200,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/call",
+            "method": "POST",
+            "name": "slow",
+            "responseDisconnected": true,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "notifications/cancelled",
+            "method": "POST",
+            "responseFinished": true,
+            "responseStatus": 202,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "tools/call",
+            "method": "POST",
+            "name": "slow",
+            "responseDisconnected": true,
+            "version": "2026-07-28"
+          },
+          {
+            "hasSessionHeader": false,
+            "mcpMethod": "notifications/cancelled",
+            "method": "POST",
+            "responseFinished": true,
+            "responseStatus": 202,
+            "version": "2026-07-28"
+          }
+        ],
+        "slow": {
+          "go-after-effect": {
+            "aborted": true,
+            "abortedAt": 1790670022535,
+            "committed": true,
+            "finished": false,
+            "started": true
+          },
+          "go-before-effect": {
+            "aborted": true,
+            "abortedAt": 1790670022521,
+            "committed": false,
+            "finished": false,
+            "started": true
+          }
+        }
+      },
+      "executed_at": "2026-09-29T08:20:22.541914+00:00",
+      "returncode": 0,
+      "stderr": "",
+      "name": "go-client"
+    },
+    {
+      "executed_at": "2026-09-29T08:21:51.472161+00:00",
+      "checks": [
+        {
+          "name": "python-before-effect",
+          "passed": true,
+          "details": {
+            "client_cancelled_error": true,
+            "progress_events": [
+              {
+                "progress": 1.0,
+                "total": 2.0,
+                "message": null
+              }
+            ],
+            "server_state": {
+              "started": true,
+              "committed": false,
+              "aborted": true,
+              "finished": false,
+              "abortedAt": 1790670111439
+            }
+          }
+        },
+        {
+          "name": "python-after-effect",
+          "passed": true,
+          "details": {
+            "client_cancelled_error": true,
+            "progress_events": [
+              {
+                "progress": 1.0,
+                "total": 2.0,
+                "message": null
+              }
+            ],
+            "server_state": {
+              "started": true,
+              "committed": true,
+              "aborted": true,
+              "finished": false,
+              "abortedAt": 1790670111449
+            }
+          }
+        }
+      ],
+      "passed": 2,
+      "failed": 0,
+      "server_observations": {
+        "requests": [
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "slow",
+            "hasSessionHeader": false,
+            "responseDisconnected": true
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "slow",
+            "hasSessionHeader": false,
+            "responseDisconnected": true
+          }
+        ],
+        "addInvocations": 0,
+        "slow": {
+          "python-before-effect": {
+            "started": true,
+            "committed": false,
+            "aborted": true,
+            "finished": false,
+            "abortedAt": 1790670111439
+          },
+          "python-after-effect": {
+            "started": true,
+            "committed": true,
+            "aborted": true,
+            "finished": false,
+            "abortedAt": 1790670111449
+          }
+        }
+      },
+      "name": "python-client-cancellation"
+    }
+  ],
+  "python_raw_wire_observations": {
+    "requests": [
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "server/discover",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/list",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "fail",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/list",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2099-01-01",
+        "mcpMethod": "tools/call",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 400,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2025-11-25",
+        "mcpMethod": "tools/call",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 400,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/list",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 400,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "fail",
+        "hasSessionHeader": false,
+        "responseStatus": 400,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "missing",
+        "hasSessionHeader": false,
+        "responseStatus": 200,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "add",
+        "hasSessionHeader": false,
+        "responseStatus": 400,
+        "responseFinished": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "slow",
+        "hasSessionHeader": false,
+        "responseDisconnected": true
+      },
+      {
+        "method": "POST",
+        "version": "2026-07-28",
+        "mcpMethod": "tools/call",
+        "name": "slow",
+        "hasSessionHeader": false,
+        "responseDisconnected": true
+      }
+    ],
+    "addInvocations": 2,
+    "slow": {
+      "before-effect": {
+        "started": true,
+        "committed": false,
+        "aborted": true,
+        "finished": false,
+        "abortedAt": 1790670022201
+      },
+      "after-effect": {
+        "started": true,
+        "committed": true,
+        "aborted": true,
+        "finished": false,
+        "abortedAt": 1790670022208
+      }
+    }
+  },
+  "harness_correction": {
+    "initial_run_passed": 13,
+    "initial_run_failed": 1,
+    "check": "unknown-tool",
+    "initial_wrong_expectation": "HTTP 400 plus JSON-RPC -32602",
+    "observed": "HTTP 200 plus JSON-RPC -32602",
+    "resolution": "Verified pinned TS transport source: pre-dispatch errors may use mapped HTTP status; handler errors are in-band and SSE already commits HTTP 200. Corrected test oracle, preserved original results; server error behavior was unchanged."
+  },
+  "interpretation": [
+    "Validate HTTP transport, JSON-RPC envelope, and tool isError independently.",
+    "Go ProtocolVersion requests a version but permits negotiation; explicitly check InitializeResult().ProtocolVersion before relying on that revision.",
+    "Raw HTTP disconnect, Python task cancellation and Go context cancellation all caused cooperative TS handler cleanup in these probes.",
+    "A pre-recorded effect remained after cancellation; cancellation does not imply rollback.",
+    "Go emitted extra HTTP notifications/cancelled POSTs accepted with 202; Python task cancellation only closed SSE in observed traces. The spec says an HTTP cancellation notification is not required or expected. Do not teach the extra Go request as a protocol requirement.",
+    "No initialize request or MCP session ID appeared on tested current-version exchanges; an SDK object named session is not evidence of a wire session.",
+    "authInfo is trusted pass-through: application middleware verifies credentials before attaching it; SDK metadata and arbitrary headers must never supply authority.",
+    "Per-request user/tenant identity is separate from OAuth clientId. Both fixture users had the same clientId.",
+    "A principal-only private-cache key is insufficient across authorization-context changes. The fixture separated tokens and scopes as well as principal.",
+    "The private cache hint does not replace authorization; the resource scope check ran before lookup."
+  ],
+  "limitations": [
+    "Only Python client -> TypeScript server and Go client -> TypeScript server were executed. No TypeScript-client, Python-server or Go-server pair was executed.",
+    "No official complete conformance suite was executed; these are bounded application-level feasibility checks.",
+    "Only loopback HTTP/SSE with deterministic tools was used; no OAuth server, production credentials, TLS, proxy or remote network.",
+    "Effects were in-memory flags. No database transaction, durable checkpoint, external effect or rollback/recovery guarantee was tested.",
+    "No stdio, MRTR continuation, optional tasks extension, subscription lifetime, legacy protocol migration or A2A runtime was tested. Private-cache authorization was checked only in the separate synthetic server fixture.",
+    "No explicit capability-mismatch, malformed output, browser-origin rejection, retry-after-lost-response, resource exhaustion or multi-process shutdown scenario was tested.",
+    "Cancellation was cooperative: the handler observed its signal and cleared its timer. A handler that ignores cancellation was not tested.",
+    "The 26-check baseline forced SSE responses. The supplemental synthetic-auth fixture exercised JSON-only responses.",
+    "Scratch source remains outside the repository. Hashes identify local artifacts; the report alone is not a complete reproducibility bundle.",
+    "Dependency versions reflect this installation on 2026-09-29; no claim that every transitive package is latest or security-audited.",
+    "Supplementary authorization tests used raw HTTP and fixed synthetic credentials; they do not establish OAuth/JWT verifier, SDK client-cache, revocation or distributed-cache conformance."
+  ],
+  "sources": [
+    {
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/cancellation",
+      "purpose": "Normative per-transport cancellation and timeout semantics."
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http",
+      "purpose": "Normative HTTP headers, metadata and envelope validation."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/v2.2.0/docs/serving/http.md",
+      "purpose": "McpServer factory, createMcpHandler, toNodeHandler and localhost middleware interfaces."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/v2.2.0/docs/servers/logging-progress-cancellation.md",
+      "purpose": "Request signal and progress notification APIs."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/v2.2.0/packages/server/src/server/perRequestTransport.ts",
+      "purpose": "HTTP status selection depends on error origin and response commitment."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/python-sdk/blob/v2.2.0/src/mcp/client/client.py",
+      "purpose": "Client mode, call_tool, progress_callback and per-round timeout signatures."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/go-sdk/blob/v1.8.0/mcp/client.go",
+      "purpose": "Client.Connect, ClientSessionOptions.ProtocolVersion and InitializeResult APIs; version negotiation caveat."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/go-sdk/blob/v1.8.0/mcp/transport.go",
+      "purpose": "Context cancellation retires calls and issues an asynchronous best-effort cancellation notification."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/go-sdk/blob/v1.8.0/mcp/streamable.go",
+      "purpose": "StreamableClientTransport options and HTTP implementation."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/v2.2.0/packages/middleware/node/src/toNodeHandler.ts",
+      "purpose": "req.auth forwarded as authInfo; authentication itself is caller responsibility."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/v2.2.0/packages/core-internal/src/types/types.ts",
+      "purpose": "AuthInfo clientId, scopes and extra field semantics."
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/v2.2.0/packages/server/src/server/server.ts",
+      "purpose": "Cache hints supported for cacheable operations and resource-specific overrides."
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/server/utilities/caching",
+      "purpose": "Private cache isolation by authorization context, including changed access token; cache scope is not authorization."
+    }
+  ],
+  "scratch_artifacts": [
+    {
+      "path": "server.mjs",
+      "sha256": "2076004d63e2e4530ad09288d8da94f02de94a73c4d022f8c19bbaf2dc95ae5d"
+    },
+    {
+      "path": "probe.py",
+      "sha256": "206bd14b43032f54bf98df68b409936ae2561bd9b6a393383aa5d8d555f12c2c"
+    },
+    {
+      "path": "python-cancel.py",
+      "sha256": "c06170d6cad7e9bec676aa049ac05cc2aec23636d06876066c786554c43516fe"
+    },
+    {
+      "path": "run-go.py",
+      "sha256": "9f35e644c728eae97143748a75debd4fda0667074e1b0e9d85e51a73a51c71b9"
+    },
+    {
+      "path": "go-probe/main.go",
+      "sha256": "d787983352fc6e1b4a4850ced6a114282796a84b3e029e0ef4b8b0c794d0e8f4"
+    },
+    {
+      "path": "package.json",
+      "sha256": "25d6dbe5573bebb77a4c3e1f89968316dd5e507b38f363620436004c5d216a9e"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "d385b2104e055dec215aad806a764dc0ab04cd8e8334a559f16a0da9d3a758fd"
+    },
+    {
+      "path": "go-probe/go.mod",
+      "sha256": "877a9fa3684ddda8df096bb549d2275ddfe3e3ccb8a693d004b12d67638fb4b3"
+    },
+    {
+      "path": "go-probe/go.sum",
+      "sha256": "6184efde48a3053a9ac99d80aa3709071979585108b182ef17463500fa0be91f"
+    },
+    {
+      "path": "results.initial.json",
+      "sha256": "bb4840e196031fb67199337f6a3c468f4f89b67e9d1f0dd98a9868169a649c2c"
+    },
+    {
+      "path": "results.json",
+      "sha256": "f8452f0dd05d426e1bb1f8bfc21f249f53fef614d7c72250c35b1caef44794bd"
+    },
+    {
+      "path": "go-results.json",
+      "sha256": "8a22545e47a320fd4a2875899bc1bed4eea115aca7eeb77cf2a15507a1b797d7"
+    },
+    {
+      "path": "python-cancel-results.json",
+      "sha256": "e48d94a62f04c042cadbbf4eef715a23020fb860bd184fb202e09c474fe94484"
+    },
+    {
+      "path": "npm-installed.json",
+      "sha256": "0d3ed7bd81ef0d0238071a6f850d9e4eff2d332cfba09b6f6e05e59fba57e371"
+    },
+    {
+      "path": "python-installed.txt",
+      "sha256": "ae3bdc77467730aac97eba9641da888ecb40b2dd4c4bb21a2677d088e42c4234"
+    },
+    {
+      "path": "go-installed.json",
+      "sha256": "58d74c9c0deb1b680194f388169c44e5956bbca6a4eb5297c048b72e65a81433"
+    },
+    {
+      "path": "auth-server.mjs",
+      "sha256": "18358eab02efe017d276a15ed40ce3e78a74c39503394e6300c941714a4eae01"
+    },
+    {
+      "path": "auth-probe.py",
+      "sha256": "2275fccbcbe4b8400e031e15913ea43b6981c65c00ffe9910bec579c638a8875"
+    },
+    {
+      "path": "auth-results.json",
+      "sha256": "a1969bc9fd3a35e6420640e93f657676254dc101cc1e0a2e85e88d72c58721da"
+    },
+    {
+      "path": "auth-results.initial.json",
+      "sha256": "69646a658e17196851f03b24b813367038436b1e7a36d1f2062b8a13f491e680"
+    },
+    {
+      "path": "auth-server.initial.stderr.log",
+      "sha256": "fbd6255146e1ee5e9bbcae125014b163699a3876ca807495767ae3c405c048ca"
+    }
+  ],
+  "replay_commands": [
+    "/tmp/tal-mcp-research-20260929/.venv/bin/python /tmp/tal-mcp-research-20260929/probe.py",
+    "python3 /tmp/tal-mcp-research-20260929/run-go.py",
+    "/tmp/tal-mcp-research-20260929/.venv/bin/python /tmp/tal-mcp-research-20260929/python-cancel.py",
+    "/tmp/tal-mcp-research-20260929/.venv/bin/python /tmp/tal-mcp-research-20260929/auth-probe.py"
+  ],
+  "open_questions": [
+    "Execute the other client/server directions before declaring three-language interoperability.",
+    "Verify real authentication, token validation/revocation, continuations, durable effects and legacy compatibility in separate fixtures.",
+    "Decide whether final repository examples should copy and harden this scratch harness or use a smaller independent implementation; scratch probes are not production templates."
+  ],
+  "baseline_summary": {
+    "checks": 26,
+    "passed": 26,
+    "failed": 0,
+    "cross_language_pairs": 2
+  },
+  "supplemental_test_runs": [
+    {
+      "executed_at": "2026-09-29T08:28:57.834454+00:00",
+      "fixture": "Synthetic credential lookup only; not OAuth, JWT or production-auth conformance.",
+      "checks": [
+        {
+          "name": "synthetic-missing-credential-rejected-before-factory",
+          "passed": true,
+          "details": {
+            "status": 401,
+            "body": {
+              "error": "Synthetic credential required"
+            }
+          }
+        },
+        {
+          "name": "synthetic-unknown-credential-rejected-before-factory",
+          "passed": true,
+          "details": {
+            "status": 401,
+            "body": {
+              "error": "Synthetic credential required"
+            }
+          }
+        },
+        {
+          "name": "handle-owner-allowed",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Effect recorded"
+                  }
+                ],
+                "structuredContent": {
+                  "principal": "alice",
+                  "effects": 1
+                },
+                "resultType": "complete",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "same-handle-wrong-principal-denied-before-effect",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Handle unavailable"
+                  }
+                ],
+                "isError": true,
+                "resultType": "complete",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "forged-body-meta-and-header-not-authority",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Handle unavailable"
+                  }
+                ],
+                "isError": true,
+                "resultType": "complete",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "verified-identity-overrides-forged-hints",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Effect recorded"
+                  }
+                ],
+                "structuredContent": {
+                  "principal": "alice",
+                  "effects": 2
+                },
+                "resultType": "complete",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "second-principal-own-handle-allowed",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Effect recorded"
+                  }
+                ],
+                "structuredContent": {
+                  "principal": "bob",
+                  "effects": 1
+                },
+                "resultType": "complete",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "private-resource-alice-miss",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "contents": [
+                  {
+                    "uri": "private://self",
+                    "mimeType": "application/json",
+                    "text": "{\"principal\":\"alice\",\"privateLabel\":\"alice-only\"}"
+                  }
+                ],
+                "resultType": "complete",
+                "ttlMs": 30000,
+                "cacheScope": "private",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "private-resource-bob-miss",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "contents": [
+                  {
+                    "uri": "private://self",
+                    "mimeType": "application/json",
+                    "text": "{\"principal\":\"bob\",\"privateLabel\":\"bob-only\"}"
+                  }
+                ],
+                "resultType": "complete",
+                "ttlMs": 30000,
+                "cacheScope": "private",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "private-resource-alice-hit",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "contents": [
+                  {
+                    "uri": "private://self",
+                    "mimeType": "application/json",
+                    "text": "{\"principal\":\"alice\",\"privateLabel\":\"alice-only\"}"
+                  }
+                ],
+                "resultType": "complete",
+                "ttlMs": 30000,
+                "cacheScope": "private",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "private-resource-bob-hit",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "result": {
+                "contents": [
+                  {
+                    "uri": "private://self",
+                    "mimeType": "application/json",
+                    "text": "{\"principal\":\"bob\",\"privateLabel\":\"bob-only\"}"
+                  }
+                ],
+                "resultType": "complete",
+                "ttlMs": 30000,
+                "cacheScope": "private",
+                "_meta": {
+                  "io.modelcontextprotocol/serverInfo": {
+                    "name": "synthetic-boundary-research",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "jsonrpc": "2.0",
+              "id": 1
+            }
+          }
+        },
+        {
+          "name": "private-cache-separated-by-principal",
+          "passed": true,
+          "details": {
+            "hits": 2,
+            "misses": 2,
+            "entries": 2,
+            "keys": [
+              {
+                "principal": "alice",
+                "credentialFingerprint": "469c93d8ff5a1f0d05ea8220f93ef35a46e0e6b9762759f3e9ffa001fd7e1dd1",
+                "method": "resources/read",
+                "uri": "private://self"
+              },
+              {
+                "principal": "bob",
+                "credentialFingerprint": "46ba779f7fc1941562d840804eb355cfc2de656cb15703c8a017e6d6f9992ec5",
+                "method": "resources/read",
+                "uri": "private://self"
+              }
+            ]
+          }
+        },
+        {
+          "name": "same-principal-new-token-new-cache-context",
+          "passed": true,
+          "details": {
+            "response": {
+              "status": 200,
+              "body": {
+                "result": {
+                  "contents": [
+                    {
+                      "uri": "private://self",
+                      "mimeType": "application/json",
+                      "text": "{\"principal\":\"alice\",\"privateLabel\":\"alice-only\"}"
+                    }
+                  ],
+                  "resultType": "complete",
+                  "ttlMs": 30000,
+                  "cacheScope": "private",
+                  "_meta": {
+                    "io.modelcontextprotocol/serverInfo": {
+                      "name": "synthetic-boundary-research",
+                      "version": "1.0.0"
+                    }
+                  }
+                },
+                "jsonrpc": "2.0",
+                "id": 1
+              }
+            },
+            "cacheMisses": 3,
+            "cacheEntries": 3
+          }
+        },
+        {
+          "name": "authorization-before-private-cache-lookup",
+          "passed": true,
+          "details": {
+            "status": 200,
+            "body": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "error": {
+                "code": -32602,
+                "message": "Resource unavailable",
+                "data": {
+                  "uri": "private://self"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "request-principal-is-not-oauth-client-id",
+          "passed": true,
+          "details": {
+            "principals": [
+              "alice",
+              "bob"
+            ],
+            "oauthClients": [
+              "same-fixture-oauth-client"
+            ],
+            "contextCount": 11
+          }
+        },
+        {
+          "name": "only-authorized-effects-recorded",
+          "passed": true,
+          "details": {
+            "effects": 3,
+            "handles": {
+              "opaque_h_7c2eb8": {
+                "owner": "alice",
+                "tenant": "tenant-one",
+                "effects": 2
+              },
+              "opaque_h_91bd44": {
+                "owner": "bob",
+                "tenant": "tenant-one",
+                "effects": 1
+              }
+            }
+          }
+        }
+      ],
+      "passed": 16,
+      "failed": 0,
+      "server_observations": {
+        "factoryCalls": 11,
+        "authenticationDenials": 2,
+        "authorizationDenials": 3,
+        "cacheHits": 2,
+        "cacheMisses": 3,
+        "effects": 3,
+        "contexts": [
+          {
+            "factoryPrincipal": "alice",
+            "handlerPrincipal": "alice",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "bob",
+            "handlerPrincipal": "bob",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "bob",
+            "handlerPrincipal": "bob",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "alice",
+            "handlerPrincipal": "alice",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "bob",
+            "handlerPrincipal": "bob",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "alice",
+            "handlerPrincipal": "alice",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "bob",
+            "handlerPrincipal": "bob",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "alice",
+            "handlerPrincipal": "alice",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "bob",
+            "handlerPrincipal": "bob",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "alice",
+            "handlerPrincipal": "alice",
+            "oauthClientId": "same-fixture-oauth-client"
+          },
+          {
+            "factoryPrincipal": "bob",
+            "handlerPrincipal": "bob",
+            "oauthClientId": "same-fixture-oauth-client"
+          }
+        ],
+        "cacheKeys": [
+          {
+            "principal": "alice",
+            "credentialFingerprint": "469c93d8ff5a1f0d05ea8220f93ef35a46e0e6b9762759f3e9ffa001fd7e1dd1",
+            "method": "resources/read",
+            "uri": "private://self"
+          },
+          {
+            "principal": "bob",
+            "credentialFingerprint": "46ba779f7fc1941562d840804eb355cfc2de656cb15703c8a017e6d6f9992ec5",
+            "method": "resources/read",
+            "uri": "private://self"
+          },
+          {
+            "principal": "alice",
+            "credentialFingerprint": "87db0a9bc98eb8f70d3eb4d03d619aefffeac7cb171dda198d14f7c01a604f51",
+            "method": "resources/read",
+            "uri": "private://self"
+          }
+        ],
+        "requests": [
+          {
+            "principal": "alice",
+            "method": "tools/call",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "bob",
+            "method": "tools/call",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "bob",
+            "method": "tools/call",
+            "forgedPrincipalHeaderPresent": true,
+            "responseStatus": 200
+          },
+          {
+            "principal": "alice",
+            "method": "tools/call",
+            "forgedPrincipalHeaderPresent": true,
+            "responseStatus": 200
+          },
+          {
+            "principal": "bob",
+            "method": "tools/call",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "alice",
+            "method": "resources/read",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "bob",
+            "method": "resources/read",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "alice",
+            "method": "resources/read",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "bob",
+            "method": "resources/read",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "alice",
+            "method": "resources/read",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          },
+          {
+            "principal": "bob",
+            "method": "resources/read",
+            "forgedPrincipalHeaderPresent": false,
+            "responseStatus": 200
+          }
+        ],
+        "handles": {
+          "opaque_h_7c2eb8": {
+            "owner": "alice",
+            "tenant": "tenant-one",
+            "effects": 2
+          },
+          "opaque_h_91bd44": {
+            "owner": "bob",
+            "tenant": "tenant-one",
+            "effects": 1
+          }
+        },
+        "cacheEntries": 3
+      },
+      "name": "synthetic-identity-handle-and-private-cache"
+    }
+  ],
+  "supplemental_design": {
+    "authentication": "Fixed public synthetic credential strings mapped to two principals. Both users share one OAuth clientId. This is not a production verifier.",
+    "authorization": "Owned handle and tenant equality plus required scope checked before the effect. Resource read scope checked before cache lookup. Unavailable/denied handles produce the same response shape.",
+    "private_cache_key": [
+      "verified tenant",
+      "verified principal",
+      "authorization version",
+      "verified sorted scopes",
+      "SHA-256 of synthetic token",
+      "method",
+      "resource URI"
+    ],
+    "cache_behavior": "Two callers produce separate private entries for the same URI. Repeated same-context calls hit their own entries. A rotated token creates a third entry for the same principal. A reduced-scope token cannot access any cached value.",
+    "protocol_cache_hints": "resources/read returns cacheScope=private and ttlMs=30000. This does not make the SDK enforce application authorization or configure a gateway/client cache.",
+    "response_mode": "JSON; the 26-check baseline remains SSE.",
+    "fixture_limit": "Single process, fixed authority, static private data, in-memory effect and cache. No verifier, revocation race, authz-epoch change under the same token, expiry wait, distributed cache or actual client-cache reuse was tested."
+  },
+  "supplemental_harness_corrections": [
+    {
+      "issue": "Startup attempted ResourceNotFoundError from @modelcontextprotocol/core.",
+      "correction": "Confirmed installed exports and imported ResourceNotFoundError from @modelcontextprotocol/server; original startup error retained in scratch."
+    },
+    {
+      "issue": "First raw resources/read requests omitted Mcp-Name; SDK correctly rejected them with HTTP400/-32020 before factory. Initial supplementary run had 9 passes and 7 failures.",
+      "correction": "Added Mcp-Name=private://self matching params.uri; repeated supplementary run passed all 16 checks. Original results retained."
+    }
+  ]
+}

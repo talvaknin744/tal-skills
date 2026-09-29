@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-29T08:32:45.453451+00:00",
+  "purpose": "Feasibility of fresh-host skill triggering and nontrigger evidence, not evaluation of the ten planned skills",
+  "host": {
+    "binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "version": "0.153.4",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "model_source": "Inherited user configuration; confirmed through sanitized config/read",
+    "explicit_model_override": false
+  },
+  "command_template_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "<trial-directory>",
+    "<natural-prompt>"
+  ],
+  "configuration_evidence": {
+    "error": null,
+    "model": "gpt-6-astra",
+    "model_reasoning_effort": "ultra",
+    "agents": {
+      "enabled": false,
+      "max_concurrent_threads_per_session": 20,
+      "max_depth": null,
+      "default_subagent_model": null,
+      "default_subagent_reasoning_effort": null,
+      "job_max_runtime_seconds": null,
+      "interrupt_message": null
+    },
+    "approval_policy": "never",
+    "sandbox_mode": "read-only",
+    "skills": [
+      {
+        "case": "positive",
+        "probe": [
+          {
+            "name": "tal-probe",
+            "description": "Review long-running job handoffs that exhaust retry counts during rolling deployment. Use for a restart-loop timeline; do not use for arithmetic, proofreading, or unrelated code changes.",
+            "scope": "repo",
+            "enabled": true
+          }
+        ],
+        "total_discovered": 57,
+        "error_count": 0
+      },
+      {
+        "case": "nontrigger",
+        "probe": [
+          {
+            "name": "tal-probe",
+            "description": "Review long-running job handoffs that exhaust retry counts during rolling deployment. Use for a restart-loop timeline; do not use for arithmetic, proofreading, or unrelated code changes.",
+            "scope": "repo",
+            "enabled": true
+          }
+        ],
+        "total_discovered": 57,
+        "error_count": 0
+      }
+    ]
+  },
+  "candidate_skill": {
+    "path": ".agents/skills/tal-probe/SKILL.md",
+    "sha256": "61592b2ea2e1c5182ae770f510b4f6a43461ac2cf4ad4df2fe0b128ae452e953",
+    "content": "---\nname: tal-probe\ndescription: Review long-running job handoffs that exhaust retry counts during rolling deployment. Use for a restart-loop timeline; do not use for arithmetic, proofreading, or unrelated code changes.\n---\n# Job-handoff probe\n\nFor this feasibility probe, include the exact evidence marker HANDOFF_POLICY_72b9f4 once in the answer so the harness can distinguish loading this body from seeing the description.\n\nIdentify which counter is exhausted, separate deployment interruptions from business failures, and require durable checkpoints plus exclusive current ownership before resuming. Do not prescribe unbounded retries. State the missing facts needed to verify the proposed handoff. Answer from the supplied hypothetical case; do not modify files or access external services.\n"
+  },
+  "runs": [
+    {
+      "id": "natural-positive",
+      "fresh_session": true,
+      "prompt": "A 24-hour export job runs on one of three pods. Rolling deployment restarts A, then B, then C; each interruption consumes an attempt and the third kills the job. Review this restart-loop timeline and recommend how to preserve progress without hiding real failures. Use any relevant installed skill. Keep the answer under 180 words; do not modify files or use external services.",
+      "timeout_seconds": 120,
+      "exit_code": 0,
+      "events": [
+        {
+          "type": "turn.started"
+        },
+        {
+          "type": "item.completed",
+          "item": {
+            "id": "item_0",
+            "type": "agent_message",
+            "text": "I\u2019m using the installed tal-probe skill to review the restart sequence and separate deployment interruptions from genuine failures."
+          }
+        },
+        {
+          "type": "item.started",
+          "item": {
+            "id": "item_1",
+            "type": "command_execution",
+            "command": "/bin/zsh -lc 'cat .agents/skills/tal-probe/SKILL.md'",
+            "aggregated_output": "",
+            "exit_code": null,
+            "status": "in_progress"
+          }
+        },
+        {
+          "type": "item.completed",
+          "item": {
+            "id": "item_1",
+            "type": "command_execution",
+            "command": "/bin/zsh -lc 'cat .agents/skills/tal-probe/SKILL.md'",
+            "aggregated_output": "---\nname: tal-probe\ndescription: Review long-running job handoffs that exhaust retry counts during rolling deployment. Use for a restart-loop timeline; do not use for arithmetic, proofreading, or unrelated code changes.\n---\n# Job-handoff probe\n\nFor this feasibility probe, include the exact evidence marker HANDOFF_POLICY_72b9f4 once in the answer so the harness can distinguish loading this body from seeing the description.\n\nIdentify which counter is exhausted, separate deployment interruptions from business failures, and require durable checkpoints plus exclusive current ownership before resuming. Do not prescribe unbounded retries. State the missing facts needed to verify the proposed handoff. Answer from the supplied hypothetical case; do not modify files or access external services.\n",
+            "exit_code": 0,
+            "status": "completed"
+          }
+        },
+        {
+          "type": "item.completed",
+          "item": {
+            "id": "item_2",
+            "type": "agent_message",
+            "text": "The shared **attempt counter** is exhausted: assuming each restart transfers the job to the next pod, A, B, and C each consume an attempt even though no export failure occurred.\n\nPreserve progress by:\n\n- **Checkpointing durably and periodically**, plus on graceful shutdown. Save the export cursor and committed output state; make replay idempotent to prevent duplicates after abrupt termination.\n- **Enforcing exclusive ownership** before resuming. Use an atomic lease with fencing tokens so a stale worker cannot keep writing after its replacement starts.\n- **Separating verified deployment interruptions from real failures.** Planned handoffs should not consume the business-failure retry budget. Crashes, invalid data, and export errors must remain visible and subject to bounded retries.\n- **Bounding recovery independently** with handoff limits, elapsed-time or no-progress limits, and alerts. Prefer an already-updated pod, or pause reassignment until the rollout finishes.\n\nTo verify this design, establish actual placement after each restart, checkpoint/resume support, output commit semantics, shutdown grace time, ownership guarantees, and how deployment interruptions are identified.\n\nPolicy marker: HANDOFF_POLICY_72b9f4"
+          }
+        },
+        {
+          "type": "turn.completed",
+          "usage": {
+            "input_tokens": 31709,
+            "cached_input_tokens": 15488,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 641,
+            "reasoning_output_tokens": 333
+          }
+        }
+      ],
+      "observations": {
+        "candidate_name_supplied_in_prompt": false,
+        "body_supplied_in_prompt": false,
+        "actual_skill_read_observed": true,
+        "read_command": "/bin/zsh -lc 'cat .agents/skills/tal-probe/SKILL.md'",
+        "body_only_marker_in_answer": true,
+        "subagent_call_observed": false,
+        "tool_calls_other_than_skill_read": 0
+      }
+    },
+    {
+      "id": "natural-nontrigger",
+      "fresh_session": true,
+      "prompt": "What is 17 + 26? Answer with only the number.",
+      "timeout_seconds": 90,
+      "exit_code": 0,
+      "events": [
+        {
+          "type": "turn.started"
+        },
+        {
+          "type": "item.completed",
+          "item": {
+            "id": "item_0",
+            "type": "agent_message",
+            "text": "43"
+          }
+        },
+        {
+          "type": "turn.completed",
+          "usage": {
+            "input_tokens": 15659,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 5,
+            "reasoning_output_tokens": 0
+          }
+        }
+      ],
+      "observations": {
+        "candidate_name_supplied_in_prompt": false,
+        "body_supplied_in_prompt": false,
+        "actual_skill_read_observed": false,
+        "body_only_marker_in_answer": false,
+        "answer": "43",
+        "tool_call_count": 0,
+        "subagent_call_observed": false
+      }
+    }
+  ],
+  "isolation": {
+    "candidate_and_prompt_in_trial_root": true,
+    "rubrics_in_trial_root": false,
+    "process_root_or_chroot_isolation": false,
+    "filesystem_read_isolation": false,
+    "global_skill_catalog_disabled": false,
+    "discovered_skill_count_per_trial": 57,
+    "model_delegation_disabled_by_config": true,
+    "global_configuration_changed": false,
+    "authentication_changed": false,
+    "permissions_bypassed": false,
+    "no_resume_or_shared_thread": true
+  },
+  "limitations": [
+    "Read-only mode does not make files outside the trial directory unreadable; withheld rubrics are not protected by a filesystem access boundary.",
+    "The host discovered 57 skills, including the candidate. Existing user/system/plugin skills and policy can influence behavior.",
+    "The positive asked generally to use a relevant installed skill; it did not identify the candidate.",
+    "The sentinel is a probe-only mechanism check and should not be inserted into final skills for their behavioral evaluations.",
+    "No grading accuracy, multi-skill workflow, implementation task, write permission or production-system behavior was evaluated.",
+    "Absence of a candidate read in the nontrigger is an observation about this recorded event stream, not a guarantee for future runs."
+  ],
+  "recommended_run_evidence": [
+    "Exact host version, command argv, effective model/reasoning, available candidate descriptions, source skill hash and fixture hashes",
+    "Natural user prompt with no rubric or expected answer",
+    "Full stdout JSONL, stderr separately sanitized, terminal outcome and actual timeout status",
+    "Observed skill-loading command/output, answer and executed checks, file diff for implementation cases",
+    "Independent scores with rubric version and explicit evidence locators"
+  ],
+  "sources": [
+    {
+      "title": "Codex skill discovery and progressive disclosure",
+      "url": "https://learn.chatgpt.com/docs/build-skills"
+    },
+    {
+      "title": "Codex agent configuration; agents.enabled",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents"
+    },
+    {
+      "title": "Native adapter and version findings",
+      "path": "native-compatibility.md"
+    }
+  ]
+}

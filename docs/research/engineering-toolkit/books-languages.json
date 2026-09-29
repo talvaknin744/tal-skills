@@ -1,0 +1,223 @@
+[
+  {
+    "id": "architecture-patterns-python-1e",
+    "title": "Architecture Patterns with Python",
+    "authors": ["Harry Percival", "Bob Gregory"],
+    "edition": "First edition",
+    "year": 2020,
+    "urls": [
+      "https://www.oreilly.com/library/view/architecture-patterns-with/9781492052197/",
+      "https://www.cosmicpython.com/",
+      "https://www.cosmicpython.com/book/chapter_06_uow",
+      "https://www.cosmicpython.com/book/chapter_07_aggregate"
+    ],
+    "access": "Complete author-hosted HTML book available under CC BY-NC-ND; only the specified chapters were read. No book text, diagrams, or example code redistributed.",
+    "read_sections": [
+      "Chapter 6: complete main text, examples, trade-offs, recap and footnote, author HTML lines 24–430.",
+      "Chapter 7: complete main text, examples, trade-offs, recap and footnotes, author HTML lines 24–523. Embedded diagram source inspected; not every rendered diagram independently verified."
+    ],
+    "findings": [
+      {
+        "trigger": "A Python use case performs several database writes.",
+        "failure": "Persistence operations commit independently or leak transaction lifetime into handlers.",
+        "mechanism": "Name one transaction owner and make success, rollback and release paths explicit; prefer the existing ORM boundary when sufficient.",
+        "conditions": "The writes share one transactional authority. Context-manager syntax alone establishes neither isolation nor remote atomicity.",
+        "counterexample": "A successful payment followed by database rollback is still a successful payment.",
+        "verification": "Force an error between writes and observe final persisted state through a fresh connection on the production database engine.",
+        "source_urls": ["https://www.cosmicpython.com/book/chapter_06_uow"],
+        "proposed_skill": "python-backend"
+      },
+      {
+        "trigger": "Concurrent Python handlers enforce an aggregate invariant.",
+        "failure": "Both handlers validate an old state and commit incompatible changes.",
+        "mechanism": "Identify the common database conflict point and enforce the invariant there; use controlled interleavings to test it.",
+        "conditions": "Every relevant writer participates. The chapter's PostgreSQL example relies on Repeatable Read, not just incrementing a field.",
+        "counterexample": "Two Read Committed writes setting an unconstrained version field to the same value need not conflict.",
+        "verification": "Force read/read/write/write ordering; assert business state and transaction outcomes. Compare against the actual database isolation contract.",
+        "source_urls": ["https://www.cosmicpython.com/book/chapter_07_aggregate"],
+        "proposed_skill": "python-backend"
+      }
+    ],
+    "limitations": [
+      "The full book was available, but it was not read in full.",
+      "Examples reflect the book's framework era. Use installed ORM APIs and versioned database documentation.",
+      "The existing concurrency-correctness skill owns distributed invariant diagnosis; this source adds Python persistence implementation detail.",
+      "The chapter itself qualifies sleep-based race tests and recommends synchronization primitives. Preserve that qualification."
+    ]
+  },
+  {
+    "id": "effective-python-3e",
+    "title": "Effective Python: 125 Specific Ways to Write Better Python",
+    "authors": ["Brett Slatkin"],
+    "edition": "Third edition; print publication November 20, 2024; copyright 2025",
+    "year": 2024,
+    "urls": [
+      "https://effectivepython.com/",
+      "https://www.informit.com/store/effective-python-125-specific-ways-to-write-better-9780138172183",
+      "https://www.informit.com/content/images/9780138172183/samplepages/9780138172183_Sample.pdf",
+      "https://www.informit.com/articles/article.aspx?p=3203546",
+      "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=3",
+      "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=7",
+      "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=8",
+      "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=9",
+      "https://github.com/bslatkin/effectivepython"
+    ],
+    "access": "Publisher supplies Chapter 5 in HTML and an 80-page sample PDF including frontmatter, Chapter 5 and index. The complete book was not accessed. Public searches did not establish an authenticated freely accessible full copy.",
+    "read_sections": [
+      "Publisher/author edition metadata and full table of contents inspected; ISBN 9780138172183 verified in publisher sample.",
+      "Complete Chapter 5 Items 30, 32, 36, 37 and 38 read in publisher HTML: argument mutation, failure results, dynamic defaults, parameter kinds and decorator metadata.",
+      "PDF frontmatter, contents and selected matching item passages inspected. This is not a complete Chapter 5 reading."
+    ],
+    "findings": [
+      {
+        "trigger": "Request handling accepts mutable arguments or creates dynamic defaults.",
+        "failure": "Shared defaults or aliases leak state between calls.",
+        "mechanism": "Make mutation ownership explicit and initialize per-call state inside the call.",
+        "conditions": "Use a distinct sentinel if None is meaningful; shallow copies still share nested objects.",
+        "counterexample": "Copying a request dictionary leaves its nested list shared.",
+        "verification": "Call twice with separate requests and inspect nested state, identity and timestamps.",
+        "source_urls": [
+          "https://www.informit.com/articles/article.aspx?p=3203546",
+          "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=7"
+        ],
+        "proposed_skill": "python-backend"
+      },
+      {
+        "trigger": "A backend helper exposes failure, flags or a decorator.",
+        "failure": "Falsey success becomes failure, flags swap, or wrappers obscure the interface.",
+        "mechanism": "Model outcomes explicitly, name ambiguous options and preserve wrapper metadata.",
+        "conditions": "Preserve supported callers; metadata preservation does not make a synchronous wrapper asynchronous.",
+        "counterexample": "Zero is a valid result; an optional lookup may legitimately return None.",
+        "verification": "Exercise zero/empty success, expected failure, existing call forms and introspected signatures.",
+        "source_urls": [
+          "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=3",
+          "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=8",
+          "https://www.informit.com/articles/article.aspx?p=3203546&seqNum=9"
+        ],
+        "proposed_skill": "python-backend"
+      }
+    ],
+    "limitations": [
+      "Coverage through Python 3.13 is the author's declared scope; current free-threaded builds and structured-concurrency behavior need official documentation.",
+      "Robustness and concurrency chapter titles were inspected, not their complete prose. Runtime guidance in the companion report is attributed to official Python documentation instead.",
+      "Book examples and copyright remain with their owners; proposed fixtures must be original."
+    ]
+  },
+  {
+    "id": "effective-typescript-2e",
+    "title": "Effective TypeScript: 83 Specific Ways to Improve Your TypeScript",
+    "authors": ["Dan Vanderkam"],
+    "edition": "Second edition",
+    "year": 2024,
+    "urls": [
+      "https://effectivetypescript.com/2024/05/21/second-edition/",
+      "https://github.com/danvk/effective-typescript/blob/main/README.md",
+      "https://effectivetypescript.com/2024/10/31/runtime-types/",
+      "https://effectivetypescript.com/2024/06/13/special-values/",
+      "https://effectivetypescript.com/2023/05/31/jsdoc-repeat/"
+    ],
+    "access": "Author-hosted complete sample items, example repository and edition announcement. Full second-edition text not accessed; generic full-PDF search results were not treated as authenticated editions.",
+    "read_sections": [
+      "Complete author sample Item 74, Chapter 9: runtime types, three schema strategies and trade-offs.",
+      "Complete author sample Item 36, Chapter 4: special values and explicit variants.",
+      "Complete author article published May 31, 2023, titled Item 30: documentation/type duplication. The second-edition repository lists this topic as Item 31; it is not represented as an authenticated second-edition excerpt.",
+      "Second-edition repository table of contents and TypeScript 5.4.5 sample-checking baseline inspected."
+    ],
+    "findings": [
+      {
+        "trigger": "A TypeScript service accepts external input.",
+        "failure": "Assertions or generated types are mistaken for validation.",
+        "mechanism": "Use one schema authority for runtime validation and static types, with generation drift checked when applicable.",
+        "conditions": "Match the existing contract/toolchain; shape checks do not establish authorization or business validity.",
+        "counterexample": "A schema listing properties without required accepts their omission.",
+        "verification": "Reject missing/wrong-type fields, test the extra-field policy, and run compilation separately from execution.",
+        "source_urls": ["https://effectivetypescript.com/2024/10/31/runtime-types/"],
+        "proposed_skill": "typescript-backend"
+      },
+      {
+        "trigger": "A response can be pending, absent, failed or successful.",
+        "failure": "In-band sentinel values enter ordinary calculations.",
+        "mechanism": "Represent distinct outcomes as explicit variants and exhaustively handle them.",
+        "conditions": "Enable appropriate null checking and preserve valid zero/empty values.",
+        "counterexample": "An unknown amount encoded as -1 is processed as a refund.",
+        "verification": "Add a variant and require the compiler to expose unhandled branches; exercise every runtime state.",
+        "source_urls": ["https://effectivetypescript.com/2024/06/13/special-values/"],
+        "proposed_skill": "typescript-backend"
+      },
+      {
+        "trigger": "API comments duplicate type declarations.",
+        "failure": "Prose becomes stale while code evolves.",
+        "mechanism": "Keep rationale, units, errors and effects in prose; keep checked shapes in types.",
+        "conditions": "Readonly is a static access restriction, not deep runtime freezing.",
+        "counterexample": "Deleting a timeout-unit comment removes information absent from number.",
+        "verification": "Review documentation against the contract and preserve behavior-relevant information.",
+        "source_urls": ["https://effectivetypescript.com/2023/05/31/jsdoc-repeat/"],
+        "proposed_skill": "typescript-backend"
+      }
+    ],
+    "limitations": [
+      "The runtime-types article's illustrative generated schema omits required. Treat examples as teaching material and verify the generated artifact's actual acceptance behavior.",
+      "Current compiler/runtime versions must be discovered in the target repository rather than inherited from 2024 sample tooling.",
+      "Do not import the author's personal schema-library preference as a universal requirement."
+    ]
+  },
+  {
+    "id": "learning-go-2e",
+    "title": "Learning Go: An Idiomatic Approach to Real-World Go Programming",
+    "authors": ["Jon Bodner"],
+    "edition": "Second edition",
+    "year": 2024,
+    "urls": [
+      "https://www.oreilly.com/library/view/learning-go-2nd/9781098139285/",
+      "https://www.oreilly.com/library/view/learning-go-2nd/9781098139285/ch14.html",
+      "https://www.oreilly.com/library/view/learning-go-3rd/0642572348533/",
+      "https://learning-go-book.dev/",
+      "https://github.com/learning-go-book-2e/ch12/tree/08720ea422a3c0f0076ed6efc11147687f47163d/sample_code",
+      "https://github.com/learning-go-book-2e/ch14/tree/71878380fe1c02a872f55fdba65ed44ac7ef997b/sample_code"
+    ],
+    "access": "Published second-edition metadata, table of contents, short publisher previews and author example code. No complete second-edition prose chapter accessed. Author site's free generics chapter explicitly belongs to revised first edition. Third edition is unfinished, with publisher date April 2027.",
+    "read_sections": [
+      "Publisher second-edition TOC and Chapter 14 opening context explanation; Chapters 9, 13 and 15 preview availability checked.",
+      "Complete author Chapter 12 sample files: backpressure/main.go, context_cancel/main.go, pipeline/ABProcessor.go, pipeline/CProcessor.go, pipeline/main.go, time_out/main.go, at commit 08720ea422a3c0f0076ed6efc11147687f47163d.",
+      "Complete author Chapter 14 sample files: cancel_http/main.go, nested_timers/main.go, own_cancellation/main.go, at commit 71878380fe1c02a872f55fdba65ed44ac7ef997b."
+    ],
+    "findings": [
+      {
+        "trigger": "A Go handler starts work that can outlive its caller.",
+        "failure": "Returning a timeout is mistaken for stopping the worker.",
+        "mechanism": "Give each goroutine an owner, cancellation path and completion signal; propagate deadlines into blocking operations.",
+        "conditions": "Cancellation is cooperative. Buffered result delivery prevents one blocked send but cannot stop arbitrary work.",
+        "counterexample": "The time_out example calls a worker without passing its context.",
+        "verification": "Cancel before result consumption and observe all owned workers finish without residual effects.",
+        "source_urls": ["https://github.com/learning-go-book-2e/ch12/blob/08720ea422a3c0f0076ed6efc11147687f47163d/sample_code/time_out/main.go"],
+        "proposed_skill": "go-backend"
+      },
+      {
+        "trigger": "An admission token limits concurrent requests.",
+        "failure": "A recovered panic bypasses ordinary token release.",
+        "mechanism": "Release acquired capacity through a guaranteed cleanup path.",
+        "conditions": "Panic recovery belongs at a deliberate boundary; do not convert arbitrary failures into success.",
+        "counterexample": "In the sample Process method, release occurs after the callback.",
+        "verification": "After a panicking callback is recovered by its owner, the next request can acquire capacity.",
+        "source_urls": ["https://github.com/learning-go-book-2e/ch12/blob/08720ea422a3c0f0076ed6efc11147687f47163d/sample_code/backpressure/main.go"],
+        "proposed_skill": "go-backend"
+      },
+      {
+        "trigger": "A Go service repeatedly calls another HTTP service.",
+        "failure": "Response bodies accumulate even though cancellation is wired.",
+        "mechanism": "Close every acquired body within its iteration; select an explicit bounded consumption policy.",
+        "conditions": "Avoid function-wide deferred accumulation inside an unbounded loop.",
+        "counterexample": "The cancel_http sample does not close successful response bodies.",
+        "verification": "Instrument a test transport and verify body close on success, rejection and early cancellation.",
+        "source_urls": ["https://github.com/learning-go-book-2e/ch14/blob/71878380fe1c02a872f55fdba65ed44ac7ef997b/sample_code/cancel_http/main.go"],
+        "proposed_skill": "go-backend"
+      }
+    ],
+    "limitations": [
+      "Findings about examples are direct code review, not claims about unseen surrounding chapter prose.",
+      "The examples were read, not executed. The verification descriptions are proposed evaluations.",
+      "Current context, net/http and testing documentation establishes API behavior; the published book predates testing/synctest's stable API.",
+      "Do not substitute an unverified full-book mirror or first-edition sample for second-edition reading provenance."
+    ]
+  }
+]

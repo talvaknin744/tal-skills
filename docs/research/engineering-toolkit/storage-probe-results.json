@@ -1,0 +1,82 @@
+{
+  "kind": "executed_research_feasibility_probe",
+  "completed_at": "2026-09-29T07:52:07Z",
+  "status": "passed",
+  "execution": {
+    "scope": "Disposable loopback-only PostgreSQL with synthetic fixtures; scratch code outside repository",
+    "python": "3.14.3",
+    "libpq": "18.0",
+    "image_tag_at_execution": "postgres:18-alpine",
+    "image_digest": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+    "probe_script": "probe.py",
+    "probe_sha256": "77c11ed49710c422bb31488542d277635dd7d95a1257e22962e8912946219380",
+    "commands_with_scratch_directory_normalized": [
+      "./venv/bin/python probe.py > results.json",
+      "docker stop tal-storage-probe-20260929",
+      "docker ps -a --filter label=tal-skills.research=storage-commit-20260929 --format '{{.Names}}'"
+    ],
+    "results_file": "results.json",
+    "container_cleanup": "Stopped owned container; label-filtered container list was empty",
+    "probe_preserved_outside_repository": true
+  },
+  "observations": {
+    "same_statement_insert_or_select": {
+      "rows": [],
+      "next_statement_rows": [
+        [
+          "cte"
+        ]
+      ],
+      "observed_lock": true
+    },
+    "concurrent_duplicate": {
+      "effect_count": 1,
+      "same_receipt": true,
+      "observed_lock": true
+    },
+    "fingerprint_conflict": "rejected without new effect",
+    "tenant_scope": {
+      "effect_count": 2
+    },
+    "commit_ack_dropped": {
+      "client_exception": "OperationalError",
+      "sqlstate": null,
+      "proxy_observed_and_suppressed": "CommandComplete COMMIT",
+      "stored_effect_count": 1
+    },
+    "same_key_retry_after_unknown": "original receipt returned; one effect",
+    "explicit_rollback_before_commit": {
+      "receipt_count": 0,
+      "effect_count": 0
+    },
+    "confirmed_serialization_abort": {
+      "sqlstate": "40001",
+      "winner_only_value": 1
+    },
+    "server_cancel_before_commit": {
+      "sqlstate": "57014",
+      "effect_count": 0,
+      "receipt_count": 0
+    },
+    "resources": {
+      "remaining_probe_sessions": 0,
+      "proxy_stopped": true
+    },
+    "versions": {
+      "postgres": "PostgreSQL 18.6 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "psycopg": "3.3.3",
+      "fsync": "on",
+      "synchronous_commit": "on"
+    }
+  },
+  "limitations": [
+    "Single real PostgreSQL engine and Python synchronous driver only; no TypeScript or Go execution",
+    "Receipt/effect/counter fixture; proposed inventory reservation example not executed",
+    "Deliberate plaintext loopback TCP COMMIT response suppression, not naturally occurring network failure or TLS compatibility",
+    "No crash, power loss, disk failure, replication, failover, restore, RPO, or external provider atomicity test",
+    "No application connection pool; no native asyncio task cancellation test",
+    "Zero server sessions observed after completion does not establish cleanup for every commit-error path",
+    "No broker or Temporal deployment executed",
+    "Scratch script requires fresh tables and its disposable instance settings; execution record is not a public installer"
+  ]
+}

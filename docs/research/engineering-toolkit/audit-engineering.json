@@ -1,0 +1,250 @@
+{
+  "reviewed_at": "2026-09-29",
+  "baseline_revision": "7279a6654487d9a5f09d4a21d117dfa841c7130d",
+  "skills": [
+    {
+      "name": "architecture",
+      "path": "skills/engineering/architecture",
+      "files_read": [
+        "skills/engineering/architecture/SKILL.md",
+        "skills/engineering/architecture/agents/openai.yaml",
+        "skills/engineering/architecture/references/book-grounding.md",
+        "skills/engineering/architecture/references/contracts/accepted-books.schema.json",
+        "skills/engineering/architecture/references/contracts/book-request.schema.json",
+        "skills/engineering/architecture/references/contracts/book-response.schema.json",
+        "skills/engineering/architecture/references/panels.md",
+        "skills/engineering/architecture/references/planning.md",
+        "skills/engineering/architecture/references/review.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Keep as the system-level decision/review skill. Native coordinator routing should select narrower skills for implementation risks instead of invoking every architecture panel lens."
+    },
+    {
+      "name": "concurrency-correctness",
+      "path": "skills/engineering/concurrency-correctness",
+      "files_read": [
+        "skills/engineering/concurrency-correctness/SKILL.md",
+        "skills/engineering/concurrency-correctness/agents/openai.yaml",
+        "skills/engineering/concurrency-correctness/references/cache-coherence.md",
+        "skills/engineering/concurrency-correctness/references/delayed-work.md",
+        "skills/engineering/concurrency-correctness/references/replica-reads.md",
+        "skills/engineering/concurrency-correctness/references/sources.md",
+        "skills/engineering/concurrency-correctness/references/transactions.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns actor histories, atomicity, freshness, and obsolete-owner safety. New messaging-reliability should own broker lifecycle and event evolution; route into this skill only for a concrete race or ordering invariant."
+    },
+    {
+      "name": "distributed-system-patterns",
+      "path": "skills/engineering/distributed-system-patterns",
+      "files_read": [
+        "skills/engineering/distributed-system-patterns/SKILL.md",
+        "skills/engineering/distributed-system-patterns/agents/openai.yaml",
+        "skills/engineering/distributed-system-patterns/references/batch.md",
+        "skills/engineering/distributed-system-patterns/references/ownership.md",
+        "skills/engineering/distributed-system-patterns/references/serving.md",
+        "skills/engineering/distributed-system-patterns/references/single-node.md",
+        "skills/engineering/distributed-system-patterns/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns topology selection, placement, sharding, fan-out, and batch completeness. New infrastructure and messaging skills should reuse these contracts instead of reopening the topology decision by default."
+    },
+    {
+      "name": "enterprise-application-patterns",
+      "path": "skills/engineering/enterprise-application-patterns",
+      "files_read": [
+        "skills/engineering/enterprise-application-patterns/SKILL.md",
+        "skills/engineering/enterprise-application-patterns/agents/openai.yaml",
+        "skills/engineering/enterprise-application-patterns/references/domain-logic.md",
+        "skills/engineering/enterprise-application-patterns/references/persistence.md",
+        "skills/engineering/enterprise-application-patterns/references/sources.md",
+        "skills/engineering/enterprise-application-patterns/references/transactions.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns domain-logic and persistence responsibilities inside an application. Language agents should apply the existing framework first and use this skill only when structure or transaction boundaries are disputed."
+    },
+    {
+      "name": "graceful-draining",
+      "path": "skills/engineering/graceful-draining",
+      "files_read": [
+        "skills/engineering/graceful-draining/SKILL.md",
+        "skills/engineering/graceful-draining/agents/openai.yaml",
+        "skills/engineering/graceful-draining/references/durable-handoff.md",
+        "skills/engineering/graceful-draining/references/platform-shutdown.md",
+        "skills/engineering/graceful-draining/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns admission shutdown, job continuity, recovery identity, and ownership transfer. Reliability and durability agents should compose it for interruption cases rather than copy its protocol into their prompts."
+    },
+    {
+      "name": "idempotency",
+      "path": "skills/engineering/idempotency",
+      "files_read": [
+        "skills/engineering/idempotency/SKILL.md",
+        "skills/engineering/idempotency/agents/openai.yaml",
+        "skills/engineering/idempotency/references/recovery.md",
+        "skills/engineering/idempotency/references/request-contract.md",
+        "skills/engineering/idempotency/references/sources.md",
+        "skills/engineering/idempotency/references/verification.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns logical operation identity, atomic arbitration, equivalent intent, result replay, and uncertain effects. Keep distinct from transport retries and message ordering."
+    },
+    {
+      "name": "legacy-code-changes",
+      "path": "skills/engineering/legacy-code-changes",
+      "files_read": [
+        "skills/engineering/legacy-code-changes/SKILL.md",
+        "skills/engineering/legacy-code-changes/agents/openai.yaml",
+        "skills/engineering/legacy-code-changes/references/dependency-isolation.md",
+        "skills/engineering/legacy-code-changes/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns characterization and minimal test seams for untested paths. The new cleanup skill should preserve this boundary and invoke it when behavior cannot yet be observed."
+    },
+    {
+      "name": "microservice-boundaries",
+      "path": "skills/engineering/microservice-boundaries",
+      "files_read": [
+        "skills/engineering/microservice-boundaries/SKILL.md",
+        "skills/engineering/microservice-boundaries/agents/openai.yaml",
+        "skills/engineering/microservice-boundaries/references/coupling.md",
+        "skills/engineering/microservice-boundaries/references/ownership.md",
+        "skills/engineering/microservice-boundaries/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns capability/data/organizational boundaries. The boundaries agent should use this skill for service seams and pragmatic-programming or object-design-patterns for local changeability."
+    },
+    {
+      "name": "microservice-data",
+      "path": "skills/engineering/microservice-data",
+      "files_read": [
+        "skills/engineering/microservice-data/SKILL.md",
+        "skills/engineering/microservice-data/agents/openai.yaml",
+        "skills/engineering/microservice-data/references/projections.md",
+        "skills/engineering/microservice-data/references/sources.md",
+        "skills/engineering/microservice-data/references/workflows.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns cross-owner invariants, sagas, compensation, and read projections. The new messaging skill should cover transport mechanics without becoming a second saga-design authority."
+    },
+    {
+      "name": "microservice-extraction",
+      "path": "skills/engineering/microservice-extraction",
+      "files_read": [
+        "skills/engineering/microservice-extraction/SKILL.md",
+        "skills/engineering/microservice-extraction/agents/openai.yaml",
+        "skills/engineering/microservice-extraction/references/cutover.md",
+        "skills/engineering/microservice-extraction/references/data-transition.md",
+        "skills/engineering/microservice-extraction/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns staged code/data ownership transfer, coexistence, and retirement. The new infrastructure skill should handle declarative infrastructure changes rather than override this migration state model."
+    },
+    {
+      "name": "microservice-integration",
+      "path": "skills/engineering/microservice-integration",
+      "files_read": [
+        "skills/engineering/microservice-integration/SKILL.md",
+        "skills/engineering/microservice-integration/agents/openai.yaml",
+        "skills/engineering/microservice-integration/references/compatibility.md",
+        "skills/engineering/microservice-integration/references/messaging.md",
+        "skills/engineering/microservice-integration/references/sources.md",
+        "skills/engineering/microservice-integration/references/ui-composition.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns interaction style, public contracts, and consumer compatibility. New messaging-reliability should start after the message-based interaction is selected and handle durable delivery and failure schedules."
+    },
+    {
+      "name": "microservice-operations",
+      "path": "skills/engineering/microservice-operations",
+      "files_read": [
+        "skills/engineering/microservice-operations/SKILL.md",
+        "skills/engineering/microservice-operations/agents/openai.yaml",
+        "skills/engineering/microservice-operations/references/capacity.md",
+        "skills/engineering/microservice-operations/references/failure-handling.md",
+        "skills/engineering/microservice-operations/references/security.md",
+        "skills/engineering/microservice-operations/references/sources.md"
+      ],
+      "status": "clarify",
+      "findings": [
+        {
+          "severity": "low",
+          "evidence": "skills/engineering/microservice-operations/references/failure-handling.md:5 includes pool acquisition in the timeout budget, then unconditionally says that a timeout means the result is unknown. A first attempt that demonstrably never acquired a connection or dispatched work can instead be a known pre-effect failure; an earlier uncertain attempt still keeps the logical operation uncertain.",
+          "source_url": "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration",
+          "recommended_change": "Qualify the timeout sentence by execution evidence: preserve unknown outcome after possible dispatch, distinguish a proven pre-dispatch timeout with no earlier uncertain attempt, and retain bounded retry/reconciliation rules. Keep this platform-neutral; the HTTPX PoolTimeout is an illustrative counterexample, not a new dependency.",
+          "verification": "Review two otherwise identical operation histories: (1) first attempt expires while waiting for a local pool slot, dispatch count zero, no prior attempt; (2) provider commits, response wait expires. The first is a known pre-effect failure and can retry within its existing budget; the second preserves original identity and reconciles or uses documented duplicate safety. Add a third history where an earlier attempt was uncertain, then the next attempt has a pool timeout: uncertainty must remain."
+        }
+      ],
+      "overlap_notes": "Owns service-level operating claims and cross-service failure containment. New reliability and infrastructure roles should route by the specific change: operation recovery, service shutdown, or infrastructure rollout."
+    },
+    {
+      "name": "microservice-testing",
+      "path": "skills/engineering/microservice-testing",
+      "files_read": [
+        "skills/engineering/microservice-testing/SKILL.md",
+        "skills/engineering/microservice-testing/agents/openai.yaml",
+        "skills/engineering/microservice-testing/references/broader-tests.md",
+        "skills/engineering/microservice-testing/references/contracts.md",
+        "skills/engineering/microservice-testing/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns consumer contracts, service independence, and appropriate test boundaries. New failure-oriented-testing should specialize in schedules, faults, and evidence rather than duplicate the whole test strategy."
+    },
+    {
+      "name": "object-design-patterns",
+      "path": "skills/engineering/object-design-patterns",
+      "files_read": [
+        "skills/engineering/object-design-patterns/SKILL.md",
+        "skills/engineering/object-design-patterns/agents/openai.yaml",
+        "skills/engineering/object-design-patterns/references/behavior-and-state.md",
+        "skills/engineering/object-design-patterns/references/construction.md",
+        "skills/engineering/object-design-patterns/references/sources.md",
+        "skills/engineering/object-design-patterns/references/structure-and-interfaces.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns concrete variation and collaboration contracts. Cleanup must not manufacture pattern-shaped abstractions; language specialists preserve idiomatic functions/protocols where sufficient."
+    },
+    {
+      "name": "pragmatic-programming",
+      "path": "skills/engineering/pragmatic-programming",
+      "files_read": [
+        "skills/engineering/pragmatic-programming/SKILL.md",
+        "skills/engineering/pragmatic-programming/agents/openai.yaml",
+        "skills/engineering/pragmatic-programming/references/changeability.md",
+        "skills/engineering/pragmatic-programming/references/experiments.md",
+        "skills/engineering/pragmatic-programming/references/sources.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns change locality, knowledge ownership, prototypes, and tracer bullets. Cleanup should require observable burden and behavior preservation rather than remove deliberate duplication mechanically."
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm run check",
+      "result": "pass",
+      "scope": "Packaging and local reference checks passed for all 30 current skills, including the 15 audited engineering skills. This is structural evidence, not proof of runtime correctness."
+    }
+  ],
+  "limitations": [
+    "All 15 engineering entrypoints and all their Markdown reference branches were read. Native UI metadata and the architecture JSON contracts were also inspected. No skill implementation was changed by this audit.",
+    "Current primary-source crosschecks were targeted to failure-prone claims; not every external URL was fetched and not every book locator was independently re-read. Existing source maps remain the provenance record for prior book reading.",
+    "No datastore, broker, Kubernetes, Celery, or provider integration was executed. Technical conclusions assess guidance and its stated evidence boundaries, not an installed production configuration.",
+    "No comparative agent experiment was run to establish that an instruction is a no-op or that shortening it improves results. Consequently no speculative style-only deletion is recommended.",
+    "Overlap notes are routing requirements for the new agents/workflows, not defects requiring renamed public skills or mandatory sibling installations."
+  ]
+}

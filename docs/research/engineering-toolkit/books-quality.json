@@ -1,0 +1,245 @@
+{
+  "research_date": "2026-09-29",
+  "books": [
+    {
+      "id": "software-engineering-at-google",
+      "title": "Software Engineering at Google: Lessons Learned from Programming Over Time",
+      "authors": [
+        "Titus Winters",
+        "Tom Manshreck",
+        "Hyrum Wright"
+      ],
+      "edition": "1st; official HTML edition",
+      "year": 2020,
+      "urls": [
+        "https://abseil.io/resources/swe-book",
+        "https://abseil.io/resources/swe-book/html/toc.html",
+        "https://abseil.io/resources/swe-book/html/ch09.html",
+        "https://abseil.io/resources/swe-book/html/ch10.html",
+        "https://abseil.io/resources/swe-book/html/ch12.html",
+        "https://abseil.io/resources/swe-book/html/ch14.html",
+        "https://abseil.io/resources/swe-book/html/ch15.html"
+      ],
+      "access": {
+        "full_text_available": true,
+        "availability": "Official complete HTML, CC BY-NC-ND 4.0. Raw chapter copies stayed outside the repository.",
+        "provenance": "Official abseil/abseil.github.io mirror, master observed at e9e24835cb889fe25251cb9ec6d51b79233e358d on 2026-09-29."
+      },
+      "read_sections": [
+        {
+          "section": "Chapter 9: Code Review",
+          "scope": "Complete chapter prose and examples",
+          "url": "https://abseil.io/resources/swe-book/html/ch09.html",
+          "sha256_html": "9d33fac388338771250acbedfa5d8acc984ac9c12bc5b30de1ba1a120e2a400f"
+        },
+        {
+          "section": "Chapter 10: Documentation",
+          "scope": "Complete chapter prose and examples",
+          "url": "https://abseil.io/resources/swe-book/html/ch10.html",
+          "sha256_html": "0e4b3a3142a49fbe96b87abfc5b6033876ade6c0e12b86534916d25d22dd3d70"
+        },
+        {
+          "section": "Chapter 12: Unit Testing",
+          "scope": "Complete chapter prose and examples",
+          "url": "https://abseil.io/resources/swe-book/html/ch12.html",
+          "sha256_html": "58306e340b2a1224cf2911c3c6a0d4315d564e34ec060faa8c00aa6ade6c6d6f"
+        },
+        {
+          "section": "Chapter 14: Larger Testing",
+          "scope": "Complete chapter prose and examples",
+          "url": "https://abseil.io/resources/swe-book/html/ch14.html",
+          "sha256_html": "61d65833a42ec4a6b9333fd3de3a5cb305d96988f8cebcd7789d42fe59f470f0"
+        },
+        {
+          "section": "Chapter 15: Deprecation",
+          "scope": "Complete chapter prose and examples",
+          "url": "https://abseil.io/resources/swe-book/html/ch15.html",
+          "sha256_html": "133c6de0d04859c253d6da68ec77663c73e8dd702e40eef6434bb067048c252e"
+        }
+      ],
+      "findings": [
+        {
+          "source": "https://abseil.io/resources/swe-book/html/ch09.html",
+          "trigger": "A change needs independent review.",
+          "failure": "Review becomes taste-driven redesign or an oversized approval queue.",
+          "mechanism": "Review correctness and comprehension against the intended change; automate mechanical checks and give extra reviewers distinct concerns.",
+          "conditions": "Use evidence and the repository convention; prefer bounded, coherent changes.",
+          "counterexample": "A small low-risk edit does not need every specialist.",
+          "verification": "Each finding identifies the affected behavior, supporting location, and required correction; track its resolution."
+        },
+        {
+          "source": "https://abseil.io/resources/swe-book/html/ch10.html",
+          "trigger": "Documentation is stale, conflicting, or hard to follow.",
+          "failure": "Readers cannot identify an authoritative instruction or its prerequisites.",
+          "mechanism": "Assign a canonical source and owner; keep audience-specific explanations separate and review instructions with an unfamiliar reader.",
+          "conditions": "Preserve operational rationale and discoverability while consolidating.",
+          "counterexample": "A tutorial and a complete reference can intentionally explain the same API differently.",
+          "verification": "Run relevant steps in a fresh context and check links, prerequisites, and audience comprehension."
+        },
+        {
+          "source": "https://abseil.io/resources/swe-book/html/ch12.html",
+          "trigger": "Cleanup breaks many tests without a requirement change.",
+          "failure": "Tests encode private call structure instead of the consumer contract.",
+          "mechanism": "Exercise the public boundary and assert meaningful outcomes; keep test inputs and expectations visible.",
+          "conditions": "Interaction assertions remain appropriate when interactions are the contract.",
+          "counterexample": "Deduplicating all test setup can conceal the scenario; copying production calculations can copy their bug.",
+          "verification": "A harmless internal change keeps tests green; a changed promised outcome makes a focused test fail."
+        },
+        {
+          "source": "https://abseil.io/resources/swe-book/html/ch14.html",
+          "trigger": "Unit tests cannot establish a deployment or dependency claim.",
+          "failure": "Doubles, packaging, configuration, load, or network behavior diverge from production.",
+          "mechanism": "Choose the smallest environment retaining the risky behavior; record real and substituted dependencies, data, action, oracle, and owner.",
+          "conditions": "Balance fidelity against isolation, cost, and failure risk.",
+          "counterexample": "A mock transaction cannot prove database isolation; a passing startup smoke check cannot prove business correctness.",
+          "verification": "Demonstrate the relevant defect, preserve diagnostic artifacts, and bound event-based waits; identify remaining fidelity gaps."
+        },
+        {
+          "source": "https://abseil.io/resources/swe-book/html/ch15.html",
+          "trigger": "An obsolete API or subsystem is proposed for removal.",
+          "failure": "Hidden users fail after an apparently safe deletion.",
+          "mechanism": "Inventory static and runtime consumers, migrate them, and prevent new dependencies during retirement.",
+          "conditions": "Removal needs a replacement or explicit withdrawal decision and a responsible owner.",
+          "counterexample": "Old code or a quiet telemetry interval alone does not prove obsolescence.",
+          "verification": "Verify migrated consumers and remaining dependency evidence; distinguish local refactoring from behavior-removing deprecation."
+        }
+      ],
+      "limitations": [
+        "Google-specific numbers, ownership machinery, and production chaos practices are context, not universal mandates.",
+        "The book describes human peer review; fresh-agent review is a repository adaptation, not an empirically equivalent substitute.",
+        "The entire book was available; only the five listed chapters were read in depth.",
+        "Chapter 14 mathematical illustrations about fidelity are not adopted as measured reliability estimates."
+      ]
+    },
+    {
+      "id": "effective-software-testing",
+      "title": "Effective Software Testing: A Developer's Guide",
+      "authors": [
+        "Maurício Aniche"
+      ],
+      "edition": "1st",
+      "year": 2022,
+      "urls": [
+        "https://www.manning.com/books/effective-software-testing",
+        "https://www.effective-software-testing.com/",
+        "https://www.manning.com/preview/effective-software-testing/chapter-1",
+        "https://livebook.manning.com/book/effective-software-testing/chapter-2",
+        "https://livebook.manning.com/book/effective-software-testing/chapter-5",
+        "https://livebook.manning.com/book/effective-software-testing/chapter-10",
+        "https://www.effective-software-testing.com/it-is-not-about-following-a-recipe",
+        "https://www.effective-software-testing.com/why-do-developers-hate-code-coverage",
+        "https://www.effective-software-testing.com/mocking-and-coupling",
+        "https://www.effective-software-testing.com/do-I-systematically-write-tests-all-the-time"
+      ],
+      "access": {
+        "full_text_available": false,
+        "availability": "Publisher catalog, chapter introductions/briefs, and complete author articles were accessible. Full publisher text requires book/subscription access; no complete chapter was recovered.",
+        "search_scope": "Searched publisher, author, Google Books, library/catalog, and institutional PDF results. The indexed HCU PDF failed TLS verification; a read-only retrieval without certificate verification returned 404. No PDF text was recovered.",
+        "failed_full_text_url": "https://ebook.app.hcu.edu.gh/wp-content/uploads/2024/08/Mauricio-Aniche-Effective-Software-Testing_-A-developers-guide-Manning-2022.pdf"
+      },
+      "read_sections": [
+        {
+          "section": "Chapters 1, 2, 5, 10",
+          "scope": "Public introductions and section headings only; not complete chapters"
+        },
+        {
+          "section": "It is not about following a recipe! (2022-05-18)",
+          "scope": "Complete author article"
+        },
+        {
+          "section": "Why do developers hate code coverage? (2021-11-18)",
+          "scope": "Complete author article"
+        },
+        {
+          "section": "Tests breaking because of mocks, what to do? (2023-03-23)",
+          "scope": "Complete author article"
+        },
+        {
+          "section": "Do I systematically write tests all the time? (2022-03-14)",
+          "scope": "Complete author article"
+        }
+      ],
+      "findings": [
+        {
+          "source": "https://www.effective-software-testing.com/it-is-not-about-following-a-recipe",
+          "trigger": "A test plan contains only habitual edge cases.",
+          "failure": "Generic empty/null inputs miss domain-specific boundaries.",
+          "mechanism": "Derive expected behavior and partitions from requirements before augmenting with familiar implementation edge cases.",
+          "conditions": "Scale formality to uncertainty and risk.",
+          "counterexample": "An empty-list case says nothing about a reservation limit or ownership transfer.",
+          "verification": "Every selected input distinguishes a stated requirement; the oracle is independently justified."
+        },
+        {
+          "source": "https://www.effective-software-testing.com/why-do-developers-hate-code-coverage",
+          "trigger": "A suite reaches a numerical coverage goal.",
+          "failure": "Executed branches are mistaken for effective assertions.",
+          "mechanism": "Use uncovered paths to question the requirement-derived suite and explain omissions.",
+          "conditions": "Coverage is a diagnostic, not a correctness certificate.",
+          "counterexample": "Tests can execute faulty behavior and still assert nothing relevant.",
+          "verification": "Introduce a representative fault and confirm an existing assertion detects it; explain untested risks."
+        },
+        {
+          "source": "https://www.effective-software-testing.com/mocking-and-coupling",
+          "trigger": "Mocks fail after changing a dependency.",
+          "failure": "Tests mix intended interactions with incidental collaborator details.",
+          "mechanism": "Name which observable interaction matters, then narrow coupling to that boundary.",
+          "conditions": "Preserve version rollback options when required by the integration.",
+          "counterexample": "External message emission can require an interaction assertion even when internal lookup calls do not.",
+          "verification": "A changed internal lookup preserves the test; a missing promised emission fails it."
+        }
+      ],
+      "limitations": [
+        "Findings are supported by the linked author articles; they are not claims of reading the full book.",
+        "Book examples are Java-oriented; runtime-specific advice needs current language and dependency documentation.",
+        "No fixed coverage percentage, mandatory mock ban, or universal testing ratio is adopted."
+      ]
+    },
+    {
+      "id": "refactoring-second-edition",
+      "title": "Refactoring: Improving the Design of Existing Code",
+      "authors": [
+        "Martin Fowler",
+        "Kent Beck (contributor)"
+      ],
+      "edition": "2nd",
+      "year": 2018,
+      "urls": [
+        "https://martinfowler.com/books/refactoring.html",
+        "https://www.thoughtworks.com/insights/books/refactoring2",
+        "https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/bk_Refactoring2-free-chapter_en.pdf",
+        "https://martinfowler.com/articles/access-refactoring-web-edition.html",
+        "https://refactoring.com/catalog/"
+      ],
+      "access": {
+        "full_text_available": false,
+        "availability": "Official complete opening chapter available as a 45-page PDF (cover plus printed pages 1–44). Canonical full web edition requires registered book access.",
+        "search_scope": "Author, publisher, Thoughtworks, and institutional/full-PDF searches; no authenticated open complete second edition located."
+      },
+      "read_sections": [
+        {
+          "section": "Chapter 1: Refactoring: A First Example",
+          "scope": "Complete chapter prose and successive code examples; printed pages 1–44; rendered printed page 38 to verify code-layout context.",
+          "url": "https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/bk_Refactoring2-free-chapter_en.pdf",
+          "sha256_pdf": "6a763eef4eb2f2274f6e4e53c9afd3be7aa35024cb24e89ffc48637de96c5880"
+        }
+      ],
+      "findings": [
+        {
+          "source": "https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/bk_Refactoring2-free-chapter_en.pdf",
+          "trigger": "Structure obstructs a specific change or understanding.",
+          "failure": "A broad cleanup changes behavior or creates speculative abstraction.",
+          "mechanism": "Preserve observed results with self-checking tests and make small transformations with feedback.",
+          "conditions": "Choose structure for the next evidenced change; track cost as well as clarity.",
+          "counterexample": "Fewer lines is not automatically better; useful structure can increase code size.",
+          "verification": "Existing output expectations survive each step; review any changed expectation as a separate behavior decision."
+        }
+      ],
+      "limitations": [
+        "The chapter demonstrates a method, not a mandate for inheritance, tiny functions, repeated calculation, or particular naming conventions.",
+        "Performance-sensitive paths still need representative measurement.",
+        "Full book was not read; public catalog entries are summaries, not full mechanics."
+      ]
+    }
+  ],
+  "interpretation": "Practice cards are original applications informed by each linked source. Counterexamples and verification checks are repository adaptations, not quotations or claims that the books prescribe these exact tests."
+}

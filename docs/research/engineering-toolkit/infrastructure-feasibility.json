@@ -1,0 +1,709 @@
+{
+  "title": "Terraform local feasibility probes",
+  "recorded_at": "2026-09-29T08:18:45.886611+00:00",
+  "status": "passed",
+  "research_only": true,
+  "scope": {
+    "scratch_directory": "/tmp/tal-terraform-research-20260929",
+    "cloud_resources": false,
+    "external_providers": false,
+    "cloud_credentials_in_execution_environment": false,
+    "global_install": false
+  },
+  "download": {
+    "version": "1.16.4",
+    "platform": "darwin_arm64",
+    "archive_url": "https://releases.hashicorp.com/terraform/1.16.4/terraform_1.16.4_darwin_arm64.zip",
+    "checksum_url": "https://releases.hashicorp.com/terraform/1.16.4/terraform_1.16.4_SHA256SUMS",
+    "sha256": "42cfdf97ad722f79085fe2279b06d4b8680172de3534b22eeddd9a0fbbe7b8f1",
+    "checksum_verified": true,
+    "signature_verified": false,
+    "archive_size": 33898998,
+    "global_install": false
+  },
+  "runtime": {
+    "terraform_version": "1.16.4",
+    "platform": "darwin_arm64",
+    "provider_selections": {},
+    "terraform_outdated": false
+  },
+  "execution_environment": {
+    "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "TMPDIR": "/private/tmp/tal-terraform-research-20260929/tmp",
+    "TF_CLI_CONFIG_FILE": "/private/tmp/tal-terraform-research-20260929/terraform.rc",
+    "TF_IN_AUTOMATION": "1",
+    "CHECKPOINT_DISABLE": "1"
+  },
+  "started_at": "2026-09-29T08:18:44.249564+00:00",
+  "finished_at": "2026-09-29T08:18:45.886611+00:00",
+  "configuration_transitions": [
+    {
+      "before_command": "version",
+      "configuration": "initial"
+    },
+    {
+      "before_command": "move-plan",
+      "configuration": "moved"
+    },
+    {
+      "before_command": "retention-plan",
+      "configuration": "removed-retained"
+    }
+  ],
+  "configurations": {
+    "initial": "terraform {\n  required_version = \"= 1.16.4\"\n}\n\nvariable \"fail_later\" {\n  type    = bool\n  default = true\n}\n\nvariable \"first_value\" {\n  type    = string\n  default = \"original\"\n}\n\nresource \"terraform_data\" \"first\" {\n  input = var.first_value\n\n  provisioner \"local-exec\" {\n    command = \"printf '%s\\n' first-created >> first-events.txt\"\n  }\n\n  provisioner \"local-exec\" {\n    when    = destroy\n    command = \"printf '%s\\n' destroy-called > first-destroy.txt\"\n  }\n}\n\nresource \"terraform_data\" \"later\" {\n  depends_on = [terraform_data.first]\n  input      = \"later-operation\"\n\n  provisioner \"local-exec\" {\n    command = var.fail_later ? \"printf '%s\\n' deliberate-local-failure >&2; exit 23\" : \"printf '%s\\n' later-recovered > later-effect.txt\"\n  }\n}\n",
+    "moved": "terraform {\n  required_version = \"= 1.16.4\"\n}\n\nvariable \"fail_later\" {\n  type    = bool\n  default = true\n}\n\nvariable \"first_value\" {\n  type    = string\n  default = \"original\"\n}\n\nresource \"terraform_data\" \"first_renamed\" {\n  input = var.first_value\n\n  provisioner \"local-exec\" {\n    command = \"printf '%s\\n' first-created >> first-events.txt\"\n  }\n\n  provisioner \"local-exec\" {\n    when    = destroy\n    command = \"printf '%s\\n' destroy-called > first-destroy.txt\"\n  }\n}\n\nresource \"terraform_data\" \"later\" {\n  depends_on = [terraform_data.first_renamed]\n  input      = \"later-operation\"\n\n  provisioner \"local-exec\" {\n    command = var.fail_later ? \"printf '%s\\n' deliberate-local-failure >&2; exit 23\" : \"printf '%s\\n' later-recovered > later-effect.txt\"\n  }\n}\n\nmoved {\n  from = terraform_data.first\n  to   = terraform_data.first_renamed\n}\n",
+    "removed-retained": "terraform {\n  required_version = \"= 1.16.4\"\n}\n\nvariable \"fail_later\" {\n  type    = bool\n  default = true\n}\n\nvariable \"first_value\" {\n  type    = string\n  default = \"original\"\n}\n\nresource \"terraform_data\" \"later\" {\n  input      = \"later-operation\"\n\n  provisioner \"local-exec\" {\n    command = var.fail_later ? \"printf '%s\\n' deliberate-local-failure >&2; exit 23\" : \"printf '%s\\n' later-recovered > later-effect.txt\"\n  }\n}\n\nremoved {\n  from = terraform_data.first_renamed\n  lifecycle {\n    destroy = false\n  }\n}\n"
+  },
+  "commands": [
+    {
+      "label": "version",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "version",
+        "-json"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "132d5c4aac5d63431c8b75c2da4c2db1604cffa4c001bcf594d383e7eb6e7aae",
+      "stdout": "{\n  \"terraform_version\": \"1.16.4\",\n  \"platform\": \"darwin_arm64\",\n  \"provider_selections\": {},\n  \"terraform_outdated\": false\n}\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "init",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "8ce7bfbe5e7097cc4e519cde92ca4a32771b5ec08274661608114be7bb6de287",
+      "stdout": "Initializing the backend...\n\nInitializing provider plugins...\n- terraform.io/builtin/terraform is built in to Terraform\n\nTerraform has been successfully initialized!\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "failing-plan",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=failing-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 2,
+      "stdout_sha256": "0f0858cb5a52976e4011b190ebe52e7f43238149ae5b3d898cd1f922548eaae6",
+      "stdout": "\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  + create\n\nTerraform will perform the following actions:\n\n  # terraform_data.first will be created\n  + resource \"terraform_data\" \"first\" {\n      + id     = (known after apply)\n      + input  = \"original\"\n      + output = (known after apply)\n    }\n\n  # terraform_data.later will be created\n  + resource \"terraform_data\" \"later\" {\n      + id     = (known after apply)\n      + input  = \"later-operation\"\n      + output = (known after apply)\n    }\n\nPlan: 2 to add, 0 to change, 0 to destroy.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "failing-plan-json",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json",
+        "failing-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "2c4dd50aa0fc6bd928953a0edf7f31bd3b1fcfe1c8f2cca191f6ccba7f406408",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/failing-plan-json.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/failing-plan-json.stderr"
+    },
+    {
+      "label": "failing-apply",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "apply",
+        "-input=false",
+        "-no-color",
+        "failing-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 1,
+      "stdout_sha256": "4d9522d689af618990bb8361ecd12cae4292d1b0c9c8432e2a292b0469628161",
+      "stdout": "terraform_data.first: Creating...\nterraform_data.first: Provisioning with 'local-exec'...\nterraform_data.first (local-exec): Executing: [\"/bin/sh\" \"-c\" \"printf '%s\\n' first-created >> first-events.txt\"]\nterraform_data.first: Creation complete after 0s [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\nterraform_data.later: Creating...\nterraform_data.later: Provisioning with 'local-exec'...\nterraform_data.later (local-exec): Executing: [\"/bin/sh\" \"-c\" \"printf '%s\\n' deliberate-local-failure >&2; exit 23\"]\nterraform_data.later (local-exec): deliberate-local-failure\n",
+      "stderr_sha256": "f6ddb827a9e7eb8aa3d4e2cd0b4b116a06f13a0dc368007835d723546fbba60b",
+      "stderr": "\nError: local-exec provisioner error\n\n  with terraform_data.later,\n  on main.tf line 32, in resource \"terraform_data\" \"later\":\n  32:   provisioner \"local-exec\" {\n\nError running command 'printf '%s\n' deliberate-local-failure >&2; exit 23': exit status 23. Output:\ndeliberate-local-failure\n\n"
+    },
+    {
+      "label": "after-failure",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "7fadf8ab27c67bf65a49f4769d23e9cdaa9a29e18f8c0432d2db579132811bca",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-failure.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-failure.stderr"
+    },
+    {
+      "label": "recovery-plan",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=recovery-plan.tfplan",
+        "-var=fail_later=false"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 2,
+      "stdout_sha256": "fbea87bd23b1e4bb114c782961e4c7b69eec6e13d5fd7327f2b6201db8d15b4e",
+      "stdout": "terraform_data.first: Refreshing state... [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\nterraform_data.later: Refreshing state... [id=af2313ac-6ecd-bdb0-c8e8-c72d296e99b2]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n-/+ destroy and then create replacement\n\nTerraform will perform the following actions:\n\n  # terraform_data.later is tainted, so must be replaced\n-/+ resource \"terraform_data\" \"later\" {\n      ~ id     = \"af2313ac-6ecd-bdb0-c8e8-c72d296e99b2\" -> (known after apply)\n      ~ output = \"later-operation\" -> (known after apply)\n        # (1 unchanged attribute hidden)\n    }\n\nPlan: 1 to add, 0 to change, 1 to destroy.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "recovery-plan-json",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json",
+        "recovery-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "de47dcaf6d48477209c62668cfbbe194b2234af93ca7d057e50fd7e44cc472fa",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/recovery-plan-json.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/recovery-plan-json.stderr"
+    },
+    {
+      "label": "recovery-apply",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "apply",
+        "-input=false",
+        "-no-color",
+        "recovery-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "c1d422d974a527401efaea996d04817df7a97b24d3774fc14b91709f159a000d",
+      "stdout": "terraform_data.later: Destroying... [id=af2313ac-6ecd-bdb0-c8e8-c72d296e99b2]\nterraform_data.later: Destruction complete after 0s\nterraform_data.later: Creating...\nterraform_data.later: Provisioning with 'local-exec'...\nterraform_data.later (local-exec): Executing: [\"/bin/sh\" \"-c\" \"printf '%s\\n' later-recovered > later-effect.txt\"]\nterraform_data.later: Creation complete after 0s [id=f93cf5b6-ed1b-2457-911d-bd6235b54048]\n\nApply complete! Resources: 1 added, 0 changed, 1 destroyed.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "after-recovery",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "0c254de5ca891dfbdf2fcb1f17068062ba2f10d962ad7524e9a65cae8f2bfef4",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-recovery.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-recovery.stderr"
+    },
+    {
+      "label": "reviewed-plan",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=reviewed-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=reviewed"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 2,
+      "stdout_sha256": "151971b086637cd5c22793b2fafffe411c8f420ba9af75c8466e53360a9a2d11",
+      "stdout": "terraform_data.first: Refreshing state... [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\nterraform_data.later: Refreshing state... [id=f93cf5b6-ed1b-2457-911d-bd6235b54048]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  ~ update in-place\n\nTerraform will perform the following actions:\n\n  # terraform_data.first will be updated in-place\n  ~ resource \"terraform_data\" \"first\" {\n        id     = \"3e7cb7ef-7ca1-205f-affb-6ca167d75fba\"\n      ~ input  = \"original\" -> \"reviewed\"\n      ~ output = \"original\" -> (known after apply)\n    }\n\nPlan: 0 to add, 1 to change, 0 to destroy.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-plan-json",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json",
+        "reviewed-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "f652490d5e8ea280fd7f6d85b2d0e5e2337388253c4c312a8eb04b7aac14338e",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/reviewed-plan-json.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/reviewed-plan-json.stderr"
+    },
+    {
+      "label": "intervening-plan",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=intervening-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 2,
+      "stdout_sha256": "d39d0c504ee86e1103ce1cfb3d9a00400d336d12326141cb230426074a19c770",
+      "stdout": "terraform_data.first: Refreshing state... [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\nterraform_data.later: Refreshing state... [id=f93cf5b6-ed1b-2457-911d-bd6235b54048]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  ~ update in-place\n\nTerraform will perform the following actions:\n\n  # terraform_data.first will be updated in-place\n  ~ resource \"terraform_data\" \"first\" {\n        id     = \"3e7cb7ef-7ca1-205f-affb-6ca167d75fba\"\n      ~ input  = \"original\" -> \"intervening\"\n      ~ output = \"original\" -> (known after apply)\n    }\n\nPlan: 0 to add, 1 to change, 0 to destroy.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "intervening-plan-json",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json",
+        "intervening-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "c3109558b0c24033328b827a4a4ab3e5cb631fa954852ce8fbfe4986f68e33f5",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/intervening-plan-json.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/intervening-plan-json.stderr"
+    },
+    {
+      "label": "intervening-apply",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "apply",
+        "-input=false",
+        "-no-color",
+        "intervening-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "496d1219308585c9a5827cbf6e69a529b48e4670932a105f2fbe80445f3cae05",
+      "stdout": "terraform_data.first: Modifying... [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\nterraform_data.first: Modifications complete after 0s [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\n\nApply complete! Resources: 0 added, 1 changed, 0 destroyed.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "stale-apply",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "apply",
+        "-input=false",
+        "-no-color",
+        "reviewed-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_sha256": "b770e8978edcebbee2056d5550fd7ef73eef7def7cf3333b83ce704f2d4b404c",
+      "stderr": "\nError: Saved plan is stale\n\nThe given plan file can no longer be applied because the state was changed by\nanother operation after the plan was created.\n"
+    },
+    {
+      "label": "after-stale-rejection",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "f7f17ff41af1b433709925aec41cfd0025ac4b91bf0d9c0c416cd8e2e8e3b2d3",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-stale-rejection.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-stale-rejection.stderr"
+    },
+    {
+      "label": "move-plan",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=move-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 2,
+      "stdout_sha256": "c8556709dc6bebae9335e95e717bee5aea999bb1b5b78a3e35db8c9b8e3753a1",
+      "stdout": "terraform_data.first_renamed: Refreshing state... [id=3e7cb7ef-7ca1-205f-affb-6ca167d75fba]\nterraform_data.later: Refreshing state... [id=f93cf5b6-ed1b-2457-911d-bd6235b54048]\n\nTerraform will perform the following actions:\n\n  # terraform_data.first has moved to terraform_data.first_renamed\n    resource \"terraform_data\" \"first_renamed\" {\n        id     = \"3e7cb7ef-7ca1-205f-affb-6ca167d75fba\"\n        # (2 unchanged attributes hidden)\n    }\n\nPlan: 0 to add, 0 to change, 0 to destroy.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "move-plan-json",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json",
+        "move-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "9d6b13fb77daab3bb63ce8f44871cd279133b88f5d8c35dd38f8774f4f52763a",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/move-plan-json.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/move-plan-json.stderr"
+    },
+    {
+      "label": "move-apply",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "apply",
+        "-input=false",
+        "-no-color",
+        "move-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "11f74fbc62e8d8b34de9029b6f891c3a6172d1e9af3b695a92bcb6fbf4704540",
+      "stdout": "\nApply complete! Resources: 0 added, 0 changed, 0 destroyed.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "after-move",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "ba1a38c273469e5673031a0e919bbc770f45346bece9654261f0997d90cfd2b5",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-move.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-move.stderr"
+    },
+    {
+      "label": "retention-plan",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=retention-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 2,
+      "stdout_sha256": "06fa8a82d19c453169e7155e84471b4730499babb1506449911b492054c698a2",
+      "stdout": "terraform_data.later: Refreshing state... [id=f93cf5b6-ed1b-2457-911d-bd6235b54048]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n\nTerraform will perform the following actions:\n\n # terraform_data.first_renamed will no longer be managed by Terraform, but will not be destroyed\n # (destroy = false is set in the configuration)\n . resource \"terraform_data\" \"first_renamed\" {\n        id     = \"3e7cb7ef-7ca1-205f-affb-6ca167d75fba\"\n        # (2 unchanged attributes hidden)\n    }\n\nPlan: 0 to add, 0 to change, 0 to destroy.\n\nWarning: Some objects will no longer be managed by Terraform\n\nIf you apply this plan, Terraform will discard its tracking information for\nthe following objects, but it will not delete them:\n - terraform_data.first_renamed\n\nAfter applying this plan, Terraform will no longer manage these objects. You\nwill need to import them into Terraform to manage them again.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "retention-plan-json",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json",
+        "retention-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "8d09dfc1a951fe13a31aa6468bdd58b3f8709a0ca5534888989ba17124b24707",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/retention-plan-json.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/retention-plan-json.stderr"
+    },
+    {
+      "label": "retention-apply",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "apply",
+        "-input=false",
+        "-no-color",
+        "retention-plan.tfplan"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "11f74fbc62e8d8b34de9029b6f891c3a6172d1e9af3b695a92bcb6fbf4704540",
+      "stdout": "\nApply complete! Resources: 0 added, 0 changed, 0 destroyed.\n",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "after-retention",
+      "argv": [
+        "/private/tmp/tal-terraform-research-20260929/bin/terraform",
+        "show",
+        "-json"
+      ],
+      "cwd": "/private/tmp/tal-terraform-research-20260929/project",
+      "exit_code": 0,
+      "stdout_sha256": "610abaa9626b55922390f2ad7a1452c26e84730095daad30d0bb3fa31e063460",
+      "stdout_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-retention.stdout",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_retained_in_scratch": "/private/tmp/tal-terraform-research-20260929/logs/after-retention.stderr"
+    }
+  ],
+  "observations": {
+    "failing-plan-actions": {
+      "terraform_data.first": [
+        "create"
+      ],
+      "terraform_data.later": [
+        "create"
+      ]
+    },
+    "partial-apply": {
+      "first_id": "3e7cb7ef-7ca1-205f-affb-6ca167d75fba",
+      "later_id": "af2313ac-6ecd-bdb0-c8e8-c72d296e99b2",
+      "later_status": "tainted",
+      "first_effect_present": true,
+      "destroy_hook_executed": false,
+      "state_serial": 3
+    },
+    "recovery-plan-actions": {
+      "terraform_data.first": [
+        "no-op"
+      ],
+      "terraform_data.later": [
+        "delete",
+        "create"
+      ]
+    },
+    "recovery": {
+      "first_identity_preserved": true,
+      "first_create_count": 1,
+      "later_identity_replaced": true,
+      "state_backup_restored": false,
+      "state_serial": 6
+    },
+    "reviewed-plan-actions": {
+      "terraform_data.first": [
+        "update"
+      ],
+      "terraform_data.later": [
+        "no-op"
+      ]
+    },
+    "intervening-plan-actions": {
+      "terraform_data.first": [
+        "update"
+      ],
+      "terraform_data.later": [
+        "no-op"
+      ]
+    },
+    "stale-plan": {
+      "rejected": true,
+      "message": "Saved plan is stale",
+      "retained_input": "intervening",
+      "state_serial": 8,
+      "cloud_drift_tested": false
+    },
+    "move-plan-actions": {
+      "terraform_data.first_renamed": [
+        "no-op"
+      ],
+      "terraform_data.later": [
+        "no-op"
+      ]
+    },
+    "same-state-move": {
+      "previous_address": "terraform_data.first",
+      "new_address": "terraform_data.first_renamed",
+      "create_count": 1,
+      "resource_identity_preserved": true
+    },
+    "retention-plan-actions": {
+      "terraform_data.first_renamed": [
+        "forget"
+      ],
+      "terraform_data.later": [
+        "no-op"
+      ]
+    },
+    "retained-removal": {
+      "action": [
+        "forget"
+      ],
+      "source_state_ownership_removed": true,
+      "destroy_hook_executed": false,
+      "local_effect_remains": true,
+      "cross_state_import_tested": false
+    }
+  },
+  "state_snapshots": [
+    {
+      "phase": "after-failure",
+      "serial": 3,
+      "lineage": "d3137c41-be98-4829-c054-9a5e0e115de7",
+      "resources": [
+        {
+          "address": "terraform_data.first",
+          "id": "3e7cb7ef-7ca1-205f-affb-6ca167d75fba",
+          "input": {
+            "value": "original",
+            "type": "string"
+          },
+          "status": "ready"
+        },
+        {
+          "address": "terraform_data.later",
+          "id": "af2313ac-6ecd-bdb0-c8e8-c72d296e99b2",
+          "input": {
+            "value": "later-operation",
+            "type": "string"
+          },
+          "status": "tainted"
+        }
+      ],
+      "sha256": "e7a8e82df3a3188be3b9b365633ac1a465b7b17ac3dd57a0084fad1b9a185b06"
+    },
+    {
+      "phase": "after-move",
+      "serial": 9,
+      "lineage": "d3137c41-be98-4829-c054-9a5e0e115de7",
+      "resources": [
+        {
+          "address": "terraform_data.first_renamed",
+          "id": "3e7cb7ef-7ca1-205f-affb-6ca167d75fba",
+          "input": {
+            "value": "intervening",
+            "type": "string"
+          },
+          "status": "ready"
+        },
+        {
+          "address": "terraform_data.later",
+          "id": "f93cf5b6-ed1b-2457-911d-bd6235b54048",
+          "input": {
+            "value": "later-operation",
+            "type": "string"
+          },
+          "status": "ready"
+        }
+      ],
+      "sha256": "887ef945b9b8216b503141e6e9de3e23f9a7d41d902db2eeaca5af8f057ce05e"
+    },
+    {
+      "phase": "after-recovery",
+      "serial": 6,
+      "lineage": "d3137c41-be98-4829-c054-9a5e0e115de7",
+      "resources": [
+        {
+          "address": "terraform_data.first",
+          "id": "3e7cb7ef-7ca1-205f-affb-6ca167d75fba",
+          "input": {
+            "value": "original",
+            "type": "string"
+          },
+          "status": "ready"
+        },
+        {
+          "address": "terraform_data.later",
+          "id": "f93cf5b6-ed1b-2457-911d-bd6235b54048",
+          "input": {
+            "value": "later-operation",
+            "type": "string"
+          },
+          "status": "ready"
+        }
+      ],
+      "sha256": "21319304e7cacf3af8ddfb5c82233b0635f5f58baf4998801f7bdce3608e985f"
+    },
+    {
+      "phase": "after-retention",
+      "serial": 11,
+      "lineage": "d3137c41-be98-4829-c054-9a5e0e115de7",
+      "resources": [
+        {
+          "address": "terraform_data.later",
+          "id": "f93cf5b6-ed1b-2457-911d-bd6235b54048",
+          "input": {
+            "value": "later-operation",
+            "type": "string"
+          },
+          "status": "ready"
+        }
+      ],
+      "sha256": "fd030f14025ba2a5f996c6894c5a703aea82d2b57ffee8ecfd8014e723ae679b"
+    },
+    {
+      "phase": "after-stale-rejection",
+      "serial": 8,
+      "lineage": "d3137c41-be98-4829-c054-9a5e0e115de7",
+      "resources": [
+        {
+          "address": "terraform_data.first",
+          "id": "3e7cb7ef-7ca1-205f-affb-6ca167d75fba",
+          "input": {
+            "value": "intervening",
+            "type": "string"
+          },
+          "status": "ready"
+        },
+        {
+          "address": "terraform_data.later",
+          "id": "f93cf5b6-ed1b-2457-911d-bd6235b54048",
+          "input": {
+            "value": "later-operation",
+            "type": "string"
+          },
+          "status": "ready"
+        }
+      ],
+      "sha256": "c7b1b5e4e941ce8b841dcf2215c5c9e8dd4052545c47c94719aeba30b334fc6a"
+    }
+  ],
+  "final_local_effects": {
+    "first-events.txt": "first-created\n",
+    "later-effect.txt": "later-recovered\n",
+    "first-destroy.txt_exists": false
+  },
+  "probe_script_sha256": "7cde8efe246e7fb024bc662b9c807887ca199fad1f827eda0dcfb911340e8489",
+  "limitations": [
+    "Built-in terraform_data state and local provisioners; no physical cloud resource identity or provider API behavior was tested.",
+    "Local-exec is used only to inject a deterministic failure and observe scratch side effects, not recommended as the default provisioning mechanism.",
+    "Saved-plan rejection after state serial change was tested; drift outside Terraform without a state update was not tested.",
+    "Same-state move and source-side forget were tested; cross-state destination import and distributed locking were not.",
+    "Official HTTPS archive SHA-256 was checked against the official HTTPS checksum file; release signature was not independently checked.",
+    "Saved plans and state are synthetic scratch artifacts; production plan or state content was not accessed.",
+    "No binary or raw plan/state artifact is included in the repository. Exact configuration, commands, observed results and output hashes are recorded here.",
+    "No state-file backup was restored; recovery used the surviving state and reviewed a new plan."
+  ],
+  "sources": [
+    {
+      "url": "https://releases.hashicorp.com/terraform/",
+      "scope": "Stable release discovery; 1.16.4 selected rather than 1.17 prereleases"
+    },
+    {
+      "url": "https://developer.hashicorp.com/terraform/language/resources/terraform-data",
+      "scope": "Built-in resource and provisioner lifecycle"
+    },
+    {
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/apply",
+      "scope": "Partial apply recovery and saved plan behavior"
+    },
+    {
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/plan",
+      "scope": "Detailed exit code and plan artifacts"
+    },
+    {
+      "url": "https://developer.hashicorp.com/terraform/language/block/removed",
+      "scope": "Explicit retained removal"
+    },
+    {
+      "url": "https://github.com/hashicorp/terraform/blob/137cba0aea37d653711ec9e026760eda2b545795/internal/backend/local/backend_local.go",
+      "scope": "Source inspection only: saved plan state serial and lineage validation; not a runtime cloud-drift experiment"
+    }
+  ]
+}

@@ -1,0 +1,1438 @@
+{
+  "skill": "a2a-engineering",
+  "recorded_at": "2026-09-29T08:42:26.669987+00:00",
+  "status": "scoped_feasibility_observed_with_two_stock_handler_semantic_validation_failures",
+  "scope": "Local deterministic research fixtures only; no model, paid API, production infrastructure, or repository implementation. Raw scratch source remains outside repository.",
+  "specification": {
+    "version": "1.0.1",
+    "commit": "3303592588e388e62e0f69f701af531d2f4e3991",
+    "verification": "git ls-remote https://github.com/a2aproject/A2A.git refs/tags/v1.0.1 refs/tags/v1.0.1^{}",
+    "wire_version": "1.0",
+    "conformance_claim": false
+  },
+  "environment": {
+    "node": "25.9.0",
+    "typescript": "5.9.3",
+    "python": "3.14.3",
+    "go": "1.27.1 darwin/arm64",
+    "sdks": {
+      "typescript": "@a2a-js/sdk@1.2.1",
+      "python": "a2a-sdk[http-server]==1.1.5",
+      "go": "github.com/a2aproject/a2a-go/v2@v2.6.0"
+    },
+    "python_dependencies": {
+      "a2a-sdk": "1.1.5",
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "certifi": "2026.7.22",
+      "cffi": "2.1.1",
+      "charset-normalizer": "3.5.1",
+      "click": "8.5.0",
+      "cryptography": "50.0.1",
+      "google-api-core": "2.39.0",
+      "google-auth": "2.59.0",
+      "googleapis-common-protos": "1.75.4",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "idna": "3.20",
+      "json-rpc": "1.15.0",
+      "opentelemetry-api": "1.45.0",
+      "packaging": "26.3",
+      "proto-plus": "1.28.4",
+      "protobuf": "7.36.2",
+      "pyasn1": "0.6.4",
+      "pyasn1_modules": "0.4.2",
+      "pycparser": "3.0",
+      "pydantic": "2.13.5",
+      "pydantic_core": "2.46.5",
+      "requests": "2.34.2",
+      "sse-starlette": "3.5.0",
+      "starlette": "1.7.0",
+      "typing-inspection": "0.4.4",
+      "typing_extensions": "4.16.0",
+      "urllib3": "2.8.0",
+      "uvicorn": "0.54.0"
+    },
+    "node_lockfile": "/tmp/tal-a2a-research-20260929/ts/package-lock.json",
+    "go_module_sum": "h1:QflB0gHxOP0o5quvA/h9EbYgfOsmRsSmFkeBYtKdwwk=",
+    "go_modfile_sum": "h1:rvFIb0sBJl2qmJRYU2fQxI6hhIQksmGGMEhT/uRwWww=",
+    "sdk_source_tags": {
+      "typescript": {
+        "tag": "v1.2.1",
+        "commit": "11cbb295a7933ecb459d4e2af0740bf4570e71b2",
+        "verification": "git ls-remote https://github.com/a2aproject/a2a-js.git refs/tags/v1.2.1 refs/tags/v1.2.1^{}",
+        "scope": "Source tag independently resolved. Installed package version separately verified; no bit-for-bit package-to-repository attestation."
+      },
+      "python": {
+        "tag": "v1.1.5",
+        "commit": "9f0f00cb0417cb59958d3186d81651be7d9b9d59",
+        "verification": "git ls-remote https://github.com/a2aproject/a2a-python.git refs/tags/v1.1.5 refs/tags/v1.1.5^{}",
+        "scope": "Source tag independently resolved. Installed package version separately verified; no bit-for-bit package-to-repository attestation."
+      },
+      "go": {
+        "tag": "v2.6.0",
+        "commit": "ebf17c56ef7e63c72883a45454a538bbc0df66b8",
+        "verification": "git ls-remote https://github.com/a2aproject/a2a-go.git refs/tags/v2.6.0 refs/tags/v2.6.0^{}",
+        "scope": "Source tag independently resolved. Installed package version separately verified; no bit-for-bit package-to-repository attestation."
+      }
+    }
+  },
+  "executed_matrix": [
+    {
+      "client": "TypeScript SDK 1.2.1",
+      "server": "Python SDK 1.1.5",
+      "transport": "JSON-RPC HTTP/SSE on127.0.0.1",
+      "results": [
+        {
+          "id": "discovery-and-wire-version",
+          "status": "passed",
+          "observed": {
+            "taskId": "d80152d0-dc40-41d8-b48e-f28f7dc977cd",
+            "state": 3,
+            "wireVersion": "1.0"
+          }
+        },
+        {
+          "id": "input-required-continuation-and-terminal-rejection",
+          "status": "passed",
+          "observed": {
+            "taskId": "ca9a4758-8e85-49d0-9482-61fad0dd824e",
+            "final": 3,
+            "terminalFollowup": {
+              "reason": "INVALID_PARAMS",
+              "code": -32602,
+              "name": "RequestMalformedError"
+            }
+          }
+        },
+        {
+          "id": "duplicate-message-id-is-not-deduplicated",
+          "status": "passed",
+          "observed": {
+            "messageId": "24dc7f2e-d1af-4159-9601-cdd21cf5f090",
+            "taskIds": [
+              "0152c2ca-3002-43d9-bda9-7b357f2981bd",
+              "acee46d0-95f4-4b01-beaf-7896e4a21ab1"
+            ],
+            "effects": 2
+          }
+        },
+        {
+          "id": "application-operation-key-deduplicates-effect",
+          "status": "passed",
+          "observed": {
+            "taskIds": [
+              "ea3b8ae3-8a61-4e2a-bc3f-1a859e4c5c2f",
+              "f3f058fc-001d-4895-bd5a-2907c400dcde"
+            ],
+            "effects": 1,
+            "scope": "in-process sequential fixture only"
+          }
+        },
+        {
+          "id": "cancel-before-effect-and-repeat",
+          "status": "passed",
+          "observed": {
+            "taskId": "7141ab48-68b9-4c84-9d21-037082487fe6",
+            "state": 5,
+            "effects": 0,
+            "cleanup": 1,
+            "repeat": {
+              "reason": "TASK_NOT_CANCELABLE"
+            }
+          }
+        },
+        {
+          "id": "cancel-after-effect-reconciles-completed",
+          "status": "passed",
+          "observed": {
+            "taskId": "f4e2a3fd-ca25-42f0-9970-5dafa119f45a",
+            "state": 3,
+            "effects": 1,
+            "artifactCount": 1,
+            "scope": "application-defined commit receipt/cancel callback"
+          }
+        },
+        {
+          "id": "disconnect-one-observer-preserves-work-and-second-stream",
+          "status": "passed",
+          "observed": {
+            "taskId": "7098446d-1d57-4d23-b107-b83fce574bc7",
+            "remainingObserverEvents": [
+              {
+                "payload": {
+                  "$case": "artifactUpdate",
+                  "value": {
+                    "taskId": "7098446d-1d57-4d23-b107-b83fce574bc7",
+                    "contextId": "1b6ac73d-dc3a-4d18-817e-25537b5bd6ac",
+                    "artifact": {
+                      "artifactId": "result",
+                      "name": "",
+                      "description": "",
+                      "parts": [
+                        {
+                          "content": {
+                            "$case": "text",
+                            "value": "effect:7098446d-1d57-4d23-b107-b83fce574bc7:1"
+                          },
+                          "filename": "",
+                          "mediaType": ""
+                        }
+                      ],
+                      "extensions": []
+                    },
+                    "append": false,
+                    "lastChunk": false
+                  }
+                }
+              },
+              {
+                "payload": {
+                  "$case": "statusUpdate",
+                  "value": {
+                    "taskId": "7098446d-1d57-4d23-b107-b83fce574bc7",
+                    "contextId": "1b6ac73d-dc3a-4d18-817e-25537b5bd6ac",
+                    "status": {
+                      "state": 3,
+                      "timestamp": "2026-09-29T08:25:42.431415Z"
+                    }
+                  }
+                }
+              }
+            ],
+            "finalState": 3
+          }
+        },
+        {
+          "id": "caller-task-get-list-cancel-subscribe-isolation",
+          "status": "passed",
+          "observed": {
+            "get": {
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001,
+              "name": "TaskNotFoundError"
+            },
+            "cancel": {
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001,
+              "name": "TaskNotFoundError"
+            },
+            "subscribe": {
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001,
+              "name": "TaskNotFoundError"
+            },
+            "foreignListSize": 0,
+            "scope": "fixture verified principal mapped into default owner store; no multi-tenant claim"
+          }
+        },
+        {
+          "id": "missing-authentication-rejected-before-dispatch",
+          "status": "passed",
+          "observed": {
+            "status": 401,
+            "layer": "fixture ASGI authentication gate"
+          }
+        },
+        {
+          "id": "malformed-role-rejected",
+          "status": "passed",
+          "observed": {
+            "status": 200,
+            "error": -32602
+          }
+        }
+      ],
+      "pass_count": 10,
+      "scope": "Main 10 scenarios executed in JavaScript using TypeScript SDK; separate strict compiled TypeScript smoke also passed."
+    },
+    {
+      "client": "Go SDK 2.6.0",
+      "server": "Go SDK 2.6.0",
+      "transport": "JSON-RPC loopback HTTP/SSE",
+      "results": [
+        {
+          "test": "TestDuplicateInitialMessageIDDoesNotDeduplicateDefaultHandler",
+          "observation": "Sending the identical initial messageId twice yielded two completed tasks, two executor calls, distinct task IDs, and one artifact per task. A continuation referencing the first terminal task was rejected with ErrUnsupportedOperation before another execution.",
+          "meaning": "A message ID alone does not supply effect idempotency with this handler. This is an allowed optional protocol behavior, not a failed SDK requirement."
+        },
+        {
+          "test": "TestDisconnectOneObserverPreservesTaskAndOtherObserver",
+          "observation": "A second SubscribeToTask stream began with the current Task. Canceling the initial SendStreamingMessage client context closed that stream, left the task nonterminal, and left its executor active. The remaining observer received the artifact and completion; GetTask returned completed.",
+          "meaning": "Observation and execution lifetimes are separate in this tested path."
+        },
+        {
+          "test": "TestCancelIsRepeatableAndCompletionCannotReplaceCanceledTask",
+          "observation": "Two sequential CancelTask calls returned canceled. Releasing the worker's completion gate afterward did not change the stored terminal state. The executor returned.",
+          "meaning": "Repeat cancellation and cancellation-first ordering were exercised."
+        },
+        {
+          "test": "TestCompletionCancelRaceHasValidTerminalOutcome",
+          "observation": "Thirty simultaneously released completion/cancellation attempts all ended completed; each cancellation returned ErrTaskNotCancelable. Each final state came from GetTask.",
+          "meaning": "Completion-first outcomes were observed in all 30 races. The separate deterministic cancellation-first test supplies the other ordering; this randomized schedule did not demonstrate both race winners."
+        },
+        {
+          "test": "TestSharedStoreCancellationDoesNotFenceExternalEffects",
+          "observation": "Two independent HTTP handlers shared one in-memory store. Cancellation handled by the second handler returned canceled while the executing handler's context remained live. After a barrier release, an intentionally unfenced atomic-counter effect ran once. The worker's next update reconciled to the already canceled task.",
+          "meaning": "A successful cancellation response does not establish a fence at an external effect boundary. Counter increment is a simulation, not a real database or provider operation. Application ownership or cancellation rules must cover that boundary."
+        }
+      ],
+      "top_level_tests": 5,
+      "race_subtests": 30,
+      "race_detector": "passed; no race detector report",
+      "scope": "One-process servers; adverse fixture uses two handlers and shared in-memory store; all 30 unconstrained races completed first, separate barrier test covers cancellation first."
+    },
+    {
+      "client": "Go SDK 2.6.0",
+      "server": "Python SDK 1.1.5",
+      "transport": "JSON-RPC loopback HTTP",
+      "results": [
+        {
+          "name": "discovery",
+          "status": "passed",
+          "observation": [
+            {
+              "url": "http://127.0.0.1:18761/rpc",
+              "protocolBinding": "JSONRPC",
+              "protocolVersion": "1.0"
+            }
+          ]
+        },
+        {
+          "name": "immediate",
+          "status": "passed",
+          "observation": {
+            "id": "d881f5b8-06ac-4777-b680-0e3fb878112f",
+            "artifacts": [
+              {
+                "artifactId": "result",
+                "parts": [
+                  {
+                    "text": "effect:d881f5b8-06ac-4777-b680-0e3fb878112f:1"
+                  }
+                ]
+              }
+            ],
+            "contextId": "ba5a22f7-7186-4f6c-a22c-c4f5aa211084",
+            "status": {
+              "state": "TASK_STATE_COMPLETED",
+              "timestamp": "2026-09-29T08:24:09.938477Z"
+            }
+          }
+        },
+        {
+          "name": "input_required_continuation",
+          "status": "passed",
+          "observation": {
+            "final_task": {
+              "id": "f4d814a0-9689-44dc-acf6-db1b295b5bb6",
+              "artifacts": [
+                {
+                  "artifactId": "result",
+                  "parts": [
+                    {
+                      "text": "effect:f4d814a0-9689-44dc-acf6-db1b295b5bb6:1"
+                    }
+                  ]
+                }
+              ],
+              "contextId": "28a3cb23-977d-4ce5-b067-e2f4d4695d27",
+              "status": {
+                "state": "TASK_STATE_COMPLETED",
+                "timestamp": "2026-09-29T08:24:09.941126Z"
+              }
+            },
+            "initial_state": "TASK_STATE_INPUT_REQUIRED"
+          }
+        },
+        {
+          "name": "get_task",
+          "status": "passed",
+          "observation": {
+            "id": "f4d814a0-9689-44dc-acf6-db1b295b5bb6",
+            "artifacts": [
+              {
+                "artifactId": "result",
+                "parts": [
+                  {
+                    "text": "effect:f4d814a0-9689-44dc-acf6-db1b295b5bb6:1"
+                  }
+                ]
+              }
+            ],
+            "contextId": "28a3cb23-977d-4ce5-b067-e2f4d4695d27",
+            "status": {
+              "state": "TASK_STATE_COMPLETED",
+              "timestamp": "2026-09-29T08:24:09.941126Z"
+            }
+          }
+        },
+        {
+          "name": "cancel_input_required",
+          "status": "passed",
+          "observation": {
+            "id": "30d6fa84-ccb7-4134-9a31-822f27084d39",
+            "contextId": "44d19802-9ba3-4a56-b20f-7e2d0eacc28a",
+            "status": {
+              "state": "TASK_STATE_CANCELED",
+              "timestamp": "2026-09-29T08:24:09.948563Z"
+            }
+          }
+        },
+        {
+          "name": "repeat_cancel_response_for_parked_task",
+          "status": "passed",
+          "observation": {
+            "id": "30d6fa84-ccb7-4134-9a31-822f27084d39",
+            "contextId": "44d19802-9ba3-4a56-b20f-7e2d0eacc28a",
+            "status": {
+              "state": "TASK_STATE_CANCELED",
+              "timestamp": "2026-09-29T08:24:09.948563Z"
+            }
+          }
+        },
+        {
+          "name": "get_task_after_repeated_cancel",
+          "status": "passed",
+          "observation": {
+            "id": "30d6fa84-ccb7-4134-9a31-822f27084d39",
+            "contextId": "44d19802-9ba3-4a56-b20f-7e2d0eacc28a",
+            "status": {
+              "state": "TASK_STATE_CANCELED",
+              "timestamp": "2026-09-29T08:24:09.948563Z"
+            }
+          }
+        }
+      ],
+      "pass_count": 7
+    }
+  ],
+  "additional_results": {
+    "typescript_compile_smoke": {
+      "compile_exit_code": 0,
+      "run": {
+        "passed": true,
+        "taskId": "6e810d31-9e8b-4c31-b677-a9d3d5e5bb01",
+        "state": 3
+      },
+      "commands": [
+        "/tmp/tal-a2a-research-20260929/ts/node_modules/.bin/tsc -p /tmp/tal-a2a-research-20260929/ts/tsconfig.json",
+        "node /tmp/tal-a2a-research-20260929/ts/out/api-smoke.js"
+      ]
+    },
+    "raw_boundaries": {
+      "runAt": "2026-09-29T08:21:44.522Z",
+      "cases": [
+        {
+          "id": "version-1.0.1",
+          "observed": {
+            "http": 200,
+            "body": {
+              "result": {
+                "task": {
+                  "id": "6e2c84d3-e7eb-4724-aed5-2f57f1583c55",
+                  "contextId": "84e943be-8b72-4228-b829-6df7ede57ee7",
+                  "status": {
+                    "state": "TASK_STATE_COMPLETED",
+                    "timestamp": "2026-09-29T08:21:44.505508Z"
+                  },
+                  "artifacts": [
+                    {
+                      "artifactId": "result",
+                      "parts": [
+                        {
+                          "text": "effect:6e2c84d3-e7eb-4724-aed5-2f57f1583c55:1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "id": "4779f691-2914-4cc5-84fc-2de368e6baed",
+              "jsonrpc": "2.0"
+            }
+          }
+        },
+        {
+          "id": "version-9.9",
+          "observed": {
+            "http": 200,
+            "body": {
+              "error": {
+                "code": -32009,
+                "message": "A2A version '9.9' is not supported by this handler. Expected version '1.0'.",
+                "data": [
+                  {
+                    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                    "reason": "VERSION_NOT_SUPPORTED",
+                    "domain": "a2a-protocol.org",
+                    "metadata": {}
+                  }
+                ]
+              },
+              "id": "34804e49-233f-41da-8921-86f41c780eee",
+              "jsonrpc": "2.0"
+            }
+          }
+        },
+        {
+          "id": "version-missing",
+          "observed": {
+            "http": 200,
+            "body": {
+              "error": {
+                "code": -32009,
+                "message": "A2A version '0.3' is not supported by this handler. Expected version '1.0'.",
+                "data": [
+                  {
+                    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                    "reason": "VERSION_NOT_SUPPORTED",
+                    "domain": "a2a-protocol.org",
+                    "metadata": {}
+                  }
+                ]
+              },
+              "id": "c3fab374-6b0c-4169-9ddd-fa6e745c02ba",
+              "jsonrpc": "2.0"
+            }
+          }
+        },
+        {
+          "id": "two-part-oneof-values",
+          "status": "passed",
+          "observed": {
+            "http": 200,
+            "body": {
+              "error": {
+                "code": -32602,
+                "message": "Invalid params",
+                "data": "Failed to parse message field: Failed to parse parts field: Message type \"lf.a2a.v1.Part\" should not have multiple \"content\" oneof fields at \"SendMessageRequest.message.parts[0]\"..."
+              },
+              "id": "2796753a-8690-4e08-8a71-90efbe177d80",
+              "jsonrpc": "2.0"
+            }
+          }
+        },
+        {
+          "id": "invalid-authentication",
+          "status": "passed",
+          "observed": {
+            "http": 401,
+            "body": {
+              "error": "unauthorized"
+            }
+          }
+        }
+      ]
+    },
+    "semantic_negative": {
+      "runAt": "2026-09-29T08:23:28.593Z",
+      "cases": [
+        {
+          "id": "empty-part",
+          "expected": "reject before executor effect",
+          "status": "failed_semantic_validation",
+          "http": 200,
+          "result": {
+            "result": {
+              "task": {
+                "id": "fe6e9633-4a37-494e-afc7-07a0fe0d7ce8",
+                "contextId": "3625eb88-cec6-4a29-99c2-07184d285c70",
+                "status": {
+                  "state": "TASK_STATE_COMPLETED",
+                  "timestamp": "2026-09-29T08:23:28.582041Z"
+                },
+                "artifacts": [
+                  {
+                    "artifactId": "result",
+                    "parts": [
+                      {
+                        "text": "effect:fe6e9633-4a37-494e-afc7-07a0fe0d7ce8:1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "id": "empty-part",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "id": "missing-message-id",
+          "expected": "reject before executor effect",
+          "status": "passed_rejection",
+          "http": 200,
+          "result": {
+            "error": {
+              "code": -32602,
+              "message": "Validation failed",
+              "data": [
+                {
+                  "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                  "reason": "INVALID_PARAMS",
+                  "domain": "a2a-protocol.org",
+                  "metadata": {
+                    "errors": [
+                      {
+                        "field": "message.message_id",
+                        "message": "Field is required."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "@type": "type.googleapis.com/google.rpc.BadRequest",
+                  "fieldViolations": [
+                    {
+                      "field": "message.message_id",
+                      "description": "Field is required."
+                    }
+                  ]
+                }
+              ]
+            },
+            "id": "missing-message-id",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "id": "missing-role",
+          "expected": "reject before executor effect",
+          "status": "passed_rejection",
+          "http": 200,
+          "result": {
+            "error": {
+              "code": -32602,
+              "message": "Validation failed",
+              "data": [
+                {
+                  "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                  "reason": "INVALID_PARAMS",
+                  "domain": "a2a-protocol.org",
+                  "metadata": {
+                    "errors": [
+                      {
+                        "field": "message.role",
+                        "message": "Field is required."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "@type": "type.googleapis.com/google.rpc.BadRequest",
+                  "fieldViolations": [
+                    {
+                      "field": "message.role",
+                      "description": "Field is required."
+                    }
+                  ]
+                }
+              ]
+            },
+            "id": "missing-role",
+            "jsonrpc": "2.0"
+          }
+        }
+      ]
+    },
+    "semantic_mitigation": {
+      "runAt": "2026-09-29T08:35:51.157Z",
+      "status": "passed",
+      "cases": [
+        {
+          "id": "SendMessage",
+          "status": "passed",
+          "result": {
+            "error": {
+              "code": -32602,
+              "message": "Every message part must contain one content value",
+              "data": [
+                {
+                  "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                  "reason": "INVALID_PARAMS",
+                  "domain": "a2a-protocol.org",
+                  "metadata": {}
+                }
+              ]
+            },
+            "id": "SendMessage",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "id": "SendStreamingMessage",
+          "status": "passed",
+          "result": {
+            "error": {
+              "code": -32602,
+              "message": "Every message part must contain one content value",
+              "data": [
+                {
+                  "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                  "reason": "INVALID_PARAMS",
+                  "domain": "a2a-protocol.org",
+                  "metadata": {}
+                }
+              ]
+            },
+            "id": "SendStreamingMessage",
+            "jsonrpc": "2.0"
+          }
+        }
+      ],
+      "additionalEffects": 0,
+      "scope": "Only missing Part content validation in message/send and message/stream; not full conformance"
+    },
+    "owner_scope": {
+      "passed": true,
+      "observed": {
+        "default_resolver_cross_tenant_same_principal": "visible",
+        "explicit_tenant_principal_resolver": "not visible"
+      },
+      "limits": "Direct store fixture; tenant input must itself be authorized; no assertion default violates its documented per-user policy."
+    },
+    "restart": {
+      "taskId": "a4df6c9c-0d92-4772-98d1-eaa27d2a614a",
+      "before": {
+        "result": {
+          "id": "a4df6c9c-0d92-4772-98d1-eaa27d2a614a",
+          "contextId": "21c67f03-cee8-4207-be0d-499f7538a097",
+          "status": {
+            "state": "TASK_STATE_COMPLETED",
+            "timestamp": "2026-09-29T08:25:08.823724Z"
+          },
+          "artifacts": [
+            {
+              "artifactId": "result",
+              "parts": [
+                {
+                  "text": "effect:a4df6c9c-0d92-4772-98d1-eaa27d2a614a:1"
+                }
+              ]
+            }
+          ]
+        },
+        "id": "203a5b57-211f-490b-a1c9-c555352997fe",
+        "jsonrpc": "2.0"
+      },
+      "scope": "Python default in-memory TaskStore, deliberate fixture server restart",
+      "after": {
+        "error": {
+          "code": -32001,
+          "message": "Task not found",
+          "data": [
+            {
+              "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+              "reason": "TASK_NOT_FOUND",
+              "domain": "a2a-protocol.org",
+              "metadata": {}
+            }
+          ]
+        },
+        "id": "c55449ec-19ec-421b-8e58-1d26397acbd7",
+        "jsonrpc": "2.0"
+      },
+      "status": "passed_observed_state_loss",
+      "runAt": "2026-09-29T08:25:24.210Z"
+    },
+    "fresh_shutdown": {
+      "command": "kill -TERM 7816",
+      "server_exit_code": 143,
+      "lifespan": "await handler.aclose(); await validated_handler.aclose()",
+      "observed": "Final fresh-run server log contained intended invalid-input error traces, but no pending-task, destroyed-task, detach-context or dispatcher warning. Earlier development runs with unfinished/incorrect fixtures emitted warnings; these are not claimed as reproduced SDK defects."
+    },
+    "context_identity_negative": {
+      "runAt": "2026-09-29T08:31:27.266Z",
+      "cases": [
+        {
+          "mode": "mismatched",
+          "status": "failed",
+          "originalContextId": "ad5ca305-7381-4488-a6c4-ddefb0465dca",
+          "result": {
+            "result": {
+              "task": {
+                "id": "f32ac12b-92af-440b-97d8-23c0080e6c01",
+                "contextId": "ad5ca305-7381-4488-a6c4-ddefb0465dca",
+                "status": {
+                  "state": "TASK_STATE_COMPLETED",
+                  "timestamp": "2026-09-29T08:31:27.255730Z"
+                },
+                "artifacts": [
+                  {
+                    "artifactId": "result",
+                    "parts": [
+                      {
+                        "text": "effect:f32ac12b-92af-440b-97d8-23c0080e6c01:1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "id": "cb92fb69-4380-4f1f-96ba-e8af732e3efc",
+            "jsonrpc": "2.0"
+          },
+          "reconciled": {
+            "result": {
+              "id": "f32ac12b-92af-440b-97d8-23c0080e6c01",
+              "contextId": "ad5ca305-7381-4488-a6c4-ddefb0465dca",
+              "status": {
+                "state": "TASK_STATE_COMPLETED",
+                "timestamp": "2026-09-29T08:31:27.255730Z"
+              },
+              "artifacts": [
+                {
+                  "artifactId": "result",
+                  "parts": [
+                    {
+                      "text": "effect:f32ac12b-92af-440b-97d8-23c0080e6c01:1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "id": "2edb06dc-164d-4fe6-bff6-71bec72ff04a",
+            "jsonrpc": "2.0"
+          },
+          "effect": 1
+        },
+        {
+          "mode": "omitted",
+          "status": "passed",
+          "originalContextId": "67c1946e-6bc3-4805-9640-8a8adc41220d",
+          "result": {
+            "result": {
+              "task": {
+                "id": "057e7b24-4465-4733-a5d9-0ff21622e86f",
+                "contextId": "67c1946e-6bc3-4805-9640-8a8adc41220d",
+                "status": {
+                  "state": "TASK_STATE_COMPLETED",
+                  "timestamp": "2026-09-29T08:31:27.261155Z"
+                },
+                "artifacts": [
+                  {
+                    "artifactId": "result",
+                    "parts": [
+                      {
+                        "text": "effect:057e7b24-4465-4733-a5d9-0ff21622e86f:1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "id": "081de39f-9335-4c70-aba4-396bd4aee1ff",
+            "jsonrpc": "2.0"
+          },
+          "reconciled": {
+            "result": {
+              "id": "057e7b24-4465-4733-a5d9-0ff21622e86f",
+              "contextId": "67c1946e-6bc3-4805-9640-8a8adc41220d",
+              "status": {
+                "state": "TASK_STATE_COMPLETED",
+                "timestamp": "2026-09-29T08:31:27.261155Z"
+              },
+              "artifacts": [
+                {
+                  "artifactId": "result",
+                  "parts": [
+                    {
+                      "text": "effect:057e7b24-4465-4733-a5d9-0ff21622e86f:1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "id": "bbfd4341-ae13-4a8b-bb7e-c2ce8ba367d6",
+            "jsonrpc": "2.0"
+          },
+          "effect": 1
+        },
+        {
+          "mode": "foreign-principal",
+          "status": "passed",
+          "originalContextId": "6f865835-7141-4de8-b138-778460f3c24b",
+          "result": {
+            "error": {
+              "code": -32001,
+              "message": "Task 47eef34a-5d98-4081-9497-2a6527bde182 not found",
+              "data": [
+                {
+                  "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                  "reason": "TASK_NOT_FOUND",
+                  "domain": "a2a-protocol.org",
+                  "metadata": {}
+                }
+              ]
+            },
+            "id": "ba948fb0-37cb-4835-bda1-be2f09ee9cd7",
+            "jsonrpc": "2.0"
+          },
+          "reconciled": {
+            "result": {
+              "id": "47eef34a-5d98-4081-9497-2a6527bde182",
+              "contextId": "6f865835-7141-4de8-b138-778460f3c24b",
+              "status": {
+                "state": "TASK_STATE_INPUT_REQUIRED",
+                "timestamp": "2026-09-29T08:31:27.264143Z"
+              }
+            },
+            "id": "6ee5d214-e9d7-4c07-a1cb-20b07bb5064d",
+            "jsonrpc": "2.0"
+          },
+          "effect": 0
+        }
+      ],
+      "scope": "Stock Python handler; explicit mismatched context accepted and effect executed. Omitted context inferred correctly. Foreign principal rejected before effect. Nonzero recorded failure despite probe exit0."
+    },
+    "context_identity_mitigation": {
+      "runAt": "2026-09-29T08:35:50.846Z",
+      "status": "passed",
+      "cases": [
+        {
+          "method": "SendMessage",
+          "status": "passed",
+          "mismatchCode": -32602,
+          "foreignCode": -32001,
+          "effectsBeforeValidContinuation": 0,
+          "validInferredContext": "dff40fdc-7c16-4573-a7a5-8c00608b08fb",
+          "finalState": "TASK_STATE_COMPLETED"
+        },
+        {
+          "method": "SendStreamingMessage",
+          "status": "passed",
+          "mismatchCode": -32602,
+          "foreignCode": -32001,
+          "effectsBeforeValidContinuation": 0,
+          "validInferredContext": "179703b5-d66f-46b4-ab68-5f15ae043a37",
+          "finalState": "TASK_STATE_COMPLETED"
+        }
+      ],
+      "scope": "Authorized task lookup and explicit context equality before dispatch on both message methods; in-memory context immutability assumed; not full conformance"
+    },
+    "identity_probe_shutdown": {
+      "commands": [
+        "kill -TERM 9135",
+        "kill -TERM 10007"
+      ],
+      "server_exit_codes": [
+        143,
+        143
+      ],
+      "scope": "Owned loopback fixture processes, identified with lsof before termination. Historical PIDs must not be reused. Both logs contain expected request errors only; no pending-task or dispatcher warnings."
+    }
+  },
+  "concrete_apis": {
+    "python": [
+      "a2a.server.request_handlers.DefaultRequestHandler aliases DefaultRequestHandlerV2",
+      "DefaultRequestHandler(agent_executor=..., task_store=..., agent_card=...)",
+      "create_jsonrpc_routes(handler, rpc_url, context_builder=None)",
+      "create_agent_card_routes(card)",
+      "AgentExecutor.execute(context,event_queue) and cancel(context,event_queue)",
+      "TaskUpdater(event_queue,task_id,context_id)",
+      "InMemoryTaskStore(owner_resolver=...)",
+      "Part.WhichOneof(\"content\") for semantic content presence",
+      "await handler.task_store.get(task_id, call_context) obtains caller-scoped task before explicit context_id comparison",
+      "await handler.aclose() in ASGI lifespan"
+    ],
+    "typescript": [
+      "ClientFactory({transports:[new JsonRpcTransportFactory({fetchImpl})]}).createFromUrl(baseUrl)",
+      "SendMessageRequest.fromJSON(wireShape) normalizes enum, oneof and defaults; it is not a validator",
+      "client.sendMessage(request, {signal})",
+      "client.resubscribeTask({id}, {signal}) returns AsyncGenerator with event.payload.$case and event.payload.value",
+      "Role and TaskState values are numeric in SDK objects; wire encodes names",
+      "Part SDK content is {$case:\"text\",value}; wire Part is {text}"
+    ],
+    "go": [
+      "a2asrv.AgentExecutor.Execute(ctx context.Context, execCtx *a2asrv.ExecutorContext) iter.Seq2[a2a.Event, error]",
+      "a2asrv.AgentExecutor.Cancel(ctx context.Context, execCtx *a2asrv.ExecutorContext) iter.Seq2[a2a.Event, error]",
+      "a2asrv.NewHandler(executor AgentExecutor, options ...RequestHandlerOption) RequestHandler",
+      "a2asrv.NewJSONRPCHandler(handler RequestHandler, options ...TransportOption) http.Handler",
+      "a2aclient.NewFromCard(ctx context.Context, card *a2a.AgentCard, options ...FactoryOption) (*Client, error)",
+      "(*a2aclient.Client).SendMessage(ctx context.Context, req *a2a.SendMessageRequest) (a2a.SendMessageResult, error)",
+      "(*a2aclient.Client).SendStreamingMessage(ctx context.Context, req *a2a.SendMessageRequest) iter.Seq2[a2a.Event, error]",
+      "(*a2aclient.Client).SubscribeToTask(ctx context.Context, req *a2a.SubscribeToTaskRequest) iter.Seq2[a2a.Event, error]",
+      "(*a2aclient.Client).CancelTask(ctx context.Context, req *a2a.CancelTaskRequest) (*a2a.Task, error)",
+      "(*a2aclient.Client).GetTask(ctx context.Context, req *a2a.GetTaskRequest) (*a2a.Task, error)"
+    ]
+  },
+  "implementation_implications": [
+    {
+      "id": "semantic-validation",
+      "finding": "Stock Python 1.1.5 accepted parts:[{}] and a continuation with mismatched explicit contextId; both invoked fixture effects. Narrow handler validation rejected both message methods before effects while preserving valid context inference.",
+      "required_evidence": "Malformed oneof presence, required fields, authorized task/context agreement, domain validity and authorization tested before application effect. Keep stock negative cases visible; mitigation is not full conformance."
+    },
+    {
+      "id": "cancel-reconcile",
+      "finding": "Cancel before effect prevented it; application-defined receipt preserved completed outcome after effect. Repeat response varied by lifecycle between canceled and TASK_NOT_CANCELABLE.",
+      "required_evidence": "Reconcile GetTask and committed effect; do not interpret cancellation acknowledgement as rollback or automatic fencing."
+    },
+    {
+      "id": "optional-dedup",
+      "finding": "Both stock Python and Go initial message IDs produced two executions. Local application operation key reduced fixture effect count to one.",
+      "required_evidence": "Durable scope-bound operation key, concurrent duplicate protection and uncertainty reconciliation require separate implementation."
+    },
+    {
+      "id": "ownership-scope",
+      "finding": "Python store default owner resolver is user_name only. Explicit tenant+principal resolver isolated direct store fixture. Default Starlette adapter maps user_name from display_name; application identity mapping must be stable and collision-resistant.",
+      "required_evidence": "Verify caller identity and tenant authority before deriving owner key; exercise every task operation."
+    },
+    {
+      "id": "active-execution-durability",
+      "finding": "Python default handler ignores queue_manager and uses process-local ActiveTaskRegistry; default task state vanished on restart. Go shared-store cancel did not fence another handler effect.",
+      "required_evidence": "Specify task persistence, executor checkpoint recovery, event routing and effect ownership independently."
+    },
+    {
+      "id": "codec-compatibility",
+      "finding": "Handwritten JS objects with wire-shaped parts silently lost text; string enum produced invalid enum. Exported codecs and strict TS compilation passed.",
+      "required_evidence": "Use pinned SDK types/codecs and inspect actual wire; do not copy pre-1.0 snippets."
+    },
+    {
+      "id": "terminal-task-boundary",
+      "finding": "Python and Go rejected follow-up with a terminal task ID before another execution. An explicit new initial message creates a separate task.",
+      "required_evidence": "Test terminal-ID rejection separately from deliberate new-task creation; do not silently reopen completed work."
+    }
+  ],
+  "commands": [
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "python3 -m venv /tmp/tal-a2a-research-20260929/py/.venv",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/pip install 'a2a-sdk[http-server]==1.1.5' uvicorn",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "npm install --prefix /tmp/tal-a2a-research-20260929/ts --save-exact @a2a-js/sdk@1.2.1",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "npm install --prefix /tmp/tal-a2a-research-20260929/ts --save-dev --save-exact typescript@5.9.3 @types/node@25.3.5",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/pip freeze > /tmp/tal-a2a-research-20260929/py/requirements.freeze.txt",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/python /tmp/tal-a2a-research-20260929/py/server.py > /tmp/tal-a2a-research-20260929/py/server-final.log 2>&1",
+      "status": "served loopback port 18761; later terminated deliberately"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/probe.mjs",
+      "exit_code": 0,
+      "scope": "Final corrected 10-case harness"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/ts/node_modules/.bin/tsc -p /tmp/tal-a2a-research-20260929/ts/tsconfig.json",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/out/api-smoke.js",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/raw-boundaries.mjs",
+      "exit_code": 0,
+      "scope": "2 rejection assertions plus 3 recorded version observations"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/semantic-invalid.mjs",
+      "exit_code": 0,
+      "scope": "Records 1 semantic validation failure and 2 rejection passes; exit0 does not mean all recorded cases passed"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/validation-mitigation.mjs",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/python /tmp/tal-a2a-research-20260929/py/owner_scope_probe.py",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/Users/idanvaknin/Documents/ChatGPT/skills",
+      "command": "mkdir -p /tmp/tal-a2a-research-20260929/go",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "go mod init tal-a2a-research",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "GOCACHE=/tmp/tal-a2a-research-20260929/go/cache GOMODCACHE=/tmp/tal-a2a-research-20260929/go/modcache GOPATH=/tmp/tal-a2a-research-20260929/go/gopath go get github.com/a2aproject/a2a-go/v2@v2.6.0",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "gofmt -w probe_test.go",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "GOCACHE=/tmp/tal-a2a-research-20260929/go/cache GOMODCACHE=/tmp/tal-a2a-research-20260929/go/modcache GOPATH=/tmp/tal-a2a-research-20260929/go/gopath go mod tidy",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "GOCACHE=/tmp/tal-a2a-research-20260929/go/cache GOMODCACHE=/tmp/tal-a2a-research-20260929/go/modcache GOPATH=/tmp/tal-a2a-research-20260929/go/gopath go test -race -v -count=1 -timeout=60s ./... > probe-output.txt 2>&1",
+      "exit_code": 0,
+      "observation": "Final run: five top-level tests and 30 race subtests passed; package elapsed 1.643s; no race-detector report."
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "GOCACHE=/tmp/tal-a2a-research-20260929/go/cache GOMODCACHE=/tmp/tal-a2a-research-20260929/go/modcache GOPATH=/tmp/tal-a2a-research-20260929/go/gopath go list -m -json github.com/a2aproject/a2a-go/v2",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/restart-check.mjs before",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "kill -TERM 4687",
+      "exit_code": 0,
+      "scope": "Owned Python fixture process identified with lsof; no unrelated process"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/python /tmp/tal-a2a-research-20260929/py/server.py > /tmp/tal-a2a-research-20260929/py/server-final.log 2>&1",
+      "status": "Restarted owned loopback fixture"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/restart-check.mjs after",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "kill -TERM 7816",
+      "exit_code": 0,
+      "scope": "Final owned Python fixture shutdown; server session exited143"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/python /tmp/tal-a2a-research-20260929/py/server.py > /tmp/tal-a2a-research-20260929/py/server-identity.log 2>&1",
+      "scope": "Owned loopback server for stock continuation semantics; later terminated deliberately",
+      "status": "served then deliberately terminated"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/context-identity.mjs",
+      "scope": "Records 1 mismatch-validation failure and 2 passing controls; exit0 does not mean all cases passed",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "kill -TERM 9135",
+      "scope": "Owned Python fixture identified with lsof; session exited143",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "/tmp/tal-a2a-research-20260929/py/.venv/bin/python /tmp/tal-a2a-research-20260929/py/server.py > /tmp/tal-a2a-research-20260929/py/server-identity-mitigation.log 2>&1",
+      "scope": "Owned loopback server after narrow validation-only scratch change; later terminated deliberately",
+      "status": "served then deliberately terminated"
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/context-identity-mitigation.mjs",
+      "scope": "Both message methods reject mismatch and foreign caller before effect; valid task-only continuation still completes",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "node /tmp/tal-a2a-research-20260929/ts/validation-mitigation.mjs",
+      "scope": "Rerun after adding context validation: missing Part content remains rejected on both methods before effect",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929",
+      "command": "kill -TERM 10007",
+      "scope": "Owned Python fixture identified with lsof; session exited143",
+      "exit_code": 0
+    },
+    {
+      "cwd": "/tmp/tal-a2a-research-20260929/go",
+      "command": "GOCACHE=/tmp/tal-a2a-research-20260929/go/cache GOMODCACHE=/tmp/tal-a2a-research-20260929/go/modcache GOPATH=/tmp/tal-a2a-research-20260929/go/gopath go run ./cmd/crosslang > crosslang-output.txt 2>&1",
+      "exit_code": 0,
+      "scope": "Go SDK 2.6.0 to Python SDK 1.1.5; seven local JSON-RPC lifecycle checks"
+    },
+    {
+      "cwd": "/Users/idanvaknin/Documents/ChatGPT/skills",
+      "command": "git ls-remote https://github.com/a2aproject/A2A.git refs/tags/v1.0.1 refs/tags/v1.0.1^{}",
+      "exit_code": 0,
+      "observed": "3303592588e388e62e0f69f701af531d2f4e3991 refs/tags/v1.0.1"
+    },
+    {
+      "cwd": "/Users/idanvaknin/Documents/ChatGPT/skills",
+      "command": "git ls-remote https://github.com/a2aproject/a2a-js.git refs/tags/v1.2.1 refs/tags/v1.2.1^{}",
+      "exit_code": 0,
+      "observed": "11cbb295a7933ecb459d4e2af0740bf4570e71b2 refs/tags/v1.2.1"
+    },
+    {
+      "cwd": "/Users/idanvaknin/Documents/ChatGPT/skills",
+      "command": "git ls-remote https://github.com/a2aproject/a2a-python.git refs/tags/v1.1.5 refs/tags/v1.1.5^{}",
+      "exit_code": 0,
+      "observed": "9f0f00cb0417cb59958d3186d81651be7d9b9d59 refs/tags/v1.1.5"
+    },
+    {
+      "cwd": "/Users/idanvaknin/Documents/ChatGPT/skills",
+      "command": "git ls-remote https://github.com/a2aproject/a2a-go.git refs/tags/v2.6.0 refs/tags/v2.6.0^{}",
+      "exit_code": 0,
+      "observed": "ebf17c56ef7e63c72883a45454a538bbc0df66b8 refs/tags/v2.6.0"
+    }
+  ],
+  "development_corrections": [
+    "Initial JavaScript client used wire enum strings and parts objects as SDK objects; corrected using numeric enum/oneof and fromJSON codecs.",
+    "Initial continuation fixture re-emitted INPUT_REQUIRED and returned too early; corrected initial follow-up Task state before completing.",
+    "Initial repeat-cancel assertion assumed same response; now accepts documented terminal rejection or canceled and reconciles stored state.",
+    "Initial stream assertion inspected wire field paths rather than SDK payload union; corrected.",
+    "Initial empty ListTasks object lacked SDK default status; fromJSON({}) supplies correct defaults."
+  ],
+  "not_tested": [
+    "Full official A2A conformance or interoperability test kit",
+    "Python client or TypeScript server",
+    "REST/gRPC transports and 0.3 migration",
+    "Production JWT/OAuth/mTLS or AgentCard signature validation",
+    "Push notifications, webhook replay and delivery durability",
+    "Real independent-process distributed event store or broker",
+    "Durable duplicate-effect suppression, transactional outbox, real external effects, crash between effect and receipt",
+    "Load/soak/resource-exhaustion tests",
+    "General cancellation or shutdown cleanup guarantees beyond recorded fixture paths"
+  ],
+  "sources": [
+    {
+      "url": "https://a2a-protocol.org/v1.0.1/specification/",
+      "kind": "normative specification",
+      "read_scope": "versioning, idempotency, cancel state errors, Part oneof, authorization, independent streams, Message task/context agreement and inference; Sections 3.3.1 and 3.5.2: optional SendMessage deduplication, idempotent cancellation, independent stream lifecycle."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-python/blob/v1.1.5/src/a2a/server/request_handlers/default_request_handler_v2.py",
+      "kind": "pinned implementation",
+      "read_scope": "constructor, queue_manager limitation, handlers, aclose, _setup_active_task caller-scoped lookup and context construction"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-python/blob/v1.1.5/src/a2a/server/agent_execution/active_task.py",
+      "kind": "pinned implementation",
+      "read_scope": "cancel ordering, terminal-state persistence and cleanup"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-python/blob/v1.1.5/src/a2a/server/owner_resolver.py",
+      "kind": "pinned implementation",
+      "read_scope": "default user_name scope"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-python/blob/v1.1.5/src/a2a/server/tasks/inmemory_task_store.py",
+      "kind": "pinned implementation",
+      "read_scope": "owner-keyed store and process-local lifecycle"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-js/blob/v1.2.1/README.md",
+      "kind": "pinned SDK guide",
+      "read_scope": "factory/client API; installed package declarations and codecs independently inspected and executed"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/go.mod",
+      "kind": "pinned implementation",
+      "read_scope": "Module pin and Go 1.26 minimum."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/a2a/core.go",
+      "kind": "pinned implementation",
+      "read_scope": "Wire version1.0; task/message/event and request types."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/a2asrv/agentexec.go",
+      "kind": "pinned implementation",
+      "read_scope": "Execute/Cancel signatures, default cancellation adapter, terminal continuation rejection, optimistic concurrent update reconciliation."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/a2asrv/handler.go",
+      "kind": "pinned implementation",
+      "read_scope": "Handler construction and default in-memory stores."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/a2aclient/client.go",
+      "kind": "pinned implementation",
+      "read_scope": "Client method signatures used by probe."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/e2e/cancellation_test.go",
+      "kind": "pinned implementation",
+      "read_scope": "Read upstream examples for cancellation test architecture; authored separate scratch fixtures."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-go/blob/v2.6.0/internal/taskexec/local_manager.go",
+      "kind": "pinned implementation",
+      "read_scope": "Detached execution lifetime and cancellation behavior."
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-python/blob/v1.1.5/src/a2a/server/routes/common.py",
+      "kind": "pinned implementation",
+      "read_scope": "Installed 1.1.5 source: StarletteUser.user_name maps BaseUser.display_name; default context builder falls back to UnauthenticatedUser if no middleware identity."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/server.py",
+      "sha256": "885e098702e132b828101617756726695cebf99e5e28963a5595a2edfde42095"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/requirements.freeze.txt",
+      "sha256": "faa95d43c73cdd1d4d232eb82beaae7b8f3345769d62cd1a24bc0ef7777e521b"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/owner_scope_probe.py",
+      "sha256": "dfcdd1d57b3459d52113ae15e918ad9eae378d6e08de7fbbe8ae5d3e92d38b45"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/owner-scope-results.json",
+      "sha256": "a557ee09a9bb8009807783377cec9a0abfa03a207a8e9454cd814280a038aea2"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/server-final.log",
+      "sha256": "733739f409d1d5d78b24c6aabfd6fc38d6fec45310853a4d84fcf4db4c0936f8"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/probe.mjs",
+      "sha256": "0bf7d8c0ed290c3f34019f35218453fba976d414046843ec68fe2831d0cbf5cb"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/results.json",
+      "sha256": "ceb80742cd6dd7cfc3900f8e786c2756c09a0bfb539869cd7820434e72185e05"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/package.json",
+      "sha256": "70d8717ed6ca259e80968674d934cc459dd541e7dacb78ca4749cd1bc20b01de"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/package-lock.json",
+      "sha256": "928f76c80d0363ed49d7c4dc443838d91d1a4b595c0300f16971aaaeae2eddf4"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/tsconfig.json",
+      "sha256": "c3b48d01dacf2b9d5fe2b20bf3f59d0df6c442ca94834e56834e124226098970"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/api-smoke.ts",
+      "sha256": "de0d8c0cdf3e9c790db542a9422dc560a76acbaaf2e9eb72919b7df75e67725d"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/api-smoke-output.json",
+      "sha256": "457145ef5a15acb905f15745910bd090ed745edd326a5ca78eb2d2f89c004642"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/raw-boundaries.mjs",
+      "sha256": "3c2d8c0f85f38a2a988e89ff79b78382ebd17d4867497fc8358dc4933b7934ef"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/raw-boundaries-results.json",
+      "sha256": "21daebbc15fc85560ee181a62f4b3f1ce5c95a7ef8d28d1dd6a26eda8b7f2f40"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/semantic-invalid.mjs",
+      "sha256": "1442196bb3fe0790a14d5928ff6cfe911db985662c0150b4b8ab478739ce86c2"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/semantic-invalid-results.json",
+      "sha256": "da154b3f455909c768fb6ae33f80698eaa6f68dd4012ee57a2a6e299389249ef"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/validation-mitigation.mjs",
+      "sha256": "08fad4d1a03536a6f5d1813c4e6af14906e1551b4221b2a9700af5bb742f55c4"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/validation-mitigation-results.json",
+      "sha256": "9feaba8a2a47ff127764658df6b3fe7f18afa9608fb58d72b27858432f939bc2"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/restart-check.mjs",
+      "sha256": "9ec478337449a9de34d8e508c8fdc11adcb877e042700297e7431f60c25527a7"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/restart-results.json",
+      "sha256": "bdcba18bb6aa7b2c1e37ed3df67881d2105274df6fd64e1dfa5288cd45e16116"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/probe_test.go",
+      "sha256": "eed87cdf187d3efbd9d01fbc7924f4397dc1174cc1453db75d8a70c43054aa5e"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/probe-output.txt",
+      "sha256": "19504c3b3f88d70c122fb3ad5366da0704f6b7c918a87564be68147dfb9a531f"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/go.mod",
+      "sha256": "5c18240b8b553bde74ecbc9dc376f18ac04e47d9422ca89bfae611b32ba0dede"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/go.sum",
+      "sha256": "139a16758901f45b374b329e262bd30fa441cbfe949df84e37eaceaea7a248ca"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/crosslang-results.json",
+      "sha256": "122746462ce3471822be0ac22e3c23efabc730453a3ec7bc964b6e20eae3a890"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go-result.json",
+      "sha256": "7507beca19794eca172359924a1a95c3a7d89642facd232d973d17ac6cd0c7b2"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/context-identity.mjs",
+      "sha256": "bd200f5a3a1bad5d2caa41c4880465418c236df50e4fdd021e81ca8e33823875"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/context-identity-results.json",
+      "sha256": "52d1821e83f313e1d4c90ceb79dca52c447d0059fbaa61082c1ac07e5c70e10f"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/context-identity-mitigation.mjs",
+      "sha256": "b9e0223b12584d7d01edc1449eedcd5bde8edee71e70b413392cff7344bd5e97"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/ts/context-identity-mitigation-results.json",
+      "sha256": "4b8bab9c57fffcaf4edb96724ec08449c25cd490b8a066c7e85d8bf60c9220d3"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/server-identity.log",
+      "sha256": "65eb84511dc4b94fa788d3ce78ac7eedf07d0518d3f15531f515abfe90ad924c"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/py/server-identity-mitigation.log",
+      "sha256": "896525bb91c35946f24451c2c6a6e56dd78dfb855a1c1b2237441db707b3ccff"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/cmd/crosslang/main.go",
+      "sha256": "edec542f34f7314c8141907bc122ce95bd9aee4234ea77b0a771a40faa574a52"
+    },
+    {
+      "path": "/tmp/tal-a2a-research-20260929/go/crosslang-output.txt",
+      "sha256": "e013f793ceccd1f718192fcfb9f18d55e1929616652aafaae82ec2329e4aa578"
+    }
+  ],
+  "execution_note": "Commands preserve executed SDK/test invocations. Fixture source authoring and ordinary file inspection commands are not a full shell transcript. Temporary process IDs are historical and must not be reused when reproducing. Scratch paths are local evidence, not installed or published dependencies. Reproduction needs the retained sources and dependency lock/freeze files; this report does not package them as production examples.",
+  "independent_review": {
+    "reviewer": "/root/research_agents/a2a_go_probe",
+    "scope": "Read-only Go counts, cancellation/shared-store claims, commands and artifact hashes",
+    "result": "Confirmed behavioral scope. Missing cross-language command/source/output added; wording corrected from Go effect count to invocation count; raw version probe exception made explicit.",
+    "remaining_findings": []
+  }
+}

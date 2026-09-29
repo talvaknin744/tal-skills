@@ -1,0 +1,122 @@
+{
+  "status": "observed-local-integration",
+  "scope": "Actual RabbitMQ broker, Pika client, and SQLite transactions. Research probe, not a reusable implementation.",
+  "started_at": "2026-09-29T08:37:32Z",
+  "finished_at": "2026-09-29T08:37:32Z",
+  "runtime": {
+    "broker": {
+      "image_tag": "docker.io/library/rabbitmq:4.3.0",
+      "repo_digest": "rabbitmq@sha256:46bf0bdf0d2008acae9c5475558001e961297bd0868214c9216bef107d7d2b87",
+      "platform_image_id": "sha256:b0a71b73f29fb2195129a03c78c846801bebf2095e9e814656aa42fad1873247",
+      "os": "linux",
+      "architecture": "arm64",
+      "observed_version": "4.3.0",
+      "erlang": "Erlang/OTP 27.3.4.11"
+    },
+    "client": {
+      "name": "pika",
+      "version": "1.3.2"
+    },
+    "python": "3.14.3",
+    "sqlite": "3.53.2",
+    "docker_engine": "29.8.0"
+  },
+  "setup": {
+    "endpoint": "127.0.0.1:56729",
+    "broker_count": 1,
+    "queue_type": "classic",
+    "durable_queue": true,
+    "persistent_messages": true,
+    "publisher_confirms": true,
+    "consumer_ack": "manual",
+    "ledger": "SQLite WAL with synchronous=FULL; logical-operation claim and effect in one transaction",
+    "identity": "Application operation ID; broker delivery tag and redelivered flag are not identity"
+  },
+  "observations": [
+    {
+      "name": "commit-before-ack",
+      "first_delivery_redelivered": false,
+      "second_delivery_redelivered": true,
+      "effect_count": 1,
+      "second_claim_inserted": false,
+      "queue_empty_after_ack": true,
+      "status": "passed"
+    },
+    {
+      "name": "new-publication-same-operation",
+      "redelivered": false,
+      "effect_count": 1,
+      "deduplication_key": "logical operation identity",
+      "status": "passed"
+    },
+    {
+      "name": "rollback-before-disconnect",
+      "rolled_back_effect_count": 0,
+      "redelivered": true,
+      "final_effect_count": 1,
+      "status": "passed"
+    },
+    {
+      "name": "ack-before-commit-loses-work",
+      "broker_delivery_available": false,
+      "effect_count": 0,
+      "status": "expected unsafe control reproduced"
+    }
+  ],
+  "method": {
+    "commit_before_ack": "Publish confirmed persistent message; manually receive; atomically commit operation claim and effect; close the AMQP connection without ACK; reconnect; observe redelivered=true; repeated claim inserts no row; effect remains one; ACK and confirm empty queue.",
+    "independent_duplicate": "Republish identical operation ID; observe redelivered=false because this is a new publication; persisted claim still suppresses the second effect.",
+    "rollback": "Apply claim and effect then roll back; close connection unacknowledged; redelivery commits exactly one effect.",
+    "unsafe_control": "ACK followed by synchronous queue-declare round trip, then disconnect before the DB effect; reconnect sees an empty queue and effect count zero."
+  },
+  "applicability": {
+    "trigger": "A broker message mutates local transactional state and may be redelivered after a connection or consumer failure.",
+    "failure": "Acknowledgement before commit can lose work; commit before acknowledgement can produce duplicate attempts.",
+    "mechanism": "Commit the stable operation claim and local effect atomically, then acknowledge; on redelivery reuse that identity and return the existing outcome.",
+    "conditions": [
+      "Claim and business effect share one transactional database boundary.",
+      "Ledger identity is stable across republishing as well as broker redelivery.",
+      "Retention covers the legitimate redelivery and replay horizon."
+    ],
+    "counterexample": "A payment provider call and local ledger do not share this SQLite transaction; this probe does not establish atomicity for external effects.",
+    "verification": "Four observed broker/DB cases, including unsafe-order negative control. Add external-outcome reconciliation and crash/failover tests when those guarantees are required."
+  },
+  "limits": [
+    "One local broker and local SQLite file, no HA/quorum or disk/power-loss experiment.",
+    "Broker process was not restarted; durable flags are configuration, not an observed restart proof.",
+    "External side effects, inbox expiration, schema evolution, parallel consumers, DLX/quarantine persistence, and failover were not tested.",
+    "Connection close was graceful AMQP shutdown, not a killed process or network partition.",
+    "SQLite connections were reopened to inspect persisted state; the laptop and broker process were not crashed.",
+    "No latency, throughput, partition ownership, ordering, or bounded-prefetch guarantee was measured."
+  ],
+  "cleanup": {
+    "container": "tal-messaging-research-20260929",
+    "container_removed": true,
+    "anonymous_volumes_removed": true,
+    "queue_deleted": true,
+    "image_retained": true,
+    "global_prune_used": false
+  },
+  "artifacts": {
+    "directory": "/tmp/tal-messaging-research-20260929",
+    "script": "/tmp/tal-messaging-research-20260929/probe.py",
+    "script_sha256": "16834044acb2a62caf91a597877c669b26fe7c324f04e17fc619061f650b1650",
+    "result": "/tmp/tal-messaging-research-20260929/results.json",
+    "run_log": "/tmp/tal-messaging-research-20260929/probe-output.log",
+    "broker_log": "/tmp/tal-messaging-research-20260929/broker.log",
+    "image_inspection": "/tmp/tal-messaging-research-20260929/image-inspect.json",
+    "docker_version": "/tmp/tal-messaging-research-20260929/docker-version.json",
+    "ledger": "/tmp/tal-messaging-research-20260929/effects.sqlite3",
+    "persistence_note": "Raw probe artifacts are local temporary research files; the repository evidence records observations but does not promise those paths survive cleanup."
+  },
+  "sources": [
+    {
+      "url": "https://www.rabbitmq.com/docs/confirms",
+      "purpose": "Publisher confirmations and consumer acknowledgements cover separate boundaries."
+    },
+    {
+      "url": "https://www.rabbitmq.com/docs/quorum-queues",
+      "purpose": "Quorum and dead-letter safety requirements were researched separately; this classic-queue experiment does not validate them."
+    }
+  ]
+}

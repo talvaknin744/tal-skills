@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-29T08:11:24Z",
+  "purpose": "Native loader and bounded execution feasibility; not final toolkit workflow evaluation",
+  "global_config_changed": false,
+  "authentication_changed": false,
+  "model_substituted": false,
+  "cli_upgraded": false,
+  "hosts": [
+    {
+      "host": "codex-homebrew",
+      "version": "0.142.5",
+      "status": "blocked",
+      "blockers": [
+        "Existing newer user config has agents.enabled boolean and agents.max_concurrent_threads_per_session; this binary tries to parse enabled as AgentRoleToml.",
+        "--ignore-user-config reaches the API but configured gpt-6-astra is rejected as requiring a newer Codex version."
+      ],
+      "successful_model_execution": false
+    },
+    {
+      "host": "codex-desktop-bundled",
+      "version": "0.153.4",
+      "binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "model_policy": "Inherited configured gpt-6-astra and reasoning effort; no role model override.",
+      "status": "bounded-role-and-skill-execution-confirmed",
+      "standalone_directory_discovery": "Source-supported; scratch project config layer was disabled as untrusted, so direct directory discovery is not behaviorally confirmed here.",
+      "explicit_role_registration": "Invocation-only -c agents.tal-probe.config_file=\"<probe-root>/.codex/agents/tal-probe.toml\" loaded the native role file.",
+      "role_result": "ROLE_LOADING_C0D3X",
+      "skill_result": "WORKFLOW_LOADING_5K1LL",
+      "successful_model_execution": true
+    },
+    {
+      "host": "claude-code",
+      "version": "2.1.150",
+      "model_policy": "model: inherit; native init reports claude-opus-4-7[1m].",
+      "status": "loader-confirmed-execution-blocked",
+      "native_init": {
+        "probe_in_agents": true,
+        "probe_in_skills": true,
+        "probe_in_slash_commands": true,
+        "permissionMode": "default"
+      },
+      "auth_status": {
+        "loggedIn": true,
+        "authMethod": "claude.ai",
+        "apiProvider": "firstParty"
+      },
+      "execution_error": "401 OAuth access token has expired. Re-authenticate to continue.",
+      "successful_model_execution": false,
+      "recovery_command": "claude auth login --claudeai",
+      "recovery_command_executed": false
+    }
+  ],
+  "probes": [
+    {
+      "id": "old-config",
+      "kind": "native-startup",
+      "outcome": "config-parse-rejected"
+    },
+    {
+      "id": "old-ignore-user-config",
+      "kind": "native-api-attempt",
+      "outcome": "model-requires-newer-cli",
+      "events": [
+        {
+          "type": "error",
+          "message": "{\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-6-astra' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}"
+        },
+        {
+          "type": "turn.failed",
+          "error": {
+            "message": "{\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-6-astra' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "modern-skill-list",
+      "kind": "native-app-server",
+      "method": "skills/list",
+      "outcome": "tal-probe returned with repo scope and no skill errors"
+    },
+    {
+      "id": "modern-project-trust",
+      "kind": "native-app-server",
+      "method": "config/read",
+      "outcome": "Project layer disabled as untrusted; both /tmp and canonical /private/tmp invocation-only trust overrides did not change the result."
+    },
+    {
+      "id": "modern-explicit-role",
+      "kind": "native-model-role-token",
+      "outcome": "pass",
+      "registration": "session flag config_file, not automatic standalone discovery",
+      "prompt": "Use the configured custom tal-probe agent for exactly one short delegated task: report its configured role token. Wait for its result. Do not read its file or inject a role token yourself. If the host cannot select a named custom agent type, report that limitation instead of substituting a general-purpose child. No file changes.",
+      "role_file": {
+        "name": "tal-probe",
+        "description": "TAL_NATIVE_AGENT_PROBE for checking native agent discovery only.",
+        "developer_instructions": "For this native loader smoke test return exactly ROLE_LOADING_C0D3X. Do not use tools or modify files."
+      },
+      "events": [
+        {
+          "type": "agent_message",
+          "text": "I\u2019ll ask the configured `tal-probe` agent to report its role token and wait for its result.\n"
+        },
+        {
+          "type": "collab_tool_call",
+          "tool": "wait",
+          "status": "completed"
+        },
+        {
+          "type": "agent_message",
+          "text": "The configured `tal-probe` agent reported: `ROLE_LOADING_C0D3X`."
+        },
+        {
+          "type": "turn.completed",
+          "usage": {
+            "input_tokens": 53635,
+            "cached_input_tokens": 35200,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 131,
+            "reasoning_output_tokens": 0
+          }
+        }
+      ],
+      "limitations": [
+        "Exec JSONL exposed a completed wait and the role-token result, but did not expose the V2 spawn request payload.",
+        "No implementation, multi-role coordination or final toolkit behavior was tested."
+      ]
+    },
+    {
+      "id": "modern-explicit-workflow",
+      "kind": "native-model-skill-invocation",
+      "outcome": "pass",
+      "prompt": "$tal-probe Execute the named workflow probe and report its result.",
+      "skill_body": "For this workflow smoke probe, return exactly WORKFLOW_LOADING_5K1LL. No file changes and no external actions.",
+      "events": [
+        {
+          "type": "agent_message",
+          "text": "WORKFLOW_LOADING_5K1LL"
+        },
+        {
+          "type": "turn.completed",
+          "usage": {
+            "input_tokens": 17368,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 34,
+            "reasoning_output_tokens": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "claude-loader",
+      "kind": "native-stream-json-initialization",
+      "outcome": "agent-and-skill-discovered-before-auth-failure",
+      "selected_agent": "tal-native-probe",
+      "agent_frontmatter": {
+        "name": "tal-native-probe",
+        "description": "Read-only native loader verification.",
+        "model": "inherit",
+        "tools": [],
+        "skills": [
+          "tal-native-probe"
+        ]
+      },
+      "model_output": null
+    }
+  ],
+  "adapter_contract": {
+    "codex": {
+      "agent_path": ".codex/agents/<name>.toml",
+      "required_fields": [
+        "name",
+        "description",
+        "developer_instructions"
+      ],
+      "skill_path": ".agents/skills/<name>/SKILL.md",
+      "workflow_invocation": "$<name>",
+      "model_fields": "omit to inherit"
+    },
+    "claude": {
+      "agent_path": ".claude/agents/<name>.md",
+      "required_project_fields": [
+        "name",
+        "description"
+      ],
+      "body": "role instructions",
+      "model": "inherit",
+      "skill_path": ".claude/skills/<name>/SKILL.md",
+      "workflow_invocation": "/<name>",
+      "workflow_context": "main session; omit context: fork for coordinating workflows"
+    },
+    "installation": [
+      "Do not edit global trust, authentication, models, permissions or concurrency settings.",
+      "Detect existing files and skill names before writing.",
+      "Validate project trust and actual host discovery separately from syntax.",
+      "Keep dependencies in the target project; do not point installed packages to the source checkout.",
+      "Report prompt-based fallback explicitly when native named roles are unavailable."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Codex custom agents",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents"
+    },
+    {
+      "title": "Codex skill discovery and invocation",
+      "url": "https://learn.chatgpt.com/docs/build-skills"
+    },
+    {
+      "title": "Claude subagents",
+      "url": "https://code.claude.com/docs/en/sub-agents"
+    },
+    {
+      "title": "Claude skills",
+      "url": "https://code.claude.com/docs/en/skills"
+    },
+    {
+      "title": "Codex0.153.4 role loader",
+      "url": "https://github.com/openai/codex/blob/rust-v0.153.4/codex-rs/agent-roles/src/loader.rs"
+    },
+    {
+      "title": "Codex0.153.4 role parser",
+      "url": "https://github.com/openai/codex/blob/rust-v0.153.4/codex-rs/agent-roles/src/agent_role_config.rs"
+    },
+    {
+      "title": "Codex0.153.4 tool exposure",
+      "url": "https://github.com/openai/codex/blob/rust-v0.153.4/codex-rs/core/src/tools/spec_plan.rs"
+    },
+    {
+      "title": "Codex0.153.4 native role application",
+      "url": "https://github.com/openai/codex/blob/rust-v0.153.4/codex-rs/core/src/tools/handlers/multi_agents_v2/spawn.rs"
+    }
+  ],
+  "source_tree_sha": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+  "evidence_retention": "Sanitized observations and relevant model events are embedded here. Raw scratch diagnostics are not published; they include local paths and unrelated installed-skill warnings."
+}

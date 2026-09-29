@@ -1,0 +1,273 @@
+{
+  "checked_on": "2026-09-29",
+  "books": [
+    {
+      "id": "infrastructure-as-code-3e",
+      "title": "Infrastructure as Code: Designing and Delivering Dynamic Systems for the Cloud Age",
+      "authors": [
+        "Kief Morris"
+      ],
+      "edition": "Third",
+      "year": 2025,
+      "urls": [
+        "https://infrastructure-as-code.com/book/",
+        "https://www.oreilly.com/library/view/infrastructure-as-code/9781098150341/",
+        "https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/infra-as-code-3e-free-chapter.pdf",
+        "https://www.oreilly.com/library/view/infrastructure-as-code/9781098150341/ch19.html",
+        "https://www.oreilly.com/library/view/infrastructure-as-code/9781098150341/ch20.html"
+      ],
+      "access": "Official 26-page excerpt; complete Chapter 1. Author, publisher, full-text and library searches did not establish a complete open third edition. Subscription or eligible library access may supply the rest.",
+      "read_sections": [
+        "Chapter 1, What Is Infrastructure as Code?, complete printed pages 1–18",
+        "Chapters 19 and 20: public introductory previews only; complete contents inspected"
+      ],
+      "findings": [
+        {
+          "trigger": "Changing deployed infrastructure.",
+          "failure": "Large untested changes entangle unrelated resources.",
+          "mechanism": "Use small versioned components and test each change.",
+          "conditions": "Choose boundaries around actual workload needs.",
+          "counterexample": "A single configuration repository does not guarantee independent deployment.",
+          "verification": "Inspect the affected resource set and run a disposable change-and-recovery exercise."
+        }
+      ],
+      "limitations": [
+        "Chapter 1 supplies principles, not detailed Terraform execution guarantees. Detailed delivery chapters were not read in full.",
+        "Current Terraform plan, locking, lifecycle, and partial-apply documentation supplies operational constraints."
+      ],
+      "reading_artifacts": [
+        {
+          "url": "https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/infra-as-code-3e-free-chapter.pdf",
+          "pages": 26,
+          "sha256": "da55029cbf68116c5913cd403e32e12fe63c2c2ea64dd5f801c5253f3b5eecb2"
+        }
+      ]
+    },
+    {
+      "id": "enterprise-integration-patterns",
+      "title": "Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions",
+      "authors": [
+        "Gregor Hohpe",
+        "Bobby Woolf"
+      ],
+      "edition": "First",
+      "year": 2003,
+      "urls": [
+        "https://www.informit.com/store/enterprise-integration-patterns-designing-building-and-9780321200686",
+        "https://www.enterpriseintegrationpatterns.com/downloads.html",
+        "https://ptgmedia.pearsoncmg.com/images/9780321200686/samplepages/0321200683.pdf",
+        "https://www.enterpriseintegrationpatterns.com/docs/EnterpriseIntegrationPatterns_HohpeWoolf_ch03.pdf",
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/IdempotentReceiver.html",
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/TransactionalClient.html",
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessageExpiration.html",
+        "https://www.enterpriseintegrationpatterns.com/patterns/messaging/GuaranteedMessaging.html"
+      ],
+      "access": "Publisher sample and author-hosted Chapter 3; public pattern summaries. Full-book searches found subscription/library routes, not an authenticated open complete edition. Published 2003, copyright 2004.",
+      "read_sections": [
+        "Complete Chapter 2, Integration Styles, printed pages 39–56",
+        "Complete Message Endpoint pattern, printed pages 95–97, in Chapter 3",
+        "Abbreviated public Idempotent Receiver, Transactional Client, Message Expiration, and Guaranteed Delivery entries",
+        "Introduction: explicit limitations of illustrative code"
+      ],
+      "findings": [
+        {
+          "trigger": "Integrating separately evolving applications.",
+          "failure": "Transport decisions leak into domain behavior.",
+          "mechanism": "Select integration style deliberately; isolate transport mapping in an endpoint.",
+          "conditions": "Retain observable delivery and failure semantics.",
+          "counterexample": "An endpoint wrapper cannot erase broker-specific guarantees.",
+          "verification": "Test application behavior independently, then test its real transport boundary."
+        }
+      ],
+      "limitations": [
+        "Do not claim the public pattern summaries are complete book patterns.",
+        "Historical illustrative code omits production concerns; no code was imported."
+      ],
+      "reading_artifacts": [
+        {
+          "url": "https://ptgmedia.pearsoncmg.com/images/9780321200686/samplepages/0321200683.pdf",
+          "pages": 98,
+          "sha256": "b12e9c8323adf5d8b6a80c82b149edc8c0b1294682f9ec11f6782e7878781805"
+        },
+        {
+          "url": "https://www.enterpriseintegrationpatterns.com/docs/EnterpriseIntegrationPatterns_HohpeWoolf_ch03.pdf",
+          "pages": 42,
+          "sha256": "c1e7125dcebfdd9a2b23a922dfbbc9694e5f8048e81e14dc95e2882043ac4f66"
+        }
+      ]
+    },
+    {
+      "id": "designing-event-driven-systems",
+      "title": "Designing Event-Driven Systems: Concepts and Patterns for Streaming Services with Apache Kafka",
+      "authors": [
+        "Ben Stopford"
+      ],
+      "edition": "First",
+      "year": 2018,
+      "urls": [
+        "https://benstopford.com/2018/04/27/book-designing-event-driven-systems/",
+        "https://benstopford.com/uploads/Designing-Event-Driven-Systems.pdf"
+      ],
+      "access": "Author-hosted complete 166-page PDF; title, edition, contents and final chapter structurally checked. Only the listed chapters were read.",
+      "read_sections": [
+        "Chapter 10, Lean Data, complete printed pages 91–97",
+        "Chapter 11, Consistency and Concurrency in Event-Driven Systems, complete printed pages 101–110",
+        "Chapter 12, Transactions, but Not as We Know Them, complete printed pages 111–121",
+        "Chapter 13, Evolving Schemas and Data over Time, complete printed pages 123–129"
+      ],
+      "findings": [
+        {
+          "trigger": "Rebuilding or changing event-driven services.",
+          "failure": "A successful live migration hides broken historical replay.",
+          "mechanism": "Define retained history, ownership, transaction and schema boundaries.",
+          "conditions": "Replay duration and older reader/writer combinations remain feasible.",
+          "counterexample": "A Kafka transaction does not cover an external payment.",
+          "verification": "Crash at effect/offset boundaries; replay old schemas into a new projection."
+        }
+      ],
+      "limitations": [
+        "2018 broker defaults and consumer-group limitations are historical.",
+        "Book schema generalizations require current format-specific checks; registry existence does not establish payload validation.",
+        "Complete source access does not mean every chapter was read."
+      ],
+      "reading_artifacts": [
+        {
+          "url": "https://benstopford.com/uploads/Designing-Event-Driven-Systems.pdf",
+          "pages": 166,
+          "sha256": "ddb86efc5c992ca51bc08c1c7c82e076161603de44eddc3e36068fbc79258657"
+        }
+      ]
+    },
+    {
+      "id": "site-reliability-engineering",
+      "title": "Site Reliability Engineering",
+      "authors": [
+        "Betsy Beyer",
+        "Chris Jones",
+        "Jennifer Petoff",
+        "Niall Richard Murphy (editors)"
+      ],
+      "edition": "First",
+      "year": 2016,
+      "urls": [
+        "https://sre.google/sre-book/data-integrity/",
+        "https://sre.google/sre-book/table-of-contents/"
+      ],
+      "access": "Official complete HTML book. This pass re-read selected Chapter 26 sections, extending existing repository reading notes.",
+      "read_sections": [
+        "Chapter 26: Out-of-band data validation",
+        "Chapter 26: Knowing That Data Recovery Will Work",
+        "Prior reading scope retained in docs/research/sre-reliability-reading.md"
+      ],
+      "findings": [
+        {
+          "trigger": "Claiming backup or recovery readiness.",
+          "failure": "Stored backup files cannot restore usable service.",
+          "mechanism": "Rehearse restoration and validate application invariants.",
+          "conditions": "Include dependencies and recovery resources.",
+          "counterexample": "A checksum success says nothing about restored user access.",
+          "verification": "Measure recovery time and restored data loss against objectives."
+        }
+      ],
+      "limitations": [
+        "Google case studies motivate design; they do not specify another platform’s runtime contract.",
+        "No new claim of complete-book reading."
+      ]
+    },
+    {
+      "id": "site-reliability-workbook",
+      "title": "The Site Reliability Workbook",
+      "authors": [
+        "Betsy Beyer",
+        "Niall Richard Murphy",
+        "David K. Rensin",
+        "Kent Kawahara",
+        "Stephen Thorne (editors)"
+      ],
+      "edition": "First",
+      "year": 2018,
+      "urls": [
+        "https://sre.google/workbook/canarying-releases/"
+      ],
+      "access": "Official complete HTML book; selected Chapter 16 section re-read.",
+      "read_sections": [
+        "Chapter 16: Canarying in Noninteractive Systems"
+      ],
+      "findings": [
+        {
+          "trigger": "Deploying changes to long-running pipeline workers.",
+          "failure": "A short health check misses work-unit failures.",
+          "mechanism": "Observe complete work units with stable canary/control attribution.",
+          "conditions": "Select result-quality and completion-time signals.",
+          "counterexample": "Pod readiness alone is not job-completion evidence.",
+          "verification": "Run a representative unit through the deployment and compare outcomes."
+        }
+      ],
+      "limitations": [
+        "Accelerated interruption tests do not replace representative-duration validation."
+      ]
+    },
+    {
+      "id": "ddia-2e-draft",
+      "title": "Designing Data-Intensive Applications",
+      "authors": [
+        "Martin Kleppmann",
+        "Chris Riccomini"
+      ],
+      "edition": "Second-edition early-release draft",
+      "year": null,
+      "urls": [
+        "https://github.com/YZXBiz/ddia/tree/157c2b303db17188dc4509c809552fd378e78b25/raw"
+      ],
+      "access": "Reuse of earlier user-supplied, commit-pinned draft reading; no newly asserted final-edition or full-book reading.",
+      "read_sections": [
+        "Prior selected Chapters 11–13 processing/recovery sections documented in docs/research/ddia-processing-recovery.md"
+      ],
+      "findings": [
+        {
+          "trigger": "Replaying jobs after failure.",
+          "failure": "Mutable inputs change the recovered result.",
+          "mechanism": "Preserve input identity and required processing context.",
+          "conditions": "History and dependencies survive the replay horizon.",
+          "counterexample": "Rereading a current lookup table is not historical replay.",
+          "verification": "Change live inputs after checkpointing, then verify the declared recovery result."
+        }
+      ],
+      "limitations": [
+        "Mirror identifies early-release material; final publication equivalence is not established.",
+        "Current platform contracts govern implementation details."
+      ]
+    },
+    {
+      "id": "release-it-2e",
+      "title": "Release It! Design and Deploy Production-Ready Software",
+      "authors": [
+        "Michael T. Nygard"
+      ],
+      "edition": "Second",
+      "year": 2018,
+      "urls": [
+        "https://store.pragprog.com/titles/mnee2/release-it-second-edition/",
+        "https://repo.darmajaya.ac.id/4586/"
+      ],
+      "access": "Reuse of earlier reading from an institutional complete-looking PDF; internal edition matched publisher metadata, but publisher authentication was not established.",
+      "read_sections": [
+        "Previously read complete Chapters 5, 13, and 14; details in docs/research/full-text-access-operations.md"
+      ],
+      "findings": [
+        {
+          "trigger": "Changing services while older work remains active.",
+          "failure": "Schema contraction invalidates retiring workers.",
+          "mechanism": "Preserve compatibility through the overlap period.",
+          "conditions": "Track the final old consumer or job.",
+          "counterexample": "A completed pod rollout need not retire every old workflow.",
+          "verification": "Exercise old/new readers and writers before permitting contraction."
+        }
+      ],
+      "limitations": [
+        "No new full-book reading in this pass.",
+        "Deployment guidance alone does not supply a durable handoff protocol."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,396 @@
+{
+  "reviewed_at": "2026-09-29",
+  "baseline_revision": "7279a6654487d9a5f09d4a21d117dfa841c7130d",
+  "scope": {
+    "temporal_entrypoints": 12,
+    "productivity_entrypoints": 3,
+    "all_entrypoints_read": true,
+    "skill_edits_performed": false
+  },
+  "skills": [
+    {
+      "name": "temporal-ai-workflows",
+      "path": "skills/temporal/temporal-ai-workflows",
+      "files_read": [
+        "skills/temporal/temporal-ai-workflows/SKILL.md",
+        "skills/temporal/temporal-ai-workflows/agents/openai.yaml",
+        "skills/temporal/temporal-ai-workflows/references/execution.md",
+        "skills/temporal/temporal-ai-workflows/references/coordination.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns durable agent turns, tool effects, approval state, and multi-agent coordination. Reuse reliability for effect contracts and safe-deployments for replay/version transitions; do not invoke all three for a simple prompt edit."
+    },
+    {
+      "name": "temporal-cloud",
+      "path": "skills/temporal/temporal-cloud",
+      "files_read": [
+        "skills/temporal/temporal-cloud/SKILL.md",
+        "skills/temporal/temporal-cloud/UPSTREAM.md",
+        "skills/temporal/temporal-cloud/references/common-scenarios.md"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-CLOUD-01",
+          "severity": "medium",
+          "evidence": "SKILL.md:129-132 and :282 classify Regional Endpoints as HA-only and exclude all Flexible Auth use of Namespace Endpoints. references/common-scenarios.md:12 says Namespace Endpoint works for all auth methods without the mixed-auth preview exception.",
+          "source_url": "https://docs.temporal.io/cloud/namespaces",
+          "recommended_change": "State the recommended Namespace Endpoint default, region-pinning purpose of Regional Endpoints, and current mixed-auth API-key restriction. Inspect actual namespace authentication settings before changing addresses.",
+          "verification": "Evaluate API-key-only namespace, mTLS namespace, mixed-auth preview namespace, and explicitly region-pinned HA deployment; retain working endpoints except where a documented constraint requires change."
+        },
+        {
+          "id": "TP-CLOUD-02",
+          "severity": "medium",
+          "evidence": "references/common-scenarios.md:115-132 migrates mTLS to API keys by creating a service account/key and swapping credentials; it omits enabling/supported namespace API-key authentication, namespace permissions, and the key name.",
+          "source_url": "https://docs.temporal.io/cloud/api-keys",
+          "recommended_change": "Make the migration conditional on current namespace authentication support; include service-account namespace access, inspect installed tcld create --help, supply required key metadata, and verify the new connection before retiring old credentials. Link namespace migration guidance.",
+          "verification": "A simulated mTLS-only namespace and permissionless service account must not be reported migration-ready; all sample CLI flags should match the pinned or installed CLI help."
+        }
+      ],
+      "overlap_notes": "Cloud connection/configuration diagnosis overlaps temporal-ops. Route configuration explanations here, operational command execution to ops, and first-time provisioning to cloud-setup. Preserve the existing public name."
+    },
+    {
+      "name": "temporal-cloud-setup",
+      "path": "skills/temporal/temporal-cloud-setup",
+      "files_read": [
+        "skills/temporal/temporal-cloud-setup/SKILL.md",
+        "skills/temporal/temporal-cloud-setup/UPSTREAM.md",
+        "skills/temporal/temporal-cloud-setup/agents/openai.yaml",
+        "skills/temporal/temporal-cloud-setup/scripts/provision.sh"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-SETUP-01",
+          "severity": "high",
+          "evidence": "SKILL.md:296 and scripts/provision.sh:1951 display env | grep with the TEMPORAL_ prefix. That prints TEMPORAL_API_KEY values into the agent transcript. Actual cmd_preflight at approximately :398 already prints selected variable names without values.",
+          "source_url": "https://docs.temporal.io/cloud/api-keys",
+          "recommended_change": "Use the actual presence-only preflight in displayed gates and generated previews. Report variable names or booleans without values and avoid shell tracing around credentials.",
+          "verification": "Run previews and preflight with a sentinel API key; assert the sentinel is absent from stdout/stderr while set and unset cases remain distinguishable."
+        },
+        {
+          "id": "TP-SETUP-02",
+          "severity": "medium",
+          "evidence": "SKILL.md:331,:593 and scripts/provision.sh:516,:1886 say the Cloud extension has no meaningful versions and always updates the prerelease tap. Official cloud-cli released v0.1.1 on 2026-09-28 and documents temporalio/brew/temporal-cloud.",
+          "source_url": "https://github.com/temporalio/cloud-cli/releases",
+          "recommended_change": "Use the current documented installation source and inspect installed version/capabilities. Replace the obsolete no-versions rationale and unconditional upgrade policy with a required-capability check; keep valid working installations. The old tap has a migration, so do not claim it necessarily fails.",
+          "verification": "Stub absent, compatible, incompatible, upgrade-failed, and non-Homebrew installations. Inspect the current extension help/version and preserve the provisioning output contract."
+        },
+        {
+          "id": "TP-SETUP-03",
+          "severity": "low",
+          "evidence": "The 807-line entrypoint contains roughly 10,570 words, with per-SDK gate templates and repeated presentation instructions alongside the main flow.",
+          "source_url": "https://www.aihero.dev/skills-writing-for-agents",
+          "recommended_change": "Move runtime-specific gate templates and detailed formatting into conditional references; retain activation, the state machine, authorization semantics, script invocations, and completion criteria in the entrypoint.",
+          "verification": "Run the existing provisioning stubs and link checks; an agent can select its SDK and locate the corresponding gate without loading unrelated SDK templates."
+        }
+      ],
+      "overlap_notes": "Explicit invocation is appropriate because this skill provisions resources. Keep its script-backed setup boundary distinct from general Cloud diagnosis. Preserve the JSON script contract and its existing authorization adaptations."
+    },
+    {
+      "name": "temporal-developer",
+      "path": "skills/temporal/temporal-developer",
+      "files_read": [
+        "skills/temporal/temporal-developer/SKILL.md",
+        "skills/temporal/temporal-developer/UPSTREAM.md",
+        "skills/temporal/temporal-developer/references/core/job-queue.md",
+        "skills/temporal/temporal-developer/references/core/standalone-activities.md"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-DEV-01",
+          "severity": "medium",
+          "evidence": "references/core/standalone-activities.md:158 lists CLI 1.7.0+/Server 1.31.0+; current feature documentation lists CLI 1.9.1+/Server 1.32.0+. job-queue.md final paragraph says Rust lacks support, while the current Rust guide supports SDK 1.0.0+.",
+          "source_url": "https://docs.temporal.io/standalone-activity",
+          "recommended_change": "Update the feature prerequisites with an as-of date and current per-SDK guide links, including Rust. Retain capability detection and a compatible fallback for older installations.",
+          "verification": "A current Rust 1.0.0 request routes to the official feature guide; older unsupported environments receive a capability check/fallback rather than instructions for missing APIs."
+        },
+        {
+          "id": "TP-DEV-02",
+          "severity": "high",
+          "evidence": "job-queue.md anti-pattern 6 says a business Activity ID provides free deduplication. standalone-activities.md:62 similarly claims natural deduplication. Neither local explanation includes the retention boundary, and a stable ID alone does not set the closed-execution reuse policy.",
+          "source_url": "https://docs.temporal.io/standalone-activity",
+          "recommended_change": "State that submission deduplication depends on explicit running-conflict and closed-ID-reuse policies and lasts only while the prior execution is retained. Preserve effect-level idempotency and reconciliation after an uncertain outcome; use an operation identity rather than an entity ID when repeats are valid.",
+          "verification": "Test duplicate submission while running, after success with default AllowDuplicate, after retention expiry, and a distinct legitimate operation for the same entity. Check that a retry after an uncertain external effect cannot duplicate that effect."
+        }
+      ],
+      "overlap_notes": "Owns SDK implementation. Existing installed-SDK/server capability check is useful; specialized skills supply effect, deployment, and readiness evidence rather than duplicate language examples."
+    },
+    {
+      "name": "temporal-observability",
+      "path": "skills/temporal/temporal-observability",
+      "files_read": [
+        "skills/temporal/temporal-observability/SKILL.md",
+        "skills/temporal/temporal-observability/UPSTREAM.md",
+        "skills/temporal/temporal-observability/references/sdk-metrics.md",
+        "skills/temporal/temporal-observability/references/service-health-monitoring.md",
+        "skills/temporal/temporal-observability/references/diagnosis-examples.md",
+        "skills/temporal/temporal-observability/references/ops-diagnostics-reference.md"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-OBS-01",
+          "severity": "high",
+          "evidence": "SKILL.md:149 classifies high Activity failures with low Workflow failures as healthy error handling. Unlimited Activity retries can leave Workflows running indefinitely with the same ratio. Similar threshold-based conclusions occur in references/service-health-monitoring.md:93-96, ops-diagnostics-reference.md:54,148-159, and diagnosis-examples.md:139,157,171. Current official service-health guidance repeats the heuristic; this finding adds an applicability limit rather than claiming the upstream page changed.",
+          "source_url": "https://docs.temporal.io/encyclopedia/retry-policies",
+          "recommended_change": "Treat failure conversion as supporting evidence only. Check completion within the business deadline, pending-Activity age, attempt count, last failure, and retry/time budgets before calling recovery healthy. Distinguish attempt-failure metrics from terminal-failure metrics and expected permanent business rejections from reliability failures.",
+          "verification": "Given SDK attempt-failure telemetry for endlessly retrying Activities, zero failed Workflows, and increasing pending age, identify stalled progress rather than healthy recovery. Recovered transient failures that complete on time remain a healthy counterexample; an intentional business rejection must not be labeled defective solely because its Workflow fails."
+        },
+        {
+          "id": "TP-OBS-02",
+          "severity": "low",
+          "evidence": "SKILL.md:15,:19,:84,:198 assume the agent lacks live metrics access or must ask the user to query, although the same entrypoint describes a D3 MCP integration.",
+          "source_url": "https://www.aihero.dev/skills-writing-for-agents",
+          "recommended_change": "Discover connected observability tools/APIs and existing supplied evidence before requesting manual queries. Distinguish unavailable data from an observed healthy result; ask only for missing information that changes the diagnosis.",
+          "verification": "With a read-only metrics connector available, execute the relevant query; without access, provide the exact query and label the conclusion unverified."
+        }
+      ],
+      "overlap_notes": "Owns telemetry selection, collection, queries, and interpretation. Hand off approved changes to worker tuning, SDK development, or ops; preserve the separate observation and implementation roles."
+    },
+    {
+      "name": "temporal-ops",
+      "path": "skills/temporal/temporal-ops",
+      "files_read": [
+        "skills/temporal/temporal-ops/SKILL.md",
+        "skills/temporal/temporal-ops/UPSTREAM.md",
+        "skills/temporal/temporal-ops/agents/openai.yaml",
+        "skills/temporal/temporal-ops/AGENT-PERMISSIONS.md",
+        "skills/temporal/temporal-ops/references/triage/authentication.md",
+        "skills/temporal/temporal-ops/references/triage/connectivity.md",
+        "skills/temporal/temporal-ops/references/triage/workflow-stuck.md"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-OPS-01",
+          "severity": "high",
+          "evidence": "SKILL.md:169 and references/triage/authentication.md:82 recommend env | grep -i TEMPORAL_API_KEY, which prints the credential value.",
+          "source_url": "https://docs.temporal.io/cloud/api-keys",
+          "recommended_change": "Replace raw environment dumps with a presence-only probe; reuse configured authentication without echoing secret values. Audit copied diagnostic examples for the same pattern.",
+          "verification": "Run the diagnostic against a sentinel variable and assert the value never reaches stdout/stderr or a generated command preview."
+        },
+        {
+          "id": "TP-OPS-02",
+          "severity": "medium",
+          "evidence": "SKILL.md:170,:284,:286 routes API-key connections to a required Regional Endpoint; authentication.md:68 already recommends Namespace Endpoints. The entrypoint contradicts its own reference and current namespace documentation.",
+          "source_url": "https://docs.temporal.io/cloud/namespaces",
+          "recommended_change": "Unify routing around the namespace authentication mode and current documented exceptions; do not switch a working API-key connection to a regional endpoint merely because it uses an API key.",
+          "verification": "An API-key-only namespace using its Namespace Endpoint passes the connection diagnosis. The mixed-auth preview exception still selects the documented supported endpoint."
+        },
+        {
+          "id": "TP-OPS-03",
+          "severity": "medium",
+          "evidence": "references/triage/workflow-stuck.md:140,:146 says heartbeats are the only dead-worker detection and describes an Activity with neither close timeout as valid indefinite execution. Current ActivityOptions requires at least one close timeout.",
+          "source_url": "https://typescript.temporal.io/api/interfaces/common.ActivityOptions",
+          "recommended_change": "Distinguish per-attempt Start-To-Close, overall Schedule-To-Close, and faster heartbeat detection. Remove the invalid no-close-timeout scenario. State that server timeout does not prove a disconnected or uncooperative physical attempt stopped; effect protection must tolerate overlap.",
+          "verification": "Check SDK rejection of missing close timeouts and a killed worker with Start-To-Close but no heartbeat. A disconnected old attempt must not be assumed stopped when its replacement starts."
+        },
+        {
+          "id": "TP-OPS-04",
+          "severity": "medium",
+          "evidence": "references/triage/workflow-stuck.md:153 states child workflows can cross namespaces without qualification. Current StartChildWorkflowExecutionCommandAttributes marks namespace deprecated and cross-namespace operations disabled by default since server 1.30.1.",
+          "source_url": "https://raw.githubusercontent.com/temporalio/api/master/temporal/api/command/v1/message.proto",
+          "recommended_change": "Limit cross-namespace child troubleshooting to verified legacy/explicitly enabled configurations. For current designs, use supported cross-namespace integration such as Nexus where applicable and inspect actual execution metadata.",
+          "verification": "A current default server must not receive a suggested cross-namespace child implementation; legacy histories remain diagnosable without assuming the feature is enabled."
+        },
+        {
+          "id": "TP-OPS-05",
+          "severity": "low",
+          "evidence": "SKILL.md:18,:22,:24 and several Temporal sibling entrypoints use skill-temporal-developer, skill-temporal-cloud, and skill-temporal-workertuning, while installed frontmatter names are temporal-developer, temporal-cloud, and temporal-workertuning.",
+          "source_url": "https://www.aihero.dev/skills-writing-for-agents",
+          "recommended_change": "Normalize prose handoffs to canonical installed names across the Temporal entrypoints and identify siblings as optional. If absent, route to bundled relevant references or current official docs rather than an unavailable package.",
+          "verification": "Validate mentioned skill names against the registry and smoke-test each package installed alone; optional referrals must not turn into unresolved mandatory dependencies."
+        }
+      ],
+      "overlap_notes": "Explicit invocation and permission levels are useful for operational mutations. Cloud connection diagnosis overlaps temporal-cloud; select one owner. Bare skill-temporal-* routing names must resolve to the repository public names without making optional siblings required."
+    },
+    {
+      "name": "temporal-production-readiness",
+      "path": "skills/temporal/temporal-production-readiness",
+      "files_read": [
+        "skills/temporal/temporal-production-readiness/SKILL.md",
+        "skills/temporal/temporal-production-readiness/agents/openai.yaml",
+        "skills/temporal/temporal-production-readiness/references/capacity-and-isolation.md",
+        "skills/temporal/temporal-production-readiness/references/rehearsals.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns the bounded production acceptance verdict, capacity envelope, isolation, and recovery rehearsals. It should consume the output of tuning/deployment/reliability work rather than reopen each implementation by default."
+    },
+    {
+      "name": "temporal-reliability",
+      "path": "skills/temporal/temporal-reliability",
+      "files_read": [
+        "skills/temporal/temporal-reliability/SKILL.md",
+        "skills/temporal/temporal-reliability/agents/openai.yaml",
+        "skills/temporal/temporal-reliability/references/effect-contracts.md",
+        "skills/temporal/temporal-reliability/references/recovery-and-waits.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns effect identity, uncertain outcomes, durable waits, and recovery invariants. Its explicit provider deduplication horizon and business-operation identity are stronger than the sampled standalone-job reference and should be reused as guidance, while keeping the developer package independently usable."
+    },
+    {
+      "name": "temporal-safe-deployments",
+      "path": "skills/temporal/temporal-safe-deployments",
+      "files_read": [
+        "skills/temporal/temporal-safe-deployments/SKILL.md",
+        "skills/temporal/temporal-safe-deployments/agents/openai.yaml",
+        "skills/temporal/temporal-safe-deployments/references/deployment-and-cutover.md",
+        "skills/temporal/temporal-safe-deployments/references/state-continuity.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns code/state compatibility, pinned versus auto-upgrade executions, replay evidence, and cutover. Reuse existing worker-draining guidance for infrastructure handoff; do not count pod restarts as business retry exhaustion."
+    },
+    {
+      "name": "temporal-serverless",
+      "path": "skills/temporal/temporal-serverless",
+      "files_read": [
+        "skills/temporal/temporal-serverless/SKILL.md",
+        "skills/temporal/temporal-serverless/UPSTREAM.md",
+        "skills/temporal/temporal-serverless/agents/openai.yaml",
+        "skills/temporal/temporal-serverless/references/concepts.md",
+        "skills/temporal/temporal-serverless/references/aws-lambda/iam.md",
+        "skills/temporal/temporal-serverless/references/aws-lambda/diagnostics.md",
+        "skills/temporal/temporal-serverless/references/aws-lambda/setup.md",
+        "skills/temporal/temporal-serverless/references/aws-lambda/versioning.md"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-SERVERLESS-01",
+          "severity": "medium",
+          "evidence": "SKILL.md:20 calls GCP Cloud Run unsupported and instructs the agent to stop. Current official serverless documentation lists Cloud Run Worker Pools and Bedrock AgentCore as pre-release, with Lambda in public preview.",
+          "source_url": "https://docs.temporal.io/serverless-workers",
+          "recommended_change": "Label the bundled implementation as Lambda-only and point other providers to current capability/access documentation. Do not apply Lambda invocation limits or lifecycle rules to Cloud Run Worker Pools or AgentCore; do not claim untested provider implementation is validated.",
+          "verification": "A Cloud Run request identifies pre-release access and the package coverage limit; Lambda follows the existing supported path with its provider-specific limits."
+        },
+        {
+          "id": "TP-SERVERLESS-02",
+          "severity": "medium",
+          "evidence": "SKILL.md:153,:207 and references/aws-lambda/diagnostics.md:95 claim a bound Task Queue proves all permissions/package/config/deadlines correct and rules out these causes for every later failure.",
+          "source_url": "https://docs.temporal.io/serverless-workers",
+          "recommended_change": "Treat binding as evidence of a successful past registration/poll. Check a current validation invocation and its timestamp, function version, role, credentials, and provider logs; later changes or outages can invalidate earlier success.",
+          "verification": "Given successful binding followed by credential revocation or a changed Lambda version, diagnostics must revisit current authentication/package state rather than insist the failure is downstream application code."
+        },
+        {
+          "id": "TP-SERVERLESS-03",
+          "severity": "medium",
+          "evidence": "SKILL.md:177 says cd followed by a write always prompts for manual approval regardless of host configuration and relies on the working directory persisting across tool calls. These are host-specific assumptions, contradicting its own portability adaptation.",
+          "source_url": "https://www.aihero.dev/skills-writing-for-agents",
+          "recommended_change": "Use explicit workdir or absolute paths for each invocation. Defer approval behavior to the actual host/session configuration and existing authorization; remove universal claims about shell persistence and prompts.",
+          "verification": "Run two independent shell calls starting in different directories and confirm every generated file remains in the selected project. A noninteractive authorized host must not be forced into an invented approval flow."
+        },
+        {
+          "id": "TP-SERVERLESS-04",
+          "severity": "medium",
+          "evidence": "references/aws-lambda/iam.md:37 calls simulate-principal-policy authoritative; its example omits resource ARNs and request context. AWS states simulator results can differ from live authorization.",
+          "source_url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html",
+          "recommended_change": "Present simulation as scoped diagnostic evidence. Include the actual resource and required context, preserve missing-context results, and validate the authorized operation independently. Do not equate failed read/list probes with permission denial when the actual failure could be network/authentication.",
+          "verification": "A policy conditioned on iam:PassedToService or a resource-scoped role must not receive a definitive denial from an underspecified simulation; an allow must not be reported as observed deployment success."
+        }
+      ],
+      "overlap_notes": "Keep the public name and explicit invocation. This package currently implements AWS Lambda; provider coverage must be distinguished from Temporal platform support. General SDK and Cloud administration guidance remains optional sibling routing."
+    },
+    {
+      "name": "temporal-workertuning",
+      "path": "skills/temporal/temporal-workertuning",
+      "files_read": [
+        "skills/temporal/temporal-workertuning/SKILL.md",
+        "skills/temporal/temporal-workertuning/UPSTREAM.md",
+        "skills/temporal/temporal-workertuning/references/core/configuration-defaults.md"
+      ],
+      "status": "fix",
+      "findings": [
+        {
+          "id": "TP-TUNING-01",
+          "severity": "medium",
+          "evidence": "references/core/configuration-defaults.md:91 puts Namespace APS 400 only in the Go SDK row. Namespace APS is a service capacity limit independent of client language. The current official quick-reference table repeats this confusing layout, while the capacity documentation describes per-namespace configuration.",
+          "source_url": "https://docs.temporal.io/cloud/capacity-modes",
+          "recommended_change": "Remove Namespace APS from the per-SDK defaults table and direct users to the actual namespace capacity setting or metric. Record the conflicting upstream table rather than treating duplicated documentation as independent corroboration.",
+          "verification": "A Python or Java worker in the same namespace uses the same namespace APS budget; the recommendation reads actual capacity instead of assuming 400 from SDK choice."
+        },
+        {
+          "id": "TP-TUNING-02",
+          "severity": "low",
+          "evidence": "SKILL.md:59-64 mandates a promotional feedback message every time the skill is first loaded, even during incident work.",
+          "source_url": "https://www.aihero.dev/skills-writing-for-agents",
+          "recommended_change": "Remove the compulsory startup promotion; preserve attribution and an optional issue-reporting reference. Keep the output focused on the requested diagnosis or tuning result.",
+          "verification": "A high schedule-to-start latency request begins with environment/evidence collection and does not emit an unrelated feedback solicitation."
+        }
+      ],
+      "overlap_notes": "Owns runtime performance changes after measuring bottlenecks. Keep collection/query work in observability and business recovery policy in reliability. Resolve installed SDK/server versions before applying example defaults."
+    },
+    {
+      "name": "temporal-workflow-design-critic",
+      "path": "skills/temporal/temporal-workflow-design-critic",
+      "files_read": [
+        "skills/temporal/temporal-workflow-design-critic/SKILL.md",
+        "skills/temporal/temporal-workflow-design-critic/UPSTREAM.md",
+        "skills/temporal/temporal-workflow-design-critic/references/checklist.md",
+        "skills/temporal/temporal-workflow-design-critic/references/decision-guide.md",
+        "skills/temporal/temporal-workflow-design-critic/references/rubric.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns an independent design verdict, not implementation ownership. Its pass/fail/inconclusive distinctions and scoped open questions complement the implementation skills; a simple local fix need not invoke the full rubric."
+    },
+    {
+      "name": "learning-experiments",
+      "path": "skills/productivity/learning-experiments",
+      "files_read": [
+        "skills/productivity/learning-experiments/SKILL.md",
+        "skills/productivity/learning-experiments/agents/openai.yaml",
+        "skills/productivity/learning-experiments/references/evidence.md",
+        "skills/productivity/learning-experiments/references/patterns.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns a small, measurable change to a study habit after an observed bottleneck. Distinct from allocating a study plan or conducting a retrieval session. Evidence limitations reject unvalidated multipliers and learner labels; no backend dependencies needed."
+    },
+    {
+      "name": "learning-plan",
+      "path": "skills/productivity/learning-plan",
+      "files_read": [
+        "skills/productivity/learning-plan/SKILL.md",
+        "skills/productivity/learning-plan/agents/openai.yaml",
+        "skills/productivity/learning-plan/references/evidence.md",
+        "skills/productivity/learning-plan/references/session-patterns.md",
+        "skills/productivity/learning-plan/references/mathematics.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns goal calibration, available time, and a feasible next learning session. Keep generic productivity autonomy and academic constraints local rather than routing it through the engineering coordinator. Retrieved studies support only the narrow claims already stated."
+    },
+    {
+      "name": "retrieval-coach",
+      "path": "skills/productivity/retrieval-coach",
+      "files_read": [
+        "skills/productivity/retrieval-coach/SKILL.md",
+        "skills/productivity/retrieval-coach/agents/openai.yaml",
+        "skills/productivity/retrieval-coach/references/evidence.md",
+        "skills/productivity/retrieval-coach/references/review-state.md",
+        "skills/productivity/retrieval-coach/references/scheduled-recall.md",
+        "skills/productivity/retrieval-coach/references/mathematics.md"
+      ],
+      "status": "keep",
+      "findings": [],
+      "overlap_notes": "Owns one attempted retrieval, error repair, and review state. Spacing dates are labeled heuristics; the agent waits for learner attempts and treats scheduling as a separate authorized action. Distinct from full study planning and habit experiments."
+    }
+  ],
+  "limitations": [
+    "This is a risk-focused audit of all 15 entrypoints plus selected references, not a line-by-line audit of the vendored Temporal reference libraries. A keep verdict applies to the inspected scope, not a certification of every bundled example.",
+    "files_read lists inspected files, including partial reads. In particular provision.sh was inspected around preflight, CLI installation, scaffolding, and previews; authentication/connectivity/workflow-stuck were selected sections; observability references and critic rubric were risk-oriented searches; serverless IAM/setup/diagnostics/versioning were selected sections. The other listed small references were read in full.",
+    "node scripts/check-skills.mjs passed for the current 30 skills. This validates local packaging/reference structure, not technical correctness, live external URL health, credential behavior, or native host execution.",
+    "Current official documentation was consulted on 2026-09-29. New feature documentation can move ahead of an installed runtime. Proposed version corrections require capability checks and dated source records; no Temporal Cloud, AWS, broker, production mutation, or live SDK execution was performed for this audit.",
+    "No comprehensive external-link crawl was performed. Selected authoritative source links resolved; sibling names in prose are a separate unresolved-routing risk not caught by file-link validation.",
+    "Productivity evidence was checked against the Karpicke/Blunt paper abstract and selected text, and the Cepeda abstract. This audit did not re-review every coaching video, transcript, visual, or complete learning-science paper.",
+    "AWS Lambda qualified-ARN wildcard guidance was checked against official Lambda documentation and was not flagged: function:name:* does exclude the unqualified function ARN. The audit does not suggest weakening this restriction.",
+    "The old temporalio/prerelease Homebrew tap publishes a migration to temporalio/brew; the CLI finding concerns obsolete version/update assumptions, not proof that every old installation command fails.",
+    "The failure-conversion ratio finding limits a heuristic still present in current official service-health documentation. Metric semantics and business acceptance criteria must be checked; it is not a claim that every Activity failure metric counts retry attempts."
+  ]
+}

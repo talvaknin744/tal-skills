@@ -1,0 +1,151 @@
+{
+  "kind": "executed_research_process_and_database_probe",
+  "completed_at": "2026-09-29T08:24:12Z",
+  "status": "passed",
+  "execution": {
+    "scope": "Real PostgreSQL and spawned Python processes; short steps represent long-running work",
+    "image_tag_at_execution": "postgres:18-alpine",
+    "image_digest": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+    "probe_script": "probe.py",
+    "probe_sha256": "5650bc41f7bbfcb05e300d8dd5f8b4b4a77ded63072d88ccf27082ce4ab6b8b0",
+    "commands_with_interpreter_and_scratch_directory_normalized": [
+      "\"$PYTHON\" probe.py > results.json",
+      "docker stop tal-draining-probe-20260929",
+      "docker ps -a --filter label=tal-skills.research=draining-20260929 --format '{{.Names}}'"
+    ],
+    "results_file": "results.json",
+    "container_cleanup": "Stopped owned container; label-filtered container list was empty",
+    "probe_preserved_outside_repository": true,
+    "network_binding": "loopback only",
+    "lease_expiry_schedule": "Fixture moves selected database lease expiration into past; no real-duration or clock-jump claim",
+    "process_failure": "Actual SIGKILL after parent received committed-effect acknowledgement and independently observed checkpoint zero"
+  },
+  "observations": {
+    "rolling_handoffs": {
+      "trace": [
+        {
+          "owner": "A",
+          "epoch": 1,
+          "checkpoint": 1
+        },
+        {
+          "owner": "B",
+          "epoch": 2,
+          "checkpoint": 2
+        },
+        {
+          "owner": "C",
+          "epoch": 3,
+          "checkpoint": 3
+        }
+      ],
+      "final": {
+        "checkpoint": 6,
+        "epoch": 4,
+        "claims": 4,
+        "maintenance_handoffs": 3,
+        "infrastructure_interruptions": 0,
+        "business_failures": 0,
+        "business_budget": 3,
+        "status": "completed",
+        "owner": null,
+        "effect_count": 6,
+        "effect_total": 21
+      }
+    },
+    "stale_owner": {
+      "old_epoch": 1,
+      "new_epoch": 2,
+      "effect_rejected": true,
+      "checkpoint_rejected": true,
+      "release_rejected": true,
+      "successor_claim_preserved": true,
+      "final": {
+        "checkpoint": 1,
+        "epoch": 2,
+        "claims": 2,
+        "maintenance_handoffs": 1,
+        "infrastructure_interruptions": 0,
+        "business_failures": 0,
+        "business_budget": 3,
+        "status": "pending",
+        "owner": null,
+        "effect_count": 1,
+        "effect_total": 1
+      }
+    },
+    "effect_checkpoint_crash": {
+      "killed_exit_code": -9,
+      "resumed_from_checkpoint": 0,
+      "first_step_replayed": true,
+      "final": {
+        "checkpoint": 6,
+        "epoch": 2,
+        "claims": 2,
+        "maintenance_handoffs": 0,
+        "infrastructure_interruptions": 1,
+        "business_failures": 0,
+        "business_budget": 3,
+        "status": "completed",
+        "owner": null,
+        "effect_count": 6,
+        "effect_total": 21
+      }
+    },
+    "admission": {
+      "retiring_generation_rejected": true,
+      "incompatible_schema_rejected": true,
+      "claims_after_rejections": 0
+    },
+    "finite_business_budget": {
+      "checkpoint": 0,
+      "epoch": 3,
+      "claims": 3,
+      "maintenance_handoffs": 0,
+      "infrastructure_interruptions": 0,
+      "business_failures": 3,
+      "business_budget": 3,
+      "status": "business-failed",
+      "owner": null,
+      "effect_count": 0,
+      "effect_total": 0
+    },
+    "deadline": {
+      "checkpoint": 0,
+      "epoch": 0,
+      "claims": 0,
+      "maintenance_handoffs": 0,
+      "infrastructure_interruptions": 0,
+      "business_failures": 0,
+      "business_budget": 3,
+      "status": "deadline-exceeded",
+      "owner": null,
+      "effect_count": 0,
+      "effect_total": 0
+    },
+    "resources": {
+      "worker_processes_started": 15,
+      "worker_processes_alive": 0,
+      "remaining_database_sessions": 0
+    },
+    "versions": {
+      "postgres": "PostgreSQL 18.6 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "psycopg": "3.3.3",
+      "python": "3.14.3",
+      "fsync": "on",
+      "synchronous_commit": "on"
+    }
+  },
+  "limitations": [
+    "No Kubernetes deployment, broker, Temporal service, or external provider tested",
+    "All workers run same script; no mixed binary migration compatibility test",
+    "Input manifest/digest immutability assumed; no access-control enforcement of that assumption",
+    "Checkpoint schema test covers version mismatch rejection, not semantic compatibility of equal versions",
+    "Effects and deduplication receipts are local PostgreSQL transactions; checkpoint intentionally separate to expose recovery gap",
+    "No lease renewal, wall-clock jump, real 12/24-hour execution, SIGTERM handling, prefetch, or broker retry-counter test",
+    "No database crash, storage failure, replication, failover, restore, or RPO validation",
+    "Admission case covers closed gate, not stress of concurrent gate transitions",
+    "Fencing fixture intentionally remains pending after boundary validation",
+    "Scratch execution record is not a production scheduler or public installer"
+  ]
+}
