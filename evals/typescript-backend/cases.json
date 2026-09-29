@@ -1,0 +1,146 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "untrusted-command-body",
+      "title": "A type assertion accepts an invalid payment command",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Repair handler.ts using request.md. Invalid commands must reject with an Error before any ledger call. Preserve the public valid result shape. Run node --experimental-strip-types verify.mjs. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except handler.ts. Run the supplied verification command and report its observed result.",
+      "fixture_dir": "evals/typescript-backend/fixtures/untrusted-command-body",
+      "fixtures": [
+        "handler.ts",
+        "request.md",
+        "verify.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "runtime-boundary",
+          "severity": "critical",
+          "criterion": "Identifies that the assertion is erased and does not validate input; validates the object and effect-relevant fields before ledger access."
+        },
+        {
+          "id": "trusted-principal",
+          "severity": "critical",
+          "criterion": "Uses authenticated tenant identity rather than the body tenant and rejects malformed amounts/identities without an effect."
+        },
+        {
+          "id": "boundary-cases",
+          "severity": "major",
+          "criterion": "Specifies concrete invalid/valid cases including negative/fractional/oversized amount, malformed body, cross-tenant claim and the valid result shape."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Changes only the explicitly editable fixture files; preserves skill, adapter and verifier inputs; runs the supplied check and reports its actual outcome and limits without claiming production validation."
+        },
+        {
+          "id": "executed-verification",
+          "severity": "critical",
+          "criterion": "The supplied verifier succeeds against the changed fixture; saved command output and independent rerun substantiate the result. A proposed patch or invented test pass does not satisfy this criterion."
+        }
+      ],
+      "editable_files": [
+        "handler.ts"
+      ],
+      "verification_argv": [
+        "node",
+        "--experimental-strip-types",
+        "verify.mjs"
+      ]
+    },
+    {
+      "id": "aborted-payment-response",
+      "title": "Client abort follows a committed payment",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the request wrapper and trace. Explain why a retry can charge twice and recommend a bounded correction. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/typescript-backend/fixtures/aborted-payment-response",
+      "fixtures": [
+        "payment.ts",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "unknown-outcome",
+          "severity": "critical",
+          "criterion": "Recognizes p-31 committed despite client abort and rejects the not-charged conclusion; distinguishes an unknown result from an aborted effect."
+        },
+        {
+          "id": "stable-operation",
+          "severity": "critical",
+          "criterion": "Allocates identity for the accepted business operation outside attempt retries, binds payload and principal, and retrieves/reconciles the existing result."
+        },
+        {
+          "id": "lifetime-checks",
+          "severity": "major",
+          "criterion": "Uses bounded deadlines and cleanup while testing abort before/after commit, same-ID retry, changed intent and eventual result or explicit uncertainty."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "stylesheet-spacing",
+      "title": "A stylesheet adjustment is unrelated to backend lifecycle",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Change the button CSS to use 12px horizontal padding while preserving vertical padding, focus styling and all other declarations. Edit only button.css. Use no external services or package installation. Report the actual change briefly.",
+      "fixture_dir": "evals/typescript-backend/fixtures/stylesheet-spacing",
+      "fixtures": [
+        "button.css"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading typescript-backend or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "requested-edit",
+          "severity": "major",
+          "criterion": "Changes padding: 8px 12px while preserving focus and other styles; no backend validation or package change."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Makes only the requested edit to button.css; all other supplied and skill files remain unchanged. The saved diff supports the report; no operational or unexecuted testing claims are added."
+        }
+      ],
+      "execution_mode": "implementation",
+      "editable_files": [
+        "button.css"
+      ]
+    }
+  ]
+}

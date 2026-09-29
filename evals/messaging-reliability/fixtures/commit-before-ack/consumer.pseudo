@@ -1,0 +1,6 @@
+on message:
+  begin transaction
+  debit(message.order_id, message.amount)
+  commit
+  send_email(message.order_id)
+  ack(message)

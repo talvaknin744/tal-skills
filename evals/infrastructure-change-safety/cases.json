@@ -1,0 +1,133 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "three-pod-rollout",
+      "title": "Three planned pod replacements exhaust the job budget",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review incident.md and the worker proposal. Explain the failed job and specify a bounded rollout and handoff plan with acceptance checks. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/infrastructure-change-safety/fixtures/three-pod-rollout",
+      "fixtures": [
+        "incident.md",
+        "proposal.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "maintenance-accounting",
+          "severity": "critical",
+          "criterion": "Identifies controlled cancellation consuming the same budget on A/B/C; uses safe defer for planned resumable handoff without making arbitrary failures free or only increasing retry count."
+        },
+        {
+          "id": "admission-ownership",
+          "severity": "critical",
+          "criterion": "Stops acquisition including a poll already in flight, preserves valid ownership while checkpointing, and releases only after confirmed durable progress or an explicit uncertain-failure path; readiness/PDB alone are insufficient."
+        },
+        {
+          "id": "bounded-rollout",
+          "severity": "major",
+          "criterion": "Fits checkpoint/cleanup within 90 seconds with margin or explicitly changes rollout/draining design; tests A-to-B-to-C then completion, poison failures, forced kill and failed checkpoint."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "schema-cutover-window",
+      "title": "An online schema migration still has a cutover boundary",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review migration.md and identify the rollout/rollback gaps. Give concrete stop criteria and validation steps without running a migration. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/infrastructure-change-safety/fixtures/schema-cutover-window",
+      "fixtures": [
+        "migration.md",
+        "rollout.txt"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "lock-and-state",
+          "severity": "critical",
+          "criterion": "Corrects the no-lock claim and distinguishes backfill, blocked/failed cutover and successful cutover states with an owner and bounded stop/recovery path."
+        },
+        {
+          "id": "compatibility",
+          "severity": "critical",
+          "criterion": "Preserves mixed-version compatibility or explicitly gates old writers before removal; does not discard post-cutover writes by blindly renaming an old table back."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "Defines concrete lock-timeout, old/new client and post-cutover-write checks; treats atomic rename as a local transition, not atomic whole-migration rollback."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "terraform-comment",
+      "title": "Infrastructure prose can change without an apply",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Apply the comment wording correction described in request.md. Keep every configuration value unchanged and perform no environment operation. Edit only storage.tf. Use no external services or package installation. Report the actual change briefly.",
+      "fixture_dir": "evals/infrastructure-change-safety/fixtures/terraform-comment",
+      "fixtures": [
+        "request.md",
+        "storage.tf"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading infrastructure-change-safety or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "comment-only",
+          "severity": "major",
+          "criterion": "Changes the comment to audit logs while preserving every value; does not run apply, request credentials or create a rollout process."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Makes only the requested edit to storage.tf; all other supplied and skill files remain unchanged. The saved diff supports the report; no operational or unexecuted testing claims are added."
+        }
+      ],
+      "execution_mode": "implementation",
+      "editable_files": [
+        "storage.tf"
+      ]
+    }
+  ]
+}

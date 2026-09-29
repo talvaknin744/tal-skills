@@ -1,0 +1,148 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "cancelled-fanout",
+      "title": "Fanout senders remain blocked after request cancellation",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Fix worker.go to honor request.md, including owned-worker completion and dependency errors. Run go test -race -count=1. Timeout bounds in the verifier detect hangs; they are not a scheduling mechanism. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except worker.go. Run the supplied verification command and report its observed result.",
+      "fixture_dir": "evals/go-backend/fixtures/cancelled-fanout",
+      "fixtures": [
+        "go.mod",
+        "request.md",
+        "verify_test.go",
+        "worker.go"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "send-lifetime",
+          "severity": "critical",
+          "criterion": "Identifies senders blocked on the unbuffered channel after receiver exit; makes sends cancellation-aware or uses an equivalent bounded ownership design."
+        },
+        {
+          "id": "join-and-errors",
+          "severity": "critical",
+          "criterion": "Ensures owned workers terminate before return, propagates client/cancellation errors, and avoids closing a channel while senders may use it."
+        },
+        {
+          "id": "deterministic-check",
+          "severity": "major",
+          "criterion": "Gates workers after dependency return and before send, cancels the caller, then observes joined workers and cancellation without relying on a sleep or global goroutine count alone."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Changes only the explicitly editable fixture files; preserves skill, adapter and verifier inputs; runs the supplied check and reports its actual outcome and limits without claiming production validation."
+        },
+        {
+          "id": "executed-verification",
+          "severity": "critical",
+          "criterion": "The supplied verifier succeeds against the changed fixture; saved command output and independent rerun substantiate the result. A proposed patch or invented test pass does not satisfy this criterion."
+        }
+      ],
+      "editable_files": [
+        "worker.go"
+      ],
+      "verification_argv": [
+        "go",
+        "test",
+        "-race",
+        "-count=1"
+      ]
+    },
+    {
+      "id": "split-lock-counter",
+      "title": "Protected memory accesses still lose an accepted update",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review counter.go. Two accepted increments must increase the value by two; explain the production result and give a discriminating check. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/go-backend/fixtures/split-lock-counter",
+      "fixtures": [
+        "counter.go",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "semantic-race",
+          "severity": "critical",
+          "criterion": "Explains how both protected reads see zero and later writes both store one; a clean memory-race detector does not establish the business invariant."
+        },
+        {
+          "id": "complete-operation",
+          "severity": "critical",
+          "criterion": "Protects the entire read-modify-write or uses a suitable atomic update, rather than merely adding more isolated read/write locks."
+        },
+        {
+          "id": "forced-schedule",
+          "severity": "major",
+          "criterion": "Forces both old reads before either write in a broken-behavior check and verifies both increments under the correction; keeps race detection as an additional check."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "go-comment-typo",
+      "title": "A pure helper comment needs one spelling correction",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Correct the spelling error in the comment only. The pure helper is already covered; preserve all executable code. Edit only helper.go. Use no external services or package installation. Report the actual change briefly.",
+      "fixture_dir": "evals/go-backend/fixtures/go-comment-typo",
+      "fixtures": [
+        "helper.go"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading go-backend or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "spelling-only",
+          "severity": "major",
+          "criterion": "Changes retuns to returns in the comment and leaves code/API intact; does not add concurrency or backend work."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Makes only the requested edit to helper.go; all other supplied and skill files remain unchanged. The saved diff supports the report; no operational or unexecuted testing claims are added."
+        }
+      ],
+      "execution_mode": "implementation",
+      "editable_files": [
+        "helper.go"
+      ]
+    }
+  ]
+}

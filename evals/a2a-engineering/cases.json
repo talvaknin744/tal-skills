@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "task-observer-disconnect",
+      "title": "Losing one task observer must not cancel shared work",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the pinned A2A lifecycle trace and handler. Explain the defect and specify correct observation/recovery behavior. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/a2a-engineering/fixtures/task-observer-disconnect",
+      "fixtures": [
+        "contract.md",
+        "handler.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "observer-lifetime",
+          "severity": "critical",
+          "criterion": "Separates observer disconnect from task cancellation; keeps s2/work alive and reconciles authoritative task state on reconnect."
+        },
+        {
+          "id": "task-authority",
+          "severity": "critical",
+          "criterion": "Authorizes task access and continuation against alice, and does not restart a terminal task under the same lifecycle as an active continuation."
+        },
+        {
+          "id": "durability-limits",
+          "severity": "major",
+          "criterion": "Distinguishes persisted Task data from resumable execution; tests two observers, reconnect/artifacts, terminal follow-up and restart against the declared contract."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "duplicate-agent-message",
+      "title": "Message identity alone does not deduplicate the business command",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the A2A request trace and executor. Define the application guarantees and adversarial checks without assuming optional peer behavior. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/a2a-engineering/fixtures/duplicate-agent-message",
+      "fixtures": [
+        "contract.md",
+        "executor.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "application-idempotency",
+          "severity": "critical",
+          "criterion": "Does not assume optional SendMessage dedup; binds stable business operation, principal and payload to effect/result arbitration rather than treating message/task/context IDs as interchangeable."
+        },
+        {
+          "id": "authorization",
+          "severity": "critical",
+          "criterion": "Rejects Bob get/cancel access despite knowing the task ID and checks authority on repeated operations."
+        },
+        {
+          "id": "cancel-race",
+          "severity": "major",
+          "criterion": "Handles repeated cancellation and completion races according to authoritative valid state, without unconditionally reporting canceled or reversing a completed effect."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "ordinary-job-endpoint",
+      "title": "An ordinary polling endpoint needs no agent protocol",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Recommend a response for the specified existing background-job API. There is no A2A peer or protocol migration requirement. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/a2a-engineering/fixtures/ordinary-job-endpoint",
+      "fixtures": [
+        "api.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading a2a-engineering or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "api-scope",
+          "severity": "major",
+          "criterion": "Returns the existing HTTP 200 JSON example and preserves authorization; adds no A2A envelopes/cards/team orchestration."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    }
+  ]
+}

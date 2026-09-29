@@ -1,0 +1,142 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "race-clean-lost-update",
+      "title": "A green memory-race check misses a semantic failure",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Implement a deterministic regression in scenario.mjs using request.md. Keep both models and verify.mjs unchanged. Run node verify.mjs and explain the observed invariant and reproducible schedule. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except scenario.mjs. Run the supplied verification command and report its observed result.",
+      "fixture_dir": "evals/failure-oriented-testing/fixtures/race-clean-lost-update",
+      "fixtures": [
+        "models.mjs",
+        "request.md",
+        "scenario.mjs",
+        "verify.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "oracle",
+          "severity": "critical",
+          "criterion": "Asserts final value 2 for two accepted increments and identifies the supplied value 1 as a semantic failure despite protected memory accesses."
+        },
+        {
+          "id": "controlled-schedule",
+          "severity": "critical",
+          "criterion": "Forces both old reads before either write using explicit gates, and avoids a barrier that deadlocks once the complete update is serialized."
+        },
+        {
+          "id": "retain-and-limit",
+          "severity": "major",
+          "criterion": "Retains the minimal failing schedule, verifies broken/fixed discrimination, and reports race detection as additional executed-path evidence rather than exhaustive correctness."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Changes only the explicitly editable fixture files; preserves skill, adapter and verifier inputs; runs the supplied check and reports its actual outcome and limits without claiming production validation."
+        },
+        {
+          "id": "executed-verification",
+          "severity": "critical",
+          "criterion": "The supplied verifier succeeds against the changed fixture; saved command output and independent rerun substantiate the result. A proposed patch or invented test pass does not satisfy this criterion."
+        }
+      ],
+      "editable_files": [
+        "scenario.mjs"
+      ],
+      "verification_argv": [
+        "node",
+        "verify.mjs"
+      ]
+    },
+    {
+      "id": "green-transaction-fake",
+      "title": "The fake cannot express an uncertain committed result",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the fake and incident trace. Propose the highest-value failure check and the evidence needed before claiming the database behavior is covered. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/failure-oriented-testing/fixtures/green-transaction-fake",
+      "fixtures": [
+        "fake.py",
+        "incident.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "uncertain-fault",
+          "severity": "critical",
+          "criterion": "Injects loss after the effect commits and before reply delivery, distinguishes it from confirmed abort, and uses effect/result invariants rather than commit call count."
+        },
+        {
+          "id": "identity-and-fidelity",
+          "severity": "critical",
+          "criterion": "Requires stable operation identity and a model capable of committed-but-unobserved state; does not treat the fake as proof of real isolation or transaction recovery."
+        },
+        {
+          "id": "adapter-check",
+          "severity": "major",
+          "criterion": "Specifies a real selected-database fault check and expected single effect/stable result or unresolved status, explicitly marking it unexecuted."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "pure-format-assertion",
+      "title": "A pure formatting assertion needs no fault framework",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "For this pure helper, give one assertion for input 7 using the documented contract. No state, I/O, timing or concurrency is involved. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/failure-oriented-testing/fixtures/pure-format-assertion",
+      "fixtures": [
+        "formatter.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading failure-oriented-testing or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "focused-assertion",
+          "severity": "major",
+          "criterion": "Gives format_number(7) == \"0007\"; does not add distributed failure machinery or unrelated dependencies."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    }
+  ]
+}

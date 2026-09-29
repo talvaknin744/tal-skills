@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "private-resource-handle",
+      "title": "A current MCP handle leaks through a shared connection",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the supplied current-protocol adapter and request trace. Identify integration defects and the minimum checks required for this version. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/mcp-engineering/fixtures/private-resource-handle",
+      "fixtures": [
+        "adapter.pseudo",
+        "contract.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "request-authority",
+          "severity": "critical",
+          "criterion": "Uses each verified request principal and authorizes handle access/cache replay; denies bob access to alice h7 instead of relying on connection identity."
+        },
+        {
+          "id": "pinned-contract",
+          "severity": "critical",
+          "criterion": "Validates the selected current revision and header/body agreement; does not replace the fixture with an obsolete mandatory initialization-session design."
+        },
+        {
+          "id": "test-evidence",
+          "severity": "major",
+          "criterion": "Tests alternating callers, handle access and mismatched envelopes against pinned SDK/schema; distinguishes synthetic authentication from proven OAuth validation and annotations from authorization."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "mcp-disconnect-after-effect",
+      "title": "MCP stream cancellation follows a completed effect",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the pinned MCP trace and continuation design. Recommend an accurate cancellation, recovery and authorization contract. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/mcp-engineering/fixtures/mcp-disconnect-after-effect",
+      "fixtures": [
+        "contract.md",
+        "handler.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "cancellation-outcome",
+          "severity": "critical",
+          "criterion": "Applies revision-specific request cancellation and cleans owned resources without claiming an already committed effect rolled back; recovers o4 under the same identity."
+        },
+        {
+          "id": "continuation-binding",
+          "severity": "critical",
+          "criterion": "Binds continuation to verified principal/operation/expiry and rejects tampering or wrong-principal use; MAC integrity alone does not prevent replay."
+        },
+        {
+          "id": "shared-arbitration",
+          "severity": "major",
+          "criterion": "Defines durable/shared single-consumption or operation-id arbitration across processes and checks repeated continuation plus before/after-commit disconnect, without assuming unsupported tasks behavior."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "plain-json-rpc-helper",
+      "title": "An unrelated JSON-RPC helper does not become MCP",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Review the simple calculator request. It is ordinary JSON-RPC and explicitly has no MCP peer or integration requirement. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/mcp-engineering/fixtures/plain-json-rpc-helper",
+      "fixtures": [
+        "calculator.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading mcp-engineering or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "ordinary-protocol",
+          "severity": "major",
+          "criterion": "Returns the ordinary JSON-RPC result envelope with result 7/id 9 and introduces no MCP handshake, headers or SDK migration."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    }
+  ]
+}

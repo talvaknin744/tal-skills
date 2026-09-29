@@ -1,0 +1,146 @@
+{
+  "format_version": 1,
+  "kind": "fixture-verifier calibration, not model trials",
+  "limitations": [
+    "Scratch corrections are not candidate outputs. These checks validate fixture discrimination, not skill quality or production behavior.",
+    "All fixtures use local synthetic dependencies; no provider, broker or cluster guarantees are established."
+  ],
+  "results": [
+    {
+      "skill": "python-backend",
+      "case_id": "cancelled-export",
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "fixture_sha256": {
+        "exporter.py": "ce210aee8a396bf20182d11e631b5907cd4bad441026656557b22e9930668c59",
+        "request.md": "7675c7c354a32666be2a02aed37a3052018c96cab5f625bceea06d56ffafc561",
+        "verify.py": "425d4097d94403b748fddd94ba0a045d62ad657574ef9eaec6dda2e6421cdbed"
+      },
+      "starting_fixture": {
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"<calibration-workspace>/python-backend/verify.py\", line 73, in <module>\n    asyncio.run(main())\n    ~~~~~~~~~~~^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/runners.py\", line 204, in run\n    return runner.run(main)\n           ~~~~~~~~~~^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/runners.py\", line 127, in run\n    return self._loop.run_until_complete(task)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/base_events.py\", line 719, in run_until_complete\n    return future.result()\n           ~~~~~~~~~~~~~^^\n  File \"<calibration-workspace>/python-backend/verify.py\", line 63, in main\n    await cancellation(False)\n  File \"<calibration-workspace>/python-backend/verify.py\", line 42, in cancellation\n    await task\n  File \"<calibration-workspace>/python-backend/exporter.py\", line 4, in export\n    async with pool.connection() as conn:\n               ~~~~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py\", line 221, in __aexit__\n    await anext(self.gen)\n  File \"<calibration-workspace>/python-backend/verify.py\", line 14, in connection\n    assert not self.remote.active, \"connection released while its owned work is still active\"\n           ^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: connection released while its owned work is still active\n"
+      },
+      "corrected_scratch_control": {
+        "exit_code": 0,
+        "stdout": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n",
+        "stderr": ""
+      },
+      "interpretation": "Starting fixture must fail; an independently constructed scratch correction must pass."
+    },
+    {
+      "skill": "typescript-backend",
+      "case_id": "untrusted-command-body",
+      "command_argv": [
+        "node",
+        "--experimental-strip-types",
+        "verify.mjs"
+      ],
+      "fixture_sha256": {
+        "verify.mjs": "d9a6ba34ce18ec905d082a140b5aaf3ac5b195542fb58837e2208272a99b56ae",
+        "request.md": "d73cef26e551c2e7e43dff43a75bc4fb5695b36785a20aa436d64d364a048930",
+        "handler.ts": "7976980595b2d104543bd0f36ef72d0deffb33596a595d09df40ba572e47ec7e"
+      },
+      "starting_fixture": {
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected rejection (Error).\n    at async file://<calibration-workspace>/typescript-backend/verify.mjs:14:3 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: [Function: Error] { stackTraceLimit: 10 },\n  operator: 'rejects',\n  diff: 'simple'\n}\n\nNode.js v25.9.0\n"
+      },
+      "corrected_scratch_control": {
+        "exit_code": 0,
+        "stdout": "PASS runtime command validation, trusted identity, and valid result shape\n",
+        "stderr": ""
+      },
+      "interpretation": "Starting fixture must fail; an independently constructed scratch correction must pass."
+    },
+    {
+      "skill": "go-backend",
+      "case_id": "cancelled-fanout",
+      "command_argv": [
+        "go",
+        "test",
+        "-race",
+        "-count=1"
+      ],
+      "fixture_sha256": {
+        "go.mod": "a054c4c719a918fe75407e1d8cdeaf81916c0f85d45fa3a82913cb55295427f0",
+        "worker.go": "4cf1680c70169036f6f378a252776bd270c49c98c589632f1c83c2f63fea0020",
+        "verify_test.go": "7d3ff27d825bb2ffbb8123aceb425e083dc3f06e674927d48d32321ed06752f6",
+        "request.md": "f520f28361bbe52343937e76cf2c759700abb88c21a64898c7284e817548bd12"
+      },
+      "starting_fixture": {
+        "exit_code": 1,
+        "stdout": "--- FAIL: TestOwnedWorkersFinishBeforeReturn (0.00s)\n    verify_test.go:28: returned while owned requests were still cleaning up\n--- FAIL: TestDependencyError (0.00s)\n    verify_test.go:45: lost dependency error: <nil>\nFAIL\nexit status 1\nFAIL\tfixtureworker\t0.202s\n",
+        "stderr": ""
+      },
+      "corrected_scratch_control": {
+        "exit_code": 0,
+        "stdout": "PASS\nok  \tfixtureworker\t1.205s\n",
+        "stderr": ""
+      },
+      "interpretation": "Starting fixture must fail; an independently constructed scratch correction must pass."
+    },
+    {
+      "skill": "failure-oriented-testing",
+      "case_id": "race-clean-lost-update",
+      "command_argv": [
+        "node",
+        "verify.mjs"
+      ],
+      "fixture_sha256": {
+        "verify.mjs": "4e9e2cb27a0fd92b5429e84f1aa58b737c715de89406277d5fcb1b3c875cecd9",
+        "models.mjs": "d0e7f453ed0bb647b9c4998e9de7d4361e0820339735847154aefa66af431ebd",
+        "scenario.mjs": "b6baddf1929e11cc77eab566e11b3d7dd9f2923355c03eb003a5239b44828aa2",
+        "request.md": "d2da56128ff850e1f61c690df4ba03469f0f88415a3d936ac03de38b8acee2f8"
+      },
+      "starting_fixture": {
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected rejection (AssertionError): the proposed scenario does not detect the lost update\n    at async file://<calibration-workspace>/failure-oriented-testing/verify.mjs:4:1 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: [class AssertionError extends Error],\n  operator: 'rejects',\n  diff: 'simple'\n}\n\nNode.js v25.9.0\n"
+      },
+      "corrected_scratch_control": {
+        "exit_code": 0,
+        "stdout": "PASS scenario rejects broken behavior and accepts the complete update\n",
+        "stderr": ""
+      },
+      "interpretation": "Starting fixture must fail; an independently constructed scratch correction must pass."
+    },
+    {
+      "skill": "code-and-docs-cleanup",
+      "case_id": "similar-policy-cleanup",
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "fixture_sha256": {
+        "setup.md": "997609cecae2ef0cee4e294028dd891202558b17cc8c37e7c2bb82085240c674",
+        "request.md": "29d6c423a346ccc66fee16058cd8b99aafc70bd7594fe740b58c5c80c2433826",
+        "verify.py": "0d54d3dc693fa9e0ab6374f3b19901bc8410f6ce626c58ec32e18294874d369e",
+        "demo.py": "2b2a981e4f9f9d33217135e38a833e17e879f14cf3fa3ad9ddeec691d1b65627",
+        "policies.py": "a73ec38ac31deaf1becdb7e2c2dd8b56d31f6f2715130aecb281abd61c5f3aac"
+      },
+      "starting_fixture": {
+        "exit_code": 0,
+        "stdout": "PASS public policy outputs and local demo execution; documentation clarity and independent ownership require separate review\n",
+        "stderr": ""
+      },
+      "corrected_scratch_control": {
+        "exit_code": 0,
+        "stdout": "PASS public policy outputs and local demo execution; documentation clarity and independent ownership require separate review\n",
+        "stderr": ""
+      },
+      "interpretation": "Cleanup baseline already preserves behavior; scorer must additionally inspect bounded cleanup and reader instructions."
+    }
+  ],
+  "checked_at": "2026-09-29T09:29:04.398955+00:00",
+  "runtimes": {
+    "python": "Python 3.14.3",
+    "node": "v25.9.0",
+    "go": "go version go1.27.1 darwin/arm64"
+  },
+  "artifact_transformation": "Machine-specific scratch prefixes normalized to <calibration-workspace>; outcomes and error text retained."
+}

@@ -1,0 +1,5 @@
+on_disconnect: return "operation aborted; retry with new ID"
+on_continue(state):
+  verify_mac(state)
+  execute_effect(state.operation)
+  return result

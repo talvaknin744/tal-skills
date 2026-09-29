@@ -1,0 +1,188 @@
+{
+  "format_version": 1,
+  "evidence_kind": "fixture_author_checks_not_native_model_runs",
+  "recorded_date": "2026-09-29",
+  "baseline_checks": [
+    {
+      "case_id": "tal-backend-delivery",
+      "status": "observed_expected_baseline",
+      "kind": "acceptance",
+      "command": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.065723,
+      "stdout": "{\n  \"sqlite\": \"3.53.2\",\n  \"checks\": [\n    {\n      \"check\": \"normal\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"replay_after_lost_response\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: ({'reservation_id': 3, 'tenant': 'tenant-a', 'sku': 'gear', 'quantity': 2, 'remaining': 0}, {'reservation_id': 1, 'tenant': 'tenant-a', 'sku': 'gear', 'quantity': 2, 'remaining': 3})\"\n    },\n    {\n      \"check\": \"changed_intent\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: expected ReservationConflict\"\n    },\n    {\n      \"check\": \"tenant_authority_and_scope\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: ('tenant-b', 'tenant-a')\"\n    },\n    {\n      \"check\": \"malformed_input\",\n      \"status\": \"fail\",\n      \"error\": \"AttributeError: 'NoneType' object has no attribute 'get'\"\n    },\n    {\n      \"check\": \"rejection_does_not_reserve_key\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"overlapping_duplicates\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: ({'reservation_id': 1, 'tenant': 'tenant-a', 'sku': 'gear', 'quantity': 2, 'remaining': 3}, {'reservation_id': 2, 'tenant': 'tenant-a', 'sku': 'gear', 'quantity': 2, 'remaining': 3})\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "tal-cleanup-review",
+      "status": "observed_expected_baseline",
+      "kind": "behavior_observation",
+      "command": [
+        "python3",
+        "-B",
+        "cli.py",
+        "--mode",
+        "legacy"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.03443,
+      "stdout": "ready (legacy)\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "tal-consistency-diagnosis",
+      "status": "observed_expected_baseline",
+      "kind": "acceptance",
+      "command": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.033181,
+      "stdout": "{\"schedule\": \"read A; read B; release both; join both\", \"snapshots\": [0, 0], \"completed_calls\": 2, \"expected_value\": 2, \"actual_value\": 1}\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/native-fixture-author-0vyzunfn/project/verify.py\", line 47, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/native-fixture-author-0vyzunfn/project/verify.py\", line 43, in main\n    assert actual == 2, \"two completed increments must add two\"\n           ^^^^^^^^^^^\nAssertionError: two completed increments must add two\n"
+    },
+    {
+      "case_id": "tal-messaging-evolution",
+      "status": "observed_expected_baseline",
+      "kind": "acceptance",
+      "command": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.034442,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/native-fixture-author-fsola77f/project/verify.py\", line 42, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/native-fixture-author-fsola77f/project/verify.py\", line 15, in main\n    same(outcomes, [\"applied\", \"duplicate\", \"stale\", \"applied\", \"duplicate\", \"applied\"])\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/native-fixture-author-fsola77f/project/verify.py\", line 8, in same\n    assert json.dumps(actual, sort_keys=True) == json.dumps(expected, sort_keys=True), (actual, expected)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (['applied', 'applied', 'applied', 'applied', 'applied', 'applied'], ['applied', 'duplicate', 'stale', 'applied', 'duplicate', 'applied'])\n"
+    },
+    {
+      "case_id": "tal-worker-rollout",
+      "status": "not_applicable",
+      "kind": "review-only facts",
+      "command": null
+    },
+    {
+      "case_id": "tal-recovery-validation",
+      "status": "observed_expected_baseline",
+      "kind": "behavior_observation",
+      "command": [
+        "python3",
+        "-B",
+        "restore.py",
+        "backup.json",
+        "scratch/runner-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.037286,
+      "stdout": "{\"imported_orders\": 2, \"destination\": \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/native-fixture-author-o02s4oxd/project/scratch/runner-check/ledger.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "tal-mcp-integration",
+      "status": "observed_expected_baseline",
+      "kind": "behavior_observation",
+      "command": [
+        "python3",
+        "-B",
+        "probe.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.024275,
+      "stdout": "{\n  \"evidence_kind\": \"local adapter observations, not SDK conformance\",\n  \"observations\": [\n    {\n      \"name\": \"owner-read\",\n      \"verified_principal\": \"alice\",\n      \"outcome\": {\n        \"principal\": \"alice\",\n        \"value\": \"alice-private\"\n      },\n      \"dispatches\": 1\n    },\n    {\n      \"name\": \"next-caller-same-handle\",\n      \"verified_principal\": \"bob\",\n      \"outcome\": {\n        \"principal\": \"alice\",\n        \"value\": \"alice-private\"\n      },\n      \"dispatches\": 2\n    },\n    {\n      \"name\": \"argument-principal\",\n      \"verified_principal\": \"bob\",\n      \"outcome\": {\n        \"principal\": \"alice\",\n        \"value\": \"alice-private\"\n      },\n      \"dispatches\": 1\n    },\n    {\n      \"name\": \"method-header-body-disagreement\",\n      \"verified_principal\": \"alice\",\n      \"outcome\": {\n        \"principal\": \"alice\",\n        \"value\": \"alice-private\"\n      },\n      \"dispatches\": 2\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "tal-a2a-integration",
+      "status": "observed_expected_baseline",
+      "kind": "behavior_observation",
+      "command": [
+        "python3",
+        "-B",
+        "probe.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.023811,
+      "stdout": "{\n  \"evidence_kind\": \"local adapter observations, not SDK conformance\",\n  \"observations\": {\n    \"one_observer_left\": {\n      \"task\": {\n        \"id\": \"task-1\",\n        \"contextId\": \"context-1\",\n        \"owner\": \"alice\",\n        \"state\": \"TASK_STATE_CANCELED\",\n        \"artifacts\": []\n      },\n      \"remaining_observers\": [\n        \"stream-2\"\n      ],\n      \"effects\": 0\n    },\n    \"foreign_get\": {\n      \"id\": \"task-1\",\n      \"contextId\": \"context-1\",\n      \"owner\": \"alice\",\n      \"state\": \"TASK_STATE_CANCELED\",\n      \"artifacts\": []\n    },\n    \"terminal_continuation\": {\n      \"task\": {\n        \"id\": \"task-1\",\n        \"contextId\": \"context-1\",\n        \"owner\": \"alice\",\n        \"state\": \"TASK_STATE_COMPLETED\",\n        \"artifacts\": [\n          {\n            \"artifactId\": \"receipt-1\",\n            \"parts\": [\n              {\n                \"text\": \"finished\"\n              }\n            ]\n          }\n        ]\n      },\n      \"effects\": 2\n    },\n    \"different_context\": {\n      \"task\": {\n        \"id\": \"task-1\",\n        \"contextId\": \"context-other\",\n        \"owner\": \"alice\",\n        \"state\": \"TASK_STATE_COMPLETED\",\n        \"artifacts\": [\n          {\n            \"artifactId\": \"receipt-1\",\n            \"parts\": [\n              {\n                \"text\": \"finished\"\n              }\n            ]\n          }\n        ]\n      },\n      \"effects\": 1\n    }\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "positive_controls": [
+    {
+      "case_id": "tal-backend-delivery",
+      "status": "pass",
+      "kind": "temporary author-written compliant implementation; not candidate/model output",
+      "modified_file": "inventory.py",
+      "control_source_sha256": "fc7f7e124e267d1d3b6d8adc296b1c77c83789931d852a4d95455d67946eb32c",
+      "command": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "elapsed_seconds": 0.061307,
+      "exit_code": 0,
+      "stdout": "{\n  \"sqlite\": \"3.53.2\",\n  \"checks\": [\n    {\n      \"check\": \"normal\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"replay_after_lost_response\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"changed_intent\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"tenant_authority_and_scope\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"malformed_input\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"rejection_does_not_reserve_key\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"overlapping_duplicates\",\n      \"status\": \"pass\"\n    }\n  ]\n}\n",
+      "stderr": "",
+      "retention": "temporary control project removed; candidate fixture remains faulty"
+    },
+    {
+      "case_id": "tal-consistency-diagnosis",
+      "status": "pass",
+      "kind": "temporary author-written compliant implementation; not candidate/model output",
+      "modified_file": "counter.py",
+      "control_source_sha256": "60c826c4758d7f6faa57ac8ac2158850ba182e3ecd8a0a73bd0874b0b7caaa8b",
+      "command": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "elapsed_seconds": 0.023375,
+      "exit_code": 0,
+      "stdout": "{\"schedule\": \"read A; read B; release both; join both\", \"snapshots\": [0, 0], \"completed_calls\": 2, \"expected_value\": 2, \"actual_value\": 2}\n",
+      "stderr": "",
+      "retention": "temporary control project removed; candidate fixture remains faulty"
+    },
+    {
+      "case_id": "tal-messaging-evolution",
+      "status": "pass",
+      "kind": "temporary author-written compliant implementation; not candidate/model output",
+      "modified_file": "consumer.py",
+      "control_source_sha256": "d315d57da24c161e67be2b0cb8bdd4ee0b00313a7b254e71d1c82dfeda3732ae",
+      "command": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "elapsed_seconds": 0.025241,
+      "exit_code": 0,
+      "stdout": "{\"status\": \"pass\", \"outcomes\": [\"applied\", \"duplicate\", \"stale\", \"applied\", \"duplicate\", \"applied\"], \"state\": {\"accounts\": {\"a\": {\"revision\": 13, \"balance\": 130}, \"b\": {\"revision\": 1, \"balance\": 7}}, \"effects\": [[\"a\", 12, 120], [\"b\", 1, 7], [\"a\", 13, 130]]}}\n",
+      "stderr": "",
+      "retention": "temporary control project removed; candidate fixture remains faulty"
+    }
+  ],
+  "limitations": [
+    "No model calls were made.",
+    "No installed host discovery or workflow execution was tested.",
+    "Local protocol probes are application models, not SDK peers."
+  ],
+  "recovery_discriminators": {
+    "status": "observed",
+    "missing": [
+      "order-2"
+    ],
+    "unexpected": [
+      "order-3"
+    ],
+    "payload_mismatch": [
+      "order-1"
+    ],
+    "duplicate_effect_id": "charge-1",
+    "already_effected_missing_order": "order-2",
+    "import_count_equality_is_misleading": true
+  }
+}

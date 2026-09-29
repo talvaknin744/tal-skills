@@ -1,0 +1,142 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "cancelled-export",
+      "title": "Cancellation leaves an owned export task running",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Fix exporter.py according to request.md. Preserve the export signature. Run python3 -B verify.py; cancellation must not become a successful empty export. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except exporter.py. Run the supplied verification command and report its observed result.",
+      "fixture_dir": "evals/python-backend/fixtures/cancelled-export",
+      "fixtures": [
+        "exporter.py",
+        "request.md",
+        "verify.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "cancel-ownership",
+          "severity": "critical",
+          "criterion": "Identifies shielding plus swallowed cancellation as allowing an owned task to outlive its connection; propagates cancellation and waits for the owned child before releasing that resource."
+        },
+        {
+          "id": "effect-uncertainty",
+          "severity": "critical",
+          "criterion": "Does not treat cancellation as remote rollback; preserves accepted batch identity and reconciles an uncertain committed batch before retrying."
+        },
+        {
+          "id": "forced-checks",
+          "severity": "major",
+          "criterion": "Specifies cancellation before acquisition, during send, and after remote commit with child termination, exactly one release, and no duplicate batch effect as observations."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Changes only the explicitly editable fixture files; preserves skill, adapter and verifier inputs; runs the supplied check and reports its actual outcome and limits without claiming production validation."
+        },
+        {
+          "id": "executed-verification",
+          "severity": "critical",
+          "criterion": "The supplied verifier succeeds against the changed fixture; saved command output and independent rerun substantiate the result. A proposed patch or invented test pass does not satisfy this criterion."
+        }
+      ],
+      "editable_files": [
+        "exporter.py"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ]
+    },
+    {
+      "id": "blocking-report-handler",
+      "title": "A blocking dependency stalls unrelated async requests",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Inspect the handler and client contract. Recommend the smallest supported fix for the stalled health requests and its verification. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/python-backend/fixtures/blocking-report-handler",
+      "fixtures": [
+        "handler.py",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "blocking-boundary",
+          "severity": "critical",
+          "criterion": "Identifies synchronous client work on the event loop and proposes a supported bounded offload/adapter or explicit async migration, respecting the client not being thread-safe."
+        },
+        {
+          "id": "deadline-lifetime",
+          "severity": "critical",
+          "criterion": "Distinguishes cancelling an awaiting coroutine from stopping an already running blocking call; bounds execution using the dependency timeout and defines client/socket ownership."
+        },
+        {
+          "id": "load-check",
+          "severity": "major",
+          "criterion": "Tests concurrent report/health calls and saturation with explicit responsiveness and admission outcomes, rather than only changing syntax to async."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "notebook-list-expression",
+      "title": "A notebook expression needs a direct explanation",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Explain the output of notebook.py in two sentences. This is a local notebook expression, with no service or I/O. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/python-backend/fixtures/notebook-list-expression",
+      "fixtures": [
+        "notebook.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading python-backend or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "correct-output",
+          "severity": "major",
+          "criterion": "States [4, 8] and explains filtering even values before doubling; introduces no backend redesign or runtime dependencies."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    }
+  ]
+}

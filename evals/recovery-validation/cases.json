@@ -1,0 +1,133 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "restored-order-ledger",
+      "title": "A successful import can restore inconsistent business progress",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the recovery rehearsal artifacts. Decide whether writes may reopen and specify the missing acceptance evidence. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/recovery-validation/fixtures/restored-order-ledger",
+      "fixtures": [
+        "contract.md",
+        "restored.json"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "business-reconciliation",
+          "severity": "critical",
+          "criterion": "Detects completed r3 without its effect and refuses to call restore usable based only on exit 0; checks identities/payloads/effects/progress consistently."
+        },
+        {
+          "id": "recovery-identity",
+          "severity": "critical",
+          "criterion": "Repairs/replays using stable accepted identity and appropriate atomic arbitration without duplicating r1/r2, and keeps source artifacts intact."
+        },
+        {
+          "id": "measured-bounds",
+          "severity": "major",
+          "criterion": "Distinguishes import duration from RTO and backup age from established RPO; requests actual loss and usable-service evidence rather than reporting the unmeasured objectives achieved."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "expired-input-history",
+      "title": "A durable cursor outlives its source snapshot",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review resume.md. Determine what can be recovered exactly, what is uncertain, and a safe next step. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/recovery-validation/fixtures/expired-input-history",
+      "fixtures": [
+        "progress.json",
+        "resume.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "input-provenance",
+          "severity": "critical",
+          "criterion": "Explains that current repeatable read and a numeric cursor cannot recreate expired accepted inputs/configuration; does not promise exact recovery from current data."
+        },
+        {
+          "id": "honest-boundary",
+          "severity": "critical",
+          "criterion": "Pauses exact replay or seeks another proven historical artifact/explicit revised requirement; does not silently substitute latest recipients/prices or ignore surviving-row conflicts."
+        },
+        {
+          "id": "retention-and-checks",
+          "severity": "major",
+          "criterion": "Defines retention over the supported pause/recovery horizon and validation of cohort/version/payload/progress before resumption."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "backup-label",
+      "title": "A label correction does not validate a backup",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Change only the visible backup label in dashboard.json as described in request.md. Preserve identifiers and schedules; this is not a backup-system assessment. Edit only dashboard.json. Use no external services or package installation. Report the actual change briefly.",
+      "fixture_dir": "evals/recovery-validation/fixtures/backup-label",
+      "fixtures": [
+        "dashboard.json",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading recovery-validation or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "label-only",
+          "severity": "major",
+          "criterion": "Sets backupLabel to Nightly backup without initiating a restore or implying that label wording proves recoverability."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Makes only the requested edit to dashboard.json; all other supplied and skill files remain unchanged. The saved diff supports the report; no operational or unexecuted testing claims are added."
+        }
+      ],
+      "execution_mode": "implementation",
+      "editable_files": [
+        "dashboard.json"
+      ]
+    }
+  ]
+}

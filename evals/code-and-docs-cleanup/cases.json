@@ -1,0 +1,146 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "similar-policy-cleanup",
+      "title": "Similar policies have different owners and an unused wrapper",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Perform the bounded cleanup in request.md by editing only policies.py and setup.md. Preserve independently owned policies and the setup prerequisite. Run python3 -B verify.py and check the resulting newcomer instructions. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except policies.py, setup.md. Run the supplied verification command and report its observed result.",
+      "fixture_dir": "evals/code-and-docs-cleanup/fixtures/similar-policy-cleanup",
+      "fixtures": [
+        "demo.py",
+        "policies.py",
+        "request.md",
+        "setup.md",
+        "verify.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "policy-independence",
+          "severity": "critical",
+          "criterion": "Preserves the independently owned sales/support decisions instead of merging them solely because their current literals match."
+        },
+        {
+          "id": "evidenced-removal",
+          "severity": "major",
+          "criterion": "Uses the supplied private caller evidence to remove the unused wrapper and consolidates the duplicate run instruction without inventing a broad redesign."
+        },
+        {
+          "id": "reader-contract",
+          "severity": "critical",
+          "criterion": "Preserves the local-mode prerequisite and useful rationale; verifies concrete policy outputs and checks the resulting newcomer instructions, distinguishing executed checks from unexecuted proposals."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Changes only the explicitly editable fixture files; preserves skill, adapter and verifier inputs; runs the supplied check and reports its actual outcome and limits without claiming production validation."
+        },
+        {
+          "id": "executed-verification",
+          "severity": "critical",
+          "criterion": "The supplied verifier succeeds against the changed fixture; saved command output and independent rerun substantiate the result. A proposed patch or invented test pass does not satisfy this criterion."
+        }
+      ],
+      "editable_files": [
+        "policies.py",
+        "setup.md"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ]
+    },
+    {
+      "id": "newcomer-setup-path",
+      "title": "Repeated setup instructions disagree on a supported flag",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the docs against the supplied CLI output. Propose a concise, runnable newcomer path while preserving the compatibility explanation. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/code-and-docs-cleanup/fixtures/newcomer-setup-path",
+      "fixtures": [
+        "cli-help.txt",
+        "guide.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "source-of-truth",
+          "severity": "critical",
+          "criterion": "Uses the supplied version-2 CLI contract and --local; removes the conflicting actionable --offline instruction while retaining its version-1 explanation as needed."
+        },
+        {
+          "id": "complete-path",
+          "severity": "critical",
+          "criterion": "Creates/chooses an existing writable empty data directory and sets TOOL_DATA_DIR before serving; does not remove prerequisites merely to shorten prose."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "States a fresh-directory command sequence and expected local-mode startup/unsupported-flag behavior, distinguishing proposed execution from supplied help evidence."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "new-export-format",
+      "title": "A requested feature is not a repository cleanup pass",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Review the ticket and give the smallest code change needed for CSV support. Leave unrelated structure and documentation alone. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/code-and-docs-cleanup/fixtures/new-export-format",
+      "fixtures": [
+        "export.py",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading code-and-docs-cleanup or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "feature-scope",
+          "severity": "major",
+          "criterion": "Proposes a csv branch calling to_csv while preserving JSON and unsupported-format behavior; no opportunistic cleanup sweep."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    }
+  ]
+}

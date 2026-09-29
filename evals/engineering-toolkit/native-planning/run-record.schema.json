@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Native workflow smoke execution record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "host",
+    "workflow",
+    "registration",
+    "model_override",
+    "execution_started",
+    "global_config_unchanged",
+    "observed",
+    "status",
+    "independent_acceptance",
+    "cleanup",
+    "capability_deviations",
+    "case_compliant"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "host": {
+      "enum": [
+        "codex",
+        "claude"
+      ]
+    },
+    "workflow": {
+      "type": "string",
+      "pattern": "^tal-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "registration": {
+      "enum": [
+        "automatic-project-directory",
+        "explicit-cli-registration",
+        "native-claude-directory"
+      ]
+    },
+    "model_override": {
+      "const": false
+    },
+    "execution_started": {
+      "type": "boolean"
+    },
+    "global_config_unchanged": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "blocked-or-failed",
+        "failed",
+        "failed-scope",
+        "failed-verification",
+        "completed-unscored"
+      ]
+    },
+    "independent_acceptance": {
+      "enum": [
+        "pending",
+        "passed",
+        "failed",
+        "inconclusive"
+      ]
+    },
+    "observed": {
+      "type": "object",
+      "required": [
+        "threads",
+        "named_native_children",
+        "observed_reads",
+        "commands",
+        "delegation",
+        "messages",
+        "limits"
+      ],
+      "properties": {
+        "threads": {
+          "type": "array"
+        },
+        "named_native_children": {
+          "type": "array"
+        },
+        "observed_reads": {
+          "type": "array"
+        },
+        "commands": {
+          "type": "array"
+        },
+        "delegation": {
+          "type": "array"
+        },
+        "messages": {
+          "type": "array"
+        },
+        "limits": {
+          "type": "array"
+        }
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "required": [
+        "terminated"
+      ],
+      "properties": {
+        "terminated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "capability_deviations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "case_compliant": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true
+}

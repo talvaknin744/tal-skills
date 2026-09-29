@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "reordered-account-events",
+      "title": "Snapshot events arrive duplicated and out of order",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review consumer.py and the broker history. Explain the final account state and recommend the smallest reliable processing contract. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/messaging-reliability/fixtures/reordered-account-events",
+      "fixtures": [
+        "consumer.py",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "reordering",
+          "severity": "critical",
+          "criterion": "Keeps account a at revision 12/gold after delayed revision 11; scopes order by account and uses the explicit snapshot contract rather than a universal drop-old-events rule."
+        },
+        {
+          "id": "dedup-effect",
+          "severity": "critical",
+          "criterion": "Makes duplicate delivery produce no second audit effect through durable identity/atomicity, with safe concurrent arbitration rather than a process-local set."
+        },
+        {
+          "id": "poison-and-checks",
+          "severity": "major",
+          "criterion": "Defines bounded malformed-message handling and tests duplicate/reordered/concurrent delivery plus commit-before-ack with concrete state/effect counts."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "commit-before-ack",
+      "title": "A committed consumer effect is delivered again",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the consumer and crash trace. Recommend a correction that states both database and external notification guarantees. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/messaging-reliability/fixtures/commit-before-ack",
+      "fixtures": [
+        "consumer.pseudo",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "durable-dedup",
+          "severity": "critical",
+          "criterion": "Couples durable message ownership/result with the debit transaction and handles duplicate delivery after commit without a second debit."
+        },
+        {
+          "id": "external-boundary",
+          "severity": "critical",
+          "criterion": "Distinguishes an outbox/durable notification intent from exactly-once provider delivery; does not claim the email and debit share one atomic transaction."
+        },
+        {
+          "id": "fault-schedule",
+          "severity": "major",
+          "criterion": "Checks crashes before/after debit commit and before/after notification/ack, including concurrent duplicate claims, with explicit debit and notification expectations."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    },
+    {
+      "id": "local-observer-callback",
+      "title": "A local callback has no durable messaging requirement",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Recommend the smallest change to notify the local listener after an in-memory counter changes. There is one owner and no cross-process consumer. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/messaging-reliability/fixtures/local-observer-callback",
+      "fixtures": [
+        "counter.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Handles the narrow request without loading messaging-reliability or launching its specialist workflow. Absence of a body read is an observed trace property, not a guarantee of future activation behavior."
+        },
+        {
+          "id": "local-contract",
+          "severity": "major",
+          "criterion": "Proposes a direct listener call with the new value under the given synchronous contract; no broker/outbox/distributed retry system."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+        }
+      ]
+    }
+  ]
+}
