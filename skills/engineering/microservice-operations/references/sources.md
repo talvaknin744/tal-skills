@@ -18,3 +18,56 @@ PDF page numbers are one-based positions from the start of each supplied file. T
 | Capacity and cache trade-offs | Ch. 11, “Worker-Based Systems,” PDF 240 (print 220); “Caching,” PDF 245 (print 225); “Caching for Writes,” “Caching for Resilience,” “Hiding the Origin,” PDF 248 (print 228) | Ch. 13, “The Four Axes of Scaling,” PDF 520–521; “Horizontal Duplication,” PDF 524; “Data Partitioning,” PDF 528–533; “For Scale,” “For Robustness,” PDF 541; “Invalidation,” PDF 548; “Write-behind,” “The Golden Rule of Caching,” PDF 552–553; “Autoscaling,” PDF 556 |
 
 The books provide the architectural trade-offs. This skill adds an actionable evidence workflow and combines related concerns around a scoped change. Product choices, example timeout values, historical security recipes, and vendor capabilities are deliberately not carried forward; use current primary documentation for implementation-specific claims.
+
+## Operational evidence
+
+Reviewed 2026-09-29. Discord's [message-storage account](https://discord.com/blog/how-discord-stores-trillions-of-messages)
+(2023-03-06) supports investigating hot partitions and request coalescing before
+assuming a database replacement resolves demand concentration. Its language,
+node counts and performance results are workload-specific.
+
+The [Go singleflight API](https://pkg.go.dev/golang.org/x/sync@v0.23.0/singleflight)
+and [v0.23.0 implementation](https://github.com/golang/sync/blob/v0.23.0/singleflight/singleflight.go)
+illustrate local Group/key duplicate suppression. They supply no application
+authorization, freshness or cancellation policy; `Forget` can admit another
+call while the earlier call remains active. [Tokio 1.53.1 Semaphore](https://docs.rs/tokio/1.53.1/tokio/sync/struct.Semaphore.html)
+illustrates bounded permit holders and fair-queue head-of-line blocking, not a
+bound on every waiting caller. These are reading pins, not required dependencies.
+
+[ScyllaDB's partition diagnostics](https://docs.scylladb.com/manual/stable/troubleshooting/large-partition-table.html)
+(manual 2026.3) are node-local and per-SSTable; metadata coverage also depends on
+version and upgrade state. An empty diagnostic table is not evidence of evenly
+distributed request load. The capacity guidance combines these limits into
+original checks; no live database or load-test result is claimed here.
+
+The conditional [cache-load reference](cache-load-protection.md) uses Redis's
+[KEYS](https://redis.io/docs/latest/commands/keys/),
+[SCAN](https://redis.io/docs/latest/commands/scan/),
+[Bloom filter](https://redis.io/docs/latest/develop/data-types/probabilistic/bloom-filter/),
+[BF.EXISTS](https://redis.io/docs/latest/commands/bf.exists/), and
+[keyspace-notification](https://redis.io/docs/latest/develop/pubsub/keyspace-notifications/)
+contracts. Redis's [thundering-herd article](https://redis.io/blog/how-to-tame-the-thundering-herd-problem/)
+(2026-05-13) supports jitter/coalescing; Amazon's [caching strategies](https://aws.amazon.com/builders-library/caching-challenges-and-strategies/)
+support soft/hard expiry and negative entries. Source reading does not establish
+the application's membership completeness, invalidation ordering or refresh
+capacity; those remain explicit conditions and checks.
+
+## Cache design contracts
+
+The [cache-design reference](cache-design.md) adds conditional choices checked
+against Redis primary documentation on 2026-09-29. These mutable `/latest/` pages
+are reading sources, not dependency pins; verify the deployed server, client,
+topology, and managed-service support. Application identity, admission, and
+coherence requirements are original deductions from the documented boundaries.
+
+| Branch | Primary sources and actual scope |
+| --- | --- |
+| Buffered-write acceptance | [Persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/), [replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/): persistence/failover windows and history-qualified progress. [WAIT](https://redis.io/docs/latest/commands/wait/) (since 3.0) and [WAITAOF](https://redis.io/docs/latest/commands/waitaof/) (since 7.2): same-connection receipt/fsync counts, timeout behavior and strong-consistency limits. |
+| Delivery and retention | [LMOVE](https://redis.io/docs/latest/commands/lmove/) (since 6.2), [XREADGROUP](https://redis.io/docs/latest/commands/xreadgroup/), [XCLAIM](https://redis.io/docs/latest/commands/xclaim/): recoverable delivery, pending ownership and repeat processing. [XTRIM](https://redis.io/docs/latest/commands/xtrim/): pending-payload removal; KEEPREF/DELREF/ACKED options require 8.2. |
+| Read routing and L1 | [XLEN](https://redis.io/docs/latest/commands/xlen/), [XINFO GROUPS](https://redis.io/docs/latest/commands/xinfo-groups/), [INFO](https://redis.io/docs/latest/commands/info/): cardinality, consumer progress and replication fields differ; group lag fields require 7.0. [Tracking reference](https://redis.io/docs/latest/develop/reference/client-side-caching/) and [CLIENT TRACKING](https://redis.io/docs/latest/commands/client-tracking/): per-key versus prefix fanout, connection lifetime and redirection. |
+| Distribution and loss | [Cluster specification](https://redis.io/docs/latest/operate/oss_and_stack/reference/cluster-spec/): slots, hash tags and multi-key limits. [Eviction](https://redis.io/docs/latest/develop/reference/eviction/): eligibility, pressure/rejection, approximate policies and role separation. Mutable-copy safety is an application requirement. |
+| Resource budgets | [Pipelining](https://redis.io/docs/latest/develop/using-commands/pipelining/): round trips and queued replies. [Latency diagnosis](https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency/), [Redis 8 I/O-thread account](https://redis.io/blog/redis-8-ga/), [UNLINK](https://redis.io/docs/latest/commands/unlink/) (since 4.0), and [INFO](https://redis.io/docs/latest/commands/info/): blocking work, deferred reclamation and allocator/RSS distinctions. No benchmark gain or universal collection-size cutoff is adopted. |
+
+These sources establish command contracts, not tested application throughput,
+recovery, or freshness. The reference's failure checks require project-specific
+execution; no new runtime result is claimed by this source ledger.

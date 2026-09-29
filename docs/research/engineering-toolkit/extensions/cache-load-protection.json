@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "topic": "cache load protection and coordination pitfalls",
+  "research_date": "2026-09-29",
+  "started_at": "2026-09-29T13:06:35Z",
+  "completed_at": "2026-09-29T13:17:08Z",
+  "counts": {
+    "new_deep_incident_articles": 0,
+    "new_pattern_articles_read": 1,
+    "reused_article_sections": 2,
+    "documentation_crosschecks": 7,
+    "runtime_experiments": 0,
+    "model_evaluations": 0,
+    "additional_article_sections_read": 1,
+    "paper_sections_read": 1
+  },
+  "method": {
+    "selection": "Official command and library contracts checked against selected vendor advice and previously read primary accounts.",
+    "scope": "Documentation and research only; reference authoring authorized separately. No production actions, downloaded source bodies, code execution experiments or model trials.",
+    "inference": "Practice mechanisms, scope decisions and test schedules are original conditional application guidance, not claims that Redis supplies a cross-store atomic protocol."
+  },
+  "recommendation": {
+    "new_public_skill": false,
+    "placement": "skills/engineering/microservice-operations/references/cache-load-protection.md",
+    "rationale": "Existing microservice-operations trigger covers cache overload; a conditional reference avoids another broad package.",
+    "routing_owner": "research_storage owns capacity.md and sources.md",
+    "other_owners": "research_agents owns isolated examples; audit_engineering independently reviews sources and candidate",
+    "permission": "User choice required before any new public skill; none proposed now."
+  },
+  "audited_coverage": [
+    {
+      "package": "concurrency-correctness",
+      "scope": "SKILL and cache-coherence, replica-reads, delayed-work, transactions, projection-rebuild, sources references",
+      "already_covered": "Stale fill publication, revision floors, tombstones, causal reads, fencing and projection bootstrap."
+    },
+    {
+      "package": "idempotency",
+      "scope": "SKILL and all four references",
+      "already_covered": "Mutation identity, authorization before replay, owner takeover, effect uncertainty and duplicate recovery; ordinary read coalescing is outside its trigger."
+    },
+    {
+      "package": "microservice-operations",
+      "scope": "SKILL and all four pre-extension references",
+      "already_covered": "Cache loss/origin overload, allowed staleness, deadlines, bounded admission and service authorization; concrete expiry/miss/scan mechanisms absent."
+    }
+  ],
+  "sources": [
+    {
+      "id": "redis-keys",
+      "title": "KEYS",
+      "url": "https://redis.io/docs/latest/commands/keys/",
+      "published_at": null,
+      "version_scope": "Current command documentation; command since Redis 1.0.0",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Complexity, warnings and cluster caveat.",
+      "finding": "Linear blocking enumeration; unsuitable for routine large live-keyspace traversal.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "redis-scan",
+      "title": "SCAN",
+      "url": "https://redis.io/docs/latest/commands/scan/",
+      "published_at": null,
+      "version_scope": "Current command documentation; command since Redis 2.8.0",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Full iteration guarantees, duplicates, COUNT, empty batches, MATCH and mutation caveats.",
+      "finding": "Incremental traversal is not a snapshot or a fixed-size page API.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "redis-bloom",
+      "title": "Bloom filters",
+      "url": "https://redis.io/docs/latest/develop/data-types/probabilistic/bloom-filter/",
+      "published_at": null,
+      "version_scope": "Current Redis data-type documentation; deployment capability must be checked",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Membership semantics, cache-miss use case, sizing and deletion limitations.",
+      "finding": "Data-structure membership does not establish synchronized database membership.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "redis-bf-exists",
+      "title": "BF.EXISTS",
+      "url": "https://redis.io/docs/latest/commands/bf.exists/",
+      "published_at": null,
+      "version_scope": "Current RedisBloom command documentation; module command since 1.0.0, not Redis server 1.0",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Arguments, examples and return information.",
+      "finding": "Zero includes a missing filter; absence requires application readiness proof.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "redis-notifications",
+      "title": "Redis keyspace notifications",
+      "url": "https://redis.io/docs/latest/develop/pubsub/keyspace-notifications/",
+      "published_at": null,
+      "version_scope": "Current Redis documentation",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Pub/Sub delivery loss, event timing and cluster node scope.",
+      "finding": "Expiry events follow deletion and may be delayed; they cannot promise refresh before expiry.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "redis-locks",
+      "title": "Distributed locks with Redis",
+      "url": "https://redis.io/docs/latest/develop/clients/patterns/distributed-locks/",
+      "published_at": null,
+      "version_scope": "Current Redis documentation; DELEX IFEQ requires Redis 8.4 or newer",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Ownership token, compare-release, renewal, validity assumptions, clock caveat and fencing recommendation.",
+      "finding": "This is a lease protocol with assumptions, not proof that an expired owner stopped.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "redis-herd",
+      "title": "How to tame the thundering herd problem",
+      "url": "https://redis.io/blog/how-to-tame-the-thundering-herd-problem/",
+      "published_at": "2026-05-13",
+      "version_scope": "James Tessier; vendor pattern article",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Technical body, especially TTL randomization, coalescing and prefetch claims.",
+      "finding": "Pattern suggestions only; promotional latency guarantees and expiry-notification refresh implication are not adopted.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "aws-caching",
+      "title": "Caching challenges and strategies",
+      "url": "https://aws.amazon.com/builders-library/caching-challenges-and-strategies/",
+      "published_at": null,
+      "version_scope": "Amazon Builders\u2019 Library; date not displayed in inspected page",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Reread selected soft/hard TTL, negative caching, coalescing and security sections.",
+      "finding": "Previously researched article; no new deep-read credit.",
+      "reused_prior_research": true
+    },
+    {
+      "id": "meta-memcache",
+      "title": "Scaling Memcache at Facebook",
+      "url": "https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf",
+      "published_at": "2013",
+      "version_scope": "NSDI 2013; Rajesh Nishtala et al.",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Reread section 3.2.1 Leases, PDF page 4, printed page 388.",
+      "finding": "Historical modified Memcached behavior; not an ordinary Redis lock API.",
+      "reused_prior_research": true
+    },
+    {
+      "id": "go-singleflight",
+      "title": "singleflight",
+      "url": "https://pkg.go.dev/golang.org/x/sync@v0.23.0/singleflight",
+      "published_at": "2026-08-31",
+      "version_scope": "golang.org/x/sync v0.23.0; inspected version, not claimed latest",
+      "accessed_at": "2026-09-29",
+      "access": "public primary text; selected sections unless read_scope says technical body",
+      "read_scope": "Group, Do, DoChan, Forget and example.",
+      "finding": "API documents local duplicate suppression; application owns cancellation and admission policy.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "cloudflare-probabilistic",
+      "title": "Sometimes I cache: implementing lock-free probabilistic caching",
+      "url": "https://blog.cloudflare.com/sometimes-i-cache/",
+      "published_at": "2024-12-26",
+      "version_scope": "Thibault Meunier; engineering explanation",
+      "accessed_at": "2026-09-29",
+      "access": "public primary article; selected sections",
+      "read_scope": "Lock-service tradeoff, probability discussion and optimal cache stampede section; not whole article.",
+      "finding": "Probabilistic refresh can launch zero or multiple origin calls.",
+      "reused_prior_research": false
+    },
+    {
+      "id": "xfetch-paper",
+      "title": "Optimal Probabilistic Cache Stampede Prevention",
+      "url": "https://cseweb.ucsd.edu/~avattani/papers/cache_stampede.pdf",
+      "published_at": "2015",
+      "version_scope": "Andrea Vattani, Flavio Chierichetti, Keegan Lowenstein; PVLDB Vol. 8 No. 8",
+      "accessed_at": "2026-09-29",
+      "access": "public author-hosted full PDF; selected text read",
+      "read_scope": "Abstract, expected stampede result around Theorem 7, complete implementation notes section 5 and Figure 3 on PDF page 6; mathematical proofs and full paper not reviewed.",
+      "finding": "Measured recomputation duration scales exponential early-expiry sampling; reduced expected stampede size is not single-worker selection.",
+      "reused_prior_research": false
+    }
+  ],
+  "practices": [
+    {
+      "id": "expiry-jitter",
+      "trigger": "Many entries share an expiration time.",
+      "failure": "Correlated misses overload the origin.",
+      "mechanism": "Spread deadlines independently within the allowed freshness ceiling; measure miss distribution.",
+      "limits": "One hot key still needs a shared loader; jitter is not refresh-ahead.",
+      "counterexample": "An immutable low-traffic object needs neither periodic refresh nor an elaborate jitter policy.",
+      "verification": "Use a fixed random seed and fake clock; assert all deadlines remain within the maximum and expiry is spread.",
+      "source_ids": [
+        "redis-herd"
+      ],
+      "novelty": "New concrete cache technique; existing retry jitter concerns a different clock.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/cache-load-protection.md"
+      ]
+    },
+    {
+      "id": "refresh-buffer",
+      "trigger": "Frequently read data should refresh before its hard serving deadline.",
+      "failure": "Slow or failed refresh becomes synchronized misses or silently unbounded stale serving.",
+      "mechanism": "Separate soft refresh time from hard expiry, bound refresh work, coalesce loaders and preserve source age/revision.",
+      "limits": "The buffer is measured against latency and retry budget; expiry notifications cannot trigger reliably before deletion.",
+      "counterexample": "Strict current-state authorization may require the authority on every decision.",
+      "verification": "Delay or fail refresh across both deadlines; assert allowed stale behavior ends at the hard boundary.",
+      "source_ids": [
+        "aws-caching",
+        "redis-notifications"
+      ],
+      "novelty": "Adds explicit timing and failure contract to existing staleness and admission guidance.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/cache-load-protection.md"
+      ]
+    },
+    {
+      "id": "probabilistic-refresh",
+      "trigger": "Early refresh is considered without a shared coordination service.",
+      "failure": "Expected load reduction is mistaken for exactly one refresher or guaranteed timely renewal.",
+      "mechanism": "Treat sampling as probabilistic admission, preserve hard freshness limits and bound origin work; coordinate if overlap is unacceptable.",
+      "limits": "Zero or multiple contenders can occur. A measured refresh duration and workload assumptions affect tuning.",
+      "counterexample": "A source allowing only one active operation requires stronger coordination than random selection.",
+      "verification": "Inject random outcomes selecting zero and multiple contenders; assert bounded origin admission and hard-expiry behavior.",
+      "source_ids": [
+        "xfetch-paper",
+        "cloudflare-probabilistic"
+      ],
+      "novelty": "Corrects the new user-provided exactly-one claim with a concise reference paragraph.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/cache-load-protection.md"
+      ]
+    },
+    {
+      "id": "negative-cache",
+      "trigger": "Repeated requests for absent objects hit the source.",
+      "failure": "A stale negative hides a newly created record, or a shared negative crosses visibility boundaries.",
+      "mechanism": "Cache authoritative absence with short bounded retention; scope equivalence, enforce authorization, bound distinct keys, and condition publication when creation must become immediately visible.",
+      "limits": "A timeout is not absence. Short TTL permits a stale window unless a stronger protocol closes it.",
+      "counterexample": "One-off random IDs may cost more cache space than repeated source lookups; admission still matters.",
+      "verification": "Pause absent lookup, create object, invalidate, then release old lookup; include tenants with equal IDs and an origin timeout.",
+      "source_ids": [
+        "aws-caching",
+        "meta-memcache"
+      ],
+      "novelty": "Concrete negative-entry treatment; stale-fill and scope mechanisms already exist elsewhere.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/cache-load-protection.md",
+        "skills/engineering/concurrency-correctness/references/cache-coherence.md"
+      ]
+    },
+    {
+      "id": "bloom-membership",
+      "trigger": "Mostly absent-key traffic makes authoritative misses expensive.",
+      "failure": "An unready, lost or lagging filter suppresses an existing database record.",
+      "mechanism": "Promote a caught-up generation; keep membership synchronized with request-visible writes. Treat positive as a lookup and uncertain readiness as bounded fallback or unavailability.",
+      "limits": "No data-structure false negatives does not imply database completeness. Readiness and membership need a protocol against replacement/loss. Retained deletions cause extra lookups; rebuild rather than clear shared bits.",
+      "counterexample": "Mostly existing-key traffic gains little; authoritative uniqueness and authorization still apply.",
+      "verification": "Commit before membership update; lose filter between readiness and query; rebuild while writes continue; positive for an absent key still performs authoritative lookup.",
+      "source_ids": [
+        "redis-bloom",
+        "redis-bf-exists"
+      ],
+      "novelty": "Substantive gap; no Bloom filter coverage in audited packages.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/cache-load-protection.md"
+      ]
+    },
+    {
+      "id": "paced-key-scan",
+      "trigger": "Operational code enumerates a large live Redis keyspace.",
+      "failure": "Blocking traversal or unbounded follow-up batches disrupt foreground traffic.",
+      "mechanism": "Pace SCAN until cursor zero, handle duplicates and empty nonterminal batches, and bound processing concurrency.",
+      "limits": "COUNT is a hint; mutations prevent exact-snapshot claims. Verify shard coverage; a complete traversal still costs linear work.",
+      "counterexample": "An isolated bounded development database can tolerate KEYS; exact accounting needs another representation.",
+      "verification": "Inject repeated keys and an empty intermediate batch; mutate keys during traversal and measure foreground latency.",
+      "source_ids": [
+        "redis-keys",
+        "redis-scan"
+      ],
+      "novelty": "New operational command contract.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/cache-load-protection.md"
+      ]
+    },
+    {
+      "id": "shared-load-lifecycle",
+      "trigger": "Concurrent equivalent reads miss one hot key.",
+      "failure": "Waiter cancellation kills another caller\u2019s load, waiters leak, or failures release a new stampede.",
+      "mechanism": "Define equivalent identity and loader ownership; bound load duration, waiters, distinct keys and origin concurrency; clean the registry on all exits.",
+      "limits": "Process-local coordination does not suppress another process. Forget can allow an overlapping load; cancellation is not built into singleflight\u2019s documented API.",
+      "counterexample": "Different visibility or freshness requirements cannot blindly share a result.",
+      "verification": "Cancel one waiter while another succeeds; fail the owner; saturate distinct keys; use two coordination groups and expect independent loads.",
+      "source_ids": [
+        "go-singleflight",
+        "meta-memcache"
+      ],
+      "novelty": "Being implemented by research_storage in capacity.md; avoid duplication in the new reference.",
+      "map_to": [
+        "skills/engineering/microservice-operations/references/capacity.md"
+      ]
+    },
+    {
+      "id": "lease-release-renewal",
+      "trigger": "A shared loader or worker uses an expiring distributed lock.",
+      "failure": "An old holder deletes a successor\u2019s lock or keeps writing after ownership becomes uncertain.",
+      "mechanism": "Use a unique acquisition token with atomic owner-checked release/renewal; stop starting protected work on uncertain renewal. Enforce stale-owner rejection at the resource when correctness requires it.",
+      "limits": "A token safe for unlock is not ordered fencing; resource checks do not automatically revoke earlier owners at TTL expiry. Async failover and clocks are protocol assumptions.",
+      "counterexample": "An efficiency-only read lock can tolerate overlap if duplicate work and late fills remain safe.",
+      "verification": "Pause past expiry, acquire a successor, release the old token, lose renewal acknowledgement and deliver an old write after a new generation.",
+      "source_ids": [
+        "redis-locks"
+      ],
+      "novelty": "Fencing already thorough. Root authorized one conditional Redis-loader paragraph covering atomic owner-token release/renewal and uncertainty in cache-coherence.md; idempotency unchanged.",
+      "map_to": [
+        "skills/engineering/concurrency-correctness/references/cache-coherence.md",
+        "skills/engineering/concurrency-correctness/references/delayed-work.md",
+        "skills/engineering/idempotency/references/recovery.md"
+      ]
+    }
+  ],
+  "followups": [
+    {
+      "path": "skills/engineering/concurrency-correctness/references/cache-coherence.md",
+      "status": "implemented after root authorization; general fencing remains in delayed-work.md",
+      "suggestion": "When a Redis lease implementation is in scope, require atomic owner-token release/renewal and treat uncertain renewal as lost authority for starting new work. Keep existing resource-fencing explanation authoritative.",
+      "source_ids": [
+        "redis-locks"
+      ]
+    }
+  ],
+  "limitations": [
+    "No runtime results claimed; test scenarios await independent implementation.",
+    "Current documentation may change; verify deployed Redis/server/module/client capabilities.",
+    "Historical Meta lease design and vendor examples are not universal performance or safety guarantees."
+  ]
+}
