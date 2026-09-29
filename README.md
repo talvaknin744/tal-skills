@@ -1,6 +1,6 @@
 # tal-skills
 
-40 portable skills, 15 specialist agents, and eight engineering workflows,
+41 portable skills, 15 specialist agents, and eight engineering workflows,
 organized by concern and backed by source records and executable failure scenarios.
 
 Start with the [task-to-workflow guide and project-local installation](docs/toolkit-usage.md).
@@ -68,6 +68,7 @@ validation, infrastructure changes, cleanup and protocol boundaries.
 | Engineering | [microservice-operations](skills/engineering/microservice-operations/SKILL.md) | Cross-service reliability, observability, and recovery |
 | Engineering | [distributed-system-patterns](skills/engineering/distributed-system-patterns/SKILL.md) | Choosing and composing distributed topology patterns |
 | Engineering | [legacy-code-changes](skills/engineering/legacy-code-changes/SKILL.md) | Characterizing untested behavior and isolating dependencies for a change |
+| Engineering | [technical-deprecation](skills/engineering/technical-deprecation/SKILL.md) | Migrating consumers before retiring supported libraries, APIs, configuration, or tools |
 | Engineering | [pragmatic-programming](skills/engineering/pragmatic-programming/SKILL.md) | Changeability, knowledge duplication, and feedback through working slices |
 | Engineering | [enterprise-application-patterns](skills/engineering/enterprise-application-patterns/SKILL.md) | Domain logic, persistence mapping, and transaction boundaries |
 | Engineering | [object-design-patterns](skills/engineering/object-design-patterns/SKILL.md) | Applying object patterns to concrete variation and coupling |
@@ -94,6 +95,7 @@ npx skills@latest add talvaknin744/tal-skills --skill idempotency
 npx skills@latest add talvaknin744/tal-skills --skill graceful-draining
 npx skills@latest add talvaknin744/tal-skills --skill concurrency-correctness
 npx skills@latest add talvaknin744/tal-skills --skill microservice-extraction
+npx skills@latest add talvaknin744/tal-skills --skill technical-deprecation
 npx skills@latest add talvaknin744/tal-skills --skill temporal-reliability
 npx skills@latest add talvaknin744/tal-skills --skill temporal-developer
 ```
@@ -155,6 +157,11 @@ Account for old workers, shared data, and recovery after the new service accepts
 ```text
 Use $legacy-code-changes to add this behavior to the untested importer.
 First establish the existing behavior and isolate the external dependency.
+```
+
+```text
+Use $technical-deprecation to review retirement of this supported API.
+Check remaining consumers, replacement behavior, and the next removal gate.
 ```
 
 ```text
