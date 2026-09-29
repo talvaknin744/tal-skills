@@ -1,0 +1,51 @@
+{
+  "run_id": "20-a2a-engineering-ordinary-job-endpoint",
+  "run_evidence_sha256": "2754e5deec5a0d0474b829b981f6580feb1857f7ca836b499e3664d3333c3eae",
+  "final_workspace_tree_sha256": "301233cbe4de329c96342c9c47dc185eb50a052ed97d4347484ae0b75a0fc0fe",
+  "case_id": "ordinary-job-endpoint",
+  "candidate_tree_sha256": "b3ad6d5eb304d82c8f8bc2f1dee05d4e1b052029c9ea84411f1d1727c1e3bc43",
+  "rubric_sha256": "b8103f08893fa4e539ac683185f2525a7dedf44b1c84b28d6d7e064a85895489",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_0-4; evidence/run.json activation_observation",
+        "observation": "Only local API inspection is observed; no a2a-engineering body read or specialist dispatch appears in the captured trace. This is a bounded observation rather than a future activation guarantee."
+      }
+    },
+    {
+      "id": "api-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1-10",
+        "observation": "Returns HTTP 200 with the unchanged JSON object id=j2/state=running, expressly limited to authorized user u1 and preserving the existing authorization rule. Adds no A2A protocol or orchestration."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "empty; evidence/trace.jsonl items_1-3; evidence/run.json input_integrity",
+        "observation": "Captured commands only locate and read the API contract. All input files remain unchanged; no external operation or unsupported runtime validation is claimed."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

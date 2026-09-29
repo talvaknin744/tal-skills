@@ -1,0 +1,60 @@
+{
+  "run_id": "03-typescript-backend-untrusted-command-body",
+  "run_evidence_sha256": "7b50f0e9a42f7ae2effe388a5a1b5b67d7d930f11342861f478dac42e25d6983",
+  "final_workspace_tree_sha256": "baae7f73fff4e3c6db29d3c2664e861d5697a1559c463879bd9804306bf8ea6c",
+  "case_id": "untrusted-command-body",
+  "candidate_tree_sha256": "81660b9639ea74d9f3f032df8df7e6ae6d2a7b0bdd7dcedc2dd77ef78d479d76",
+  "rubric_sha256": "515df9f133ef62222f7766eb82ce431bcfac81ee4e42ac3a3148c640f0b46158",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "runtime-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/handler.ts",
+        "locator": "lines 1\u201327; evidence/trace.jsonl item_5",
+        "observation": "Replaces the unchecked type assertion with object/null/array, integer/range, and requestId string/length checks before any ledger invocation; commentary identifies trusting the body type as the original problem."
+      }
+    },
+    {
+      "id": "trusted-principal",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/handler.ts",
+        "locator": "lines 6\u20138 and 26",
+        "observation": "Rejects body-supplied tenant selection; the sole ledger call receives req.auth.tenant. Malformed effect-relevant values throw before any effect."
+      }
+    },
+    {
+      "id": "boundary-cases",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/verify.mjs",
+        "locator": "lines 9\u201321; evidence/trace.jsonl item_9",
+        "observation": "Executes concrete malformed/null/array/string, negative/fractional/oversized/string amount, missing/oversized identity, cross-tenant, and successful result-shape cases. Local supplied verifier passes."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; forbidden_changes=[]; evidence/answer.md",
+        "observation": "Only handler.ts changes. Candidate preserves request/skill/verifier files and reports actual strip-types verifier success while explicitly disclosing that separate typechecking was unavailable."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/trace.jsonl item_9",
+        "observation": "Candidate verification and matching independent rerun of node --experimental-strip-types verify.mjs both exit0, with no changes in the independent verification workspace."
+      }
+    }
+  ]
+}

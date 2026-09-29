@@ -1,0 +1,70 @@
+{
+  "run_id": "23-code-and-docs-cleanup-similar-policy-cleanup-r2",
+  "run_evidence_sha256": "b17c9f3a826605ce7dd36b1a8223b19758f602075b8a4953309a0aaad7a1ee88",
+  "final_workspace_tree_sha256": "ca9921e8d006a70b28fb24be55db533fb57985abf9966ed042016c7d222d38c3",
+  "case_id": "similar-policy-cleanup",
+  "candidate_tree_sha256": "dc206ec1179b9a9da3b6a12a304caddf98782cf5266828095c357bbc8483472d",
+  "rubric_sha256": "532149f0479f70e1b5a44bd2e970aa37af5f89bd4148dce0143083c809babd8f",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "policy-independence",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/policies.py",
+        "locator": "lines 1-6",
+        "observation": "Retains separate exported sales/support functions, each returning 30, with an ownership comment explaining why they remain independent."
+      }
+    },
+    {
+      "id": "evidenced-removal",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_4,6,9; evidence/workspace.patch",
+        "observation": "Reads the private/no-caller evidence, removes only identity_wrapper, and consolidates duplicate run prose into one setup sequence without broad restructuring."
+      }
+    },
+    {
+      "id": "reader-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/setup.md",
+        "locator": "lines 1-13; evidence/trace.jsonl item_12",
+        "observation": "Preserves fresh-shell TOOL_API_MODE=local and its no-remote-service rationale. The actual newcomer command block is extracted and executed with the variable initially unset, producing exactly the documented sales=30 support=30 output."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "policies.py and setup.md only; evidence/run.json input_integrity; trace.jsonl items_11-13",
+        "observation": "Only the two permitted files change; protected inputs and skill files remain unchanged. Verifier and newcomer execution evidence support the final bounded report, with no external service or production claim."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/checks/independent-01.stdout.txt",
+        "observation": "Independent supplied-verifier execution is bound to revised candidate dc206ec1179b9a9da3b6a12a304caddf98782cf5266828095c357bbc8483472d and this final fixture; exits 0 without timeout or workspace changes. Candidate item_11 corroborates the observed pass."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+      "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+    ],
+    "note": "Original results remain preserved. This fresh rerun is qualitative evidence, not a controlled estimate of improvement or capability-constrained execution."
+  }
+}

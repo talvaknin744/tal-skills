@@ -1,0 +1,1 @@
+Add format_name="csv" by calling the existing to_csv(rows) helper. Preserve JSON behavior and the unsupported-format ValueError. No policy redesign, documentation rewrite or unrelated deletion is requested; both helpers already have focused tests.

@@ -1,0 +1,26 @@
+{
+  "case_id": "task-observer-disconnect",
+  "rubric_sha256": "d2efb018726c03197d2bfd6909e44241215c0a0263cffe265069e77b52b62a47",
+  "rubric": [
+    {
+      "id": "observer-lifetime",
+      "severity": "critical",
+      "criterion": "Separates observer disconnect from task cancellation; keeps s2/work alive and reconciles authoritative task state on reconnect."
+    },
+    {
+      "id": "task-authority",
+      "severity": "critical",
+      "criterion": "Authorizes task access and continuation against alice, and does not restart a terminal task under the same lifecycle as an active continuation."
+    },
+    {
+      "id": "durability-limits",
+      "severity": "major",
+      "criterion": "Distinguishes persisted Task data from resumable execution; tests two observers, reconnect/artifacts, terminal follow-up and restart against the declared contract."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+    }
+  ]
+}

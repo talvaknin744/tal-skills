@@ -1,0 +1,199 @@
+{
+  "format_version": 1,
+  "run_id": "16-code-and-docs-cleanup-new-export-format",
+  "case_id": "new-export-format",
+  "skill": "code-and-docs-cleanup",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "0859fc8a1bd5a0a98876915649e2a14630b36634be3f70971a8e77417bbb4d6d",
+  "fixture_tree_sha256": "d2ac7bb3a37cc2018c0092a7fc9f575a031571efde09c0d1897dc6c50d355d59",
+  "prompt_sha256": "df4d340a0d6452914b7453192bdccb17234aab330aaf122c0da5201b10810462",
+  "case_prompt_sha256": "a2c6c832faa0f8669017f4cfd4072631a5e37b76364167ac2b9cc133d9576996",
+  "rubric_sha256": "4f83fab2315f3f1841e44c5ea0fe0efef06e6646cc80a6ab7316e30a2083c649",
+  "freeze_sha256": "005e8de151ab0a0c1d1ffd25124a60ba45c1313e81fc83d279ab8d18188fb589",
+  "runner_tree_sha256": "7d2a2eb5cc606feba760cd996b1d2a6951d6d3162d485541681e84652d86b233",
+  "dependencies_tree_sha256": "e67cea44fd4c5291a367d1124b76916566ede6d4304e88160815aed500563489",
+  "task_mode": "nontrigger",
+  "execution_mode": "nontrigger",
+  "activation_expected": "do_not_auto_activate",
+  "editable_files": [],
+  "verification_argv": null,
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-astra",
+  "model_settings": {
+    "reasoning_effort": "ultra"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "read-only",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "host_version": "codex-cli 0.153.4",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 35.506,
+  "token_usage": {
+    "input_tokens": 68809,
+    "cached_input_tokens": 49152,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 731,
+    "reasoning_output_tokens": 184
+  },
+  "started_at": "2026-09-29T09:44:32.355Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/tmp/tal-skill-trials-20260929/16-code-and-docs-cleanup-new-export-format/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nReview the ticket and give the smallest code change needed for CSV support. Leave unrelated structure and documentation alone. Keep all files unchanged and use no external services."
+  ],
+  "effective_prompt_sha256": "df4d340a0d6452914b7453192bdccb17234aab330aaf122c0da5201b10810462",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"read-only\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 57,
+    "candidate_entries": [
+      {
+        "name": "code-and-docs-cleanup",
+        "description": "Remove evidenced maintenance friction in code or documentation while preserving its contract. Use for confusing structure, unused local code, stale instructions, or duplicated knowledge; exclude feature redesign and routine spelling or formatting edits.",
+        "path": "/private/tmp/tal-skill-trials-20260929/16-code-and-docs-cleanup-new-export-format/workspace/.agents/skills/code-and-docs-cleanup/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "requested_setting_observations": {
+      "sandbox_mode": "read-only",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-09-29T09:45:07.861Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 6,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "5b8fcf98c2808acfc2abcfd8cd382dbdffa8f4a26bb0d34f4c95457c48b7259a",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "d39e9ef0125b17c8b1b2b83ed6c42dbd3092bdf6d4d7726ee5df6bdb54d1740c",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "db3fb1aed74e961378cad3695c277563d4f68e29bc4d304672bf7470d0ab2c95",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "0a6698d7b4822f77fcf78d28f5e64791ca965ea6c2a5346892240783102505e7",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "a2cebc41a961c77b774ed65a58e2fedf874a742608da0c93bd0477b5e9921afe",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "4468e5c188b1891dbad3183a12abe562987027f2015d60ed722e4ea5d912184c",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "a2cebc41a961c77b774ed65a58e2fedf874a742608da0c93bd0477b5e9921afe",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "092088677c6681d033d74d13b358a180c4ee44398931b9358d66ae86830c8d7f",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "2b245f432dbbe048787316be0c496d104179419d2a6b50c1bf0d8e1d2ba933c8",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "0497ac64ccdc8a8634272d164a3cc07f56e525d1ce919e0b2a28b96d974ce638",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "61c098d0231ce292ee37867f5c34b2bf58f7c948ec8e3c9b263dd783fa6bc26e"
+}

@@ -1,0 +1,6 @@
+on SIGTERM:
+  readiness = false
+  cancel(current_handler)
+  return
+# Suggested mitigation: failure_limit = 10
+# Rolling supervisor proceeds as soon as replacement is healthy.

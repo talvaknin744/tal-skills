@@ -1,0 +1,199 @@
+{
+  "format_version": 1,
+  "run_id": "07-messaging-reliability-reordered-account-events",
+  "case_id": "reordered-account-events",
+  "skill": "messaging-reliability",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "6aec01fba2ae3d88df5231522e7ee52945ae1905bcc5f659fab0acaef868bd26",
+  "fixture_tree_sha256": "cd309ed9cbbbaddd7d41d7068696c7021f9c5091a5f8e5ec2035f68ce7fa0522",
+  "prompt_sha256": "1aae768170f0919804f05d06aaa5d9996ee6179c69724a3804fdcce2969b8d30",
+  "case_prompt_sha256": "927d15eae934249eda3a83a0ab80cfbd8992b6dd3b1b9ed5670ebe0305ae3f3e",
+  "rubric_sha256": "6a39d2c81da07de17cbf8e2db60c209a9ace3d938d11ca798171978599a7c2f1",
+  "freeze_sha256": "005e8de151ab0a0c1d1ffd25124a60ba45c1313e81fc83d279ab8d18188fb589",
+  "runner_tree_sha256": "7d2a2eb5cc606feba760cd996b1d2a6951d6d3162d485541681e84652d86b233",
+  "dependencies_tree_sha256": "e67cea44fd4c5291a367d1124b76916566ede6d4304e88160815aed500563489",
+  "task_mode": "review",
+  "execution_mode": "review",
+  "activation_expected": "activate",
+  "editable_files": [],
+  "verification_argv": null,
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-astra",
+  "model_settings": {
+    "reasoning_effort": "ultra"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "read-only",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "host_version": "codex-cli 0.153.4",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 134.832,
+  "token_usage": {
+    "input_tokens": 94576,
+    "cached_input_tokens": 71808,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3908,
+    "reasoning_output_tokens": 948
+  },
+  "started_at": "2026-09-29T09:38:18.463Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/tmp/tal-skill-trials-20260929/07-messaging-reliability-reordered-account-events/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nReview consumer.py and the broker history. Explain the final account state and recommend the smallest reliable processing contract. Keep all files unchanged and use no external services."
+  ],
+  "effective_prompt_sha256": "1aae768170f0919804f05d06aaa5d9996ee6179c69724a3804fdcce2969b8d30",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"read-only\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 57,
+    "candidate_entries": [
+      {
+        "name": "messaging-reliability",
+        "description": "Diagnose or implement reliable broker consumers, acknowledgements, retry and quarantine paths, event replay, and schema evolution. Use for lost or duplicate effects, out-of-order events, poison messages, and unsafe consumer checkpoints; exclude in-process collection transformations.",
+        "path": "/private/tmp/tal-skill-trials-20260929/07-messaging-reliability-reordered-account-events/workspace/.agents/skills/messaging-reliability/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "requested_setting_observations": {
+      "sandbox_mode": "read-only",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-09-29T09:40:33.295Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 7,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "1b5a13cdaf4c451467072a92a5d1c2ca13c2b57cd55920f66e6bc70c31e2a020",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "ae581ed43c9c0512e632fbfffd864cc987d4d0335c516803d4ae49fc08b77ed4",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "c0705a16e5af72621af2d18a72d9fe215b03a344a15a6fa3b665a6e5762e9331",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "c4a6f4544cb3b81a7a26d0cb36c2dc114deb8a7e64c2b7b42dd5ef80e1f80844",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "7aae39c29190f4b74bd5bcd83333a4ddfd0d951714e40b626e1da79ad6057f92",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "75ccc4ffc3f5db241ea4407353eb37a531475cfa9daeb1dbafd23d15f9679c05",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "7aae39c29190f4b74bd5bcd83333a4ddfd0d951714e40b626e1da79ad6057f92",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "fbe53d22230b503df76d79b56d3e53d8560290249752c5e8da70f725af7ec753",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "30af6103df7b08aaf4d15b8936acc63f07f1eafa2bc6ef75301fd93c1a96cd1a",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "9c1deba06dccb6668472f5c0b8c2bf1e05371223d491af790970a7e646d89714",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "e0b33d2a1474e455aaa6617295cd5d7e078c1f38ca93dd6daaf42b984017eae3"
+}

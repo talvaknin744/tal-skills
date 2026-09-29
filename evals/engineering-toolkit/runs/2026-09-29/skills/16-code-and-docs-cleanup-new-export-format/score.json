@@ -1,0 +1,51 @@
+{
+  "run_id": "16-code-and-docs-cleanup-new-export-format",
+  "run_evidence_sha256": "61c098d0231ce292ee37867f5c34b2bf58f7c948ec8e3c9b263dd783fa6bc26e",
+  "final_workspace_tree_sha256": "5b8fcf98c2808acfc2abcfd8cd382dbdffa8f4a26bb0d34f4c95457c48b7259a",
+  "case_id": "new-export-format",
+  "candidate_tree_sha256": "0859fc8a1bd5a0a98876915649e2a14630b36634be3f70971a8e77417bbb4d6d",
+  "rubric_sha256": "4f83fab2315f3f1841e44c5ea0fe0efef06e6646cc80a6ab7316e30a2083c649",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 0,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_0-1 and item_6; evidence/run.json activation_observation",
+        "observation": "The candidate explicitly announces code-and-docs-cleanup, successfully reads its complete SKILL.md at item_1, and reads its sources at item_6 despite the narrow new-feature nontrigger. This is observed inappropriate activation, independent of the otherwise correct final proposal."
+      }
+    },
+    {
+      "id": "feature-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3-12",
+        "observation": "Proposes only the csv branch calling existing to_csv(rows), preserving JSON and the unsupported-format ValueError without a cleanup sweep."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "empty; evidence/trace.jsonl items_1-7; evidence/run.json input_integrity",
+        "observation": "The captured trace contains local reads only, the project/skill files remain unchanged, and the final answer accurately labels the patch as proposed and tests as not run."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

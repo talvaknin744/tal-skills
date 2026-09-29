@@ -1,0 +1,207 @@
+{
+  "format_version": 1,
+  "run_id": "05-go-backend-cancelled-fanout",
+  "case_id": "cancelled-fanout",
+  "skill": "go-backend",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "f73f9cf61722bf830a92faae0cc90fb6f9c2f24a2ce7697c435590612eaf118b",
+  "fixture_tree_sha256": "d4187f2ffe5b2aa27ccfd5900e643b570a604705420e2a852d1c7a5827cfa378",
+  "prompt_sha256": "79d26d68b0a854315d1b97fbccd592940f05f6d68b5832c23b0eca763a9ea284",
+  "case_prompt_sha256": "944d1e0f72e1253ada6ca52d27752ef33c80370000acd269d8a6075aee193020",
+  "rubric_sha256": "d93ed920afdcb8f52c44c51c8785fc72a6b8dfabd459deda4cb73774151e00c5",
+  "freeze_sha256": "005e8de151ab0a0c1d1ffd25124a60ba45c1313e81fc83d279ab8d18188fb589",
+  "runner_tree_sha256": "7d2a2eb5cc606feba760cd996b1d2a6951d6d3162d485541681e84652d86b233",
+  "dependencies_tree_sha256": "e67cea44fd4c5291a367d1124b76916566ede6d4304e88160815aed500563489",
+  "task_mode": "implementation",
+  "execution_mode": "implementation",
+  "activation_expected": "activate",
+  "editable_files": [
+    "project/worker.go"
+  ],
+  "verification_argv": [
+    "go",
+    "test",
+    "-race",
+    "-count=1"
+  ],
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-astra",
+  "model_settings": {
+    "reasoning_effort": "ultra"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "workspace-write",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "host_version": "codex-cli 0.153.4",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 144.391,
+  "token_usage": {
+    "input_tokens": 206080,
+    "cached_input_tokens": 181120,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3699,
+    "reasoning_output_tokens": 1142
+  },
+  "started_at": "2026-09-29T09:37:46.427Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "workspace-write",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/tmp/tal-skill-trials-20260929/05-go-backend-cancelled-fanout/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nFix worker.go to honor request.md, including owned-worker completion and dependency errors. Run go test -race -count=1. Timeout bounds in the verifier detect hangs; they are not a scheduling mechanism. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except worker.go. Run the supplied verification command and report its observed result."
+  ],
+  "effective_prompt_sha256": "79d26d68b0a854315d1b97fbccd592940f05f6d68b5832c23b0eca763a9ea284",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"workspace-write\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 57,
+    "candidate_entries": [
+      {
+        "name": "go-backend",
+        "description": "Implement or review Go services when context cancellation, goroutine ownership, resource cleanup, runtime input validation, or database transactions affect backend correctness.",
+        "path": "/private/tmp/tal-skill-trials-20260929/05-go-backend-cancelled-fanout/workspace/.agents/skills/go-backend/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "requested_setting_observations": {
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-09-29T09:40:10.818Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 14,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "fa2ae0648f2771d47d26ddb00aaeaea3c896cb074a097a38b27d7f3cf6f0c090",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "ea13e6608b1ef6a83961b11851e7efe40c39aac64eb15d1170915800af5cb762",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "15b06f27e01bb3b49d79f1d7bdf6a9391704782b75a46299b180f9132cd4e93d",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "9671b0310829f865951b818bea32748c44920b82e38ff609b934da774feed34c",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "e92875f00e8e8d28ed4b56140ebeb1dc8119047f24a89c2fc31b254b5c100477",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "7a37cf51dc41d6559faafab9aacb2c668c112798c75b0b3fcea1307cce431700",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "e92875f00e8e8d28ed4b56140ebeb1dc8119047f24a89c2fc31b254b5c100477",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "97f371b1d48ba378b1f10e816cdc197c1743900457ca6704ce7c481bbc196aae",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "adb81fe039f301dbdaeb1fdbceae77355650773e441919ae63c84a661a565669",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "8ad025be62453740ef73029a7227fcdfea2e5c1670acb449d48da5fddb6e445b",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "6cf52520b73efb6f3ebde016a71a9d6fc11924a3287db1aeb4e092ff721956d3",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "3bb6c9ad226e52555b542fcf6c6859ad0d6fc4cb86fa0f1949c05a7e83ff384d"
+}

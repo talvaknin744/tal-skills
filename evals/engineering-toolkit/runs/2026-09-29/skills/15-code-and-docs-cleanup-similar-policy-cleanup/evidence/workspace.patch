@@ -1,0 +1,34 @@
+diff --git a/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/before/project/policies.py b/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/workspace/project/policies.py
+index 3c965e2..d56afe2 100644
+--- a/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/before/project/policies.py
++++ b/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/workspace/project/policies.py
+@@ -1,8 +1,6 @@
++# Independently owned policies; their windows may change separately.
+ def sales_window_days():
+     return 30
+ 
+ def support_window_days():
+     return 30
+-
+-def identity_wrapper(value):
+-    return value
+diff --git a/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/before/project/setup.md b/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/workspace/project/setup.md
+index 6cd36f3..abc2861 100644
+--- a/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/before/project/setup.md
++++ b/tmp/tal-skill-trials-20260929/15-code-and-docs-cleanup-similar-policy-cleanup/workspace/project/setup.md
+@@ -1,4 +1,11 @@
+-Set TOOL_API_MODE=local before running the examples; this keeps them local.
+-Run python demo.py.
+-Execute python demo.py to run the demonstration.
+-The local-mode variable is required in a fresh shell.
++From the project directory, with Python 3 installed, set `TOOL_API_MODE=local`
++in each fresh shell before running the example. This prerequisite keeps the
++example local and avoids contacting a remote service.
++
++```sh
++export TOOL_API_MODE=local
++python3 -B demo.py
++```
++
++Expected output: `sales=30 support=30`.
++A `set local mode` error means the variable is missing or incorrect in the current shell.

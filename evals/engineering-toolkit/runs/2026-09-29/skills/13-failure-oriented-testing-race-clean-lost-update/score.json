@@ -1,0 +1,70 @@
+{
+  "run_id": "13-failure-oriented-testing-race-clean-lost-update",
+  "run_evidence_sha256": "6fdb6a8a783196145e21397b6ab199df0efde41d94a5ee7a41c63158612509f2",
+  "final_workspace_tree_sha256": "0032bbbd8222b3cb33134a21dc70f004194e9f60e5f54f44d43d7396b230dbbd",
+  "case_id": "race-clean-lost-update",
+  "candidate_tree_sha256": "0e9e2fae8bae45bea7e9eed59efb09712a5b6165e5b6f92c6b3ae6843f38bef4",
+  "rubric_sha256": "0034bb2b352f6e237309537b532789ed5da99c21ddaa609093c76182c3a6945e",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/scenario.mjs",
+        "locator": "lines 20-22; evidence/trace.jsonl item_12",
+        "observation": "The unchanged semantic oracle requires value 2 after both successful increments. The extra observed check confirms broken actual=1/expected=2 and fixed=2, establishing the lost update rather than relying on protected-access or memory-race status."
+      }
+    },
+    {
+      "id": "controlled-schedule",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/scenario.mjs",
+        "locator": "lines 4-18",
+        "observation": "Explicit per-call checkpoint promises force both broken reads before either write, then release and await A before releasing B. The same public-API scenario accepts the complete update without sleeps, factory inspection, or a barrier inside serialized work."
+      }
+    },
+    {
+      "id": "retain-and-limit",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/scenario.mjs",
+        "locator": "lines 9-22; evidence/answer.md; evidence/trace.jsonl items_8,10,12",
+        "observation": "Retains and explains the minimal two-call schedule. Baseline verifier fails, changed verifier passes, and extra assertions discriminate broken=1/fixed=2. The report confines the claim to the supplied models and schedule; it does not claim a race detector was executed or that this establishes exhaustive/production correctness."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "only scenario.mjs; evidence/run.json input_integrity; trace.jsonl item_10",
+        "observation": "Only scenario.mjs changes; model, verifier and skill hashes remain unchanged. Captured node verify.mjs exits 0 and the final answer reports that actual result without production claims."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/checks/independent-01.stdout.txt; trace.jsonl item_10",
+        "observation": "The independent supplied-verifier rerun is bound to this run/candidate/final fixture, exits 0 without timeout or check-workspace changes, and prints broken/fixed discrimination PASS, matching the candidate command evidence."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+      "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

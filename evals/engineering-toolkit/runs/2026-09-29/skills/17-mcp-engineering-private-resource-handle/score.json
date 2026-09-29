@@ -1,0 +1,60 @@
+{
+  "run_id": "17-mcp-engineering-private-resource-handle",
+  "run_evidence_sha256": "2ec2256b80000e30fa2fb9423f39836cb976e35b535bd7de68b4ed0b1a37e8c9",
+  "final_workspace_tree_sha256": "c664e33db3d28027fe7e5f69b92a9d1e75ed312d9f81626afc67f1667818680a",
+  "case_id": "private-resource-handle",
+  "candidate_tree_sha256": "6080a47815b20ff4785037f6acedaae92263828884f9b9fe24b4442bb47b855d",
+  "rubric_sha256": "ecfe446439617e2a45ba4b00b6ed1dfa4494018371ae6b8c5414963756c7370a",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "request-authority",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3-5, 13-14",
+        "observation": "Separately identifies cache-hit disclosure and stale connection-principal dispatch. Requires current trusted request identity, handle ownership checks before cache/dispatch, and authorization-context partitioning; Bob must receive no Alice-owned content or unauthorized effect."
+      }
+    },
+    {
+      "id": "pinned-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 7, 15-16, 24-27",
+        "observation": "Uses the supplied 2026-07-28 revision, requires version/method/name agreement before protected work, and rejects a legacy initialization handshake as proof of this per-request contract. Does not fabricate missing SDK pin evidence."
+      }
+    },
+    {
+      "id": "test-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13-18, 24-29; evidence/trace.jsonl item_10",
+        "observation": "Defines alternating caller, cache hit/miss, metadata mismatch, schema and actual pinned-SDK peer checks with expected denial. Explicitly separates synthetic auth from OAuth and annotations from authority. The executed in-memory reproduction is honestly distinguished from unexecuted SDK interoperability."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_1-10; evidence/workspace.patch; evidence/run.json input_integrity",
+        "observation": "Observed commands read local fixtures/references and run a no-write in-memory translation; no external event is captured. Empty diff and hashes preserve supplied files. The answer accurately labels static/model evidence and SDK/runtime limits."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

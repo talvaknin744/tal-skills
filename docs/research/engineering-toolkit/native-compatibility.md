@@ -7,7 +7,7 @@ Checked 29 September 2026. This is feasibility evidence from small loader and ex
 | Host | What was verified | Limit |
 | --- | --- | --- |
 | Homebrew Codex CLI 0.142.5 | Version and startup diagnostics; `--ignore-user-config` reaches the API | Existing newer user config fails parsing. The configured `gpt-6-astra` is then rejected because this CLI is too old. No successful model run. |
-| Desktop-bundled Codex CLI 0.153.4 | Repository skill discovery through `skills/list`; explicit `$tal-probe` invocation; delegated custom-role token returned using invocation-only `config_file` registration | Scratch project trust blocked automatic project agent discovery. The JSONL exposed a completed wait and token result, but omitted the V2 spawn payload. |
+| Desktop-bundled Codex CLI 0.153.4 | Repository skill discovery through `skills/list`; explicit `$tal-probe` invocation; delegated custom-role token returned using invocation-only `config_file` registration; later automatic `tal-python` dispatch observed with a persisted parent | Bounded dispatch proof does not establish complete workflow acceptance. V2 child activity needs a native metadata lookup when spawn payloads and child-start notifications are omitted. |
 | Claude Code 2.1.150 | Native initialization listed the test agent, skill and slash command; `model: inherit` resolved to the configured model | API execution failed with expired OAuth. No Claude model behavior, preloaded-skill use or delegation result was observed. |
 
 The usable Codex binary on this machine is `/Applications/ChatGPT.app/Contents/Resources/codex`; the `codex` command on PATH resolves to the older Homebrew installation. No binary was upgraded. No global configuration, trust record, authentication, model preference or permission setting was changed.
@@ -28,7 +28,7 @@ The test role contained a sentinel in its private role instructions. The parent 
 
 The test workflow contained a different sentinel only in its skill body. `$tal-probe` returned `WORKFLOW_LOADING_5K1LL`. Separately, `skills/list` reported the skill with repository scope and no discovery error. These are observed execution and discovery, rather than merely a model claiming it could use a skill.
 
-For project agents, `config/read` showed the scratch configuration layer disabled as untrusted. Both `/tmp` and its macOS canonical `/private/tmp` path were checked. Invocation-only project trust overrides did not enable the layer. We left the trust boundary intact. The successful role probe registered exactly the reviewed role file through a session flag:
+In the initial project-agent probes, `config/read` showed the scratch configuration layer disabled as untrusted. Both `/tmp` and its macOS canonical `/private/tmp` path were checked. The dotted-key invocation overrides attempted then did not enable the layer; the later correction below resolves that limitation. The successful initial role probe registered exactly the reviewed role file through a session flag:
 
 ```sh
 <desktop-codex> exec --ephemeral --json -s read-only \
@@ -36,7 +36,39 @@ For project agents, `config/read` showed the scratch configuration layer disable
   -C '<probe-project>' '<bounded delegation request>'
 ```
 
-The remaining final-toolkit smoke test must run in an already trusted project or after the user trusts the target through the host's normal flow. It should verify actual agent selection, dependency loading and workflow completion; a successful generator check alone is insufficient.
+The final-toolkit smoke test should verify actual agent selection, dependency loading and workflow completion; a successful generator check alone is insufficient. It can use the corrected session-only trust override below without changing the user's persistent trust configuration.
+
+## 29 September 2026 correction: session-only trust works
+
+Later read-only probes confirmed the whole-map TOML override
+`projects={"<fs.realpath(trial-root)>"={trust_level="trusted"}}`, supplied as the
+value following one `-c` argv element. The CLI splits dotted keys literally;
+quoting a path inside a dotted key did not encode that path as intended. The
+corrected value enabled the project configuration layer and discovered the
+installed workflow skill with repository scope. The model remained
+`gpt-6-astra` with `ultra` reasoning, and the global configuration hash did not
+change. These read-only probes did not run a model turn; later execution evidence
+is recorded below. [Exact command and source explanation](../../../evals/engineering-toolkit/native-planning/README.md),
+[sanitized restricted preflight](../../../evals/engineering-toolkit/native-planning/restricted-preflight.json).
+
+## 29 September 2026 execution addendum: persisted native delegation
+
+A subsequent bounded probe observed automatic `tal-python` role dispatch with a
+normal persisted parent, the native default full-history fork, and inherited
+model settings. Native child metadata confirms the parent, fork origin and role;
+child command events confirm its installed skill read. No fixture files changed.
+The earlier ephemeral workflow attempt failed because default fork construction
+loads parent history from persistent storage, which ephemeral roots omit in this
+host version. The runner now requests `ephemeral:false`. The first persisted
+attempt hit a usage limit before delegation; the retry followed external capacity
+restoration. [Selected observable proof and provenance](../../../evals/engineering-toolkit/native-planning/persistent-delegation-probe.json).
+
+The initial collector missed V2 child-activity identifiers; a separate read-only
+native query supplied the proof, and a regression now covers automatic metadata
+collection. This is a dispatch mechanism check, not acceptance of all workflows.
+One earlier backend run observed a changed global configuration hash; its writer
+is unknown. The persisted probe observed equal hashes. No investigation or
+runner action restored or edited global configuration.
 
 Claude initialization listed `tal-native-probe` in `agents`, `skills` and `slash_commands` before the request failed with `401 OAuth access token has expired`. `claude auth status` still reported a signed-in subscription, so that status alone was insufficient. The verified subscription sign-in command is `claude auth login --claudeai`; it was not executed during research. After authentication is refreshed externally, repeat the bounded native execution test and retain the result before claiming Claude workflow execution.
 

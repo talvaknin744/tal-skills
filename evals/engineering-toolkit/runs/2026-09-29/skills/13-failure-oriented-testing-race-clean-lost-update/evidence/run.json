@@ -1,0 +1,205 @@
+{
+  "format_version": 1,
+  "run_id": "13-failure-oriented-testing-race-clean-lost-update",
+  "case_id": "race-clean-lost-update",
+  "skill": "failure-oriented-testing",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "0e9e2fae8bae45bea7e9eed59efb09712a5b6165e5b6f92c6b3ae6843f38bef4",
+  "fixture_tree_sha256": "20437d7b3232ff71f01d685759041efe0c892bba2f4fb80d98fb462adcbb43d2",
+  "prompt_sha256": "711506076526f763eb2e5e1fdf0e23a4d8c4d83a3fc80a963103f246461c1365",
+  "case_prompt_sha256": "6b1d0d7f0aab80c8731183105f945f31a1aaa322f607365d04184efb39097d77",
+  "rubric_sha256": "0034bb2b352f6e237309537b532789ed5da99c21ddaa609093c76182c3a6945e",
+  "freeze_sha256": "005e8de151ab0a0c1d1ffd25124a60ba45c1313e81fc83d279ab8d18188fb589",
+  "runner_tree_sha256": "7d2a2eb5cc606feba760cd996b1d2a6951d6d3162d485541681e84652d86b233",
+  "dependencies_tree_sha256": "e67cea44fd4c5291a367d1124b76916566ede6d4304e88160815aed500563489",
+  "task_mode": "implementation",
+  "execution_mode": "implementation",
+  "activation_expected": "activate",
+  "editable_files": [
+    "project/scenario.mjs"
+  ],
+  "verification_argv": [
+    "node",
+    "verify.mjs"
+  ],
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-astra",
+  "model_settings": {
+    "reasoning_effort": "ultra"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "workspace-write",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "host_version": "codex-cli 0.153.4",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_2"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 94.387,
+  "token_usage": {
+    "input_tokens": 112790,
+    "cached_input_tokens": 90880,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2114,
+    "reasoning_output_tokens": 624
+  },
+  "started_at": "2026-09-29T09:42:57.608Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "workspace-write",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/tmp/tal-skill-trials-20260929/13-failure-oriented-testing-race-clean-lost-update/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nImplement a deterministic regression in scenario.mjs using request.md. Keep both models and verify.mjs unchanged. Run node verify.mjs and explain the observed invariant and reproducible schedule. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except scenario.mjs. Run the supplied verification command and report its observed result."
+  ],
+  "effective_prompt_sha256": "711506076526f763eb2e5e1fdf0e23a4d8c4d83a3fc80a963103f246461c1365",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"workspace-write\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 57,
+    "candidate_entries": [
+      {
+        "name": "failure-oriented-testing",
+        "description": "Design or strengthen tests for injected faults, adversarial execution orders, generated inputs, and recovery. Use when happy-path checks miss a suspected failure or an invariant needs a discriminating oracle; exclude settled low-risk edits already covered by meaningful tests.",
+        "path": "/private/tmp/tal-skill-trials-20260929/13-failure-oriented-testing-race-clean-lost-update/workspace/.agents/skills/failure-oriented-testing/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "requested_setting_observations": {
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-09-29T09:44:31.995Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 10,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "0032bbbd8222b3cb33134a21dc70f004194e9f60e5f54f44d43d7396b230dbbd",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "cde3d9dc88613a9434726283f462647054fcfccb3a03464b838bb7d7e7e044c9",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "5aaa5498a21f01dc52455f120ad324b12d7fe427babcc964f74a4956757de8d0",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "1130b33bd8625e9adf05b9a3fd295cd9c1efd4f2597232ba2cb309f3be0d6ba6",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "3210368ef4d871a2e89d21b7c03a5b8fbeee046250cc00dd13f162f6b0c82357",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "e04f49d1b34985339115c5a8cdbd58305537ea58c6990a08673afb2a8d0600f8",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "3210368ef4d871a2e89d21b7c03a5b8fbeee046250cc00dd13f162f6b0c82357",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "38db247a032828e1fca099195e80b8f22b5e72621391cdf8603a842b5c71831d",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "2cc94491a6c2ff18148979921fe3bf2a07c145bb2357a6760057171ef08d80a6",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "92363046c6bdccc19b60daa599f3c4902442d63fecaf227fa88dacbc16e65468",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "f2c943916c842416844eea8b69e096d67a4d6c826793e5a2998d1e6aecd3719a",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "6fdb6a8a783196145e21397b6ab199df0efde41d94a5ee7a41c63158612509f2"
+}

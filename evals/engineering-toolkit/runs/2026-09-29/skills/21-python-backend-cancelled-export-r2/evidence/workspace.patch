@@ -1,0 +1,15 @@
+diff --git a/tmp/tal-skill-trials-20260929/21-python-backend-cancelled-export-r2/before/project/exporter.py b/tmp/tal-skill-trials-20260929/21-python-backend-cancelled-export-r2/workspace/project/exporter.py
+index 4423fb0..3078e3b 100644
+--- a/tmp/tal-skill-trials-20260929/21-python-backend-cancelled-export-r2/before/project/exporter.py
++++ b/tmp/tal-skill-trials-20260929/21-python-backend-cancelled-export-r2/workspace/project/exporter.py
+@@ -1,9 +1,3 @@
+-import asyncio
+-
+ async def export(pool, remote, batches):
+     async with pool.connection() as conn:
+-        task = asyncio.create_task(remote.send_batches(conn, batches))
+-        try:
+-            return await asyncio.shield(task)
+-        except asyncio.CancelledError:
+-            return []
++        return await remote.send_batches(conn, batches)

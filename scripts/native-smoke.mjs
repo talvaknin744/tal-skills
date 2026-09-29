@@ -94,12 +94,32 @@ export function summarizeEvents(events, trialRoot) {
         reads.push({ thread_id: p.threadId, path: path.relative(trialRoot, absolute).split(path.sep).join('/'), evidence: locator, basis: 'native best-effort read action on completed zero-exit command' });
       }
     } else if (item.type === 'collabAgentToolCall') delegation.push({ tool: item.tool, sender_thread_id: item.senderThreadId, receiver_thread_ids: item.receiverThreadIds, status: item.status, requested_model: item.model ?? null, requested_reasoning_effort: item.reasoningEffort ?? null, evidence: locator });
+    else if (item.type === 'subAgentActivity') delegation.push({ tool: 'native-subagent-activity', sender_thread_id: p.threadId, receiver_thread_ids: [item.agentThreadId], agent_path: item.agentPath, status: item.kind, evidence: locator });
     else if (item.type === 'agentMessage') finalMessages.push({ thread_id: p.threadId, text: item.text, evidence: locator });
   }
   return { threads: [...threads.values()], named_native_children: [...threads.values()].filter(x => x.parent_thread_id && x.agent_role?.startsWith('tal-')), observed_reads: reads, commands, delegation, messages: finalMessages,
     limits: ['Command read actions are the host parser\'s best-effort classification; retain raw output for review.', 'Missing role metadata or read events are inconclusive, not evidence inferred from assistant claims.', 'A matching role and a successful process do not independently establish task correctness.'] };
 }
-function fileHash(filename) { try { return sha256(fs.readFileSync(filename)); } catch (error) { if (error.code === 'ENOENT') return null; throw error; } }
+export function discoveredChildThreads(events, primaryThread) {
+  const ids = new Set();
+  for (const event of events) {
+    const params = event.params ?? {}, item = params.item ?? {};
+    const candidates = [params.threadId, params.thread?.parentThreadId ? params.thread.id : null, item.type === 'subAgentActivity' ? item.agentThreadId : null, ...(item.receiverThreadIds ?? [])];
+    for (const id of candidates) if (typeof id === 'string' && id && id !== primaryThread) ids.add(id);
+  }
+  return [...ids];
+}
+function configFingerprint(filename) {
+  let fd;
+  try {
+    fd = fs.openSync(filename, 'r');
+    const bytes = fs.readFileSync(fd), stat = fs.fstatSync(fd);
+    return { sha256: sha256(bytes), modified_at: stat.mtime.toISOString(), observed_at: new Date().toISOString() };
+  } catch (error) {
+    if (error.code === 'ENOENT') return { sha256: null, modified_at: null, observed_at: new Date().toISOString() };
+    throw error;
+  } finally { if (fd !== undefined) fs.closeSync(fd); }
+}
 function globalConfigPath() { return path.join(process.env.CODEX_HOME || path.join(os.homedir(), '.codex'), 'config.toml'); }
 function saveJson(filename, value) { fs.writeFileSync(filename, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 }); }
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -164,7 +184,7 @@ export async function collectNativeRun({ trialRoot, workflow, prompt, mode, runt
   if (!MODES.has(mode)) throw new Error(`Unsupported task mode: ${mode}`);
   if (!Number.isFinite(timeoutSeconds) || timeoutSeconds < 1 || timeoutSeconds > 1800) throw new Error('Timeout must be between 1 and 1800 seconds');
   checkId(workflow, 'workflow', true);
-  const root = fs.realpathSync(trialRoot), beforeConfig = fileHash(globalConfigPath());
+  const root = fs.realpathSync(trialRoot), beforeConfig = configFingerprint(globalConfigPath());
   const args = [...binaryArgs, 'app-server', '--stdio', ...sessionOverrides(root, children)];
   const events = [], stderr = fs.openSync(path.join(evidenceRoot, 'stderr.txt'), 'wx', 0o600), eventFile = fs.openSync(path.join(evidenceRoot, 'events.jsonl'), 'wx', 0o600);
   const child = spawnHost(binary, args, { cwd: root, stdio: ['pipe', 'pipe', 'pipe'] });
@@ -195,7 +215,9 @@ export async function collectNativeRun({ trialRoot, workflow, prompt, mode, runt
     if (!preflight.config.project_layers.some(x => !x.disabled_reason && fs.existsSync(x.source.dotCodexFolder) && fs.realpathSync(x.source.dotCodexFolder) === path.join(root, '.codex'))) throw new Error('Disposable project config layer is not enabled');
     const mcpOverrides = Object.fromEntries(Object.keys(caps.mcp_servers).map(name => [name, { enabled: false }]));
     if (Object.keys(mcpOverrides).length) capabilityDeviations.push('Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.');
-    threadStart = await client.request('thread/start', { cwd: root, approvalPolicy: 'never', sandbox: mode === 'implementation' || runtimeOutputPaths.length ? 'workspace-write' : 'read-only', ephemeral: true, config: { mcp_servers: mcpOverrides } });
+    // Native full-history delegation reads its parent from the host's persisted
+    // thread store. Ephemeral roots cannot supply that history in Codex 0.153.4.
+    threadStart = await client.request('thread/start', { cwd: root, approvalPolicy: 'never', sandbox: mode === 'implementation' || runtimeOutputPaths.length ? 'workspace-write' : 'read-only', ephemeral: false, config: { mcp_servers: mcpOverrides } });
     primaryThread = threadStart.thread?.id;
     if (!primaryThread) throw new Error('thread/start did not return an identifier');
     executionStarted = true;
@@ -205,13 +227,8 @@ export async function collectNativeRun({ trialRoot, workflow, prompt, mode, runt
     await Promise.race([completion, new Promise(resolve => { timer = setTimeout(() => { failure = `Workflow timeout after ${timeoutSeconds}s`; resolve(); }, timeoutSeconds * 1000); })]);
     clearTimeout(timer);
     if (!primaryOutcome && !failure) failure = 'No terminal primary turn observed';
-    const childrenSeen = new Set();
-    for (const event of events) {
-      if (event.method === 'thread/started' && event.params?.thread?.parentThreadId) childrenSeen.add(event.params.thread.id);
-      for (const id of event.params?.item?.receiverThreadIds ?? []) if (id !== primaryThread) childrenSeen.add(id);
-    }
     // Metadata retrieval improves role evidence even when spawn payloads are omitted.
-    for (const threadId of childrenSeen) {
+    for (const threadId of discoveredChildThreads(events, primaryThread)) {
       try { await client.request('thread/read', { threadId, includeTurns: true }); } catch (error) { client.writeEvent({ method: 'tal/observationLimit', params: { threadId, message: error.message } }); }
     }
   } catch (error) { failure ??= error.message; }
@@ -226,9 +243,11 @@ export async function collectNativeRun({ trialRoot, workflow, prompt, mode, runt
     fs.closeSync(stderr); fs.closeSync(eventFile);
   }
   const observation = summarizeEvents(events, root);
+  const afterConfig = configFingerprint(globalConfigPath());
   const report = { schema_version: 1, host: 'codex', workflow, task_mode: mode, argv: [binary, ...args], registration: 'automatic-project-directory', model_override: false,
     primary_thread: primaryThread, preflight, effective_thread_model: threadStart?.model ?? threadStart?.thread?.model ?? null, effective_thread_reasoning: threadStart?.reasoningEffort ?? threadStart?.thread?.reasoningEffort ?? null,
-    execution_started: executionStarted, terminal_turn: observableTrace(primaryOutcome), failure, global_config_unchanged: beforeConfig === fileHash(globalConfigPath()), observed: observation, cleanup, capability_deviations: capabilityDeviations, case_compliant: capabilityDeviations.length === 0,
+    thread_persistence: { requested_ephemeral: false, observed_ephemeral: threadStart?.thread?.ephemeral ?? null, root_path: threadStart?.thread?.path ?? null },
+    execution_started: executionStarted, terminal_turn: observableTrace(primaryOutcome), failure, global_config_unchanged: beforeConfig.sha256 === afterConfig.sha256, global_config_observation: { before: beforeConfig, after: afterConfig, change_attribution: beforeConfig.sha256 === afterConfig.sha256 ? 'not-applicable' : 'unknown; comparison alone does not identify the writer' }, observed: observation, cleanup, capability_deviations: capabilityDeviations, case_compliant: capabilityDeviations.length === 0,
     status: failure ? 'blocked-or-failed' : primaryOutcome?.status === 'completed' ? 'completed-unscored' : 'failed', independent_acceptance: 'pending' };
   saveJson(path.join(evidenceRoot, 'run.json'), report);
   return report;

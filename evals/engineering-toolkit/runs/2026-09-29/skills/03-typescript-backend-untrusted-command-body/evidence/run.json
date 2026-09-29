@@ -1,0 +1,206 @@
+{
+  "format_version": 1,
+  "run_id": "03-typescript-backend-untrusted-command-body",
+  "case_id": "untrusted-command-body",
+  "skill": "typescript-backend",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "81660b9639ea74d9f3f032df8df7e6ae6d2a7b0bdd7dcedc2dd77ef78d479d76",
+  "fixture_tree_sha256": "32d49879bea643217944edd8633ba9e6130e78efa2fb44036341998f7567ad68",
+  "prompt_sha256": "ce7ea57e113106d5de3c30477000c97d9f9414f5e4179ba47c9dda2c29d04bdb",
+  "case_prompt_sha256": "cd44ebbc25ecf71a7e9a1b3b45b15c84932ef24c658985e66f0fb12f9e5af62b",
+  "rubric_sha256": "515df9f133ef62222f7766eb82ce431bcfac81ee4e42ac3a3148c640f0b46158",
+  "freeze_sha256": "005e8de151ab0a0c1d1ffd25124a60ba45c1313e81fc83d279ab8d18188fb589",
+  "runner_tree_sha256": "7d2a2eb5cc606feba760cd996b1d2a6951d6d3162d485541681e84652d86b233",
+  "dependencies_tree_sha256": "e67cea44fd4c5291a367d1124b76916566ede6d4304e88160815aed500563489",
+  "task_mode": "implementation",
+  "execution_mode": "implementation",
+  "activation_expected": "activate",
+  "editable_files": [
+    "project/handler.ts"
+  ],
+  "verification_argv": [
+    "node",
+    "--experimental-strip-types",
+    "verify.mjs"
+  ],
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-astra",
+  "model_settings": {
+    "reasoning_effort": "ultra"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "workspace-write",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex",
+  "host_version": "codex-cli 0.153.4",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 69.579,
+  "token_usage": {
+    "input_tokens": 109585,
+    "cached_input_tokens": 88704,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 1677,
+    "reasoning_output_tokens": 377
+  },
+  "started_at": "2026-09-29T09:36:36.456Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "workspace-write",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/tmp/tal-skill-trials-20260929/03-typescript-backend-untrusted-command-body/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nRepair handler.ts using request.md. Invalid commands must reject with an Error before any ledger call. Preserve the public valid result shape. Run node --experimental-strip-types verify.mjs. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except handler.ts. Run the supplied verification command and report its observed result."
+  ],
+  "effective_prompt_sha256": "ce7ea57e113106d5de3c30477000c97d9f9414f5e4179ba47c9dda2c29d04bdb",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"workspace-write\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 57,
+    "candidate_entries": [
+      {
+        "name": "typescript-backend",
+        "description": "Implement or debug TypeScript services when runtime input validation, asynchronous resource ownership, request cancellation, or database transaction boundaries affect correctness. Use for backend handlers and workers, not browser UI styling or type-only library changes.",
+        "path": "/private/tmp/tal-skill-trials-20260929/03-typescript-backend-untrusted-command-body/workspace/.agents/skills/typescript-backend/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "requested_setting_observations": {
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-09-29T09:37:46.035Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 8,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "baae7f73fff4e3c6db29d3c2664e861d5697a1559c463879bd9804306bf8ea6c",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "2876cda91b6440d8385d1eab0c9c153ec97284f163db96a89825425c339ec130",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "894059286a63a3467ef2ca87b84961c9227681ddb6f9d02bb48b0e83dfe67494",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "128895d7022d92a1647c5407418043d3ec0fe77b91e593f6960bdfa780b91566",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "44f748b9b2ae53e72d54e72d6fec97e999c40f834b168247b5dba6314493d13b",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "7eb21b0b52b688b755ff5e6b79b7afb398e0a89dac7e3bd02e6de2e9b3a3e96a",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "44f748b9b2ae53e72d54e72d6fec97e999c40f834b168247b5dba6314493d13b",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "27e7de949505a8421dd47cc5d87faf30f42081ffcca666a34624836b6b11e17d",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "5e2698ec1a029b8db78870480dfbb9a2014d9b719bc2791a717c9ef7410bb7bb",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "3980e9ccf42ce135156c67021ed3c36881d028ed1e850591998d18fada71369d",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "a643a8bfb6ea7bf174bd945b6f9ed3e27150f8f686c279dac3ccbe022f061fa9",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "7b50f0e9a42f7ae2effe388a5a1b5b67d7d930f11342861f478dac42e25d6983"
+}

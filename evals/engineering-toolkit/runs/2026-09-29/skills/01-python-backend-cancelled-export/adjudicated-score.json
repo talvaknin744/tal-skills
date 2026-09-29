@@ -1,0 +1,60 @@
+{
+  "run_id": "01-python-backend-cancelled-export",
+  "run_evidence_sha256": "97044c29eed83bdd3a90dfed0d519ef24e6e4ff4beaf8790e970fda44b191be6",
+  "final_workspace_tree_sha256": "06ebdd43dd6e7407be05660c64640e573007a8e478a1baf023999dd157a5f8b4",
+  "case_id": "cancelled-export",
+  "candidate_tree_sha256": "f03d5a940d10c358cf5c10bce9ae3382d12a4c75ade9e08127b744f8086e5597",
+  "rubric_sha256": "d4283b40c0a81037876151c1890f5d93fd1b11c8cc9d07f0df0eb845899d1e4a",
+  "reviewer": "/root/books_operations",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "cancel-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/exporter.py",
+        "locator": "lines 1\u20133; evidence/trace.jsonl item_8",
+        "observation": "Removes the shielded detached child and swallowed CancelledError, directly awaiting send_batches inside connection ownership. item_8 explicitly connects shielding to work outliving release; observed checks confirm remote.active false before release."
+      }
+    },
+    {
+      "id": "effect-uncertainty",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/exporter.py",
+        "locator": "lines 1\u20133; evidence/trace.jsonl item_8 (line 17), item_11 (line 23); final-project/verify.py:37\u201349; evidence/checks.json independent-01",
+        "observation": "The implementation passes accepted batches unchanged, propagates cancellation, and adds neither a new operation identity nor a retry. Observable item_8 explicitly avoids retrying an uncertain or committed send. The post-commit check retains exactly batch-17 and both captured candidate execution and independent-01 pass. Reconciliation before retry is conditional here: no retry is requested or implemented, and the fixture supplies no reconciliation API. Inventing a new recovery API or caller retry policy would exceed the permitted exporter.py change. This does not claim remote rollback or prove future caller retry safety."
+      }
+    },
+    {
+      "id": "forced-checks",
+      "score": 1,
+      "evidence": {
+        "artifact": "final-project/verify.py",
+        "locator": "lines 32\u201349 and 59\u201365; evidence/trace.jsonl item_11",
+        "observation": "Executes supplied deterministic cancellation during send and after remote commit, checking one release, stopped work, and no duplicate batch effect. The required cancellation-before-acquisition scenario is neither specified nor executed; the fake Pool yields immediately."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; forbidden_changes=[]; evidence/answer.md",
+        "observation": "Only exporter.py changes; skill, request, and verifier stay unchanged. Captured verifier exits0 and final answer quotes its actual local scenarios without production claims. Host capability limitations remain recorded independently."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/trace.jsonl item_11",
+        "observation": "Candidate command and coordinator independent execution both ran python3 -B verify.py successfully, exit0; matching sealed input hashes and check-workspace changes=[] substantiate the local result."
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "run_id": "11-recovery-validation-restored-order-ledger",
+  "run_evidence_sha256": "c1b178a6d9cf1c2b229f34dd035f14e47527a9dc07bee0f7e2e57b8402a2968c",
+  "final_workspace_tree_sha256": "f65f285cbf7936b3ccbbf71db4ad668334cd505cf379f25d14fad926f438ace5",
+  "case_id": "restored-order-ledger",
+  "candidate_tree_sha256": "cc43220ae7fba9e4d54c94450a808f0e6670428f3ca98560fcab6e9e4bdf1510",
+  "rubric_sha256": "726ac280cdfe5fb56ee8abc6bef4b3c1b7c7bfc6524c3abb4d608bfecb7e8fe5",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "business-reconciliation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5-6; trace.jsonl item_8",
+        "observation": "Refuses reopening because r3 is completed without an effect; checks exact r1/r2/r3 payloads, duplicates and unexpected effects. The local read-only reconciliation observes 2 effects totaling 30 versus 3 totaling 60."
+      }
+    },
+    {
+      "id": "recovery-identity",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5-8",
+        "observation": "Preserves original identity r3, requires exactly one matching effect/completion per accepted identity, repeated replay without duplication, and a disposable target separate from the source. It does not specify atomic effect/completion arbitration or another concrete mechanism that makes the proposed repair/replay safe; that material recovery condition remains unresolved."
+      }
+    },
+    {
+      "id": "measured-bounds",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10-12",
+        "observation": "Limits zero input loss to the supplied independent immutable manifest, distinguishes missing effect from lost accepted input and backup age from RPO, and separates 3-minute import from the incident-to-usable-service RTO, which remains open."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_1-9; evidence/workspace.patch; evidence/run.json input_integrity",
+        "observation": "Only local reads and a read-only Python reconciliation are observed. The workspace diff is empty and input integrity passes. Proposed replay/service checks are not reported as executed. Host capability deviations remain separately recorded; absence of external calls is limited to the captured trace."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "case_id": "three-pod-rollout",
+  "rubric_sha256": "7d288963845760db8db5f53e9c42043d071e093afd0ae1fdf964f286e8927b5b",
+  "rubric": [
+    {
+      "id": "maintenance-accounting",
+      "severity": "critical",
+      "criterion": "Identifies controlled cancellation consuming the same budget on A/B/C; uses safe defer for planned resumable handoff without making arbitrary failures free or only increasing retry count."
+    },
+    {
+      "id": "admission-ownership",
+      "severity": "critical",
+      "criterion": "Stops acquisition including a poll already in flight, preserves valid ownership while checkpointing, and releases only after confirmed durable progress or an explicit uncertain-failure path; readiness/PDB alone are insufficient."
+    },
+    {
+      "id": "bounded-rollout",
+      "severity": "major",
+      "criterion": "Fits checkpoint/cleanup within 90 seconds with margin or explicitly changes rollout/draining design; tests A-to-B-to-C then completion, poison failures, forced kill and failed checkpoint."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+    }
+  ]
+}

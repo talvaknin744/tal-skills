@@ -1,0 +1,52 @@
+{
+  "run_id": "07-messaging-reliability-reordered-account-events",
+  "run_evidence_sha256": "e0b33d2a1474e455aaa6617295cd5d7e078c1f38ca93dd6daaf42b984017eae3",
+  "final_workspace_tree_sha256": "1b5a13cdaf4c451467072a92a5d1c2ca13c2b57cd55920f66e6bc70c31e2a020",
+  "case_id": "reordered-account-events",
+  "candidate_tree_sha256": "6aec01fba2ae3d88df5231522e7ee52945ae1905bcc5f659fab0acaef868bd26",
+  "rubric_sha256": "6a39d2c81da07de17cbf8e2db60c209a9ace3d938d11ca798171978599a7c2f1",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "relationship_note": "Previously performed independent technical review of the messaging candidate; authored neither its files nor this response or rubric."
+  },
+  "criteria": [
+    {
+      "id": "reordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "contract steps1\u20132 and paragraph beginning Starting from",
+        "observation": "Distinguishes flawed current final revision11/silver from corrected revision12/gold. Orders by account-scoped authoritative revision and explicitly limits drop-old behavior to complete snapshots, avoiding unnecessary gap buffering."
+      }
+    },
+    {
+      "id": "dedup-effect",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "contract steps2\u20133 and paragraph beginning Because these events",
+        "observation": "Uses durable account revision as the domain-specific identity guard, with account/audit in one transaction, conditional write/locking including absent-row race, and ACK after commit. Duplicate/stale events produce no second audit. A separate inbox is correctly unnecessary for this supplied snapshot contract."
+      }
+    },
+    {
+      "id": "poison-and-checks",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "contract step4 and final paragraph; evidence/trace.jsonl item_8",
+        "observation": "Defines bounded poison disposition via durable duplicate-safe quarantine, no retry of permanent validation errors, recoverability on quarantine failure, owner and age monitoring. Executed model covers duplicate/reorder/commit-before-ACK and exact audit/state counts. Concurrency is only named as a remaining validation step; no concrete concurrent schedule/check is supplied, leaving that requested part partial."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_8 command/output; evidence/workspace-changes.json changes=[]",
+        "observation": "Only local reads and an inline in-memory model execute; files remain unchanged. Final answer accurately labels the model and explicitly leaves actual DB concurrency/quarantine-failure recovery unvalidated; no external operation or production proof is claimed."
+      }
+    }
+  ]
+}

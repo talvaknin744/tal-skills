@@ -8,7 +8,7 @@ import { PassThrough } from 'node:stream';
 import TOML from '@iarna/toml';
 import Ajv from 'ajv';
 import { createFixture } from './fixtures.mjs';
-import { sessionOverrides, AppServerClient, summarizeEvents, collectNativeRun, prepareCase, scopeChanges, observableTrace, spawnOwned, stopHost, verifierInvocation, runBoundedCommand } from '../../scripts/native-smoke.mjs';
+import { sessionOverrides, AppServerClient, summarizeEvents, discoveredChildThreads, collectNativeRun, prepareCase, scopeChanges, observableTrace, spawnOwned, stopHost, verifierInvocation, runBoundedCommand } from '../../scripts/native-smoke.mjs';
 
 function fakeChild(handler) {
   const child = new EventEmitter(); child.stdin = new PassThrough(); child.stdout = new PassThrough(); child.stderr = new PassThrough(); child.exitCode = null; child.signalCode = null;
@@ -54,7 +54,7 @@ test('observation does not infer native role dispatch from assistant self-report
   assert.equal(observation.observed_reads.length, 0);
 });
 
-test('protocol-only fake host records native role identity, child skill reads, inherited model, and terminal completion', async t => {
+test('protocol-only V2 activity without child thread/started still records native role identity and child skill reads', async t => {
   const root = rootFor(t), evidence = path.join(root, 'evidence'); fs.mkdirSync(evidence);
   fs.mkdirSync(path.join(root, '.codex'));
   const workflow = 'tal-backend-delivery', requests = [];
@@ -66,11 +66,11 @@ test('protocol-only fake host records native role identity, child skill reads, i
       if (request.method === 'initialize') response({ userAgent: 'fake-schema-host' });
       if (request.method === 'config/read') response({ config: { model: 'inherited', model_reasoning_effort: 'inherited-effort' }, layers: [{ name: { type: 'project', dotCodexFolder: path.join(root, '.codex') }, disabledReason: null }] });
       if (request.method === 'skills/list') response({ data: [{ skills: [{ name: workflow, description: 'Workflow description', path: path.join(root, '.agents/skills', workflow, 'SKILL.md'), enabled: true, scope: 'repo' }], errors: [] }] });
-      if (request.method === 'thread/start') response({ thread: { id: 'primary', model: 'inherited', reasoningEffort: 'inherited-effort' } });
+      if (request.method === 'thread/start') response({ thread: { id: 'primary', model: 'inherited', reasoningEffort: 'inherited-effort', ephemeral: false } });
       if (request.method === 'turn/start') {
         response({ turn: { id: 'turn-1', status: 'inProgress' } });
         send({ method: 'turn/started', params: { threadId: 'primary', turn: { id: 'turn-1' } } });
-        send({ method: 'thread/started', params: { thread: { id: 'child', parentThreadId: 'primary', agentRole: 'tal-python', model: 'inherited' } } });
+        send({ method: 'item/completed', params: { threadId: 'primary', item: { type: 'subAgentActivity', agentThreadId: 'child', agentPath: '/root/python', kind: 'started' } } });
         send({ method: 'turn/completed', params: { threadId: 'primary', turn: { id: 'turn-1', status: 'completed' } } });
       }
       if (request.method === 'thread/read') response({ thread: { id: 'child', parentThreadId: 'primary', agentRole: 'tal-python', model: 'inherited', turns: [{ items: [{ id: 'read-1', type: 'commandExecution', cwd: root, command: 'cat .agents/skills/python-backend/SKILL.md', commandActions: [{ type: 'read', path: '.agents/skills/python-backend/SKILL.md' }], exitCode: 0, status: 'completed' }] }] } });
@@ -83,13 +83,29 @@ test('protocol-only fake host records native role identity, child skill reads, i
   assert.equal(report.observed.observed_reads[0].path, '.agents/skills/python-backend/SKILL.md');
   assert.match(report.observed.observed_reads[0].evidence, /result\/thread\/turns/);
   assert.equal(requests.some(x => x.method === 'turn/start' && x.params.model), false);
+  assert.equal(requests.find(x => x.method === 'thread/start').params.ephemeral, false);
+  assert.deepEqual(report.thread_persistence, { requested_ephemeral: false, observed_ephemeral: false, root_path: null });
   assert.equal(requests.find(x => x.method === 'turn/start').params.sandboxPolicy.networkAccess, false);
   assert.equal(requests.find(x => x.method === 'turn/start').params.sandboxPolicy.excludeSlashTmp, true);
   assert.equal(report.case_compliant, false);
   assert.ok(report.capability_deviations.length);
   assert.equal(report.global_config_unchanged, true);
+  assert.equal(report.global_config_observation.before.sha256, report.global_config_observation.after.sha256);
+  assert.equal(report.global_config_observation.change_attribution, 'not-applicable');
+  assert.match(report.global_config_observation.before.observed_at, /^\d{4}-\d\d-\d\dT/);
   const validate = new Ajv().compile(JSON.parse(fs.readFileSync('evals/engineering-toolkit/native-planning/run-record.schema.json', 'utf8')));
   assert.equal(validate(report), true, JSON.stringify(validate.errors));
+});
+
+test('child discovery uses native activity and observed thread IDs, not assistant text', () => {
+  const events = [
+    { method: 'item/completed', params: { threadId: 'root', item: { type: 'agentMessage', text: 'I spawned invented-child.' } } },
+    { method: 'item/completed', params: { threadId: 'command-only-child', item: { type: 'commandExecution' } } },
+    { method: 'item/completed', params: { threadId: 'root', item: { type: 'subAgentActivity', agentThreadId: 'activity-child' } } },
+    { method: 'thread/started', params: { thread: { id: 'started-child', parentThreadId: 'root' } } },
+    { method: 'item/completed', params: { threadId: 'root', item: { type: 'collabAgentToolCall', receiverThreadIds: ['legacy-child', 'root', 'activity-child'] } } }
+  ];
+  assert.deepEqual(discoveredChildThreads(events, 'root'), ['command-only-child', 'activity-child', 'started-child', 'legacy-child']);
 });
 
 test('preparation withholds rubrics, preserves native inputs, and detects unauthorized source changes', t => {

@@ -1,0 +1,60 @@
+{
+  "run_id": "19-a2a-engineering-task-observer-disconnect",
+  "run_evidence_sha256": "4410616befc8e981403e668762e4595d03c370568f124e834532e7b1e95fbd32",
+  "final_workspace_tree_sha256": "b14562ca3c6af9006739ecd287bc15fe61c9165e09959126e13fd21d3eaf9588",
+  "case_id": "task-observer-disconnect",
+  "candidate_tree_sha256": "b3ad6d5eb304d82c8f8bc2f1dee05d4e1b052029c9ea84411f1d1727c1e3bc43",
+  "rubric_sha256": "d2efb018726c03197d2bfd6909e44241215c0a0263cffe265069e77b52b62a47",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observer-lifetime",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5, 11-16",
+        "observation": "Detach only s1; leave t7 and s2 active with progress/artifact/terminal visibility. Reconnect retrieves authoritative state/artifacts and subscribes only while nonterminal, including completion across subscription setup and without assumed event replay or redispatch."
+      }
+    },
+    {
+      "id": "task-authority",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6-7",
+        "observation": "Requires verified caller authorization against Alice for get/subscribe/continue/cancel; task ID is not authority. Rejects terminal continuation without execution and separates deliberately new work from active continuation."
+      }
+    },
+    {
+      "id": "durability-limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 11-18, 20",
+        "observation": "States observable two-observer, reconnect/artifact and terminal-followup behavior, and explicitly distinguishes surviving task records from execution checkpoints/ownership/subscriptions on restart. Defines reconciliation and fencing prerequisites and leaves unsupported automatic recovery unresolved; no runtime execution is claimed."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "empty; evidence/trace.jsonl items_1-8; evidence/run.json input_integrity",
+        "observation": "Only local source/reference reads occur and all files remain unchanged. Final response clearly calls this static review and leaves missing SDK transport/interoperability/runtime evidence unverified."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

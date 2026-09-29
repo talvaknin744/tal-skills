@@ -1,0 +1,60 @@
+{
+  "run_id": "05-go-backend-cancelled-fanout",
+  "run_evidence_sha256": "3bb6c9ad226e52555b542fcf6c6859ad0d6fc4cb86fa0f1949c05a7e83ff384d",
+  "final_workspace_tree_sha256": "fa2ae0648f2771d47d26ddb00aaeaea3c896cb074a097a38b27d7f3cf6f0c090",
+  "case_id": "cancelled-fanout",
+  "candidate_tree_sha256": "f73f9cf61722bf830a92faae0cc90fb6f9c2f24a2ce7697c435590612eaf118b",
+  "rubric_sha256": "d93ed920afdcb8f52c44c51c8785fc72a6b8dfabd459deda4cb73774151e00c5",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "send-lifetime",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/worker.go",
+        "locator": "worker select; evidence/trace.jsonl item_11",
+        "observation": "Identifies blocked sends after cancellation and replaces unconditional sends with a select over result delivery and workerCtx.Done(). Bounded two-worker ownership is preserved."
+      }
+    },
+    {
+      "id": "join-and-errors",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/worker.go",
+        "locator": "cancel(); workers.Wait(); final ctx.Err()/dependencyErr branches",
+        "observation": "Every return follows cancel and WaitGroup completion. Original dependency error is retained unless caller cancellation takes precedence; no channel is closed while senders are active. The supplied client explicitly honors cancellation."
+      }
+    },
+    {
+      "id": "deterministic-check",
+      "score": 1,
+      "evidence": {
+        "artifact": "final-project/verify_test.go",
+        "locator": "gatedClient.Get and TestOwnedWorkersFinishBeforeReturn",
+        "observation": "The executed test deterministically gates client cleanup and checks Fetch cannot return while owned requests remain active, then observes cancellation. It does not gate the distinct required interval after Get has returned and before the worker send; no additional schedule for that interval is specified. Timeout bounds are used only for hangs."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "only project/worker.go changed; evidence/trace.jsonl items17\u201319",
+        "observation": "Only worker.go changes, with protected files hash-checked. Actual go test -race -count=1 succeeds using a temporary cache and downloads disabled; a later command proves artifacts removed. No production validation is claimed. The asserted earlier default-cache failure is not present in captured events, so it is not counted as observed evidence."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/trace.jsonl item_17",
+        "observation": "Captured candidate command exits0 with PASS; independent matching go test -race -count=1 also exits0 with no check-workspace changes. This establishes local fixture verification only."
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+diff --git a/tmp/tal-skill-trials-20260929/03-typescript-backend-untrusted-command-body/before/project/handler.ts b/tmp/tal-skill-trials-20260929/03-typescript-backend-untrusted-command-body/workspace/project/handler.ts
+index 6f3cfd3..4a14ef7 100644
+--- a/tmp/tal-skill-trials-20260929/03-typescript-backend-untrusted-command-body/before/project/handler.ts
++++ b/tmp/tal-skill-trials-20260929/03-typescript-backend-untrusted-command-body/workspace/project/handler.ts
+@@ -1,5 +1,27 @@
+-type Charge = { tenant: string; amountCents: number; requestId: string };
+ export async function charge(req: { auth: { tenant: string }; body: unknown }, ledger: any) {
+-  const command = req.body as Charge;
+-  return ledger.charge(command.tenant, command.requestId, command.amountCents);
++  const command = req.body;
++  if (typeof command !== 'object' || command === null || Array.isArray(command)) {
++    throw new Error('Charge command must be an object');
++  }
++  if ('tenant' in command) {
++    throw new Error('Charge tenant must come from authenticated identity');
++  }
++  if (
++    !('amountCents' in command) ||
++    typeof command.amountCents !== 'number' ||
++    !Number.isInteger(command.amountCents) ||
++    command.amountCents <= 0 ||
++    command.amountCents > 100000
++  ) {
++    throw new Error('amountCents must be a positive integer at most 100000');
++  }
++  if (
++    !('requestId' in command) ||
++    typeof command.requestId !== 'string' ||
++    command.requestId.length === 0 ||
++    command.requestId.length > 80
++  ) {
++    throw new Error('requestId must be a nonempty string at most 80 characters');
++  }
++  return ledger.charge(req.auth.tenant, command.requestId, command.amountCents);
+ }
