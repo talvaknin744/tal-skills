@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-29T12:27:10.530410+00:00",
+  "runtime_pins": {
+    "python": "3.14.3",
+    "go": "go1.27.1",
+    "node": "25.9.0"
+  },
+  "platform": "macOS-14.2-arm64-arm-64bit-Mach-O",
+  "source_sha256": {
+    "README.md": "a3b002310bb97b44d5f6de1cc8c2c75bf4269e23b20d8afc651d6e0b2fef5cc8",
+    "verify.py": "2d958d2431510e2e57a6a17ae25004347f3e50e200e1b74296bb796865dac845",
+    "python/probe.py": "67caf7095f9737e34bd3480816b1ba187cff543dba6e78a296e6bcb0b2db1a75",
+    "go/main.go": "5a198324cc844e83a9d3b15e0c539335e4cb204f74e1517cf93b8a879766aefd",
+    "node/probe.mjs": "6a723a6d7dd348de131cbd914684e5d52b21bcebfa80a718731be4840754440c"
+  },
+  "status": "pass",
+  "runs": [
+    {
+      "language": "python",
+      "execution": {
+        "exit_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 0.078,
+        "stdout": "{\"language\": \"python\", \"runtime\": \"3.14.3\", \"implementation\": \"CPython\", \"optimization_level\": 0, \"scenarios\": [{\"id\": \"semaphore-grant-cancel-before-resume\", \"status\": \"pass\", \"evidence\": {\"canceled_waiter_accepted\": false, \"successor_acquired\": true, \"third_waiter_blocked_while_successor_held\": true, \"final_single_permit_recovery\": true, \"private_semaphore_fields_used\": false, \"pending_tasks_after_cleanup\": 0}}, {\"id\": \"shielded-acquisition-abandoned-grant\", \"status\": \"observed-unsafe\", \"evidence\": {\"observer_canceled\": true, \"shielded_acquisition_succeeded\": true, \"next_borrower_blocked_until_harness_repair\": true, \"harness_repaid_abandoned_grant\": true, \"pending_tasks_after_cleanup\": 0}}], \"limitations\": [\"Controlled CPython event-loop schedule; not a fairness guarantee for every implementation.\", \"No private semaphore capacity or waiter fields are used as an oracle.\", \"Unsafe shield control is repaired and joined by the harness.\"]}\n",
+        "stderr": "",
+        "timeout_cleanup": null
+      },
+      "probe": {
+        "language": "python",
+        "runtime": "3.14.3",
+        "implementation": "CPython",
+        "optimization_level": 0,
+        "scenarios": [
+          {
+            "id": "semaphore-grant-cancel-before-resume",
+            "status": "pass",
+            "evidence": {
+              "canceled_waiter_accepted": false,
+              "successor_acquired": true,
+              "third_waiter_blocked_while_successor_held": true,
+              "final_single_permit_recovery": true,
+              "private_semaphore_fields_used": false,
+              "pending_tasks_after_cleanup": 0
+            }
+          },
+          {
+            "id": "shielded-acquisition-abandoned-grant",
+            "status": "observed-unsafe",
+            "evidence": {
+              "observer_canceled": true,
+              "shielded_acquisition_succeeded": true,
+              "next_borrower_blocked_until_harness_repair": true,
+              "harness_repaid_abandoned_grant": true,
+              "pending_tasks_after_cleanup": 0
+            }
+          }
+        ],
+        "limitations": [
+          "Controlled CPython event-loop schedule; not a fairness guarantee for every implementation.",
+          "No private semaphore capacity or waiter fields are used as an oracle.",
+          "Unsafe shield control is repaired and joined by the harness."
+        ]
+      }
+    },
+    {
+      "language": "go",
+      "execution": {
+        "exit_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 1.241,
+        "stdout": "{\"language\":\"go\",\"limitations\":[\"The select case is deterministic: cancellation is ready and the unbuffered send cannot proceed.\",\"The effect is an in-process counter, not a remote effect or transaction.\",\"No claim that a precheck excludes cancellation arriving after it.\"],\"platform\":\"darwin/arm64\",\"runtime\":\"go1.27.1\",\"scenarios\":[{\"id\":\"select-operand-before-canceled-case\",\"status\":\"observed-unsafe\",\"evidence\":{\"effectful_operand_calls\":1,\"receivers\":0,\"selected\":\"cancellation\"}},{\"id\":\"precheck-known-cancellation\",\"status\":\"pass\",\"evidence\":{\"effect_starts\":0,\"error_is_canceled\":true}},{\"id\":\"precheck-not-an-effect-fence\",\"status\":\"observed-unsafe\",\"evidence\":{\"cancel_after_check_before_effect\":true,\"effect_starts\":1,\"worker_joined\":true}}]}\n",
+        "stderr": "",
+        "timeout_cleanup": null
+      },
+      "probe": {
+        "language": "go",
+        "limitations": [
+          "The select case is deterministic: cancellation is ready and the unbuffered send cannot proceed.",
+          "The effect is an in-process counter, not a remote effect or transaction.",
+          "No claim that a precheck excludes cancellation arriving after it."
+        ],
+        "platform": "darwin/arm64",
+        "runtime": "go1.27.1",
+        "scenarios": [
+          {
+            "id": "select-operand-before-canceled-case",
+            "status": "observed-unsafe",
+            "evidence": {
+              "effectful_operand_calls": 1,
+              "receivers": 0,
+              "selected": "cancellation"
+            }
+          },
+          {
+            "id": "precheck-known-cancellation",
+            "status": "pass",
+            "evidence": {
+              "effect_starts": 0,
+              "error_is_canceled": true
+            }
+          },
+          {
+            "id": "precheck-not-an-effect-fence",
+            "status": "observed-unsafe",
+            "evidence": {
+              "cancel_after_check_before_effect": true,
+              "effect_starts": 1,
+              "worker_joined": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "language": "node",
+      "execution": {
+        "exit_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 0.07,
+        "stdout": "{\"language\":\"node\",\"runtime\":\"25.9.0\",\"scenarios\":[{\"id\":\"finished-cancels-observation-only\",\"status\":\"observed-unsafe\",\"evidence\":{\"observer_error\":\"AbortError\",\"stream_destroyed_when_observer_rejected\":false,\"stream_delivered_data_after_observer_cancellation\":true,\"owner_subsequently_closed_stream\":true}},{\"id\":\"pipeline-abort-closes-owned-streams\",\"status\":\"pass\",\"evidence\":{\"read_demand_observed_before_abort\":true,\"pipeline_error\":\"AbortError\",\"source_destroyed_and_closed\":true,\"destination_destroyed_and_closed\":true,\"pipeline_settlement_joined\":true}}],\"limitations\":[\"finished() is not unsafe; the unsafe control is treating observer cancellation as stopped work.\",\"Only built-in in-memory Node streams are exercised; no HTTP sockets, external resources, or custom async generators.\",\"No backpressure, throughput, memory bound, or arbitrary third-party teardown claim.\"]}\n",
+        "stderr": "",
+        "timeout_cleanup": null
+      },
+      "probe": {
+        "language": "node",
+        "runtime": "25.9.0",
+        "scenarios": [
+          {
+            "id": "finished-cancels-observation-only",
+            "status": "observed-unsafe",
+            "evidence": {
+              "observer_error": "AbortError",
+              "stream_destroyed_when_observer_rejected": false,
+              "stream_delivered_data_after_observer_cancellation": true,
+              "owner_subsequently_closed_stream": true
+            }
+          },
+          {
+            "id": "pipeline-abort-closes-owned-streams",
+            "status": "pass",
+            "evidence": {
+              "read_demand_observed_before_abort": true,
+              "pipeline_error": "AbortError",
+              "source_destroyed_and_closed": true,
+              "destination_destroyed_and_closed": true,
+              "pipeline_settlement_joined": true
+            }
+          }
+        ],
+        "limitations": [
+          "finished() is not unsafe; the unsafe control is treating observer cancellation as stopped work.",
+          "Only built-in in-memory Node streams are exercised; no HTTP sockets, external resources, or custom async generators.",
+          "No backpressure, throughput, memory bound, or arbitrary third-party teardown claim."
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Seven controlled in-process observations, not benchmarks or all-schedule proofs.",
+    "Observed-unsafe controls pass only when the specified unsafe assumption is disproved and harness cleanup finishes.",
+    "No network, package installation, database, remote effect, HTTP socket, or backpressure experiment.",
+    "POSIX launcher uses process-group deadlines; probe cleanup is separately observed."
+  ],
+  "observed_runtimes": {
+    "python": "3.14.3",
+    "node": "25.9.0",
+    "go": "go1.27.1"
+  },
+  "go_build": {
+    "flags": [
+      "-race"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_seconds": 0.525,
+    "stdout": "",
+    "stderr": "",
+    "timeout_cleanup": null
+  },
+  "counts": {
+    "pass": 3,
+    "observed-unsafe": 4,
+    "fail": 0
+  },
+  "completed_at": "2026-09-29T12:27:12.479020+00:00"
+}

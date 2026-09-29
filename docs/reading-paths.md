@@ -26,6 +26,7 @@ Access and reading scope:
 - [Quality and testing books](research/engineering-toolkit/books-quality.md).
 - [Earlier book-derived skills and editions](book-skills.md).
 - [Sixty-publisher survey and selected deep reads](research/engineering-toolkit/README.md).
+- [Seventeen additional articles](research/engineering-toolkit/extensions/README.md): protected task retirement, snapshot/delete handoff, regional replay, stream ownership, recovery inputs and composed tool authority.
 
 The survey is curated coverage, not a popularity ranking. Practices were adopted
 with a trigger, failure mechanism, applicability limit, counterexample and
