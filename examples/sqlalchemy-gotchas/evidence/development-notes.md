@@ -1,0 +1,9 @@
+# Development failures retained
+
+The first run resolved the virtual environment's interpreter symlink, selecting the base interpreter and failing to import FastAPI. The container was removed. The launcher now preserves the venv executable path and verifies that Python reports an isolated environment. The original failed report is retained alongside the corrected run; it is not counted as successful evidence.
+
+The second run passed all eight case oracles and returned all leases/tasks, but the harness rejected an asyncio debug slow-callback timing notice during setup. That was an inappropriate load-dependent criterion for this correctness fixture. The launcher now preserves and classifies that exact notice separately; every other nonempty stderr line still fails verification. No case result, resource warning, unawaited-coroutine warning, or query error was suppressed. The failed report and its confirmed container removal remain recorded.
+
+Final independent verification passed all eight cases under an optimized parent, with an unoptimized probe, 25 worker checkouts/checkins, zero pending tasks, zero remaining database clients, and confirmed removal of the generated container. A synthetic probe-process failure with exit 73 and a RuntimeWarning correctly failed verification and still removed its own container. A TERM-ignoring descendant was killed in the timeout regression; a macOS group-observation error remained explicitly unconfirmed. The [independent review](../../../docs/research/engineering-toolkit/extensions/review-sqlalchemy-gotchas.md) has no remaining actionable findings.
+
+Author report SHA-256: `fa79664957d392ab19d1673a1c0a382a50a64210fdf9a3585f186bad269109f4`. Independent report SHA-256: `718f2a532a636537bd7745125a0015d37657304ceff132998fb8f8455d6fbded`. Both reports match the same five source hashes.

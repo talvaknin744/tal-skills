@@ -18,6 +18,10 @@ The main session coordinates; installing a roster does not require using it all.
 | Build or review an A2A peer or task lifecycle | `tal-a2a-integration` | A2A |
 | Remove evidenced maintenance burden while preserving behavior | `tal-cleanup-review` | Cleanup |
 
+For retirement of a supported library, API, configuration option, or internal
+tool, use [technical-deprecation](../skills/engineering/technical-deprecation/SKILL.md)
+as a standalone skill to establish consumer transitions and removal gates.
+
 A spelling fix or local pure function does not need the complete delivery path.
 Workflows specify a short path, entry conditions and stopping conditions. The
 [shared handoff](../workflows/_shared/handoff.md) carries objective, scope, files,
@@ -37,7 +41,8 @@ node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex
 
 Use `--host claude` or `--host both` for the other host. Repeat `--workflow` or
 `--agent` to select more entrypoints. With no explicit selection, a first install
-selects all; a later install retains its selection. Explicit selections describe
+selects all 15 agents and eight workflows, then their dependencies (currently
+19 skills). A later install retains its selection. Explicit selections describe
 the desired set. `--json` gives machine-readable plans and results. Inspect the
 plan before changing selections or removing a host.
 
@@ -58,8 +63,15 @@ Installation requires a filesystem supporting same-filesystem hard links; the
 installer probes this before publishing managed files. Windows path rules have
 structural tests; a native Windows installation run is separate evidence.
 
-Ordinary skills remain independently installable through the skills CLI or by
-copying a complete `skills/<concern>/<name>/` package. Generated workflow
+Ordinary skills remain independently installable through the skills CLI:
+
+```sh
+npx skills@latest add talvaknin744/tal-skills --skill technical-deprecation
+```
+
+Alternatively, copy the complete `skills/engineering/technical-deprecation/`
+package into the project's `.agents/skills/` for Codex or `.claude/skills/` for
+Claude. Keep its references, license, and metadata together. Generated workflow
 entrypoints are templates in this repository and become `SKILL.md` only through
 the toolkit installer, which supplies their required documents and roles.
 
@@ -87,6 +99,14 @@ or another installed name for a bounded assignment. Roles are named subagents;
 workflow entrypoints are skills. The hosts decide whether native delegation is
 available. A child merely reading a role prompt is a fallback, and must be
 reported separately from native loading.
+
+For the independently installed retirement skill, invoke `$technical-deprecation`
+in Codex or `/technical-deprecation` in Claude. For example:
+
+```text
+Use $technical-deprecation to plan retiring this configuration option.
+Account for infrequent and offline clients, replacement compatibility, and recovery.
+```
 
 ## Completion and limitations
 
