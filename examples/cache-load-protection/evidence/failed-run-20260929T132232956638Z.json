@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-29T13:22:32.291026+00:00",
+  "status": "fail",
+  "pins": {
+    "schema_version": 1,
+    "python": "3.14.3",
+    "python_packages": [],
+    "redis_version": "8.10.2",
+    "redis_image": "redis@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+    "redis_image_platform": "linux/arm64",
+    "bloom_module_path": "/usr/local/lib/redis/modules/redisbloom.so",
+    "bloom_version_policy": "Record MODULE LIST from the immutable image; require BF.RESERVE and BF.EXISTS at runtime.",
+    "sqlite_version_policy": "Bundled Python sqlite3; observed version recorded in each report."
+  },
+  "source_sha256": {
+    ".gitignore": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
+    "README.md": "cbd0a8cd4ec05b1f53cf63084a0620dfae334eef6f9e9a0c580df7cbd65f8292",
+    "dependencies.lock.json": "fa0b579de1b0fa22f112082b95fc7087b43d83b5a2dfc7b5006a93282d1c0165",
+    "redis_client.py": "dde3c93314bcb42518f4562ab8b306ca50b05b62fb972a313c5f40c13f98d2ff",
+    "probes.py": "24953c4280b18127bc6ca282a1f0d96cd32cc4f56ccdaca096848e7f5bff81ef",
+    "verify.py": "cb4aae3c64b25dc7889292687e2cc9998fbdd652aa080dbb1dae8812d8107a26"
+  },
+  "scenarios": [],
+  "runtime": {
+    "python": "3.14.3",
+    "sqlite": "3.53.2",
+    "platform": "macOS-14.2-arm64-arm-64bit-Mach-O"
+  },
+  "errors": [
+    "KeyError: '6379/tcp'"
+  ],
+  "container_failure_logs": "Starting Redis Server\n1:C 29 Sep 2026 13:22:32.764 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo\n1:C 29 Sep 2026 13:22:32.764 * Redis version=8.10.2, bits=64, commit=00000000, modified=1, pid=1, just started\n1:C 29 Sep 2026 13:22:32.764 * Configuration loaded\n1:M 29 Sep 2026 13:22:32.764 * monotonic clock: ARM CNTVCT @ 24 ticks/us\n1:M 29 Sep 2026 13:22:32.765 * Running mode=standalone, port=6379.\n1:M 29 Sep 2026 13:22:32.765 * <bf> RedisBloom version 8.10.1 (Git=unknown)\n1:M 29 Sep 2026 13:22:32.765 * <bf> Registering configuration options: [\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ bf-error-rate       :      0.01 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ bf-initial-size     :       100 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ bf-expansion-factor :         2 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ cf-bucket-size      :         2 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ cf-initial-size     :      1024 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ cf-max-iterations   :        20 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ cf-expansion-factor :         1 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> \t{ cf-max-expansions   :        32 }\n1:M 29 Sep 2026 13:22:32.766 * <bf> ]\n1:M 29 Sep 2026 13:22:32.766 * Module 'bf' loaded from /usr/local/lib/redis/modules/redisbloom.so\n1:M 29 Sep 2026 13:22:32.766 # Module /usr/local/lib/redis/modules//redisbloom.so initialization failed. Module not loaded\n1:M 29 Sep 2026 13:22:32.766 # Can't load module from /usr/local/lib/redis/modules//redisbloom.so: server aborting",
+  "container_failure_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-09-29T13:22:32.716328513Z",
+    "FinishedAt": "2026-09-29T13:22:32.768104221Z"
+  },
+  "cleanup": {
+    "owner_label": "io.tal-skills.cache-load-protection-run",
+    "owned_ids": [
+      "b4f902792f69066b0c7cbb22a2353633da05e80cbdfd558fd88f2a269fa28165"
+    ],
+    "removed_ids": [
+      "b4f902792f69066b0c7cbb22a2353633da05e80cbdfd558fd88f2a269fa28165"
+    ],
+    "errors": [],
+    "remaining_ids": [],
+    "complete": true
+  },
+  "completed_at": "2026-09-29T13:22:32.956584+00:00",
+  "counts": {
+    "scenarios": 0,
+    "passed": 0
+  }
+}

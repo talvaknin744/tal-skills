@@ -1,0 +1,82 @@
+{
+  "format_version": 1,
+  "kind": "fixture_author_calibration_not_candidate_scoring",
+  "python_version": "3.14.3",
+  "private-format-helper": {
+    "baseline": {
+      "argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": "{\"checks\": 2, \"failures\": [{\"check\": \"check_removal\", \"error\": \"unused private helper remains\"}], \"passed\": 1}\n",
+      "stderr": ""
+    },
+    "scratch_positive_control": {
+      "argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"checks\": 2, \"failures\": [], \"passed\": 2}\n",
+      "stderr": ""
+    },
+    "control_source": "\"\"\"Small local label formatter.\"\"\"\n__all__ = [\"format_label\"]\n\n\ndef format_label(prefix, value):\n    if not isinstance(prefix, str) or not prefix.strip():\n        raise ValueError(\"prefix must be a nonempty string\")\n    if not isinstance(value, int) or isinstance(value, bool):\n        raise ValueError(\"value must be an integer\")\n    return f\"{prefix.strip()}: {value:,}\"\n",
+    "control_sha256": "4451c8d030af0edf5e6244583e6d2a66750dec19c09daa5f2e8d5cba89d4362e",
+    "optimization_refusal": {
+      "environment": {
+        "PYTHONOPTIMIZE": "1"
+      },
+      "argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/idanvaknin/Documents/ChatGPT/skills/evals/technical-deprecation/fixtures/private-format-helper/verify.py\", line 3, in <module>\n    raise RuntimeError(\"Acceptance checks require assertions; disable Python optimization\")\nRuntimeError: Acceptance checks require assertions; disable Python optimization\n"
+    },
+    "source_files": {
+      "labels.py": "dfd5a8c60372368947b204f6e07b641b4b65edcc8e6cd16557555246674e2877",
+      "request.md": "31cb3a2b2bb9d7f17df9ffb5ca8ac6fdae63b3523824be7bb784f9984eec0f42",
+      "verify.py": "db99c75697dbbc9bc4ee2b7ea6c8a3a00fe40e03318436732483f03c405026be"
+    }
+  },
+  "limits": [
+    "No candidate model runs or self-grading.",
+    "Local Python verifier and synthetic review contracts only; no external consumers, messages, registries, infrastructure or network."
+  ],
+  "review_fact_checks": {
+    "periodic-export-client": {
+      "checks": [
+        "Monthly August31 execution predates September8\u201315 telemetry; next scheduled execution is September30.",
+        "The monthly job uses an archived image excluded from the literal current-branch search.",
+        "Supplied immutable snapshot contains issued inv-1 and voided inv-2; v2 sample contains only inv-1 with no snapshot identifier.",
+        "Roles, unassigned migration tasks, proposed date and approval status are represented separately."
+      ],
+      "source_files": {
+        "contract.md": "179c2d10210bcb052473ea1a3cd8178830c39862fddb33f7555edd4fb9d74c69",
+        "inventory.json": "6b46340b7d8405c1d0cd088fb9f75eb108217bf9b6a9e791322691bdfc381b92",
+        "proposal.md": "617f509c6344500c7cfb6cda63e5cc4abcd687eb2809c31ec1a943a2cabb00a9",
+        "request.md": "be3c87e752d34b2afcb3f2652649ea33f4935ca7acb0e4bdd052d684cd2b0c6a"
+      }
+    },
+    "config-channel-migration": {
+      "checks": [
+        "Cohort counts total120; central cohorts total108 and local administration12.",
+        "Enabled and limit sample distributions each total70; inherited-policy counts match omitted-field counts.",
+        "Last-contact September4 to next-contact October19 is45days; planned October15 retirement precedes that reconnect.",
+        "Contract distinguishes old-parser rejection, field-presence precedence, false/zero/unset behavior and independently delivered binary/configuration.",
+        "Proposal conflicts are intentional review material; supported-release commitment runs through December31."
+      ],
+      "source_files": {
+        "contract.md": "1c5b27f0c0cab456b7fad302191b4d79161935cb2063e433c8f61449881adbba",
+        "inventory.json": "34eea89806bb6d000eb8ab69e4d307720076d71c1a179ecfe13b21def84fb8f2",
+        "proposal.md": "33a8f83721c45a277198663b97b43b5719b9d0eca506f7e568dbe695715bb521",
+        "request.md": "d008d96a6e75d9cf10305484aa2742de04ee6d4c08d4e350d77240353e6979d4"
+      }
+    }
+  }
+}

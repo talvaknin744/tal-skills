@@ -36,3 +36,5 @@ with a trigger, failure mechanism, applicability limit, counterexample and
 verification. Company scale and a successful case study do not make an approach
 appropriate for every service. Complete legally accessible author/publisher text
 was sought where useful; excerpts and inaccessible material remain labeled.
+
+For cache design, start with [authority, capacity, and retention](../skills/engineering/microservice-operations/references/cache-design.md), then select [load protection](../skills/engineering/microservice-operations/references/cache-load-protection.md) or [cache consistency](../skills/engineering/concurrency-correctness/references/cache-coherence.md). Redis details illustrate specific contracts; they do not require a Redis-specific skill. The [local failure examples](../examples/cache-load-protection/README.md) distinguish actual Redis observations from virtual-time and in-process models.

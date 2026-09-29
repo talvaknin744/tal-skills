@@ -1,0 +1,66 @@
+{
+  "run_id": "03-nontrigger",
+  "run_evidence_sha256": "83f883cd5bcbfe89e9fc54cd7305d641f88d4facb65cd49e1120a53bb0552426",
+  "final_workspace_tree_sha256": "4efe1cd4a92562afe86f26089aa4bcae5ae09079f5a1e4eade987520ae37ffad",
+  "case_id": "private-format-helper",
+  "candidate_tree_sha256": "5db6626f69f2363865d6cf7d47687002f6d804af4772e5d5185a46efa84f1eea",
+  "rubric_sha256": "9810e334b0ee52ecc33866a2456fc0d705bef8e10e061ade1d97d86fb46ed7d6",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 5,9,11,13,15\u201316; evidence/discovery.json",
+        "observation": "Trace shows bounded request/source inspection, helper removal and local verification, with no technical-deprecation instruction body emitted to model context and no consumer-retirement process. Lines 9 and 15 read skill bytes only to compute and print hashes for file-integrity checks; these opaque hash operations are not semantic instruction loading. Discovery exposes name/description metadata only. No body activation is observed in this trial; this does not prove absence of unrecorded loading or general selection accuracy."
+      }
+    },
+    {
+      "id": "bounded-removal",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "single labels.py hunk; final-project/labels.py lines 1\u201311",
+        "observation": "The sole patch removes _old_label and its separating blank lines. format_label, its validation/formatting and __all__ are byte-preserved. No replacement shim, grace period, notices, owner discovery or unrelated refactor was introduced."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[0] independent-01; evidence/checks/independent-01.stdout.txt; evidence/trace.jsonl:13",
+        "observation": "Candidate actually ran python3 -B verify.py and passed both protected checks. Coordinator independent-01 reran the unchanged verifier against the final bound input and also passed 2/2, exit 0 without timeout or check-workspace changes. Source inspection confirms assertions cover exported formatting/validation outputs and both AST/runtime helper absence. Independent stdout hashes and final labels.py hash were rechecked by the scorer; no extra verifier execution by the scorer is claimed."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; workspace_after; evidence/answer.md",
+        "observation": "Only project/labels.py changed (final SHA256 4451c8d030af0edf5e6244583e6d2a66750dec19c09daa5f2e8d5cba89d4362e). Scorer matched all nine final workspace hashes, packaged/raw evidence and final-project files, and independently confirmed request.md and verify.py unchanged. Final reports only the actual local helper removal and 2/2 result; no external consumer or production validation is implied. Case isolation remains unproven, separately recorded rather than invented as an observed scope violation."
+      }
+    }
+  ],
+  "case_compliant": false,
+  "task_outcome": "pass",
+  "observed_scope_breach": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "critical_failures": [],
+  "verification_limits": [
+    "Executed: candidate protected verifier 2/2 and coordinator independent verifier 2/2, both local synthetic Python checks.",
+    "The scorer reviewed existing independently executed evidence and source/hash bindings; no additional test execution or external validation is claimed.",
+    "Passing behavioral criteria do not establish enforced confinement or causal skill uplift."
+  ]
+}

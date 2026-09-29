@@ -1,0 +1,65 @@
+{
+  "run_id": "06-nontrigger-r2",
+  "run_evidence_sha256": "0e2f6add56b834cfcd2c71fcedec0342770a6e494a3833b78eb75ba6b2d6143e",
+  "final_workspace_tree_sha256": "dc8a3a685110f34c76f4f4b3b8aee325ccacbc64b2115174f42d44aee33694ce",
+  "case_id": "private-format-helper",
+  "candidate_tree_sha256": "3e0225feb31808e80836b2fecc9b50dbb637a005bfff2a6309ee162dbf1712e3",
+  "rubric_sha256": "9810e334b0ee52ecc33866a2456fc0d705bef8e10e061ade1d97d86fb46ed7d6",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed events 5\u201320",
+        "observation": "Saved trace reads request/source/verifier, performs exactly the private-helper cleanup and local checks. No technical-deprecation body/reference loading or consumer-retirement work appears; inherited catalog metadata does not establish activation. Absence is evidence for this captured trial only."
+      }
+    },
+    {
+      "id": "bounded-removal",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "single labels.py hunk",
+        "observation": "Only _old_label and adjacent blank lines are removed. format_label and __all__ are preserved, with no shim, grace period, ownership process or unrelated refactor."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "line17; evidence/checks.json checks[0]; checks/independent-01.stdout.txt",
+        "observation": "Actual candidate python3 -B verify.py passes both checks; independently executed coordinator verifier also passes2/2 exit0 without timeout or workspace changes. Protected checks cover formatter outputs/validation/export and AST/runtime helper absence. Scorer rechecked source/evidence hashes; no additional scorer execution is claimed."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes; workspace_after; evidence/trace.jsonl:19\u201320",
+        "observation": "All9 final workspace hashes match. Only labels.py changed; original/final request and verifier match, and packaged evidence equals raw trial. Final reports only local removal and passing2/2. No external action or production validation claimed; confinement gaps remain separately recorded."
+      }
+    }
+  ],
+  "case_compliant": false,
+  "task_outcome": "pass",
+  "observed_scope_breach": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "critical_failures": [],
+  "verification_limits": [
+    "Candidate and coordinator independent verifier each executed2/2 local protected checks; no external validation.",
+    "Behavioral pass does not establish input/tool confinement or skill uplift."
+  ]
+}
