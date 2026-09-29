@@ -1,0 +1,5 @@
+archive(manifest):
+    for object in manifest:
+        bytes = await source.download(object.key)
+        await destination.put(object.key, bytes, object.checksum)
+    return { copied: manifest.length }

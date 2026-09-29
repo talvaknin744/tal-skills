@@ -1,0 +1,1128 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-29",
+  "index_url": "https://temporal.io/in-use",
+  "inventory_method": "All 70 resource entries in the public index page's serialized pagination data, cross-checked against canonical URLs in Temporal's public sitemap. Logos and unrelated resource-library entries are excluded.",
+  "index_html_sha256": "40269031f37494904d2f56ffc3fc13f61e80157c4310b1da46119b576242a07f",
+  "evidence_policy": "Observations paraphrase published text. Transferable lessons are engineering inferences, not claims of customer implementation. Video summaries are not full transcripts or watched videos; inaccessible transcripts remain an explicit limitation.",
+  "stories": [
+    {
+      "index": 1,
+      "title": "How Jota runs banking and AI workflows on Temporal",
+      "url": "https://temporal.io/resources/case-studies/jota",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page; no video was required.",
+      "observed_pattern": "Jota separates conversation orchestration from banking operations and returns actual operation results to the agent. It persists waits for customer confirmation and correlates conversations with banking execution.",
+      "transferable_lesson": "Inference: bind each requested tool action to a durable operation and feed its confirmed or explicitly unknown outcome back to the model. Preserve approval identity across retries and waits.",
+      "bug_to_prevent": "The assistant announces a transfer succeeded before the banking operation completes, or a repeated confirmation creates another transfer.",
+      "limitations": "The story does not establish exactly-once external effects. Its recommendation to use local Activities for database access is workload-specific, not a universal rule. Worker-versioning adoption is described as future work.",
+      "source_type": "Case Study",
+      "source_text_sha256": "c1faf923c982978b9905f0d63ee4358ad11331120ffa07855329bd2023b2d84f",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "How Strada built durable AI insurance agents with Temporal",
+      "url": "https://temporal.io/resources/case-studies/strada",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text. The web reader failed for this URL; an independent HTTP request returned 200 and confirmed the expected article content.",
+      "observed_pattern": "Strada isolates attachment processing, bounds its reasoning loop, persists responses before delivery, and serializes reasoning over overlapping customer context. Activities have different retry policies by failure class; its long-lived coordinator uses Continue-As-New.",
+      "transferable_lesson": "Inference: choose failure boundaries deliberately, serialize only the shared decision scope, and carry pending work across history rollover. Durable delivery records still need a retry-safe send protocol.",
+      "bug_to_prevent": "Concurrent agents issue contradictory replies; one failed attachment restarts successful work; coordinator rollover loses queued requests; a retried send duplicates email.",
+      "limitations": "No implementation or replay histories are supplied. Persist-before-send alone cannot prove duplicate-free delivery, and serial orchestration can become a throughput bottleneck.",
+      "source_type": "Case Study",
+      "source_text_sha256": "961973381023fb31bdfb186a267e5b7a5aeb005c93905bb151addeda61ac0d3f",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "Scaling AI-powered education with durable workflows",
+      "url": "https://temporal.io/resources/case-studies/maria-educacao",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page; architecture diagrams were not needed for these textual observations.",
+      "observed_pattern": "Maria Educação uses domain pipelines with per-step Activities, child-workflow fan-out, concurrency caps, dedicated workers for heavy processing, and heartbeats for external job polling. Some agent reasoning is a LangGraph graph inside one Activity.",
+      "transferable_lesson": "Inference: align durable checkpoints with costly retry boundaries, cap aggregate provider demand, and separate resource-heavy work. Identify which inner graph steps lack their own durable checkpoint.",
+      "bug_to_prevent": "Retrying one graph Activity unexpectedly repeats successful model calls, unbounded fan-out exhausts provider quotas, or missing heartbeats delay recovery from a dead polling worker.",
+      "limitations": "The narrative alternates between one Activity per model call and whole graphs inside Activities. Its no-repeat claims do not address completion-recording failures or internal graph checkpoint semantics.",
+      "source_type": "Case Study",
+      "source_text_sha256": "a499b7b3be7f07d5197c25faec9c310343a268ea1ed31d2ed7229ac93ad8000d",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 4,
+      "title": "How ShareChat rebuilt subscription billing on Temporal and reached 99.9% reliability",
+      "url": "https://temporal.io/resources/case-studies/sharechat",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page; regulatory claims are treated as historical customer context, not current legal guidance.",
+      "observed_pattern": "ShareChat replaced independently scheduled notification and collection jobs with ordered billing-cycle workflows. A cycle captures configuration once, uses durable timing and retry limits, and supports versioned evolution. Migration proceeded by product with metric checks.",
+      "transferable_lesson": "Inference: encode prerequisite confirmation and deadlines explicitly; snapshot business configuration per logical cycle; evolve active runs compatibly and migrate with measurable rollback criteria.",
+      "bug_to_prevent": "A collection runs before its notification is confirmed, live configuration alters an active cycle, or old and new schedulers both bill a subscription.",
+      "limitations": "Do not copy the story's regulatory timing or retry numbers without current verification. Infinite notification retries and recursively created cycles require explicit cancellation, lifetime, and history bounds.",
+      "source_type": "Case Study",
+      "source_text_sha256": "449697e1ba4103bca9c15d79fd82a6f3df3ff0bba3f23d7983f40c3918b96ad8",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 5,
+      "title": "How SMILe uses Temporal to orchestrate multi-channel logistics Workflows",
+      "url": "https://temporal.io/resources/case-studies/shree-maruti-integrated-logistic-limited-smile",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page.",
+      "observed_pattern": "SMILe models booking lifecycles as workflows, keeps routing and sequencing in orchestration, and places partner integrations in Activities. Asynchronous partner updates influence the ongoing process.",
+      "transferable_lesson": "Inference: record routing inputs through replay-safe boundaries and correlate each external update to the correct booking and operation. Give integration failures their own recovery policy.",
+      "bug_to_prevent": "Replay reads fresh partner availability and chooses a different route, or an old delivery event mutates the wrong booking state.",
+      "limitations": "The story gives no concrete event-ordering, deduplication, or provider-idempotency mechanism. Durable workflow state alone does not make integrations safe.",
+      "source_type": "Case Study",
+      "source_text_sha256": "8829f872a02e04627581c5dd38b8206da9eefff5c7692504852af6a3b9dbbb1d",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 6,
+      "title": "Mews: Hospitality, payments, and durability on a global scale",
+      "url": "https://temporal.io/resources/case-studies/mews",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page.",
+      "observed_pattern": "Mews extracted variable-duration bill closing into an independent workflow, models refund settlement waits with a cutoff, and coordinates dispute and onboarding events with Signals. It reports using patching and replay tests when changing webhook workflows.",
+      "transferable_lesson": "Inference: isolate variable-duration work when the business dependency permits it, make retry eligibility and deadlines explicit, and replay representative active histories before rollout.",
+      "bug_to_prevent": "A slow operation blocks unrelated payment work, a settlement-dependent refund retries forever, or changed command ordering breaks in-flight executions.",
+      "limitations": "Outage recovery is customer-reported. The article does not specify payment idempotency or patch-retirement rules; replay tests alone cannot validate all external side effects.",
+      "source_type": "Case Study",
+      "source_text_sha256": "634ea415807cb784d444650d23750b0c7ac98478fccc5ef35966b1cf20740cb7",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 7,
+      "title": "How Emergent runs 1 billion+ agent Actions per month on Temporal Cloud",
+      "url": "https://temporal.io/resources/case-studies/emergent",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page.",
+      "observed_pattern": "Emergent's agent originally shared the resource-constrained execution sandbox and died with it. Its Temporal design separates orchestration, uses child workflows for agent coordination, supports human waits, and checks workflow changes through replay.",
+      "transferable_lesson": "Inference: keep orchestration alive independently of disposable tool environments; persist sandbox identity and reconcile its state after failure. Specify child cancellation, termination, and cleanup behavior rather than assuming inheritance is sufficient.",
+      "bug_to_prevent": "A tool-induced memory failure kills its own recovery controller, retries leak sandboxes, or cancellation leaves child work running.",
+      "limitations": "Child workflows provide logical execution boundaries, not automatic process or resource isolation. The case study's availability language does not establish universal downtime guarantees.",
+      "source_type": "Case Study",
+      "source_text_sha256": "9cd1e799c52739008c127471da4bd952f44bd40c769edd0a2d6098af2a84f80f",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 8,
+      "title": "How Nooks scaled their AI platform 100x without breaking",
+      "url": "https://temporal.io/resources/case-studies/nooks",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page.",
+      "observed_pattern": "Nooks separates call-processing steps into retryable Activities and structures CRM synchronization as historical or incremental orchestration with chunked child work. Incremental schedules use BUFFER_ALL to retain runs when prior work is unfinished.",
+      "transferable_lesson": "Inference: select overlap behavior from freshness and completeness requirements, bound accumulated work, and track synchronization checkpoints. Limit provider-wide concurrency across chunks and retries.",
+      "bug_to_prevent": "Slow recurring syncs create an ever-growing backlog, overlapping runs overwrite newer data, or independently capped workers collectively exceed provider quotas.",
+      "limitations": "BUFFER_ALL is a customer choice, not a universal recommendation. The article does not specify deduplication, consistency, or aggregate rate-limiting algorithms.",
+      "source_type": "Case Study",
+      "source_text_sha256": "ffbcb43be7d515453924d52ff82a6e080801c11f9f4fb0b0c9546e8f23c70a50",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 9,
+      "title": "How Retool built robust Workflow and Agents products on Temporal",
+      "url": "https://temporal.io/resources/case-studies/how-retool-built-robust-workflow-agents-products",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full written case study and verified its canonical page. The embedded interview was not watched or transcribed; conclusions use only the article.",
+      "observed_pattern": "Retool reused its existing Temporal foundation for Agents, representing an agent run as a specialized workflow that coordinates tools, iterative context, retries, timeouts, and human interaction.",
+      "transferable_lesson": "Inference: define one durable lifecycle for an agent task and reuse established orchestration primitives, while specifying tool-call boundaries, stopping conditions, and ownership of human input.",
+      "bug_to_prevent": "An agent loses task state while waiting, or an unbounded reasoning loop continues calling tools without reaching a terminal or escalated outcome.",
+      "limitations": "This is a high-level product case study with no code, retry contracts, or concrete failure analysis. Boundaries and safeguards in the lesson are engineering inferences.",
+      "source_type": "Case Study",
+      "source_text_sha256": "2c02d109bec9c28f885cbf800efdb36227254cf17b7647355afd3cd018956735",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 10,
+      "title": "How VEED.IO powers four million daily video workflows with Temporal",
+      "url": "https://temporal.io/resources/case-studies/veedio-video-workflows",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page.",
+      "observed_pattern": "VEED began with a modest workflow, then composed reusable Activities around third-party media and model providers. Activity visibility helps it inspect provider usage and costs; team champions supported adoption.",
+      "transferable_lesson": "Inference: centralize provider adapters with explicit retry, timeout, error, and cost contracts. Count attempts and externally billed operations separately, and adopt the model incrementally with representative failures.",
+      "bug_to_prevent": "Repeated provider requests silently multiply cost, different workflows classify the same provider error inconsistently, or a broad migration spreads an untested adapter defect.",
+      "limitations": "A workflow Activity count is not necessarily the number of externally billed calls. The story supplies no provider idempotency guarantees or cost-reconciliation implementation.",
+      "source_type": "Case Study",
+      "source_text_sha256": "6623806b5247f7bd5789b9be278cd48c96ac5f7737d9189e4223a957d5d379c1",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 11,
+      "title": "FireHydrant: Durable alerting and faster incident response with Temporal",
+      "url": "https://temporal.io/resources/case-studies/firehydrant",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page; outage claims were not independently audited.",
+      "observed_pattern": "FireHydrant models notification, acknowledgment, and escalation as one alert lifecycle. It centralizes rule evaluation to avoid repeated work during bursts, uses short idempotent Activities, and standardizes cross-language parameters with Protocol Buffers.",
+      "transferable_lesson": "Inference: correlate executions to business incidents, persist the transition that makes an action newly eligible, and explicitly test duplicate events and schema compatibility across workers.",
+      "bug_to_prevent": "A burst triggers the same escalation repeatedly, a late acknowledgment fails to stop escalation, or incompatible payloads fail after a deployment.",
+      "limitations": "The article does not show the send-deduplication or rule-transition implementation. Its outage experience cannot guarantee notification delivery during arbitrary dependency failures.",
+      "source_type": "Case Study",
+      "source_text_sha256": "2c862a888a2d1fdf4eef62e96df4092ab04f705104e9cee6c28b0af977174696",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 12,
+      "title": "Duolingo simplifies self-service infrastructure with Temporal Nexus",
+      "url": "https://temporal.io/resources/case-studies/duolingo-temporal-nexus",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the full published case-study text and verified the canonical page. The page contains inconsistent wording about the current Slack approval interface.",
+      "observed_pattern": "Duolingo exposes selected infrastructure operations through Nexus across team-owned Namespaces. A portal and gateway initiate workflows; sensitive operations retain approval steps, and workers have narrowly scoped infrastructure permissions.",
+      "transferable_lesson": "Inference: expose a small operation contract across ownership boundaries and enforce authorization, approval identity, and resource permissions independently. Preserve status visibility without granting callers general administrative control.",
+      "bug_to_prevent": "Self-service callers gain broad Namespace access, replayed approvals authorize different parameters, or a worker role can perform unrelated destructive operations.",
+      "limitations": "Nexus does not replace application authorization or cloud IAM. The closing section places Slack approvals in future plans, while earlier prose suggests they already exist. Verify current SDK support separately.",
+      "source_type": "Case Study",
+      "source_text_sha256": "b4d06a3d0af2aded2dd8ee3eaea1fc5898d45e1db24ff363ab77d34837a35e41",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 13,
+      "title": "Replit uses Temporal to power Replit Agent reliably at scale",
+      "url": "https://temporal.io/resources/case-studies/replit-uses-temporal-to-power-replit-agent-reliably-at-scale",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Replit describes a Workflow per agent session, Activities for nondeterministic execution, and Updates for user interactions including consent. It also orchestrates deployments and domain lifecycles.",
+      "transferable_lesson": "Inference: Give each session a stable business identity and define conflict/reuse behavior. Persist consent in orchestration state, and make external process creation and tools safe under repeated Activity attempts.",
+      "bug_to_prevent": "Duplicate agent processes or repeated external actions despite having only one active Workflow ID.",
+      "limitations": "A unique running Workflow is not proof that an external agent process or Activity runs exactly once. The case study does not expose fencing, process reconciliation, or idempotency implementation. Reported availability is customer-specific.",
+      "source_type": "Case Study",
+      "source_text_sha256": "571e1e335d14bf190688f861222d9731aa409f68f5f43907b483c40608a54cdb",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 14,
+      "title": "Lindy boosts reliability and observability of AI agents with Temporal Cloud",
+      "url": "https://temporal.io/resources/case-studies/lindy-reliability-observability-ai-agents-temporal-cloud",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Lindy reports replacing queue-based orchestration that lost visibility around API failures and pod shutdowns with durable, observable agent execution spanning model calls and integrations.",
+      "transferable_lesson": "Inference: Make progress and failure states inspectable across worker replacement; place nondeterministic integrations behind Activity boundaries and distinguish transient retryable failures from terminal outcomes.",
+      "bug_to_prevent": "An automation silently stops after a worker exits or an external API times out, leaving neither recovery nor an actionable operational signal.",
+      "limitations": "The short article uses broad Workflow terminology for wake-ups and individual calls; it provides no code or precise boundary model. Do not interpret it as permission for direct network calls inside Workflow code or evidence of universal queue-system inadequacy.",
+      "source_type": "Case Study",
+      "source_text_sha256": "f6b5a8883d69ac834d0a0bc1c319e61b153030866795a215ca2d773f6e3fb0a5",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 15,
+      "title": "Attentive migrates to Temporal Cloud for infrastructure cost savings and increased application reliability",
+      "url": "https://temporal.io/resources/case-studies/attentive-migrates-temporal-cloud-infra-cost-savings",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Attentive describes persistence compatibility and scaling problems while self-hosting, progressive namespace migration through development, staging, and production, and discovery of ongoing Workflows belonging to an inactive customer.",
+      "transferable_lesson": "Inference: Test migration against active executions and Schedules, audit lifecycle ownership, and monitor work whose business owner has disappeared. Evaluate hosting against actual storage, upgrade, and operational constraints.",
+      "bug_to_prevent": "Abandoned recurring work keeps executing, or a migration loses in-flight state and scheduled work.",
+      "limitations": "The migration service was prerelease and vendor-assisted in this account; verify current support and procedures. Their choice to terminate stale Workflows is not a general recommendation to bypass cancellation or business cleanup. Cost conclusions are workload-specific.",
+      "source_type": "Case Study",
+      "source_text_sha256": "6658737afe536280bad228200d40fda23b63b2f478bdd17d4d39ef339e9dcf7b",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 16,
+      "title": "Gradient Labs uses AI agents to resolve complex customer issues in financial services",
+      "url": "https://temporal.io/resources/case-studies/gradient-labs-uses-ai-agents-to-resolve-complex-customer-issues",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Gradient Labs identifies successful model requests with unusable outputs as a distinct failure mode. Its conversation Workflows retain state across long interactions and use timers for follow-up.",
+      "transferable_lesson": "Inference: Validate model outputs explicitly; classify invalid results and bound regeneration separately from network retries. Retry the failed step without redoing prior confirmed external actions, and measure semantic quality independently of execution completion.",
+      "bug_to_prevent": "Invalid model output is treated as success, or unlimited regeneration repeatedly spends money and duplicates an earlier tool effect.",
+      "limitations": "The article implies bad model outputs automatically cause errors and retries. Temporal does not supply domain-specific output validation; application code and SDK failure configuration must establish that behavior. No retry budget or concrete validator is published.",
+      "source_type": "Case Study",
+      "source_text_sha256": "ff560befc4d54df8c225b8a7ba602c20f4cb9f8f91f528e8e55c5a5b9daa43da",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 17,
+      "title": "How Vinted Runs 10 to 12 Million Workflows a Day with Temporal While Keeping Dev Velocity High and Costs Low",
+      "url": "https://temporal.io/resources/case-studies/vinted-10-12-million-worflows-daily-dev-velocity-low-cost",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Vinted began with a limited background flow and controlled adoption with feature flags. It encountered oversized payloads, unintended Ruby return values, and serialization problems, and added queue-oriented metrics beyond CPU and memory.",
+      "transferable_lesson": "Inference: Stage adoption with a single execution owner per business operation; review serialized inputs and results, use references for bulky data, and observe schedule-to-start latency and queue pressure.",
+      "bug_to_prevent": "An implicit return serializes an unexpectedly large object, or workers appear healthy while tasks accumulate unprocessed.",
+      "limitations": "The case study's broad locking and retry claims do not specify external-effect safety. Parallel legacy and Temporal paths need ownership controls absent from the article. Self-hosting economics and workload scale are not portable guarantees.",
+      "source_type": "Case Study",
+      "source_text_sha256": "015a1c0da3845e7cf1128ac0d50d9af4779bff2f9d822082653e1cad078dc26c",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 18,
+      "title": "Gorgias uses AI agents to help over 15,000 e-commerce brands improve customer service",
+      "url": "https://temporal.io/resources/case-studies/gorgias-uses-ai-agents-to-improve-customer-service",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Gorgias moved from answering questions to agents that perform order operations. Its requirements included external API retries, compensation across steps, asynchronous results, and durable pauses; support, sales, and synthesis agents have distinct Workflows.",
+      "transferable_lesson": "Inference: Treat action-taking agents as distributed business processes. Define each effect's authorization, idempotency, failure classification, and compensation before composing agents; use durable waits for external or human responses.",
+      "bug_to_prevent": "A retried return or cancellation duplicates an external effect, or partial completion is concealed behind a successful chat response.",
+      "limitations": "No saga implementation, transaction guarantee, or compensation policy is supplied. The article's suggestion that retry complexities disappear must not replace application-level retry and side-effect design.",
+      "source_type": "Case Study",
+      "source_text_sha256": "e7eefd390fec3096211da2762416ba02e3c40c27d78456e15ed03964000b16c6",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 19,
+      "title": "How Trendyol’s Database Team Scales for 200K Merchants and 1M+ Orders a Day",
+      "url": "https://temporal.io/resources/case-studies/trendyol-database-scaling-temporal",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Trendyol describes a parent Workflow starting regional database-creation child Workflows in parallel. Children check provisioning readiness through Activities separated by durable waits; replication starts after both regions are ready.",
+      "transferable_lesson": "Inference: Model dependency joins explicitly and distinguish submitted provisioning from confirmed readiness. Make resource creation repeat-safe, use durable waiting, and add deadlines, cancellation, and history-growth management for prolonged polling.",
+      "bug_to_prevent": "Replication starts before prerequisites exist, or a retry creates duplicate infrastructure after an uncertain provisioning response.",
+      "limitations": "The article does not establish resource idempotency or database consistency guarantees. Its generic sleep notation should not be copied as SDK-specific code. Readiness polling needs a workload-appropriate choice between timers, retried checks, heartbeats, and external notifications.",
+      "source_type": "Case Study",
+      "source_text_sha256": "285a3e3025e5687a257158eea75ef986c085f5fa1d96637050331c691e8b2eb3",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 20,
+      "title": "How Vodafone aims to orchestrate value added services across devices with Temporal",
+      "url": "https://temporal.io/resources/case-studies/how-vodafone-aims-to-orchestrate-value-added-services-across-devices",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Vodafone separates device-control domains and campaign orchestration across Namespaces. It distinguishes steady onboarding traffic from fleet-wide update bursts and retains responsibility for worker scaling when adopting Temporal Cloud.",
+      "transferable_lesson": "Inference: Isolate competing workloads intentionally, bound campaign fan-out, and size workers and downstream rate limits independently of service capacity. Define ownership when old and new device controllers coexist.",
+      "bug_to_prevent": "A fleet campaign starves onboarding, overwhelms device APIs, or races another controller into conflicting updates.",
+      "limitations": "Namespace layout alone does not prove resource isolation or prevent external split brain. Payload confidentiality requires a configured client-side codec; metadata remains a separate concern. Cloud scaling and hosting-cost comparisons do not remove worker capacity planning.",
+      "source_type": "Case Study",
+      "source_text_sha256": "6e3cb87a7d8ad3a9b5d4b7c15b1ad98f25678430dc7569b40a1e6db20c3b95ad",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 21,
+      "title": "Mollie Payments maximizes operational efficiency using Temporal",
+      "url": "https://temporal.io/resources/case-studies/mollie-payments-maximizes-operational-efficiency",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text and verified the live Temporal page.",
+      "observed_pattern": "Mollie uses durable, long-running verification processes and batched invitations to coordinate customer work with analyst capacity. It explicitly cautions against making Workflows the default for every problem and describes client-side protection of personal data.",
+      "transferable_lesson": "Inference: Adopt orchestration where waiting, coordination, or recovery justify it; preserve a simpler design otherwise. Connect invitation cadence to actual downstream capacity and verify which payloads and metadata can expose personal information.",
+      "bug_to_prevent": "Missing invitations silently leave downstream staff idle, or personal data leaks through unprotected metadata despite encrypted payloads.",
+      "limitations": "The account does not publish its encryption configuration or workload-balancing algorithm. Durable execution supports process recovery but does not itself establish regulatory compliance, data minimization, or correct capacity allocation.",
+      "source_type": "Case Study",
+      "source_text_sha256": "99d62f0f01d7ee6b43610ac255884d72fa47ed386cfd271608085e3731ea9853",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 22,
+      "title": "Driving Innovation: Deferred Payments and Car Data Management at Turo",
+      "url": "https://temporal.io/resources/on-demand/driving-innovation-deferred-payments-turo",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published talk abstract and presenter text and verified the live page. The linked YouTube video advertises English automatic captions, but caption endpoints returned empty responses; searches yielded no accessible transcript. Video not watched.",
+      "observed_pattern": "Turo's abstract describes deferred rental payments and recurring imports of vehicle catalogs from multiple providers, including distributed processing, error notification, and monitoring of lengthy jobs.",
+      "transferable_lesson": "Inference: Separate business deadlines from recurring import cadence. Specify late, overlapping, canceled, and retried execution behavior, using stable business identities and repeat-safe effects.",
+      "bug_to_prevent": "A delayed charge happens twice, or overlapping imports expose inconsistent catalog state.",
+      "limitations": "Only the abstract was accessible, not implementation details or the presentation's design decisions. Timer-versus-Schedule selection, overlap policies, payment idempotency, and import publication strategy require independent official documentation and project requirements.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "47be939844c9985f41c7fe75e1d659401b8dfc024f5592fef497ede8da7caca7",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 23,
+      "title": "Nordstrom: Orchestrating a Kafka Migration with Temporal",
+      "url": "https://temporal.io/resources/on-demand/orchestrating-kafka-migration-nordstrom",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published talk abstract and presenter text and verified the live page. The linked YouTube video advertises English automatic captions, but caption endpoints returned empty responses; searches yielded no accessible transcript. Video not watched.",
+      "observed_pattern": "Nordstrom's abstract describes Workflows supporting readiness assessment, replication, and coordination across application teams during a migration from self-managed Kafka to Confluent Cloud.",
+      "transferable_lesson": "Inference: Treat migration as a staged protocol with recorded readiness, explicit ownership, verifiable data synchronization, cutover conditions, and a recovery path; durable orchestration must enforce those checks.",
+      "bug_to_prevent": "Cutover occurs before replication or application readiness, causing missing data or incompatible consumers.",
+      "limitations": "The abstract promises discussion of data-loss prevention but supplies no actual consistency protocol, rollback algorithm, or measured outcome. Do not present its advertised blueprint as reviewed implementation guidance.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "c764dcc5f9ae834db6a5081cb9f0662c269855420b1e2e44acaae05ad7738353",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 24,
+      "title": "YUM! Brands: Delayed Execution with Parent Workflows and Schedules",
+      "url": "https://temporal.io/resources/on-demand/yum-brands-delayed-execution",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published talk abstract and presenter text and verified the live page. The linked YouTube video advertises English automatic captions, but caption endpoints returned empty responses; searches yielded no accessible transcript. Video not watched.",
+      "observed_pattern": "YUM! Brands' title identifies delayed execution using parent Workflows and Schedules. The abstract announces examples and lessons but gives no concrete implementation; the presenter describes payment, loyalty, and promotion use cases.",
+      "transferable_lesson": "Inference: For delayed business operations, explicitly investigate lifecycle ownership, cancellation, schedule overlap, and whether the trigger is one-off or recurring before selecting a mechanism.",
+      "bug_to_prevent": "Scheduled work survives a business cancellation or overlapping executions apply the same promotion twice.",
+      "limitations": "Insufficient detail to attribute any specific best practice to YUM! Brands. Use this as a coverage entry and a design question, not authority for a parent-close policy, Schedule configuration, or code pattern.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "e9c3c5b3ba5408764d057ba028ca7ebdc709530e7c917496c355fdab3816e30c",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 25,
+      "title": "Linus Health: Transitioning to Durable Workflows in Cognitive Healthcare",
+      "url": "https://temporal.io/resources/on-demand/transitioning-durable-workflows-cognitive-healthcare",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Linus Health describes replacing homegrown analytics orchestration with Activities, Signals, and parent-child Workflows while exploring cross-language interoperability and parallel operation of legacy and Temporal paths.",
+      "transferable_lesson": "Inference: plan migration ownership and compatibility explicitly; when comparing old and new paths, control which path may produce each external effect.",
+      "bug_to_prevent": "Duplicate business effects or lost handoffs during dual operation.",
+      "limitations": "The abstract does not describe routing, reconciliation, payload schemas, or an achieved cutover result.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "ef23eb4a15298de1bb51ac5752808610616679f568cb8d5721739b3b1aa9d181",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 26,
+      "title": "Platform as a Superpower: Adoption of Temporal at HashiCorp",
+      "url": "https://temporal.io/resources/on-demand/platform-as-superpower-hashicorp",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "HashiCorp describes using durable execution for internal platform workflows and identifies concealed ownership and security complexity in developer self-service interfaces.",
+      "transferable_lesson": "Inference: define service ownership, permissions, and recovery responsibilities alongside ergonomic workflow APIs.",
+      "bug_to_prevent": "An easy-to-call platform operation that lacks an accountable owner or enforceable authorization boundary.",
+      "limitations": "The abstract promises examples but provides no concrete authorization model, workflow code, or measured incident evidence.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "c59df013a046b9b4ea8b318c2e16d5f7418ad461c7afd8be7cc9dc27f5de5d6c",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 27,
+      "title": "Durable-Driven Design(DDD): Durable software for the durable business at equipifi",
+      "url": "https://temporal.io/resources/on-demand/durable-driven-design-software",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "equipifi describes moving from custom Kafka-based state management to Temporal to reduce orchestration work and focus on changing banking business requirements.",
+      "transferable_lesson": "Inference: separate business lifecycle decisions from transport mechanics, and migrate a bounded process with explicit state and failure semantics.",
+      "bug_to_prevent": "Business transitions scattered across message handlers and duplicated orchestration state.",
+      "limitations": "The abstract does not establish a general case against Kafka or supply migration mechanics, consistency rules, or code.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "a7a72ba2cfe91334211810ce7334a51a280789c3d44c9b79f4b85d3d5310bbe5",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 28,
+      "title": "Spiral Scout: A Practical and Tactical Approach to Temporal and AI",
+      "url": "https://temporal.io/resources/on-demand/practical-tactical-approach-temporal-ai",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Spiral Scout describes long-running agent Workflows, AI decision coordination, and passing data between Workflows through external references.",
+      "transferable_lesson": "Inference: give externally referenced artifacts stable identities and retention compatible with workflow recovery; keep nondeterministic model execution behind the appropriate execution boundary.",
+      "bug_to_prevent": "Resuming an agent against missing or changed referenced data, or recomputing an unrecorded model decision.",
+      "limitations": "The abstract does not specify reference storage, model-call boundaries, authorization, or retry implementation; those recommendations require official documentation.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "b20e22b4afb6d27f942852dbf4175ef81485d2e3a48433a5f13f95c2878a7bee",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 29,
+      "title": "Docker: Trends in GenAI Development",
+      "url": "https://temporal.io/resources/on-demand/trends-in-gen-ai-development",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Docker presents combining containerized open-source generative AI with Temporal durable execution.",
+      "transferable_lesson": "Inference: evaluate packaging and durable orchestration separately, and verify concrete failure recovery before claiming an AI application is production ready.",
+      "bug_to_prevent": "Treating a container plus an orchestrator as sufficient evidence of reliable model and tool execution.",
+      "limitations": "The very short abstract supplies no architecture, code, failure schedule, or implementation-specific lesson.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "e413149a3408eb0b5a13724cf3ff00c80b5129dc9c4d69232966627f2a06952d",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 30,
+      "title": "Cloudflare: Production Readiness Checks at scale with Temporal and Temporal Schedules",
+      "url": "https://temporal.io/resources/on-demand/production-readiness-checks-cloudflare",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Cloudflare describes distributing production-readiness checks across workers, running checks in parallel, and using Temporal Schedules to refresh a readiness dashboard periodically.",
+      "transferable_lesson": "Inference: specify schedule overlap behavior, bound parallelism to downstream capacity, and distinguish fresh results from stale or failed checks.",
+      "bug_to_prevent": "Overlapping refreshes overload dependencies or publish older results over newer observations.",
+      "limitations": "The abstract does not reveal overlap policy, concurrency limits, result fencing, or exact retry settings; these are inferred review questions.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "5185073bd65a396712683d8ebb751c6b57f7b18787aa5d11af3050aa4c1e461b",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 31,
+      "title": "Efficiency in the Cloud: Leveraging Temporal Cloud Metrics to Autoscale Your Workers at Bitovi",
+      "url": "https://temporal.io/resources/on-demand/efficiency-in-temporal-cloud",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Bitovi compares worker autoscaling using Temporal Cloud metrics, platform metrics, and scheduled capacity, and describes demonstrating dynamic scaling from Cloud metrics.",
+      "transferable_lesson": "Inference: select scaling signals against measured workload demand and processing latency; validate scale-down and dependency saturation as well as scale-up.",
+      "bug_to_prevent": "A scaling policy adds workers without relieving the real bottleneck, or removes capacity while tasks remain delayed.",
+      "limitations": "The abstract names no specific metric, threshold, stabilization window, SDK, or autoscaler configuration.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "4204a239fd75246e40e15d218dcda36f83f3c4094d630ddca864c0ea57c8e57b",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 32,
+      "title": "Discern Inc: Accelerating Development with Kibu",
+      "url": "https://temporal.io/resources/on-demand/accelerating-development-with-kibu",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Discern presents Kibu, a Go toolkit generating service plumbing for Workflow starts, Queries, and Updates from Go code.",
+      "transferable_lesson": "Inference: treat generated adapters as semantic boundaries; verify start identity and the distinction between observation and state-changing commands.",
+      "bug_to_prevent": "Generated endpoints accidentally duplicate starts or conflate read-only Queries with state mutations.",
+      "limitations": "The abstract does not describe generated code, deduplication, compatibility guarantees, or a supported current Kibu version.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "164dd7bc5762ca6097b1cede7d21d3bbcc61341d81b1e0fd798f0702879a4d5c",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 33,
+      "title": "Bitovi: Developer Secrets to Reducing Temporal Cloud Costs",
+      "url": "https://temporal.io/resources/on-demand/developer-secrets-reducing-temporal-cloud-costs",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Bitovi describes comparing workflow designs by action and event-history storage usage, including shorter lifetimes and actor-style execution.",
+      "transferable_lesson": "Inference: estimate history growth and action volume from representative traffic before optimizing; retain the required recovery and business semantics.",
+      "bug_to_prevent": "Unbounded history growth or cost-oriented changes that alter lifecycle and recovery behavior.",
+      "limitations": "The abstract gives no reproducible measurements or universally cheaper pattern; its 2024 pricing description is not current pricing guidance.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "a92e71f9d04b2223aedf12a7a7d714a1c2fa38c987a89d08d26027024f5ac7a7",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 34,
+      "title": "Block: Using new Temporal features in real-world payments applications",
+      "url": "https://temporal.io/resources/on-demand/block-real-world-payments",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Block describes Workflow Updates for checkout, child-workflow patterns for parallel work and compensation, and Workflow Replayer for compatibility checks in CI/CD.",
+      "transferable_lesson": "Inference: gate workflow changes with representative recorded-history replay and test child lifecycle and compensation explicitly.",
+      "bug_to_prevent": "A deployment replays incompatibly, or parent completion leaves a child or compensation task in an unintended state.",
+      "limitations": "The abstract does not specify SDK APIs, child-close policies, replay sampling, or compensation ordering; replay alone cannot prove external-effect safety.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "1317b552c8d7944416f074ba2e20b3e394a0b299ac824918333b3b1746a8fb4a",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 35,
+      "title": "Humana: Complexity and the Cloud, Enterprise Edition",
+      "url": "https://temporal.io/resources/on-demand/humana-complexity-and-the-cloud",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Humana argues that moving infrastructure to the cloud leaves applications responsible for ephemeral execution, transient failure, and durable state, and presents Temporal as an orchestration abstraction.",
+      "transferable_lesson": "Inference: review application recovery boundaries during cloud migration and test process loss rather than assuming deployment topology provides resilience.",
+      "bug_to_prevent": "A migrated application retains in-memory coordination assumptions and loses progress when its process disappears.",
+      "limitations": "This is a conceptual abstract with broad promotional claims, not a documented implementation or proof that external consistency is automatic.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "0f6a82cc156f710641155cc962227ae772a103b93551938a38a6e1e3ebd063ef",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 36,
+      "title": "Netflix: The Future of Durable Execution Across Team and Namespace Boundaries",
+      "url": "https://temporal.io/resources/on-demand/netflix-future-durable-execution-namespace-boundaries",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Public transcript searches did not recover a transcript; the linked YouTube page advertised English automatic captions, but its caption endpoint returned no text. Video was not watched.",
+      "observed_pattern": "Netflix describes Temporal for Spinnaker and other infrastructure control planes, seeking team-owned namespaces and clean contracts instead of custom cross-namespace proxies and webhooks.",
+      "transferable_lesson": "Inference: make cross-team contracts, authorization, ownership, cancellation, and recovery behavior explicit; verify the currently supported integration mechanism.",
+      "bug_to_prevent": "Leaking internal workflow details across teams or assuming namespace separation alone settles authorization and failure handling.",
+      "limitations": "The 2024 abstract discusses future enhancements and does not identify current Nexus availability, SDK support, or exact delivery guarantees.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "17bae3d6ebb8f3495e0fa8f62d423b1eed445df4429313b53b68ae2c7c9ae2d0",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 37,
+      "title": "Durable Large-scale Media Workflows: Insights from Netflix’s Plato Platform",
+      "url": "https://temporal.io/resources/on-demand/netflix-plato-durable-workflows",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Netflix describes Plato using message-based RPC, scheduling priorities, execution avoidance, and typed models for bursty media processing.",
+      "transferable_lesson": "Inference: separate durable orchestration from compute admission; bound outstanding work and test payload contracts instead of assuming persistence supplies unlimited capacity.",
+      "bug_to_prevent": "Unbounded fan-out overwhelms expensive workers or repeats already satisfied computation.",
+      "limitations": "Abstract does not expose scheduling algorithms or establish that its custom platform features are native Temporal capabilities.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "cf9908609e32759a897f578054a0f9153b6b4b0f70138dbf5c2993e0244d2a95",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 38,
+      "title": "How Arc XP of the Washington Post Powers a Perceptual AI Pipeline with Temporal",
+      "url": "https://temporal.io/resources/on-demand/arc-xp-washington-post-perceptual-ai-pipeline",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Arc XP combined scene detection, frame extraction, AWS resource management, and thumbnail inference into a durable workflow, refining Activity boundaries with Temporal engineers.",
+      "transferable_lesson": "Inference: inventory each pipeline step and place external I/O and nondeterministic inference behind explicit Activity contracts; choose checkpoint boundaries around recoverable work.",
+      "bug_to_prevent": "Replaying orchestration reruns inference or resource mutations, while oversized Activities repeat avoidable work.",
+      "limitations": "Abstract names concerns but supplies no concrete implementation, checkpoint sizes, or retry configuration.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "b4a197da085b9b0c27b888d3c08d4d0eb0f6af3a54e535ee53d0fee6eb10fb92",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 39,
+      "title": "Qualtrics: Simpler Cross Cloud Durable Execution",
+      "url": "https://temporal.io/resources/on-demand/simpler-cross-cloud-durable-execution",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Qualtrics describes cross-cloud API integration requirements including authentication, encryption, rate limits, network access, and failure retries.",
+      "transferable_lesson": "Inference: define connectivity, credentials, downstream capacity, and retry ownership at each cloud boundary before selecting communication mechanisms.",
+      "bug_to_prevent": "Retries amplify throttling or repeatedly fail because workers lack required access.",
+      "limitations": "Abstract describes the problem, not the resulting architecture; it does not demonstrate that Temporal removes public endpoints or security controls.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "e7599950526b172994b6d3ab49ca42a07a296dac3c54fb6cffa321d9c0f46ac4",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 40,
+      "title": "Salesforce's Temporal Success Story: Pioneering Efficiency and Innovation",
+      "url": "https://temporal.io/resources/on-demand/salesforces-temporal-success-story",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Salesforce reports automated namespace provisioning through a Terraform provider and cluster notifications integrated with Slack.",
+      "transferable_lesson": "Inference: make namespace configuration repeatable and direct actionable operational events to an identified owner with enough execution context to investigate.",
+      "bug_to_prevent": "Configuration drift and unowned failures persist across separately managed environments.",
+      "limitations": "Abstract does not specify configuration fields, alert thresholds, permissions, or operational procedures. Promotional growth claims are excluded.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "5a08d5d30f525e1bae161ffe1495dc18bb84e467d121f8fa930bd7eee84df407",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 41,
+      "title": "Great tech is not enough: building trust to get the most out of Temporal at Cash App",
+      "url": "https://temporal.io/resources/on-demand/great-tech-is-not-enough",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Cash App reports that a successful initial statement-generation launch did not by itself produce wider adoption; platform support and developer engagement changed as usage expanded.",
+      "transferable_lesson": "Inference: validate onboarding, examples, and incident ownership with application teams before expanding a shared workflow platform.",
+      "bug_to_prevent": "Teams adopt durable execution without knowing deployment or recovery responsibilities.",
+      "limitations": "Abstract promises discussion of tooling and rituals but does not disclose those implementations; no specific internal process is inferred.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "d8f6380b2a1e82a25dfe6f53f5552122177b3ae89d4cc43dbf59ed9007e8c2dc",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 42,
+      "title": "Building Assembly Lines with Temporal at Juristat",
+      "url": "https://temporal.io/resources/on-demand/building-assembly-lines-juristat",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Juristat describes an assembly-line system combining human tasks and automated processing, allowing automation to replace manual steps over time.",
+      "transferable_lesson": "Inference: model human and automated completion through explicit durable state transitions, preserving approval identity and checking late or repeated responses.",
+      "bug_to_prevent": "An outdated approval resumes superseded work or an automated replacement bypasses a required decision.",
+      "limitations": "Abstract does not identify Temporal messaging APIs, authorization design, deadlines, or migration mechanics; these safeguards are engineering inferences.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "f1490bace65ac3369142858b9f105b093473078f7cd423bb29b462165ebeb237",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 43,
+      "title": "Modernize: Just Because You Can, Doesn’t Mean You Should… Workflow Edition",
+      "url": "https://temporal.io/resources/on-demand/just-because-you-can-workflow-edition",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Modernize argues for using an established durable execution platform and concentrating engineering effort on application capabilities.",
+      "transferable_lesson": "Inference: compare the recovery, testing, and operational responsibilities of a custom orchestrator with adopting a maintained platform before rebuilding coordination infrastructure.",
+      "bug_to_prevent": "A homegrown job chain loses recovery behavior that was assumed rather than implemented.",
+      "limitations": "Abstract announces three pitfalls and three success factors without enumerating them. No specific failure or implementation evidence is available.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "63ec677d8c131510054702558a4f8200b998ee09ebf07dd8a7923c71f147da50",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 44,
+      "title": "Jackson Laboratory: Imaging Workflows using Temporal.io to Cure Cancer (...and other useful things)",
+      "url": "https://temporal.io/resources/on-demand/imaging-workflows-temporal-cure-cancer",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "Jackson Laboratory describes durable scientific image-analysis workflows using Java, Python, and Kubernetes, including deep-learning workloads.",
+      "transferable_lesson": "Inference: separate worker capability and deployment concerns from orchestration, and validate that the intended runtime can execute each computational step.",
+      "bug_to_prevent": "Tasks reach workers lacking required libraries, hardware, or input access.",
+      "limitations": "Abstract promises code and configuration in the talk but contains none; it supports workload and language observations only.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "f72805812d6aaf991e241d7282e9fe6cd03586f967da52f0134218d82c07ba9a",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 45,
+      "title": "NVIDIA: How to Manage GPUs in the Cloud and Keep Them Running, All the Time, Forever",
+      "url": "https://temporal.io/resources/on-demand/how-to-manage-gpus-cloud",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the complete published abstract and presenter text. Searched the linked video ID for a public transcript; none was found. Direct YouTube fetch failed. Summary only; video not watched.",
+      "observed_pattern": "NVIDIA describes representing hardware resources as Workflows and composing state machines, actors, and DAGs through Temporal messaging and child workflows.",
+      "transferable_lesson": "Inference: choose workflow boundaries around resource ownership and lifecycle, then define message ordering, concurrent-handler behavior, and bounded history for long-lived entities.",
+      "bug_to_prevent": "Conflicting commands mutate the same resource or an indefinitely running entity accumulates unbounded history.",
+      "limitations": "Abstract does not reveal ownership enforcement, history rotation, failure reconciliation, or handler synchronization. Idle-workflow economics are workload-specific.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "70580ba4b51a154300497fb1d60c188cc798baf5ce4f4e589e663d1d824c129a",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 46,
+      "title": "JPMC: A Payments Modernization Journey using Temporal",
+      "url": "https://temporal.io/resources/on-demand/payments-modernization-jpmc",
+      "evidence_type": "title_only",
+      "evidence_note": "Read the complete published page text, which contains only the presenter biography besides the title. Public transcript search and direct YouTube fetch yielded no usable talk content; video not watched.",
+      "observed_pattern": "The JPMC page identifies a payments-modernization talk and its presenter but publishes no technical abstract.",
+      "transferable_lesson": "No technical lesson can be responsibly attributed without accessible talk content.",
+      "bug_to_prevent": "Inventing payment-safety guarantees from the title or speaker affiliation.",
+      "limitations": "Insufficient technical evidence: title and presenter only. Transcript search found no matching public transcript, and the linked video page could not be fetched.",
+      "source_type": "Replay 2024",
+      "source_text_sha256": "5ab23c165d0a602240e7b8200f0d13775728e37006d80e20ae57aba1aaec5762",
+      "skills": []
+    },
+    {
+      "index": 47,
+      "title": "How ANZ Bank accelerated home loan origination with Temporal",
+      "url": "https://temporal.io/resources/case-studies/anz-story",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published written case study. No video or transcript was needed to assess its text.",
+      "observed_pattern": "ANZ describes separating loan origination into domain Workflows, combining human decisions with automated tasks, and moving from self-hosting to Temporal Cloud.",
+      "transferable_lesson": "Inference: map domain state and failure ownership explicitly; implement and test compensations and human-wait transitions as application behavior.",
+      "bug_to_prevent": "Treating orchestration as automatic rollback leaves completed external effects inconsistent after later failures.",
+      "limitations": "Written case study includes marketing shorthand about automatic compensation and preventing timeouts; those are not general Temporal guarantees. No compensation code or retry parameters are supplied.",
+      "source_type": "Case Study",
+      "source_text_sha256": "d648057141109b7b7f2a53f268bbd9568cf23c683c5a77472065ba882c9884f4",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 48,
+      "title": "End-to-end AI workflows with Temporal at Descript",
+      "url": "https://temporal.io/resources/case-studies/descript",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published written case study. No video or transcript was needed to assess its text.",
+      "observed_pattern": "Descript describes staged transcription with out-of-order results, GPU-specific Task Queues, unit and staging tests, and gradual feature-flag migration with result checks.",
+      "transferable_lesson": "Inference: route compute by capability, identify chunks independently of completion order, test result assembly, and migrate traffic with observable comparison and rollback criteria.",
+      "bug_to_prevent": "Merging by arrival order corrupts output; routing to incompatible workers stalls processing.",
+      "limitations": "Go SDK Sessions were prospective, not deployed. The reported decision not to emphasize load testing is not a transferable recommendation; workload validation remains necessary.",
+      "source_type": "Case Study",
+      "source_text_sha256": "a9a41b73ea2f05ef24ebf22cc2c35f26e4c760b7e073985d97eec98e8eddca27",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 49,
+      "title": "How Maersk Built a “Time Machine” for the Logistics Industry with Temporal",
+      "url": "https://temporal.io/resources/case-studies/maersk",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from Temporal's customer index.",
+      "observed_pattern": "Maersk replaced a stateless payment coordinator with a Workflow calling booking, account, and notification Activities. Its booking process also uses child Workflows for human steps and exposes progress through Temporal's UI.",
+      "transferable_lesson": "Engineering inference: separate durable business coordination from retryable service calls, and represent waiting for people as explicit durable state.",
+      "bug_to_prevent": "Losing progress during downstream outages or making a completed payment depend on a failed notification.",
+      "limitations": "The story does not specify payment deduplication, timeout values, compensation semantics, or Signal handling. Its eventual-completion language is not a universal guarantee. Child Workflows are an observed design, not mandatory for every human step.",
+      "source_type": "Case Study",
+      "source_text_sha256": "381bdc826aa046466acb1917295ca58bbab623c8e59e2b4f802aa4543a4f29fb",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 50,
+      "title": "Temporal: A central “brain” for box",
+      "url": "https://temporal.io/resources/case-studies/box",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from Temporal's customer index.",
+      "observed_pattern": "Box migrated folder-operation orchestration and business logic together. It tested both traversal coverage and operation correctness, began with an in-memory simulation, then rolled out tenant by tenant.",
+      "transferable_lesson": "Engineering inference: verify orchestration equivalence separately from rewritten business rules, then expand migration exposure in controlled cohorts.",
+      "bug_to_prevent": "A migration appearing successful while skipping files, duplicating copies, or propagating incorrect permissions.",
+      "limitations": "No production implementation, concurrency protocol, or rollout rollback procedure is provided. Simulation establishes model behavior, not real-service retry safety or storage consistency.",
+      "source_type": "Case Study",
+      "source_text_sha256": "8742af8a0a37a0edc2717441f69d935392ce8135a7f35b4b7b8a5e8b32e9f9f2",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 51,
+      "title": "Build a Reliable System in a Microservices World at Snap",
+      "url": "https://eng.snap.com/build_a_reliable_system_in_a_microservices_world_at_snap",
+      "evidence_type": "external_blog",
+      "evidence_note": "Read Temporal's complete repost and verified the original Snap Engineering article, dated July 16, 2021, through the web tool.",
+      "observed_pattern": "Snap describes report generation as data retrieval, report construction, and notification Activities. It identifies a lost API response as a cause of duplicate expensive jobs and integrates its shared Temporal service with existing service-mesh access controls.",
+      "transferable_lesson": "Engineering inference: define stable operation identity at ingress, preserve step progress, and retain application authorization when adding orchestration.",
+      "bug_to_prevent": "Starting duplicate jobs after an ambiguous start response or rebuilding a completed report because its notification failed.",
+      "limitations": "The article is historical and gives no current SDK API or deduplication implementation. Temporal does not automatically make arbitrary external effects idempotent or supply application-level authorization.",
+      "source_type": "Blog Post",
+      "source_text_sha256": "c2540ecb3ec74be5d59a1e3777d16dc220d057422174840a5effc890b75d1b29",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 52,
+      "title": "Bugcrowd Unlocks AI Workflows with Temporal",
+      "url": "https://temporal.io/resources/case-studies/bugcrowd",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete written case study; its embedded webinar was not viewed.",
+      "observed_pattern": "Bugcrowd places database lookup and ML matching in Activities, then coordinates hacker invitations through parent and child Workflows using Signals and timers for human responses.",
+      "transferable_lesson": "Engineering inference: isolate inference from durable coordination and model invitation acceptance, expiration, and completion as explicit event-driven transitions.",
+      "bug_to_prevent": "Losing a human response after a restart or applying a late invitation response to an already-finished engagement.",
+      "limitations": "The article does not document duplicate-Signal handling, races between timers and responses, parent-close policy, or ML reproducibility. Those require an application-specific design and tests.",
+      "source_type": "Case Study",
+      "source_text_sha256": "25135498ff15c589523ab368168aa8b5a9f7a5d5f0ee5fe333369f638fa851a2",
+      "skills": [
+        "temporal-ai-workflows"
+      ]
+    },
+    {
+      "index": 53,
+      "title": "Dubber, Temporal, and Conversational AI at Scale",
+      "url": "https://temporal.io/resources/case-studies/dubber",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from Temporal's customer index.",
+      "observed_pattern": "Dubber orchestrates recording ingestion, transcription, and summarization with Temporal. The team reports named retry profiles, different policies for resource-intensive work, and separate regional Namespaces for sensitive call-processing deployments.",
+      "transferable_lesson": "Engineering inference: choose retries by failure and resource characteristics, and explicitly map sensitive payload storage and execution to residency requirements.",
+      "bug_to_prevent": "Expensive retry storms or assuming that a Namespace alone enforces the intended data-residency boundary.",
+      "limitations": "The case study does not disclose payload encryption, provider locality, worker routing, profile settings, or current Cloud topology. Its observability claims do not establish the truth of unrecorded external effects.",
+      "source_type": "Case Study",
+      "source_text_sha256": "6b859e0f5077cecdc89a60e5e067473183558b8b3556f8366c0381f52596239f",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 54,
+      "title": "AI Data Workflows at Messari with 4-6x Developer Velocity",
+      "url": "https://temporal.io/resources/case-studies/messari",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from Temporal's customer index.",
+      "observed_pattern": "Messari moved a cron-based ingestion and AI-enrichment pipeline to Workflows, uses Activity retry policies and visible retry state, and reports task rate limiting for third-party API calls.",
+      "transferable_lesson": "Engineering inference: coordinate dispatch limits with upstream quotas and make prolonged retries visible for diagnosis.",
+      "bug_to_prevent": "Multiple workers or retries collectively overwhelming a provider while every worker appears locally within its limit.",
+      "limitations": "The story does not identify the limiter API, scope, burst behavior, concurrency settings, or retry budgets. It cannot establish that every provider interaction becomes reliable without additional application controls.",
+      "source_type": "Case Study",
+      "source_text_sha256": "d73ce2b91ce8b3d8bacf66e3550e51e9e2bc6654579f52edc63e206551fbc6d3",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 55,
+      "title": "How Temporal Simplified Checkr Workflows",
+      "url": "https://temporal.io/resources/case-studies/checkr",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from Temporal's customer index.",
+      "observed_pattern": "Checkr's background checks combine service calls and manual review over variable durations. The team replaced selected Kafka-backed pipeline components incrementally rather than migrating all flows together.",
+      "transferable_lesson": "Engineering inference: choose bounded migration slices and explicitly account for existing work and human waits at each cutover.",
+      "bug_to_prevent": "Abandoning in-flight checks or running old and new coordinators against the same business operation.",
+      "limitations": "The article gives no cutover ownership protocol, historical replay procedure, or current deployment/versioning API. The incremental approach is evidence of migration strategy, not proof that coexistence is automatically safe.",
+      "source_type": "Case Study",
+      "source_text_sha256": "d674fea232b8e9b279d9fe5b4b1dd906966b7cd7121aed63a9cb7d29b12b25bd",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 56,
+      "title": "Reliable Medical Diagnostics at Zebra Medical Vision with Temporal",
+      "url": "https://temporal.io/resources/case-studies/zebra-medical-vision",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from Temporal's customer index.",
+      "observed_pattern": "Zebra Medical Vision standardized image-processing boundaries from series to studies and used Temporal to coordinate downloading, repackaging, and uploading existing data. The migration exposed inconsistent image metadata.",
+      "transferable_lesson": "Engineering inference: align Workflow identity with the domain's complete processing unit and validate data invariants during resumable migrations.",
+      "bug_to_prevent": "Producing apparently complete outputs from incomplete groups of inputs or propagating corrupt metadata through a reliable pipeline.",
+      "limitations": "The story does not specify clinical validation, privacy safeguards, medical accuracy, or exact migration implementation. Durable execution does not validate the correctness or safety of model outputs.",
+      "source_type": "Case Study",
+      "source_text_sha256": "3013626f0c2346fd89dc8d2efd56cc47161b51110d80724f662f2dcd9d22f989",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 57,
+      "title": "Reliable crypto transactions at Coinbase",
+      "url": "https://temporal.io/resources/case-studies/coinbase",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case study, including its explicit note that it describes Coinbase's use of Cadence, Temporal's precursor.",
+      "observed_pattern": "The Coinbase story describes compensating multi-step asset transfers and moving components from a custom Saga engine to Cadence while retaining existing deployment tooling.",
+      "transferable_lesson": "Engineering inference: model compensation as recoverable business work and distinguish an unresolved reversal from a completed failure outcome.",
+      "bug_to_prevent": "Reporting a transaction as cleanly failed while earlier debits remain uncompensated.",
+      "limitations": "This is historical Cadence evidence, not a description of current Temporal APIs or Coinbase architecture. Compensation is not an atomic database rollback and may itself fail or be unavailable for an irreversible effect.",
+      "source_type": "Case Study",
+      "source_text_sha256": "66f73a45234d3e9cea2d2e6d6846fd754c670fbe48cf333056ba1d5745686a1c",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 58,
+      "title": "How Stripe uses Temporal",
+      "url": "https://temporal.io/resources/on-demand/stripe",
+      "evidence_type": "webinar_summary",
+      "evidence_note": "Read the complete written summary and verified the live page. Searched by video ID and attempted the linked YouTube page; no accessible transcript was obtained. No video viewing claimed.",
+      "observed_pattern": "Temporal's summary says Stripe wraps its SDK, distributes worker-service ownership, requires explicit Activity retry policies, statically checks replay hazards, and versions interface changes.",
+      "transferable_lesson": "Engineering inference: encode recurring correctness constraints in shared tooling and test history compatibility when contracts evolve.",
+      "bug_to_prevent": "Accidentally relying on unsuitable retry defaults or deploying changes that cannot replay recorded execution history.",
+      "limitations": "Evidence is a short publisher-written webinar summary, not a transcript or Stripe implementation. It does not justify hiding every SDK capability or prescribe current protobuf/versioning mechanics.",
+      "source_type": "Webinar",
+      "source_text_sha256": "3c0f2d19be67a8f1e00b234e09b9f77669b880f1e41df12df82eb854ce8ba84b",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 59,
+      "title": "Datadog: Hacking Temporal to run on SQLite!",
+      "url": "https://temporal.io/resources/on-demand/datadog",
+      "evidence_type": "webinar_summary",
+      "evidence_note": "Read the complete written summary and verified the live page. No accessible transcript was obtained after search and YouTube access attempts. Also verified the official temporalio/temporalite-archived repository, which recommends the Temporal CLI dev server.",
+      "observed_pattern": "Temporal's summary describes Datadog's Temporalite work to simplify local startup and end-to-end Workflow tests with disposable server instances.",
+      "transferable_lesson": "Engineering inference: keep real-service integration tests easy to run, using maintained local tooling appropriate to the installed SDK.",
+      "bug_to_prevent": "Assuming mocked Workflow tests exercise actual worker registration, transport, and server integration, or adopting an obsolete tool from a historical story.",
+      "limitations": "Evidence is a written webinar summary. Temporalite is archived and deprecated: https://github.com/temporalio/temporalite-archived . Disposable development-server tests do not establish production durability, capacity, or availability.",
+      "source_type": "Webinar",
+      "source_text_sha256": "89333f491b8758441686e196545a48dba0d6442b1b805424923dc7e1fced34c6",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 60,
+      "title": "How Netflix uses Temporal",
+      "url": "https://temporal.io/resources/on-demand/netflix",
+      "evidence_type": "webinar_summary",
+      "evidence_note": "Read the complete written summary and verified the live page. Searched by video ID and attempted the linked YouTube page; no accessible transcript was obtained. No video viewing claimed.",
+      "observed_pattern": "Temporal's brief summary identifies Netflix use in Spinnaker cloud operations and controlled blue-green or red-black Flink deployments.",
+      "transferable_lesson": "Engineering inference: model deployment preparation, readiness, traffic transition, and recovery as distinct states with explicit success criteria.",
+      "bug_to_prevent": "Treating a successful provisioning call as proof that a deployment is ready for traffic or that the previous deployment can be removed.",
+      "limitations": "The summary provides no readiness checks, rollback algorithm, deployment code, or Workflow versioning details. The inferred deployment states are recommendations, not a verified account of Netflix's implementation.",
+      "source_type": "Webinar",
+      "source_text_sha256": "2373dc3d243e15bd4dada14a39038fb06fba4f2ccd60ed136e608ed43616e766",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 61,
+      "title": "DigitalOcean Synchronizes Distributed Transactions with Temporal",
+      "url": "https://temporal.io/resources/case-studies/digitalocean",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that DigitalOcean moved reconciliation of updates across storage systems from custom state machines and manual repairs into workflows.",
+      "transferable_lesson": "Engineering inference: enumerate partial-success states and give each a durable recovery path; orchestration does not create an atomic transaction across external stores.",
+      "bug_to_prevent": "A partially applied storage update silently leaving resources inconsistent, or being retried without checking existing effects.",
+      "limitations": "The story provides no implementation, isolation model, or reconciliation algorithm. Its broad reliability language cannot establish cross-system atomicity.",
+      "source_type": "Case Study",
+      "source_text_sha256": "a893b008f74214c771a0c256245737c4e67d13b6f0c5797884f85529fb372c87",
+      "skills": [
+        "temporal-reliability"
+      ]
+    },
+    {
+      "index": 62,
+      "title": "AutoKitteh Increases Development Efficiency with Temporal",
+      "url": "https://temporal.io/resources/case-studies/autokitteh",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that AutoKitteh translates external events into workflows through platform abstractions, replacing internally maintained state-management machinery.",
+      "transferable_lesson": "Engineering inference: keep the event-to-workflow adapter small and specify identity, duplicate delivery, and initiation failures at that boundary.",
+      "bug_to_prevent": "Repeated delivery of the same external event creating unintended independent business operations.",
+      "limitations": "The source does not describe AutoKitteh event identifiers, deduplication rules, or actual start APIs; the boundary checklist is an inference.",
+      "source_type": "Case Study",
+      "source_text_sha256": "dcedaf268cec7dde2bf8ed485f01ba942b46bc62a5178c966ad0ea82e18d2613",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 63,
+      "title": "Linus Health Boosts Innovation with Temporal",
+      "url": "https://temporal.io/resources/case-studies/linus-health",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that Linus Health uses workflows to express the required order of assessment steps and event history to improve troubleshooting. It uses Temporal Cloud while operating its own workers.",
+      "transferable_lesson": "Engineering inference: encode prerequisite conditions explicitly, test interrupted sequences, and keep worker deployment and monitoring responsibilities visible in the operating model.",
+      "bug_to_prevent": "A later assessment step running before its prerequisite, or an unoperated worker fleet being mistaken for a fully managed application.",
+      "limitations": "The story supplies no patient-data design, regulatory evidence, worker topology, or ordering code. It cannot support healthcare compliance claims.",
+      "source_type": "Case Study",
+      "source_text_sha256": "37ea9a70dff0535151257348b3560284c0e7dc88a559e6e495e6765b4e35dd5a",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 64,
+      "title": "Logikcull Achieves 5x Faster Development with Temporal",
+      "url": "https://temporal.io/resources/case-studies/logikcull",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that Logikcull separates document-processing components for independent scaling and moved a processing step earlier to represent progress more accurately.",
+      "transferable_lesson": "Engineering inference: define user-visible milestones using meaningful completed work, then validate how retries, partial completion, and independent workers affect those milestones.",
+      "bug_to_prevent": "Reporting a document as processed because it entered a queue or reached an incidental internal stage.",
+      "limitations": "The case study does not give progress formulas, queue configuration, consistency guarantees, or deployment details.",
+      "source_type": "Case Study",
+      "source_text_sha256": "1608f9dc01bd7b3b072a5444e3b2b241591cea4cd3b64fb753a06b87883ceead",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 65,
+      "title": "SAP Concur Migrates to the Cloud using Temporal",
+      "url": "https://temporal.io/resources/case-studies/sap-concur",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that SAP Concur orchestrates data movement, schema changes, and configuration updates during cloud migrations, and separately manages SQL Server availability groups and replicas.",
+      "transferable_lesson": "Engineering inference: model migration dependencies and resumable boundaries explicitly; verify each subsystem before permitting a cutover and record a recovery decision for partial completion.",
+      "bug_to_prevent": "A retry or premature cutover combining migrated data with stale schemas or configuration.",
+      "limitations": "The source does not disclose cutover protocols, rollback feasibility, checkpoints, or verification gates. Those are proposed review questions, not reported implementation facts.",
+      "source_type": "Case Study",
+      "source_text_sha256": "bb5297119268c2030eb652f228a026dd2de107d393c3f2e05a2cb5330aae2cad",
+      "skills": [
+        "temporal-safe-deployments"
+      ]
+    },
+    {
+      "index": 66,
+      "title": "Instacart Simplifies Complex Workflows with Temporal",
+      "url": "https://temporal.io/resources/case-studies/instacart-simplifies-complex-workflows",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that Instacart replaced a combination of scheduling tools and long-running RPCs for complex interdependent processes, emphasizing execution visibility and workflow testing.",
+      "transferable_lesson": "Engineering inference: place dependency coordination in one explicit durable process and make external operations independently testable at their boundaries.",
+      "bug_to_prevent": "Hidden dependencies between scheduled jobs allowing a later step to run after an earlier step failed.",
+      "limitations": "The article is a high-level account; it provides no migration plan, exact workflow structure, or demonstration that every legacy tool was removed.",
+      "source_type": "Case Study",
+      "source_text_sha256": "5677acf9fd88cbd28c3485a597d2ba861181d2c54151ccc60d3f590d3f7cb56c",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 67,
+      "title": "Netflix Increases Developer Productivity",
+      "url": "https://temporal.io/resources/case-studies/netflix-increases-developer-productivity",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that Netflix sought consistent infrastructure-orchestration abstractions and valued defining and testing orchestration in code.",
+      "transferable_lesson": "Engineering inference: standardize the smallest shared workflow and activity contracts, then test failure paths rather than relying on production execution to reveal orchestration mistakes.",
+      "bug_to_prevent": "Team-specific orchestration wrappers hiding incompatible failure semantics and leaving recovery paths untested.",
+      "limitations": "The source offers no concrete code, contract definition, or test suite. Its general managed-service remarks do not establish Netflix’s deployment model.",
+      "source_type": "Case Study",
+      "source_text_sha256": "279717af77c04807752ef6380062df61f19d7bb0e3369a07c84953e647c32f52",
+      "skills": [
+        "temporal-workflow-design-critic"
+      ]
+    },
+    {
+      "index": 68,
+      "title": "Instacart: How Workflows are empowering our platforms",
+      "url": "https://temporal.io/resources/on-demand/temporal-at-instacart-how-workflows-are-empowering-our-platforms",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the full official written summary and verified the live page. Searched for a transcript; none was retrieved. The embedded YouTube page could not be fetched. No video was watched.",
+      "observed_pattern": "Temporal’s summary of Instacart’s Replay talk describes configurable retries and signals, with shared Terraform modules and Datadog dashboards supporting adoption.",
+      "transferable_lesson": "Engineering inference: pair shared provisioning and observability with explicit retry and message-handling contracts; test late and repeated control messages.",
+      "bug_to_prevent": "A platform default retrying a business rejection indefinitely, or a repeated signal applying the same business transition twice.",
+      "limitations": "Only the publisher’s talk summary was available. It does not disclose actual retry settings, signal handlers, dashboard alerts, or infrastructure modules.",
+      "source_type": "Replay 2023",
+      "source_text_sha256": "c487faa41ab98e4871447506dfdc601946950b7533c6eec748e3c3fdae36c7c1",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 69,
+      "title": "Using Temporal at Hashicorp",
+      "url": "https://temporal.io/resources/on-demand/temporal-hashicorp",
+      "evidence_type": "talk_summary",
+      "evidence_note": "Read the full official written summary and verified the live page. Searched for a transcript; none was retrieved. The embedded YouTube page could not be fetched. No video was watched.",
+      "observed_pattern": "Temporal’s summary of HashiCorp’s Replay talk describes cellular Nomad infrastructure with shuffle sharding, a Temporal-backed compute API, and Protobuf-generated Go clients and workers.",
+      "transferable_lesson": "Engineering inference: align orchestration limits with infrastructure isolation boundaries and validate typed payload contracts across independently deployed clients and workers.",
+      "bug_to_prevent": "A control-plane workflow propagating an operation across every cell, or incompatible message changes breaking existing executions.",
+      "limitations": "The summary does not document Temporal namespace or task-queue isolation. Nomad cells must not be equated with Temporal clusters or treated as proof of workflow-level isolation.",
+      "source_type": "Replay 2023",
+      "source_text_sha256": "225ecf61f6549a91c2d2b26e3e1ecfb82351400f7b269176d7710eb1fb0222c8",
+      "skills": [
+        "temporal-production-readiness"
+      ]
+    },
+    {
+      "index": 70,
+      "title": "Dapper Labs Optimizes Blockchain Payments with Temporal",
+      "url": "https://temporal.io/resources/case-studies/dapperlabs-story",
+      "evidence_type": "written_case_study",
+      "evidence_note": "Read the complete published case-study text extracted from the page.",
+      "observed_pattern": "Temporal reports that Dapper Labs coordinates payment and fulfillment services requiring compensating actions, manages reservation waits, and integrates asynchronous payment providers.",
+      "transferable_lesson": "Engineering inference: define compensation and reservation-expiry behavior around confirmed business effects, preserving uncertainty when a provider response is missing.",
+      "bug_to_prevent": "Releasing a reservation or issuing compensation while a payment’s actual outcome is still unknown.",
+      "limitations": "The story does not expose compensation ordering, timeout values, provider idempotency contracts, or recovery rules. Its SDK metadata and narrative language differ, so no SDK recommendation is inferred.",
+      "source_type": "Case Study",
+      "source_text_sha256": "e5bdee328954a6068a508caed92007d422ea184c10e9f356fe4e3c7611433a93",
+      "skills": [
+        "temporal-reliability"
+      ]
+    }
+  ]
+}

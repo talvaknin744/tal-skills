@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
+import { markdownTargets } from './lib/markdown-links.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const skillRoot = path.join(root, 'skills');
@@ -63,8 +64,7 @@ for (const { entry, directory, concern } of skillDirectories) {
   for (const filename of filesUnder(directory)) {
     if (!filename.endsWith('.md')) continue;
     const contents = fs.readFileSync(filename, 'utf8');
-    for (const match of contents.matchAll(/!?\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
-      const target = match[1];
+    for (const target of markdownTargets(contents)) {
       if (/^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith('#')) continue;
       const localPath = decodeURIComponent(target.split('#')[0]);
       const resolved = path.resolve(path.dirname(filename), localPath);

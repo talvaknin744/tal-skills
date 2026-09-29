@@ -1,0 +1,16 @@
+v1 renew(invoice):
+    await activity.loadAccount(invoice.accountId)
+    await workflowTimer(14 days)
+    await activity.charge(invoice)
+    await activity.sendReceipt(invoice)
+
+v2 renew(invoice):
+    await activity.loadAccount(invoice.accountId)
+    await workflowTimer(14 days)
+    await activity.checkCompliance(invoice.accountId)
+    await activity.charge(invoice)
+    await activity.sendReceipt(invoice)
+
+example v1 command history:
+    ScheduleActivity(loadAccount), StartTimer(14 days),
+    ScheduleActivity(charge), ScheduleActivity(sendReceipt)

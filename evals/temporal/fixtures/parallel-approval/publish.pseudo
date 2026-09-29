@@ -1,0 +1,18 @@
+workflow prepareAndPublish(request):
+    context = { findings: [], headline: "" }
+    await parallel(
+        activity.researchPricing(request, context),
+        activity.researchCompliance(request, context)
+    )
+    document = render(context)
+    approved = false
+    on approval(message):
+        approved = true
+    await approved OR durableTimer(10 minutes)
+    if approved:
+        return await activity.publish(document, randomUUID())
+
+activity researchPricing(request, context):
+    result = await modelResearch(request)
+    context.findings.append(result.findings)
+    context.headline = result.headline

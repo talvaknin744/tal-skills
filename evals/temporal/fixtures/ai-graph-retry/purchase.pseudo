@@ -1,0 +1,12 @@
+workflow purchase(request):
+    return await activity.runGraph(request, maxAttempts = 3)
+
+activity runGraph(request):
+    spent = 0
+    items = await model("Select items", request)
+    spent += 0.20
+    receipt = await supplier.placeOrder(items, randomUUID())
+    summary = await model("Summarize receipt", receipt)
+    spent += 0.20
+    assert spent <= 1.00
+    return summary

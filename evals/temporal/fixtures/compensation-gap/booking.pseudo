@@ -1,0 +1,14 @@
+compensations = []
+try:
+    room = await activity.reserveRoom(bookingRef)
+    compensations.append(() => activity.releaseRoom(bookingRef))
+    car = await activity.reserveCar(bookingRef)
+    compensations.append(() => activity.releaseCar(bookingRef))
+    return confirmed(room, car)
+catch failure:
+    for compensate in reverse(compensations):
+        try:
+            await compensate()
+        catch cleanupFailure:
+            log(cleanupFailure)
+    return rejected(failure)

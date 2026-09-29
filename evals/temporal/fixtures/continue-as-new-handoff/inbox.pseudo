@@ -1,0 +1,17 @@
+run(accountId, balance = 0):
+    pending = []
+    appliedCommandIds = set()
+
+    async handleCommand(command):
+        await activity.validate(command)
+        pending.push(command)
+        return accepted(command.commandId)
+
+    while true:
+        await condition(() => pending.length > 0)
+        command = pending.shift()
+        if not appliedCommandIds.has(command.commandId):
+            balance = apply(balance, command)
+            appliedCommandIds.add(command.commandId)
+        if historySuggestsRollover():
+            continueAsNew(accountId)

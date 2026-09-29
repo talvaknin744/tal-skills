@@ -1,0 +1,617 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "payment-response-loss",
+      "title": "Business charge identity survives Activity attempts and Workflow runs",
+      "skill": "temporal-reliability",
+      "tags": [
+        "activity-retries",
+        "idempotency",
+        "ambiguous-outcome"
+      ],
+      "prompt": "Review the renewal incident and charge adapter. Why could the invoice be charged twice despite Activity retries, and what is the smallest safe correction under PayGate's supplied contract? Include concrete failure checks and recovery limits. Do not modify files.",
+      "fixture_dir": "evals/temporal/fixtures/payment-response-loss",
+      "fixtures": [
+        "incident.md",
+        "charge.ts"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "uncertain-charge",
+          "severity": "critical",
+          "criterion": "Explains that provider acceptance followed by a lost response can leave a successful external effect while the Activity retries; does not claim durable execution guarantees one external charge by itself."
+        },
+        {
+          "id": "business-identity",
+          "severity": "critical",
+          "criterion": "Recommends a stable identity scoped to tenant and immutable invoice, retained across Activity attempts and Workflow runs; excludes attempt number and changing Run ID from the logical charge identity."
+        },
+        {
+          "id": "payload-and-horizon",
+          "severity": "major",
+          "criterion": "Keeps accepted amount and other charge intent stable, uses the supplied result lookup/replay contract within its retention, and requires reconciliation rather than blind replacement after the provider identity expires."
+        },
+        {
+          "id": "failure-checks",
+          "severity": "major",
+          "criterion": "Specifies provider acceptance followed by a lost response and retry, a new Workflow run for the same invoice, and equal-amount distinct invoices with one effect for the same obligation and separate effects for separate obligations."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "compensation-registration-gap",
+      "title": "Cleanup covers an effect whose completion response is lost",
+      "skill": "temporal-reliability",
+      "tags": [
+        "compensation",
+        "ambiguous-outcome",
+        "recovery"
+      ],
+      "prompt": "Review booking.pseudo against the provider contracts. Can rejected bookings leave a hold behind? Recommend a coherent cleanup strategy and a failure schedule that would expose the problem, without rewriting the project or changing files.",
+      "fixture_dir": "evals/temporal/fixtures/compensation-gap",
+      "fixtures": [
+        "requirements.md",
+        "booking.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "registration-window",
+          "severity": "critical",
+          "criterion": "Identifies reserve acceptance followed by lost response or exhausted retries before the compensation is appended; explains why the registered-only cleanup can miss that hold."
+        },
+        {
+          "id": "recoverable-cleanup",
+          "severity": "critical",
+          "criterion": "Makes cleanup eligible before the potentially successful reserve or uses equivalent durable operation-state recovery. Accounts for a late reserve succeeding after an absent-hold release; keeps it unresolved until settlement/reconciliation rather than claiming early registration alone closes that race."
+        },
+        {
+          "id": "cleanup-failure",
+          "severity": "major",
+          "criterion": "Makes release retryable and tracked using the supplied idempotent release-by-reference contract, preserves unresolved cleanup for intervention, and does not present logged-and-swallowed release failure as a completed business rollback."
+        },
+        {
+          "id": "not-acid",
+          "severity": "major",
+          "criterion": "Describes compensation as a follow-up business action with its own failures, not instantaneous transaction rollback; preserves reverse-order cleanup where dependencies require it."
+        },
+        {
+          "id": "failure-checks",
+          "severity": "major",
+          "criterion": "Specifies reserve accepted/response lost and release transient failure schedules, asserting eventual release or an explicit unresolved-cleanup state rather than merely a rejected booking result."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "replay-and-worker-retirement",
+      "title": "A code rollout preserves old histories and sleeping executions",
+      "skill": "temporal-safe-deployments",
+      "tags": [
+        "replay",
+        "worker-versioning",
+        "rollout"
+      ],
+      "prompt": "Assess the v2 release and ten-minute Worker retirement proposal. Separate command-history compatibility from traffic routing, propose a safe rollout and rollback plan, and explain what evidence is missing. This is a read-only review; do not deploy or edit files.",
+      "fixture_dir": "evals/temporal/fixtures/replay-and-retirement",
+      "fixtures": [
+        "release.md",
+        "workflows.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "command-compatibility",
+          "severity": "critical",
+          "criterion": "Identifies the inserted compliance Activity as a command-sequence change that cannot simply replace the old implementation for affected histories; distinguishes this from compatible Activity implementation changes."
+        },
+        {
+          "id": "compatible-routing",
+          "severity": "critical",
+          "criterion": "Uses supported version routing/pinning and retained old code or a verified replay-compatible code branch; does not assume sending new executions to v2 makes all existing executions safe on it."
+        },
+        {
+          "id": "old-worker-retention",
+          "severity": "critical",
+          "criterion": "Rejects ten idle minutes as proof that v1 is unused; accounts for fourteen-day sleeping and outstanding executions, with retirement based on verified reachability/assignment and an explicit plan for remaining old runs."
+        },
+        {
+          "id": "rollback-evidence",
+          "severity": "major",
+          "criterion": "Calls for representative real history replay and new/old execution tests, records unavailable history and version evidence, and explains why replacing all code with v1 may be unsafe for executions that already produced v2 commands."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "continue-as-new-handoff",
+      "title": "Rollover preserves state and resolves in-flight message handlers",
+      "skill": "temporal-safe-deployments",
+      "tags": [
+        "continue-as-new",
+        "messages",
+        "state-handoff"
+      ],
+      "prompt": "Review the account inbox's rollover design. Specify what must cross the Continue-As-New boundary and how to handle a command validating or arriving near rollover. Give targeted verification cases. Do not change files.",
+      "fixture_dir": "evals/temporal/fixtures/continue-as-new-handoff",
+      "fixtures": [
+        "requirements.md",
+        "inbox.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "state-handoff",
+          "severity": "critical",
+          "criterion": "Identifies that passing only accountId loses balance, accepted pending commands, and the deduplication state; carries forward the state needed for the business invariant or uses an explicitly durable alternative."
+        },
+        {
+          "id": "handler-lifecycle",
+          "severity": "critical",
+          "criterion": "Addresses the handler awaiting validation at rollover and commands accepted near handoff with a concrete drain/close/transfer protocol; does not assume unfinished handlers migrate into the next run."
+        },
+        {
+          "id": "message-delivery",
+          "severity": "major",
+          "criterion": "Defines or flags stable Workflow ID versus run-specific delivery and producer retry/acknowledgement behavior so a rollover race does not silently discard an acknowledged command."
+        },
+        {
+          "id": "bounded-growth",
+          "severity": "major",
+          "criterion": "Handles history and deduplication growth with a retention or durable invariant tied to the producer retry contract, rather than either forgetting all IDs or accumulating an unlimited run input."
+        },
+        {
+          "id": "handoff-checks",
+          "severity": "major",
+          "criterion": "Proposes rollover with nonzero balance, pending work, a duplicate command, validation in flight, and a boundary arrival; expected results preserve accepted commands without double application."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "backlog-versus-vendor-quota",
+      "title": "Worker scaling cannot exceed an account-wide upstream capacity",
+      "skill": "temporal-production-readiness",
+      "tags": [
+        "capacity",
+        "rate-limits",
+        "task-queues"
+      ],
+      "prompt": "Review the proposed backlog fix using observations.md. Explain the bottleneck, the likely effect of more Workers, and a bounded operational plan that preserves documents. Specify useful measurements. Do not change files or contact any service.",
+      "fixture_dir": "evals/temporal/fixtures/queue-and-quota",
+      "fixtures": [
+        "observations.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "capacity-bound",
+          "severity": "critical",
+          "criterion": "Recognizes that arrival rate exceeds the supplied account-wide acceptance quota and that replicas alone cannot create sufficient sustained throughput; explains that retries can make overload worse."
+        },
+        {
+          "id": "aggregate-control",
+          "severity": "critical",
+          "criterion": "Places an effective rate/concurrency policy at the scope of the shared vendor quota across replicas and queues; does not suggest per-worker limits that multiply uncontrolled as replicas increase."
+        },
+        {
+          "id": "error-policy",
+          "severity": "major",
+          "criterion": "Uses Retry-After/backoff and distinguishes retryable throttling/transient failures from terminal failures; proposes upstream backpressure or deferred durable acceptance without discarding documents. Acknowledges that sustained arrival above the fixed quota cannot have a bounded backlog unless intake slows; does not rely on an excluded quota increase or data expiry."
+        },
+        {
+          "id": "measure-correct-queue",
+          "severity": "major",
+          "criterion": "Distinguishes Workflow Task health from Activity backlog and observes accepted throughput, retry amplification, queue age, vendor responses, and latency before tuning Worker capacity."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "schedule-overlap-policy",
+      "title": "Schedule overlap and catch-up are independent business choices",
+      "skill": "temporal-production-readiness",
+      "tags": [
+        "schedules",
+        "overlap",
+        "catch-up"
+      ],
+      "prompt": "Review whether limiting Workflow retry attempts solves this snapshot Schedule's concurrency problem. Recommend overlap and recovery behavior consistent with the business requirements, including missed ticks and operator backfill. Keep requirements.md unchanged.",
+      "fixture_dir": "evals/temporal/fixtures/schedule-overlap",
+      "fixtures": [
+        "requirements.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "overlap-not-retry",
+          "severity": "critical",
+          "criterion": "Explains that independent scheduled starts can overlap even when each Workflow has one attempt; enforces at most one active snapshot per warehouse using suitable overlap policy and identity boundaries."
+        },
+        {
+          "id": "business-policy",
+          "severity": "major",
+          "criterion": "Selects or discusses skip/coalescing behavior consistent with freshness and permission to skip ticks, avoiding an unbounded backlog of every five-minute tick."
+        },
+        {
+          "id": "catch-up-backfill",
+          "severity": "major",
+          "criterion": "Treats catch-up and operator backfill as explicit, separate choices that must preserve the same concurrency invariant; does not assume the overlap choice resolves all outage behavior."
+        },
+        {
+          "id": "configuration-evidence",
+          "severity": "major",
+          "criterion": "Proposes a twelve-minute execution with multiple ticks and an outage/backfill check, and verifies or defers exact version-specific configuration names rather than inventing supplied API facts."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "payload-privacy-and-capacity",
+      "title": "External payload references need durable access and protected metadata",
+      "skill": "temporal-production-readiness",
+      "tags": [
+        "payloads",
+        "history",
+        "privacy"
+      ],
+      "prompt": "Review this document-analysis design and the signed-URL proposal. Recommend a practical payload boundary, privacy controls, and capacity checks that handle delayed retries. Explain any evidence limits. Do not provision resources or edit design.md.",
+      "fixture_dir": "evals/temporal/fixtures/payload-privacy",
+      "fixtures": [
+        "design.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "history-boundary",
+          "severity": "critical",
+          "criterion": "Identifies repeated large document and result payloads as event-history/transport pressure that extra Worker memory alone does not address; proposes carrying small references and bounded metadata instead."
+        },
+        {
+          "id": "reference-lifetime",
+          "severity": "critical",
+          "criterion": "Recognizes that fifteen-minute signed URLs and one-day object deletion cannot serve three-day retries; uses stable authorized object identity plus renewable access and retention aligned with actual replay/recovery needs."
+        },
+        {
+          "id": "sensitive-metadata",
+          "severity": "critical",
+          "criterion": "Keeps medical content and credentials out of Search Attributes/logs and proposes scoped access and appropriate payload/storage protection; does not treat encryption as permission to publish sensitive indexed metadata."
+        },
+        {
+          "id": "measured-limits",
+          "severity": "major",
+          "criterion": "Calls for actual payload/history measurements and deployed-version limit verification, while retaining tenant checks and lifecycle cleanup; does not claim the proposed design passed capacity testing."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "ai-graph-retry-and-budget",
+      "title": "Retry boundaries preserve AI tool identity and the logical purchase budget",
+      "skill": "temporal-ai-workflows",
+      "tags": [
+        "ai",
+        "activity-granularity",
+        "cost-budget"
+      ],
+      "prompt": "Review the purchase assistant after the incident. Propose the smallest durable execution structure that preserves one order and the stated spending cap across failures. Explain what remains uncertain after a lost model response. Keep all files unchanged.",
+      "fixture_dir": "evals/temporal/fixtures/ai-graph-retry",
+      "fixtures": [
+        "requirements.md",
+        "purchase.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "graph-reexecution",
+          "severity": "critical",
+          "criterion": "Identifies that a retried monolithic Activity can repeat billed model requests and an already accepted order, select different items, and reset its local spending counter."
+        },
+        {
+          "id": "durable-boundaries",
+          "severity": "critical",
+          "criterion": "Keeps model and supplier I/O outside deterministic Workflow execution, preserves completed node outputs at suitable durable boundaries, and distinguishes this from guaranteeing a failed Activity's internal calls ran once."
+        },
+        {
+          "id": "stable-tool-effect",
+          "severity": "critical",
+          "criterion": "Uses a tenant-scoped logical order key and stable selected arguments across retries, with the supplied retention boundary; does not derive the tool identity from attempts or fresh random values."
+        },
+        {
+          "id": "durable-budget",
+          "severity": "critical",
+          "criterion": "Enforces the one-dollar cap before dispatch across retries using durable reservations or a justified worst-case allocation; counts lost-response requests as potentially billed and does not release their budget based only on timeout."
+        },
+        {
+          "id": "uncertainty-and-checks",
+          "severity": "major",
+          "criterion": "Acknowledges that missing model deduplication/usage lookup prevents exact recovery of the unknown call, and proposes a failure schedule checking one supplier acceptance and spending at or below the cap."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "parallel-context-and-approval",
+      "title": "Explicit branch results and an expiring approval gate protect publication",
+      "skill": "temporal-ai-workflows",
+      "tags": [
+        "parallelism",
+        "human-approval",
+        "deadline"
+      ],
+      "prompt": "Review prepareAndPublish for branch-result handling and publication authorization. Give a concise corrected state flow and focused tests for parallel completion, stale or late approval, and a lost publish response. Keep the files unchanged.",
+      "fixture_dir": "evals/temporal/fixtures/parallel-approval",
+      "fixtures": [
+        "requirements.md",
+        "publish.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "explicit-results",
+          "severity": "critical",
+          "criterion": "Explains that mutating serialized Activity arguments does not update Workflow context; gathers labelled branch return values and retains their evidence."
+        },
+        {
+          "id": "deterministic-merge",
+          "severity": "major",
+          "criterion": "Defines a deterministic merge or explicit conflict decision so branch completion order does not choose the headline or discard evidence."
+        },
+        {
+          "id": "approval-binding",
+          "severity": "critical",
+          "criterion": "Checks authorized editor, request identity, and exact final document digest before approving publication; rejects stale or unrelated approval messages."
+        },
+        {
+          "id": "deadline-state",
+          "severity": "critical",
+          "criterion": "Uses the original absolute deadline and an explicit pending/approved/expired state; rejects messages processed at or after the deadline and does not reopen a closed or expired decision."
+        },
+        {
+          "id": "publication-retry",
+          "severity": "major",
+          "criterion": "Keeps publish arguments and logical operation identity stable through retries and proposes both branch orders, wrong-digest/unauthorized messages, deadline boundary, and response-loss checks."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "heartbeat-and-cancellation",
+      "title": "Progress and cancellation must cross the Activity boundary",
+      "skill": "temporal-reliability",
+      "tags": [
+        "heartbeats",
+        "cancellation",
+        "long-running-activities"
+      ],
+      "prompt": "Review the archive Activity's timeout, retry, and cancellation behavior. Recommend a scoped recovery approach for a three-hour copy, including progress checkpoints and the requested cancellation semantics. Keep the project unchanged.",
+      "fixture_dir": "evals/temporal/fixtures/heartbeat-cancellation",
+      "fixtures": [
+        "requirements.md",
+        "archive.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "timeout-not-kill",
+          "severity": "critical",
+          "criterion": "Recognizes that the fifteen-minute timeout can trigger overlapping retries of a three-hour Activity and does not forcibly stop the previous network calls; preserves destination idempotency across attempts."
+        },
+        {
+          "id": "checkpoint-contract",
+          "severity": "major",
+          "criterion": "Uses progress heartbeats/checkpoints whose saved position follows confirmed object completion and resumes from durable details, with tolerable repeated puts after a checkpoint gap."
+        },
+        {
+          "id": "cancellation-contract",
+          "severity": "critical",
+          "criterion": "Makes cancellation observable and cooperatively stops further copying with SDK-supported context/network behavior; does not promise cancellation undoes already copied objects or guarantees instant remote termination."
+        },
+        {
+          "id": "bounded-recovery",
+          "severity": "major",
+          "criterion": "Chooses coherent liveness/overall timeouts and cleanup tracking, calls for verifying installed SDK cancellation behavior, and proposes a mid-copy crash/cancel test with observable progress and cleanup state."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    },
+    {
+      "id": "bounded-charge-activity-edit",
+      "title": "A narrow Activity adapter fix preserves logical charge identity",
+      "skill": "temporal-reliability",
+      "tags": [
+        "implementation",
+        "activity-retries",
+        "scope"
+      ],
+      "prompt": "Fix charge.mjs so the provider identity follows requirements.md across Activity attempts and Workflow runs. Keep the adapter's error and receipt behavior. Use Node built-ins to verify repeated and distinct obligations, response loss after provider acceptance, and audit failure followed by retry. Do not install packages or redesign the Workflow.",
+      "fixture_dir": "evals/temporal/fixtures/bounded-charge-edit",
+      "fixtures": [
+        "requirements.md",
+        "charge.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "actual-stable-fix",
+          "severity": "critical",
+          "criterion": "Actually edits charge.mjs to send invoice-charge:<tenantId>:<invoiceId> independent of Activity attempt and Workflow Run ID, with distinct identities for distinct tenant/invoice pairs."
+        },
+        {
+          "id": "error-and-result",
+          "severity": "critical",
+          "criterion": "Preserves provider errors, audit errors, receipt return behavior, and audit execution only after a received provider receipt; does not swallow failures or mark success without the receipt."
+        },
+        {
+          "id": "executed-checks",
+          "severity": "major",
+          "criterion": "Runs local checks for repeated obligations across attempts/runs, distinct obligations, provider acceptance with a lost response, and audit failure followed by retry, inspecting actual passed keys and observable provider-effect counts in a contract-faithful stand-in."
+        },
+        {
+          "id": "bounded-change",
+          "severity": "major",
+          "criterion": "Limits the implementation to the adapter and relevant local verification, with no external calls, dependencies, Temporal platform setup, or unrelated infrastructure."
+        },
+        {
+          "id": "honest-verification",
+          "severity": "major",
+          "criterion": "Reports actual commands/results and limits their evidence to adapter behavior under the supplied stand-in contract rather than claiming a real Temporal or provider integration was verified."
+        }
+      ]
+    },
+    {
+      "id": "calendar-temporal-nontrigger",
+      "title": "JavaScript Temporal date formatting does not trigger workflow engineering",
+      "skill": "temporal-reliability",
+      "tags": [
+        "activation",
+        "scope",
+        "calendar"
+      ],
+      "prompt": "Review format.mjs against requirements.md. Explain the smallest correction to the output format and give the expected output for 2026-03-07. Keep the files unchanged.",
+      "fixture_dir": "evals/temporal/fixtures/nontrigger-date-format",
+      "fixtures": [
+        "requirements.md",
+        "format.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Handles the calendar formatter without loading the Temporal Workflow skill or proposing Workers, durable execution, retries, task queues, or platform migration."
+        },
+        {
+          "id": "correct-format",
+          "severity": "major",
+          "criterion": "Identifies month/day order and missing zero padding and gives 07/03/2026 as the required output, with a minimal formatter correction."
+        },
+        {
+          "id": "bounded-evidence",
+          "severity": "major",
+          "criterion": "Does not assume a Temporal Workflow service or install a runtime/polyfill; if the local Node runtime lacks Temporal.PlainDate, accurately distinguishes inspection from execution."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied project files unchanged and clearly distinguishes proposed checks and inferred behavior from tests or production observations actually obtained."
+        }
+      ]
+    }
+  ]
+}
