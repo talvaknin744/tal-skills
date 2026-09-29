@@ -6,7 +6,7 @@
 
 **AWS Lambda — Public Preview since July 30, 2026.** Open to all Temporal Cloud customers. There is no access request, no support ticket, and no manual toggle to enable: a customer selects "AWS Lambda (Public Preview)" as the compute provider in the UI and sets up their Worker Deployment directly. Never route a user to support to "get access" for Lambda.
 
-AWS Lambda is the only compute provider this skill supports. Do not adapt the Lambda material to any other provider.
+AWS Lambda is the only compute provider this package implements. Cloud Run Worker Pools and Bedrock AgentCore are separate platform pre-releases with access through Support; consult the [current serverless guide](https://docs.temporal.io/serverless-workers). The lifecycle and invocation-limit examples below describe Lambda, not universal limits for other providers.
 
 Public Preview is not General Availability. APIs are still evolving and may be subject to backwards-incompatible changes between versions — pin SDK and CLI versions for anything long-lived, and read the installed package's real API surface rather than writing from memory.
 

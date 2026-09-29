@@ -127,5 +127,5 @@ There are exactly 6 overlap policies.
 
 ## Sibling skill pointers
 
-- For metrics collection and alerting infrastructure, see the observability skill (planned: `skill-temporal-observability`).
+- For metrics collection and alerting infrastructure, see the observability skill (planned: `temporal-observability`).
 - For Schedule CRUD operations (`temporal schedule create`, `temporal schedule update`, etc.) and the time-spec forms, see [`cli-conventions.md`](../ops/cli-conventions.md#schedule-time-spec-forms) in the ops reference files.

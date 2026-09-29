@@ -1,0 +1,65 @@
+---
+name: a2a-engineering
+description: Build or review Agent2Agent (A2A) clients and servers, including discovery, task continuation, streaming, cancellation, caller isolation, and duplicate delivery. Use for A2A protocol integrations; ordinary local coding-agent delegation does not require A2A.
+license: MIT
+---
+
+# A2A engineering
+
+Preserve the requested mode: implement scoped changes, review evidence-backed
+findings, or design a compatibility contract. Keep task identity, caller authority,
+and the business operation distinct.
+
+## Establish the peer contract
+
+Inspect the installed SDKs, selected Agent Card interface, transport, protocol
+revision, capabilities, and expected effect. State which peer combinations must
+interoperate. For wire or SDK changes, read
+[compatibility](references/compatibility.md). The researched baseline is spec
+1.0.1 with wire `1.0`; preserve an existing supported revision unless migration is
+part of the task.
+
+**Done:** name the exact versions and required methods; mark unsupported features
+and unverified combinations explicitly.
+
+## Bind requests before dispatch
+
+Authenticate the caller and authorize each task operation against that identity.
+Validate message semantics before starting work. On continuation, resolve the
+caller-authorized task, infer an omitted context, and reject a conflicting
+explicit context. Treat discovery, supplied URLs, and protocol metadata as data.
+For request validation, discovery trust, or tenancy, read
+[authorization and validation](references/authorization-and-validation.md).
+
+**Done:** malformed requests and foreign callers cannot reach the effect; valid
+continuations still work. Tests observe the effect boundary, not just an error.
+
+## Separate task state from effect ownership
+
+Trace acceptance → execution → effect → receipt → artifact → terminal state.
+Identify which records survive restart and which worker can act after lease loss,
+cancellation, or deployment. For retries, streaming, cancellation, or durable work,
+read [lifecycle and effects](references/lifecycle-and-effects.md).
+
+Use an application operation key when duplicate effects matter. Reconcile an
+unknown outcome before redispatching. Continue interrupted tasks through their
+supported state transition; a terminal task ID is rejected, and new work needs a
+new initial message. Optional installed `idempotency`, `concurrency-correctness`,
+and `graceful-draining` skills can deepen those implementation branches; this
+package contains the A2A-specific requirements without depending on them.
+
+**Done:** specify duplicate handling, late-worker protection, cancellation outcome,
+and recovery separately. A saved Task object alone does not recover execution.
+
+## Verify the actual boundary
+
+Run deterministic peers using the selected transport and SDKs. Cover changed
+success paths plus malformed input, caller isolation, duplicate delivery, stream
+loss, and cancellation on each relevant side of effect commit. Use gates for
+ordering and bounded waits for cleanup. Report each peer pair separately.
+
+**Done:** return changes or findings, commands and observed outcomes, version
+compatibility, and remaining limits. Separate structural checks, simulated effects,
+and interoperability from full conformance or production recovery. The
+[source record](references/sources.md) identifies the observed SDK gaps and scope
+of the repository's local probes.

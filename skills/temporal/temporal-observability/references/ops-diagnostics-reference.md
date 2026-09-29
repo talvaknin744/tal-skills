@@ -51,11 +51,11 @@ When diagnosing, the metric name depends on the user's environment. Use this tab
 | Activity execution latency | `temporal_cloud_v1_activity_start_to_close_latency_p99` | `temporal_activity_execution_latency` |
 | Resource exhaustion | `temporal_cloud_v1_resource_exhausted_error_count` | `temporal_request_failure` (filtered by status) |
 
-For threshold values (failure conversion rate >0.1 = poor, <0.01 = good; activity success rate target >95%), see `service-health-monitoring.md` § Ratio-Based Monitoring. For schedule-to-start and sync match thresholds, see `worker-health-monitoring.md` § Minimal Observations.
+For metric alignment and limits of failure ratios, see `service-health-monitoring.md` § Ratio-Based Monitoring. Use business completion deadlines and workload baselines instead of universal ratio thresholds. For schedule-to-start and sync match thresholds, see `worker-health-monitoring.md` § Minimal Observations.
 
 ## Environment Detection
 
-When the user hasn't stated their environment, use these clues. Ask if confidence is below 95%.
+When the user hasn't stated their environment, use these clues. Confirm missing facts that affect metric names, units, or interpretation.
 
 | Clue | Likely Environment |
 |---|---|
@@ -96,7 +96,7 @@ User reports: workflows slow to start / backlog growing / high latency
 │  │  │  ├─ ZERO on all workers → Slots depleted
 │  │  │  │  ├─ Host CPU/memory high → Scale horizontally (add worker instances)
 │  │  │  │  └─ Host CPU/memory low → Increase max concurrent execution size
-│  │  │  │     (hand off to skill-temporal-workertuning for tuning guidance)
+│  │  │  │     (hand off to temporal-workertuning for tuning guidance)
 │  │  │  │
 │  │  │  └─ Slots available → Workers have capacity but aren't polling fast enough
 │  │  │     └─ Increase concurrent pollers per worker
@@ -147,15 +147,15 @@ User reports: activity failures / workflow failures / error rate spiking
 │
 ├─ Check: failure conversion rate
 │   (workflow_failed_count / activity_fail_count)
-│   Ref: service-health-monitoring.md § Failure Conversion Rate for thresholds
+│   Align attempt/terminal semantics, labels, window, and denominator first
+│   Ref: service-health-monitoring.md § Failure Conversion Rate
 │
-│  ├─ HIGH → Workflows not handling activity failures gracefully
-│  │  └─ Fix: add error handling in workflow code (try/catch, fallbacks,
-│  │     compensation logic, human notification)
-│  │     Hand off to skill-temporal-developer for code changes
+│  ├─ HIGH → Inspect histories: expected business rejection or unexpected failure?
+│  │  └─ Fix handling only when it violates the intended terminal outcome
+│  │     Route code changes to temporal-developer when installed
 │  │
-│  └─ LOW → Good resilience; activities fail but workflows recover
-│     └─ Focus on reducing the activity failure rate itself (below)
+│  └─ LOW → Check business completion, pending age, and retry/time budgets
+│     └─ No timely completion can mean a retry loop, not resilience
 │
 ├─ Check: activity success rate
 │   Ref: service-health-monitoring.md § Activity Success Rate for formula + target

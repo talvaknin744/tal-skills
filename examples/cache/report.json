@@ -1,0 +1,991 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "run_id": "69b30aeded3b4c8e",
+  "image_pin": "redis@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+  "expected_redis_version": "8.10.2",
+  "candidate_sha256": "97922dc01ffb0a5b71ce08fecbc8d2c4f8b8afaf297e791fca6765bba3b8b60c",
+  "scope": "Two spawned service processes; separate Redis TCP and SQLite connections; generated local records",
+  "cases": [
+    {
+      "name": "naive_cache_aside_stale_fill",
+      "outcome": "forbidden_outcome_reproduced",
+      "evidence": {
+        "ack_revision": 2,
+        "later_read_revision": 1
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture",
+            "mode": "naive"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "mode": "naive",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 0,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "a",
+          "request": {
+            "action": "finish",
+            "mode": "naive"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": 1,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "b",
+          "request": {
+            "action": "read",
+            "mode": "naive"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "path": "cache",
+            "source_reads": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "client_check_then_set",
+      "outcome": "forbidden_outcome_reproduced",
+      "evidence": {
+        "floor_after_write": 2,
+        "cached_revision": 1
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture",
+            "mode": "checked"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false,
+            "client_observed_floor": "1",
+            "client_check_allowed": true
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 2,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "a",
+          "request": {
+            "action": "finish",
+            "mode": "checked"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": 1,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "b",
+          "request": {
+            "action": "read",
+            "mode": "naive"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "path": "cache",
+            "source_reads": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "atomic_fill_after_write",
+      "outcome": "contract_satisfied",
+      "evidence": {
+        "overlapping_read_revision": 1,
+        "old_fill_result": 0,
+        "later_read_revision": 2,
+        "value_eviction": false,
+        "floor_preserved": true,
+        "repeated_read_avoids_source": true
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 2,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "a",
+          "request": {
+            "action": "finish"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": 0,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "b",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "source",
+            "publish_result": 1,
+            "source_reads": 1
+          }
+        },
+        {
+          "sequence": 7,
+          "actor": "b",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "cache",
+            "source_reads": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "atomic_fill_after_value_eviction",
+      "outcome": "contract_satisfied",
+      "evidence": {
+        "overlapping_read_revision": 1,
+        "old_fill_result": 0,
+        "later_read_revision": 2,
+        "value_eviction": true,
+        "floor_preserved": true,
+        "repeated_read_avoids_source": true
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 2,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "b",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "source",
+            "publish_result": 1,
+            "source_reads": 1
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "a",
+          "request": {
+            "action": "finish"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": 0,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 7,
+          "actor": "b",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "source",
+            "publish_result": 1,
+            "source_reads": 2
+          }
+        },
+        {
+          "sequence": 8,
+          "actor": "b",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "cache",
+            "source_reads": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "delayed_older_notification",
+      "outcome": "contract_satisfied",
+      "evidence": {
+        "floor": 3,
+        "delayed_notification_revision": 2,
+        "later_read_revision": 3
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Second"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Second",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 2,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Third"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Third",
+              "revision": 3
+            },
+            "database_committed": true,
+            "cache_transition_result": 3,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "a",
+          "request": {
+            "action": "advance",
+            "revision": 2
+          },
+          "response": {
+            "floor": 3
+          }
+        },
+        {
+          "sequence": 7,
+          "actor": "a",
+          "request": {
+            "action": "finish"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": 0,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 8,
+          "actor": "b",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Third",
+              "revision": 3
+            },
+            "path": "source",
+            "publish_result": 1,
+            "source_reads": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "floor_expiry_permissive",
+      "outcome": "forbidden_outcome_reproduced",
+      "evidence": {
+        "metadata_loss": "observed real PEXPIRE",
+        "delayed_fill_result": 1,
+        "later_read_revision": 1,
+        "later_read_path": "cache"
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 2,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "a",
+          "request": {
+            "action": "finish",
+            "mode": "permissive"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": 1,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "b",
+          "request": {
+            "action": "read",
+            "mode": "permissive"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "path": "cache",
+            "source_reads": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "floor_expiry_fixed",
+      "outcome": "contract_satisfied_via_authoritative_fallback",
+      "evidence": {
+        "metadata_loss": "observed real PEXPIRE",
+        "delayed_fill_result": -1,
+        "later_read_revision": 2,
+        "later_read_path": "source"
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "capture"
+          },
+          "response": {
+            "captured": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "public_response_sent": false
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "write",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "cache_transition_result": 2,
+            "service_acknowledged": true
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "a",
+          "request": {
+            "action": "finish",
+            "mode": "fixed"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "publish_result": -1,
+            "public_response_sent": true
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "b",
+          "request": {
+            "action": "read",
+            "mode": "fixed"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "source",
+            "publish_result": -1,
+            "source_reads": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "database_commit_before_cache_transition",
+      "outcome": "dual_write_gap_observed",
+      "evidence": {
+        "database_revision": 2,
+        "read_before_cache_transition": 1,
+        "service_acknowledged_during_gap": false,
+        "read_after_replayed_floor_advance": 2,
+        "physical_process_crash": false
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "a",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "b",
+          "request": {
+            "action": "reset"
+          },
+          "response": {
+            "reset": true
+          }
+        },
+        {
+          "sequence": 3,
+          "actor": "a",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "path": "source",
+            "publish_result": 1,
+            "source_reads": 1
+          }
+        },
+        {
+          "sequence": 4,
+          "actor": "b",
+          "request": {
+            "action": "commit_only",
+            "label": "Updated"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "database_committed": true,
+            "service_acknowledged": false
+          }
+        },
+        {
+          "sequence": 5,
+          "actor": "a",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Original",
+              "revision": 1
+            },
+            "path": "cache",
+            "source_reads": 1
+          }
+        },
+        {
+          "sequence": 6,
+          "actor": "b",
+          "request": {
+            "action": "advance",
+            "revision": 2
+          },
+          "response": {
+            "floor": 2
+          }
+        },
+        {
+          "sequence": 7,
+          "actor": "a",
+          "request": {
+            "action": "read"
+          },
+          "response": {
+            "record": {
+              "id": "north",
+              "label": "Updated",
+              "revision": 2
+            },
+            "path": "source",
+            "publish_result": 1,
+            "source_reads": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "snapshot_rule_cannot_discard_deltas",
+      "outcome": "forbidden_outcome_reproduced",
+      "evidence": {
+        "required_sum": 11,
+        "observed_sum": 10,
+        "late_delta_discarded": true
+      },
+      "trace": [
+        {
+          "sequence": 1,
+          "actor": "b",
+          "request": {
+            "action": "delta_control",
+            "sequence": 2,
+            "delta": 10
+          },
+          "response": {
+            "applied": 1
+          }
+        },
+        {
+          "sequence": 2,
+          "actor": "a",
+          "request": {
+            "action": "delta_control",
+            "sequence": 1,
+            "delta": 1
+          },
+          "response": {
+            "applied": 0
+          }
+        }
+      ]
+    }
+  ],
+  "executed_at_utc": "2026-09-29T09:03:43Z",
+  "container": {
+    "id": "40dfada4511975a40d1018c501079578521ca9ab10c51984ad017c0de3a702cf",
+    "image_id": "sha256:675f7644831d85995868250485bf7a71970257f74da31c62969a868d3f3eff2e",
+    "configured_image": "redis@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+    "redis_version": "8.10.2",
+    "port": 55719,
+    "persistence": "disabled for disposable probe",
+    "maxmemory_policy": "noeviction"
+  },
+  "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "sqlite_version": "3.53.2",
+  "actors": {
+    "a": {
+      "pid": 26107,
+      "redis_client_id": 13
+    },
+    "b": {
+      "pid": 26110,
+      "redis_client_id": 14
+    }
+  },
+  "scenario_count": 9,
+  "scripts": {
+    "publish": "c7453db01cb3e063c8400301499ddadc4cdcc2105dfd1fb15afc353805c8ff8a",
+    "advance": "42d800e481b523a299eb67116594daec2fe2a2605a693393ca56b3a0602293e4",
+    "read": "5f5f14afc94c6b352e6e1bc6953436ad2640b7429da12a2f2d043a872b7329af"
+  },
+  "cleanup": {
+    "workers": [
+      {
+        "pid": 26107,
+        "stopped": true,
+        "forced": false,
+        "exit_code": 0
+      },
+      {
+        "pid": 26110,
+        "stopped": true,
+        "forced": false,
+        "exit_code": 0
+      }
+    ],
+    "removed_container_ids": [
+      "40dfada4511975a40d1018c501079578521ca9ab10c51984ad017c0de3a702cf"
+    ],
+    "errors": [],
+    "images_removed": false,
+    "temporary_database_removed": true
+  },
+  "limitations": [
+    "The database commit and Redis transition are separate operations.",
+    "An overlapping read may return an older snapshot; post-acknowledgement reads may not regress.",
+    "Value deletion emulates eviction; memory-pressure eviction was not tested.",
+    "Actual floor expiry was tested; persistence, restart, replication and failover were not.",
+    "Missing metadata disables cache use and filling; automatic metadata recovery is absent.",
+    "The interrupted dual write is a controlled boundary, not a physical crash or durable outbox.",
+    "Conditional replacement of snapshots cannot be applied to unordered deltas.",
+    "Lua revision comparison is only exercised for small exact integers.",
+    "No throughput, arbitrary-schedule, arbitrary-database or external-effect guarantee is established."
+  ]
+}

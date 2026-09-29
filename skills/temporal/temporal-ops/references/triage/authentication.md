@@ -67,19 +67,19 @@ This section covers data-plane API-key auth (`TEMPORAL_API_KEY` / `--api-key` on
 
 For **API-key-only** Namespaces, the Cloud API-keys guide and SDK develop docs recommend the **Namespace Endpoint**: `<namespace>.<account_id>.tmprl.cloud:7233`.
 
-Use the **API Regional Endpoint** (`<region>.<cloud_provider>.api.temporal.io:7233`) when:
+Use the assigned **API Regional Endpoint** (`<region>.<cloud_provider>.api.temporal.io:7233`, for example `us-east-1.aws.api.temporal.io:7233`) when:
 
 - The client needs an explicit region pin
 - Private connectivity without private DNS (SNI / server name may need the regional API hostname — see [connectivity.md](connectivity.md#endpoint-formats))
 - The Namespace uses **dual auth** (`api_key_or_mtls`, pre-release): API keys cannot use the Namespace Endpoint on these Namespaces — enable via Support; HA is not supported in this mode
 
-If an API key fails on the Namespace Endpoint, try Regional before assuming the key is bad (especially if the Namespace allows both auth methods). See the endpoint table in [connectivity.md → endpoint formats](connectivity.md#endpoint-formats) for the full comparison.
+If an API key fails, first inspect the Namespace auth mode, credential delivery, and provisioned endpoint. Do not switch endpoints blindly: mixed-auth, explicit pinning, and private connectivity need their configured address and TLS settings. See the endpoint table in [connectivity.md → endpoint formats](connectivity.md#endpoint-formats) for the full comparison.
 
 ### Things to check when `UNAUTHENTICATED` is returned with an API key
 
 Per the Cloud troubleshooting note: "Invalid API key errors: Check that you copied the key correctly and that it hasn't been revoked or expired."
 
-- **Key not delivered to the process.** Inside the failing environment (pod/container/host), confirm `TEMPORAL_API_KEY` is set: `env | grep -i TEMPORAL_API_KEY`. A shell-level export on the developer's laptop is not inherited by a container.
+- **Key not delivered to the process.** Inside the failing environment (pod/container/host), confirm `TEMPORAL_API_KEY` is set: `test -n "${TEMPORAL_API_KEY:-}"` (exit 0 means nonempty; never print the value). A shell-level export on the developer's laptop is not inherited by a container.
 - **Key typo or truncation.** Leading/trailing whitespace, a trailing newline from a copy-paste, or a shell that split the key on whitespace will all produce `UNAUTHENTICATED`.
 - **Key disabled.** A disabled key cannot authenticate — per the Cloud docs: "When disabled, an API key cannot authenticate with Temporal Cloud." Check with `tcld apikey list` or `tcld apikey get --id <apikey_id>`.
 - **Key deleted.** Per the Cloud docs: "Deleting an API key stops it from authenticating with Temporal Cloud."

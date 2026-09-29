@@ -1,0 +1,75 @@
+{
+  "status": "pass",
+  "runtime": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "platform": "macOS-14.2-arm64-arm-64bit-Mach-O",
+  "command": "python3 examples/quality/verify.py",
+  "candidate_sha256": {
+    "before.py": "df5a33cb478aa740c1950c7fc6f0177421fecdc81b1262d7d13f91cbdf07cd2e",
+    "after.py": "254b9dd2590fbfaa232c08253425d8b0a3e220aee0e25bd1297cae23a2ef01b4",
+    "contract.md": "79926b8f405b58ee16e1c3e0a087bf50847ebf70e1909b0ffc758149598368d9",
+    "golden.json": "60b2f61f3ab1de9269b3ef41ce2f4950b5c6eb0f48f2bd65eb872a8d1ec2b957",
+    "counterexample.json": "411ac74bd514838fb62773a61be71d6403c88aabc5ea1999f28cc04dd9681002",
+    "verify.py": "c1f03e5e3e528b6c2398bb815bc656a21934cb5b2d0ceb4971225ea895476534"
+  },
+  "golden_histories_per_implementation": 15,
+  "generated_fault_schedules_per_implementation": 27,
+  "before_after_observations_equal": true,
+  "seeded_defects_detected": [
+    {
+      "defect": "duplicate replay",
+      "contract_case": "lost response then replay",
+      "source_sha256": "8e69af8fea6f4ff2e5c2e88c87c82e07f932d1eeaeab406a8f41d45151d74da2",
+      "failure": "lost response then replay: expected {'outcomes': [{'error': 'TransportFailure', 'message': 'response lost after commit'}, {'ok': 'credit-1'}], 'state': {'balance': 50, 'journal': [['a', 'support', 50, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': 50, 'receipt': 'credit-1'}}}}; observed {'outcomes': [{'error': 'TransportFailure', 'message': 'response lost after commit'}, {'ok': 'credit-2'}], 'state': {'balance': 100, 'journal': [['a', 'support', 50, 'credit-1'], ['a', 'support', 50, 'credit-2']], 'requests': {'a': {'policy': 'support', 'amount': 50, 'receipt': 'credit-2'}}}}"
+    },
+    {
+      "defect": "boolean accepted",
+      "contract_case": "booleans rejected",
+      "source_sha256": "961351fdeafec33f54321a6b8c6ad4e2621b22d0154d2b93fea56b7ef9d71499",
+      "failure": "booleans rejected: expected {'outcomes': [{'error': 'InvalidCredit', 'message': 'amount must be an integer'}, {'error': 'InvalidCredit', 'message': 'amount must be an integer'}], 'state': {'balance': 0, 'journal': [], 'requests': {}}}; observed {'outcomes': [{'ok': 'credit-1'}, {'error': 'InvalidCredit', 'message': 'amount outside policy'}], 'state': {'balance': 1, 'journal': [['a', 'support', True, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': True, 'receipt': 'credit-1'}}}}"
+    },
+    {
+      "defect": "upper bound excluded",
+      "contract_case": "maximum support credit",
+      "source_sha256": "c4607169d1447689e12f43a4c8701b6243cedf4fc4d890bda5fba1bd03d3f27c",
+      "failure": "maximum support credit: expected {'outcomes': [{'ok': 'credit-1'}], 'state': {'balance': 100, 'journal': [['a', 'support', 100, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': 100, 'receipt': 'credit-1'}}}}; observed {'outcomes': [{'error': 'InvalidCredit', 'message': 'amount outside policy'}], 'state': {'balance': 0, 'journal': [], 'requests': {}}}"
+    },
+    {
+      "defect": "policy omitted from identity",
+      "contract_case": "key binds full payload",
+      "source_sha256": "e40af3f8c64cdc0c14a9e108a8d32f3a197e696b7884d8e481e81eeac5581f05",
+      "failure": "key binds full payload: expected {'outcomes': [{'ok': 'credit-1'}, {'error': 'RequestConflict', 'message': 'key already binds another credit'}, {'error': 'RequestConflict', 'message': 'key already binds another credit'}], 'state': {'balance': 50, 'journal': [['a', 'support', 50, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': 50, 'receipt': 'credit-1'}}}}; observed {'outcomes': [{'ok': 'credit-1'}, {'error': 'RequestConflict', 'message': 'key already binds another credit'}, {'ok': 'credit-1'}], 'state': {'balance': 50, 'journal': [['a', 'support', 50, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': 50, 'receipt': 'credit-1'}}}}"
+    },
+    {
+      "defect": "integer serialization changed",
+      "contract_case": "minimum support credit",
+      "source_sha256": "c06ab87597aa7ceb2856b2ce78317c2337b0b0d4cdae29444328e308fc93d9e7",
+      "failure": "minimum support credit: expected {'outcomes': [{'ok': 'credit-1'}], 'state': {'balance': 1, 'journal': [['a', 'support', 1, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': 1, 'receipt': 'credit-1'}}}}; observed {'outcomes': [{'ok': 'credit-1'}], 'state': {'balance': 1.0, 'journal': [['a', 'support', 1, 'credit-1']], 'requests': {'a': {'policy': 'support', 'amount': 1, 'receipt': 'credit-1'}}}}"
+    }
+  ],
+  "reduction": {
+    "original_steps": 5,
+    "retained_steps": [
+      [
+        "a",
+        "support",
+        50,
+        "after_commit"
+      ],
+      [
+        "a",
+        "support",
+        50,
+        "none"
+      ]
+    ],
+    "minimality": "deletion-minimal while preserving lost-response/retry precondition"
+  },
+  "limits": [
+    "sequential in-memory model",
+    "no database or network",
+    "no restart durability",
+    "no concurrent-execution proof",
+    "finite examples and 27 schedules, not all-input equivalence",
+    "policy independence and rationale require source review"
+  ]
+}

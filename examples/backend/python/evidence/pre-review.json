@@ -1,0 +1,186 @@
+{
+  "language": "python",
+  "runtime": "3.14.3",
+  "drivers": {
+    "psycopg": "3.3.6",
+    "psycopg-binary": "3.3.6",
+    "psycopg-pool": "3.3.3"
+  },
+  "scenarios": [
+    {
+      "id": "sequential-duplicate",
+      "status": "passed",
+      "evidence": {
+        "same_receipt": true,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "legitimate-repeat",
+      "status": "passed",
+      "evidence": {
+        "distinct_receipts": true,
+        "available": 3,
+        "reservations": 2
+      }
+    },
+    {
+      "id": "concurrent-duplicate",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "conflict": false,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "conflicting-intent",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "conflict": true,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "cross-tenant",
+      "status": "passed",
+      "evidence": {
+        "lookup_scoped": true,
+        "independent_receipts": true
+      }
+    },
+    {
+      "id": "last-item",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "available": 0,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "rollback-before-mutation",
+      "status": "passed",
+      "evidence": {
+        "rollback_observed": true,
+        "pool_size_one_recovered": true
+      }
+    },
+    {
+      "id": "rollback-before-commit",
+      "status": "passed",
+      "evidence": {
+        "rollback_observed": true,
+        "pool_size_one_recovered": true
+      }
+    },
+    {
+      "id": "unknown-commit",
+      "status": "passed",
+      "evidence": {
+        "unknown_reported": true,
+        "committed_receipt_replayed": true,
+        "fault": "proxy-dropped-postgresql-COMMIT-reply",
+        "reservations": 1,
+        "commit_replies_dropped": 1
+      }
+    },
+    {
+      "id": "not-observed-inflight",
+      "status": "passed",
+      "evidence": {
+        "uncommitted_lookup": "NotObserved",
+        "later_receipt_observed": true
+      }
+    },
+    {
+      "id": "cancellation-query",
+      "status": "passed",
+      "evidence": {
+        "native_cancelled_error": true,
+        "observed_sql_wait": true,
+        "fresh_request_completed": true
+      }
+    },
+    {
+      "id": "cancellation-acquire",
+      "status": "passed",
+      "evidence": {
+        "native_cancelled_error": true,
+        "pool_wait_observed": true,
+        "fresh_request_completed": true
+      }
+    },
+    {
+      "id": "resource-recovery",
+      "status": "passed",
+      "evidence": {
+        "pool_size": 1,
+        "available_connections": 1,
+        "waiting_requests": 0,
+        "errors_recovered": [
+          "unavailable",
+          "missing-inventory",
+          "intent-conflict",
+          "pool-deadline"
+        ]
+      }
+    },
+    {
+      "id": "boundary-validation",
+      "status": "passed",
+      "evidence": {
+        "invalid_cases_rejected": 24,
+        "integral_float_normalized": true,
+        "shared_vectors_consumed": true,
+        "visible_ascii_endpoints_accepted": true
+      }
+    },
+    {
+      "id": "native-cancellation-after-effect",
+      "status": "passed",
+      "evidence": {
+        "effect_rolled_back": true,
+        "fresh_request_completed": true
+      }
+    },
+    {
+      "id": "commit-response-loss",
+      "status": "passed",
+      "evidence": {
+        "fault": "application-response-loss-after-confirmed-commit",
+        "original_receipt_replayed": true
+      }
+    }
+  ],
+  "limitations": [
+    "Single authoritative PostgreSQL database and local transactional effects only.",
+    "No external-provider, replica, failover, power-loss, or disaster-recovery guarantee."
+  ],
+  "observed_at": "2026-09-29T08:59:17.266110+00:00",
+  "command": "python3 examples/backend/run.py --report <temporary-report> -- <temporary-venv>/bin/python examples/backend/python/verify.py",
+  "environment": {
+    "database": "disposable loopback PostgreSQL 18.6",
+    "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+    "configuration": "URLs and credentials injected by launcher; omitted from this report"
+  },
+  "candidate_hashes": {
+    "examples/backend/python/reservation.py": "d14415ea5233dffbe1d010035efc468887673fad074b273d1c2ba3f10d33a333",
+    "examples/backend/python/verify.py": "5e91abf5dad2282c21163ffaad8f8d09a5b9f6b47c435c5b51f9f13b949d9d1d",
+    "examples/backend/python/requirements.txt": "f711eb0a6f8ec3b5ca6b768d1f03481bb9a3c452787534f0101dc23b6b0b56e6",
+    "examples/backend/schema.sql": "35141af85bd9377187c85b1e6aa78bd8c7ef939c7539b0a02f675aa3892a9070",
+    "examples/backend/scenarios.json": "57e23e77681f334ac960bff826de75b2a4ba7ee6ea11bed14f4db794155d06cc",
+    "examples/backend/run.py": "56266eddb72bef36082c8cf1d2abc633bf12542266aba0e31a155c4b54ee02fe",
+    "examples/backend/commit_proxy.py": "178b53d39f8e0279e280dc25fb75ed9ce3694f9a310017e7b713e27b2b65b6c2"
+  },
+  "candidate_hash_note": "SHA-256 of source, dependency pins, and shared fixture files recorded after this verifier completed.",
+  "proxy_observation": {
+    "connections": 2,
+    "commits_dropped": 1,
+    "errors": []
+  }
+}

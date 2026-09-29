@@ -1,0 +1,63 @@
+name: Backend runtime examples
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'examples/backend/**'
+      - '.github/workflows/backend-examples.yml'
+  pull_request:
+    paths:
+      - 'examples/backend/**'
+      - '.github/workflows/backend-examples.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, typescript, go]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        if: matrix.language == 'typescript'
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: examples/backend/typescript/package-lock.json
+      - uses: actions/setup-go@v7
+        if: matrix.language == 'go'
+        with:
+          go-version-file: examples/backend/go/go.mod
+          cache-dependency-path: examples/backend/go/go.sum
+      - name: Python contract
+        if: matrix.language == 'python'
+        run: |
+          python -m venv /tmp/tal-backend-venv
+          /tmp/tal-backend-venv/bin/python -m pip install -r examples/backend/python/requirements.txt
+          python examples/backend/run.py --report /tmp/backend-result.json -- /tmp/tal-backend-venv/bin/python examples/backend/python/verify.py
+      - name: TypeScript contract
+        if: matrix.language == 'typescript'
+        run: |
+          npm ci --ignore-scripts --prefix examples/backend/typescript
+          npm run typecheck --prefix examples/backend/typescript
+          python examples/backend/run.py --report /tmp/backend-result.json -- npm test --prefix examples/backend/typescript
+      - name: Go contract
+        if: matrix.language == 'go'
+        run: |
+          (cd examples/backend/go && go test -race ./... && go vet ./...)
+          python examples/backend/run.py --report /tmp/backend-result.json -- sh -c 'cd examples/backend/go && go run -race ./cmd/verify'
+      - name: Observed result
+        if: always()
+        run: |
+          if test -f /tmp/backend-result.json; then
+            cat /tmp/backend-result.json
+          fi

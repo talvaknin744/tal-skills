@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "operation": "reserve-v1",
+  "scenarios": [
+    {
+      "id": "sequential-duplicate",
+      "oracle": "Same identity and intent returns one immutable receipt and one stock decrement."
+    },
+    {
+      "id": "legitimate-repeat",
+      "oracle": "Different keys with equal commands produce two independent reservations."
+    },
+    {
+      "id": "concurrent-duplicate",
+      "oracle": "Unique-key arbitration and a fresh statement snapshot return the winning receipt."
+    },
+    {
+      "id": "conflicting-intent",
+      "oracle": "Concurrent reuse of a key with another quantity rejects the second intent."
+    },
+    {
+      "id": "cross-tenant",
+      "oracle": "Equal textual keys stay independent across trusted tenant contexts."
+    },
+    {
+      "id": "last-item",
+      "oracle": "Two distinct keys contend for one unit; exactly one succeeds."
+    },
+    {
+      "id": "rollback-before-mutation",
+      "oracle": "Failure after claim insertion commits no receipt and no stock change."
+    },
+    {
+      "id": "rollback-before-commit",
+      "oracle": "Failure after stock decrement rolls both tables back."
+    },
+    {
+      "id": "unknown-commit",
+      "oracle": "Proxy drops actual COMMIT acknowledgement; original-key reconciliation observes one effect."
+    },
+    {
+      "id": "not-observed-inflight",
+      "oracle": "An absent lookup while another attempt is active is not classified as aborted."
+    },
+    {
+      "id": "cancellation-query",
+      "oracle": "Native cancellation of a blocked query finalizes or retires the owned connection."
+    },
+    {
+      "id": "cancellation-acquire",
+      "oracle": "Canceled pool acquisition cannot orphan a late lease."
+    },
+    {
+      "id": "resource-recovery",
+      "oracle": "Repeated failures/cancellation in a size-one pool permit bounded subsequent success."
+    },
+    {
+      "id": "boundary-validation",
+      "oracle": "Runtime parsing rejects invalid shape/types/ranges before mutation and normalizes integral numbers."
+    }
+  ],
+  "valid_quantities": [
+    1,
+    1.0,
+    1000000
+  ],
+  "invalid_quantities": [
+    true,
+    false,
+    0,
+    -1,
+    1.5,
+    1000001,
+    "1",
+    null
+  ],
+  "notes": [
+    "Numeric 1e0 is equivalent to 1.0 after JSON parsing.",
+    "NaN and infinities are invalid; parsers may reject them before domain validation.",
+    "This common inventory lists required semantic outcomes. Each native verifier implements its own scheduling and assertions."
+  ]
+}

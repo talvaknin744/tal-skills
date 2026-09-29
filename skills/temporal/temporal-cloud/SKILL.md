@@ -125,20 +125,20 @@ Symptom: tcld login not working
 
 | Use case | Recommended endpoint | Notes |
 |----------|---------------------|-------|
-| Workers & clients (all auth) | `<namespace>.<account>.tmprl.cloud:7233` | **Namespace Endpoint** - works for both mTLS and API key auth. Recommended for all namespaces. |
-| Multi-region HA (advanced) | `<region>.<cloud_provider>.api.temporal.io:7233` | Regional Endpoint - only needed for advanced HA routing. See [namespace access docs](https://docs.temporal.io/cloud/namespaces#access-namespaces). |
+| Workers & clients (mTLS or API-key-only) | `<namespace>.<account>.tmprl.cloud:7233` | Namespace Endpoint; recommended default and follows HA failover. |
+| Explicit region pin | `<region>.<cloud_provider>.api.temporal.io:7233` | Regional Endpoint; use the assigned region and configure the Namespace TLS server name for mTLS. |
 | tcld / Cloud Ops API | `saas-api.tmprl.cloud` | Control plane |
 
-**Exception:** Namespaces using Flexible Auth (pre-release) cannot use Namespace Endpoints yet.
+**Exception:** In mixed-auth (`api_key_or_mtls`, pre-release) Namespaces, API keys cannot yet use Namespace Endpoints. Check the Namespace's actual auth mode and supplied regional endpoint. Preserve working assigned/private endpoints unless migration is required; the HA/private DNS intermediary `*.region.tmprl.cloud` is not a replacement for the API Regional endpoint. See [current Namespace access guidance](https://docs.temporal.io/cloud/namespaces#access-namespaces).
 
 ```
 Symptom: Can't connect to Temporal Cloud
 │
 ├─ Check: Using Namespace Endpoint?
-│  ├─ Using regional endpoint (`*.api.temporal.io`) without HA need?
-│  │  └─ Switch to Namespace Endpoint (`<ns>.<acct>.tmprl.cloud:7233`)
-│  ├─ Using old/stale endpoint format?
-│  │  └─ Switch to Namespace Endpoint
+│  ├─ Regional/private endpoint configured?
+│  │  └─ Verify region pin, auth mode, and provisioned address before changing it
+│  ├─ Endpoint differs from the Namespace configuration?
+│  │  └─ Use the supplied endpoint for the intended auth mode
 │  └─ Endpoint looks correct → Continue
 │
 ├─ Check: DNS resolution
@@ -279,8 +279,8 @@ Symptom: namespace not found or access denied
 │
 ├─ Check: Address format
 │  ├─ Namespace Endpoint (recommended): <namespace>.<account>.tmprl.cloud:7233
-│  ├─ Regional Endpoint (HA only): <region>.<cloud_provider>.api.temporal.io:7233
-│  └─ Using wrong or stale endpoint? → switch to Namespace Endpoint
+│  ├─ Regional Endpoint (explicit pin): <region>.<cloud_provider>.api.temporal.io:7233
+│  └─ Using wrong or stale endpoint? → verify the provisioned endpoint and auth mode
 │
 └─ Check: User permissions
    └─ tcld user list
@@ -338,7 +338,7 @@ Symptom: Workers not picking up tasks
 
 HA (multi-region) namespaces use a hierarchical DNS structure:
 - Namespace endpoint: `<ns>.<acct>.tmprl.cloud` (CNAME to active region)
-- Regional endpoint: `<region>.region.tmprl.cloud`
+- HA/private-connectivity DNS intermediary: `<provider>-<region>.region.tmprl.cloud`
 - During failover, CNAME switches regions (15s TTL, ~30s convergence)
 
 ```
@@ -346,7 +346,7 @@ Symptom: HA namespace connectivity or failover issues
 │
 ├─ Check: DNS resolution
 │  └─ nslookup <namespace>.tmprl.cloud
-│     ├─ Should return CNAME → <region>.region.tmprl.cloud
+│     ├─ For HA/private connectivity, inspect CNAME → <provider>-<region>.region.tmprl.cloud
 │     └─ Then resolve to IP address
 │
 ├─ Symptom: Clients not failing over

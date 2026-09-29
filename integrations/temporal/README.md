@@ -34,13 +34,20 @@ Select another name from the table with the same `--skill` option. Installing an
 - **Authorization:** Operational skills use the target and scope already authorized in the session and collect only missing authorization or readiness. A host permission dialog is not assumed to exist.
 - **Provisioning failures:** Cloud Setup propagates failed dependency installation. A partial dependency directory no longer counts as success. If parallel Namespace creation was already submitted, recovery inspects that Namespace before another provisioning attempt.
 
+- **CLI and credential diagnostics:** Setup checks exact required command/flag capabilities and records core/extension versions separately. Compatible installs do not upgrade. Previews and execution share the same branch decision, and environment diagnostics disclose names/presence rather than key values. Selected-profile verification uses `config get --prop address` with output discarded; `config list` alone does not establish that the profile exists. See [Cloud CLI documentation](https://docs.temporal.io/cli/cloud).
+- **Progressive setup instructions:** Cloud Setup now routes to package-local gate, presentation, and phase references; public names, invocation metadata, script subcommands, and result markers remain stable.
+- **Execution limits:** Standalone Activity deduplication depends on running/closed ID policies and retention; external effects still need idempotency. Timeout detection does not kill an old process, and cross-Namespace children require verified legacy/explicit support. See [Standalone Activities](https://docs.temporal.io/standalone-activity) and [Activity timeout options](https://typescript.temporal.io/api/interfaces/common.ActivityOptions).
+- **Health evidence:** Failure ratios are investigation clues, not universal resilience scores. Verify business outcomes, pending age, retry/time budgets, and metric semantics. Bound serverless Task Queues prove a previous poll, not present credentials or invocation health.
+- **Cloud/provider scope:** Endpoint guidance distinguishes API-key-only, mTLS, mixed-auth, regional, and private connections. The API Regional `*.api.temporal.io` address remains separate from the `*.region.tmprl.cloud` HA/private DNS intermediary. This package implements Lambda; the [platform guide](https://docs.temporal.io/serverless-workers) also documents other provider pre-releases. IAM simulation is context-dependent evidence, not proof of live authorization.
+- **Tuning and routing:** Namespace capacity is independent of SDK choice; unavailable sibling aliases use public skill names with documentation fallbacks. Feedback solicitation is optional.
+
 The remaining upstream instructions and examples are a pinned reference library, not a claim that every sample was tested against every supported SDK. Read only the references required for the current task.
 
 ## Runtime requirements
 
 Most packages contain guidance only. CLI operations need the relevant installed `temporal`/`tcld` commands, authenticated access, and the intended environment. Serverless additionally needs the selected cloud/SDK tooling; its two CloudFormation assets are bundled.
 
-Cloud Setup includes a Bash script and needs Git, network access, the prerelease unified Temporal CLI, `jq` or Python for secret capture, and the chosen SDK/package manager. macOS CLI installation uses Homebrew; other systems require the documented installation path. Its sample repositories, branches, package downloads, and Cloud account remain external dependencies. No Cloud resources or credentials were created while preparing these packages.
+Cloud Setup includes a Bash script and needs Git, network access, a compatible core Temporal CLI and Public Preview Cloud extension, `jq` or Python for secret capture, and the chosen SDK/package manager. macOS CLI installation uses the `temporalio/brew/temporal-cloud` Homebrew formula only when required capabilities are missing; other systems require the documented installation path. Its sample repositories, branches, package downloads, and Cloud account remain external dependencies. No Cloud resources or credentials were created while preparing these packages.
 
 ## Refresh an upstream package
 

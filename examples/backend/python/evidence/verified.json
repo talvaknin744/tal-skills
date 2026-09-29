@@ -1,0 +1,222 @@
+{
+  "language": "python",
+  "runtime": "3.14.3",
+  "drivers": {
+    "psycopg": "3.3.6",
+    "psycopg-binary": "3.3.6",
+    "psycopg-pool": "3.3.3"
+  },
+  "scenarios": [
+    {
+      "id": "sequential-duplicate",
+      "status": "passed",
+      "evidence": {
+        "same_receipt": true,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "legitimate-repeat",
+      "status": "passed",
+      "evidence": {
+        "distinct_receipts": true,
+        "available": 3,
+        "reservations": 2
+      }
+    },
+    {
+      "id": "concurrent-duplicate",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "conflict": false,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "conflicting-intent",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "conflict": true,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "cross-tenant",
+      "status": "passed",
+      "evidence": {
+        "lookup_scoped": true,
+        "independent_receipts": true
+      }
+    },
+    {
+      "id": "last-item",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "available": 0,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "rollback-before-mutation",
+      "status": "passed",
+      "evidence": {
+        "rollback_observed": true,
+        "pool_size_one_recovered": true
+      }
+    },
+    {
+      "id": "rollback-before-commit",
+      "status": "passed",
+      "evidence": {
+        "rollback_observed": true,
+        "pool_size_one_recovered": true
+      }
+    },
+    {
+      "id": "unknown-commit",
+      "status": "passed",
+      "evidence": {
+        "unknown_reported": true,
+        "committed_receipt_replayed": true,
+        "fault": "proxy-dropped-postgresql-COMMIT-reply",
+        "reservations": 1,
+        "commit_replies_dropped": 1
+      }
+    },
+    {
+      "id": "not-observed-inflight",
+      "status": "passed",
+      "evidence": {
+        "uncommitted_lookup": "NotObserved",
+        "later_receipt_observed": true
+      }
+    },
+    {
+      "id": "cancellation-query",
+      "status": "passed",
+      "evidence": {
+        "native_cancelled_error": true,
+        "observed_sql_wait": true,
+        "fresh_request_completed": true
+      }
+    },
+    {
+      "id": "cancellation-acquire",
+      "status": "passed",
+      "evidence": {
+        "native_cancelled_error": true,
+        "pool_wait_observed": true,
+        "fresh_request_completed": true
+      }
+    },
+    {
+      "id": "resource-recovery",
+      "status": "passed",
+      "evidence": {
+        "pool_size": 1,
+        "available_connections": 1,
+        "waiting_requests": 0,
+        "errors_recovered": [
+          "unavailable",
+          "missing-inventory",
+          "intent-conflict",
+          "pool-deadline"
+        ]
+      }
+    },
+    {
+      "id": "boundary-validation",
+      "status": "passed",
+      "evidence": {
+        "invalid_cases_rejected": 24,
+        "integral_float_normalized": true,
+        "shared_vectors_consumed": true,
+        "visible_ascii_endpoints_accepted": true
+      }
+    },
+    {
+      "id": "native-cancellation-after-effect",
+      "status": "passed",
+      "evidence": {
+        "effect_rolled_back": true,
+        "fresh_request_completed": true
+      }
+    },
+    {
+      "id": "commit-response-loss",
+      "status": "passed",
+      "evidence": {
+        "fault": "application-response-loss-after-confirmed-commit",
+        "original_receipt_replayed": true
+      }
+    },
+    {
+      "id": "cleanup-retirement",
+      "status": "passed",
+      "evidence": {
+        "deadline_expired_after_effect": true,
+        "rollback_dispatch_attempts": 0,
+        "retired_backend_removed": true,
+        "primary_timeout_preserved": true,
+        "fresh_request_completed": true,
+        "instrumentation": "pinned driver rollback dispatch guard; no network-blackhole claim"
+      }
+    },
+    {
+      "id": "commit-error-classification",
+      "status": "passed",
+      "evidence": {
+        "unknown_sqlstates": [
+          "40003",
+          "57P01",
+          null,
+          "08006"
+        ],
+        "confirmed_abort_sqlstates": [
+          "40001",
+          "40P01",
+          "23505",
+          "23514"
+        ],
+        "scope": "classification using real pinned driver exception classes, not injected server failures"
+      }
+    }
+  ],
+  "limitations": [
+    "Single authoritative PostgreSQL database and local transactional effects only.",
+    "No external-provider, replica, failover, power-loss, or disaster-recovery guarantee."
+  ],
+  "observed_at": "2026-09-29T09:10:48.646969+00:00",
+  "command": "python3 examples/backend/run.py --report <temporary-report> -- <temporary-venv>/bin/python examples/backend/python/verify.py",
+  "environment": {
+    "database": "disposable loopback PostgreSQL 18.6",
+    "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+    "configuration": "URLs and credentials injected by launcher; omitted from this report",
+    "libpq_version": 180006
+  },
+  "candidate_hashes": {
+    "examples/backend/python/reservation.py": "b0527986e53ca811dd4cd3bd5a052cfa191a0738c35ab7f5aefe7d6d641ec01b",
+    "examples/backend/python/verify.py": "eaf949900a2f9e7156480ae453f9cfc21c533a4f9b1ad7b4a999fa78191c2eb8",
+    "examples/backend/python/requirements.txt": "f711eb0a6f8ec3b5ca6b768d1f03481bb9a3c452787534f0101dc23b6b0b56e6",
+    "examples/backend/schema.sql": "35141af85bd9377187c85b1e6aa78bd8c7ef939c7539b0a02f675aa3892a9070",
+    "examples/backend/scenarios.json": "57e23e77681f334ac960bff826de75b2a4ba7ee6ea11bed14f4db794155d06cc",
+    "examples/backend/run.py": "2029a0edf9955df05e8212aad730f1657af3def0ade9496a5f87912303bcae6b",
+    "examples/backend/commit_proxy.py": "178b53d39f8e0279e280dc25fb75ed9ce3694f9a310017e7b713e27b2b65b6c2"
+  },
+  "candidate_hash_note": "SHA-256 of source, dependency pins, and shared fixture files recorded for the completed verifier; rechecked unchanged when recording this evidence.",
+  "proxy_observation": {
+    "connections": 2,
+    "commits_dropped": 1,
+    "errors": []
+  },
+  "review_corrections": [
+    "Abnormal transaction exits retire the local connection before transaction or pool exit can start a new rollback wait; the lease return remains awaited.",
+    "Only explicitly recognized transaction-abort SQLSTATEs classify COMMIT as confirmed failure; completion-unknown and connection-fatal errors retain uncertainty."
+  ]
+}

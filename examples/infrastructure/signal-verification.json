@@ -1,0 +1,101 @@
+{
+  "status": "passed",
+  "started_at": "2026-09-29T09:12:08.052740+00:00",
+  "verifier_sha256": "f9d0a3d0e18ccb67b1c1b0a161b149d7d93a56bcb144704bbedbd02f835f92bb",
+  "harness_sha256": "fd9d0d0ae6b46d49933abd35058ccffc03c8427e9d4f104150a5e9fba85df85a",
+  "scope": "Synthetic wait executable only; no actual Terraform behavior or cloud resources are tested.",
+  "observations": {
+    "startup_marker_observed": true,
+    "child_ignored_sigterm": true,
+    "verifier_exit_code": 143,
+    "expected_exit_code": 143,
+    "owned_process_group_gone": true,
+    "scratch_removed_before_harness_cleanup": true,
+    "elapsed_seconds": 3.014,
+    "stdout": "{\"status\": \"failed\", \"passed_checks\": 0, \"report\": \"/private/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/tal-infra-signal-check-tc_q476c/verifier-report.json\", \"cleanup\": {\"managed_state_empty\": false, \"temporary_directory_removed\": true}, \"error\": \"TerminationRequested: received signal 15\"}\n",
+    "stderr": "",
+    "verifier_report": {
+      "schema_version": 1,
+      "status": "failed",
+      "started_at": "2026-09-29T09:12:08.108929+00:00",
+      "expected_terraform_version": "1.16.4",
+      "commands": [
+        {
+          "label": "version",
+          "argv": [
+            "terraform",
+            "version",
+            "-json"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "timed_out": false,
+          "interrupted": false,
+          "elapsed_ms": 210,
+          "stdout": "{\"terraform_version\": \"1.16.4\", \"platform\": \"synthetic-wait-stub\", \"provider_selections\": {}}\n",
+          "stderr": ""
+        },
+        {
+          "label": "init",
+          "argv": [
+            "terraform",
+            "init",
+            "-no-color",
+            "-input=false"
+          ],
+          "exit_code": -15,
+          "expected_exit_code": 0,
+          "timed_out": false,
+          "interrupted": true,
+          "elapsed_ms": 3066,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "checks": [],
+      "configuration_transitions": [
+        {
+          "fixture": "initial",
+          "before_command_index": 1,
+          "sha256": "43e5c43d4c4097ec36b53d61a97a966ac4e7848f24947b9c6679c58d00700616"
+        }
+      ],
+      "cleanup": {
+        "managed_state_empty": false,
+        "temporary_directory_removed": true
+      },
+      "scope": {
+        "cloud_resources": false,
+        "external_provider_downloads": false,
+        "global_install": false
+      },
+      "limits": [
+        "Local terraform_data and scratch effects only; no cloud provider or physical resource tested.",
+        "State-update staleness was tested; out-of-band cloud drift was not.",
+        "Same-state moves and source forgetting were tested; cross-state adoption and remote locking were not.",
+        "local-exec is a fault injector here, not a general provisioning recommendation."
+      ],
+      "source_hashes": {
+        "verify.py": "f9d0a3d0e18ccb67b1c1b0a161b149d7d93a56bcb144704bbedbd02f835f92bb",
+        "terraform.lock.json": "fb03a5327bf9506db0903c3b5464fcfff7e0ba21327a65c7a9fb9ab719103cd4",
+        "fixtures/initial/main.tf": "43e5c43d4c4097ec36b53d61a97a966ac4e7848f24947b9c6679c58d00700616",
+        "fixtures/moved/main.tf": "06e1eb2e2f85e40b99e8ad157400a0c24bf678bb2a2ac74bc0e5624f1adda37a",
+        "fixtures/retained/main.tf": "de4eb99d2bc22ac3bf31a58335595c93f3f07e43673d225e8bd04a40a5b629e7"
+      },
+      "binary": {
+        "source": "supplied",
+        "sha256": "e0a1d55eeb2f888b42072284d823566a766924951323a2ae042045001213551f",
+        "publisher_authentication": "caller responsibility"
+      },
+      "runtime": {
+        "terraform_version": "1.16.4",
+        "platform": "synthetic-wait-stub",
+        "provider_selections": {}
+      },
+      "error": "TerminationRequested: received signal 15",
+      "termination_signal": 15,
+      "finished_at": "2026-09-29T09:12:11.388158+00:00"
+    }
+  },
+  "finished_at": "2026-09-29T09:12:11.399135+00:00"
+}

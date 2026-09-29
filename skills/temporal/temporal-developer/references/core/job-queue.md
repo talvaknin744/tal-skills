@@ -73,7 +73,7 @@ The shape of the port is the same regardless of source system:
 2. **Worker process → Temporal Worker.** One Worker process registers the Activities and polls a Task Queue. Concurrency knobs move from the framework's worker flags to Worker options — see `references/{your_language}/advanced-features.md`, and the `temporal-workertuning` skill for sizing.
 3. **`delay()` / `perform_async` / `queue.add()` → Client `start` or `execute`.** This is the only real call-site change. It happens in producer code, which must be non-Workflow application code.
 4. **Retry/timeout config → Retry Policy and Activity timeouts** on the start options, not on the handler. Remember the attempts-vs-retries off-by-one.
-5. **Job ID → Activity ID.** Reuse whatever idempotency key already exists. If there was none, derive one from the business entity.
+5. **Job ID → Activity ID.** Reuse the logical operation's idempotency key. An entity may have several valid operations, so include an operation/event identifier rather than deduplicating every job for that entity.
 6. **Monitoring → built-in visibility and metrics.** Replace Flower/Sidekiq Web/Bull Board polling of a Redis key with `list`/`count`/`describe` and the Web UI.
 
 Framework-specific notes worth stating when they come up:
@@ -93,7 +93,7 @@ Anti-patterns to avoid when building a job queue on Temporal:
 3. **An Activity that polls Redis/SQS/a database table for work** and then dispatches it. Once on Temporal, the producer should enqueue Standalone Activities directly. (Polling an external system you do not control is a different, legitimate pattern — see [Temporal workflow patterns](patterns.md).)
 4. **Hand-rolled retry loops inside the Activity.** Configure a Retry Policy instead; a `for attempt in range(3)` inside an Activity hides failures from visibility and metrics.
 5. **A side table tracking job status.** Status, attempt count, last error, and result are already queryable. Add a table only where job state has to be joined against business data.
-6. **A random UUID as the Activity ID by default.** A business identifier such as `send-welcome-email:user-42` makes jobs addressable and deduplicated for free. A UUID is the fallback for when no meaningful identifier exists.
+6. **Assuming a business ID provides permanent effect deduplication.** Choose an ID for the logical operation and explicitly set both running-ID conflict and closed-ID reuse policies. The default closed reuse policy allows duplicates; retained execution records last only for the Namespace retention period. Reusing a bare entity ID can also suppress legitimate later operations. Provider-side effects still need their own idempotency or reconciliation after an uncertain outcome.
 
 ## Code layout
 
@@ -118,4 +118,4 @@ A Workflow that needs a job to outlive it can start a Standalone Activity from i
 
 Conceptual references: [Job Queue](https://docs.temporal.io/evaluate/development-production-features/job-queue) and [Standalone Activity](https://docs.temporal.io/standalone-activity).
 
-Rust is the one SDK in this skill without Standalone Activity support. For a language without support, the fallback is a Workflow that runs the single Activity, accepting the extra Action and latency until support lands.
+Current [Rust Standalone Activity support](https://docs.temporal.io/develop/rust/activities/standalone-activities) is available in SDK 1.0.0 (Rust 1.92+; CLI 1.9.1+). The vendored Rust reference set predates it: use that official guide for syntax. For older SDK/server deployments without the capability, a Workflow wrapping one Activity remains a compatibility fallback, with additional overhead.

@@ -59,7 +59,7 @@ The CLI and every SDK exposes the same conceptual operations against a Standalon
 - **Get result** — wait on a handle for completion. `execute` is equivalent to `start` followed by awaiting the handle's result.
 - **Cancel / Terminate** — via the handle or CLI.
 
-**Choosing an Activity ID.** Every Standalone Activity call requires an **Activity ID**, which uniquely identifies that one call. It is the key you use later to get the result, describe, cancel, or terminate the Activity, and it is what conflict/reuse policies dedupe against. Use a **business-logic identifier** that uniquely identifies the call — for example `send-welcome-email:user-42`, `sync-invoice:INV-2026-001`, or `process-webhook:<event-id>`. This makes Activities addressable and naturally deduplicated by your domain. Only if you genuinely have no meaningful business-level identifier should you generate a **UUID** to use as the Activity ID.
+**Choosing an Activity ID.** Every Standalone Activity call requires an **Activity ID**, which uniquely identifies that one call. It is the key you use later to get the result, describe, cancel, or terminate the Activity, and it is what conflict/reuse policies dedupe against. Use a **business-logic identifier** that uniquely identifies the call — for example `send-welcome-email:user-42`, `sync-invoice:INV-2026-001`, or `process-webhook:<event-id>`. This makes Activities addressable; deduplication depends on explicit running-ID conflict and closed-ID reuse policies. Closed IDs default to `AllowDuplicate`, and records expire after Namespace retention. Include an operation/event identity when an entity can have legitimate repeated work. Execution deduplication does not make external effects idempotent: a timeout can leave the provider outcome uncertain, so use an effect key or reconciliation there. Only if you genuinely have no meaningful business-level identifier should you generate a **UUID** to use as the Activity ID.
 
 Visibility operations are available as well:
 
@@ -155,7 +155,7 @@ All existing Activity metrics apply to Standalone Activities (scheduled, started
 
 ## Temporal CLI support
 
-- Requires **Temporal CLI v1.7.0+** and **Temporal Server v1.31.0+**. See [Temporal CLI installation guide](install_cli.md) if you need to update the CLI.
+- The [current GA feature guide](https://docs.temporal.io/standalone-activity) lists **Temporal CLI v1.9.1+** and **Temporal Server v1.32.0+** (checked 2026-09-29). Earlier preview versions had different minimums; verify deployed capabilities before using preview-era examples. See [Temporal CLI installation guide](install_cli.md) if you need to update the CLI.
 - The Temporal Dev Server (`temporal server start-dev`) has Standalone Activities enabled by default.
 
 ## Temporal Cloud support

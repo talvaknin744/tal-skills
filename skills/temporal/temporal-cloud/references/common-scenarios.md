@@ -8,7 +8,7 @@ User is connecting to Temporal Cloud with an API key.
 
 **Checklist:**
 1. Use the full namespace name (`<name>.<account-id>`)
-2. Use the Namespace Endpoint (`<ns>.<acct>.tmprl.cloud:7233`) - works for all auth methods
+2. Use the Namespace Endpoint (`<ns>.<acct>.tmprl.cloud:7233`) for API-key-only Namespaces. For mixed-auth pre-release, use the regional endpoint supplied for API keys; verify the current Namespace configuration
 3. Keep credentials in environment variables where possible
 4. Verify with `temporal workflow list`
 
@@ -110,22 +110,10 @@ tcld namespace accepted-client-ca remove \
 
 User wants to use API keys instead of certificates.
 
-```bash
-# 1. Create service account
-tcld service-account create \
-  --name worker-sa \
-  --description "Service account for workers"
+1. Inspect the Namespace authentication mode and confirm API-key support is enabled before changing clients. For mixed-auth pre-release, confirm access and the supported API-key endpoint; a new key alone does not change the Namespace's auth mode.
+2. Create or reuse a service account with the minimum required role on the target Namespace. Verify those permissions separately from possession of an API key.
+3. Inspect `tcld service-account create --help` and `tcld apikey create --help` for the installed version's required name, permission, and expiry flags. Create the key through the authorized secret-capture path; keep its value out of chat, argv, logs, and diffs.
+4. Test the new identity and endpoint with a read-only Workflow list, then a representative permitted operation. The data-plane CLI can read `TEMPORAL_API_KEY` from a secure environment; `tcld` uses `TEMPORAL_CLOUD_API_KEY`.
+5. Roll out the Worker configuration and verify polling and completion before retiring the old certificates. Preserve a rollback path until the new authentication path is verified.
 
-# 2. Create API key
-tcld apikey create \
-  --service-account-id <sa-id> \
-  --description "Worker API key"
-
-# 3. Test with temporal CLI (same Namespace Endpoint, just swap auth)
-temporal workflow list --limit 1 \
-  --address my-ns.abc123.tmprl.cloud:7233 \
-  --namespace my-ns.abc123 \
-  --api-key <api-key>
-
-# 4. Update worker config to use API key instead of certs
-```
+Sources: [Namespace authentication and endpoints](https://docs.temporal.io/cloud/namespaces), [API keys and service accounts](https://docs.temporal.io/cloud/api-keys).

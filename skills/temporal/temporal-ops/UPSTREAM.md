@@ -18,6 +18,18 @@ This is a tal-skills adaptation of official Temporal source, not an official Tem
 
 - Normalized trailing whitespace in imported reference files.
 
+### Engineering toolkit maintenance — 2026-09-29
+
+Replaced credential-value probes with presence-only checks; aligned current endpoint routing while preserving configured regional/private exceptions; corrected timeout requirements, heartbeat/physical-process inference, and cross-Namespace child defaults; normalized optional public skill names.
+
+Primary checks: [Namespace endpoints](https://docs.temporal.io/cloud/namespaces), [ActivityOptions requirements](https://typescript.temporal.io/api/interfaces/common.ActivityOptions), and [API child-Namespace deprecation](https://github.com/temporalio/api/blob/master/temporal/api/command/v1/message.proto).
+
+The original source pin and MIT license are unchanged. This is a targeted local correction of audited entrypoints and selected risk-bearing references, not a line-by-line revalidation of the entire vendored library.
+
+### Independent review correction — 2026-09-29
+
+Independent review corrected the local current-versus-legacy endpoint classification. Preserved API Regional endpoint and HA/private DNS intermediary as separate documented roles; aligned authentication, connectivity, and SDK snippet references. Source: [Namespace access documentation](https://docs.temporal.io/cloud/namespaces#access-namespaces). These corrections supersede the initial local implementation claim; the upstream pin remains unchanged.
+
 ## Verification and updates
 
 The package was checked locally for frontmatter, bundled resource links, and attribution. Provisioning scripts receive shell syntax and isolated stub checks; no live Cloud setup, deployment, credentials, or Workflow execution was performed for this import. Examples and runtime dependencies still require validation against the project's installed SDK and environment.

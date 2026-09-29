@@ -84,5 +84,5 @@ A Workflow can hit this limit even when every individual payload is under 2 MB. 
 
 ## Sibling skill pointers
 
-- For implementing the claim check pattern or External Storage in SDK code, see the developer skill (`skill-temporal-developer`).
-- For worker tuning to manage batch sizes and concurrency, see the worker tuning skill (`skill-temporal-workertuning`).
+- For implementing the claim check pattern or External Storage in SDK code, see the developer skill (`temporal-developer`).
+- For worker tuning to manage batch sizes and concurrency, see the worker tuning skill (`temporal-workertuning`).

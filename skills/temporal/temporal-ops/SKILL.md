@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 Adapted from Temporal's official MIT-licensed skill. For the pinned source and local changes, see [UPSTREAM.md](UPSTREAM.md).
 
+Sibling skill names are optional routing suggestions. If a sibling is not installed, use this package's relevant references and current official documentation; do not require another package to complete the scoped task.
+
 # Skill: temporal-ops
 
 ## Overview
@@ -15,13 +17,13 @@ This skill operates and diagnoses Temporal environments. It has two modes:
 - **Operations:** the user wants to do something — create a namespace, rotate a key, check capacity, find unhealthy workflows, cancel a batch, set up export. The skill executes the right commands and interprets the output.
 - **Diagnosis:** the user arrives with a symptom — a stuck workflow, a cert error, a connection timeout, a non-determinism panic. The skill routes the investigation through a layered, bottom-up diagnosis until a root cause is identified with a confidence score.
 
-It does not teach how to write workflows or activities (use `skill-temporal-developer` for that), and it does not reproduce exhaustive CLI flag tables — run `temporal <cmd> --help` for those, and see [cli-conventions.md](references/ops/cli-conventions.md) for cross-command CLI conventions. The boundary is: if the user needs to administer or troubleshoot a running Temporal environment, this skill applies.
+It does not teach how to write workflows or activities (use `temporal-developer` for that), and it does not reproduce exhaustive CLI flag tables — run `temporal <cmd> --help` for those, and see [cli-conventions.md](references/ops/cli-conventions.md) for cross-command CLI conventions. The boundary is: if the user needs to administer or troubleshoot a running Temporal environment, this skill applies.
 
 ## Out of scope
 
-- **Writing workflows, activities, or SDK code** → `skill-temporal-developer`.
+- **Writing workflows, activities, or SDK code** → `temporal-developer`.
 - **Exhaustive CLI flags / command reference** → run `temporal <cmd> --help`; **cross-command CLI conventions** → [cli-conventions.md](references/ops/cli-conventions.md).
-- **Worker performance tuning, sizing, capacity planning** → `skill-temporal-workertuning`.
+- **Worker performance tuning, sizing, capacity planning** → `temporal-workertuning`.
 - **Helm, Kubernetes, database admin, monitoring stack config** for self-hosted — beyond the CLI surface.
 
 If the conversation drifts into one of these areas, hand off to the relevant sibling skill rather than improvising.
@@ -166,8 +168,8 @@ Find the row that matches the user's symptom. Start the investigation at the fir
 | `x509: certificate has expired` or `not yet valid` | Certificates | `openssl x509 -enddate -noout -in cert.pem` | [certificates.md#expired-or-not-yet-valid](references/triage/certificates.md#expired-or-not-yet-valid) |
 | `x509: certificate signed by unknown authority` | Certificates | `openssl verify -CAfile ca.pem client.pem` | [certificates.md#unknown-authority](references/triage/certificates.md#unknown-authority) |
 | `tcld` session / auth fails, Cloud role unclear | Authentication | `tcld account get` | [authentication.md#cloud-role-and-permission-model](references/triage/authentication.md#cloud-role-and-permission-model) |
-| `UNAUTHENTICATED`, API key rejected | Authentication | `env \| grep -i TEMPORAL_API_KEY`, then `tcld apikey get --id <apikey_id>` | [authentication.md#things-to-check-when-unauthenticated-is-returned-with-an-api-key](references/triage/authentication.md#things-to-check-when-unauthenticated-is-returned-with-an-api-key) |
-| `namespace not found` / wrong namespace string with an API key | Authentication | Confirm Regional Endpoint form `<region>.<cloud_provider>.api.temporal.io:7233` | [authentication.md#address-form-for-api-key-connections](references/triage/authentication.md#address-form-for-api-key-connections) |
+| `UNAUTHENTICATED`, API key rejected | Authentication | `test -n "${TEMPORAL_API_KEY:-}"` (presence only; never print the value), then `tcld apikey get --id <apikey_id>` | [authentication.md#things-to-check-when-unauthenticated-is-returned-with-an-api-key](references/triage/authentication.md#things-to-check-when-unauthenticated-is-returned-with-an-api-key) |
+| `namespace not found` / wrong namespace string with an API key | Authentication | Confirm full Namespace name and its provisioned endpoint/auth mode | [authentication.md#address-form-for-api-key-connections](references/triage/authentication.md#address-form-for-api-key-connections) |
 | `RESOURCE_EXHAUSTED` gRPC status | Rate limits | Identify which limit fired: throttle metrics on Cloud v1, the `resource_exhausted_cause` label on v0 / self-hosted | [rate-limits.md#identifying-which-limit-was-hit](references/triage/rate-limits.md#identifying-which-limit-was-hit) |
 | Task queue shows no pollers | Worker health | `temporal task-queue describe --task-queue <q>` | [worker-health.md#what-no-pollers-looks-like](references/triage/worker-health.md#what-no-pollers-looks-like) |
 | Workflow stuck on a pending activity / timer / child / signal | Workflow stuck | `temporal workflow describe --workflow-id <id>` | [workflow-stuck.md#the-primary-inspection-command-temporal-workflow-describe](references/triage/workflow-stuck.md#the-primary-inspection-command-temporal-workflow-describe) |
@@ -281,9 +283,9 @@ If the layer above the fix is still failing, return to step 4 and continue walki
 
 - [sdk-snippet-review.md](references/triage/sdk-snippet-review.md) — Layer-0 config check for pasted SDK connection snippets: endpoint form per auth method, namespace format, auth / TLS expectations, `TEMPORAL_*` env vars, common misconfigurations. Run before the diagnostic ladder.
 - [diagnostic-ladder.md](references/triage/diagnostic-ladder.md) — the seven-layer bottom-up model, with one canonical command per layer and cross-links into the topical leaves.
-- [connectivity.md](references/triage/connectivity.md) — DNS, TCP, endpoint families (Namespace Endpoint for mTLS vs. Regional Endpoint for API keys), firewall/proxy shapes, PrivateLink/PSC, quick diagnostic scripts.
+- [connectivity.md](references/triage/connectivity.md) — DNS, TCP, endpoint families (Namespace Endpoint for mTLS/API-key-only, regional/private exceptions), firewall/proxy shapes, PrivateLink/PSC, quick diagnostic scripts.
 - [certificates.md](references/triage/certificates.md) — x509 and TLS alert strings, expiry / unknown-authority / hostname-mismatch / key-mismatch diagnosis, Cloud accepted-client-CA set via `tcld namespace accepted-client-ca`, Cloud mTLS certificate requirements, rotation and expiry notifications, openssl recipes.
-- [authentication.md](references/triage/authentication.md) — `UNAUTHENTICATED` vs `PERMISSION_DENIED`, API-key lifecycle (`tcld apikey` commands, env var propagation, required Regional Endpoint form), mTLS after TLS (certificate filters, identity-to-role mapping), Cloud account-level roles and namespace-level permissions.
+- [authentication.md](references/triage/authentication.md) — `UNAUTHENTICATED` vs `PERMISSION_DENIED`, API-key lifecycle (`tcld apikey` commands, env var presence, auth-specific endpoint selection), mTLS after TLS (certificate filters, identity-to-role mapping), Cloud account-level roles and namespace-level permissions.
 - [workflow-stuck.md](references/triage/workflow-stuck.md) — Workflow Execution Status values, `temporal workflow describe` as the primary inspection command, Event History via `temporal workflow show`, pending activities / child workflows / signals / Nexus operations / Workflow Tasks, WorkflowTaskFailed retry loops, recovery commands (signal, terminate, cancel, reset, pause/unpause).
 - [non-determinism.md](references/triage/non-determinism.md) — determinism definition, WFT-failure signature, ND-inducing code patterns, per-SDK error shapes, identifying ND from Event History, local replay reproduction, remediation via Worker Versioning / patching / reset.
 - [worker-health.md](references/triage/worker-health.md) — no-pollers runbook via `temporal task-queue describe`, reachability and versioning, worker-level describe, schedule-to-start latency, worker task slots, sticky execution and sticky cache, worker heartbeating, Cloud namespace-level poller limits, worker log signatures.

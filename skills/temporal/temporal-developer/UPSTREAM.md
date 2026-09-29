@@ -19,6 +19,14 @@ This is a tal-skills adaptation of official Temporal source, not an official Tem
 
 - Normalized trailing whitespace in imported reference files.
 
+### Engineering toolkit maintenance — 2026-09-29
+
+Clarified Standalone Activity execution deduplication versus external effect idempotency, running/closed ID policies and retention, operation identity, current CLI/server minimums, and Rust support with legacy fallback.
+
+Primary checks: [Standalone Activities](https://docs.temporal.io/standalone-activity) and [Rust guide](https://docs.temporal.io/develop/rust/activities/standalone-activities).
+
+The original source pin and MIT license are unchanged. This is a targeted local correction of audited entrypoints and selected risk-bearing references, not a line-by-line revalidation of the entire vendored library.
+
 ## Verification and updates
 
 The package was checked locally for frontmatter, bundled resource links, and attribution. Provisioning scripts receive shell syntax and isolated stub checks; no live Cloud setup, deployment, credentials, or Workflow execution was performed for this import. Examples and runtime dependencies still require validation against the project's installed SDK and environment.

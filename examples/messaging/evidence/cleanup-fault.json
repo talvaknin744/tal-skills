@@ -1,0 +1,82 @@
+{
+  "status": "passed",
+  "scenario": "temporary-directory cleanup failure remains visible",
+  "injection": "TemporaryDirectory.__exit__ raises before removal; real broker cases and container cleanup still execute",
+  "source_sha256": "38f4fcb4433e6cc1dbf53ad7be74cea3f3a9d18e1a8b73ac701690e56eb58439",
+  "observed": {
+    "status": "failed",
+    "runtime": {
+      "requested_image": "rabbitmq:4.3.0@sha256:46bf0bdf0d2008acae9c5475558001e961297bd0868214c9216bef107d7d2b87",
+      "pika": "1.3.2",
+      "docker_engine": "29.8.0",
+      "image_id": "sha256:b0a71b73f29fb2195129a03c78c846801bebf2095e9e814656aa42fad1873247",
+      "repo_digests": [
+        "rabbitmq@sha256:46bf0bdf0d2008acae9c5475558001e961297bd0868214c9216bef107d7d2b87"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "broker_version": "4.3.0",
+      "erlang": "Erlang/OTP 27.3.4.11",
+      "sqlite": "3.53.2"
+    },
+    "configuration": {
+      "broker_count": 1,
+      "queue_type": "classic",
+      "durable_queue": true,
+      "persistent_messages": true,
+      "publisher_confirms": true,
+      "consumer_ack": "manual",
+      "ledger": "SQLite WAL, synchronous=FULL"
+    },
+    "cases": [
+      {
+        "name": "commit-before-ack",
+        "status": "passed",
+        "redelivered": true,
+        "effect_count": 1
+      },
+      {
+        "name": "independently-published-duplicate",
+        "status": "passed",
+        "redelivered": false,
+        "effect_count": 1
+      },
+      {
+        "name": "changed-intent-rejected",
+        "status": "passed",
+        "effect_count": 1
+      },
+      {
+        "name": "rollback-before-disconnect",
+        "status": "passed",
+        "rolled_back_effect_count": 0,
+        "final_effect_count": 1
+      },
+      {
+        "name": "ack-before-commit-negative-control",
+        "status": "passed",
+        "unsafe_result_reproduced": true,
+        "message_recoverable": false,
+        "effect_count": 0
+      }
+    ],
+    "cleanup": {
+      "container_removed": true,
+      "anonymous_volumes_removed": true,
+      "temporary_ledger_created": true,
+      "temporary_ledger_removed": false,
+      "image_retained": true
+    },
+    "limits": [
+      "One local broker and SQLite file; no quorum, failover, or power-loss guarantee was tested.",
+      "Consumer connections closed gracefully; neither broker nor host was restarted or killed.",
+      "Durable settings are configuration, not an observed restart-survival proof.",
+      "No DLQ transfer/persistence, external-provider transaction, ledger expiry, or parallel consumer test."
+    ],
+    "failure": {
+      "type": "OSError",
+      "message": "Injected temporary-directory cleanup failure"
+    }
+  },
+  "injection_cleanup_completed": true
+}

@@ -221,7 +221,7 @@ Confidence checkpoints follow the skill convention in [runtime-errors.md](runtim
 
 5. **Check for a poison task.** If the same Workflow keeps failing its WFT, read its history per [workflow-stuck.md → Pending Workflow Task and WorkflowTaskFailed loops](workflow-stuck.md#pending-workflow-task-and-workflowtaskfailed-loops). If the cause is Nondeterminism, escalate to the non-determinism recipe below.
 
-6. **Pollers fresh, no auth/rate-limit/poison signals, schedule-to-start latency high** → the ceiling is the Worker, not the server. See [worker-health.md → Schedule-to-start latency](worker-health.md#schedule-to-start-latency) and [→ Worker task slots](worker-health.md#worker-task-slots). Sizing / tuning lives in `skill-temporal-deploy`; this skill has done its job by proving the earlier layers healthy.
+6. **Pollers fresh, no auth/rate-limit/poison signals, schedule-to-start latency high** → the ceiling is the Worker, not the server. See [worker-health.md → Schedule-to-start latency](worker-health.md#schedule-to-start-latency) and [→ Worker task slots](worker-health.md#worker-task-slots). Sizing / tuning lives in `temporal-safe-deployments`; this skill has done its job by proving the earlier layers healthy.
 
 **Confidence:** high if one signal from steps 3–5 fires and matches the backlog's start time. Low if steps 1–5 are all clean — that pattern is almost always "not enough workers," and worker-health.md flags it: low Poll Success Rate + low schedule-to-start latency + low host utilization can even indicate *too many* Workers (see [worker-health.md → Cloud Namespace-level poller limits](worker-health.md#cloud-namespace-level-poller-limits)).
 
@@ -257,7 +257,7 @@ Confidence checkpoints follow the skill convention in [runtime-errors.md](runtim
    | Situation | Remediation |
    |---|---|
    | Worker Versioning already in place and this Workflow Type can be pinned going forward | [→ Worker Versioning (preferred)](non-determinism.md#remediation-worker-versioning-preferred). Adopting Versioning mid-incident does not fix already-looping Workflows. |
-   | In-flight Workflows must complete under both old and new behavior | [→ per-SDK patching](non-determinism.md#remediation-per-sdk-patching) — `GetVersion` / `patched` branch. SDK API details in `skill-temporal-developer`. |
+   | In-flight Workflows must complete under both old and new behavior | [→ per-SDK patching](non-determinism.md#remediation-per-sdk-patching) — `GetVersion` / `patched` branch. SDK API details in `temporal-developer`. |
    | Bad commit cleanly revertible, divergences not yet widespread | [→ Fix the Worker code and redeploy](non-determinism.md#remediation-fix-and-redeploy-or-reset-past-the-divergence) — revert, let the server-side WFT-retry loop succeed on new Workers. |
    | Workflows already wedged past the divergence | [→ Reset the Workflow past the divergence](non-determinism.md#remediation-fix-and-redeploy-or-reset-past-the-divergence) — `temporal workflow reset --event-id <last-good-WorkflowTaskCompleted>`. Valid reset points: `WorkflowTaskStarted`, `WorkflowTaskCompleted`, `WorkflowTaskTimedOut`, `WorkflowTaskFailed`. Confirm with the business owner — events after the reset point are re-executed. |
 

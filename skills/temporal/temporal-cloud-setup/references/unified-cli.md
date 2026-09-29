@@ -1,108 +1,64 @@
-# Unified Temporal CLI (cloud-cli) + Client Config TOML Reference
+# Temporal Cloud extension and client config reference
 
-> **The executor is `scripts/provision.sh`, not these raw commands.** During a run the agent invokes that script, which has these flags pinned and the error handling baked in. This file is the **background + source-of-truth** for what the script does: read it to understand the behavior, and when a prerelease flag drifts, update both `scripts/provision.sh` and this file together. Don't hand-run these commands during a normal setup.
+The executor is the package's `scripts/provision.sh`. This reference explains its command contracts for maintenance; do not hand-run key-creation or config-read commands during a setup. Verify exact installed command help before changing the script.
 
-Read this before changing any `temporal cloud ...` or `temporal config ...` command in the script. The `cloud-cli` is in **prerelease**, so command and flag names change. If a command or flag here is not accepted, run the matching `--help` and use what it reports — never guess flags.
+## Status and installation
 
-## What this CLI is
+The Cloud extension is **Public Preview**, separately versioned from the core Temporal CLI. Reviewed against [Cloud CLI v0.1.1](https://github.com/temporalio/cloud-cli/tree/9575d18f0a4588b51382886655a30742c094baac) and [official CLI documentation](https://docs.temporal.io/cli/cloud) on 2026-09-29. Preview APIs can change; record the versions actually used.
 
-- The unified CLI exposes a `temporal cloud` command group (binary name `temporal-cloud`). It is the prerelease successor to the older `tcld` Cloud CLI; the subcommand shapes mirror `tcld`.
-- It is **separate** from a local `temporal server start-dev` workflow. This setup never starts a local server.
-- Source / releases: https://github.com/temporalio/cloud-cli
-
-## Prerelease disclaimer (show before download)
-
-Surface this to the user before installing, quoted verbatim:
-
-> **Pre-release:** This extension is offered as a pre-release and is subject to change. Please reach out to Temporal Support if you have questions.
-
-## Install
-
-macOS (Homebrew, prerelease tap) — **confirm Homebrew is installed first** (`command -v brew`); if it is absent, do not auto-install it, point the user to https://brew.sh or use the download fallback below:
+Current macOS installation uses the supported tap:
 
 ```bash
-command -v brew && brew install temporalio/prerelease/temporal-cloud
+brew install temporalio/brew/temporal-cloud
 ```
 
-The tap is `temporalio/prerelease`, but the formula/binary is named `temporal-cloud` (not `cloud-cli`). If `brew install temporalio/prerelease/cloud-cli` fails with a formula-not-found error, use `temporal-cloud` as shown above.
+The older `temporalio/prerelease` tap has a migration path; its appearance in an existing setup is not proof that installation failed. Other platforms can use the [release archives](https://github.com/temporalio/cloud-cli/releases), with both the core `temporal` binary and the `temporal-cloud` extension on PATH. The setup script does not install Homebrew or download arbitrary binaries automatically.
 
-Other platforms: download the latest archive from
-https://github.com/temporalio/cloud-cli/releases/latest , extract, and put the
-`temporal-cloud` binary on your `PATH`. Build from source with `make build` (needs Go).
-
-Verify:
+Local inspection:
 
 ```bash
-temporal cloud version      # or: temporal-cloud --version
+temporal --version           # core CLI
+temporal cloud --version     # Cloud extension; not a 'cloud version' subcommand
 temporal cloud --help
 ```
 
-## Authenticate
+The script checks exact subcommand usage paths and required flags for Namespace creation/listing, key creation, login/identity/regions, config inspection, and Workflow/Task Queue verification. A compatible installation returns `update=skipped`, `reason=compatible`; an unknown development version can still be compatible. Missing capabilities cause install/update only on the supported Homebrew path, followed by revalidation. Package failure or still-missing capabilities is a structured error, not permission to continue. Preview and execution use the same decision function. `version` and `cloud_version` identify different binaries.
 
-```bash
-temporal cloud login        # opens a browser for OAuth
-temporal cloud whoami       # confirm the authenticated identity
-```
+These local checks establish command shape, not Cloud account eligibility or live response semantics. Verify Namespace activation, key authentication, Worker polling, and Workflow completion separately.
 
-For non-interactive use, most commands also accept `--api-key <key>`.
+## Authentication and regions
 
-If the user has no Cloud account yet, send them to https://temporal.io/get-cloud first.
+`temporal cloud login` starts browser authentication; `whoami` identifies the cached login. Neither proves Cloud API reachability. Fresh OAuth still requires identity-provider access despite using a loopback callback; see the [v0.1.1 login implementation](https://github.com/temporalio/cloud-cli/blob/9575d18f0a4588b51382886655a30742c094baac/temporalcloudcli/oauth.go). The subsequent `region list` is a live request. Select an exact provider-prefixed region from that account's result, reusing the user's already-stated region when it is present in the list.
 
-## List regions
+Management commands use the browser identity, without `--profile cloud-setup`. Data-plane commands explicitly use the named `cloud-setup` profile. Do not infer that `tcld` and the Cloud extension use identical flags or credential environment variables.
 
-Before creating a namespace, **always** list the available **provider-prefixed** regions and have the user **select from the output** — **do not hand-prefix a bare region, and do not accept a region typed from memory without confirming it against the list** (a remembered region can be valid yet wrong for the account, creating the namespace in the wrong place — which has paged on-call teams):
+## Namespace creation
 
-```bash
-temporal cloud region list                 # list available regions; `temporal cloud region get <id>` for one
-```
-
-Note: in the current prerelease (cloud version 0.0.1) the region commands live under the **`region`** group (`temporal cloud region list` / `region get`) — there is **no** `namespace list-regions` subcommand. Use `--help` to confirm the exact subcommand name in the installed version. Pass to `--region` only a value the user selected from this command's output (shape `<provider>-<region>`); never a bare region you prefixed yourself, and never one typed from memory that you haven't confirmed against the list.
-
-## Create an API-key namespace
-
-Prerelease CLI — these flags are verified during the start-up check (against https://github.com/temporalio/cloud-cli and `--help`). Use the verified flags directly here; if that check found drift, this block should already be updated to match. As of the current prerelease:
+The main flow uses `start-namespace` to submit the following shape, then clones/installs the sample while provisioning proceeds:
 
 ```bash
 temporal cloud namespace create \
-  --name quickstartai-<sdk>-<timestamp> \
-  --region <provider>-<region> \
+  --name <bare-name> \
+  --region <provider-region-from-list> \
   --api-key-auth-enabled \
   --retention-days 30 \
-  --auto-confirm
-```
-
-- Confirmed flag names (these differ from older `tcld`): the namespace name flag is `--name` (not `--namespace`); API-key auth is the boolean `--api-key-auth-enabled` (not `--auth-method api_key`).
-- **`--name` takes the bare name only** (e.g. `quickstartai-go-20260617-143205`) — Cloud appends `.<account-id>` itself (its `--help` even says the name "becomes part of the namespace ID"). The bare name must be **≤39 characters**; the appended account-id does not count toward that limit.
-- **`--auto-confirm` is required for unattended runs** (otherwise an interactive confirm prompt hangs the skill). **Never `--auto-confirm` a *delete*.**
-- **Region is provider-prefixed**: `us-east-1` → `aws-us-east-1` (and `gcp-...` for GCP). List exact values with the region-list command above.
-- **Create synchronously (no `--async`).** It blocks for **a few minutes** (repeated `Operation pending…` lines — normal provisioning, not a hang) until the namespace lands on Cloud. `--async` is still unusable (returns before the namespace is provisioned). Don't abort during the wait.
-- **Get the handle from `namespace list -o jsonl`, NOT from the create output.** As of the current prerelease, `create`'s default text output drifted to a **diff format** (`-{}` / `+{"name": …}`) that no longer carries the `<name>.<account-id>` handle. `namespace list -o jsonl` **works** — the earlier "list/get/-o json return empty" note is stale — and returns `{"Namespaces":[{"namespace":"<handle>","spec":{"name":"<bare>"},"endpoints":{"mtlsGrpcAddress":"<handle>.tmprl.cloud:7233", …}}, …]}`. `lookup_handle_by_name` matches our `spec.name` → `.namespace`, with an account-id-construct fallback (the account-id is account-stable). Still never decode the API-key token or read config files for the account-id.
-- **Detached-but-synchronous (overlap):** `provision-and-scaffold` runs this synchronous create as a background job **within one invocation** while it clones + installs deps in the foreground, then joins and resolves the handle via `lookup_handle_by_name`. Still **never `--async`**; only the *process* is backgrounded, and only inside that single call.
-- The `address` for the client config TOML is the **namespace endpoint** = the handle + `.tmprl.cloud:7233`, e.g. `<namespace-handle>.tmprl.cloud:7233` — build it directly from the handle (no `namespace get` needed). Use this, **not** the regional `grpcAddress` (`<region>.<provider>.api.temporal.io:7233`) — region-agnostic, works with API keys, survives HA failover (Temporal's recommended endpoint).
-
-## Create an API key
-
-Flags verified during the start-up check (against https://github.com/temporalio/cloud-cli and `--help`). As of the current prerelease, the subcommand for the logged-in user is `create-for-me` with these flags.
-
-> **⚠️ Secret-safety: never run this command without redirecting stdout into a `0600` file.** The response carries the one-time `eyJ…` token; run it bare and the token prints to the terminal (and into any agent transcript). `scripts/provision.sh create-key` is the sanctioned caller — it always redirects. The form below is the *only* form to copy:
-
-```bash
-umask 077
-temporal cloud apikey create-for-me \
-  --display-name <key-name> \
-  --description "money-transfer Cloud setup" \
-  --expiry-duration 24h \
   --auto-confirm \
-  -o json > "$KEYFILE"     # never to the terminal
+  --async
 ```
 
-- Confirmed against the prerelease CLI (differs from older `tcld`): subcommand `apikey create-for-me`; `--display-name` is **required** (not `--name`); expiry is `--expiry-duration` (not `--duration`). A separate `apikey create` may exist for service accounts; use `create-for-me` for the current user.
-- `--auto-confirm` is **required** — like `namespace create`, this command prompts interactively; without it a captured run returns exit 0 with empty output and no key created.
-- **Re-verify auth first.** The earlier `login` can expire mid-run. Run `temporal cloud whoami` right before this; if it errors/empties, `temporal cloud login` again before retrying.
-- **Empty output + exit 0 ⇒ diagnose, don't improvise.** It means a suppressed confirm prompt (add `--auto-confirm`) **or an expired login** (re-check `whoami`/`login`). Fix the cause and re-run once.
-- Capture path (verified against cloud version 0.0.1 with fresh auth): `-o json` **works** — redirect it to a `0600` file (`umask 077`), e.g. `... --auto-confirm -o json > "$HOME/.key.json"`. The secret is the **`.token`** field and the non-secret id is **`.keyId`**. In Step 6, read `.token` from that file and write it **directly into the TOML** under `[profile.cloud-setup]` via a script (never `config set --value`, never a rendered diff — both would expose the secret), then `chmod 600` the file and delete the temp capture file.
-- `temporal cloud apikey list` may return **empty output even when keys exist** on this prerelease build — do **not** treat that as a failed creation. The authoritative confirmation of key creation is the `create-for-me` response (`asyncOperation.state == STATE_FULFILLED` + a returned `keyId`); the ultimate validity check is the Worker authenticating in Phase 4.
-- **The secret is displayed only once.** It cannot be retrieved later — if lost, create a new key. Never echo it into chat or commit it to a repo.
+`await-namespace --name <bare-name>` polls the exact name via `namespace list --name ... -o json`, waits for ACTIVE, and resolves the full `<name>.<account-id>` handle. Async submission is not readiness. A local interruption or failed clone does not cancel the submitted create; inspect that name before submitting another.
+
+The legacy `provision-and-scaffold` fallback deliberately runs synchronous create in a background subprocess, joins it, and checks readiness. Its lack of `--async` is a fallback contract, not a claim that async is unsupported. Historical preview guidance saying async was unusable predates the current start/await flow.
+
+The generated Namespace is API-key-only, so its Namespace Endpoint (`<handle>.tmprl.cloud:7233`) is appropriate. For an existing mixed-auth/private Namespace, use the actual configured endpoint and current [Namespace access guidance](https://docs.temporal.io/cloud/namespaces); do not generalize the setup assumption to all Namespaces.
+
+## API-key capture
+
+The current user command is `apikey create-for-me`, with required `--display-name` and the supported `--description`, `--expiry-duration`, `--auto-confirm`, and structured-output flags. The script uses a 25-hour key. A version check cannot establish whether a specific account permits creation.
+
+Invoke only `scripts/provision.sh create-key`: it captures both streams into restricted temporary files, writes the token directly into a mode-0600 config, returns only non-secret identifiers, and removes capture files. Never show a token, pass it through argv, or read the saved TOML into agent context. Use `verify-config` for redacted verification.
+
+The current structured response uses `token` and `keyId`. Legacy prerelease captures included empty/non-JSON output and TTY behavior; those observations explain defensive parsing and the hidden local-input fallback, but are not a universal claim about current v0.1.1. Failure to capture a token is an error, not evidence of a usable key. Reconcile the attempted creation and account limits before repeating it.
 
 ## Client config TOML
 
@@ -138,19 +94,13 @@ disabled = false   # TLS is REQUIRED for Temporal Cloud — set it explicitly.
 # "unable to connect / tls not set to true" failures; `disabled = false` is unambiguous.
 ```
 
-**Write the whole `[profile.cloud-setup]` block directly into the TOML file — do not use `temporal config set`.** `config set` rewrites the shared file and can strip the `oauth` block out of `[profile.default]` (where the `temporal cloud login` session lives), breaking `temporal cloud whoami` and cleanup. Writing the block yourself touches only `cloud-setup`. Write `address` and `namespace` directly, and the `api_key` the same way — from the captured value via shell redirection (never `config set --value`, which records the secret in shell history and exposes it in `ps`). Then restrict permissions so other local accounts can't read the credential:
+**Let `provision.sh create-key` write the named profile.** Historical preview runs observed shared-file rewrites dropping unrelated OAuth configuration; the script preserves other profiles and never passes the key via `config set --value` (argv and history can expose it). It sets file permissions to 0600. The permission shape below is illustrative; use the script's resolved config path, not a hard-coded macOS path:
 
 ```bash
 chmod 600 "$HOME/Library/Application Support/temporalio/temporal.toml"
 ```
 
-Other useful commands (always scope them to the profile):
-
-```bash
-temporal --profile cloud-setup config list   # show the profile (do not print api_key to the user)
-temporal --profile cloud-setup config get <property>
-temporal --profile cloud-setup config delete <property>
-```
+For verification, invoke `scripts/provision.sh verify-config`. In [core CLI v1.9.1](https://github.com/temporalio/cli/blob/v1.9.1/internal/temporalcli/commands.config.go), `config list` enumerates all profile names and does not validate the selected profile. The script uses `--profile cloud-setup config get --prop address`, which requires that profile to exist, and discards both streams. It does not establish credential validity or network readiness; `await-auth` does that separately. Never read an entire secret-bearing profile into agent context.
 
 Once the `cloud-setup` profile is set, `temporal --profile cloud-setup workflow list` / `workflow describe` operate against the Cloud namespace. Plain commands without the flag still use the user's `default` — so always pass `--profile cloud-setup`.
 
@@ -163,39 +113,8 @@ https://cloud.temporal.io/namespaces/<namespace-handle>/workflows/<workflow-id>/
 ```
 
 The bare list URL (`…/workflows`) is a fallback only — surface the run-specific URL when you have the Workflow ID + Run ID (from the starter output or `workflow describe -o json`). `<namespace-handle>` is the namespace's full handle from `namespace create` — `<name>.<account-id>`, e.g. `quickstartai-go-20260617-143205.fmrip`.
-## Auth-failure stderr wording (await-auth / workflow list)
+## Historical auth-error observations
 
-`temporal --profile cloud-setup workflow list` is the auth-readiness poll. On failure
-the Cloud API gateway (Envoy) returns a gRPC status whose `desc` is a **JWT-filter**
-message — the wording is **JWT-anchored, never "api key"-anchored**. Captured against
-the prerelease CLI:
+Older prerelease runs returned JWT-filter messages such as `Jwt is missing`, `Jwt issuer is not configured`, or `Jwt is expired`. These are examples, not guaranteed current wording. The script treats an expired/invalid/revoked/disabled key or token as permanent when the qualifier is anchored to credential context; other failures remain bounded retries and end with redacted evidence. Authentication readiness is not proven by a cached identity or exit code without a successful authorized call.
 
-| Condition | Exact stderr | Classification |
-|---|---|---|
-| Empty / missing key | `Error: failed reaching server: rpc error: code = Unauthenticated desc = Jwt is missing` | **transient** (can occur mid-propagation) |
-| Bad / wrong-issuer key | `Error: failed reaching server: rpc error: code = Unauthenticated desc = Jwt issuer is not configured` | **transient** |
-| Expired key | `Error: failed reaching server: rpc error: code = Unauthenticated desc = Jwt is expired` | **permanent → `key-expired` fast-fail** |
-| mTLS-only namespace (wrong endpoint) | `Error: failed reaching server: connection error: desc = "error reading server preface: remote error: tls: certificate required"` | **transient** (TLS layer, not auth) |
-
-Why only `expired` fast-fails: a valid key that is merely *propagating* has a **future
-`exp`**, so it can never emit `Jwt is expired` — matching `expired` (anchored to
-jwt/key/token) is safe against wrong-fast-failing a key that just needs a moment. The
-other descs are ambiguous (can appear during propagation), so they stay transient and
-resolve as `auth-timeout` with the redacted stderr line attached. This is the source of
-truth for `await_auth_permanent()` in `scripts/provision.sh`.
-
-> Note: `Jwt is missing` / `issuer is not configured` and the mTLS/TLS error were
-> captured live. `Jwt is expired` is the standard Envoy JWT-filter default and the
-> expected wording for a real expired key; it was not captured live (the prerelease
-> `apikey create-for-me` emits the one-time secret only to a TTY, so a short-expiry
-> key couldn't be minted+polled non-interactively). If a live capture ever differs,
-> update the table and `await_auth_permanent()` together.
-
-## API-key mint output drift (create-key)
-
-The prerelease `apikey create-for-me -o json` does **not** put the one-time secret on
-redirectable stdout: with stdout+stderr redirected (non-TTY) it returns **empty output
-with exit 0** and, in that mode, may not persist a key at all. The secret is emitted to
-the controlling **TTY** / as human text. This is why `cmd_create_key` captures BOTH
-streams, falls back to a JWT-pattern scrape, and finally to a hidden `/dev/tty` paste —
-and why the offline `key-empty` scenario (empty both streams, exit 0) is faithful.
+A wrong issuer or a TLS certificate requirement may indicate configuration, not propagation. Read the actual error and Namespace auth mode before retrying, changing endpoints, or minting another key. Update the parser and its tests together if current runtime evidence differs.

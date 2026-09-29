@@ -136,3 +136,7 @@ conditional guidance for surviving consumers and complete long-running work unit
 Final examples, skill trials, independent scores, installation checks, and native
 workflow runs belong to the subsequent evaluation record. A research feasibility
 probe is not a passed evaluation of artifacts that do not yet exist.
+
+[Implementation review corrections](review-corrections.md) record where a
+source crosscheck or executed fault changed an initial interpretation, including
+Temporal endpoint distinctions, protocol errors, cleanup and installer recovery.

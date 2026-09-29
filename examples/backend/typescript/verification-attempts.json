@@ -1,0 +1,81 @@
+{
+  "kind": "typescript_backend_verification_history",
+  "recorded_at": "2026-09-29T09:07:11.556Z",
+  "command": "python3 examples/backend/run.py --report examples/backend/typescript/verification.json -- npm --prefix examples/backend/typescript test",
+  "earlier_attempts": [
+    {
+      "order": 1,
+      "status": "failed",
+      "stage": "actual COMMIT reply loss",
+      "observed_error": "Unhandled Client error event: Connection terminated unexpectedly",
+      "runtime": "v25.9.0",
+      "proxy": {
+        "connections": 1,
+        "commits_dropped": 1,
+        "errors": []
+      },
+      "root_cause": "The pool removes its idle client error listener at checkout. The operation awaited the query but did not own a checked-out Client error listener.",
+      "correction": "Attach a lease-owned connection error listener; retire the client on that event and remove the listener after retirement or before safe release.",
+      "evidence_limit": "Captured terminal output; the process exited before a complete scenario JSON report was emitted."
+    },
+    {
+      "order": 2,
+      "status": "failed",
+      "stage": "final resource assertion",
+      "observed_error": "All application sessions must be closed: actual 1, expected 0",
+      "proxy": {
+        "connections": 1,
+        "commits_dropped": 1,
+        "errors": []
+      },
+      "root_cause": "An immediate pg_stat_activity assertion followed pool.end before the server finished asynchronous disconnect cleanup.",
+      "correction": "Bounded polling of the actual server session count, with a separately recorded resource-finalization scenario.",
+      "evidence_limit": "The case runner finished without printed individual scenario failures; the process exited at the final assertion before its full JSON report was emitted."
+    }
+  ],
+  "final_verification": {
+    "completed_at": "2026-09-29T09:07:11.556Z",
+    "scenario_count": 16,
+    "all_passed": true,
+    "remaining_application_sessions": 0,
+    "report": "verification.json",
+    "sha256": "e7186a65eb380341e279982a9825bf0238c8b484c8cb9f7eea4cdccfed364207"
+  },
+  "source_hashes": {
+    "reservation.ts": "0252cd06e5cd04d6ad49be21672cfe58522cd67217a7375c967346443bbe74e1",
+    "verify.ts": "662ebf597fcfb002b502752975943c250ca088d72c1d6b9fe3e47c93a14c6f14",
+    "package-lock.json": "d51cb1a2689e7f688a4b96c80e9c03393fb79c10ef6df82816abb9cbf80b3d7c"
+  },
+  "limitations": [
+    "Earlier failures are summarized from captured tool output, not complete saved transcripts.",
+    "Each runtime attempt used the common disposable runner; no production database was changed."
+  ],
+  "independent_review_findings": [
+    {
+      "severity": "P2",
+      "status": "fixed",
+      "finding": "Idle client retirement could wait indefinitely for a half-open peer even after removal from pool capacity.",
+      "reproduction": "Reviewer used a real allowHalfOpen loopback peer with PostgreSQL startup and stubbed SQL. With cleanupMs20, request remained unsettled after200ms and remove listener remained; destroying peer completed original cancellation.",
+      "correction": "Retain an owned net.Socket per driver client, start a retirement force-destroy timer, still await remove/end, and dispose timer/listener.",
+      "regression_case": "stalled-idle-retirement",
+      "regression_scope": "Real TCP and driver retirement; SQL answers are explicitly stubbed."
+    }
+  ],
+  "independent_recheck": {
+    "reviewer": "independent research_messaging agent",
+    "result": "closed reproduced P2; no remaining demonstrated material finding in reviewed scope",
+    "original_probe_repeated": true,
+    "cleanup_allowance_ms": 20,
+    "settled_within_observation_ms": 200,
+    "original_cancellation_preserved": true,
+    "pool_total": 0,
+    "remove_listener_count": 0,
+    "external_peer_rescue_used": false,
+    "independent_typecheck": "passed",
+    "reviewed_source_hashes": {
+      "reservation.ts": "0252cd06e5cd04d6ad49be21672cfe58522cd67217a7375c967346443bbe74e1",
+      "verify.ts": "662ebf597fcfb002b502752975943c250ca088d72c1d6b9fe3e47c93a14c6f14",
+      "package-lock.json": "d51cb1a2689e7f688a4b96c80e9c03393fb79c10ef6df82816abb9cbf80b3d7c"
+    }
+  }
+}

@@ -59,9 +59,9 @@ dig +short <namespace>.<account>.tmprl.cloud # short-form answer
 
 Interpreting results:
 
-- For a **public-internet Namespace**, the A record resolves to a public IP (CNAME chain through `<cloud>-<region>.region.tmprl.cloud`).
+- For a **public-internet Namespace**, verify resolution and reachability without assuming a particular CNAME chain or pinning observed IPs; DNS targets may change.
 - For a **PrivateLink/PSC Namespace with private DNS configured**, the Namespace hostname should resolve to the VPC endpoint address (AWS VPCE DNS name) or the PSC internal IP (GCP) from inside the VPC.
-- For an HA (multi-region) Namespace, the Namespace record is a CNAME to `<cloud>-<region>.region.tmprl.cloud` where `<region>` is the currently active region.
+- For **HA with private connectivity**, the documented Namespace CNAME resolves through `<provider>-<region>.region.tmprl.cloud`, which can be overridden in a private DNS zone. Inspect the actual assigned connection.
 
 ## Endpoint formats
 
@@ -70,8 +70,8 @@ Using the wrong endpoint family is one of the most common causes of "cannot conn
 | Purpose | Endpoint pattern | Port | Source |
 |---|---|---|---|
 | Cloud Namespace Endpoint (recommended default for workers, SDKs, and `temporal` CLI data-plane — mTLS and API-key-only) | `<namespace>.<account>.tmprl.cloud` | 7233 |  |
-| Cloud API Regional Endpoint (explicit region pin; dual-auth API-key path; some private-connectivity setups) | `<region>.<cloud_provider>.api.temporal.io` | 7233 | |
-| Cloud HA Regional Endpoint (pin to a specific HA replica region) | `<cloud>-<region>.region.tmprl.cloud` | 7233 | |
+| Cloud API Regional Endpoint (explicit region pin; check mixed-auth/private requirements) | `<region>.<cloud_provider>.api.temporal.io` | 7233 | [Namespace access](https://docs.temporal.io/cloud/namespaces#access-namespaces) |
+| HA/private-connectivity DNS intermediary | `<provider>-<region>.region.tmprl.cloud` | DNS record | Namespace CNAME target for private-zone overrides; not a generic API Regional endpoint replacement |
 | Cloud control-plane (Cloud Ops API, `tcld`, Terraform provider) | `saas-api.tmprl.cloud` | 443 | |
 | Self-hosted frontend | `<your-frontend-host>` | `7233` default | deployment-specific |
 | Local dev server | `localhost` | `7233` default | `temporal server start-dev` |
@@ -79,8 +79,8 @@ Using the wrong endpoint family is one of the most common causes of "cannot conn
 Notes:
 
 - The **Namespace Endpoint** is the recommended default for Temporal Clients (SDK, workers, `temporal` CLI) for both mTLS and API-key-only Namespaces, because it transparently follows HA failovers without a client change .
-- The **API Regional Endpoint** is for explicit region pinning, some private-connectivity setups, and **dual-auth pre-release** (which does not support API key auth to a Namespace Endpoint). When using **mTLS** against an API Regional, HA Regional, or VPCE address, the client must set the TLS server name to the Namespace Endpoint value (see [certificates.md → server name override](certificates.md#server-name-override)).
-- Do not conflate the API Regional form (`*.api.temporal.io`) with the HA Regional form (`*.region.tmprl.cloud`) — both are “regional” in docs, but they are different hostnames.
+- The **API Regional Endpoint** is for explicit region pinning, some private-connectivity setups, and **dual-auth pre-release** (which does not support API key auth to a Namespace Endpoint). When using **mTLS** against an API Regional or VPCE address, the client must set the TLS server name to the Namespace Endpoint value (see [certificates.md → server name override](certificates.md#server-name-override)).
+- The documented API Regional endpoint is `*.api.temporal.io`. The `*.region.tmprl.cloud` record is a distinct HA/private-connectivity DNS intermediary. Follow the assigned connection and provider instructions; do not automatically substitute one hostname family for the other.
 - `saas-api.tmprl.cloud` is **not** a workflow data-plane endpoint — pointing a worker or `temporal workflow …` command at it will not work.
 - The `--address` flag (env `TEMPORAL_ADDRESS`) takes `host:port`, not a URL.
 
@@ -89,7 +89,7 @@ Notes:
 | Auth method | TLS server name |
 |---|---|
 | mTLS (single-region) | Namespace Endpoint, e.g. `my-namespace.my-account.tmprl.cloud` |
-| API key (single-region) | Regional API endpoint, e.g. `us-east-1.aws.api.temporal.io` (or `us-central1.gcp.api.temporal.io`) |
+| API key (single-region) | The regional API TLS server name supplied by the private-connection configuration, for example `us-east-1.aws.api.temporal.io`. Verify the provider instructions. |
 | Multi-region (mTLS or API key) | Active region endpoint, e.g. `aws-us-east-1.region.tmprl.cloud` |
 
 For full private connectivity setup (PrivateLink, PSC, connectivity rules), see [cloud-connectivity.md](../ops/cloud-connectivity.md).

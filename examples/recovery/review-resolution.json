@@ -1,0 +1,37 @@
+{
+  "finding": "P2: restore_command_seconds included target provisioning",
+  "reviewed_candidate_sha256": "ab178c3c65d25b8a599b066816b1c2d8839ac425d5360fa8dd71a5f9a839ec44",
+  "historical_report": "history/report-before-timing-correction.json",
+  "historical_report_preserved": true,
+  "correction": "Separate timers measure target provisioning and the restore call; the end-to-end acceptance timer retains its original boundary.",
+  "corrected_candidate_sha256": "90ff7c738e879a710001e94cd238abad3c30c6d08ceedd52a616abfaf8b9f00b",
+  "verification_command": "python3 examples/recovery/verify.py --output examples/recovery/report.json",
+  "report": "report.json",
+  "verification_status": "passed",
+  "scenarios_passed": 8,
+  "cleanup_passed": true,
+  "rto": {
+    "start_utc": "2026-09-29T09:07:42.744445+00:00",
+    "start": "Immediately before target provisioning; source loss is simulated",
+    "stop": "Authenticated application identity, schema, watermark, content, and business invariants pass",
+    "target_provisioning_seconds": 0.746154,
+    "restore_command_seconds": 0.042369,
+    "application_accepted_seconds": 1.043767,
+    "target_seconds": null,
+    "objective_met": null,
+    "includes": [
+      "target provisioning",
+      "restore",
+      "missing-role detection",
+      "role/grant repair",
+      "acceptance checks"
+    ],
+    "excludes": [
+      "incident detection",
+      "backup creation",
+      "image pull",
+      "remote transfer",
+      "traffic cutover"
+    ]
+  }
+}

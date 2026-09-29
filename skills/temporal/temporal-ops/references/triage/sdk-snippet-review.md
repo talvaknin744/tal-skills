@@ -2,7 +2,7 @@
 
 A Layer-0 config check that runs **before** the [diagnostic ladder](diagnostic-ladder.md). When a user pastes SDK connection code (or just the address / namespace / auth fields), the snippet itself is frequently the whole bug — wrong endpoint family, short namespace, auth method mismatched to the Namespace. Running DNS / TCP / TLS probes at that point "fixes" nothing, because nothing lower is broken.
 
-This file is a **cross-SDK** checklist for **Temporal Cloud** client/worker connection config. SDK-specific field names (`tls.Config{}` in Go, `Connection.connect({ tls })` in TypeScript, `TLSConfig` in Python) belong to `skill-temporal-developer`. Stay at the level of: endpoint, namespace, auth method, TLS expectations, env vars.
+This file is a **cross-SDK** checklist for **Temporal Cloud** client/worker connection config. SDK-specific field names (`tls.Config{}` in Go, `Connection.connect({ tls })` in TypeScript, `TLSConfig` in Python) belong to `temporal-developer`. Stay at the level of: endpoint, namespace, auth method, TLS expectations, env vars.
 
 Out of scope here:
 - Network-layer probes (DNS / TCP / TLS / auth) → [diagnostic-ladder.md](diagnostic-ladder.md)
@@ -54,10 +54,10 @@ Cloud data-plane endpoints (port `7233`) plus the control-plane endpoint:
 |---|---|---|
 | Namespace Endpoint (recommended default) | `<namespace>.<account>.tmprl.cloud:7233` | mTLS and API-key-only Namespaces; follows HA failovers  |
 | API Regional Endpoint | `<region>.<cloud_provider>.api.temporal.io:7233` | Explicit region pin; private connectivity without private DNS; dual-auth pre-release (API key cannot use Namespace Endpoint) |
-| HA Regional Endpoint | `<cloud>-<region>.region.tmprl.cloud:7233` | Pin to a specific HA replica region |
+| HA/private DNS intermediary | `<provider>-<region>.region.tmprl.cloud` | Namespace CNAME target for private-zone overrides; do not substitute it for the API Regional endpoint |
 | Control plane (`tcld`, Cloud Ops API, Terraform) | `saas-api.tmprl.cloud:443` | **Not** a workflow / worker endpoint |
 
-The Namespace Endpoint follows HA failovers transparently. When a client pins to an API Regional or HA Regional Endpoint (or a PrivateLink/PSC DNS name) with **mTLS**, the client **must** override the TLS `server_name` to the Namespace Endpoint value — see [certificates.md → Server name override](certificates.md#server-name-override).
+The Namespace Endpoint follows HA failovers transparently. When a client pins to an API Regional Endpoint (or a PrivateLink/PSC DNS name) with **mTLS**, the client **must** override the TLS `server_name` to the Namespace Endpoint value — see [certificates.md → Server name override](certificates.md#server-name-override).
 
 **Snippet smells:**
 
@@ -91,7 +91,7 @@ One auth method per client connection. A snippet that sets both mTLS cert flags 
 
 ## TLS expectations
 
-Principle-level only. Do not diagnose SDK-specific struct fields here — that belongs to `skill-temporal-developer`.
+Principle-level only. Do not diagnose SDK-specific struct fields here — that belongs to `temporal-developer`.
 
 - **API key auth.** TLS is **required**. The client opens a TLS connection (server TLS only, no client cert) and presents the API key as a bearer credential at the gRPC layer. An API-key snippet with TLS explicitly disabled will not connect.
 - **mTLS auth.** Client certificate and private key are **required**. The certificate must chain to a CA that the namespace accepts — verify with `tcld namespace accepted-client-ca list --namespace <ns>` (see [certificates.md → Accepted client CA set (mTLS Cloud)](certificates.md#accepted-client-ca-set-mtls-cloud)). The key file must match the cert; see [certificates.md → Key does not match cert](certificates.md#key-does-not-match-cert).
@@ -158,4 +158,4 @@ SDK envconfig also accepts `TEMPORAL_TLS_CLIENT_CERT_PATH` / `TEMPORAL_TLS_CLIEN
 - Snippet looks plausible on all five review points → proceed to [diagnostic-ladder.md](diagnostic-ladder.md).
 - Snippet has an obvious wrong endpoint, namespace, or auth method → fix that first; do not run network-layer probes until it's corrected.
 - Snippet fix applied and symptom persists → descend the ladder from layer 1 (DNS). The environment may have a second, independent problem.
-- Snippet references SDK-specific struct fields, connection-builder objects, or runtime-specific TLS APIs that aren't covered here → hand off to `skill-temporal-developer`.
+- Snippet references SDK-specific struct fields, connection-builder objects, or runtime-specific TLS APIs that aren't covered here → hand off to `temporal-developer`.

@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 Adapted from Temporal's official MIT-licensed skill. For the pinned source and local changes, see [UPSTREAM.md](UPSTREAM.md).
 
+Sibling skill names are optional routing suggestions. If a sibling is not installed, use this package's relevant references and current official documentation; do not require another package to complete the scoped task.
+
 # Skill: temporal-serverless
 
 ## Overview
@@ -17,9 +19,10 @@ This skill helps users deploy and operate Temporal Workers on serverless compute
 | Cloud provider | Compute service | Support | Reference directory |
 |---|---|---|---|
 | AWS | Lambda | Supported — Public Preview, open to all Temporal Cloud customers | `references/aws-lambda/` |
-| GCP | Cloud Run | Not supported | — |
+| GCP | Cloud Run Worker Pools | Platform pre-release; access through Support; not covered by this package | — |
+| AWS | Bedrock AgentCore | Platform pre-release; access through Support; not covered by this package | — |
 
-Only a provider marked Supported is covered. If a request names another, say it is not supported and stop; do not adapt a supported provider's material to it. **Never let the provider be an unstated assumption:** when the request does not name one, it is confirmed in the step 1 questions, not silently defaulted.
+This package implements the Lambda path only. For another provider, state that package limitation and consult the [current platform guide](https://docs.temporal.io/serverless-workers) and provider-specific documentation; do not adapt Lambda IAM, packaging, or limits to it. **Never let the provider be an unstated assumption:** when the request does not name one, it is confirmed in the step 1 questions, not silently defaulted.
 
 Every supported provider's directory carries the same shared layout — `setup.md`, `iam.md`, `versioning.md`, `diagnostics.md`, `observability.md`, `self-hosted.md` — plus one `sdk-<language>.md` file for each supported SDK. Paths below are written `references/<provider>/…`; substitute the directory from the table. Provider-specific commands, templates, permissions, SDK APIs, and defaults live there — this file stays at the workflow level. When a step needs concrete commands or SDK details, go to the reference file named at the end of that step.
 
@@ -150,7 +153,7 @@ Where the harness has a todo list, use it *in addition to* the printed checklist
 
 5. **Grant Temporal permission to invoke the Worker.** Configure the compute provider's access so Temporal can invoke and inspect the Worker. This access is separate from the compute unit's own execution role — do not confuse the two. Two things to get right before you create anything: (a) this grant is **shared, account-wide infrastructure** that a previous deployment may already have created — look for an existing one and extend it to cover your new Worker rather than creating a parallel copy, and never delete or repurpose one you did not create without asking; (b) scope the grant so that *future* immutable builds are covered, not just today's — a grant pinned to one build breaks the next release in a way that surfaces later as an unrelated-looking invocation failure. → `references/<provider>/iam.md`.
 
-6. **Register the Worker Deployment Version, verify the validation invocation, then set it current.** Create the Worker Deployment Version with the compute provider configured; the deployment name and build ID must exactly match the values in the Worker code. Creating it triggers one validation invocation — **check that it bound the Task Queue before going further.** If the Task Queue is bound, the permission grant, package, config, and deadline are all provably correct, and any later failure is downstream; if it is not, setting the version current will not fix it. Then set it current: through the UI this happens automatically, through the CLI it is a separate step, without which Tasks never route to the version. → `references/<provider>/setup.md`.
+6. **Register the Worker Deployment Version, verify the validation invocation, then set it current.** Create the Worker Deployment Version with the compute provider configured; the deployment name and build ID must exactly match the values in the Worker code. Creating it triggers one validation invocation — **check that it bound the Task Queue before going further.** A bound Task Queue proves a Worker with that version polled successfully at least once. Revalidate current credentials, role, function version, configuration, and recent invocation logs before excluding startup failures; they may have changed since binding. If it is not bound, setting the version current will not fix initial startup. Then set it current: through the UI this happens automatically, through the CLI it is a separate step, without which Tasks never route to the version. → `references/<provider>/setup.md`.
 
 7. **Verify.** Start a Workflow on the Task Queue and confirm Temporal invokes the Worker — check the Workflow history in the Temporal UI and the compute provider's logs. If it does not progress, → `references/<provider>/diagnostics.md`.
 
@@ -174,7 +177,7 @@ How to move through the workflow above.
 
   For anything that creates, updates, or deletes, name the resource and the target account or Namespace explicitly — an approval prompt should arrive with its justification already on screen, not after it.
 - **Read the current state instead of recalling it.** Check the installed package's API, the CLI's own `--help` for the flags you are about to pass, the compute unit's reported state, and the CLI version. Each of these has drifted in practice: a Public Preview SDK whose fields moved, a CLI too old to have the serverless subcommand at all, a resource that reports success while still settling.
-- **Do not chain `cd` with commands that create or modify files.** A compound `cd <dir> && <write>` triggers a manual approval prompt no matter how the user's permissions are configured, so scaffolding a project this way asks for approval on every run. Use absolute paths, or the tool's own directory flag (`go -C <dir> …`), and rely on the shell's working directory persisting between calls — the `cd` buys nothing and costs a prompt. Keep the command count down for the same reason: one `go get` covering both packages beats two.
+- **Set the working directory explicitly.** Use the execution tool's `workdir`, absolute paths, or a supported directory flag such as `go -C`. Shell working directories may not persist across calls, and approval behavior depends on the host and session policy. Group related package operations when it improves clarity.
 - **Verify each step before building the next on top of it.** Compile the Worker before packaging it, confirm the package's target architecture before uploading, wait for the compute unit to be ready before publishing a build, and confirm the Task Queue is bound before shifting traffic. Deployment failures here surface far from their cause — an architecture or dependency mismatch appears only at first invocation, and a first-invocation failure appears as "the Worker is never invoked", several steps later.
 - **When something fails, read the actual error before changing anything.** Fetch the failure reason from the provider (deployment events, logs, status fields) and fix that. Do not retry the same command with variations, and do not start editing permissions or trust policies on the theory that the problem might be access — most first-invocation failures are not permission problems, and some failures are on Temporal's side and will reproduce no matter what you change.
 - **Treat the user's account as shared and pre-existing.** Assume other deployments, roles, and stacks are already there. Look before creating, extend rather than duplicate, and never delete or repurpose something you did not create without asking. When you do work around existing infrastructure — a different name, a reused role — say so explicitly in your summary rather than leaving it as a silent deviation.
@@ -204,7 +207,7 @@ Surface these early — they apply regardless of compute provider:
 
 ## Troubleshooting
 
-Start by determining whether the Worker is being invoked at all. Then, in priority order: (1) **Validate Connection** in the Temporal UI (Workers > Deployments > select > Actions > Validate Connection) — checks credentials, role assumption, and reachability in one step; (2) check whether the version's **Task Queue is bound** — if it is, invocation and Worker startup provably work and the fault is downstream, which rules out most of the surface in one command; (3) confirm the version is **current** (CLI-created versions are not automatic, and a confirmation-prompted command may have silently done nothing); (4) check the compute provider's logs for connection, auth, or TLS errors; (5) if rapid repeated invocations show no progress, check the deployment name/build ID match. Distinguish a Temporal-side failure (reproduces no matter what you change on the provider side) from a genuine user-permission problem before editing anything. → `references/<provider>/diagnostics.md`, `references/concepts.md`.
+Start by determining whether the Worker is being invoked at all. Then, in priority order: (1) **Validate Connection** in the Temporal UI (Workers > Deployments > select > Actions > Validate Connection) — checks credentials, role assumption, and reachability in one step; (2) check whether the version's **Task Queue is bound** — if it is, a successful poll occurred previously; inspect recent invocation evidence before ruling out changed credentials, IAM, configuration, package, or deadline; (3) confirm the version is **current** (CLI-created versions are not automatic, and a confirmation-prompted command may have silently done nothing); (4) check the compute provider's logs for connection, auth, or TLS errors; (5) if rapid repeated invocations show no progress, check the deployment name/build ID match. Distinguish a Temporal-side failure (reproduces no matter what you change on the provider side) from a genuine user-permission problem before editing anything. → `references/<provider>/diagnostics.md`, `references/concepts.md`.
 
 ## Common Pitfalls
 
@@ -241,7 +244,7 @@ Most questions need 2–3 reference files.
 
 ## Out of Scope
 
-- **General SDK development patterns** (Workflows, Activities, signals, queries, Worker Versioning concepts): see `skill-temporal-developer`.
-- **Traditional Worker tuning** (slot suppliers, tuners, poller autoscaling, resource-based tuning): see `skill-temporal-workertuning`.
-- **Temporal Cloud administration** (Namespaces, users, certificates, billing): see `skill-temporal-ops`.
+- **General SDK development patterns** (Workflows, Activities, signals, queries, Worker Versioning concepts): see `temporal-developer`.
+- **Traditional Worker tuning** (slot suppliers, tuners, poller autoscaling, resource-based tuning): see `temporal-workertuning`.
+- **Temporal Cloud administration** (Namespaces, users, certificates, billing): see `temporal-ops`.
 - **CLI command reference** (beyond serverless-specific flags): use `temporal-developer` for developer commands or `temporal-ops` for administration, and inspect the installed command's `--help`.

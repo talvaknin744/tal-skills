@@ -47,4 +47,3 @@ The last three checks should be enforced using captured artifacts or tool outcom
 ## Limits
 
 No blog's model-specific speedup or success rate is adopted as a repository guarantee. Four complete articles were read, while other candidates were inspected only for fit and access. No vendor example was executed during this research lane. Publisher selection is a curated coverage sample, not a measured top-ten ranking.
-

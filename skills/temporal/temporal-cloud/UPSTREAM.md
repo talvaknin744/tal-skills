@@ -11,7 +11,19 @@ This is a tal-skills adaptation of official Temporal source, not an official Tem
 
 ## Local changes
 
-- Added provenance pointer and UPSTREAM.md; operational reference content is unchanged.
+- Added provenance pointer and UPSTREAM.md.
+
+### Engineering toolkit maintenance — 2026-09-29
+
+Clarified current Namespace/Regional endpoint guidance and mixed-auth exceptions; made certificate-to-API-key migration verify auth mode and least-privilege Namespace access before cutover.
+
+Primary checks: [Namespace access/authentication](https://docs.temporal.io/cloud/namespaces) and [API keys](https://docs.temporal.io/cloud/api-keys).
+
+The original source pin and MIT license are unchanged. This is a targeted local correction of audited entrypoints and selected risk-bearing references, not a line-by-line revalidation of the entire vendored library.
+
+### Independent review correction — 2026-09-29
+
+Independent review corrected a local endpoint inference: the documented API Regional endpoint remains `<region>.<cloud_provider>.api.temporal.io:7233`; `<provider>-<region>.region.tmprl.cloud` is the HA/private DNS intermediary. Updated both entrypoint and troubleshooting reference, including the mixed-auth exception. Source: [Namespace access documentation](https://docs.temporal.io/cloud/namespaces#access-namespaces). These corrections supersede the initial local implementation claim; the upstream pin remains unchanged.
 
 ## Verification and updates
 

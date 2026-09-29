@@ -1,0 +1,83 @@
+{
+  "recorded_at": "2026-09-29T09:06:32.001046+00:00",
+  "runtime": "go1.27.1 darwin/arm64",
+  "driver": "pgx 5.11.0",
+  "postgresql": "18.6",
+  "fixture_image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+  "commands": [
+    {
+      "cwd": "examples/backend/go",
+      "command": "go test -race ./...",
+      "result": "passed"
+    },
+    {
+      "cwd": "examples/backend/go",
+      "command": "go vet ./...",
+      "result": "passed"
+    },
+    {
+      "cwd": "examples/backend/go",
+      "command": "go build -race -o /tmp/tal-go-backend-verify ./cmd/verify",
+      "result": "passed"
+    },
+    {
+      "cwd": ".",
+      "command": "TAL_EXAMPLE_REPORT=/tmp/tal-go-backend-report-final.json python3 examples/backend/run.py -- /tmp/tal-go-backend-verify",
+      "result": "passed, all 14 scenarios"
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "result": "terminated after diagnosed implementation failure",
+      "finding": "time.Duration quotient was formatted as a duration string rather than integer milliseconds, causing PostgreSQL set_config to reject statement_timeout before any reservation SQL. Synthetic inventories remained unchanged; no receipts were committed.",
+      "correction": "Format int64(milliseconds).",
+      "cleanup": "Verifier child terminated with SIGTERM; launcher exited241, removed its owned container, and reported proxy errors=[] and commits_dropped=0."
+    },
+    {
+      "attempt": 2,
+      "result": "all 14 native scenarios passed under race detector",
+      "changes_since": "Correct timeout formatting; acquisition uses native deadline and pool canceled-acquire counter."
+    },
+    {
+      "attempt": 3,
+      "result": "all 14 native scenarios passed under race detector",
+      "changes_since": "Independent review moved lock blocker off observer connection to avoid transaction-cached activity snapshots; added local error/input tests and stricter fixture gating."
+    },
+    {
+      "attempt": 4,
+      "result": "all 14 native scenarios passed under race detector",
+      "changes_since": "Exclude SQLSTATE40003/FATAL termination from confirmed-abort classification; post-COMMIT cancellation uses actual CancelFunc; report bounded-cleanup limitation.",
+      "proxy": {
+        "connections": 2,
+        "commits_dropped": 1,
+        "errors": []
+      }
+    }
+  ],
+  "independent_review": {
+    "agent": "go_skill",
+    "findings_addressed": [
+      "Use a separate database connection for lock blocker and pg_stat_activity observer.",
+      "Use actual request CancelFunc after COMMIT, rather than returning a constructed cancellation error."
+    ],
+    "cross_language_review_addressed": "SQLSTATE40003 statement_completion_unknown remains unknown; 57P01 termination also remains unknown."
+  },
+  "source_sha256": {
+    "examples/backend/go/reservation.go": "435dd3d3cb26a587207e67b329c5628307bf95a5aa83aca69635d605973896a1",
+    "examples/backend/go/reservation_test.go": "0588323db28691c988ec5fca45ae1336dfc1b1f067fe86bdb742d1b6f15eb24c",
+    "examples/backend/go/cmd/verify/main.go": "33c02912f589f3b6f7b0d5813b1728e7300ea6f6fcf4564b72c2b60ed72b994c",
+    "examples/backend/go/go.mod": "3aa9a14b06e1c22aaffe29483d8801491bc830b29832c51858fe6c4ad189574f",
+    "examples/backend/go/go.sum": "a5e7a8db07eba28dbde48bf9a54c4e9084a5a95ded581c0ff44c08b74e3dfe69",
+    "examples/backend/schema.sql": "35141af85bd9377187c85b1e6aa78bd8c7ef939c7539b0a02f675aa3892a9070",
+    "examples/backend/scenarios.json": "57e23e77681f334ac960bff826de75b2a4ba7ee6ea11bed14f4db794155d06cc",
+    "examples/backend/run.py": "2029a0edf9955df05e8212aad730f1657af3def0ade9496a5f87912303bcae6b",
+    "examples/backend/commit_proxy.py": "178b53d39f8e0279e280dc25fb75ed9ce3694f9a310017e7b713e27b2b65b6c2"
+  },
+  "report_sha256": "31551d18108938be49767908a9ea13ae3c5f92e8771560d0d0e6ccbf538e1159",
+  "limitations": [
+    "The native run proves only its induced local PostgreSQL histories. No authentication, failover, power loss, backup restore, or remote exactly-once claims.",
+    "The bounded network cleanup timeout branch was not induced; it records incomplete cleanup rather than asserting quiescence.",
+    "A race-detector pass covers executed schedules only."
+  ]
+}

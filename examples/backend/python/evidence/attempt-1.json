@@ -1,0 +1,120 @@
+{
+  "language": "python",
+  "runtime": "3.14.3",
+  "drivers": {
+    "psycopg": "3.3.6",
+    "psycopg-binary": "3.3.6",
+    "psycopg-pool": "3.3.3"
+  },
+  "scenarios": [
+    {
+      "id": "sequential-duplicate",
+      "status": "passed",
+      "evidence": {
+        "same_receipt": true,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "legitimate-repeat",
+      "status": "passed",
+      "evidence": {
+        "distinct_receipts": true,
+        "available": 3,
+        "reservations": 2
+      }
+    },
+    {
+      "id": "concurrent-duplicate",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "conflict": false,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "conflicting-intent",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "conflict": true,
+        "available": 3,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "cross-tenant",
+      "status": "passed",
+      "evidence": {
+        "lookup_scoped": true,
+        "independent_receipts": true
+      }
+    },
+    {
+      "id": "last-item",
+      "status": "passed",
+      "evidence": {
+        "database_lock_wait_observed": true,
+        "available": 0,
+        "reservations": 1
+      }
+    },
+    {
+      "id": "rollback-before-mutation",
+      "status": "passed",
+      "evidence": {
+        "rollback_observed": true,
+        "pool_size_one_recovered": true
+      }
+    },
+    {
+      "id": "rollback-before-commit",
+      "status": "passed",
+      "evidence": {
+        "rollback_observed": true,
+        "pool_size_one_recovered": true
+      }
+    },
+    {
+      "id": "unknown-commit",
+      "status": "passed",
+      "evidence": {
+        "unknown_reported": true,
+        "committed_receipt_replayed": true,
+        "fault": "proxy-dropped-postgresql-COMMIT-reply",
+        "reservations": 1,
+        "commit_replies_dropped": 1
+      }
+    },
+    {
+      "id": "not-observed-inflight",
+      "status": "passed",
+      "evidence": {
+        "uncommitted_lookup": "NotObserved",
+        "later_receipt_observed": true
+      }
+    },
+    {
+      "id": "cancellation-query",
+      "status": "failed",
+      "error": "AssertionError"
+    }
+  ],
+  "limitations": [
+    "Single authoritative PostgreSQL database and local transactional effects only.",
+    "No external-provider, replica, failover, power-loss, or disaster-recovery guarantee."
+  ],
+  "observed_at": "2026-09-29T08:57:49.516082+00:00",
+  "command": "python3 examples/backend/run.py --report <temporary-report> -- <temporary-venv>/bin/python examples/backend/python/verify.py",
+  "environment": {
+    "database": "disposable loopback PostgreSQL 18.6",
+    "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+    "configuration": "URLs and credentials injected by launcher; omitted from this report"
+  },
+  "candidate_hashes": null,
+  "candidate_hash_note": "Source hashes were not captured for this historical failed attempt. It is not evidence for the final candidate.",
+  "failure_analysis": "Cancellation test used the locking transaction as its statistics observer. Its repeated pg_stat_activity reads could retain a cached snapshot. The final fixture uses an independent autocommit observer."
+}

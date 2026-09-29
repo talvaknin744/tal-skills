@@ -16,6 +16,14 @@ This is a tal-skills adaptation of official Temporal source, not an official Tem
 
 - Normalized trailing whitespace in imported reference files.
 
+### Engineering toolkit maintenance — 2026-09-29
+
+Separated Namespace APS capacity from SDK-specific defaults, removed mandatory startup feedback solicitation, and normalized optional public sibling routing.
+
+Primary checks: [Cloud capacity modes](https://docs.temporal.io/cloud/capacity-modes). The table correction is an applicability clarification; Namespace capacity must be inspected in the target environment.
+
+The original source pin and MIT license are unchanged. This is a targeted local correction of audited entrypoints and selected risk-bearing references, not a line-by-line revalidation of the entire vendored library.
+
 ## Verification and updates
 
 The package was checked locally for frontmatter, bundled resource links, and attribution. Provisioning scripts receive shell syntax and isolated stub checks; no live Cloud setup, deployment, credentials, or Workflow execution was performed for this import. Examples and runtime dependencies still require validation against the project's installed SDK and environment.

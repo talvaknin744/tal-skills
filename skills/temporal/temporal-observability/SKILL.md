@@ -6,17 +6,19 @@ version: 0.1.0
 
 Adapted from Temporal's official MIT-licensed skill. For the pinned source and local changes, see [UPSTREAM.md](UPSTREAM.md).
 
+Sibling skill names are optional routing suggestions. If a sibling is not installed, use this package's relevant references and current official documentation; do not require another package to complete the scoped task.
+
 # Skill: temporal-observability
 
 ## Overview
 
 This skill helps users set up metrics collection, write monitoring queries, configure alerts, and diagnose performance issues using Temporal metrics. It operates in three modes:
 
-- **Setup** — generating scrape configs, integration configs, and SDK metrics endpoint code. Always end setup with a validation step: prompt the user to confirm metrics are arriving and queryable in their platform.
+- **Setup** — generating scrape configs, integration configs, and SDK metrics endpoint code. Always end setup with a validation step: verify recent metrics are arriving and queryable in the destination, using available read-only access or requesting the missing result.
 - **Query** — writing PromQL/DQL queries for dashboards and alerts.
 - **Diagnosis** — systematic, metrics-driven diagnosis using the USE methodology (Utilization, Saturation, Errors). Follow the Diagnosis Protocol below.
 
-You produce configs, queries, and code snippets. You do not have access to live metric data, dashboards, or alerting systems. When the user describes symptoms, provide the diagnostic queries and explain what to look for in the results. This skill owns the metrics collection and query layer. When the user needs to act on metric signals (scale workers, change tuning parameters, rotate credentials, administer namespaces), hand off to the appropriate sibling skill and provide the metric evidence gathered so far.
+You produce configs, queries, and code snippets. Discover available connected tools/APIs and supplied evidence before deciding whether live data is accessible. Query read-only when authorized access exists; otherwise provide exact diagnostic queries and request the missing results. This skill owns the metrics collection and query layer. When the user needs to act on metric signals (scale workers, change tuning parameters, rotate credentials, administer namespaces), hand off to the appropriate sibling skill and provide the metric evidence gathered so far.
 
 ## How to Use This Skill
 
@@ -47,7 +49,7 @@ Histogram units differ: milliseconds for Core-based SDKs (TypeScript, Python, .N
 Most real questions require 2-3 reference files:
 
 - **"Set up monitoring for my Temporal Cloud namespace"** → `openmetrics-endpoint.md` (auth + scrape) + `integrations.md` (platform config) + `service-health-monitoring.md` (what to alert on) + `worker-health-monitoring.md` (worker fleet).
-- **"My workers seem slow / tasks are backing up / activities failing"** (diagnosis) → Follow the **Diagnosis Protocol** below. Consult `ops-diagnostics-reference.md` (USE framework, decision trees, metric mappings) + `worker-health-monitoring.md` (thresholds, queries) + `service-health-monitoring.md` (failure rates, limits) + `troubleshooting.md` (per-bottleneck root causes). For worked examples: `diagnosis-examples.md`. If they need to act on findings: hand off to `skill-temporal-workertuning`.
+- **"My workers seem slow / tasks are backing up / activities failing"** (diagnosis) → Follow the **Diagnosis Protocol** below. Consult `ops-diagnostics-reference.md` (USE framework, decision trees, metric mappings) + `worker-health-monitoring.md` (thresholds, queries) + `service-health-monitoring.md` (failure rates, limits) + `troubleshooting.md` (per-bottleneck root causes). For worked examples: `diagnosis-examples.md`. If they need to act on findings: hand off to `temporal-workertuning`.
 - **"Migrate from v0 to v1"** → `migration-v0-to-v1.md` (mapping table + auth changes). Only relevant for users already on v0 — never suggest v0 to new users. v0 is deprecated and unavailable to new accounts.
 - **"What metrics should I watch?"** → `service-health-monitoring.md` + `worker-health-monitoring.md` for the essential observation set.
 
@@ -65,8 +67,8 @@ Map the user's description to a category:
 | "activities failing", "workflow failures spiking", "retries not working", "error rate high" | **Failure/Error** |
 | "workflows taking too long end-to-end", "execution slow", "replay latency" | **Latency** |
 | "resource exhausted errors", "throttling", "hitting limits" | **Resource Pressure** |
-| "can't connect", "auth error", "certificate expired" | **Not this skill** — hand off to `skill-temporal-cloud` |
-| "need to tune workers", "autoscaling", "slot sizing" | **Not this skill** — hand off to `skill-temporal-workertuning` |
+| "can't connect", "auth error", "certificate expired" | **Not this skill** — hand off to `temporal-cloud` |
+| "need to tune workers", "autoscaling", "slot sizing" | **Not this skill** — hand off to `temporal-workertuning` |
 
 If the symptom doesn't clearly map, ask what behavior they're seeing, when it started, and what changed.
 
@@ -77,13 +79,13 @@ Use context clues to determine:
 - **SDK language**: Go, Java, TypeScript, Python, .NET (affects metric units)
 - **Observability platform**: Prometheus, Datadog, Grafana Cloud, New Relic, etc.
 
-See `references/ops-diagnostics-reference.md` § Environment Detection for clue table. If confidence is below 95%, ask.
+See `references/ops-diagnostics-reference.md` § Environment Detection for clue table. Ask only for missing facts that change the query or interpretation; do not infer a precise confidence percentage.
 
 ### Step D3: Establish Metrics Access
 
-You do not have access to live metrics. Establish how to get values:
+Inspect available tools and the supplied evidence, then choose an access path:
 
-1. **MCP tool** — if the user has a Datadog or Grafana MCP server connected, use it to query metrics directly.
+1. **Connected tool/API** — use available read-only access to query the destination, whether through MCP, an API, or a supported CLI. Record query, time window, labels, and timestamps.
 2. **Screenshots** — ask the user to capture specific dashboard panels. Tell them which panels based on the symptom category:
    - Throughput/Backlog: schedule-to-start latency, backlog count, task slots available, sync match rate
    - Failure/Error: activity failure count (by type if possible), workflow failure count, activity execution latency
@@ -92,7 +94,7 @@ You do not have access to live metrics. Establish how to get values:
 
 Always provide queries in the user's platform syntax. See `references/ops-diagnostics-reference.md` § Query Examples by Platform for Datadog and New Relic translations. For PromQL, see `references/worker-health-monitoring.md` and `references/service-health-monitoring.md`.
 
-**Do not proceed with diagnosis without metrics data.**
+Without metrics or equivalent evidence, report hypotheses and the missing check; do not present a confirmed diagnosis or treat absent data as health.
 
 ### Step D4: Run USE Diagnostic
 
@@ -127,9 +129,9 @@ Structure every diagnosis response using this format:
 **Why**: Root cause grounded in metric evidence. Explain the causal chain ("X is high because Y, caused by Z"). If multiple factors interact, show how.
 
 **Fix**: Ordered list, most impactful first. For each action, explain **why it helps** in one sentence.
-- Worker tuning → hand off to `skill-temporal-workertuning`
-- Infrastructure changes → hand off to `skill-temporal-ops`
-- Code changes → hand off to `skill-temporal-developer`
+- Worker tuning → hand off to `temporal-workertuning`
+- Infrastructure changes → hand off to `temporal-ops`
+- Code changes → hand off to `temporal-developer`
 
 **Monitor After**: Which metrics to watch, target values, and expected timeline for improvement.
 
@@ -146,7 +148,7 @@ For fully worked examples of this protocol in action, see `references/diagnosis-
 | Assuming `approximate_backlog_count = 0` means no backlog | This metric resets to zero on idle queues. Confirm with schedule-to-start latency. |
 | Jumping to "add more workers" without checking slots | First check if existing workers have available slots. Slot depletion with low host CPU = configuration issue, not capacity. |
 | Diagnosing without knowing the environment | Cloud vs self-hosted changes which metrics exist. Always establish environment first. |
-| Ignoring the failure conversion rate | High activity failures with low workflow failures = healthy error handling. Always compute the ratio in failure scenarios. |
+| Treating a failure ratio as proof of resilience | Check completion within the business deadline, pending age, retry/time budgets, and expected business rejections. A low ratio can hide endless retries; a high ratio can reflect valid terminal rejection. Align metric semantics, labels, windows, and nonzero denominators before comparing. |
 | Prescribing without explaining | Users who understand the mechanics make better decisions. Explain before recommending. |
 
 ## Key Facts
@@ -175,10 +177,10 @@ For fully worked examples of this protocol in action, see `references/diagnosis-
 | Troubleshooting performance bottlenecks using metrics | Consult `references/troubleshooting.md` |
 | Describing a symptom that needs systematic diagnosis (slow workflows, backlog, failures, latency) | Follow the **Diagnosis Protocol** above. Consult `references/ops-diagnostics-reference.md` for USE framework and decision trees |
 | Wants a worked example of a diagnostic workflow | Consult `references/diagnosis-examples.md` |
-| Wants to write Workflow/Activity/Worker SDK code (not metrics config) | Defer to `skill-temporal-developer` |
-| Wants to tune Worker performance (slot suppliers, tuners, cache sizing) | Defer to `skill-temporal-workertuning` -- this skill owns collection/query layer only |
-| Wants to administer or diagnose Temporal Cloud/self-hosted environments | Defer to `skill-temporal-ops` -- this skill provides metric queries for diagnosis |
-| Wants Cloud connectivity, auth, or namespace config (not metrics) | Defer to `skill-temporal-cloud` |
+| Wants to write Workflow/Activity/Worker SDK code (not metrics config) | Defer to `temporal-developer` |
+| Wants to tune Worker performance (slot suppliers, tuners, cache sizing) | Defer to `temporal-workertuning` -- this skill owns collection/query layer only |
+| Wants to administer or diagnose Temporal Cloud/self-hosted environments | Defer to `temporal-ops` -- this skill provides metric queries for diagnosis |
+| Wants Cloud connectivity, auth, or namespace config (not metrics) | Defer to `temporal-cloud` |
 
 ## Critical Rules
 
@@ -194,7 +196,7 @@ For fully worked examples of this protocol in action, see `references/diagnosis-
 - Setup is not complete until metrics are confirmed arriving and queryable **in the user's destination platform**. Verifying that the source endpoint returns data is not sufficient — the data must be flowing end-to-end into the platform where the user will actually query it. After providing any scrape config, integration config, or SDK metrics setup, always end with a validation step.
 - **Validate at the destination, not the source.** Tailor the check to where the data needs to land:
   - **Prometheus**: Query the Prometheus API to confirm data arrived — e.g., `curl -s "http://localhost:9090/api/v1/query?query=temporal_cloud_v1_service_request_count"` should return results with recent timestamps.
-  - **Datadog, Grafana Cloud, New Relic, ClickStack**: These don't have local CLI query access — prompt the user to check the platform UI. Tell them exactly what to search for (e.g., "In Datadog Metrics Explorer, search for `temporal_cloud_v1` — do matching metrics appear with recent values?").
+  - **Datadog, Grafana Cloud, New Relic, ClickStack**: Discover connected read-only tools/APIs first. If unavailable, provide the exact platform query or UI search and request recent timestamps and values.
 - For Cloud metrics, account for ~3-minute data latency — if the destination shows no data yet, wait a few minutes and check again.
 - Do not assume setup succeeded just because the config looks correct. Verify at the destination or ask the user to verify.
 

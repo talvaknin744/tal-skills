@@ -236,7 +236,7 @@ grpcurl \
 # Recipe as written in:
 ```
 
-**For SDK clients:** the SDK concept is the same — set the TLS `ServerName` (Go / Java / .NET / Python / TypeScript) to the Namespace Endpoint hostname. The exact property name varies by SDK; refer to each SDK's client-connection doc linked from `docs/cloud/certificates#configure-clients-to-use-client-certificates` and cross-check against `skill-temporal-developer`. This triage file deliberately does not spell SDK APIs out, to avoid drift.
+**For SDK clients:** the SDK concept is the same — set the TLS `ServerName` (Go / Java / .NET / Python / TypeScript) to the Namespace Endpoint hostname. The exact property name varies by SDK; refer to each SDK's client-connection doc linked from `docs/cloud/certificates#configure-clients-to-use-client-certificates` and cross-check against `temporal-developer`. This triage file deliberately does not spell SDK APIs out, to avoid drift.
 
 ## Key does not match cert
 

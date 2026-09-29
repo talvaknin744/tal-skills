@@ -72,9 +72,9 @@ If not using infinite retry policies, Activity failures can lead to Workflow fai
 Activity Failure --> Retry Logic --> More Activity Failures --> Workflow Decision --> Potential Workflow Failure
 ```
 
-Activity failures are often recoverable and expected. Workflow failures represent terminal states requiring immediate attention. A spike in activity failures may precede workflow failures. <!-- docs/cloud/service-health.mdx:87-88 -->
+Activity failures can be recoverable. Workflow failures are terminal outcomes: classify expected business rejections separately from unexpected operational failures. A spike in Activity failures may precede Workflow failures or a growing population stuck retrying. <!-- docs/cloud/service-health.mdx:87-88 -->
 
-Temporal recommends that Workflows should be designed to always succeed. If an Activity fails more than its retry policy allows, the Workflow should handle Activity failure and take action to notify a human or be aware of the error. <!-- docs/cloud/service-health.mdx:89 -->
+Define the intended terminal outcome for each failure class. Handle retry exhaustion with the required compensation, reconciliation, notification, or explicit failure. Do not turn a valid business rejection into success merely to improve a metric. <!-- docs/cloud/service-health.mdx:89 -->
 
 ### Ratio-Based Monitoring
 <!-- docs/cloud/service-health.mdx:91-112 -->
@@ -88,10 +88,13 @@ Monitor the ratio of workflow failures to activity failures:
 workflow_failure_rate = temporal_cloud_v1_workflow_failed_count / temporal_cloud_v1_activity_fail_count
 ```
 
-What to watch for: <!-- docs/cloud/service-health.mdx:101-104 -->
-- High ratio (greater than 0.1): Poor error handling - activities failing are causing workflow failures
-- Low ratio (less than 0.01): Good resilience - activities fail but workflows recover
-- Sudden spikes: May indicate systematic issues
+Interpret this as an investigation signal, not a universal health score. Confirm whether each metric counts attempt failures or terminal executions, and align labels, time windows, and a nonzero denominator. SDK attempt-failure counters and Cloud execution metrics need not have identical semantics.
+
+- High ratio: inspect failure classes and histories; expected business rejection may correctly fail a Workflow.
+- Low ratio: verify completion within the business deadline, pending age, and retry/time budgets. Endless retries can produce few Workflow failures while delivering no useful work.
+- Sudden change: compare with a workload-specific baseline and the business completion SLO.
+
+This is a local applicability clarification of the heuristics in [Cloud service health](https://docs.temporal.io/cloud/service-health), informed by [retry policy semantics](https://docs.temporal.io/encyclopedia/retry-policies) and [intentional Workflow failure for business errors](https://docs.temporal.io/develop/python/best-practices/error-handling). The source's 0.1/0.01 examples are not universal correctness thresholds.
 
 #### Activity Success Rate
 <!-- docs/cloud/service-health.mdx:106-112 -->
@@ -100,7 +103,7 @@ What to watch for: <!-- docs/cloud/service-health.mdx:101-104 -->
 activity_success_rate = temporal_cloud_v1_activity_success_count / (temporal_cloud_v1_activity_success_count + temporal_cloud_v1_activity_fail_count)
 ```
 
-Target: >95% for most applications. Lower success rate can be a sign of system troubles. <!-- docs/cloud/service-health.mdx:112 -->
+Choose a target from the business SLO and expected rejection mix. Compare with the baseline and pending/completion latency; this rate alone cannot prove the system meets its deadline. <!-- docs/cloud/service-health.mdx:112 -->
 
 ## Replication Lag Monitoring
 <!-- docs/cloud/service-health.mdx:118-145 -->

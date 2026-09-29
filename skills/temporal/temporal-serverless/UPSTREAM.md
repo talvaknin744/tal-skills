@@ -16,6 +16,14 @@ This is a tal-skills adaptation of official Temporal source, not an official Tem
 - Clarified reuse of session authorization and absence of guaranteed host permission prompts.
 - Added Codex UI metadata preserving explicit invocation.
 
+### Engineering toolkit maintenance — 2026-09-29
+
+Separated Lambda package scope from current platform provider availability; treated Task Queue binding as historical evidence; clarified explicit working directories and host permissions; qualified IAM simulation and failed-read evidence, preserved qualified/unqualified ARN distinctions, and required resource inspection before rollback-stack cleanup; normalized optional sibling names.
+
+Primary checks: [Serverless platform guide](https://docs.temporal.io/serverless-workers) and [IAM simulator limits](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html).
+
+The original source pin and MIT license are unchanged. This is a targeted local correction of audited entrypoints and selected risk-bearing references, not a line-by-line revalidation of the entire vendored library.
+
 ## Verification and updates
 
 The package was checked locally for frontmatter, bundled resource links, and attribution. Provisioning scripts receive shell syntax and isolated stub checks; no live Cloud setup, deployment, credentials, or Workflow execution was performed for this import. Examples and runtime dependencies still require validation against the project's installed SDK and environment.

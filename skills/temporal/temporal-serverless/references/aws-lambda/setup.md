@@ -59,7 +59,7 @@ temporal config get --prop address   # --profile mechanism
 
 - For Temporal Cloud the Namespace is the fully-qualified `<namespace_id>.<account_id>`, not the bare name. <!-- docs/develop/environment-configuration.mdx:128-129 -->
 - Supplying an API key auto-enables TLS; no cert flags are needed for API-key auth. <!-- docs/develop/environment-configuration.mdx:70 -->
-- The `temporal ...` commands in Steps 4–6 assume this is configured. To create an API key, see `skill-temporal-ops`.
+- The `temporal ...` commands in Steps 4–6 assume this is configured. To create an API key, see `temporal-ops`.
 
 **Temporal-side preflight.** Confirm the CLI can reach the Namespace before deploying — this is the Temporal side of the pre-deploy access check. It should list (empty is fine) without an auth or connection error:
 
@@ -392,7 +392,7 @@ To remove a serverless Worker deployment (for example, after an evaluation), tea
    ```bash
    aws logs delete-log-group --log-group-name /aws/lambda/my-temporal-worker
    ```
-8. **Ask whether to revoke the Temporal Cloud API key** — do not revoke it as a matter of course. The key is account-scoped, not deployment-scoped: tearing this deployment down does not mean the user is finished with Temporal Cloud, and if the key was created during this run (see `skill-temporal-ops`) it is the one they now need for their next deploy, for `tcld`, and for every other Worker in the Namespace. Keep it unless they say otherwise. On a yes, revoke it **last** — it is the credential authenticating every Temporal command above it. Like `set-current-version`, `tcld apikey delete` prompts for confirmation and, run non-interactively, exits without deleting anything; the exit code looks clean while the key is still live. Pass `--auto_confirm` and confirm from the `list` output that the key is gone rather than trusting the exit code.
+8. **Ask whether to revoke the Temporal Cloud API key** — do not revoke it as a matter of course. The key is account-scoped, not deployment-scoped: tearing this deployment down does not mean the user is finished with Temporal Cloud, and if the key was created during this run (see `temporal-ops`) it is the one they now need for their next deploy, for `tcld`, and for every other Worker in the Namespace. Keep it unless they say otherwise. On a yes, revoke it **last** — it is the credential authenticating every Temporal command above it. Like `set-current-version`, `tcld apikey delete` prompts for confirmation and, run non-interactively, exits without deleting anything; the exit code looks clean while the key is still live. Pass `--auto_confirm` and confirm from the `list` output that the key is gone rather than trusting the exit code.
    ```bash
    tcld apikey delete --id <KEY_ID> --auto_confirm
    tcld apikey list

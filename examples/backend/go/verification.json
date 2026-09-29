@@ -1,0 +1,175 @@
+{
+  "language": "go",
+  "runtime": "go1.27.1",
+  "drivers": {
+    "pgx": "5.11.0",
+    "postgresql": "18.6"
+  },
+  "scenarios": [
+    {
+      "id": "sequential-duplicate",
+      "status": "passed",
+      "evidence": {
+        "available": 3,
+        "reservation_rows": 1
+      }
+    },
+    {
+      "id": "legitimate-repeat",
+      "status": "passed",
+      "evidence": {
+        "available": 1,
+        "reservation_rows": 2
+      }
+    },
+    {
+      "id": "concurrent-duplicate",
+      "status": "passed",
+      "evidence": {
+        "lock_wait_observed": true,
+        "state": {
+          "available": 3,
+          "reservation_rows": 1
+        }
+      }
+    },
+    {
+      "id": "conflicting-intent",
+      "status": "passed",
+      "evidence": {
+        "lock_wait_observed": true,
+        "state": {
+          "available": 3,
+          "reservation_rows": 1
+        }
+      }
+    },
+    {
+      "id": "cross-tenant",
+      "status": "passed",
+      "evidence": [
+        {
+          "available": 3,
+          "reservation_rows": 1
+        },
+        {
+          "available": 3,
+          "reservation_rows": 1
+        }
+      ]
+    },
+    {
+      "id": "last-item",
+      "status": "passed",
+      "evidence": {
+        "available": 0,
+        "reservation_rows": 1
+      }
+    },
+    {
+      "id": "rollback-before-mutation",
+      "status": "passed",
+      "evidence": {
+        "fresh_request": {
+          "available": 3,
+          "reservation_rows": 1
+        },
+        "native_cancellation": true,
+        "rollback_state": "zero rows, stock five"
+      }
+    },
+    {
+      "id": "rollback-before-commit",
+      "status": "passed",
+      "evidence": {
+        "fresh_request": {
+          "available": 3,
+          "reservation_rows": 1
+        },
+        "native_cancellation": true,
+        "rollback_state": "zero rows, stock five"
+      }
+    },
+    {
+      "id": "unknown-commit",
+      "status": "passed",
+      "evidence": {
+        "fault": "TCP proxy suppressed real COMMIT acknowledgement",
+        "outcome": "unknown",
+        "state": {
+          "available": 3,
+          "reservation_rows": 1
+        }
+      }
+    },
+    {
+      "id": "not-observed-inflight",
+      "status": "passed",
+      "evidence": {
+        "initial": "NotObserved, not proof of abort",
+        "state": {
+          "available": 3,
+          "reservation_rows": 1
+        }
+      }
+    },
+    {
+      "id": "cancellation-query",
+      "status": "passed",
+      "evidence": {
+        "acquired_connections": 0,
+        "lock_wait_observed": true,
+        "native_cancellation": true,
+        "operation_outcome": "no-commit-requested"
+      }
+    },
+    {
+      "id": "cancellation-acquire",
+      "status": "passed",
+      "evidence": {
+        "canceled_acquire_delta": 1,
+        "capacity_recovered": true,
+        "state": {
+          "available": 4,
+          "reservation_rows": 1
+        }
+      }
+    },
+    {
+      "id": "resource-recovery",
+      "status": "passed",
+      "evidence": {
+        "acquired_connections": 0,
+        "iterations": 3,
+        "state": {
+          "available": 5,
+          "reservation_rows": 3
+        }
+      }
+    },
+    {
+      "id": "boundary-validation",
+      "status": "passed",
+      "evidence": {
+        "after_commit_cancellation": "committed receipt recovered",
+        "equivalent_numbers": [
+          "1",
+          "1.0",
+          "1e0"
+        ],
+        "invalid_commands": 16,
+        "state": {
+          "available": 3,
+          "reservation_rows": 2
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic tenants on one disposable primary; this is not authentication, failover, crash recovery, or remote exactly-once evidence.",
+    "No automatic retries; receipts and keys remain retained for the lifetime of the records.",
+    "Race detector covers exercised schedules only; bounded rollback and driver cleanup may extend beyond the request deadline.",
+    "A COMMIT call is conservatively marked dispatched immediately before driver entry; dispatch itself is not separately acknowledged.",
+    "If the bounded driver-cleanup join expires, Failure records a secondary cleanup error and unfinished driver work remains pool-owned; that network failure was not induced."
+  ]
+}

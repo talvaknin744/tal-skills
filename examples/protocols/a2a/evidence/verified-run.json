@@ -1,0 +1,625 @@
+{
+  "started_at": "2026-09-29T09:12:36.398181+00:00",
+  "specification": "1.0.1",
+  "wire_version": "1.0",
+  "scope": "Local deterministic JSON-RPC/SSE probes; no model or paid service",
+  "commands": [
+    {
+      "argv": [
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/.venv/bin/python",
+        "-c",
+        "import platform; print(platform.python_version())"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "seconds": 0.019
+    },
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "seconds": 0.019
+    },
+    {
+      "argv": [
+        "go",
+        "version"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "seconds": 0.005
+    },
+    {
+      "argv": [
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/.venv/bin/python",
+        "-c",
+        "import importlib.metadata as m,json,sys; print(json.dumps({p:m.version(p) for p in json.loads(sys.argv[1])}))",
+        "[\"a2a-sdk\", \"annotated-types\", \"anyio\", \"certifi\", \"cffi\", \"charset-normalizer\", \"click\", \"cryptography\", \"google-api-core\", \"google-auth\", \"googleapis-common-protos\", \"h11\", \"httpcore\", \"httpx\", \"idna\", \"json-rpc\", \"opentelemetry-api\", \"packaging\", \"proto-plus\", \"protobuf\", \"pyasn1\", \"pyasn1_modules\", \"pycparser\", \"pydantic\", \"pydantic_core\", \"requests\", \"sse-starlette\", \"starlette\", \"typing-inspection\", \"typing_extensions\", \"urllib3\", \"uvicorn\"]"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "seconds": 0.06
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "typescript",
+      "exit_code": 0,
+      "seconds": 0.581
+    },
+    {
+      "argv": [
+        "go",
+        "list",
+        "-m",
+        "-json",
+        "github.com/a2aproject/a2a-go/v2"
+      ],
+      "cwd": "go",
+      "exit_code": 0,
+      "seconds": 0.007
+    },
+    {
+      "argv": [
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/.venv/bin/python",
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/python/verify_owner_scope.py"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "seconds": 0.191
+    },
+    {
+      "argv": [
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/.venv/bin/python",
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/python/server.py",
+        "--ready-file",
+        "/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/tal-a2a-verify-jo9xn1zr/ready-1.json"
+      ],
+      "cwd": ".",
+      "lifecycle": "owned subprocess; terminated and awaited"
+    },
+    {
+      "argv": [
+        "node",
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/typescript/dist/verify.js",
+        "http://127.0.0.1:57587",
+        "/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/tal-a2a-verify-jo9xn1zr/typescript.json"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "seconds": 0.212
+    },
+    {
+      "argv": [
+        "go",
+        "run",
+        "./cmd/crosslang",
+        "http://127.0.0.1:57587",
+        "/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/tal-a2a-verify-jo9xn1zr/go-crosslang.json"
+      ],
+      "cwd": "go",
+      "exit_code": 0,
+      "seconds": 0.36
+    },
+    {
+      "argv": [
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/.venv/bin/python",
+        "/Users/idanvaknin/Documents/ChatGPT/skills/examples/protocols/a2a/python/server.py",
+        "--ready-file",
+        "/var/folders/90/lpd23hr9221dznf3g69l0dqr0000gn/T/tal-a2a-verify-jo9xn1zr/ready-2.json"
+      ],
+      "cwd": ".",
+      "lifecycle": "owned subprocess; terminated and awaited"
+    },
+    {
+      "argv": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-count=1",
+        "-timeout=60s",
+        "./..."
+      ],
+      "cwd": "go",
+      "exit_code": 0,
+      "seconds": 2.533
+    }
+  ],
+  "results": {
+    "owner_scope": {
+      "status": "passed",
+      "default_per_user_scope": "same principal can read across fixture tenant values",
+      "explicit_tenant_principal_scope": "other tenant cannot read",
+      "limit": "Direct store probe; no production tenant authorization or default-policy violation claim"
+    },
+    "typescript_to_python": {
+      "probe": "typescript-to-python",
+      "runAt": "2026-09-29T09:12:37.891Z",
+      "runtime": "v25.9.0",
+      "client": "@a2a-js/sdk@1.2.1",
+      "server": "a2a-sdk==1.1.5",
+      "wireVersion": "1.0",
+      "cases": [
+        {
+          "id": "discovery-wire-version-and-artifact",
+          "status": "passed",
+          "observed": {
+            "taskId": "cdda9728-6711-4979-bdef-1c3afd22b849",
+            "wireVersion": "1.0",
+            "state": "completed"
+          }
+        },
+        {
+          "id": "continuation-and-terminal-rejection",
+          "status": "passed",
+          "observed": {
+            "taskId": "73e82770-32c8-4241-9def-b898bcd515de",
+            "terminal": {
+              "name": "UnsupportedOperationError",
+              "message": "Terminal tasks cannot receive another message",
+              "reason": "UNSUPPORTED_OPERATION",
+              "code": -32004
+            }
+          }
+        },
+        {
+          "id": "terminal-operation-preflight",
+          "status": "passed",
+          "observed": {
+            "taskId": "9a18ee13-7742-4d40-bd11-949d54fc723c",
+            "cancel": {
+              "name": "TaskNotCancelableError",
+              "message": "Task cannot be canceled",
+              "reason": "TASK_NOT_CANCELABLE",
+              "code": -32002
+            },
+            "subscribe": {
+              "name": "UnsupportedOperationError",
+              "message": "Terminal task has no live stream; use GetTask",
+              "reason": "UNSUPPORTED_OPERATION",
+              "code": -32004
+            },
+            "effectCount": 1
+          }
+        },
+        {
+          "id": "duplicate-message-id-does-not-deduplicate-effect",
+          "status": "passed",
+          "observed": {
+            "tasks": [
+              "b832b3ac-1ae2-437c-8621-406d77b1988a",
+              "ffb41a09-3052-47e1-8669-08bea84caf5a"
+            ],
+            "simulatedEffects": 2,
+            "protocolDeduplication": "optional"
+          }
+        },
+        {
+          "id": "sequential-application-operation-key",
+          "status": "passed",
+          "observed": {
+            "tasks": [
+              "04201cdc-7d26-435f-8d2f-33175c32f423",
+              "9b546363-a81b-4edc-982c-c3160c8fa623"
+            ],
+            "simulatedEffects": 1,
+            "scope": "sequential memory-only fixture"
+          }
+        },
+        {
+          "id": "cancel-before-effect-and-reconcile-repeat",
+          "status": "passed",
+          "observed": {
+            "taskId": "e642b471-236e-47ea-8ffe-4804357fd733",
+            "effects": 0,
+            "cleanup": 1,
+            "repeat": {
+              "name": "TaskNotCancelableError",
+              "message": "Task cannot be canceled",
+              "reason": "TASK_NOT_CANCELABLE",
+              "code": -32002
+            }
+          }
+        },
+        {
+          "id": "cancel-after-effect-reconciles-receipt",
+          "status": "passed",
+          "observed": {
+            "taskId": "fcee3638-90e7-4a8c-9b69-faf6f61c2ea0",
+            "effects": 1,
+            "cleanup": 1,
+            "scope": "application-defined receipt recovery"
+          }
+        },
+        {
+          "id": "disconnect-one-observer-preserves-work-and-other-observer",
+          "status": "passed",
+          "observed": {
+            "taskId": "f260a4b7-5be3-4a3d-adbf-06314c57de9a",
+            "remainingObserver": [
+              "artifact",
+              "completed"
+            ]
+          }
+        },
+        {
+          "id": "caller-isolation-for-active-task-operations",
+          "status": "passed",
+          "observed": {
+            "get": {
+              "name": "TaskNotFoundError",
+              "message": "Task not found",
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001
+            },
+            "cancel": {
+              "name": "TaskNotFoundError",
+              "message": "Task not found",
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001
+            },
+            "subscribe": {
+              "name": "TaskNotFoundError",
+              "message": "Task not found",
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001
+            },
+            "send": {
+              "name": "TaskNotFoundError",
+              "message": "Task not found",
+              "reason": "TASK_NOT_FOUND",
+              "code": -32001
+            },
+            "foreignListSize": 0
+          }
+        },
+        {
+          "id": "authentication-gate-before-dispatch",
+          "status": "passed",
+          "observed": {
+            "rejected": [
+              "missing",
+              "invalid"
+            ],
+            "scope": "fixed local identity map only"
+          }
+        },
+        {
+          "id": "required-fields-enums-and-conflicting-content",
+          "status": "passed",
+          "observed": {
+            "invalidRequests": 4,
+            "code": -32602
+          }
+        },
+        {
+          "id": "stock-empty-part-runs-effect",
+          "status": "observed-unsafe-stock",
+          "observed": {
+            "taskId": "55e45a8c-d7cb-4fea-aceb-c599eab4228a",
+            "effectCount": 1,
+            "expectedBoundary": "reject before dispatch",
+            "stockBoundary": "unsafe acceptance"
+          }
+        },
+        {
+          "id": "stock-context-mismatch-runs-effect",
+          "status": "observed-unsafe-stock",
+          "observed": {
+            "taskId": "e6bb42d1-7ce3-4530-a7e0-e237cdcfe015",
+            "effectCount": 1,
+            "expectedBoundary": "reject context mismatch",
+            "stockBoundary": "unsafe acceptance"
+          }
+        },
+        {
+          "id": "guard-empty-part-SendMessage",
+          "status": "passed",
+          "observed": {
+            "code": -32602,
+            "additionalEffects": 0
+          }
+        },
+        {
+          "id": "guard-context-and-owner-SendMessage",
+          "status": "passed",
+          "observed": {
+            "taskId": "662e1053-d436-42c4-8204-11fb39ce13d5",
+            "effectsBeforeValidContinuation": 0,
+            "inferredContext": "fa11b716-4ced-4da7-8407-e18da43baabc"
+          }
+        },
+        {
+          "id": "guard-empty-part-SendStreamingMessage",
+          "status": "passed",
+          "observed": {
+            "code": -32602,
+            "additionalEffects": 0
+          }
+        },
+        {
+          "id": "guard-context-and-owner-SendStreamingMessage",
+          "status": "passed",
+          "observed": {
+            "taskId": "8f78f704-efa2-4c9b-9027-2aa63bda0cb8",
+            "effectsBeforeValidContinuation": 0,
+            "inferredContext": "ab6ec7a9-dfed-47a0-b754-9559011db018"
+          }
+        },
+        {
+          "id": "wire-version-boundary",
+          "status": "passed",
+          "observed": [
+            {
+              "version": "1.0.1",
+              "code": null
+            },
+            {
+              "version": "9.9",
+              "code": -32009
+            },
+            {
+              "version": "absent",
+              "code": -32009
+            }
+          ]
+        }
+      ],
+      "passed": 16,
+      "observedUnsafeStock": 2,
+      "failed": 0,
+      "limitations": [
+        "synthetic identity",
+        "sequential memory-only operation key",
+        "simulated counter effects",
+        "not full conformance"
+      ]
+    },
+    "go_to_python": {
+      "at": "2026-09-29T09:12:38Z",
+      "base_url": "http://127.0.0.1:57587",
+      "checks": [
+        {
+          "name": "discovery",
+          "status": "passed",
+          "observation": [
+            {
+              "url": "http://127.0.0.1:57587/guarded/rpc",
+              "protocolBinding": "JSONRPC",
+              "protocolVersion": "1.0"
+            }
+          ]
+        },
+        {
+          "name": "immediate",
+          "status": "passed",
+          "observation": {
+            "id": "efb6ec17-6771-4a09-a1d9-64420ae0ab39",
+            "artifacts": [
+              {
+                "artifactId": "result",
+                "parts": [
+                  {
+                    "text": "effect:efb6ec17-6771-4a09-a1d9-64420ae0ab39:1"
+                  }
+                ]
+              }
+            ],
+            "contextId": "051e9e83-b6c3-4a17-90a7-1d61f9acb91c",
+            "status": {
+              "state": "TASK_STATE_COMPLETED",
+              "timestamp": "2026-09-29T09:12:38.249244Z"
+            }
+          }
+        },
+        {
+          "name": "input_required_continuation",
+          "status": "passed",
+          "observation": {
+            "final_task": {
+              "id": "3fb16f33-5d68-4536-8bc9-4ff2c6b1d143",
+              "artifacts": [
+                {
+                  "artifactId": "result",
+                  "parts": [
+                    {
+                      "text": "effect:3fb16f33-5d68-4536-8bc9-4ff2c6b1d143:1"
+                    }
+                  ]
+                }
+              ],
+              "contextId": "0e224b93-45ea-4df7-9a67-1ca9c5935435",
+              "status": {
+                "state": "TASK_STATE_COMPLETED",
+                "timestamp": "2026-09-29T09:12:38.251525Z"
+              }
+            },
+            "initial_state": "TASK_STATE_INPUT_REQUIRED"
+          }
+        },
+        {
+          "name": "get_task",
+          "status": "passed",
+          "observation": {
+            "id": "3fb16f33-5d68-4536-8bc9-4ff2c6b1d143",
+            "artifacts": [
+              {
+                "artifactId": "result",
+                "parts": [
+                  {
+                    "text": "effect:3fb16f33-5d68-4536-8bc9-4ff2c6b1d143:1"
+                  }
+                ]
+              }
+            ],
+            "contextId": "0e224b93-45ea-4df7-9a67-1ca9c5935435",
+            "status": {
+              "state": "TASK_STATE_COMPLETED",
+              "timestamp": "2026-09-29T09:12:38.251525Z"
+            }
+          }
+        },
+        {
+          "name": "cancel_input_required",
+          "status": "passed",
+          "observation": {
+            "id": "13357f7b-252c-4e13-a562-4bdc789ac4ea",
+            "contextId": "f385d989-d7bb-4014-9457-e24784d06fda",
+            "status": {
+              "state": "TASK_STATE_CANCELED",
+              "timestamp": "2026-09-29T09:12:38.253782Z"
+            }
+          }
+        },
+        {
+          "name": "repeat_cancel_response_for_parked_task",
+          "status": "passed",
+          "observation": {
+            "error": "Task cannot be canceled",
+            "is_task_not_cancelable": true
+          }
+        },
+        {
+          "name": "get_task_after_repeated_cancel",
+          "status": "passed",
+          "observation": {
+            "id": "13357f7b-252c-4e13-a562-4bdc789ac4ea",
+            "contextId": "f385d989-d7bb-4014-9457-e24784d06fda",
+            "status": {
+              "state": "TASK_STATE_CANCELED",
+              "timestamp": "2026-09-29T09:12:38.253782Z"
+            }
+          }
+        }
+      ],
+      "client": "github.com/a2aproject/a2a-go/v2 v2.6.0",
+      "limitations": [
+        "local static bearer identity only; no production authentication claim",
+        "no persistent store or process recovery",
+        "same host loopback network",
+        "server pin checked by launcher; client resolves real public agent card"
+      ],
+      "probe": "a2a-go-client-to-python-server",
+      "runtime": "go1.27.1",
+      "server": "a2a-sdk Python 1.1.5 deterministic fixture",
+      "status": "passed",
+      "transport": "JSON-RPC HTTP wire 1.0"
+    },
+    "shutdown": [
+      {
+        "exit_code": -15,
+        "unexpected_cleanup_lines": [],
+        "expected_request_errors": 7
+      },
+      {
+        "exit_code": -15,
+        "unexpected_cleanup_lines": [],
+        "expected_request_errors": 0
+      }
+    ],
+    "restart": {
+      "status": "observed-state-loss",
+      "before": "completed",
+      "after": "TASK_NOT_FOUND",
+      "scope": "Default in-memory storage; observation is not a passed durability guarantee"
+    },
+    "go_to_go": {
+      "status": "passed",
+      "race_detector": "no report",
+      "top_level_tests": [
+        "TestDuplicateInitialMessageIDDoesNotDeduplicateDefaultHandler",
+        "TestDisconnectOneObserverPreservesTaskAndOtherObserver",
+        "TestCancelIsRepeatableAndCompletionCannotReplaceCanceledTask",
+        "TestCompletionCancelRaceHasValidTerminalOutcome",
+        "TestSharedStoreCancellationDoesNotFenceExternalEffects"
+      ],
+      "race_subtests": 30,
+      "observations": [
+        "verify_test.go:179: same messageId accepted twice; executions=2; distinct task IDs=true",
+        "verify_test.go:190: terminal task continuation rejected before another execution",
+        "verify_test.go:235: closed initial stream; second observer received artifact and completion; GetTask reconciled completed state",
+        "verify_test.go:256: both cancel calls returned canceled; releasing completion preserved canceled state; executor returned",
+        "verify_test.go:298: 30 released-at-once races: outcomes=map[TASK_STATE_COMPLETED:30]",
+        "verify_test.go:358: separate handlers sharing store: CancelTask returned canceled before worker noticed; unfenced simulated effect ran once; task stayed canceled"
+      ],
+      "adverse_case": "Shared-store cancellation leaves an unfenced simulated effect possible; passing assertion records the unsafe behavior"
+    }
+  },
+  "status": "verified-with-two-observed-stock-validation-gaps",
+  "source_sha256": {
+    ".gitignore": "38025721ee61eddaecddfcdc75ceee48c2cb05e75153349f1a58c3d5128ee7f4",
+    "README.md": "e7fe8649da9d44caf03bd1e1a782c2b36fa143df21fcc49fe48c6a46751de6e2",
+    "go/cmd/crosslang/main.go": "b1faf0c82069da24c4f95fd396d21cf392c7423b1b820e178978406c7a1602e9",
+    "go/go.mod": "58b602e510a14e06ffa54335aa3bcb3c8d07a852c51d8201429e6b751840ba6f",
+    "go/go.sum": "139a16758901f45b374b329e262bd30fa441cbfe949df84e37eaceaea7a248ca",
+    "go/verify_test.go": "eed87cdf187d3efbd9d01fbc7924f4397dc1174cc1453db75d8a70c43054aa5e",
+    "python/requirements.lock.txt": "d66adfb0603c40d8be0f0a177dc56030a4a4781ab30e0d0da9b5ab8e562613ad",
+    "python/server.py": "917fcf1d90f522ad9952774cb898c05a4bd8f04c31a7037789d473b8b2b347a5",
+    "python/verify_owner_scope.py": "494f7ad0a676b09d90c3eba2f1fd61214bd27717b9fafe4a58c7d69e156e92f4",
+    "typescript/package-lock.json": "1a5e59114880e7d6971f39563a8c7f11424858c4bb737d8f538ec4b33bdff69d",
+    "typescript/package.json": "674642bae204d3b6186cd035e01060cad326d07a7dedf9f4841bb05be47f6f18",
+    "typescript/tsconfig.json": "795265dc30b43e4980c2508afe02dc9eee4150123dc8a2a463d8fcec3e3d6a7c",
+    "typescript/verify.ts": "a8587ae43f119275dad42efaed9d6454644cec52bd11377d0c5f3476e07efec7",
+    "verify.py": "e5b7824d98c507805e2d18482a56f8007010a4ae5ed77e80a6ff19a527884b2c"
+  },
+  "limitations": [
+    "Synthetic fixed identities; no JWT/OAuth/mTLS validation",
+    "Memory-only task/receipt storage and simulated counter effects",
+    "No durable concurrent deduplication, webhook delivery, REST/gRPC, or full conformance",
+    "Two Go handlers share memory in one process; no distributed deployment claim"
+  ],
+  "runtime": {
+    "launcher_python": "3.14.3",
+    "peer_python": "3.14.3",
+    "node": "v25.9.0",
+    "go": "go version go1.27.1 darwin/arm64"
+  },
+  "python_packages": {
+    "a2a-sdk": "1.1.5",
+    "annotated-types": "0.8.0",
+    "anyio": "4.15.1",
+    "certifi": "2026.7.22",
+    "cffi": "2.1.1",
+    "charset-normalizer": "3.5.1",
+    "click": "8.5.0",
+    "cryptography": "50.0.1",
+    "google-api-core": "2.39.0",
+    "google-auth": "2.59.0",
+    "googleapis-common-protos": "1.75.4",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpx": "0.28.1",
+    "idna": "3.20",
+    "json-rpc": "1.15.0",
+    "opentelemetry-api": "1.45.0",
+    "packaging": "26.3",
+    "proto-plus": "1.28.4",
+    "protobuf": "7.36.2",
+    "pyasn1": "0.6.4",
+    "pyasn1_modules": "0.4.2",
+    "pycparser": "3.0",
+    "pydantic": "2.13.5",
+    "pydantic_core": "2.46.5",
+    "requests": "2.34.2",
+    "sse-starlette": "3.5.0",
+    "starlette": "1.7.0",
+    "typing-inspection": "0.4.4",
+    "typing_extensions": "4.16.0",
+    "urllib3": "2.8.0",
+    "uvicorn": "0.54.0"
+  },
+  "go_module": {
+    "Path": "github.com/a2aproject/a2a-go/v2",
+    "Version": "v2.6.0",
+    "Sum": "h1:QflB0gHxOP0o5quvA/h9EbYgfOsmRsSmFkeBYtKdwwk=",
+    "GoModSum": "h1:rvFIb0sBJl2qmJRYU2fQxI6hhIQksmGGMEhT/uRwWww="
+  },
+  "finished_at": "2026-09-29T09:12:41.445459+00:00"
+}

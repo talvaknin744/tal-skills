@@ -1,0 +1,17 @@
+# Sources and scope
+
+Checked 2026-09-29. These are conditional engineering references, not claims that every broker implements the same protocol. Verify the deployed version before changing configuration. No book or article code was copied.
+
+| Source | Material read and useful boundary |
+| --- | --- |
+| [Confluent: Error handling patterns in Kafka](https://www.confluent.io/blog/error-handling-patterns-in-kafka/) (2021-05-21) | Complete article. Retry/redirect routing can preserve related-message order; the sketch leaves atomic recovery and reassignment decisions to the application. |
+| [RabbitMQ: At-least-once dead lettering](https://www.rabbitmq.com/blog/2022/03/29/at-least-once-dead-lettering) (2022-03-29) | Complete article, including examples and caveats. Historical 3.10 feature introduction; current 4.3 documentation governs configuration. |
+| [RabbitMQ acknowledgements](https://www.rabbitmq.com/docs/confirms) and [quorum queues](https://www.rabbitmq.com/docs/quorum-queues) | Relevant acknowledgement, dead-letter, delivery-limit, and persistence sections, current 4.3. The local example runs 4.3.0 with a classic queue; quorum and dead-letter behavior were not executed. |
+| [NATS: Per-subject discard policy](https://nats.io/blog/new-per-subject-discard-policy/) (2022-11-14) | Complete article, including deletion and republication example. Rejection depends on retained state; historical cross-product comparisons were not adopted. |
+| [NATS publishing](https://docs.nats.io/learn/jetstream/publishing), [retention](https://docs.nats.io/learn/jetstream/shaping-the-stream), [stream API](https://docs.nats.io/reference/jetstream/api/stream/create) | Relevant outcome, retention, and configuration sections; stream API displayed 2.15. Missing PubAck can be an unknown outcome. Inspect supported persistence mode; no NATS runtime test was performed. |
+| [Kafka design](https://kafka.apache.org/43/design/design/) and [KafkaConsumer API](https://kafka.apache.org/43/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html) | Transaction, compaction, consumer-position, and concurrent-processing sections; 4.3 documentation/API page displayed 4.3.1. No Kafka cluster was run. |
+| [Pulsar messaging](https://pulsar.apache.org/docs/4.2.x/concepts-messaging/) | 4.2 retry, negative-acknowledgement, subscription, and dead-letter sections. Retry-topic guidance has subscription-specific limits; no Pulsar runtime test was performed. |
+| [Debezium Outbox Event Router](https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html) | Relevant event ID and aggregate key fields; stable page displayed 3.6. No connector deployment was performed. |
+| [Schema Registry evolution](https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html) | Relevant compatibility and transitivity sections. Registry validation was not run; historical fixture tests remain an application responsibility. |
+
+Research also read Temporal's [automated worker versioning example](https://temporal.io/blog/automated-worker-versioning-with-github-actions) (2026-09-09) and current [Worker Versioning documentation](https://docs.temporal.io/production-deployment/worker-deployments/worker-versioning). Those operational decisions belong in deployment/Temporal skills: keeping compatible pinned workers and recovering already-pinned executions are distinct from changing traffic for new runs.

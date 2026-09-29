@@ -223,11 +223,11 @@ temporal workflow show \
 
 | Use case | Endpoint |
 |----------|----------|
-| Workers & clients (all auth) | `<namespace>.<account>.tmprl.cloud:7233` (Namespace Endpoint - recommended) |
-| Multi-region HA (advanced) | `<region>.<cloud_provider>.api.temporal.io:7233` (Regional Endpoint) |
+| Workers & clients (mTLS or API-key-only) | `<namespace>.<account>.tmprl.cloud:7233` (Namespace Endpoint - recommended) |
+| Explicit region pin or required mixed-auth API-key path | `<region>.<cloud_provider>.api.temporal.io:7233` (Regional Endpoint) |
 | Control plane (`tcld`, Cloud Ops API) | `saas-api.tmprl.cloud` |
 
-Namespace Endpoints work for both mTLS and API key auth. Use Regional Endpoints only for advanced multi-region HA routing. See [namespace access docs](https://docs.temporal.io/cloud/namespaces#access-namespaces).
+Namespace Endpoints are the default for mTLS and API-key-only Namespaces. Mixed-auth pre-release restricts API-key use of Namespace Endpoints. Regional Endpoints support explicit region pinning and the configured mixed-auth/private path; inspect the actual Namespace and TLS settings. See [namespace access docs](https://docs.temporal.io/cloud/namespaces#access-namespaces).
 
 ## OpenSSL Commands
 
@@ -510,12 +510,12 @@ Best first checks:
 ### Standard Endpoints
 
 ```
-Namespace Endpoint (recommended, all auth): <namespace>.<account>.tmprl.cloud:7233
-Regional Endpoint (advanced HA only):       <region>.<cloud_provider>.api.temporal.io:7233
+Namespace Endpoint (mTLS/API-key-only default): <namespace>.<account>.tmprl.cloud:7233
+API Regional Endpoint (explicit region pin):       <region>.<cloud_provider>.api.temporal.io:7233
 Web UI:                                     https://cloud.temporal.io/namespaces/<namespace>
 ```
 
-Namespace Endpoints work for both mTLS and API key auth. All namespaces can use them (exception: Flexible Auth pre-release namespaces).
+In mixed-auth pre-release, API keys cannot use the Namespace Endpoint. This restriction does not exclude all mTLS use of Namespace Endpoints.
 
 ### Regional Endpoints
 
@@ -523,7 +523,7 @@ Pattern: `<region>.<cloud_provider>.api.temporal.io:7233`
 
 Example: `us-east-1.aws.api.temporal.io:7233`
 
-Only recommended for advanced multi-region HA routing. For the full list of supported regions and providers, see [Cloud regions](https://docs.temporal.io/cloud/regions). See also [namespace access docs](https://docs.temporal.io/cloud/namespaces#access-namespaces).
+Use for an explicit region pin or where the configured mixed-auth/private connection requires it. The `*.region.tmprl.cloud` HA/private DNS intermediary has a separate role; do not substitute endpoint families. For the full list of supported regions and providers, see [Cloud regions](https://docs.temporal.io/cloud/regions). See also [namespace access docs](https://docs.temporal.io/cloud/namespaces#access-namespaces).
 
 **Note:** Namespace name includes account ID suffix. Full format: `<namespace-name>.<account-id>`
 

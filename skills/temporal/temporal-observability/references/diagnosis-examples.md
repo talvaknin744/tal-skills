@@ -75,7 +75,7 @@ The "what changed 2 hours ago?" question is critical — the fix depends on the 
 1. **Immediate:** Scale workers from 3 to 6+ instances — doubles total slot capacity to 6,000. New workers start polling immediately.
 2. **Before scaling:** Verify worker hosts have CPU/memory headroom. Adding slots to a CPU-saturated host makes things worse.
 3. **Investigate:** Check activity execution duration over the last 2 hours. If a downstream service slowed down, scaling is a band-aid.
-4. **For tuning parameters** (slot sizes, poller counts) → hand off to `skill-temporal-workertuning`.
+4. **For tuning parameters** (slot sizes, poller counts) → hand off to `temporal-workertuning`.
 
 **Monitor After:**
 - `temporal_cloud_v1_approximate_backlog_count` should start decreasing within minutes of new workers coming online
@@ -111,8 +111,8 @@ The "what changed 2 hours ago?" question is critical — the fix depends on the 
 Request these values (explain why each matters):
 
 1. `temporal_activity_execution_failed` rate — volume and whether concentrated on one activity type (dependency issue) or spread across many (infrastructure issue).
-2. `temporal_workflow_failed` rate — business impact. Workflow failures mean work is lost or needs manual recovery.
-3. Failure conversion rate (`workflow_failed / activity_execution_failed`) — separates "flaky dependencies" from "broken error handling." See `service-health-monitoring.md` § Failure Conversion Rate for thresholds.
+2. `temporal_workflow_failed` rate — business impact. Classify expected business rejection separately from unexpected operational failure.
+3. Failure conversion rate (`workflow_failed / activity_execution_failed`) — is an investigation clue after metric alignment; correlate histories, business deadlines, and pending age. See `service-health-monitoring.md` § Failure Conversion Rate for applicability limits.
 4. `temporal_activity_execution_latency` p99 — if activities are timing out rather than returning errors.
 5. Whether failures are concentrated on specific activity types or spread across all.
 
@@ -136,7 +136,7 @@ sum(rate(temporal_workflow_failed_total[5m]))
 
 Follow decision tree (ops-diagnostics-reference.md § Scenario 2):
 - Activity failures ELEVATED (180/min, up from 2/min) → confirmed
-- Failure conversion rate = 45/180 = 0.25 → HIGH (>> 0.1 threshold) → poor error handling
+- Observed ratio = 45/180 = 0.25 → investigation clue only; confirm metric semantics and correlated Workflow histories before attributing causality
 - Failures CONCENTRATED on one activity type (`ProcessPayment`) → downstream dependency problem
 - Retries NOT succeeding → persistent failure, not transient
 - Activities timing out at exactly the StartToClose timeout → dependency unresponsive
@@ -144,7 +144,7 @@ Follow decision tree (ops-diagnostics-reference.md § Scenario 2):
 | Resource | Utilization | Saturation | Errors |
 |---|---|---|---|
 | Activity Execution (ProcessPayment) | Timing out at 10s StartToClose — consuming full timeout budget before failing | Each attempt holds a slot for 10s × 3 retries = 30s of wasted slot time per invocation | 180 failures/min (90× baseline) |
-| Workflow Execution | Normal for non-payment workflows | N/A | 45 failures/min. Conversion rate 0.25 — critically high |
+| Workflow Execution | Normal for non-payment workflows | N/A | 45 failures/min. Observed ratio 0.25; unexpected payment failures violate this example's completion objective |
 
 Hidden cost: 60 unique invocations/min × 30s wasted slot time each = 1,800 worker-seconds/min consumed by work that will never succeed. This can starve other activities (link to Scenario 1 if schedule-to-start latency also elevated).
 
@@ -154,7 +154,7 @@ Hidden cost: 60 unique invocations/min × 30s wasted slot time each = 1,800 work
 
 **Why:** Two problems interacting:
 1. **Payment service is down or unreachable** (primary cause). Activities time out at exactly their limit — the service isn't responding at all. Retries aren't helping because the issue is persistent.
-2. **Workflows don't handle ProcessPayment failure gracefully** (amplifies impact). Failure conversion rate is 0.25 — for every 4 activity failures, 1 workflow dies. A resilient system should be <0.01.
+2. **Inspect payment failure handling against the business contract.** The ratio alone does not establish a defect or one-to-one causality. In this example, confirm histories show unhandled infrastructure failures rather than valid declined payments, and determine whether compensation, pending reconciliation, or explicit failure is required.
 
 **Fix:**
 1. **Immediate:** Investigate the payment service directly. Check its health endpoint, recent deploys, error logs.
@@ -163,17 +163,17 @@ Hidden cost: 60 unique invocations/min × 30s wasted slot time each = 1,800 work
    - Catch failure, enter a wait state (sleep + retry later)
    - Send notification for human intervention
    - Execute a compensation activity (mark order as "payment pending")
-   - Hand off to `skill-temporal-developer` for code changes
+   - Hand off to `temporal-developer` for code changes
 4. **Reduce wasted capacity:** Add a circuit breaker — after N consecutive failures, stop retrying and fall back. Stops hammering a dead service and frees slots.
 
 **Monitor After:**
 - `ProcessPayment` activity failure rate should drop to baseline once payment service recovers
-- Failure conversion rate should drop to <0.01 after error handling improvements
-- `temporal_workflow_failed` should return to ~0 once both fixes are in place
+- Verify the intended terminal outcome for infrastructure failure, uncertain charge, and legitimate decline; check business completion deadlines and pending age
+- Unexpected operational failures should return to baseline; expected business rejections remain visible
 - Watch worker task slot availability — retry storm may have been consuming slots needed by other activities
 
 **If Not Resolved:**
 - Payment service recovers but workflow failures persist → check for a second failing activity type
 - Payment service stays down → error handling fix (#3) becomes urgent
-- Worker capacity issues from retry storms → hand off to `skill-temporal-workertuning`
+- Worker capacity issues from retry storms → hand off to `temporal-workertuning`
 - Failures spread to other activity types → infrastructure-level issue (OOM, network), not a single dependency

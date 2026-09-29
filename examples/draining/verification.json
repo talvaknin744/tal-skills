@@ -1,0 +1,210 @@
+{
+  "example": "durable-job-handoff",
+  "status": "passed",
+  "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+  "invocation": {
+    "timeout_seconds": 300
+  },
+  "checks": [
+    {
+      "name": "rolling_handoffs",
+      "status": "passed",
+      "evidence": {
+        "trace": [
+          {
+            "owner": "A",
+            "epoch": 1,
+            "checkpoint": 1
+          },
+          {
+            "owner": "B",
+            "epoch": 2,
+            "checkpoint": 2
+          },
+          {
+            "owner": "C",
+            "epoch": 3,
+            "checkpoint": 3
+          }
+        ],
+        "final": {
+          "checkpoint": 6,
+          "epoch": 4,
+          "claims": 4,
+          "maintenance_handoffs": 3,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "owner": null,
+          "effect_count": 6,
+          "effect_total": 21
+        }
+      }
+    },
+    {
+      "name": "stale_owner",
+      "status": "passed",
+      "evidence": {
+        "effect_rejected": true,
+        "checkpoint_rejected": true,
+        "release_rejected": true,
+        "successor_claim_preserved": true,
+        "final": {
+          "checkpoint": 1,
+          "epoch": 2,
+          "claims": 2,
+          "maintenance_handoffs": 1,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "pending",
+          "owner": null,
+          "effect_count": 1,
+          "effect_total": 1
+        }
+      }
+    },
+    {
+      "name": "effect_before_checkpoint",
+      "status": "passed",
+      "evidence": {
+        "killed_exit_code": -9,
+        "first_step_replayed": true,
+        "final": {
+          "checkpoint": 6,
+          "epoch": 2,
+          "claims": 2,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 1,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "owner": null,
+          "effect_count": 6,
+          "effect_total": 21
+        }
+      }
+    },
+    {
+      "name": "admission_and_schema",
+      "status": "passed",
+      "evidence": {
+        "checkpoint": 0,
+        "epoch": 0,
+        "claims": 0,
+        "maintenance_handoffs": 0,
+        "infrastructure_interruptions": 0,
+        "business_failures": 0,
+        "business_budget": 3,
+        "status": "pending",
+        "owner": null,
+        "effect_count": 0,
+        "effect_total": 0
+      }
+    },
+    {
+      "name": "poison_input",
+      "status": "passed",
+      "evidence": {
+        "checkpoint": 0,
+        "epoch": 0,
+        "claims": 0,
+        "maintenance_handoffs": 0,
+        "infrastructure_interruptions": 0,
+        "business_failures": 0,
+        "business_budget": 3,
+        "status": "quarantined",
+        "owner": null,
+        "effect_count": 0,
+        "effect_total": 0
+      }
+    },
+    {
+      "name": "business_budget",
+      "status": "passed",
+      "evidence": {
+        "checkpoint": 0,
+        "epoch": 3,
+        "claims": 3,
+        "maintenance_handoffs": 0,
+        "infrastructure_interruptions": 0,
+        "business_failures": 3,
+        "business_budget": 3,
+        "status": "business-failed",
+        "owner": null,
+        "effect_count": 0,
+        "effect_total": 0
+      }
+    },
+    {
+      "name": "job_deadline",
+      "status": "passed",
+      "evidence": {
+        "before_claim": {
+          "checkpoint": 0,
+          "epoch": 0,
+          "claims": 0,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "deadline-exceeded",
+          "owner": null,
+          "effect_count": 0,
+          "effect_total": 0
+        },
+        "during_ownership": {
+          "checkpoint": 0,
+          "epoch": 1,
+          "claims": 1,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "deadline-exceeded",
+          "owner": null,
+          "effect_count": 0,
+          "effect_total": 0
+        }
+      }
+    },
+    {
+      "name": "immutable_input",
+      "status": "passed",
+      "evidence": {
+        "changed_manifest_rejected": true
+      }
+    }
+  ],
+  "limitations": [
+    "Short processes stand in for a 12/24-hour job; no endurance or Kubernetes test.",
+    "Effects, receipts, and fencing are local PostgreSQL state, not external-provider guarantees.",
+    "All workers use the same binary; schema mismatch rejection is not mixed-version compatibility proof.",
+    "Lease/deadline expiry is advanced by the fixture; no lease-renewal or clock-jump test.",
+    "No broker delivery counter, prefetch, SIGTERM drain, partition, database crash, or failover test.",
+    "Database storage is disposable tmpfs; no physical durability or RPO claim.",
+    "Only closed-generation rejection is exercised; concurrent admission-gate transitions need further tests."
+  ],
+  "source_sha256": {
+    "verify.py": "fc7e49c6a6502e803af925b3ba757d9a7fca6e35f42834713fbc39ca6e3fcb56",
+    "worker.py": "636440d332285837f2e334ad9eded5651599c295cdb2b7ad0b6cfc24b6104be3",
+    "schema.sql": "778f9883523d8b3c78ce6da45400ab24374c4e1eb5786f271a8be2eec3772c7b",
+    "requirements.txt": "6d9f3ccc398c4a22a47e08bfd19b95ba54e9330006c87b7a36c6d5e0854abefb",
+    "README.md": "633fabc24ea5547da88f5a20aa6e03983094e246f747650289fa6dc59ee81847"
+  },
+  "versions": {
+    "postgres": "18.6",
+    "psycopg": "3.3.6",
+    "python": "3.14.3",
+    "fsync": "on",
+    "synchronous_commit": "on"
+  },
+  "resources": {
+    "remaining_database_sessions": 0,
+    "worker_processes_started": 18,
+    "worker_processes_alive": 0,
+    "container_removed": true
+  },
+  "completed_at": "2026-09-29T09:06:47.124190+00:00"
+}

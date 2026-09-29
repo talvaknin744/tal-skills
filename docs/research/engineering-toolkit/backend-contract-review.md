@@ -35,7 +35,7 @@ lookup enforce the scope. Keep the operation namespace fixed as `reserve-v1`
 across ordinary deployments. A new release or response representation must not
 silently make outstanding keys look unused.
 
-Accept a request key and SKU of 1–128 visible ASCII characters (`0x21..0x7e`,
+Accept a trusted tenant identifier, request key and SKU of 1–128 visible ASCII characters (`0x21..0x7e`,
 excluding whitespace and control characters). This is a deliberately narrow
 example contract, not a general rule for product identifiers. The command has
 exactly `sku` and `quantity`; reject missing or unexpected fields. Accept a finite

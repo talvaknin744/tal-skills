@@ -86,13 +86,15 @@ In the Java SDK, these poller options use different names: `workflowPollThreadCo
 
 ### Defaults by SDK
 
-| SDK | MaxConcurrentWorkflowTaskPollers | MaxConcurrentActivityTaskPollers | Namespace APS | TaskQueueActivitiesPerSecond |
-|-----|----------------------------------|----------------------------------|---------------|------------------------------|
-| **Go** | 2 | 2 | 400 | Unlimited |
-| **Java** | 5 | 5 | - | - |
-| **TypeScript** | 10 | 10 | - | - |
-| **Python** | 5 | 5 | - | - |
-| **.NET** | 5 | 5 | - | - |
+| SDK | MaxConcurrentWorkflowTaskPollers | MaxConcurrentActivityTaskPollers | TaskQueueActivitiesPerSecond |
+|-----|----------------------------------|----------------------------------|------------------------------|
+| **Go** | 2 | 2 | Unlimited |
+| **Java** | 5 | 5 | - |
+| **TypeScript** | 10 | 10 | - |
+| **Python** | 5 | 5 | - |
+| **.NET** | 5 | 5 | - |
+
+Namespace APS is a Cloud capacity setting, independent of SDK choice. Read the actual Namespace capacity mode and limits from Cloud configuration/metrics before sizing; do not assume a Go-specific 400 APS default. See [capacity modes](https://docs.temporal.io/cloud/capacity-modes).
 
 ### Poller autoscaling (recommended)
 

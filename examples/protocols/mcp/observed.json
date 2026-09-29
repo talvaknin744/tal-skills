@@ -1,0 +1,1285 @@
+{
+  "format_version": 1,
+  "observed_at": "2026-09-29T09:07:17.074678+00:00",
+  "protocol": "2026-07-28",
+  "source_sha256": {
+    "server.ts": "3cd71c13ce94665fb441c96d51458134f02de0c0091206813b9032a2f2b2ab14",
+    "package.json": "d45655ffb9cfdc7a75273c452aabed5da2e892e7410708d92d03c4209f35ab11",
+    "package-lock.json": "905cc2373e3c238ec95db16715ce43421a8344f544a836b47f0397efd8e48c57",
+    "tsconfig.json": "a3443e21d693beafb89e0bf71ff489b215d4edd63c8960d5314238b8f42f871b",
+    "verify.sh": "ee3d5351d77ee854cdae3bfe3b088831cbc5ea9db2591a6c8649be37c76fcf2f",
+    "README.md": "7fdff6032aa3dc709cdfa82c89977eccc9a5e67a348ec27e96e301cef2616165",
+    "python/requirements.lock": "fbd043152b30ca283a857972e253a4a2ffddac47276cfd8828ff35b05ef3b6e8",
+    "go/main.go": "d9e55d611561dd6d474ee905853ce28c906630fd40a7d6c15e2bf3fda06f4431",
+    "go/go.mod": "7f47862d4e0353e8f69d06091b2df09587ae82cb01868da7e7e3dbc6040dacd3",
+    "go/go.sum": "6184efde48a3053a9ac99d80aa3709071979585108b182ef17463500fa0be91f",
+    "python/client.py": "2cb3248bef608b7fce0772fc72dd7f9dd98609330aca283ec4cf6b8ce0fa6724",
+    "python/support.py": "0152019fb1ef4a2f2f44a76c851a8df91d7d9292e6988266deaf0bc8a2303506",
+    "python/verify.py": "a8734faca8a726b570356d5034924be0db4466b3689a96b21e4c9d853b05d1ff",
+    "python/verify_authorization.py": "8dc3e5717313dc7ba72a6cd3063c5bec8b67c1d41b8d2c59a3d72b93269bcdd2",
+    "python/verify_cancellation.py": "c2e1c1ff5bb1ab650152e5629170835b252dc85216655ea7223a97406c1fe520",
+    "python/verify_contracts.py": "8ba1e3e4733c5b2363f2dbbb4387112c5b89ad416b196337b81a7a97b50fdd72"
+  },
+  "environment": {
+    "python": "3.14.3",
+    "platform": "macOS-14.2-arm64-arm-64bit-Mach-O",
+    "mcp": "2.2.0",
+    "mcp-types": "2.2.0",
+    "httpx2": "2.13.1",
+    "node": "v25.9.0",
+    "go": "go version go1.27.1 darwin/arm64",
+    "@modelcontextprotocol/server": "2.2.0",
+    "@modelcontextprotocol/core": "2.2.0",
+    "@modelcontextprotocol/node": "2.1.0",
+    "go_sdk": "github.com/modelcontextprotocol/go-sdk v1.8.0"
+  },
+  "checks": [
+    {
+      "name": "python-to-typescript-valid",
+      "passed": true,
+      "details": {
+        "protocol": "2026-07-28",
+        "tools": [
+          "add",
+          "fail",
+          "slow"
+        ],
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "name": "mcp-contract-example",
+              "version": "1.0.0"
+            }
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "7",
+              "annotations": null,
+              "_meta": null
+            }
+          ],
+          "structuredContent": {
+            "sum": 7
+          },
+          "isError": false,
+          "resultType": "complete"
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "invalid-arguments-tool-error",
+      "passed": true,
+      "details": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "mcp-contract-example",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Input validation error: Invalid arguments for tool add: a: Invalid input: expected number, received string",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": null,
+        "isError": true,
+        "resultType": "complete"
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "business-rejection-tool-error",
+      "passed": true,
+      "details": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "mcp-contract-example",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Deliberate business rejection",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": null,
+        "isError": true,
+        "resultType": "complete"
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "explicit-protocol-pin",
+      "passed": true,
+      "details": {
+        "protocol": "2026-07-28",
+        "result": {
+          "sum": 2
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "wrong-version",
+      "passed": true,
+      "details": {
+        "http_status": 400,
+        "response": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32022,
+            "message": "Unsupported protocol version: 2099-01-01",
+            "data": {
+              "supported": [
+                "2026-07-28"
+              ],
+              "requested": "2099-01-01"
+            }
+          },
+          "id": 100
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "header-body-version-mismatch",
+      "passed": true,
+      "details": {
+        "http_status": 400,
+        "response": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32020,
+            "message": "Bad Request: the request headers and body disagree: the body envelope names protocol version 2026-07-28 but the MCP-Protocol-Version header names 2025-11-25",
+            "data": {
+              "mismatch": {
+                "header": "2025-11-25",
+                "body": "the body envelope names protocol version 2026-07-28 but the MCP-Protocol-Version header names 2025-11-25"
+              }
+            }
+          },
+          "id": 100
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "header-body-method-mismatch",
+      "passed": true,
+      "details": {
+        "http_status": 400,
+        "response": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32020,
+            "message": "Bad Request: the request headers and body disagree: the body names method tools/call but the Mcp-Method header names tools/list",
+            "data": {
+              "mismatch": {
+                "header": "tools/list",
+                "body": "the body names method tools/call but the Mcp-Method header names tools/list"
+              }
+            }
+          },
+          "id": 100
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "header-body-name-mismatch",
+      "passed": true,
+      "details": {
+        "http_status": 400,
+        "response": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32020,
+            "message": "Bad Request: the request headers and body disagree: the body carries params.name=\"add\" but the Mcp-Name header names \"fail\"",
+            "data": {
+              "mismatch": {
+                "header": "fail",
+                "body": "the body carries params.name=\"add\" but the Mcp-Name header names \"fail\""
+              }
+            }
+          },
+          "id": 100
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "unknown-tool",
+      "passed": true,
+      "details": {
+        "http_status": 200,
+        "response": {
+          "jsonrpc": "2.0",
+          "id": 100,
+          "error": {
+            "code": -32602,
+            "message": "Tool missing not found"
+          }
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "missing-required-meta",
+      "passed": true,
+      "details": {
+        "http_status": 400,
+        "response": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32602,
+            "message": "Invalid params: the MCP-Protocol-Version header names protocol revision 2026-07-28, but the request is missing the required per-request envelope key(s): _meta",
+            "data": {
+              "envelope": {
+                "missing": [
+                  "_meta"
+                ]
+              }
+            }
+          },
+          "id": 100
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "http-disconnect-before-effect",
+      "passed": true,
+      "details": {
+        "first_event": {
+          "jsonrpc": "2.0",
+          "method": "notifications/progress",
+          "params": {
+            "progressToken": "before-effect",
+            "progress": 1,
+            "total": 2
+          }
+        },
+        "server_state": {
+          "started": true,
+          "committed": false,
+          "aborted": true,
+          "finished": false
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "http-disconnect-after-effect",
+      "passed": true,
+      "details": {
+        "first_event": {
+          "jsonrpc": "2.0",
+          "method": "notifications/progress",
+          "params": {
+            "progressToken": "after-effect",
+            "progress": 1,
+            "total": 2
+          }
+        },
+        "server_state": {
+          "started": true,
+          "committed": true,
+          "aborted": true,
+          "finished": false
+        }
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "invalid-envelope-no-add-effect",
+      "passed": true,
+      "details": {
+        "addInvocations": 2
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "modern-wire-has-no-initialize-or-session",
+      "passed": true,
+      "details": {
+        "requests": [
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "server/discover",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/list",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "fail",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/list",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2099-01-01",
+            "mcpMethod": "tools/call",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 400
+          },
+          {
+            "method": "POST",
+            "version": "2025-11-25",
+            "mcpMethod": "tools/call",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 400
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/list",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 400
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "fail",
+            "hasSessionHeader": false,
+            "responseStatus": 400
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "missing",
+            "hasSessionHeader": false,
+            "responseStatus": 200
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "add",
+            "hasSessionHeader": false,
+            "responseStatus": 400
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "slow",
+            "hasSessionHeader": false,
+            "responseDisconnected": true
+          },
+          {
+            "method": "POST",
+            "version": "2026-07-28",
+            "mcpMethod": "tools/call",
+            "name": "slow",
+            "hasSessionHeader": false,
+            "responseDisconnected": true
+          }
+        ]
+      },
+      "suite": "python-and-http"
+    },
+    {
+      "name": "python-before-effect",
+      "passed": true,
+      "details": {
+        "client_cancelled_error": true,
+        "progress_events": [
+          {
+            "progress": 1.0,
+            "total": 2.0,
+            "message": null
+          }
+        ],
+        "server_state": {
+          "started": true,
+          "committed": false,
+          "aborted": true,
+          "finished": false
+        }
+      },
+      "suite": "python-cancellation"
+    },
+    {
+      "name": "python-after-effect",
+      "passed": true,
+      "details": {
+        "client_cancelled_error": true,
+        "progress_events": [
+          {
+            "progress": 1.0,
+            "total": 2.0,
+            "message": null
+          }
+        ],
+        "server_state": {
+          "started": true,
+          "committed": true,
+          "aborted": true,
+          "finished": false
+        }
+      },
+      "suite": "python-cancellation"
+    },
+    {
+      "name": "synthetic-missing-credential-rejected-before-factory",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "body": {
+          "error": "Synthetic credential required"
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "synthetic-unknown-credential-rejected-before-factory",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "body": {
+          "error": "Synthetic credential required"
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "handle-owner-allowed",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Effect recorded"
+              }
+            ],
+            "structuredContent": {
+              "principal": "alice",
+              "effects": 1
+            },
+            "resultType": "complete",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "same-handle-wrong-principal-denied-before-effect",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Handle unavailable"
+              }
+            ],
+            "isError": true,
+            "resultType": "complete",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "forged-body-meta-and-header-not-authority",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Handle unavailable"
+              }
+            ],
+            "isError": true,
+            "resultType": "complete",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "verified-identity-overrides-forged-hints",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Effect recorded"
+              }
+            ],
+            "structuredContent": {
+              "principal": "alice",
+              "effects": 2
+            },
+            "resultType": "complete",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "second-principal-own-handle-allowed",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Effect recorded"
+              }
+            ],
+            "structuredContent": {
+              "principal": "bob",
+              "effects": 1
+            },
+            "resultType": "complete",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "private-resource-alice-miss",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "contents": [
+              {
+                "uri": "private://self",
+                "mimeType": "application/json",
+                "text": "{\"principal\":\"alice\",\"privateLabel\":\"alice-only\"}"
+              }
+            ],
+            "resultType": "complete",
+            "ttlMs": 30000,
+            "cacheScope": "private",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "private-resource-bob-miss",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "contents": [
+              {
+                "uri": "private://self",
+                "mimeType": "application/json",
+                "text": "{\"principal\":\"bob\",\"privateLabel\":\"bob-only\"}"
+              }
+            ],
+            "resultType": "complete",
+            "ttlMs": 30000,
+            "cacheScope": "private",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "private-resource-alice-hit",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "contents": [
+              {
+                "uri": "private://self",
+                "mimeType": "application/json",
+                "text": "{\"principal\":\"alice\",\"privateLabel\":\"alice-only\"}"
+              }
+            ],
+            "resultType": "complete",
+            "ttlMs": 30000,
+            "cacheScope": "private",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "private-resource-bob-hit",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "result": {
+            "contents": [
+              {
+                "uri": "private://self",
+                "mimeType": "application/json",
+                "text": "{\"principal\":\"bob\",\"privateLabel\":\"bob-only\"}"
+              }
+            ],
+            "resultType": "complete",
+            "ttlMs": 30000,
+            "cacheScope": "private",
+            "_meta": {
+              "io.modelcontextprotocol/serverInfo": {
+                "name": "synthetic-authorization-example",
+                "version": "1.0.0"
+              }
+            }
+          },
+          "jsonrpc": "2.0",
+          "id": 1
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "private-cache-separated-by-principal",
+      "passed": true,
+      "details": {
+        "hits": 2,
+        "misses": 2,
+        "entries": 2,
+        "keys": [
+          {
+            "principal": "alice",
+            "credentialFingerprint": "469c93d8ff5a1f0d05ea8220f93ef35a46e0e6b9762759f3e9ffa001fd7e1dd1",
+            "method": "resources/read",
+            "uri": "private://self"
+          },
+          {
+            "principal": "bob",
+            "credentialFingerprint": "46ba779f7fc1941562d840804eb355cfc2de656cb15703c8a017e6d6f9992ec5",
+            "method": "resources/read",
+            "uri": "private://self"
+          }
+        ]
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "same-principal-new-token-new-cache-context",
+      "passed": true,
+      "details": {
+        "response": {
+          "status": 200,
+          "body": {
+            "result": {
+              "contents": [
+                {
+                  "uri": "private://self",
+                  "mimeType": "application/json",
+                  "text": "{\"principal\":\"alice\",\"privateLabel\":\"alice-only\"}"
+                }
+              ],
+              "resultType": "complete",
+              "ttlMs": 30000,
+              "cacheScope": "private",
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "synthetic-authorization-example",
+                  "version": "1.0.0"
+                }
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 1
+          }
+        },
+        "cacheMisses": 3,
+        "cacheEntries": 3
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "authorization-before-private-cache-lookup",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "body": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "error": {
+            "code": -32602,
+            "message": "Resource unavailable",
+            "data": {
+              "uri": "private://self"
+            }
+          }
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "request-principal-is-not-oauth-client-id",
+      "passed": true,
+      "details": {
+        "principals": [
+          "alice",
+          "bob"
+        ],
+        "oauthClients": [
+          "same-fixture-oauth-client"
+        ],
+        "contextCount": 11
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "only-authorized-effects-recorded",
+      "passed": true,
+      "details": {
+        "effects": 3,
+        "handles": {
+          "opaque_h_7c2eb8": {
+            "owner": "alice",
+            "tenant": "tenant-one",
+            "effects": 2
+          },
+          "opaque_h_91bd44": {
+            "owner": "bob",
+            "tenant": "tenant-one",
+            "effects": 1
+          }
+        }
+      },
+      "suite": "synthetic-authorization-cache"
+    },
+    {
+      "name": "go-negotiated-version",
+      "passed": true,
+      "details": {
+        "actual": "2026-07-28",
+        "requested": "2026-07-28"
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-list-tools",
+      "passed": true,
+      "details": {
+        "resultType": "complete",
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "mcp-contract-example",
+            "version": "1.0.0"
+          }
+        },
+        "ttlMs": 0,
+        "cacheScope": "private",
+        "tools": [
+          {
+            "description": "Add two bounded integers.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "properties": {
+                "a": {
+                  "maximum": 1000,
+                  "minimum": -1000,
+                  "type": "integer"
+                },
+                "b": {
+                  "maximum": 1000,
+                  "minimum": -1000,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            },
+            "name": "add",
+            "outputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "sum": {
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sum"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "description": "Return a deliberate business rejection for verification.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "properties": {},
+              "type": "object"
+            },
+            "name": "fail"
+          },
+          {
+            "description": "Observe interruption before or after a simulated in-memory effect.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "properties": {
+                "commitFirst": {
+                  "type": "boolean"
+                },
+                "token": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "token",
+                "commitFirst"
+              ],
+              "type": "object"
+            },
+            "name": "slow"
+          }
+        ]
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-valid-call",
+      "passed": true,
+      "details": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "mcp-contract-example",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "10"
+          }
+        ],
+        "structuredContent": {
+          "sum": 10
+        },
+        "resultType": "complete"
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-invalid-input",
+      "passed": true,
+      "details": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "mcp-contract-example",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Input validation error: Invalid arguments for tool add: a: Invalid input: expected number, received string"
+          }
+        ],
+        "isError": true,
+        "resultType": "complete"
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-business-rejection",
+      "passed": true,
+      "details": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "mcp-contract-example",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Deliberate business rejection"
+          }
+        ],
+        "isError": true,
+        "resultType": "complete"
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-unknown-tool",
+      "passed": true,
+      "details": {
+        "error": "calling \"tools/call\": Tool missing not found",
+        "protocol_error": {
+          "code": -32602,
+          "message": "Tool missing not found"
+        }
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-before-effect",
+      "passed": true,
+      "details": {
+        "error": "context canceled",
+        "state": {
+          "aborted": true,
+          "committed": false,
+          "finished": false,
+          "started": true
+        }
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-after-effect",
+      "passed": true,
+      "details": {
+        "error": "context canceled",
+        "state": {
+          "aborted": true,
+          "committed": true,
+          "finished": false,
+          "started": true
+        }
+      },
+      "suite": "go-client"
+    },
+    {
+      "name": "go-invalid-input-no-side-effect",
+      "passed": true,
+      "details": 1,
+      "suite": "go-client"
+    },
+    {
+      "name": "go-no-initialize-or-session",
+      "passed": true,
+      "details": [
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "server/discover",
+          "method": "POST",
+          "responseStatus": 200,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/list",
+          "method": "POST",
+          "responseStatus": 200,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/call",
+          "method": "POST",
+          "name": "add",
+          "responseStatus": 200,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/call",
+          "method": "POST",
+          "name": "add",
+          "responseStatus": 200,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/call",
+          "method": "POST",
+          "name": "fail",
+          "responseStatus": 200,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/call",
+          "method": "POST",
+          "name": "missing",
+          "responseStatus": 200,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/call",
+          "method": "POST",
+          "name": "slow",
+          "responseDisconnected": true,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "notifications/cancelled",
+          "method": "POST",
+          "responseStatus": 202,
+          "version": "2026-07-28"
+        },
+        {
+          "hasSessionHeader": false,
+          "mcpMethod": "tools/call",
+          "method": "POST",
+          "name": "slow",
+          "responseDisconnected": true,
+          "version": "2026-07-28"
+        }
+      ],
+      "suite": "go-client"
+    }
+  ],
+  "phases": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "returncode": 0,
+      "stdout": "\n> tal-skills-mcp-example@1.0.0 typecheck\n> tsc --noEmit\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "go",
+        "build",
+        "-mod=readonly",
+        "-o",
+        "probe",
+        "."
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "go: downloading github.com/modelcontextprotocol/go-sdk v1.8.0\ngo: downloading github.com/google/jsonschema-go v0.4.3\ngo: downloading github.com/yosida95/uritemplate/v3 v3.0.2\ngo: downloading golang.org/x/oauth2 v0.35.0\ngo: downloading golang.org/x/sync v0.20.0\ngo: downloading golang.org/x/time v0.15.0\ngo: downloading github.com/segmentio/encoding v0.5.4\ngo: downloading github.com/segmentio/asm v1.1.3\ngo: downloading golang.org/x/sys v0.41.0\n"
+    },
+    {
+      "suite": "python-and-http",
+      "server_cleanup": "exited-zero"
+    },
+    {
+      "suite": "python-cancellation",
+      "server_cleanup": "exited-zero"
+    },
+    {
+      "suite": "synthetic-authorization-cache",
+      "server_cleanup": "exited-zero"
+    },
+    {
+      "suite": "go-client",
+      "server_cleanup": "exited-zero"
+    }
+  ],
+  "limitations": [
+    "Selected SDK interoperability checks, not complete protocol conformance.",
+    "Synthetic credential lookup only; no OAuth/JWT verifier conformance.",
+    "Effects and cache are in memory; no durability, provider rollback or distributed recovery claim.",
+    "Python and Go clients against TypeScript only; no reverse language pairs or stdio.",
+    "No legacy migration, MRTR, tasks, DPoP, revocation or actual client/gateway cache conformance."
+  ],
+  "go_wire_observations": [
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "server/discover",
+      "method": "POST",
+      "responseStatus": 200,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/list",
+      "method": "POST",
+      "responseStatus": 200,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/call",
+      "method": "POST",
+      "name": "add",
+      "responseStatus": 200,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/call",
+      "method": "POST",
+      "name": "add",
+      "responseStatus": 200,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/call",
+      "method": "POST",
+      "name": "fail",
+      "responseStatus": 200,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/call",
+      "method": "POST",
+      "name": "missing",
+      "responseStatus": 200,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/call",
+      "method": "POST",
+      "name": "slow",
+      "responseDisconnected": true,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "notifications/cancelled",
+      "method": "POST",
+      "responseStatus": 202,
+      "version": "2026-07-28"
+    },
+    {
+      "hasSessionHeader": false,
+      "mcpMethod": "tools/call",
+      "method": "POST",
+      "name": "slow",
+      "responseDisconnected": true,
+      "version": "2026-07-28"
+    }
+  ],
+  "passed": 42,
+  "failed": 0,
+  "status": "passed"
+}

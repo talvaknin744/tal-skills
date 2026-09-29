@@ -24,27 +24,29 @@ If the operator cannot have IAM write permissions, have an administrator run the
 
 ### Preflight check
 
-Run before any command that creates or modifies AWS resources. None should print `DENIED`:
+Before a mutation, verify the selected identity and any required read capabilities. Read-only list calls do not prove create/update permission; a failed call may indicate connectivity, expired credentials, or a service error rather than denial. Keep the actual error visible (without credentials) and classify it before changing IAM.
 
 ```bash
 aws sts get-caller-identity
-aws lambda list-functions --max-items 1 >/dev/null 2>&1 && echo "lambda: ok" || echo "lambda: DENIED"
-aws cloudformation describe-stacks >/dev/null 2>&1 && echo "cloudformation: ok" || echo "cloudformation: DENIED"
-aws iam list-roles --max-items 1 >/dev/null 2>&1 && echo "iam read: ok" || echo "iam: limited (role creation may be blocked)"
-aws logs describe-log-groups --limit 1 >/dev/null 2>&1 && echo "logs: ok" || echo "logs: DENIED"
+aws lambda list-functions --max-items 1 >/dev/null
+aws cloudformation describe-stacks >/dev/null
+aws iam list-roles --max-items 1 >/dev/null
+aws logs describe-log-groups --limit 1 >/dev/null
 ```
 
-The calls above cannot exercise `iam:PassRole`. To check it (and any other specific action) authoritatively, use the policy simulator against the caller's ARN:
+The IAM policy simulator is a context-scoped diagnostic, not authoritative proof that the live request will succeed. Resolve an assumed-role session to its actual IAM role ARN (including any path); do not mechanically rewrite a session ARN. Simulate the specific action and exact resource, supplying applicable condition context. For example, for passing a Lambda execution role:
 
 ```bash
-CALLER_ARN=$(aws sts get-caller-identity --query Arn --output text)
 aws iam simulate-principal-policy \
-  --policy-source-arn "$CALLER_ARN" \
-  --action-names lambda:CreateFunction iam:PassRole cloudformation:CreateStack iam:CreateRole \
-  --query 'EvaluationResults[].{action:EvalActionName,decision:EvalDecision}' --output table
+  --policy-source-arn <OPERATOR_IAM_USER_OR_ROLE_ARN> \
+  --action-names iam:PassRole \
+  --resource-arns <LAMBDA_EXECUTION_ROLE_ARN> \
+  --context-entries ContextKeyName=iam:PassedToService,ContextKeyValues=lambda.amazonaws.com,ContextKeyType=string \
+  --query 'EvaluationResults[].{action:EvalActionName,resource:EvalResourceName,decision:EvalDecision,missingContext:MissingContextValues}' \
+  --output json
 ```
 
-For an assumed-role session, rewrite the ARN (`arn:aws:sts::…:assumed-role/Name/session`) to the underlying role ARN (`arn:aws:iam::…:role/Name`) for `simulate-principal-policy`.
+Missing context or an unavailable simulator leaves the result inconclusive. Resource policies, session policies, service conditions, and organizational controls may differ from the simulated request. Verify the authorized live operation and its service error separately; never broaden permissions solely to make a simulation pass. See [AWS simulator limitations](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html).
 
 ### When the preflight cannot authenticate
 
@@ -124,8 +126,8 @@ Temporal needs permission to invoke your Lambda function and check its status. T
 ROLE=Temporal-Cloud-Serverless-Worker   # or whatever name you intend to use
 
 # Does the role already exist?
-aws iam get-role --role-name "$ROLE" --query 'Role.Arn' --output text 2>/dev/null \
-  || echo "not present — safe to create"
+aws iam get-role --role-name "$ROLE" --query 'Role.Arn' --output text
+# Only NoSuchEntity confirms absence; classify AccessDenied/network errors separately.
 
 # If it does: which stack owns it? CloudFormation tags the resources it creates.
 # Empty output means the role is orphaned or hand-created, not stack-managed.
@@ -156,7 +158,7 @@ aws cloudformation delete-stack --stack-name <STACK_NAME> --region <AWS_REGION>
 aws cloudformation wait stack-delete-complete --stack-name <STACK_NAME> --region <AWS_REGION>
 ```
 
-Deleting a `ROLLBACK_COMPLETE` stack is safe — it created nothing that survived. Deleting a stack in any *successful* state is not; that is live infrastructure.
+Before deleting even a `ROLLBACK_COMPLETE` stack, inspect its resources and retention policies: rollback does not prove nothing survived. Confirm ownership and the authorized cleanup scope. A successful stack may contain live infrastructure.
 
 #### Which ARNs to authorize
 

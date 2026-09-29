@@ -1,11 +1,53 @@
 # tal-skills
 
-Portable agent skills, organized by concern and backed by realistic evaluation cases.
+Portable skills, specialist agents, and engineering workflows, organized by
+concern and backed by source records and executable failure scenarios.
+
+Start with the [task-to-workflow guide and project-local installation](docs/toolkit-usage.md).
+Use the [domain reading paths](docs/reading-paths.md) for deeper study and the
+[research ledger](docs/research/engineering-toolkit/README.md) for the 60-publisher
+survey, selected articles, book access records, and applicability limits.
+
+## Agents and workflows
+
+The canonical [agents](agents/) cover coordination, Python, TypeScript, Go,
+boundaries, idempotency, consistency, durability, messaging, infrastructure,
+reliability, failure testing, MCP, A2A, and cleanup. Generated adapters support
+Codex and Claude while inheriting the user's model settings.
+
+The eight [workflows](workflows/) handle backend delivery, consistency diagnosis,
+messaging evolution, worker rollout, recovery validation, MCP integration, A2A
+integration, and cleanup. The main session selects relevant specialists, assigns
+one writer per overlapping file set, and returns independent findings to that
+owner. Small changes use a short path.
+
+```sh
+npm ci --ignore-scripts
+node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex --workflow tal-backend-delivery --dry-run
+node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex --workflow tal-backend-delivery
+```
+
+Choose `claude` or `both` for the other host. Installation is project-local,
+includes selected dependencies, tracks owned files, and stops on collisions.
+The [usage guide](docs/toolkit-usage.md) explains selection updates, native
+invocation, recovery and host limitations. [Runnable examples](examples/) test
+backend contracts, messaging, stale cache fills, worker handoffs, restore
+validation, infrastructure changes, cleanup and protocol boundaries.
 
 ## Skills
 
 | Concern | Skill | Use it for |
 |---|---|---|
+| Languages | [python-backend](skills/languages/python-backend/SKILL.md) | Python service boundaries, async ownership, cancellation and transactions |
+| Languages | [typescript-backend](skills/languages/typescript-backend/SKILL.md) | Runtime validation, trusted context and owned asynchronous resources |
+| Languages | [go-backend](skills/languages/go-backend/SKILL.md) | Context propagation, goroutine completion and transaction cleanup |
+| Messaging | [messaging-reliability](skills/messaging/messaging-reliability/SKILL.md) | Publication, acknowledgement, replay, ordering and bounded consumer failure |
+| Infrastructure | [infrastructure-change-safety](skills/infrastructure/infrastructure-change-safety/SKILL.md) | Partial applies, identity-preserving changes, rollout and recovery |
+| Reliability | [recovery-validation](skills/reliability/recovery-validation/SKILL.md) | Restored application contracts, accepted work, effects and recovery objectives |
+| Testing | [failure-oriented-testing](skills/testing/failure-oriented-testing/SKILL.md) | Independent oracles, controlled fault schedules and meaningful regressions |
+| Quality | [code-and-docs-cleanup](skills/quality/code-and-docs-cleanup/SKILL.md) | Evidence-backed simplification that preserves behavior and useful rationale |
+| Protocols | [mcp-engineering](skills/protocols/mcp-engineering/SKILL.md) | Pinned MCP versions, authority, resource isolation and request lifecycle |
+| Protocols | [a2a-engineering](skills/protocols/a2a-engineering/SKILL.md) | Pinned A2A versions, task ownership, observers and duplicate business effects |
 | Productivity | [learning-plan](skills/productivity/learning-plan/SKILL.md) | Feasible study schedules, actual progress, prerequisite triage and exam preparation |
 | Productivity | [retrieval-coach](skills/productivity/retrieval-coach/SKILL.md) | Interactive recall, mathematical feedback and spaced review from observed attempts |
 | Productivity | [learning-experiments](skills/productivity/learning-experiments/SKILL.md) | Diagnose a study bottleneck and test one bounded change against fresh performance |
@@ -132,11 +174,19 @@ Source citations, remembered patterns, and agreement between agents do not prove
 ## Repository map
 
 Skills are grouped by concern: `skills/<concern>/<skill-name>/`. Current
-concerns include `engineering`, `productivity` and `temporal`. Add concerns when a real skill needs them;
+concerns include languages, engineering, messaging, infrastructure, reliability,
+testing, quality, protocols, productivity and Temporal. Add concerns when a real skill needs them;
 keep each skill self-contained and its name unique across the repository.
 
 ```text
 skills/
+├── languages/
+├── messaging/
+├── infrastructure/
+├── reliability/
+├── testing/
+├── quality/
+├── protocols/
 ├── engineering/
 │   ├── architecture/
 │   ├── idempotency/
@@ -149,6 +199,10 @@ skills/
 │   └── learning-experiments/
 └── temporal/
     └── <skill-name>/
+agents/                 Canonical roles grouped by concern
+workflows/              Eight task paths and a shared handoff
+adapters/               Generated native agent files and workflow templates
+examples/               Explicit runnable runtime experiments
 docs/
 ├── research/
 ├── book-skills.md
@@ -176,6 +230,10 @@ tests/
 
 | Path | Purpose |
 |---|---|
+| [agents](agents/) | Canonical bounded specialist roles and shared execution contract |
+| [workflows](workflows/) | Task routing, ownership, review and acceptance paths |
+| [adapters](adapters/) | Generated Codex and Claude definitions; installed through the toolkit installer |
+| [examples](examples/) | Pinned runtime scenarios, commands, observations and limitations |
 | [skills/engineering](skills/engineering) | Self-contained skills: each has SKILL.md, optional references, and UI metadata |
 | [skills/temporal](skills/temporal) | Focused Temporal skills and attributed adaptations of official skills |
 | [docs/temporal](docs/temporal) | Customer-story coverage, observations, inferences, and evidence limits |

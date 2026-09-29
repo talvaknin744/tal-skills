@@ -1,0 +1,560 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "started_at": "2026-09-29T09:00:40.819678+00:00",
+  "expected_terraform_version": "1.16.4",
+  "commands": [
+    {
+      "label": "version",
+      "argv": [
+        "terraform",
+        "version",
+        "-json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 867,
+      "stdout": "{\n  \"terraform_version\": \"1.16.4\",\n  \"platform\": \"darwin_arm64\",\n  \"provider_selections\": {},\n  \"terraform_outdated\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "init",
+      "argv": [
+        "terraform",
+        "init",
+        "-no-color",
+        "-input=false"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 33,
+      "stdout": "Initializing the backend...\n\nInitializing provider plugins...\n- terraform.io/builtin/terraform is built in to Terraform\n\nTerraform has been successfully initialized!\n",
+      "stderr": ""
+    },
+    {
+      "label": "failing-plan",
+      "argv": [
+        "terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=failing-plan.tfplan"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "timed_out": false,
+      "elapsed_ms": 39,
+      "stdout": "\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  + create\n\nTerraform will perform the following actions:\n\n  # terraform_data.first will be created\n  + resource \"terraform_data\" \"first\" {\n      + id     = (known after apply)\n      + input  = \"original\"\n      + output = (known after apply)\n    }\n\n  # terraform_data.later will be created\n  + resource \"terraform_data\" \"later\" {\n      + id     = (known after apply)\n      + input  = \"later-operation\"\n      + output = (known after apply)\n    }\n\nPlan: 2 to add, 0 to change, 0 to destroy.\n",
+      "stderr": ""
+    },
+    {
+      "label": "failing-plan-json",
+      "argv": [
+        "terraform",
+        "show",
+        "-json",
+        "failing-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 32,
+      "stdout": "{\"format_version\":\"1.2\",\"terraform_version\":\"1.16.4\",\"variables\":{\"fail_later\":{\"value\":true},\"first_value\":{\"value\":\"original\"}},\"planned_values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"input\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"input\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}},\"resource_changes\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"create\"],\"before\":null,\"after\":{\"input\":\"original\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{\"id\":true,\"output\":true},\"before_sensitive\":false,\"after_sensitive\":{}}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"create\"],\"before\":null,\"after\":{\"input\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{\"id\":true,\"output\":true},\"before_sensitive\":false,\"after_sensitive\":{}}}],\"configuration\":{\"provider_config\":{\"terraform\":{\"name\":\"terraform\",\"full_name\":\"terraform.io/builtin/terraform\"}},\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' first-created \\u003e\\u003e first-events.txt\"}}},{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' destroy-called \\u003e first-destroy.txt\"}}}],\"expressions\":{\"input\":{\"references\":[\"var.first_value\"]}},\"schema_version\":0},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"references\":[\"var.fail_later\"]}}}],\"expressions\":{\"input\":{\"constant_value\":\"later-operation\"}},\"schema_version\":0,\"depends_on\":[\"terraform_data.first\"]}],\"variables\":{\"fail_later\":{\"default\":true},\"first_value\":{\"default\":\"original\"}}}},\"timestamp\":\"2026-09-29T09:00:42Z\",\"applyable\":true,\"complete\":true,\"errored\":false}\n",
+      "stderr": ""
+    },
+    {
+      "label": "failing-plan-apply",
+      "argv": [
+        "terraform",
+        "apply",
+        "-no-color",
+        "-input=false",
+        "failing-plan.tfplan"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "timed_out": false,
+      "elapsed_ms": 66,
+      "stdout": "terraform_data.first: Creating...\nterraform_data.first: Provisioning with 'local-exec'...\nterraform_data.first (local-exec): Executing: [\"/bin/sh\" \"-c\" \"printf '%s\\n' first-created >> first-events.txt\"]\nterraform_data.first: Creation complete after 0s [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\nterraform_data.later: Creating...\nterraform_data.later: Provisioning with 'local-exec'...\nterraform_data.later (local-exec): Executing: [\"/bin/sh\" \"-c\" \"printf '%s\\n' deliberate-local-failure >&2; exit 23\"]\nterraform_data.later (local-exec): deliberate-local-failure\n",
+      "stderr": "\nError: local-exec provisioner error\n\n  with terraform_data.later,\n  on main.tf line 32, in resource \"terraform_data\" \"later\":\n  32:   provisioner \"local-exec\" {\n\nError running command 'printf '%s\n' deliberate-local-failure >&2; exit 23': exit status 23. Output:\ndeliberate-local-failure\n\n"
+    },
+    {
+      "label": "after-failure",
+      "argv": [
+        "terraform",
+        "show",
+        "-json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 36,
+      "stdout": "{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"b263bd7d-6ab5-501b-7bca-6ef3600d1c14\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first\"],\"tainted\":true}]}}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "recovery-plan",
+      "argv": [
+        "terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=recovery-plan.tfplan",
+        "-var=fail_later=false"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "timed_out": false,
+      "elapsed_ms": 41,
+      "stdout": "terraform_data.first: Refreshing state... [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\nterraform_data.later: Refreshing state... [id=b263bd7d-6ab5-501b-7bca-6ef3600d1c14]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n-/+ destroy and then create replacement\n\nTerraform will perform the following actions:\n\n  # terraform_data.later is tainted, so must be replaced\n-/+ resource \"terraform_data\" \"later\" {\n      ~ id     = \"b263bd7d-6ab5-501b-7bca-6ef3600d1c14\" -> (known after apply)\n      ~ output = \"later-operation\" -> (known after apply)\n        # (1 unchanged attribute hidden)\n    }\n\nPlan: 1 to add, 0 to change, 1 to destroy.\n",
+      "stderr": ""
+    },
+    {
+      "label": "recovery-plan-json",
+      "argv": [
+        "terraform",
+        "show",
+        "-json",
+        "recovery-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 32,
+      "stdout": "{\"format_version\":\"1.2\",\"terraform_version\":\"1.16.4\",\"variables\":{\"fail_later\":{\"value\":\"false\"},\"first_value\":{\"value\":\"original\"}},\"planned_values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"input\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}},\"resource_changes\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"no-op\"],\"before\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":{}}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"delete\",\"create\"],\"before\":{\"id\":\"b263bd7d-6ab5-501b-7bca-6ef3600d1c14\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after\":{\"input\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{\"id\":true,\"output\":true},\"before_sensitive\":{},\"after_sensitive\":{}},\"action_reason\":\"replace_because_tainted\"}],\"prior_state\":{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"b263bd7d-6ab5-501b-7bca-6ef3600d1c14\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first\"],\"tainted\":true}]}}},\"configuration\":{\"provider_config\":{\"terraform\":{\"name\":\"terraform\",\"full_name\":\"terraform.io/builtin/terraform\"}},\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' first-created \\u003e\\u003e first-events.txt\"}}},{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' destroy-called \\u003e first-destroy.txt\"}}}],\"expressions\":{\"input\":{\"references\":[\"var.first_value\"]}},\"schema_version\":0},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"references\":[\"var.fail_later\"]}}}],\"expressions\":{\"input\":{\"constant_value\":\"later-operation\"}},\"schema_version\":0,\"depends_on\":[\"terraform_data.first\"]}],\"variables\":{\"fail_later\":{\"default\":true},\"first_value\":{\"default\":\"original\"}}}},\"timestamp\":\"2026-09-29T09:00:43Z\",\"applyable\":true,\"complete\":true,\"errored\":false}\n",
+      "stderr": ""
+    },
+    {
+      "label": "recovery-plan-apply",
+      "argv": [
+        "terraform",
+        "apply",
+        "-no-color",
+        "-input=false",
+        "recovery-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 66,
+      "stdout": "terraform_data.later: Destroying... [id=b263bd7d-6ab5-501b-7bca-6ef3600d1c14]\nterraform_data.later: Destruction complete after 0s\nterraform_data.later: Creating...\nterraform_data.later: Provisioning with 'local-exec'...\nterraform_data.later (local-exec): Executing: [\"/bin/sh\" \"-c\" \"printf '%s\\n' later-recovered > later-effect.txt\"]\nterraform_data.later: Creation complete after 0s [id=995153c8-62a1-6566-c460-0c0f641c3804]\n\nApply complete! Resources: 1 added, 0 changed, 1 destroyed.\n",
+      "stderr": ""
+    },
+    {
+      "label": "after-recovery",
+      "argv": [
+        "terraform",
+        "show",
+        "-json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 37,
+      "stdout": "{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first\"]}]}}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-plan",
+      "argv": [
+        "terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=reviewed-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=reviewed"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "timed_out": false,
+      "elapsed_ms": 32,
+      "stdout": "terraform_data.first: Refreshing state... [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\nterraform_data.later: Refreshing state... [id=995153c8-62a1-6566-c460-0c0f641c3804]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  ~ update in-place\n\nTerraform will perform the following actions:\n\n  # terraform_data.first will be updated in-place\n  ~ resource \"terraform_data\" \"first\" {\n        id     = \"a0b38d2d-6dd1-5299-5e43-800ce83781df\"\n      ~ input  = \"original\" -> \"reviewed\"\n      ~ output = \"original\" -> (known after apply)\n    }\n\nPlan: 0 to add, 1 to change, 0 to destroy.\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-plan-json",
+      "argv": [
+        "terraform",
+        "show",
+        "-json",
+        "reviewed-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 24,
+      "stdout": "{\"format_version\":\"1.2\",\"terraform_version\":\"1.16.4\",\"variables\":{\"fail_later\":{\"value\":\"false\"},\"first_value\":{\"value\":\"reviewed\"}},\"planned_values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"reviewed\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}},\"resource_changes\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"update\"],\"before\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"reviewed\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{\"output\":true},\"before_sensitive\":{},\"after_sensitive\":{}}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"no-op\"],\"before\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":{}}}],\"prior_state\":{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first\"]}]}}},\"configuration\":{\"provider_config\":{\"terraform\":{\"name\":\"terraform\",\"full_name\":\"terraform.io/builtin/terraform\"}},\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' first-created \\u003e\\u003e first-events.txt\"}}},{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' destroy-called \\u003e first-destroy.txt\"}}}],\"expressions\":{\"input\":{\"references\":[\"var.first_value\"]}},\"schema_version\":0},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"references\":[\"var.fail_later\"]}}}],\"expressions\":{\"input\":{\"constant_value\":\"later-operation\"}},\"schema_version\":0,\"depends_on\":[\"terraform_data.first\"]}],\"variables\":{\"fail_later\":{\"default\":true},\"first_value\":{\"default\":\"original\"}}}},\"timestamp\":\"2026-09-29T09:00:43Z\",\"applyable\":true,\"complete\":true,\"errored\":false}\n",
+      "stderr": ""
+    },
+    {
+      "label": "intervening-plan",
+      "argv": [
+        "terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=intervening-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "timed_out": false,
+      "elapsed_ms": 28,
+      "stdout": "terraform_data.first: Refreshing state... [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\nterraform_data.later: Refreshing state... [id=995153c8-62a1-6566-c460-0c0f641c3804]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  ~ update in-place\n\nTerraform will perform the following actions:\n\n  # terraform_data.first will be updated in-place\n  ~ resource \"terraform_data\" \"first\" {\n        id     = \"a0b38d2d-6dd1-5299-5e43-800ce83781df\"\n      ~ input  = \"original\" -> \"intervening\"\n      ~ output = \"original\" -> (known after apply)\n    }\n\nPlan: 0 to add, 1 to change, 0 to destroy.\n",
+      "stderr": ""
+    },
+    {
+      "label": "intervening-plan-json",
+      "argv": [
+        "terraform",
+        "show",
+        "-json",
+        "intervening-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 25,
+      "stdout": "{\"format_version\":\"1.2\",\"terraform_version\":\"1.16.4\",\"variables\":{\"fail_later\":{\"value\":\"false\"},\"first_value\":{\"value\":\"intervening\"}},\"planned_values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}},\"resource_changes\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"update\"],\"before\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{\"output\":true},\"before_sensitive\":{},\"after_sensitive\":{}}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"no-op\"],\"before\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":{}}}],\"prior_state\":{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"original\",\"output\":\"original\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first\"]}]}}},\"configuration\":{\"provider_config\":{\"terraform\":{\"name\":\"terraform\",\"full_name\":\"terraform.io/builtin/terraform\"}},\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' first-created \\u003e\\u003e first-events.txt\"}}},{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' destroy-called \\u003e first-destroy.txt\"}}}],\"expressions\":{\"input\":{\"references\":[\"var.first_value\"]}},\"schema_version\":0},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"references\":[\"var.fail_later\"]}}}],\"expressions\":{\"input\":{\"constant_value\":\"later-operation\"}},\"schema_version\":0,\"depends_on\":[\"terraform_data.first\"]}],\"variables\":{\"fail_later\":{\"default\":true},\"first_value\":{\"default\":\"original\"}}}},\"timestamp\":\"2026-09-29T09:00:43Z\",\"applyable\":true,\"complete\":true,\"errored\":false}\n",
+      "stderr": ""
+    },
+    {
+      "label": "intervening-plan-apply",
+      "argv": [
+        "terraform",
+        "apply",
+        "-no-color",
+        "-input=false",
+        "intervening-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 35,
+      "stdout": "terraform_data.first: Modifying... [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\nterraform_data.first: Modifications complete after 0s [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\n\nApply complete! Resources: 0 added, 1 changed, 0 destroyed.\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-plan-apply",
+      "argv": [
+        "terraform",
+        "apply",
+        "-no-color",
+        "-input=false",
+        "reviewed-plan.tfplan"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "timed_out": false,
+      "elapsed_ms": 25,
+      "stdout": "",
+      "stderr": "\nError: Saved plan is stale\n\nThe given plan file can no longer be applied because the state was changed by\nanother operation after the plan was created.\n"
+    },
+    {
+      "label": "after-stale-rejection",
+      "argv": [
+        "terraform",
+        "show",
+        "-json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 23,
+      "stdout": "{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first\"]}]}}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "move-plan",
+      "argv": [
+        "terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=move-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "timed_out": false,
+      "elapsed_ms": 27,
+      "stdout": "terraform_data.first_renamed: Refreshing state... [id=a0b38d2d-6dd1-5299-5e43-800ce83781df]\nterraform_data.later: Refreshing state... [id=995153c8-62a1-6566-c460-0c0f641c3804]\n\nTerraform will perform the following actions:\n\n  # terraform_data.first has moved to terraform_data.first_renamed\n    resource \"terraform_data\" \"first_renamed\" {\n        id     = \"a0b38d2d-6dd1-5299-5e43-800ce83781df\"\n        # (2 unchanged attributes hidden)\n    }\n\nPlan: 0 to add, 0 to change, 0 to destroy.\n",
+      "stderr": ""
+    },
+    {
+      "label": "move-plan-json",
+      "argv": [
+        "terraform",
+        "show",
+        "-json",
+        "move-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 24,
+      "stdout": "{\"format_version\":\"1.2\",\"terraform_version\":\"1.16.4\",\"variables\":{\"fail_later\":{\"value\":\"false\"},\"first_value\":{\"value\":\"intervening\"}},\"planned_values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first_renamed\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}},\"resource_changes\":[{\"address\":\"terraform_data.first_renamed\",\"previous_address\":\"terraform_data.first\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"no-op\"],\"before\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":{}}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"no-op\"],\"before\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":{}}}],\"prior_state\":{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first_renamed\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first_renamed\"]}]}}},\"configuration\":{\"provider_config\":{\"terraform\":{\"name\":\"terraform\",\"full_name\":\"terraform.io/builtin/terraform\"}},\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first_renamed\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' first-created \\u003e\\u003e first-events.txt\"}}},{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"constant_value\":\"printf '%s\\n' destroy-called \\u003e first-destroy.txt\"}}}],\"expressions\":{\"input\":{\"references\":[\"var.first_value\"]}},\"schema_version\":0},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"references\":[\"var.fail_later\"]}}}],\"expressions\":{\"input\":{\"constant_value\":\"later-operation\"}},\"schema_version\":0,\"depends_on\":[\"terraform_data.first_renamed\"]}],\"variables\":{\"fail_later\":{\"default\":true},\"first_value\":{\"default\":\"original\"}}}},\"timestamp\":\"2026-09-29T09:00:43Z\",\"applyable\":true,\"complete\":true,\"errored\":false}\n",
+      "stderr": ""
+    },
+    {
+      "label": "move-plan-apply",
+      "argv": [
+        "terraform",
+        "apply",
+        "-no-color",
+        "-input=false",
+        "move-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 29,
+      "stdout": "\nApply complete! Resources: 0 added, 0 changed, 0 destroyed.\n",
+      "stderr": ""
+    },
+    {
+      "label": "after-move",
+      "argv": [
+        "terraform",
+        "show",
+        "-json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 24,
+      "stdout": "{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first_renamed\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{},\"depends_on\":[\"terraform_data.first_renamed\"]}]}}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "retention-plan",
+      "argv": [
+        "terraform",
+        "plan",
+        "-no-color",
+        "-input=false",
+        "-detailed-exitcode",
+        "-out=retention-plan.tfplan",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "timed_out": false,
+      "elapsed_ms": 27,
+      "stdout": "terraform_data.later: Refreshing state... [id=995153c8-62a1-6566-c460-0c0f641c3804]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n\nTerraform will perform the following actions:\n\n # terraform_data.first_renamed will no longer be managed by Terraform, but will not be destroyed\n # (destroy = false is set in the configuration)\n . resource \"terraform_data\" \"first_renamed\" {\n        id     = \"a0b38d2d-6dd1-5299-5e43-800ce83781df\"\n        # (2 unchanged attributes hidden)\n    }\n\nPlan: 0 to add, 0 to change, 0 to destroy.\n\nWarning: Some objects will no longer be managed by Terraform\n\nIf you apply this plan, Terraform will discard its tracking information for\nthe following objects, but it will not delete them:\n - terraform_data.first_renamed\n\nAfter applying this plan, Terraform will no longer manage these objects. You\nwill need to import them into Terraform to manage them again.\n",
+      "stderr": ""
+    },
+    {
+      "label": "retention-plan-json",
+      "argv": [
+        "terraform",
+        "show",
+        "-json",
+        "retention-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 26,
+      "stdout": "{\"format_version\":\"1.2\",\"terraform_version\":\"1.16.4\",\"variables\":{\"fail_later\":{\"value\":\"false\"},\"first_value\":{\"value\":\"intervening\"}},\"planned_values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}},\"resource_changes\":[{\"address\":\"terraform_data.first_renamed\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"forget\"],\"before\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"after\":null,\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":false},\"action_reason\":\"delete_because_no_resource_config\"},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"change\":{\"actions\":[\"no-op\"],\"before\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"after_unknown\":{},\"before_sensitive\":{},\"after_sensitive\":{}}}],\"prior_state\":{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.first_renamed\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"first_renamed\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"a0b38d2d-6dd1-5299-5e43-800ce83781df\",\"input\":\"intervening\",\"output\":\"intervening\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}},{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}}},\"configuration\":{\"provider_config\":{\"terraform\":{\"name\":\"terraform\",\"full_name\":\"terraform.io/builtin/terraform\"}},\"root_module\":{\"resources\":[{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_config_key\":\"terraform\",\"provisioners\":[{\"type\":\"local-exec\",\"expressions\":{\"command\":{\"references\":[\"var.fail_later\"]}}}],\"expressions\":{\"input\":{\"constant_value\":\"later-operation\"}},\"schema_version\":0}],\"variables\":{\"fail_later\":{\"default\":true},\"first_value\":{\"default\":\"original\"}}}},\"timestamp\":\"2026-09-29T09:00:43Z\",\"applyable\":true,\"complete\":true,\"errored\":false}\n",
+      "stderr": ""
+    },
+    {
+      "label": "retention-plan-apply",
+      "argv": [
+        "terraform",
+        "apply",
+        "-no-color",
+        "-input=false",
+        "retention-plan.tfplan"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 33,
+      "stdout": "\nApply complete! Resources: 0 added, 0 changed, 0 destroyed.\n",
+      "stderr": ""
+    },
+    {
+      "label": "after-retention",
+      "argv": [
+        "terraform",
+        "show",
+        "-json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 25,
+      "stdout": "{\"format_version\":\"1.0\",\"terraform_version\":\"1.16.4\",\"values\":{\"root_module\":{\"resources\":[{\"address\":\"terraform_data.later\",\"mode\":\"managed\",\"type\":\"terraform_data\",\"name\":\"later\",\"provider_name\":\"terraform.io/builtin/terraform\",\"schema_version\":0,\"values\":{\"id\":\"995153c8-62a1-6566-c460-0c0f641c3804\",\"input\":\"later-operation\",\"output\":\"later-operation\",\"store\":null,\"triggers_replace\":null},\"sensitive_values\":{}}]}}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "cleanup-managed-state",
+      "argv": [
+        "terraform",
+        "destroy",
+        "-auto-approve",
+        "-no-color",
+        "-input=false",
+        "-var=fail_later=false",
+        "-var=first_value=intervening"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 35,
+      "stdout": "terraform_data.later: Refreshing state... [id=995153c8-62a1-6566-c460-0c0f641c3804]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  - destroy\n\nTerraform will perform the following actions:\n\n  # terraform_data.later will be destroyed\n  - resource \"terraform_data\" \"later\" {\n      - id     = \"995153c8-62a1-6566-c460-0c0f641c3804\" -> null\n      - input  = \"later-operation\" -> null\n      - output = \"later-operation\" -> null\n    }\n\nPlan: 0 to add, 0 to change, 1 to destroy.\nterraform_data.later: Destroying... [id=995153c8-62a1-6566-c460-0c0f641c3804]\nterraform_data.later: Destruction complete after 0s\n\nDestroy complete! Resources: 1 destroyed.\n",
+      "stderr": ""
+    },
+    {
+      "label": "cleanup-state-list",
+      "argv": [
+        "terraform",
+        "state",
+        "list"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 23,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "checks": [
+    {
+      "name": "partial-apply-persists",
+      "status": "passed",
+      "evidence": {
+        "first_id": "a0b38d2d-6dd1-5299-5e43-800ce83781df",
+        "later_id": "b263bd7d-6ab5-501b-7bca-6ef3600d1c14",
+        "later_status": "tainted",
+        "serial": 3
+      }
+    },
+    {
+      "name": "recovery-preserves-completed-work",
+      "status": "passed",
+      "evidence": {
+        "first_id": "a0b38d2d-6dd1-5299-5e43-800ce83781df",
+        "first_create_count": 1,
+        "restored_old_state_file": false
+      }
+    },
+    {
+      "name": "saved-plan-staleness",
+      "status": "passed",
+      "evidence": {
+        "message": "Saved plan is stale",
+        "serial": 8,
+        "cloud_drift_tested": false
+      }
+    },
+    {
+      "name": "same-state-move",
+      "status": "passed",
+      "evidence": {
+        "from": "terraform_data.first",
+        "to": "terraform_data.first_renamed",
+        "preserved_id": "a0b38d2d-6dd1-5299-5e43-800ce83781df"
+      }
+    },
+    {
+      "name": "retained-removal",
+      "status": "passed",
+      "evidence": {
+        "action": "forget",
+        "source_ownership_removed": true,
+        "destroy_hook_executed": false,
+        "destination_import_tested": false
+      }
+    }
+  ],
+  "configuration_transitions": [
+    {
+      "fixture": "initial",
+      "before_command_index": 1,
+      "sha256": "43e5c43d4c4097ec36b53d61a97a966ac4e7848f24947b9c6679c58d00700616"
+    },
+    {
+      "fixture": "moved",
+      "before_command_index": 17,
+      "sha256": "06e1eb2e2f85e40b99e8ad157400a0c24bf678bb2a2ac74bc0e5624f1adda37a"
+    },
+    {
+      "fixture": "retained",
+      "before_command_index": 21,
+      "sha256": "de4eb99d2bc22ac3bf31a58335595c93f3f07e43673d225e8bd04a40a5b629e7"
+    }
+  ],
+  "cleanup": {
+    "managed_state_empty": true,
+    "temporary_directory_removed": true
+  },
+  "scope": {
+    "cloud_resources": false,
+    "external_provider_downloads": false,
+    "global_install": false
+  },
+  "limits": [
+    "Local terraform_data and scratch effects only; no cloud provider or physical resource tested.",
+    "State-update staleness was tested; out-of-band cloud drift was not.",
+    "Same-state moves and source forgetting were tested; cross-state adoption and remote locking were not.",
+    "local-exec is a fault injector here, not a general provisioning recommendation."
+  ],
+  "source_hashes": {
+    "verify.py": "7a694ba3244d2cac2e381824115ad6d8f16e65da810c80879e160812f11f1981",
+    "terraform.lock.json": "fb03a5327bf9506db0903c3b5464fcfff7e0ba21327a65c7a9fb9ab719103cd4",
+    "fixtures/initial/main.tf": "43e5c43d4c4097ec36b53d61a97a966ac4e7848f24947b9c6679c58d00700616",
+    "fixtures/moved/main.tf": "06e1eb2e2f85e40b99e8ad157400a0c24bf678bb2a2ac74bc0e5624f1adda37a",
+    "fixtures/retained/main.tf": "de4eb99d2bc22ac3bf31a58335595c93f3f07e43673d225e8bd04a40a5b629e7"
+  },
+  "binary": {
+    "source": "official-download",
+    "archive_url": "https://releases.hashicorp.com/terraform/1.16.4/terraform_1.16.4_darwin_arm64.zip",
+    "archive_sha256": "42cfdf97ad722f79085fe2279b06d4b8680172de3534b22eeddd9a0fbbe7b8f1",
+    "checksum_url": "https://releases.hashicorp.com/terraform/1.16.4/terraform_1.16.4_SHA256SUMS",
+    "checksum_manifest_sha256": "e8702b6a51705a6846412055205819091ac9a74d551611015ddf36087fe9a2b5",
+    "sha256": "41882c19afdb92ac1d97b55ae6a45bee2a9fe6e0d530b1b526a257211cbef7b2",
+    "release_signature_verified": false
+  },
+  "runtime": {
+    "terraform_version": "1.16.4",
+    "platform": "darwin_arm64",
+    "provider_selections": {},
+    "terraform_outdated": false
+  },
+  "finished_at": "2026-09-29T09:00:43.646277+00:00",
+  "additional_checks": [
+    {
+      "name": "supplied-checksum-mismatch",
+      "checked_at": "2026-09-29T09:00:40.923576+00:00",
+      "status": "passed",
+      "expected_verifier_exit": 1,
+      "observed_verifier_exit": 1,
+      "terraform_commands_executed": 0,
+      "observed_error": "ProbeError: Supplied executable checksum mismatch; it was not executed",
+      "temporary_directory_removed": true
+    },
+    {
+      "name": "process-group-timeout-cleanup",
+      "checked_at": "2026-09-29T09:02:28.964176+00:00",
+      "status": "passed",
+      "method": "Imported stop_process with bytecode disabled; started a parent and a child that ignores SIGTERM; observed EOF after bounded group termination.",
+      "elapsed_seconds": 3.002,
+      "parent_return_code": -15
+    }
+  ]
+}

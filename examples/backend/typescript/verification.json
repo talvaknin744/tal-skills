@@ -1,0 +1,238 @@
+{
+  "language": "typescript",
+  "runtime": "v25.9.0",
+  "drivers": {
+    "pg": "8.23.0"
+  },
+  "startedAt": "2026-09-29T09:07:11.035Z",
+  "completedAt": "2026-09-29T09:07:11.556Z",
+  "postgres": "PostgreSQL 18.6 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "scenarios": [
+    {
+      "id": "sequential-duplicate",
+      "status": "passed",
+      "evidence": {
+        "sameReceipt": true,
+        "state": {
+          "available": 3,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "legitimate-repeat",
+      "status": "passed",
+      "evidence": {
+        "distinctReceipts": true,
+        "state": {
+          "available": 3,
+          "reservations": 2
+        }
+      }
+    },
+    {
+      "id": "concurrent-duplicate",
+      "status": "passed",
+      "evidence": {
+        "lockObserved": true,
+        "conflictRejected": false,
+        "state": {
+          "available": 4,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "conflicting-intent",
+      "status": "passed",
+      "evidence": {
+        "lockObserved": true,
+        "conflictRejected": true,
+        "state": {
+          "available": 4,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "cross-tenant",
+      "status": "passed",
+      "evidence": {
+        "independentReceipts": true,
+        "a": {
+          "available": 4,
+          "reservations": 1
+        },
+        "b": {
+          "available": 4,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "last-item",
+      "status": "passed",
+      "evidence": {
+        "lockObserved": true,
+        "state": {
+          "available": 0,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "rollback-before-mutation",
+      "status": "passed",
+      "evidence": {
+        "rollbackConfirmed": true,
+        "stateAfterRetry": {
+          "available": 4,
+          "reservations": 1
+        },
+        "cleanupFailures": 0
+      }
+    },
+    {
+      "id": "rollback-before-commit",
+      "status": "passed",
+      "evidence": {
+        "rollbackConfirmed": true,
+        "stateAfterRetry": {
+          "available": 4,
+          "reservations": 1
+        },
+        "cleanupFailures": 0
+      }
+    },
+    {
+      "id": "unknown-commit",
+      "status": "passed",
+      "evidence": {
+        "transportReplyLost": true,
+        "originalReceiptRecovered": true,
+        "state": {
+          "available": 3,
+          "reservations": 1
+        },
+        "proxy": {
+          "connections": 1,
+          "commits_dropped": 1,
+          "errors": []
+        }
+      }
+    },
+    {
+      "id": "not-observed-inflight",
+      "status": "passed",
+      "evidence": {
+        "absentWhileUncommitted": true,
+        "presentAfterCommit": true
+      }
+    },
+    {
+      "id": "cancellation-query",
+      "status": "passed",
+      "evidence": {
+        "lockObserved": true,
+        "nativeCancellation": true,
+        "freshReceipt": "fd4ee6e4-7bab-4b0d-a847-232e0da235f9",
+        "state": {
+          "available": 4,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "cancellation-acquire",
+      "status": "passed",
+      "evidence": {
+        "lateAcquireReleased": true,
+        "nativeCancellation": true,
+        "waiting": 0,
+        "held": 0
+      }
+    },
+    {
+      "id": "resource-recovery",
+      "status": "passed",
+      "evidence": {
+        "rounds": [
+          {
+            "lockObserved": true,
+            "nativeCancellation": true,
+            "freshReceipt": "b1c7cf77-f9de-4174-866d-a00f546cbaef",
+            "state": {
+              "available": 4,
+              "reservations": 1
+            }
+          },
+          {
+            "lockObserved": true,
+            "nativeCancellation": true,
+            "freshReceipt": "42c3011f-1112-4e61-b987-55ba09de6e20",
+            "state": {
+              "available": 4,
+              "reservations": 1
+            }
+          },
+          {
+            "lockObserved": true,
+            "nativeCancellation": true,
+            "freshReceipt": "42ef6009-1274-4742-8b2e-815b0c2ea198",
+            "state": {
+              "available": 4,
+              "reservations": 1
+            }
+          }
+        ],
+        "waiting": 0,
+        "held": 0
+      }
+    },
+    {
+      "id": "stalled-idle-retirement",
+      "status": "passed",
+      "evidence": {
+        "realSocket": true,
+        "sqlResponsesStubbed": true,
+        "peerHalfCloseObserved": true,
+        "cleanupAllowanceMs": 30,
+        "externalRescueUsed": false,
+        "nativeCancellation": true
+      }
+    },
+    {
+      "id": "boundary-validation",
+      "status": "passed",
+      "evidence": {
+        "invalidCommandCount": 21,
+        "invalidKeyCount": 5,
+        "invalidTenantCount": 5,
+        "numericIntegralFormsEquivalent": true,
+        "validQuantityCount": 3,
+        "preAbortedAcquireAvoided": true,
+        "state": {
+          "available": 4,
+          "reservations": 1
+        }
+      }
+    },
+    {
+      "id": "resource-finalization",
+      "status": "passed",
+      "evidence": {
+        "allApplicationSessionsGone": true
+      }
+    }
+  ],
+  "resources": {
+    "remainingApplicationSessions": 0,
+    "poolsClosed": 20
+  },
+  "limitations": [
+    "Local PostgreSQL and nonpipeline pg only; no TLS, failover, replication, crash, restore, or external-provider atomicity.",
+    "Trusted tenant is supplied by the fixture; authentication and HTTP disconnect mapping are not implemented.",
+    "Fault-injected TCP COMMIT reply suppression uses the common proxy; it is not a naturally occurring network failure.",
+    "Success receipts are retained without expiry. Test gates control real transaction timing and are not production extension points."
+  ]
+}

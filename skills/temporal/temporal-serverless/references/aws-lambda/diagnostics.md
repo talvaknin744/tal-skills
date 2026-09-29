@@ -92,7 +92,7 @@ temporal worker deployment describe-version \
 
 If no Task Queues are listed, the binding has not been established. The server binds a Task Queue to a Worker Deployment Version when a Worker with that deployment version successfully connects and polls the Task Queue. <!-- docs/troubleshooting/serverless-workers.mdx:108-109 -->
 
-**What a healthy version looks like.** The inverse of the check above is the single most useful positive signal in the whole setup: the Task Queue appearing here, for both workflow and activity task types, proves that Temporal assumed the invocation role, invoked the Lambda, the package loaded, the env vars were right, the Worker authenticated to the Namespace, and the timeout was long enough to reach a poll. Getting this output means every remaining failure is downstream (routing, versioning-behavior, or application code), so check it immediately after `create-version` and before touching anything else. `describe-version` still does **not** report whether a compute provider is attached, so it cannot rule that in or out.
+**What a bound version proves.** A listed Task Queue records that a Worker with that deployment version connected and polled successfully. It is historical evidence, not proof that current IAM, credentials, package, configuration, or invocation deadline still work. Check recent validation/invocation logs and the deployed immutable function version before focusing only on routing or application code. `describe-version` still does not report whether a compute provider is attached.
 
 #### Failed first invocation
 

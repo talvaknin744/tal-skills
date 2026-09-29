@@ -6,7 +6,7 @@ Citations point at stable doc anchors (slug + heading), e.g. `/cloud/high-availa
 
 Out of scope here:
 - DNS / TCP reachability in general (before HA is even a hypothesis) → [connectivity.md](connectivity.md) (layers 1-2), which also carries the PrivateLink / CNAME facts in [§ PrivateLink and PSC](connectivity.md#privatelink-and-psc).
-- Worker placement architecture decisions (cost, latency, pattern selection) → `skill-temporal-deploy`. This file gives only a triage-layer pointer.
+- Worker placement architecture decisions (cost, latency, pattern selection) → `temporal-safe-deployments`. This file gives only a triage-layer pointer.
 - Enabling HA / choosing replica regions / pricing at setup time → `/cloud/high-availability/enable`.
 - `tcld` flag semantics → [CLI conventions](../ops/cli-conventions.md), the relevant command's `--help`, and [Cloud namespace administration](../ops/cloud-namespace-admin.md).
 
@@ -98,7 +98,7 @@ Nothing in your infrastructure polls, so there is no DNS to re-resolve. The Work
 
 **Discriminate:** confirm the new active region (`tcld namespace get --namespace <namespace_id>.<account_id>` plus the `FailoverNamespace` audit entry) and compare it against the Lambda ARN on the Version serving the affected Task Queue. Long-lived Workers on other Task Queues recover on their own, so a mixed fleet recovers partially — which reads like a regional outage rather than a configuration constraint.
 
-**Fix:** `tcld namespace failover` moves the Namespace only, and tcld has no compute-provider surface. Remediation is to repoint the existing Worker Deployment Version's compute provider at a function in the new active region — an in-place update, not a new Version. Hand it to `skill-temporal-serverless`; it changes where production Workers are invoked, so propose it before running.
+**Fix:** `tcld namespace failover` moves the Namespace only, and tcld has no compute-provider surface. Remediation is to repoint the existing Worker Deployment Version's compute provider at a function in the new active region — an in-place update, not a new Version. Hand it to `temporal-serverless`; it changes where production Workers are invoked, so propose it before running.
 
 **Prevent:** publish the function in every region the Namespace can fail over to, so the repoint is a single command instead of a provisioning exercise under time pressure.
 
@@ -175,7 +175,7 @@ The triage concern is narrow: confirm workers can reach whichever region is curr
 - Two supported configurations: run workers in both regions continuously, or establish cross-region connectivity (Transit Gateway / VPC Peering) so a single-region fleet can reach the newly active region.
 - In a full regional outage, workers in that region may fail alongside the primary; a second fleet in the replica's region keeps Workflows moving.
 
-Pattern selection (cost, latency, operational complexity) is a `skill-temporal-deploy` concern, not triage.
+Pattern selection (cost, latency, operational complexity) is a `temporal-safe-deployments` concern, not triage.
 
 ## RPO / RTO reference
 

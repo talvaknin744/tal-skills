@@ -14,14 +14,17 @@
         "Clarified replay versus Activity retries, stable scoped idempotency keys, atomic effect protection, uncertain outcomes, and compensation registration before uncertain effects.",
         "Added an installed SDK/server capability check before applying version-specific references.",
         "Added explicit illustrative contracts to all six language Saga examples: absence-safe compensation, late forward-attempt coordination, shipping reconciliation, cancellation, and failed-compensation recovery.",
-        "Normalized trailing whitespace in imported reference files."
+        "Normalized trailing whitespace in imported reference files.",
+        "Clarified Standalone Activity execution deduplication versus external effect idempotency, running/closed ID policies and retention, operation identity, current CLI/server minimums, and Rust support with legacy fallback."
       ],
       "modified_files": [
         "SKILL.md",
         "UPSTREAM.md",
         "references/core/gotchas.md",
         "references/core/interactive-workflows.md",
+        "references/core/job-queue.md",
         "references/core/patterns.md",
+        "references/core/standalone-activities.md",
         "references/dotnet/patterns.md",
         "references/go/patterns.md",
         "references/java/patterns.md",
@@ -38,11 +41,15 @@
       "license_source": "LICENSE",
       "local_path": "skills/temporal/temporal-cloud",
       "modifications": [
-        "Added provenance pointer and UPSTREAM.md; operational reference content is unchanged."
+        "Added provenance pointer and UPSTREAM.md.",
+        "Clarified current Namespace/Regional endpoint guidance and mixed-auth exceptions; made certificate-to-API-key migration verify auth mode and least-privilege Namespace access before cutover.",
+        "Independent review corrected a local endpoint inference: the documented API Regional endpoint remains `<region>.<cloud_provider>.api.temporal.io:7233`; `<provider>-<region>.region.tmprl.cloud` is the HA/private DNS intermediary. Updated both entrypoint and troubleshooting reference, including the mixed-auth exception."
       ],
       "modified_files": [
         "SKILL.md",
-        "UPSTREAM.md"
+        "UPSTREAM.md",
+        "references/cloud-troubleshooting-reference.md",
+        "references/common-scenarios.md"
       ]
     },
     {
@@ -57,15 +64,25 @@
         "Replaced a missing sibling CLI resource with bundled CLI conventions and namespace administration references.",
         "Clarified reuse of existing session authorization for its actual command/target/scope.",
         "Added Codex UI metadata preserving explicit invocation.",
-        "Normalized trailing whitespace in imported reference files."
+        "Normalized trailing whitespace in imported reference files.",
+        "Replaced credential-value probes with presence-only checks; aligned current endpoint routing while preserving configured regional/private exceptions; corrected timeout requirements, heartbeat/physical-process inference, and cross-Namespace child defaults; normalized optional public skill names.",
+        "Independent review corrected the local current-versus-legacy endpoint classification. Preserved API Regional endpoint and HA/private DNS intermediary as separate documented roles; aligned authentication, connectivity, and SDK snippet references."
       ],
       "modified_files": [
         "SKILL.md",
         "UPSTREAM.md",
         "agents/openai.yaml",
         "references/ops/cloud-ops-api.md",
+        "references/triage/authentication.md",
+        "references/triage/blob-size-limits.md",
+        "references/triage/certificates.md",
         "references/triage/connectivity.md",
-        "references/triage/ha-failover.md"
+        "references/triage/ha-failover.md",
+        "references/triage/performance-bottlenecks.md",
+        "references/triage/recipes.md",
+        "references/triage/schedule-missed.md",
+        "references/triage/sdk-snippet-review.md",
+        "references/triage/workflow-stuck.md"
       ]
     },
     {
@@ -93,11 +110,13 @@
       "modifications": [
         "Added provenance pointer and UPSTREAM.md.",
         "Replaced unavailable temporal-cli routing with developer/ops skills and installed CLI help.",
-        "Normalized trailing whitespace in imported reference files."
+        "Normalized trailing whitespace in imported reference files.",
+        "Separated Namespace APS capacity from SDK-specific defaults, removed mandatory startup feedback solicitation, and normalized optional public sibling routing."
       ],
       "modified_files": [
         "SKILL.md",
         "UPSTREAM.md",
+        "references/core/configuration-defaults.md",
         "references/core/tuner-examples.md"
       ]
     },
@@ -110,13 +129,17 @@
       "local_path": "skills/temporal/temporal-observability",
       "modifications": [
         "Added provenance pointer and UPSTREAM.md.",
-        "Converted 12 documentation-root-relative links to absolute docs.temporal.io URLs."
+        "Converted 12 documentation-root-relative links to absolute docs.temporal.io URLs.",
+        "Replaced universal failure-ratio health judgments with metric-semantic alignment, pending-age/retry-budget/business-outcome checks; enabled available read-only metric access before asking for data; removed uncalibrated confidence thresholds and normalized optional sibling routing."
       ],
       "modified_files": [
         "SKILL.md",
         "UPSTREAM.md",
+        "references/diagnosis-examples.md",
+        "references/ops-diagnostics-reference.md",
         "references/sdk-metrics.md",
-        "references/self-hosted-monitoring.md"
+        "references/self-hosted-monitoring.md",
+        "references/service-health-monitoring.md"
       ]
     },
     {
@@ -130,12 +153,17 @@
         "Added provenance pointer and UPSTREAM.md.",
         "Replaced unavailable temporal-cli routing with developer/ops skills and installed CLI help.",
         "Clarified reuse of session authorization and absence of guaranteed host permission prompts.",
-        "Added Codex UI metadata preserving explicit invocation."
+        "Added Codex UI metadata preserving explicit invocation.",
+        "Separated Lambda package scope from current platform provider availability; treated Task Queue binding as historical evidence; clarified explicit working directories and host permissions; qualified IAM simulation and failed-read evidence, preserved qualified/unqualified ARN distinctions, and required resource inspection before rollback-stack cleanup; normalized optional sibling names."
       ],
       "modified_files": [
         "SKILL.md",
         "UPSTREAM.md",
-        "agents/openai.yaml"
+        "agents/openai.yaml",
+        "references/aws-lambda/diagnostics.md",
+        "references/aws-lambda/iam.md",
+        "references/aws-lambda/setup.md",
+        "references/concepts.md"
       ]
     },
     {
@@ -151,13 +179,19 @@
         "Clarified scoped authorization, existing readiness confirmation, host/network portability, runtime dependencies, and the requested stopping point.",
         "Added the Codex default prompt while preserving explicit invocation.",
         "Propagated dependency installation failures instead of reporting successful scaffolding; rerun package installation rather than treating partial dependency directories as complete.",
-        "Added dependency failure recovery, including uncertain Namespace creation in the parallel provisioning path."
+        "Added dependency failure recovery, including uncertain Namespace creation in the parallel provisioning path.",
+        "Replaced value-printing environment probes with names-only disclosure; added exact CLI capability checks, separate core/extension versions, compatible-install no-op, supported tap, truthful preview branches, and post-install failure checks. Extracted gate/output/phase references while preserving public metadata, subcommands, result markers, async flow, and fallback. Distinguished historical preview observations from current behavior and corrected the offline-login inference.",
+        "Independent review found that core CLI v1.9.1 config list enumerates profile names without validating --profile. verify-config now uses selected-profile config get --prop address and discards both streams; capability checks and disclosure match it. Tests cover exact/missing/other/prefix profiles, malformed config, and unexpected secret-bearing output. Bounded connection retries now lead to evidence-based diagnosis rather than a blanket readiness/provider-fault claim."
       ],
       "modified_files": [
         "SKILL.md",
         "UPSTREAM.md",
         "agents/openai.yaml",
         "references/failure-handling.md",
+        "references/gate-templates.md",
+        "references/output-format.md",
+        "references/phases.md",
+        "references/unified-cli.md",
         "scripts/provision.sh"
       ]
     }

@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-29T09:07:12.542527+00:00",
+  "python": "3.14.3",
+  "source_sha256": {
+    "models.py": "2455d49ab5ac7a0fd2e19d285faa1ce5581aa514d686bb31b1611cc75ca9652e",
+    "rabbitmq.py": "38f4fcb4433e6cc1dbf53ad7be74cea3f3a9d18e1a8b73ac701690e56eb58439",
+    "verify.py": "70619a55ceb63b2847012fbb65667f0b7cdc58407c640650c2149cf498338d80"
+  },
+  "semantics": {
+    "status": "passed",
+    "cases": [
+      {
+        "name": "reordered-complete-state",
+        "status": "passed",
+        "revision": 3,
+        "value": 30
+      },
+      {
+        "name": "tombstone-rejects-stale-resurrection",
+        "status": "passed",
+        "revision": 4,
+        "deleted": true
+      },
+      {
+        "name": "delta-gap-buffer-and-duplicate",
+        "status": "passed",
+        "revision": 3,
+        "quantity": 12
+      },
+      {
+        "name": "bounded-gap-preserves-retry-and-reconciles",
+        "status": "passed",
+        "rejected_event_retained_by_caller": true,
+        "final_quantity": 21
+      },
+      {
+        "name": "changed-event-intent-rejected",
+        "status": "passed"
+      },
+      {
+        "name": "baseline-covered-identity-retained",
+        "status": "passed",
+        "quantity": 12
+      },
+      {
+        "name": "completed-prefix-with-numerical-offset-gaps",
+        "status": "passed",
+        "blocked_checkpoint": 11,
+        "finished_checkpoint": 13,
+        "sparse_checkpoint": 12
+      }
+    ]
+  },
+  "broker": {
+    "status": "passed",
+    "runtime": {
+      "requested_image": "rabbitmq:4.3.0@sha256:46bf0bdf0d2008acae9c5475558001e961297bd0868214c9216bef107d7d2b87",
+      "pika": "1.3.2",
+      "docker_engine": "29.8.0",
+      "image_id": "sha256:b0a71b73f29fb2195129a03c78c846801bebf2095e9e814656aa42fad1873247",
+      "repo_digests": [
+        "rabbitmq@sha256:46bf0bdf0d2008acae9c5475558001e961297bd0868214c9216bef107d7d2b87"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "broker_version": "4.3.0",
+      "erlang": "Erlang/OTP 27.3.4.11",
+      "sqlite": "3.53.2"
+    },
+    "configuration": {
+      "broker_count": 1,
+      "queue_type": "classic",
+      "durable_queue": true,
+      "persistent_messages": true,
+      "publisher_confirms": true,
+      "consumer_ack": "manual",
+      "ledger": "SQLite WAL, synchronous=FULL"
+    },
+    "cases": [
+      {
+        "name": "commit-before-ack",
+        "status": "passed",
+        "redelivered": true,
+        "effect_count": 1
+      },
+      {
+        "name": "independently-published-duplicate",
+        "status": "passed",
+        "redelivered": false,
+        "effect_count": 1
+      },
+      {
+        "name": "changed-intent-rejected",
+        "status": "passed",
+        "effect_count": 1
+      },
+      {
+        "name": "rollback-before-disconnect",
+        "status": "passed",
+        "rolled_back_effect_count": 0,
+        "final_effect_count": 1
+      },
+      {
+        "name": "ack-before-commit-negative-control",
+        "status": "passed",
+        "unsafe_result_reproduced": true,
+        "message_recoverable": false,
+        "effect_count": 0
+      }
+    ],
+    "cleanup": {
+      "container_removed": true,
+      "anonymous_volumes_removed": true,
+      "temporary_ledger_created": true,
+      "temporary_ledger_removed": true,
+      "image_retained": true
+    },
+    "limits": [
+      "One local broker and SQLite file; no quorum, failover, or power-loss guarantee was tested.",
+      "Consumer connections closed gracefully; neither broker nor host was restarted or killed.",
+      "Durable settings are configuration, not an observed restart-survival proof.",
+      "No DLQ transfer/persistence, external-provider transaction, ledger expiry, or parallel consumer test."
+    ]
+  },
+  "limits": [
+    "Single-threaded semantic models do not establish database atomicity, broker failover, or multi-consumer correctness."
+  ],
+  "status": "passed",
+  "finished_at": "2026-09-29T09:07:15.225217+00:00"
+}

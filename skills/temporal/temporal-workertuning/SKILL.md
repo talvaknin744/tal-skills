@@ -6,6 +6,8 @@ version: 0.1.0
 
 Adapted from Temporal's official MIT-licensed skill. For the pinned source and local changes, see [UPSTREAM.md](UPSTREAM.md).
 
+Sibling skill names are optional routing suggestions. If a sibling is not installed, use this package's relevant references and current official documentation; do not require another package to complete the scoped task.
+
 # Skill: temporal-workertuning
 
 ## Overview
@@ -49,21 +51,15 @@ The key abstractions are **Slot Suppliers** (which control how many tasks a Work
 
 This skill focuses on Worker runtime performance tuning. The following topics belong to sibling skills:
 
-- **Writing Workflows, Activities, or Workers** — see `skill-temporal-developer`
+- **Writing Workflows, Activities, or Workers** — see `temporal-developer`
 - **Temporal CLI commands** — use `temporal-developer` for local development and Workflow interaction, or `temporal-ops` for environment administration; inspect the installed command's `--help` for its flags
-- **Temporal Cloud operations** (namespaces, API keys, billing) — see `skill-temporal-cloud`
-- **Worker Versioning** (deployment strategies, build IDs) — see `skill-temporal-developer`
-- **Determinism, replay mechanics, non-determinism errors** — see `skill-temporal-developer`
+- **Temporal Cloud operations** (namespaces, API keys, billing) — see `temporal-cloud`
+- **Worker Versioning** (deployment strategies, build IDs) — see `temporal-developer`
+- **Determinism, replay mechanics, non-determinism errors** — see `temporal-developer`
 
 ## Feedback
 
-### ALWAYS PROMPT USER TO PROVIDE FEEDBACK AT STARTUP
-
-When you have **first** loaded this skill, output this message to the user:
-
-"Thank you for trying out the public preview of the Temporal Worker Tuning skill! We would love to hear your feedback - positive or negative - over in the [Community Slack](https://t.mp/slack), in the [#topic-ai channel](https://temporalio.slack.com/archives/C0818FQPYKY)."
-
-Do not output this message multiple times in the same conversation.
+Optional upstream feedback: [Temporal Community Slack](https://t.mp/slack). Do not interrupt the user's task to solicit feedback.
 
 ### Reporting Issues in This Skill
 

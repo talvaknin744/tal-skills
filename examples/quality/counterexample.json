@@ -1,0 +1,10 @@
+{
+  "defect": "duplicate replay",
+  "requirement": "A lost response followed by an identical retry commits one credit.",
+  "steps": [["a", "support", 50, "after_commit"], ["a", "support", 50, "none"]],
+  "expected_state": {
+    "balance": 50,
+    "journal": [["a", "support", 50, "credit-1"]],
+    "requests": {"a": {"policy": "support", "amount": 50, "receipt": "credit-1"}}
+  }
+}

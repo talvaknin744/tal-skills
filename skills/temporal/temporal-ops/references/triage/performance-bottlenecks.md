@@ -238,5 +238,5 @@ Counts Workflow Executions forcibly evicted from the sticky cache (cache was ful
 
 ## Sibling skill pointers
 
-- For detailed Worker tuning recommendations (slot counts, poller counts, cache sizes), see the worker tuning skill (`skill-temporal-workertuning`).
-- For metrics collection and dashboard setup, see the observability skill (planned: `skill-temporal-observability`).
+- For detailed Worker tuning recommendations (slot counts, poller counts, cache sizes), see the worker tuning skill (`temporal-workertuning`).
+- For metrics collection and dashboard setup, see the observability skill (planned: `temporal-observability`).
