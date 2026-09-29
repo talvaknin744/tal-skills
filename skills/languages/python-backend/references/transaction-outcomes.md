@@ -12,4 +12,7 @@ Use one end-to-end deadline, including pool wait. Derive positive statement limi
 
 Verify on the target engine: concurrent duplicate requests, conflicting intent, a business-invariant race, interruption before commit, and a lost commit reply. Use controlled gates or observed database waits. Inspect committed state from a separate connection and show resource recovery. In-memory models cannot establish persistence or restart recovery.
 
+For SQLAlchemy query construction, ORM loading, or generated-SQL regressions,
+read [meaningful query checks](sqlalchemy-sessions-and-queries.md#query-checks-with-an-observable-oracle).
+
 Sources: [Architecture Patterns with Python, Chapter 6](https://www.cosmicpython.com/book/chapter_06_uow), [Chapter 7](https://www.cosmicpython.com/book/chapter_07_aggregate), [PostgreSQL isolation](https://www.postgresql.org/docs/current/transaction-iso.html), [Psycopg transaction management](https://www.psycopg.org/psycopg3/docs/basic/transactions.html).

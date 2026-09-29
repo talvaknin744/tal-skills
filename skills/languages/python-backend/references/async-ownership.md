@@ -6,6 +6,9 @@ Assign each task an owner that awaits its completion. Use `TaskGroup` for relate
 
 Acquire connections, cursors, locks, and asynchronous generators inside scopes that release them on success, error, and cancellation. Use `aclosing` when early exit from asynchronous iteration requires deterministic generator closure. One independent concurrent transaction needs its own connection or ORM session. Multiple cursors on one connection still share transaction state.
 
+For SQLAlchemy sessions used by concurrent tasks or FastAPI dependencies, read
+[SQLAlchemy sessions and query checks](sqlalchemy-sessions-and-queries.md#session-and-task-boundaries).
+
 For a **custom pool or admission adapter**, distinguish queued, granted-but-not-yet-resumed, and accepted ownership. Cancellation can arrive after a waiter receives a grant but before its consumer resumes; name the layer that returns that abandoned grant exactly once. Gate that handoff and verify subsequent capacity. Standard `asyncio.Semaphore` already refunds this window in [CPython 3.14.3](https://github.com/python/cpython/blob/v3.14.3/Lib/asyncio/locks.py#L386-L448). Prefer its public scoped API; the historical [semaphore article](https://neopythonic.blogspot.com/2022/10/reasoning-about-asynciosemaphore.html) does not define a portable invariant for today's private `_value`.
 
 Let `CancelledError` propagate after awaited cleanup. If cancellation overlaps an irreversible effect or COMMIT, preserve the uncertain/committed business outcome separately; cancellation is not evidence of rollback. A shielded cleanup task still needs a lifetime owner and a completion join. Bound cleanup independently when the request budget has expired, preserve the original exception, and record secondary cleanup errors.

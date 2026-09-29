@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "lane": "technical-deprecation",
+  "researched_on": "2026-09-29",
+  "status": "skill-authored-awaiting-independent-verification",
+  "report": "technical-deprecation.md",
+  "skill": "skills/engineering/technical-deprecation",
+  "runtime_experiments_executed_by_author": false,
+  "model_evaluations_executed_by_author": false,
+  "source_text_or_code_redistributed": false,
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Software Engineering at Google: Chapter 15, Deprecation",
+      "book_editors": ["Titus Winters", "Tom Manshreck", "Hyrum Wright"],
+      "chapter_author": "Hyrum Wright",
+      "chapter_editor": "Tom Manshreck",
+      "edition": "First edition",
+      "year": 2020,
+      "url": "https://abseil.io/resources/swe-book/html/ch15.html",
+      "access": "Official complete HTML; CC BY-NC-ND 4.0",
+      "read_scope": "Complete chapter previously read and recorded in books-quality.json; complete main chapter reread for this package. Linked chapters and cited tooling were not reread.",
+      "prior_record": "docs/research/engineering-toolkit/books-quality.json",
+      "prior_html_sha256": "133c6de0d04859c253d6da68ec77663c73e8dd702e40eef6434bb067048c252e",
+      "hash_limit": "Hash identifies the prior research snapshot, not a newly downloaded copy or current live page.",
+      "trigger": "A supported technical contract is being retired.",
+      "failure": "Existing consumers remain or new ones appear while the migration stalls.",
+      "mechanism": "Discover use, assign responsibility, migrate, prevent fresh dependencies, and measure intermediate progress.",
+      "limits": "Technical systems with consumer visibility; not a public-product shutdown policy or a mandate for Google-specific tools, staffing, or outages.",
+      "counterexample": "Age alone does not make a working system obsolete.",
+      "verification": "Proposed per-consumer compatibility and removal checks; no live retirement or effectiveness experiment performed."
+    },
+    {
+      "id": "S2",
+      "title": "PEP 387: Backwards Compatibility Policy",
+      "author": "Benjamin Peterson",
+      "url": "https://peps.python.org/pep-0387/",
+      "created": "2009-06-18",
+      "page_last_modified_observed": "2026-01-15T18:38:37Z",
+      "access": "Official public HTML",
+      "read_scope": "Public API scope, Basic policy for backwards compatibility, Soft Deprecation, Making Incompatible Changes, and changelog; not linked discussion threads.",
+      "trigger": "A policy label is being treated as a removal schedule.",
+      "failure": "Soft deprecation is mistaken for permission to remove supported behavior.",
+      "mechanism": "Record the actual policy state and apply its transition requirements.",
+      "limits": "This policy governs Python's language and standard library; its grace periods and governance do not govern arbitrary projects.",
+      "counterexample": "A supported soft-deprecated interface can remain available without a scheduled removal.",
+      "verification": "Inspect the target's actual support policy; proposed test retains a supported legacy consumer."
+    },
+    {
+      "id": "S3",
+      "title": "Python warnings: Warning control",
+      "url": "https://docs.python.org/3.14/library/warnings.html",
+      "version": "3.14; rendered page identified 3.14.7",
+      "access": "Official public versioned HTML",
+      "read_scope": "Warning Categories, Warnings Filter/default filters, Testing Warnings, Updating Code For New Versions of Dependencies, and deprecated decorator documentation. No runtime execution.",
+      "trigger": "A warning or deprecation annotation is offered as proof that new use is blocked.",
+      "failure": "Runtime filters hide warnings or diagnostic output does not fail the selected build.",
+      "mechanism": "Inspect installed tooling and verify visibility plus actual enforcement under the configured check.",
+      "limits": "Decorator availability is runtime-version-dependent; runtime category does not determine static checker diagnostics. Documentation alone cannot establish a project's CI behavior.",
+      "counterexample": "An ignored DeprecationWarning can coexist with successful continued use.",
+      "verification": "Proposed allowed-existing and forbidden-new-use controls; no Python warning probe executed in this task."
+    }
+  ],
+  "repository_applications": [
+    {
+      "id": "A1",
+      "source_ids": ["S1"],
+      "trigger": "A caller search or quiet usage interval is presented as complete discovery.",
+      "failure": "Infrequent, dynamic, external, or retained-input consumers are omitted.",
+      "mechanism": "Record evidence coverage by source, environment, version, path, and observation interval; preserve unknowns.",
+      "limits": "A finite observed domain supports conclusions only about that domain.",
+      "counterexample": "A monthly job can be absent from a shorter usage report.",
+      "verification": "Independent fixture exposes a periodic or indirect consumer and requires a justified next gate."
+    },
+    {
+      "id": "A2",
+      "source_ids": ["S1", "S2"],
+      "trigger": "A replacement exists but retirement parity is uncertain.",
+      "failure": "Provider-level success conceals a changed consumer error, side effect, or data format.",
+      "mechanism": "Classify required behavior as preserved, intentionally changed, or unresolved and verify representative consumers.",
+      "limits": "Authorized withdrawal can replace parity; unresolved behavior cannot silently become an approved change.",
+      "counterexample": "A new method with the same parameter names can persist an incompatible format.",
+      "verification": "Independent staged-migration fixture tests a consumer-specific semantic or recovery boundary."
+    },
+    {
+      "id": "A3",
+      "source_ids": ["S1", "S3"],
+      "trigger": "Migration progress is undermined by newly introduced use.",
+      "failure": "A warning appears but the intended dependency rule is not enforced.",
+      "mechanism": "Choose the precise adoption boundary and test permitted legacy use alongside a prohibited new dependency.",
+      "limits": "A project-level dependency rule does not necessarily block additional calls inside an existing consumer; state actual scope.",
+      "counterexample": "A rule that rejects every existing consumer can break the promised staged transition.",
+      "verification": "Separate allowed and forbidden controls against the real configured guard."
+    }
+  ],
+  "proposed_evaluations": [
+    {
+      "case_id": "periodic-export-client",
+      "kind": "positive",
+      "scope": "API/library retirement with an infrequent consumer, a replacement semantic gap, and prevention of new adoption.",
+      "status": "Proposed; independent author owns fixture, prompt, rubric, and execution records."
+    },
+    {
+      "case_id": "config-channel-migration",
+      "kind": "positive",
+      "scope": "Staged configuration/tool migration with supported offline installs and an explicit state-compatibility recovery boundary.",
+      "status": "Proposed; independent author owns fixture, prompt, rubric, and execution records."
+    },
+    {
+      "case_id": "private-format-helper",
+      "kind": "nontrigger",
+      "scope": "Remove a truly unused private helper while preserving the small module's public behavior.",
+      "status": "Proposed; no deprecation program, consumer-notice process, or model run performed by this author."
+    }
+  ],
+  "packaging": {
+    "entrypoint_style": "Short ordered workflow with completion criteria and conditional references",
+    "new_agent": false,
+    "mandatory_sibling_skill_dependencies": [],
+    "evaluation_location": "evals/technical-deprecation/ under separate ownership",
+    "writing_guidance": "Matt Pocock's Writing for Agents and local skill-creator; no external skill text copied"
+  },
+  "structural_checks_by_author": [
+    {
+      "command": "/tmp/tal-python-backend-impl/bin/python /Users/idanvaknin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/engineering/technical-deprecation",
+      "result": "passed"
+    },
+    {
+      "command": "node scripts/check-skills.mjs",
+      "result": "passed for all 41 current skill packages"
+    },
+    {
+      "check": "JSON parsing, local Markdown target existence, final newlines, and trailing whitespace for the eight authored files",
+      "result": "passed"
+    }
+  ],
+  "verification_limits": "Structural validation, source inspection, independent review, native skill behavior, and production retirement are separate evidence categories. This author claims no model score or runtime deprecation success."
+}
