@@ -1,0 +1,26 @@
+# Sources and scope
+
+Reviewed 2026-09-29. This skill's workflow, decision tables, and verification scenarios are independently authored synthesis. It does not reproduce a book or vendor manual, and no linked source is an instruction to change the user's environment. Check the target product version before relying on an API or configuration detail.
+
+Selected sections of the user-supplied [DDIA early-release second-edition draft, chapters 6 and 8–13](https://github.com/YZXBiz/ddia/tree/157c2b303db17188dc4509c809552fd378e78b25/raw) were read for replication, isolation, uncertain outcomes, clocks, and derived data. The mirror was not verified against the final publication. The additions distinguish monotonic reads from read-your-writes, unknown commit from confirmed abort, and transaction isolation from real-time freshness. Product behavior is checked independently below.
+
+| Source | Basis used | Limit |
+| --- | --- | --- |
+| [PostgreSQL transaction isolation](https://www.postgresql.org/docs/current/transaction-iso.html), [locking](https://www.postgresql.org/docs/current/explicit-locking.html), [serialization retries](https://www.postgresql.org/docs/current/mvcc-serialization-failure-handling.html) | Statement snapshots, serialization anomalies, lock scope, whole-transaction retries | PostgreSQL-specific behavior; verify deployed version and driver |
+| [Meta: Cache made consistent](https://engineering.fb.com/2022/06/08/core-infra/cache-made-consistent/) | Late-fill races, eviction of version evidence, payload/revision mismatches, client-visible monitoring | Original engineering account, not a ready-made Redis recipe |
+| [Scaling Memcache at Facebook](https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf) | Cache-issued fill leases and invalidation in §3.2.1 | Historical implementation; ordinary deployments may lack this protocol |
+| [Redis transactions](https://redis.io/docs/latest/develop/using-commands/transactions/) | Conditional cache transitions and execution-error limits | Redis atomicity does not include another datastore |
+| [Microsoft Cache-Aside](https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside) | Cache-aside consistency limitations | Pattern guidance, not a freshness guarantee |
+| [Amazon caching challenges](https://aws.amazon.com/builders-library/caching-challenges-and-strategies/) | Local-cache disagreement, cold caches, dependency load | Operational experience; derive capacity from the target workload |
+| [MongoDB read isolation and recency](https://www.mongodb.com/docs/manual/core/read-isolation-consistency-recency/), [causal concerns](https://www.mongodb.com/docs/manual/core/causal-consistency-read-write-concerns/) | Causal context across sessions and required concerns | Session and driver requirements matter |
+| [DynamoDB read consistency](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html) | Resource-specific read semantics; state may change after a read | Verify resource, API, and regional topology |
+| [etcd API guarantees](https://etcd.io/docs/v3.5/learning/api_guarantees/) | Linearizable versus potentially stale reads; separate watch guarantees | Version 3.5 reference; check installed version |
+| [AWS transactional outbox](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html), [Debezium Outbox Event Router](https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html) | Publication intent, duplicates, aggregate keys and event IDs | End-to-end consumer freshness is a separate contract |
+| [Kleppmann: How to do distributed locking](https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html) | Paused owners, delayed requests, protected-resource fencing | An original analysis; no blanket recommendation for a lock product |
+| [FoundationDB paper](https://www.foundationdb.org/files/fdb-paper.pdf) | Deterministic simulation and its limitations, §4 and §6.2 | Inspiration for controlled schedules, not a requirement to build a simulator |
+| [Jepsen: Linearizability](https://jepsen.io/consistency/models/linearizable) | Real-time order of non-overlapping operations | Model definition, not a certification of any chosen stack |
+| [PostgreSQL application consistency](https://www.postgresql.org/docs/current/applevel-consistency.html) | Snapshot timing matters when combining locks and isolation | A shared lock alone does not refresh an earlier Repeatable Read snapshot |
+| [Spanner external consistency](https://docs.cloud.google.com/spanner/docs/true-time-external-consistency) | Difference between isolation, real-time order, and their combination | A semantics example, not a recommendation to change databases |
+| [RFC 9562](https://www.rfc-editor.org/rfc/rfc9562.html#section-5.7) | UUIDv7 format and ordering limits | Time-sortable identifiers alone do not establish authoritative ownership order |
+
+The instruction structure follows [Matt Pocock's Writing for Agents](https://www.aihero.dev/skills-writing-for-agents): concrete branch pointers, short common steps, conditional references, and observable completion criteria. The referenced engineering sources support mechanisms and limits; choosing a repair for the user's invariant remains an explicit synthesis task.

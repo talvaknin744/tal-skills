@@ -1,0 +1,50 @@
+--- release-skill/references/durable-handoff.md
++++ trial-skill/references/durable-handoff.md
+@@ -35,12 +34,0 @@
+-Bind recovery to an immutable input manifest, snapshot, or documented cutoff and
+-replay policy. Record the code/configuration and historical lookup versions that
+-affect the result; a saved cursor over changing pages can skip, duplicate, or
+-reinterpret work. Keep required inputs available through the recovery horizon.
+-Holding one database transaction open for the entire job is not a default repair.
+-
+-Restore a representative checkpoint in an isolated context and verify its
+-integrity, input identity, and resulting progress before relying on it for
+-handoff. Check output/configuration revisions at publication where stale results
+-must be rejected. A readable checkpoint format alone does not establish a valid
+-recovery point.
+-
+@@ -55,3 +43 @@
+-duplicate delivery, resume, or redrive. A successful acknowledgment alone is not
+-permission to discard that record; use the broker's actual delivery contract.
+-Outside the retention window, reconcile durable outcome evidence before
++resume or redrive. Outside that window, reconcile durable outcome evidence before
+@@ -104,6 +89,0 @@
+-Measure a process-local drain budget with the runtime's monotonic elapsed-time
+-clock, accounting for hook time already consumed. Persist business deadlines
+-using a documented shared time authority; another host cannot restore a raw
+-process-local monotonic timestamp. Test wall-clock jumps if deadline decisions
+-depend on them, and preserve the platform's own hard termination limit.
+-
+--- release-skill/references/sources.md
++++ trial-skill/references/sources.md
+@@ -6,20 +5,0 @@
+-
+-The user-supplied [DDIA second-edition draft](https://github.com/YZXBiz/ddia/tree/157c2b303db17188dc4509c809552fd378e78b25/raw)
+-was also read selectively in chapters 6 and 8–13. The files identify themselves
+-as early-release material; they were not verified against the final publication.
+-The relevant additions concern reproducible inputs, clock domains, recovery
+-boundaries, and the limits of processing guarantees. Current product contracts
+-take precedence over historical or draft examples.
+-
+-- The official SRE chapters on [reliability testing](https://sre.google/sre-book/testing-reliability/)
+-  and [data pipelines](https://sre.google/sre-book/data-processing-pipelines/)
+-  support independently validating restored checkpoints and controlling output
+-  publication. The [noninteractive canary guidance](https://sre.google/workbook/canarying-releases/)
+-  evaluates completed work and output quality over a representative work-unit
+-  duration; healthy replacement pods alone are insufficient evidence.
+-- [Python's monotonic-clock contract](https://docs.python.org/3/library/time.html#time.monotonic)
+-  illustrates elapsed-time semantics; use the target runtime's supported clock
+-  and verify its suspend behavior. Persisted deadlines need a shared time model.
+-- [SQS DeleteMessage](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessage.html)
+-  documents possible repeat delivery even after deletion in standard queues.
+-  Retention follows the actual replay horizon, rather than acknowledgment alone.

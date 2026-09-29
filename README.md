@@ -8,6 +8,8 @@ Portable agent skills, organized by concern and backed by realistic evaluation c
 |---|---|---|
 | Engineering | [architecture](skills/engineering/architecture/SKILL.md) | Architecture planning and review, with optional independent specialists and book grounding |
 | Engineering | [idempotency](skills/engineering/idempotency/SKILL.md) | Designing, implementing, and reviewing retry-safe APIs, webhooks, and queue workers |
+| Engineering | [graceful-draining](skills/engineering/graceful-draining/SKILL.md) | Preserving long-running jobs through shutdown, handoff, and rolling deployment |
+| Engineering | [concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md) | Diagnosing and fixing concurrent writes, stale caches, and replica-read races |
 | Temporal | [temporal-reliability](skills/temporal/temporal-reliability/SKILL.md) | Activity effects, uncertain outcomes, compensation, and durable waits |
 | Temporal | [temporal-safe-deployments](skills/temporal/temporal-safe-deployments/SKILL.md) | Replay compatibility, Worker deployments, history rollover, and migrations |
 | Temporal | [temporal-production-readiness](skills/temporal/temporal-production-readiness/SKILL.md) | Capacity, backlog, data lifetime, isolation, and recovery evidence |
@@ -17,6 +19,8 @@ Also bundled: **eight adapted official Temporal skills** for SDK development, de
 
 The four focused Temporal skills draw on a [review of all 70 customer-index entries](docs/temporal/README.md), with source-by-source evidence limits and current primary documentation. Talk summaries are labeled separately from complete written stories.
 
+The two distributed-correctness skills are backed by [primary-source research, an eight-repository skill audit, and a book shortlist](docs/research/README.md). They focus on concrete interruption and race histories, with [isolated evaluation fixtures](evals/distributed-correctness/README.md).
+
 ## Install
 
 Using the [skills CLI](https://github.com/vercel-labs/skills):
@@ -24,6 +28,8 @@ Using the [skills CLI](https://github.com/vercel-labs/skills):
 ```sh
 npx skills@latest add talvaknin744/tal-skills --skill architecture
 npx skills@latest add talvaknin744/tal-skills --skill idempotency
+npx skills@latest add talvaknin744/tal-skills --skill graceful-draining
+npx skills@latest add talvaknin744/tal-skills --skill concurrency-correctness
 npx skills@latest add talvaknin744/tal-skills --skill temporal-reliability
 npx skills@latest add talvaknin744/tal-skills --skill temporal-developer
 ```
@@ -68,6 +74,16 @@ Check duplicate tool calls, approval expiry, and the budget across Continue-As-N
 
 The architecture skill excludes routine implementation, debugging, and ordinary PR review. The idempotency skill handles focused design, review, and implementation of duplicate-suppression and recovery behavior. Reviews stay read-only unless execution is already authorized; implementation requests authorize their scoped changes. Required capabilities or evidence that are missing remain explicit limitations.
 
+```text
+Use $graceful-draining to review our 24-hour import workers.
+Explain how rolling replacements preserve progress without consuming the business retry budget.
+```
+
+```text
+Use $concurrency-correctness to fix this stale-cache race.
+Reconstruct the competing operations and force the failing ordering in a regression.
+```
+
 ## Design principles
 
 - Keep triggers specific and the common workflow short; load conditional references only when relevant.
@@ -87,14 +103,18 @@ keep each skill self-contained and its name unique across the repository.
 skills/
 ├── engineering/
 │   ├── architecture/
-│   └── idempotency/
+│   ├── idempotency/
+│   ├── graceful-draining/
+│   └── concurrency-correctness/
 └── temporal/
     └── <skill-name>/
 docs/
+├── research/
 └── temporal/
 integrations/
 └── temporal/
 evals/
+├── distributed-correctness/
 ├── README.md
 ├── architecture/
 ├── idempotency/
@@ -104,6 +124,7 @@ scripts/
 ├── architecture/
 └── lib/
 tests/
+├── distributed-correctness/
 ├── architecture/
 ├── idempotency/
 └── temporal/
@@ -114,6 +135,7 @@ tests/
 | [skills/engineering](skills/engineering) | Self-contained skills: each has SKILL.md, optional references, and UI metadata |
 | [skills/temporal](skills/temporal) | Focused Temporal skills and attributed adaptations of official skills |
 | [docs/temporal](docs/temporal) | Customer-story coverage, observations, inferences, and evidence limits |
+| [docs/research](docs/research) | Architecture/programming source audits, book reading scope, and focused additions |
 | [integrations/temporal](integrations/temporal) | Official upstream revisions, licenses, and documented local corrections |
 | [scripts](scripts) | Shared packaging checks and skill-specific maintainer tools |
 | [tests](tests) | Deterministic regression and fixture-integrity tests, grouped by skill |

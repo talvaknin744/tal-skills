@@ -1,0 +1,1379 @@
+{
+  "format_version": 1,
+  "review_date": "2026-09-29",
+  "rubric_path": "<repo>/evals/distributed-correctness/cases.json",
+  "scoring_procedure": "<repo>/evals/README.md",
+  "scoring_scale": {
+    "pass": 2,
+    "partial": 1,
+    "fail": 0
+  },
+  "review_scope": "Saved observable answers, tool summaries, exact manifests, raw fixtures and final project/skill hashes; cache verifier independently executed. No hidden reasoning was requested or scored.",
+  "aggregate": {
+    "runs_reviewed": 7,
+    "unique_cases_reviewed": 6,
+    "corpus_case_count": 11,
+    "unrun_case_ids": [
+      "deadline-and-outage",
+      "primary-read-lost-update",
+      "replica-read-your-writes",
+      "sequential-file-transform",
+      "shared-grace-budget"
+    ],
+    "rubric_pass_runs": 7,
+    "declared_capability_compliant_runs": 0,
+    "critical_gates_passed": 27,
+    "critical_gates_failed": 0,
+    "noncritical_weighted_score": 56,
+    "noncritical_weighted_max": 56,
+    "raw_total": 82,
+    "raw_max": 82,
+    "note": "Seven sampled runs cover six unique cases; initial five apply only to their pre-book-refinement snapshots. Only the two new cases directly sample the final refined snapshots.",
+    "pre_book_refinement_runs": 5,
+    "final_refinement_runs": 2
+  },
+  "findings": [
+    {
+      "severity": "limitation",
+      "id": "capability-enforcement",
+      "finding": "Prompt-only web/subagent restrictions and shared unrestricted filesystem prevent describing trials as case-compliant under the evaluator guide."
+    },
+    {
+      "severity": "limitation",
+      "id": "no-improvement-causality",
+      "finding": "No randomized blinded matched original-versus-revised comparison. The initial PostgreSQL output already avoids a barrier deadlock, so retest does not demonstrate that reference patch caused improvement."
+    },
+    {
+      "severity": "limitation",
+      "id": "sparse-case-coverage",
+      "finding": "Six of eleven unique cases were exercised; shared Kubernetes grace/PDB, hard-deadline uncertain cleanup, primary-read lost update, causal replica freshness and nontrigger behavior remain untested."
+    },
+    {
+      "severity": "minor-nonrubric",
+      "id": "initial-postgres-overengineering",
+      "finding": "Initial PostgreSQL answer prescribes an outbox despite the fixture requiring only no success email for aborted transactions. Retest correctly makes durable delivery optional. Both remain correct against the rubric."
+    },
+    {
+      "severity": "limitation",
+      "id": "artifact-provenance",
+      "finding": "tools.md is an authored trace summary, not a platform-enforced audit. Final hashes establish final-file equality, not absence of every possible transient edit or network action. Exact model/version, elapsed time and usage are unavailable in artifacts."
+    },
+    {
+      "severity": "limitation",
+      "id": "no-production-verification",
+      "finding": "Only cache model behavior executed. PostgreSQL isolation, lease fencing, broker receipts, real shutdown budgets, durable storage and production recovery have not been tested."
+    },
+    {
+      "severity": "limitation",
+      "id": "snapshot-attribution",
+      "finding": "Initial five scores are preserved and explicitly attributed to pre-book-refinement snapshots. Only resume-mutable-input and lost-commit-response exactly match the current final DDIA/SRE-refined skill files; each source comparison and hash is recorded."
+    }
+  ],
+  "results": [
+    {
+      "trial_id": "cache-fill-invalidation",
+      "case_id": "cache-fill-invalidation",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/cache-fill-invalidation/answer.md",
+        "trace_summary": "<trial-root>/cache-fill-invalidation/tools.md",
+        "manifest": "<trial-root>/cache-fill-invalidation/manifest.json",
+        "project": "<trial-root>/cache-fill-invalidation/project",
+        "skill": "<trial-root>/cache-fill-invalidation/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+        "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+        "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+        "skill/references/delayed-work.md": "ccdcae71c18c67ea920e0516e007ecb696df242fe7a448740a597c92e638d60a",
+        "skill/references/replica-reads.md": "8c56947594382f890ae48db471566bc7d781cf42a0990658b356e470740a5043",
+        "skill/references/sources.md": "1e56faed0aa2b19b7a00bbc583e2e74730cdc41da99e4fa5601f6c5d0dcf517c",
+        "skill/references/transactions.md": "39b37ad3b5cb26744c8a453f0814ffa6db874f7bf3914a9c34a77ef1a514651b"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [
+          "project/service.mjs"
+        ],
+        "raw_fixture_changes": [
+          "service.mjs"
+        ],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/model.mjs": {
+            "before": "d5bd82f94c209c710c3a287d0626eb347cb9c80d9b87c3ed91adf57a7fe97bf2",
+            "after": "d5bd82f94c209c710c3a287d0626eb347cb9c80d9b87c3ed91adf57a7fe97bf2",
+            "raw_fixture": "d5bd82f94c209c710c3a287d0626eb347cb9c80d9b87c3ed91adf57a7fe97bf2"
+          },
+          "project/requirements.md": {
+            "before": "d50283cd3ffeea2b15721e3a23416c91679cf4b1fa0fa5d3fbec24d801973989",
+            "after": "d50283cd3ffeea2b15721e3a23416c91679cf4b1fa0fa5d3fbec24d801973989",
+            "raw_fixture": "d50283cd3ffeea2b15721e3a23416c91679cf4b1fa0fa5d3fbec24d801973989"
+          },
+          "project/service.mjs": {
+            "before": "3b3076ca1efa90144db12ab3cb54642669c7ab775b44c3bf123a2740f923541d",
+            "after": "c48eca9a83f84776e2fcabe427f738bb98e0ed4ea1523f55413641ac71f28d28",
+            "raw_fixture": "3b3076ca1efa90144db12ab3cb54642669c7ab775b44c3bf123a2740f923541d"
+          },
+          "project/verify.mjs": {
+            "before": "012d69a6aca4e76c31ce53f75d9f87479750d8f7baeff8d127f9a8279ccad333",
+            "after": "012d69a6aca4e76c31ce53f75d9f87479750d8f7baeff8d127f9a8279ccad333",
+            "raw_fixture": "012d69a6aca4e76c31ce53f75d9f87479750d8f7baeff8d127f9a8279ccad333"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "observable-contract",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/cache-fill-invalidation/answer.md",
+            "line": 9,
+            "quote": "After the change it passed all five checks (exit 0)",
+            "reviewer_observation": "Reviewer independently reran the unchanged node verify.mjs in the final trial project: exit 0, five PASS lines, 5/5 checks passed."
+          }
+        },
+        {
+          "id": "atomic-shared-ordering",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/cache-fill-invalidation/answer.md",
+            "line": 5,
+            "quote": "Writes await `cache.advanceFloor` before returning",
+            "reviewer_observation": "service.mjs uses shared publishIfFresh and advanceFloor; provided adapter atomically retains monotonic floors across eviction and old notifications."
+          }
+        },
+        {
+          "id": "scope",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/cache-fill-invalidation/answer.md",
+            "line": 1,
+            "quote": "preserving its public API",
+            "reviewer_observation": "Final raw-fixture and manifest comparisons show only service.mjs changed; its two cache operations and explanatory comments are the entire diff. Adapter, verifier, requirements and method signatures are unchanged."
+          }
+        },
+        {
+          "id": "overlap-contract",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/cache-fill-invalidation/answer.md",
+            "line": 5,
+            "quote": "An overlapping reader can still return its captured snapshot",
+            "reviewer_observation": "Correctly permits the in-flight snapshot while requiring reads invoked after acknowledged writes to meet that revision."
+          }
+        },
+        {
+          "id": "limits",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/cache-fill-invalidation/answer.md",
+            "line": 11,
+            "quote": "The checks do not establish a distributed transaction or production storage correctness",
+            "reviewer_observation": "Explicitly limits evidence to successful adapter calls, authoritative snapshots and retained shared floors; excludes crash gaps, outages, floor expiry and replica reads."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "observable-contract",
+          "atomic-shared-ordering",
+          "scope"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 6,
+        "raw_max": 6
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 10,
+      "raw_max": 10,
+      "answer_words": 297,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": true,
+          "command": "node verify.mjs",
+          "cwd": "<trial-root>/cache-fill-invalidation/project",
+          "exit_code": 0,
+          "passed": 5,
+          "total": 5,
+          "output_artifact": "<trial-root>/reviewer-cache-verification.txt"
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "pre-book-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/concurrency-correctness",
+        "matches_current_skill_at_review": false,
+        "source_file_set_matches": true,
+        "different_source_files": [
+          "skill/references/delayed-work.md",
+          "skill/references/replica-reads.md",
+          "skill/references/sources.md",
+          "skill/references/transactions.md"
+        ],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+          "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+          "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+          "skill/references/delayed-work.md": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+          "skill/references/replica-reads.md": "3d50d94c9c61bacb0d8f1695ceeff7c11fb5e6713e8ed44742f6e6bac95859f1",
+          "skill/references/sources.md": "1c510012e11d0436c2ab49b8dafc3e2562a667c927a079184ecb5d8b447d74b2",
+          "skill/references/transactions.md": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55"
+        },
+        "note": "Original criterion scores preserved. This run predates the final DDIA/SRE reference refinements; it is evidence for its own manifest snapshot only."
+      }
+    },
+    {
+      "trial_id": "rolling-worker-drain",
+      "case_id": "rolling-worker-drain",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/rolling-worker-drain/answer.md",
+        "trace_summary": "<trial-root>/rolling-worker-drain/tools.md",
+        "manifest": "<trial-root>/rolling-worker-drain/manifest.json",
+        "project": "<trial-root>/rolling-worker-drain/project",
+        "skill": "<trial-root>/rolling-worker-drain/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+        "skill/agents/openai.yaml": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+        "skill/references/durable-handoff.md": "740215beb08c2dfb309991fac9ba1f8b3dbd114966c92a4d2882ebb3aa4a6b49",
+        "skill/references/platform-shutdown.md": "fcc483da42ee98bbc72bb893bbf9da1969f787e8855f09c7a4c406fa19516c98",
+        "skill/references/sources.md": "9b1fc01ff0196ba14381a2f4e772be1b9038e931a6f49cb4f0c0ead5956f2e38"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [],
+        "raw_fixture_changes": [],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/incident.md": {
+            "before": "8d761d11d1f90a40136a56b5858daa1a41b08ed6064aa5b4af7224ac2f29cc8b",
+            "after": "8d761d11d1f90a40136a56b5858daa1a41b08ed6064aa5b4af7224ac2f29cc8b",
+            "raw_fixture": "8d761d11d1f90a40136a56b5858daa1a41b08ed6064aa5b4af7224ac2f29cc8b"
+          },
+          "project/worker.pseudo": {
+            "before": "479ac51834614363eba6c4f415048dd274bba9c5bc0bb6981d86b8ae0e7ff528",
+            "after": "479ac51834614363eba6c4f415048dd274bba9c5bc0bb6981d86b8ae0e7ff528",
+            "raw_fixture": "479ac51834614363eba6c4f415048dd274bba9c5bc0bb6981d86b8ae0e7ff528"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "failure-classification",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/rolling-worker-drain/answer.md",
+            "line": 1,
+            "quote": "rollout cancellations exhausted the queue's failure budget",
+            "reviewer_observation": "Maps A, B and C TaskCancelled to failures 1, 2, 3; retains malformed-input threshold 3 and uses supplied defer only for safe maintenance."
+          }
+        },
+        {
+          "id": "admission-and-ownership",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/rolling-worker-drain/answer.md",
+            "line": 26,
+            "quote": "settles all in-flight receives before any delivery is deferred",
+            "reviewer_observation": "Closes generation admission/local polling, inventories reserved and active work, rejects readiness-only gating, and preserves renewals/dependencies until safe disposition or explicit unresolved recovery."
+          }
+        },
+        {
+          "id": "durable-handoff",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/rolling-worker-drain/answer.md",
+            "line": 32,
+            "quote": "Preserve stable `(job_id, page/effect identity)` across all retries",
+            "reviewer_observation": "Requires confirmed contiguous durable progress, replay/reconciliation and resource fencing. Ambiguous checkpoint/disposition does not become completion."
+          }
+        },
+        {
+          "id": "bounded-rollout",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/rolling-worker-drain/answer.md",
+            "line": 30,
+            "quote": "exit by 85 seconds, retaining 5 seconds of margin",
+            "reviewer_observation": "Candidate phase deadlines fit 90 seconds; explicitly unmeasured and conditional on bounded pages/RPCs. Chooses resume for 12–24-hour jobs and holds rollout if prerequisites do not fit."
+          }
+        },
+        {
+          "id": "failure-checks",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/rolling-worker-drain/answer.md",
+            "line": 46,
+            "quote": "safe maintenance handoffs leave the failure counter unchanged; the job eventually completes",
+            "reviewer_observation": "Schedules A→B→C, claim races, malformed input, ambiguous checkpoints/defer, crash/kill, lease losses and stall escalation. Does not promise arbitrary crash recovery is free under supplied queue accounting."
+          }
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/rolling-worker-drain/answer.md",
+            "line": 3,
+            "quote": "no code changes, deployments, redrives, runtime experiments, or external documentation checks were performed",
+            "reviewer_observation": "Final project and skill hashes match the trial manifest and raw fixtures. tools.md reports static inspection; scenarios are explicitly unrun. Capability-enforcement limitation is reported separately."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "failure-classification",
+          "admission-and-ownership",
+          "durable-handoff",
+          "scope-and-evidence"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 8,
+        "raw_max": 8
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 12,
+      "raw_max": 12,
+      "answer_words": 1900,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": false,
+          "reason": "Review-only fixture; no database, queue, supervisor or integration verification was run."
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "pre-book-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/graceful-draining",
+        "matches_current_skill_at_review": false,
+        "source_file_set_matches": true,
+        "different_source_files": [
+          "skill/references/durable-handoff.md",
+          "skill/references/sources.md"
+        ],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+          "skill/agents/openai.yaml": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+          "skill/references/durable-handoff.md": "af89775889196f25ba1be66b85e8c34e94b193d536d51f7a8e9a69a198b844c7",
+          "skill/references/platform-shutdown.md": "fcc483da42ee98bbc72bb893bbf9da1969f787e8855f09c7a4c406fa19516c98",
+          "skill/references/sources.md": "890e7dfe89b7b0cb0056c6732ac8bc087ea4cace72da98d99ed9168d20c536b5"
+        },
+        "note": "Original criterion scores preserved. This run predates the final DDIA/SRE reference refinements; it is evidence for its own manifest snapshot only."
+      }
+    },
+    {
+      "trial_id": "handoff-ack-loss",
+      "case_id": "handoff-ack-loss",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/handoff-ack-loss/answer.md",
+        "trace_summary": "<trial-root>/handoff-ack-loss/tools.md",
+        "manifest": "<trial-root>/handoff-ack-loss/manifest.json",
+        "project": "<trial-root>/handoff-ack-loss/project",
+        "skill": "<trial-root>/handoff-ack-loss/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+        "skill/agents/openai.yaml": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+        "skill/references/durable-handoff.md": "740215beb08c2dfb309991fac9ba1f8b3dbd114966c92a4d2882ebb3aa4a6b49",
+        "skill/references/platform-shutdown.md": "fcc483da42ee98bbc72bb893bbf9da1969f787e8855f09c7a4c406fa19516c98",
+        "skill/references/sources.md": "9b1fc01ff0196ba14381a2f4e772be1b9038e931a6f49cb4f0c0ead5956f2e38"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [],
+        "raw_fixture_changes": [],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/observations.md": {
+            "before": "7d67d40bc1ef40ddd33447fb340c3c6d5dad2b57c9faa9c4046ca06720010566",
+            "after": "7d67d40bc1ef40ddd33447fb340c3c6d5dad2b57c9faa9c4046ca06720010566",
+            "raw_fixture": "7d67d40bc1ef40ddd33447fb340c3c6d5dad2b57c9faa9c4046ca06720010566"
+          },
+          "project/worker.pseudo": {
+            "before": "a95272d5d007e2ddc3a8a578d10f6efa7f593d6c1646a64ac6ef494d1283d11e",
+            "after": "a95272d5d007e2ddc3a8a578d10f6efa7f593d6c1646a64ac6ef494d1283d11e",
+            "raw_fixture": "a95272d5d007e2ddc3a8a578d10f6efa7f593d6c1646a64ac6ef494d1283d11e"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "completed-replay",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/handoff-ack-loss/answer.md",
+            "line": 19,
+            "quote": "If `COMPLETED`, perform no transform, row append, summary append, or state reset; ACK this delivery",
+            "reviewer_observation": "Terminal state is authoritative and absorbing. Retries settle delivery only; no repeated business finalization after ACK loss."
+          }
+        },
+        {
+          "id": "resource-fencing",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/handoff-ack-loss/answer.md",
+            "line": 21,
+            "quote": "the current expected owner and generation, a still-valid lease according to authoritative database time",
+            "reviewer_observation": "Checks these guards in the same serialized transaction as row/progress writes and finalization; explains why a pre-read or renewal logging cannot stop suspended A."
+          }
+        },
+        {
+          "id": "atomic-progress-effects",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/handoff-ack-loss/answer.md",
+            "line": 25,
+            "quote": "In one transaction append the summary and change the state to `COMPLETED`",
+            "reviewer_observation": "Chunk inserts and expected-cursor CAS are atomic; stable export/manifest offsets plus all-writer serialization ensure logical uniqueness. Unique keys are valid optional additional enforcement, not required to repair this protocol."
+          }
+        },
+        {
+          "id": "ownership-loss",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/handoff-ack-loss/answer.md",
+            "line": 31,
+            "quote": "Fence release/cleanup so A cannot clear B's ownership",
+            "reviewer_observation": "Stops cooperative work on renewal rejection; expired token must reacquire and resource-side fences remain mandatory for delayed work."
+          }
+        },
+        {
+          "id": "fault-checks",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/handoff-ack-loss/answer.md",
+            "line": 45,
+            "quote": "No extra 40–49 rows and no cursor regression; cursor remains at least 70",
+            "reviewer_observation": "Explicit lost-ACK/redelivery and A-pause/B-progress/A-resume schedules assert one summary, logical uniqueness and monotonic progress; includes chunk/finalization commit ambiguity."
+          }
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/handoff-ack-loss/answer.md",
+            "line": 3,
+            "quote": "the protocol and schedules below are proposed, not executed or verified against a live queue or database",
+            "reviewer_observation": "Both final project files match raw fixtures and manifest. tools.md reports read-only local inspection. Independent second reviewer agreed on all six scores."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "completed-replay",
+          "resource-fencing",
+          "atomic-progress-effects",
+          "scope-and-evidence"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 8,
+        "raw_max": 8
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 12,
+      "raw_max": 12,
+      "answer_words": 1823,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": false,
+          "reason": "Review-only fixture; no database, queue, supervisor or integration verification was run."
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "pre-book-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/graceful-draining",
+        "matches_current_skill_at_review": false,
+        "source_file_set_matches": true,
+        "different_source_files": [
+          "skill/references/durable-handoff.md",
+          "skill/references/sources.md"
+        ],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+          "skill/agents/openai.yaml": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+          "skill/references/durable-handoff.md": "af89775889196f25ba1be66b85e8c34e94b193d536d51f7a8e9a69a198b844c7",
+          "skill/references/platform-shutdown.md": "fcc483da42ee98bbc72bb893bbf9da1969f787e8855f09c7a4c406fa19516c98",
+          "skill/references/sources.md": "890e7dfe89b7b0cb0056c6732ac8bc087ea4cace72da98d99ed9168d20c536b5"
+        },
+        "note": "Original criterion scores preserved. This run predates the final DDIA/SRE reference refinements; it is evidence for its own manifest snapshot only."
+      }
+    },
+    {
+      "trial_id": "postgres-write-skew",
+      "case_id": "postgres-write-skew",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/postgres-write-skew/answer.md",
+        "trace_summary": "<trial-root>/postgres-write-skew/tools.md",
+        "manifest": "<trial-root>/postgres-write-skew/manifest.json",
+        "project": "<trial-root>/postgres-write-skew/project",
+        "skill": "<trial-root>/postgres-write-skew/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+        "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+        "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+        "skill/references/delayed-work.md": "ccdcae71c18c67ea920e0516e007ecb696df242fe7a448740a597c92e638d60a",
+        "skill/references/replica-reads.md": "8c56947594382f890ae48db471566bc7d781cf42a0990658b356e470740a5043",
+        "skill/references/sources.md": "1e56faed0aa2b19b7a00bbc583e2e74730cdc41da99e4fa5601f6c5d0dcf517c",
+        "skill/references/transactions.md": "39b37ad3b5cb26744c8a453f0814ffa6db874f7bf3914a9c34a77ef1a514651b"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [],
+        "raw_fixture_changes": [],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/requirements.md": {
+            "before": "b2ed30d2a9fc69a35201ca00a30bea68b6f2b5e9023c488b45315fc783e5fb3f",
+            "after": "b2ed30d2a9fc69a35201ca00a30bea68b6f2b5e9023c488b45315fc783e5fb3f",
+            "raw_fixture": "b2ed30d2a9fc69a35201ca00a30bea68b6f2b5e9023c488b45315fc783e5fb3f"
+          },
+          "project/schedule.sql": {
+            "before": "c8dd0cab23d5f81b24fe2fe3433b6e940aef3f8ef5a86756ab759293c9ce0da8",
+            "after": "c8dd0cab23d5f81b24fe2fe3433b6e940aef3f8ef5a86756ab759293c9ce0da8",
+            "raw_fixture": "c8dd0cab23d5f81b24fe2fe3433b6e940aef3f8ef5a86756ab759293c9ce0da8"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "write-skew",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew/answer.md",
+            "line": 3,
+            "quote": "Their primary-key targets differ, so neither update creates a same-row write conflict",
+            "reviewer_observation": "Explains both Repeatable Read snapshots see two, distinct-row updates can both commit, and caller-row locks do not cover the ward invariant."
+          }
+        },
+        {
+          "id": "coherent-isolation",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew/answer.md",
+            "line": 10,
+            "quote": "shared ward-row lock with **Read Committed**",
+            "reviewer_observation": "Acquires ward row before a separate post-lock count on one connection; explicitly warns unchanged ward locks under Repeatable Read do not refresh snapshots; covers all relevant writers."
+          }
+        },
+        {
+          "id": "retry-boundary",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew/answer.md",
+            "line": 40,
+            "quote": "at most three complete transaction attempts within a two-second overall request budget",
+            "reviewer_observation": "Requires rollback, fresh reads/writes and new transaction for known-aborted SQLSTATEs; rejects reconnect-plus-COMMIT and separates unknown commit outcomes."
+          }
+        },
+        {
+          "id": "external-effect",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew/answer.md",
+            "line": 42,
+            "quote": "A rolled-back attempt leaves neither a grant nor an email intent",
+            "reviewer_observation": "Moves email to committed outbox delivery with stable IDs and does not claim rollback undoes email or outbox gives exactly-once delivery. This is more machinery than fixture strictly requires, noted separately."
+          }
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew/answer.md",
+            "line": 47,
+            "quote": "Do not place a two-party barrier after lock acquisition",
+            "reviewer_observation": "Schedules same-ward contention, original/own-row failures, unrelated ward, rollback and complete bounded retry via controlled sessions/fault hook; asserts retained coverage and no aborted email. Already avoids barrier deadlock despite older reference snapshot."
+          }
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew/answer.md",
+            "line": 52,
+            "quote": "The trace is supplied evidence, not a test result",
+            "reviewer_observation": "Final two project files and skill files match manifest; projects match raw fixtures. No SQL execution/live database or project edits reported; version/driver/writer/provider limits explicit."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "write-skew",
+          "coherent-isolation",
+          "retry-boundary",
+          "scope-and-evidence"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 8,
+        "raw_max": 8
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 12,
+      "raw_max": 12,
+      "answer_words": 1342,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": false,
+          "reason": "Review-only fixture; no database, queue, supervisor or integration verification was run."
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "pre-book-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/concurrency-correctness",
+        "matches_current_skill_at_review": false,
+        "source_file_set_matches": true,
+        "different_source_files": [
+          "skill/references/delayed-work.md",
+          "skill/references/replica-reads.md",
+          "skill/references/sources.md",
+          "skill/references/transactions.md"
+        ],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+          "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+          "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+          "skill/references/delayed-work.md": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+          "skill/references/replica-reads.md": "3d50d94c9c61bacb0d8f1695ceeff7c11fb5e6713e8ed44742f6e6bac95859f1",
+          "skill/references/sources.md": "1c510012e11d0436c2ab49b8dafc3e2562a667c927a079184ecb5d8b447d74b2",
+          "skill/references/transactions.md": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55"
+        },
+        "note": "Original criterion scores preserved. This run predates the final DDIA/SRE reference refinements; it is evidence for its own manifest snapshot only."
+      }
+    },
+    {
+      "trial_id": "postgres-write-skew-retest",
+      "case_id": "postgres-write-skew",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/postgres-write-skew-retest/answer.md",
+        "trace_summary": "<trial-root>/postgres-write-skew-retest/tools.md",
+        "manifest": "<trial-root>/postgres-write-skew-retest/manifest.json",
+        "project": "<trial-root>/postgres-write-skew-retest/project",
+        "skill": "<trial-root>/postgres-write-skew-retest/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+        "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+        "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+        "skill/references/delayed-work.md": "ccdcae71c18c67ea920e0516e007ecb696df242fe7a448740a597c92e638d60a",
+        "skill/references/replica-reads.md": "8c56947594382f890ae48db471566bc7d781cf42a0990658b356e470740a5043",
+        "skill/references/sources.md": "1e56faed0aa2b19b7a00bbc583e2e74730cdc41da99e4fa5601f6c5d0dcf517c",
+        "skill/references/transactions.md": "8a1aa9041a07436aa8bad74e5b80b99170aa8b97a892d0bb53b26399f3f0193e"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [],
+        "raw_fixture_changes": [],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/requirements.md": {
+            "before": "b2ed30d2a9fc69a35201ca00a30bea68b6f2b5e9023c488b45315fc783e5fb3f",
+            "after": "b2ed30d2a9fc69a35201ca00a30bea68b6f2b5e9023c488b45315fc783e5fb3f",
+            "raw_fixture": "b2ed30d2a9fc69a35201ca00a30bea68b6f2b5e9023c488b45315fc783e5fb3f"
+          },
+          "project/schedule.sql": {
+            "before": "c8dd0cab23d5f81b24fe2fe3433b6e940aef3f8ef5a86756ab759293c9ce0da8",
+            "after": "c8dd0cab23d5f81b24fe2fe3433b6e940aef3f8ef5a86756ab759293c9ce0da8",
+            "raw_fixture": "c8dd0cab23d5f81b24fe2fe3433b6e940aef3f8ef5a86756ab759293c9ce0da8"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "write-skew",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew-retest/answer.md",
+            "line": 16,
+            "quote": "Each transaction reads the shared predicate but writes a different row",
+            "reviewer_observation": "Detailed two-reader distinct-row history and rejection of requester-only locks; cross-row coverage is the invariant."
+          }
+        },
+        {
+          "id": "coherent-isolation",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew-retest/answer.md",
+            "line": 54,
+            "quote": "The isolation change and statement boundary are essential",
+            "reviewer_observation": "Chooses Read Committed ward lock before separate decision statements, explains stale Repeatable Read snapshot hazard, and requires participation by all coverage writers."
+          }
+        },
+        {
+          "id": "retry-boundary",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew-retest/answer.md",
+            "line": 60,
+            "quote": "three total transaction attempts",
+            "reviewer_observation": "Two-second whole-request budget plus pool/driver/database timeouts. Known-aborted transactions restart in full with fresh reads; business rejection is not retried; unknown commit is reconciled."
+          }
+        },
+        {
+          "id": "external-effect",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew-retest/answer.md",
+            "line": 64,
+            "quote": "only after the transaction helper returns a **confirmed successful commit**, outside its retry callback",
+            "reviewer_observation": "No email for aborted transactions. Optional durable outbox is conditioned on eventual delivery requirement; email failure cannot rerun grant transaction."
+          }
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew-retest/answer.md",
+            "line": 71,
+            "quote": "Do not put a barrier after B's lock acquisition while A is waiting for that barrier",
+            "reviewer_observation": "Same-ward blocking, unrelated ward progress, stale-snapshot guard, abort/deadlock/serialization/retry and explicit Serializable alternative; asserts coverage and no aborted-grant email."
+          }
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/postgres-write-skew-retest/answer.md",
+            "line": 3,
+            "quote": "No database or live service was contacted",
+            "reviewer_observation": "Project and skill files match manifest, projects match raw fixtures; tools.md and answer label database schedules unexecuted and deployed behavior unverified."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "write-skew",
+          "coherent-isolation",
+          "retry-boundary",
+          "scope-and-evidence"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 8,
+        "raw_max": 8
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 12,
+      "raw_max": 12,
+      "answer_words": 1570,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": false,
+          "reason": "Review-only fixture; no database, queue, supervisor or integration verification was run."
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "pre-book-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/concurrency-correctness",
+        "matches_current_skill_at_review": false,
+        "source_file_set_matches": true,
+        "different_source_files": [
+          "skill/references/delayed-work.md",
+          "skill/references/replica-reads.md",
+          "skill/references/sources.md",
+          "skill/references/transactions.md"
+        ],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+          "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+          "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+          "skill/references/delayed-work.md": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+          "skill/references/replica-reads.md": "3d50d94c9c61bacb0d8f1695ceeff7c11fb5e6713e8ed44742f6e6bac95859f1",
+          "skill/references/sources.md": "1c510012e11d0436c2ab49b8dafc3e2562a667c927a079184ecb5d8b447d74b2",
+          "skill/references/transactions.md": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55"
+        },
+        "note": "Original criterion scores preserved. This run predates the final DDIA/SRE reference refinements; it is evidence for its own manifest snapshot only."
+      }
+    },
+    {
+      "trial_id": "resume-mutable-input",
+      "case_id": "resume-mutable-input",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/resume-mutable-input/answer.md",
+        "trace_summary": "<trial-root>/resume-mutable-input/tools.md",
+        "manifest": "<trial-root>/resume-mutable-input/manifest.json",
+        "project": "<trial-root>/resume-mutable-input/project",
+        "skill": "<trial-root>/resume-mutable-input/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+        "skill/agents/openai.yaml": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+        "skill/references/durable-handoff.md": "af89775889196f25ba1be66b85e8c34e94b193d536d51f7a8e9a69a198b844c7",
+        "skill/references/platform-shutdown.md": "fcc483da42ee98bbc72bb893bbf9da1969f787e8855f09c7a4c406fa19516c98",
+        "skill/references/sources.md": "890e7dfe89b7b0cb0056c6732ac8bc087ea4cace72da98d99ed9168d20c536b5"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [],
+        "raw_fixture_changes": [],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/export.pseudo": {
+            "before": "6d47fd3e5dd97124dfdc7e35bf90940839058e0852de0715a156911d375635da",
+            "after": "6d47fd3e5dd97124dfdc7e35bf90940839058e0852de0715a156911d375635da",
+            "raw_fixture": "6d47fd3e5dd97124dfdc7e35bf90940839058e0852de0715a156911d375635da"
+          },
+          "project/job.md": {
+            "before": "2ba7bac1789d08ed380bf05be15d3d71deaab614869a77568402d03d640bbda4",
+            "after": "2ba7bac1789d08ed380bf05be15d3d71deaab614869a77568402d03d640bbda4",
+            "raw_fixture": "2ba7bac1789d08ed380bf05be15d3d71deaab614869a77568402d03d640bbda4"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "cursor-is-not-input",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/resume-mutable-input/answer.md",
+            "line": 5,
+            "quote": "Insertions, deletions, and reordering shift offsets",
+            "reviewer_observation": "Explains offset drift despite unique output keys, changes to region/pricing/rounding, and why frequent checkpointing or a new Repeatable Read transaction cannot recover accepted input."
+          }
+        },
+        {
+          "id": "accepted-snapshot",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/resume-mutable-input/answer.md",
+            "line": 14,
+            "quote": "region UK, recipients revision 100, pricing revision 17, and calculation version 1",
+            "reviewer_observation": "Binds the immutable acceptance record, keeps revision namespaces distinct, retains all historical calculation fields, and traverses sealed inputs by immutable ID or manifest position."
+          }
+        },
+        {
+          "id": "retention-boundary",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/resume-mutable-input/answer.md",
+            "line": 23,
+            "quote": "If neither historical inputs nor an equivalent proven artifact exist, exact recovery is unsupported: pause/escalate",
+            "reviewer_observation": "Recognizes seven-day history is insufficient for eight-day pause; retains sealed inputs, computation and progress through supported recovery/replay horizon without silently substituting latest data."
+          }
+        },
+        {
+          "id": "restore-validation",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/resume-mutable-input/answer.md",
+            "line": 25,
+            "quote": "Derive progress from that reconciliation, not by translating the mutable offset directly into an ID",
+            "reviewer_observation": "Validates identity/configuration/schema/calculation compatibility, reconstructs expected cohort, compares all existing rows and derives a safe verified cursor while preserving unresolved provenance."
+          }
+        },
+        {
+          "id": "bounded-resumption",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/resume-mutable-input/answer.md",
+            "line": 17,
+            "quote": "Commit each bounded batch of rows and its cursor together within 30 seconds",
+            "reviewer_observation": "Preserves atomic output/progress and stable uniqueness; reconciles conflicting rows instead of ignoring them. Proposed checks include source insertion/deletion/reordering, versions, expired artifacts and before/after committed checkpoint deployment."
+          }
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/resume-mutable-input/answer.md",
+            "line": 28,
+            "quote": "These are proposed verification steps, not executed tests",
+            "reviewer_observation": "All project and skill manifest hashes match; project files match raw fixtures; tools.md records reads/hashes and external answer artifacts only. Independent second reviewer agreed on all six criteria."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "cursor-is-not-input",
+          "accepted-snapshot",
+          "retention-boundary",
+          "scope-and-evidence"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 8,
+        "raw_max": 8
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 12,
+      "raw_max": 12,
+      "answer_words": 1424,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": false,
+          "reason": "Review-only fixture; no database, live export, network or executable integration verification was run."
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "final-DDIA-SRE-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/graceful-draining",
+        "matches_current_skill_at_review": true,
+        "source_file_set_matches": true,
+        "different_source_files": [],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+          "skill/agents/openai.yaml": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+          "skill/references/durable-handoff.md": "af89775889196f25ba1be66b85e8c34e94b193d536d51f7a8e9a69a198b844c7",
+          "skill/references/platform-shutdown.md": "fcc483da42ee98bbc72bb893bbf9da1969f787e8855f09c7a4c406fa19516c98",
+          "skill/references/sources.md": "890e7dfe89b7b0cb0056c6732ac8bc087ea4cace72da98d99ed9168d20c536b5"
+        },
+        "note": "The two new runs use the final refined skill files as verified by exact hashes."
+      }
+    },
+    {
+      "trial_id": "lost-commit-response",
+      "case_id": "lost-commit-response",
+      "candidate_commit": null,
+      "candidate_identity": "exact file snapshot recorded by manifest and verified SHA-256 hashes, not current working tree",
+      "model": null,
+      "model_note": "Exact model/version/settings not recorded in supplied trial artifacts; fresh no-history fork reported by coordinator. Do not infer model equivalence or sampling reproducibility.",
+      "capabilities_declared": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "capability_deviations": [
+        "Web and subagent prohibitions were prompt-only; tools were not platform-disabled.",
+        "Trial filesystem isolation was by copied directory and instruction, not an enforced filesystem sandbox."
+      ],
+      "case_compliant": false,
+      "rubric_result": "pass",
+      "compliance_note": "All observable rubric criteria pass. Per evals/README.md, unenforced declared capability constraints prevent an unqualified case-compliance claim. Reported tool use did not invoke web/subagents.",
+      "artifact_paths": {
+        "answer": "<trial-root>/lost-commit-response/answer.md",
+        "trace_summary": "<trial-root>/lost-commit-response/tools.md",
+        "manifest": "<trial-root>/lost-commit-response/manifest.json",
+        "project": "<trial-root>/lost-commit-response/project",
+        "skill": "<trial-root>/lost-commit-response/skill"
+      },
+      "skill_snapshot_sha256": {
+        "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+        "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+        "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+        "skill/references/delayed-work.md": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+        "skill/references/replica-reads.md": "3d50d94c9c61bacb0d8f1695ceeff7c11fb5e6713e8ed44742f6e6bac95859f1",
+        "skill/references/sources.md": "1c510012e11d0436c2ab49b8dafc3e2562a667c927a079184ecb5d8b447d74b2",
+        "skill/references/transactions.md": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55"
+      },
+      "project_invariants": {
+        "pass": true,
+        "manifest_changes": [],
+        "raw_fixture_changes": [],
+        "project_file_set_unchanged": true,
+        "hashes": {
+          "project/debit.pseudo": {
+            "before": "24ef1f858ec96f4253d42ac663be49073fa711c6a5ab01dea01763197bf392d3",
+            "after": "24ef1f858ec96f4253d42ac663be49073fa711c6a5ab01dea01763197bf392d3",
+            "raw_fixture": "24ef1f858ec96f4253d42ac663be49073fa711c6a5ab01dea01763197bf392d3"
+          },
+          "project/incident.md": {
+            "before": "69fa9963373731496b82ca29ddc1037d79a46b14529db42b9b1dc0a3520c0b4e",
+            "after": "69fa9963373731496b82ca29ddc1037d79a46b14529db42b9b1dc0a3520c0b4e",
+            "raw_fixture": "69fa9963373731496b82ca29ddc1037d79a46b14529db42b9b1dc0a3520c0b4e"
+          }
+        }
+      },
+      "criteria": [
+        {
+          "id": "unknown-is-not-aborted",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/lost-commit-response/answer.md",
+            "line": 1,
+            "quote": "The first commit succeeded; only its acknowledgement was lost",
+            "reviewer_observation": "Identifies two committed debits caused by treating an unknown commit as aborted, rejects extra retries as the fix and explicitly separates confirmed SerializationFailure from connection loss/timeout."
+          }
+        },
+        {
+          "id": "atomic-request-outcome",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/lost-commit-response/answer.md",
+            "line": 9,
+            "quote": "Commit the outcome, debit, and balance change together",
+            "reviewer_observation": "Uses stable request ID and accepted payload; inserts non-null candidate result under unique ID before any debit, commits all effects atomically, validates reused intent and returns the original stored result."
+          }
+        },
+        {
+          "id": "uncertain-recovery",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/lost-commit-response/answer.md",
+            "line": 20,
+            "quote": "This does **not** prove the original aborted: it may still be uncommitted",
+            "reviewer_observation": "Absent lookup is not proof of abort. Safe replay uses the same unique outcome-first transaction to wait/arbitrate with an original or competing claim; authoritative lookup returns committed result. Separately flags historical debits without outcome records for reconciliation."
+          }
+        },
+        {
+          "id": "bounded-retries",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/lost-commit-response/answer.md",
+            "line": 24,
+            "quote": "one total two-second request deadline",
+            "reviewer_observation": "Complete transaction retry on confirmed abort with fresh state; all reconnects/lookups/key waits/backoff share deadline and attempt cap. Potentially committed unresolved attempt returns pending with original ID; local timeout does not establish rollback."
+          }
+        },
+        {
+          "id": "fault-checks",
+          "severity": "major",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/lost-commit-response/answer.md",
+            "line": 33,
+            "quote": "Test both release-to-commit and release-to-abort",
+            "reviewer_observation": "Schedules committed-response loss, confirmed abort, concurrent duplicate waiting, absent lookup with original in flight, changed payload and outage beyond two seconds; asserts one debit, stable outcome or pending. Avoids barrier deadlock."
+          }
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "score": 2,
+          "rating": "pass",
+          "evidence": {
+            "artifact": "<trial-root>/lost-commit-response/answer.md",
+            "line": 40,
+            "quote": "No database, runtime, or integration tests were run, and the project was left unchanged",
+            "reviewer_observation": "All project and skill manifest hashes match and project matches raw fixtures. tools.md reports local inspection only. Distinguishes supplied trace from independent database evidence and labels all verification unexecuted."
+          }
+        }
+      ],
+      "critical_gates": {
+        "rule": "Any critical score 0 makes the rubric run unsuccessful regardless of aggregate; critical results reported separately.",
+        "pass": true,
+        "passed_ids": [
+          "unknown-is-not-aborted",
+          "atomic-request-outcome",
+          "uncertain-recovery",
+          "scope-and-evidence"
+        ],
+        "partial_ids": [],
+        "failed_ids": [],
+        "raw_score": 8,
+        "raw_max": 8
+      },
+      "noncritical_score": {
+        "major_weight": 2,
+        "minor_weight": 1,
+        "weighted_score": 8,
+        "weighted_max": 8
+      },
+      "raw_total": 12,
+      "raw_max": 12,
+      "answer_words": 1203,
+      "elapsed_seconds": null,
+      "tool_calls": null,
+      "token_usage": null,
+      "efficiency_note": "Word count measured from answer artifact. Raw event trace, elapsed time and usage metrics were not supplied; tools.md summarizes commands and is not a complete machine event log.",
+      "reviewer": "independent-observable-artifact-review",
+      "reviewer_verification": {
+        "hash_audit": true,
+        "raw_fixture_diff": true,
+        "node_verify": {
+          "executed": false,
+          "reason": "Review-only fixture; no database, live export, network or executable integration verification was run."
+        }
+      },
+      "snapshot_attribution": {
+        "stage": "final-DDIA-SRE-refinement-snapshot",
+        "source_skill_path": "<repo>/skills/engineering/concurrency-correctness",
+        "matches_current_skill_at_review": true,
+        "source_file_set_matches": true,
+        "different_source_files": [],
+        "source_sha256_at_review": {
+          "skill/LICENSE": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+          "skill/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+          "skill/agents/openai.yaml": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+          "skill/references/cache-coherence.md": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5",
+          "skill/references/delayed-work.md": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+          "skill/references/replica-reads.md": "3d50d94c9c61bacb0d8f1695ceeff7c11fb5e6713e8ed44742f6e6bac95859f1",
+          "skill/references/sources.md": "1c510012e11d0436c2ab49b8dafc3e2562a667c927a079184ecb5d8b447d74b2",
+          "skill/references/transactions.md": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55"
+        },
+        "note": "The two new runs use the final refined skill files as verified by exact hashes."
+      }
+    }
+  ],
+  "extension_review": {
+    "added_trial_ids": [
+      "resume-mutable-input",
+      "lost-commit-response"
+    ],
+    "checks": "Read new answers, tool summaries and raw fixtures; compared every snapshot hash, final project file and current source skill. No new external or executable checks were run. Earlier independent cache verifier result is retained.",
+    "preserved_initial_records": true,
+    "preservation_note": "Original five records remain identical except for added snapshot_attribution metadata."
+  }
+}

@@ -1,0 +1,10 @@
+--- before/service.mjs
++++ after/service.mjs
+@@ -11 +11,2 @@
+-    await this.cache.set(id, record);
++    // A rejected fill may still be returned to this overlapping reader.
++    await this.cache.publishIfFresh(id, record);
+@@ -17 +18,2 @@
+-    await this.cache.delete(id);
++    // Retain revision knowledge across eviction before acknowledging the write.
++    await this.cache.advanceFloor(id, record.revision);

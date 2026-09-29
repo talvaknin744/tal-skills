@@ -1,0 +1,17 @@
+async reserve(sku, requestId):
+  row = await readPool.query("SELECT available FROM inventory WHERE sku = ?", sku)
+  if row.available < 1: return { accepted: false }
+  await primary.transaction(async tx =>:
+    await tx.execute("UPDATE inventory SET available = ? WHERE sku = ?",
+                     row.available - 1, sku)
+    await tx.execute("INSERT INTO reservations(request_id, sku) VALUES (?, ?)",
+                     requestId, sku)
+  )
+  return { accepted: true }
+
+-- Existing reservation schema:
+CREATE TABLE reservations (
+  id bigserial PRIMARY KEY,
+  request_id text NOT NULL,
+  sku text NOT NULL
+);

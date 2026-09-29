@@ -1,0 +1,590 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "rolling-worker-drain",
+      "title": "A rolling deployment must preserve resumable long-running work",
+      "skill": "graceful-draining",
+      "tags": [
+        "rollout",
+        "retry-accounting",
+        "admission"
+      ],
+      "prompt": "Review why import imp-884 failed during this rollout even though its pages are resumable. Assess the proposed graceful-drain change and retry-limit increase, then specify a bounded shutdown and rollout protocol plus the observations needed to verify it. Do not edit files or deploy anything.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/rolling-worker-drain",
+      "fixtures": [
+        "incident.md",
+        "worker.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "failure-classification",
+          "severity": "critical",
+          "criterion": "Identifies deployment TaskCancelled consuming the ordinary failure budget on A, B, and C; uses the supplied defer contract for controlled resumable maintenance rather than merely increasing the count or making all failures free."
+        },
+        {
+          "id": "admission-and-ownership",
+          "severity": "critical",
+          "criterion": "Stops queue acquisition and handles an acquisition already in flight before quiescing work; readiness alone does not stop this poll loop. Keeps ownership valid while work/checkpointing is active and relinquishes only after safe durable progress or an explicit unresolved failure path."
+        },
+        {
+          "id": "durable-handoff",
+          "severity": "critical",
+          "criterion": "Preserves stable job identity, confirmed durable cursor and replay safety across replacement processes. Does not claim cancelling the handler completes the job or that a local checkpoint guarantees recovery when its commit is uncertain."
+        },
+        {
+          "id": "bounded-rollout",
+          "severity": "major",
+          "criterion": "Fits cooperative stopping and confirmed checkpoint/release within the actual 90-second deadline with margin, or explicitly changes the rollout/drain design. Explains why 12\u201324-hour jobs and twice-daily replacement require resumability or retained draining workers rather than a guaranteed full finish during shutdown."
+        },
+        {
+          "id": "failure-checks",
+          "severity": "major",
+          "criterion": "Specifies the repeated A-to-B-to-C maintenance schedule and asserts eventual completion without consuming the malformed-input failure budget; also checks admission races, crash/kill, and a failed or ambiguous checkpoint rather than testing only a clean SIGTERM."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "shared-grace-budget",
+      "title": "Kubernetes readiness, lifecycle hooks, and rollout budgets have different roles",
+      "skill": "graceful-draining",
+      "tags": [
+        "kubernetes",
+        "termination",
+        "pdb"
+      ],
+      "prompt": "Review the rollout proposal and manifest against the supplied termination contract and observations. Identify unsupported claims, explain the observed kill, and propose a workable admission, checkpoint, and rollout sequence. Do not change files or contact a cluster.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/shared-grace-budget",
+      "fixtures": [
+        "proposal.md",
+        "deployment.yaml"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "shared-deadline",
+          "severity": "critical",
+          "criterion": "Accounts for the 25-second preStop hook inside the 60-second termination budget, leaving about 35 seconds for SIGTERM handling; does not grant a fresh 60 seconds to the handler or promise the observed 38\u201350-second checkpoint fits."
+        },
+        {
+          "id": "queue-admission",
+          "severity": "critical",
+          "criterion": "Closes or gates outbound queue acquisition as part of drain, including in-flight acquisition and new slots, rather than relying on HTTP readiness or endpoint propagation."
+        },
+        {
+          "id": "pdb-scope",
+          "severity": "critical",
+          "criterion": "Rejects the claim that the PDB job-awareness or Eviction-API admission controls prevent this ordinary Deployment rollout from replacing active workers. Distinguishes Deployment strategy/capacity from application work completion."
+        },
+        {
+          "id": "workable-sequence",
+          "severity": "major",
+          "criterion": "Proposes an idempotent drain entrypoint shared by hook and signal, a deadline budget with exit margin, and resumable work or job-aware retention when completion cannot fit; preserves capacity and verifies new worker readiness before further retirement."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "Uses timing, active job count, acquisition closure, checkpoint acknowledgement, and forced termination evidence to validate the proposal; does not infer safe drain solely from readiness false or zero Service traffic."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "handoff-ack-loss",
+      "title": "Completion replay and stale owners require separate protections",
+      "skill": "graceful-draining",
+      "tags": [
+        "handoff",
+        "acknowledgement",
+        "fencing"
+      ],
+      "prompt": "Review the supplied export replay and ownership traces and the proposed progress-read/ACK-retry patch. Explain what can still go wrong and propose a minimal coherent recovery protocol under the supplied contracts. Include failure schedules to verify. Do not modify files.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/handoff-ack-loss",
+      "fixtures": [
+        "observations.md",
+        "worker.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "completed-replay",
+          "severity": "critical",
+          "criterion": "Treats the durable completed state as authoritative after the lost ACK; a redelivery must return/ack the existing completion without appending the final summary again. Retrying ACK alone does not make finalization safe."
+        },
+        {
+          "id": "resource-fencing",
+          "severity": "critical",
+          "criterion": "Requires the supplied current owner/generation and lease check in the same transaction as every protected progress, row, and completion write; explains that lease expiry or a pre-write progress read cannot stop suspended A from writing after B acquires ownership."
+        },
+        {
+          "id": "atomic-progress-effects",
+          "severity": "critical",
+          "criterion": "Preserves the relationship between durable rows and progress, and one logical result per input offset plus one summary, using atomic transactions and appropriate stable identity/uniqueness. Does not acknowledge completion before its durable evidence exists."
+        },
+        {
+          "id": "ownership-loss",
+          "severity": "major",
+          "criterion": "Stops cooperative work when renewal fails while retaining resource-side fencing for paused or already in-flight work. Prevents a delayed old renewal/release from clearing the successor's ownership."
+        },
+        {
+          "id": "fault-checks",
+          "severity": "major",
+          "criterion": "Specifies commit followed by lost ACK/redelivery and A pause/lease expiry/B progress/A resume, asserting a single summary, no duplicate logical rows, and no cursor regression; distinguishes these from production checks actually run."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "deadline-and-outage",
+      "title": "A hard deadline cannot turn uncertain cleanup into successful completion",
+      "skill": "graceful-draining",
+      "tags": [
+        "deadline",
+        "cancellation",
+        "reconciliation"
+      ],
+      "prompt": "Review this shutdown handler against the timeline and product contract. Describe required behavior for deployment termination, user cancellation, the native compression call, and uncertain RPC outcomes. Propose a bounded replacement protocol. Keep the supplied files unchanged.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/deadline-and-outage",
+      "fixtures": [
+        "incident.md",
+        "shutdown.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "unfinished-ack",
+          "severity": "critical",
+          "criterion": "Removes unconditional success acknowledgement of unfinished or uncertain work; distinguishes committed completion, resumable maintenance interruption, cancellation requested, and terminal cancelled with tracked cleanup."
+        },
+        {
+          "id": "deadline-budget",
+          "severity": "critical",
+          "criterion": "Uses one remaining shutdown deadline across join, checkpoint, release, and exit with margin; does not allocate 90 seconds to join plus fresh RPC budgets or promise cooperative cancellation interrupts the native call."
+        },
+        {
+          "id": "uncertain-outcomes",
+          "severity": "critical",
+          "criterion": "Treats checkpoint and release timeouts as unknown committed outcomes, records unresolved operations and last confirmed progress in the supplied reachable ledger, and provides bounded reconciliation/recovery instead of logged-and-forgotten success."
+        },
+        {
+          "id": "late-work-and-cleanup",
+          "severity": "major",
+          "criterion": "Accounts for another host acquiring the lease and old work continuing during isolation; identifies required fencing/deduplication or unresolved external-effect limits, and tracks incomplete temporary objects and already published object cleanup without claiming immediate rollback."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "Covers coordinator outage through deadline, checkpoint committed/response lost, forced kill during compression, and explicit user cancellation, with eventual resumption or explicit unresolved cleanup rather than a fabricated successful finish."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "cache-fill-invalidation",
+      "title": "A delayed cache fill cannot resurrect an acknowledged older revision",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "cache-invalidation",
+        "revision-floor",
+        "implementation"
+      ],
+      "prompt": "Fix LabelService in service.mjs so it meets requirements.md under overlapping readers and writers. Keep the adapter implementations and verification script unchanged, preserve the public API, run the supplied verification, and explain the scope of the result.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/cache-fill-invalidation",
+      "fixtures": [
+        "requirements.md",
+        "service.mjs",
+        "model.mjs",
+        "verify.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "observable-contract",
+          "severity": "critical",
+          "criterion": "The supplied node verify.mjs command exits successfully with all five checks passing against the modified service; success is established by actual execution rather than a claimed or rewritten test."
+        },
+        {
+          "id": "atomic-shared-ordering",
+          "severity": "critical",
+          "criterion": "Uses the provided shared atomic revision-floor/publication contract or an equally sound implementation within the supplied interface. Preserves monotonic floors through eviction and out-of-order notifications; a process-local lock, delay, unconditional fill, or evictable-only marker is insufficient."
+        },
+        {
+          "id": "scope",
+          "severity": "critical",
+          "criterion": "Changes only service.mjs, preserving adapter and test contents and the read/write signatures; does not bypass caching by always reading the database, add unavailable infrastructure, or weaken the requirements."
+        },
+        {
+          "id": "overlap-contract",
+          "severity": "major",
+          "criterion": "Explains that an already overlapping read may return its captured snapshot, while subsequently invoked reads must honor the acknowledged revision. Avoids imposing or claiming impossible latest-at-response semantics."
+        },
+        {
+          "id": "limits",
+          "severity": "major",
+          "criterion": "States that this deterministic model validates adapter use under successful calls, not production Redis/database atomicity, crash recovery, replica freshness, or arbitrary marker lifetime; does not claim these failure modes are solved by passing five local checks."
+        }
+      ]
+    },
+    {
+      "id": "primary-read-lost-update",
+      "title": "Reading the primary does not make a read-then-write reservation atomic",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "lost-update",
+        "conditional-update",
+        "idempotency"
+      ],
+      "prompt": "Review the inventory incident and the proposal to move both readers to the primary. Explain whether that change protects the stock invariant, propose the smallest safe transactional correction, and include response-loss and concurrent-request checks. Do not modify files.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/primary-read-lost-update",
+      "fixtures": [
+        "incident.md",
+        "reserve.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "race-schedule",
+          "severity": "critical",
+          "criterion": "Shows that two primary reads can still both observe one available unit before either writes, and both absolute writes can commit zero with two reservations; distinguishes replica staleness from non-atomic decision and mutation."
+        },
+        {
+          "id": "atomic-invariant",
+          "severity": "critical",
+          "criterion": "Makes the stock predicate and decrement atomic at the shared authority, for example conditional decrement with affected-row checking plus the reservation in one transaction, or suitable locking/isolation covering the read and write. A per-process mutex or primary routing alone is insufficient."
+        },
+        {
+          "id": "request-replay",
+          "severity": "major",
+          "criterion": "Addresses stable request ID and uniqueness/result lookup or equivalent replay protection in the same database transaction so a lost response and retry cannot reserve an extra unit; distinguishes legitimate stock rejection from an existing accepted request."
+        },
+        {
+          "id": "bounded-retry",
+          "severity": "major",
+          "criterion": "Retries a complete failed transaction where appropriate within the deadline, not a stale absolute UPDATE, and returns a clear conflict or rejection when it cannot safely complete."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "Proposes two concurrent requests against stock one and commit/response-loss/retry schedules, asserting stock consistency, at most one newly accepted reservation, and stable replay of the same request."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "postgres-write-skew",
+      "title": "Multi-row coverage is an invariant across concurrent transactions",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "write-skew",
+        "postgresql",
+        "isolation"
+      ],
+      "prompt": "Review the two concurrent time-off requests and both proposed database fixes. Explain why this incident can occur, choose a coherent correction with bounded retry behavior, and describe focused verification. Do not edit files or run against a database.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/postgres-write-skew",
+      "fixtures": [
+        "requirements.md",
+        "schedule.sql"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "write-skew",
+          "severity": "critical",
+          "criterion": "Identifies the cross-row ward invariant and explains how Repeatable Read snapshots let both requests see two doctors and update distinct rows without a write conflict; locking only each caller's own row does not serialize the shared decision."
+        },
+        {
+          "id": "coherent-isolation",
+          "severity": "critical",
+          "criterion": "Chooses a protocol that actually serializes or validates the ward-wide decision. A Serializable solution retries the full transaction on serialization failure; a ward-row lock solution ensures the count sees prior committed changes (for example acquire ward lock before the decision at Read Committed), rather than keeping a stale Repeatable Read snapshot."
+        },
+        {
+          "id": "retry-boundary",
+          "severity": "critical",
+          "criterion": "Restarts the entire aborted transaction with fresh reads and bounded retries/backoff or returns conflict; reconnecting and issuing COMMIT again cannot recover the aborted business decision."
+        },
+        {
+          "id": "external-effect",
+          "severity": "major",
+          "criterion": "Moves successful notification after confirmed commit with durable recoverability if delivery matters, or otherwise prevents repeatable external effects from occurring inside retried/aborted transactions. Does not claim database rollback undoes an already sent email."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "Specifies synchronized two-doctor requests against the same ward plus unrelated wards, and a serialization-abort/retry schedule; asserts at least one on-call doctor and no successful notification for an aborted grant."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "replica-read-your-writes",
+      "title": "A write dependency must cross service and cache boundaries",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "causal-context",
+        "replica-lag",
+        "freshness"
+      ],
+      "prompt": "Review both proposed fixes for the shipping preview trace. Specify a read contract and request flow that meets the caller's freshness requirement within its latency budget, including cache hits, follower lag, and a partition. Keep the files unchanged.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/replica-read-your-writes",
+      "fixtures": [
+        "trace.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "dependency-propagation",
+          "severity": "critical",
+          "criterion": "Carries the acknowledged account revision from the save through the browser/quote-service request or equivalent causal context; explains why a separate account-service connection pin and fixed delay do not provide this cross-service dependency."
+        },
+        {
+          "id": "cache-and-replica-validation",
+          "severity": "critical",
+          "criterion": "Checks cached and follower results against the required account revision and only returns success when the requirement holds, using bounded wait or a reachable authoritative read as needed. Cache hits cannot bypass the freshness condition."
+        },
+        {
+          "id": "bounded-unavailability",
+          "severity": "critical",
+          "criterion": "Preserves the 200 ms total budget and returns explicit pending/retry/unavailable when the required revision cannot be established during partition; does not silently serve the stale address or promise both availability and the required freshness."
+        },
+        {
+          "id": "scope-of-guarantee",
+          "severity": "major",
+          "criterion": "Scopes the guarantee to this caller's account revision dependency and allows a newer committed revision, without claiming all callers now receive global linearizability or that an authoritative read makes a future order write atomic."
+        },
+        {
+          "id": "verification",
+          "severity": "major",
+          "criterion": "Specifies stale cache, lagging follower, caught-up follower, newer concurrent write, and leader-unreachable schedules; asserts successful preview revision is at least the propagated minimum and unresolved requests remain explicit."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "sequential-file-transform",
+      "title": "A static local CSV task should not trigger distributed correctness analysis",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "nontrigger",
+        "scope"
+      ],
+      "prompt": "Return names.csv sorted in ascending numeric id order, preserving its header and spelling. The project notes describe the scope. Do not modify the source file.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/sequential-file-transform",
+      "fixtures": [
+        "request.md",
+        "names.csv"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "correct-result",
+          "severity": "critical",
+          "criterion": "Returns exactly the header id,name followed by 2,Noah Cohen; 17,Sofia Martin; and 30,Amara Patel as CSV rows in numeric order."
+        },
+        {
+          "id": "no-unrelated-workflow",
+          "severity": "major",
+          "criterion": "Completes the local transformation without distributed-systems architecture, locks, consistency contracts, deployment plans, or requests to provision services."
+        },
+        {
+          "id": "scope",
+          "severity": "critical",
+          "criterion": "Leaves the source file unchanged, does not use network access, and does not claim to have run checks or inspected systems that are absent."
+        }
+      ]
+    },
+    {
+      "id": "resume-mutable-input",
+      "title": "A resumed cursor must preserve the accepted input and computation",
+      "skill": "graceful-draining",
+      "tags": [
+        "checkpoint",
+        "mutable-input",
+        "restore-compatibility"
+      ],
+      "prompt": "Review the resumed campaign export and the proposed recovery changes. Specify how to preserve the originally accepted output across source edits, deployment, and a long pause, including what to validate before restoring this checkpoint. Keep files unchanged; do not run a live export.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/resume-mutable-input",
+      "fixtures": [
+        "job.md",
+        "export.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "cursor-is-not-input",
+          "severity": "critical",
+          "criterion": "Explains that offset into changing membership/order can omit or repeat recipients and that latest pricing/default region/new rounding can change the obligation; more frequent cursor writes alone preserve neither input nor computation."
+        },
+        {
+          "id": "accepted-snapshot",
+          "severity": "critical",
+          "criterion": "Binds input membership, ordering, pricing, region, and calculation to the immutable acceptance record, using retained revisions or an equivalent durable materialization. Uses a stable traversal position within that bound dataset; does not replace the accepted export with latest-state semantics."
+        },
+        {
+          "id": "retention-boundary",
+          "severity": "critical",
+          "criterion": "Accounts for seven-day source history versus eight-day resumption. Preserves sufficient immutable input/artifacts for the supported recovery horizon or refuses unresolved resumption with an explicit recovery path when required history is gone; does not silently switch to current data."
+        },
+        {
+          "id": "restore-validation",
+          "severity": "major",
+          "criterion": "Validates job identity, input/config/calculation versions, checkpoint format and cursor meaning, and compatibility with durable output before resuming on v2. Determines how the old checkpoint can be reconstructed from evidence, and preserves unresolved uncertainty where existing output provenance cannot be verified."
+        },
+        {
+          "id": "bounded-resumption",
+          "severity": "major",
+          "criterion": "Keeps transactions within the supplied 30-second limit and preserves atomic output/progress and stable output uniqueness. Does not prescribe a job-long transaction; proposes checks for insertion/deletion/reordering, version change, expired history, and deployment after a committed checkpoint."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    },
+    {
+      "id": "lost-commit-response",
+      "title": "An unknown commit response differs from a confirmed transaction abort",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "commit-ambiguity",
+        "transaction-retry",
+        "business-identity"
+      ],
+      "prompt": "Review the debit incident and retry-limit proposal. Give the smallest coherent recovery protocol using the supplied database capabilities, distinguish confirmed aborts from an unknown COMMIT outcome, and specify bounded failure checks. Do not change files or access a database.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/lost-commit-response",
+      "fixtures": [
+        "incident.md",
+        "debit.pseudo"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "unknown-is-not-aborted",
+          "severity": "critical",
+          "criterion": "Identifies the first committed debit despite the lost reply and distinguishes ConnectionLost/COMMIT timeout from confirmed SerializationFailure. Does not classify all exceptions as rolled back or solve the duplicate effect by adding attempts."
+        },
+        {
+          "id": "atomic-request-outcome",
+          "severity": "critical",
+          "criterion": "Uses the stable business request ID and accepted payload as the durable replay boundary, recording the outcome atomically with the debit under the unique request constraint. Validates reused-ID intent and returns the existing result instead of generating a new logical debit identity on retry."
+        },
+        {
+          "id": "uncertain-recovery",
+          "severity": "critical",
+          "criterion": "Resolves an unknown result through authoritative outcome lookup and/or a safe retry with the same transactional request identity. An absent lookup alone is not proof the original transaction aborted; the protocol handles an original commit still in flight or a competing request through the supplied database serialization/uniqueness contract."
+        },
+        {
+          "id": "bounded-retries",
+          "severity": "major",
+          "criterion": "Retries the complete transaction on a confirmed serialization abort with fresh state within the request deadline. Bounds reconnect/lookup/retry effort and returns pending/unknown with the stable request ID when the committed outcome cannot be established, rather than reporting a definite failure for a possibly committed debit."
+        },
+        {
+          "id": "fault-checks",
+          "severity": "major",
+          "criterion": "Specifies committed debit with lost response, confirmed abort, duplicate concurrent delivery, same-ID different payload, and an outage exceeding the deadline; asserts one debit and a stable durable result or explicit unresolved status."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+        }
+      ]
+    }
+  ]
+}

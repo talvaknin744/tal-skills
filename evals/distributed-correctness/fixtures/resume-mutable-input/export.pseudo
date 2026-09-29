@@ -1,0 +1,16 @@
+resume(export_id):
+    checkpoint = progress.load(export_id)
+    offset = checkpoint.offset
+    region = runtime.default_region
+    while true:
+        recipients = directory.list(
+            region=region, order_by="updated_at", offset=offset, limit=500)
+        if recipients.is_empty():
+            mark_completed(export_id)
+            return
+        prices = pricing.latest()
+        rows = recipients.map(person => calculate(person, prices, runtime.rounding))
+        db.transaction:
+            output.insert_unique(export_id, rows)
+            progress.save(export_id, offset=offset + recipients.length)
+        offset += recipients.length

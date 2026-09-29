@@ -1,0 +1,19 @@
+on_stop(reason):
+    accepting = false
+    job.cancel_requested = true
+    job.public_status = CANCELLED
+    worker.request_cooperative_stop()
+    try:
+        worker.join(timeout=90_seconds)
+        for operation in [checkpoint(job.id, worker.local_cursor), release(delivery)]:
+            try:
+                queue.execute(operation)
+            except Timeout:
+                log("shutdown RPC timed out; cleanup will be retried")
+    finally:
+        queue.ack(delivery)
+        exit(0)
+
+# API calls use 10-second client timeouts and have no shared deadline argument.
+# The worker reads cancel_requested only between batches/native calls.
+# No entry is written to the operations ledger by this handler.

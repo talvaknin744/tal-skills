@@ -1,0 +1,38 @@
+--- release-skill/references/delayed-work.md
++++ trial-skill/references/delayed-work.md
+@@ -8,2 +7,0 @@
+-
+-Establish who allocates comparable revisions. Independent writers can produce conflicting histories; a locally increasing counter or wall-clock timestamp does not supply one authoritative order. Such a topology needs an explicit conflict/merge policy or a common authority, with tests for concurrent writes.
+@@ -25,2 +22,0 @@
+-Verify the generation allocator's authority and durability. A time-sortable UUID, ULID, or independently maintained clock does not by itself prove ownership order.
+-
+--- release-skill/references/replica-reads.md
++++ trial-skill/references/replica-reads.md
+@@ -8,2 +7,0 @@
+-
+-For monotonic reads, also carry the latest state the session has observed even if it never wrote anything. After observing revision 8, routing that session to a replica at 7 must wait, reroute, or return the contract's explicit unavailable outcome. Sticky routing alone needs a failover rule.
+@@ -33,2 +30,0 @@
+-Where monotonic reads are promised, repeat the rerouting test for a session that only read revision 8 and made no writes.
+-
+--- release-skill/references/sources.md
++++ trial-skill/references/sources.md
+@@ -4,2 +3,0 @@
+-
+-Selected sections of the user-supplied [DDIA early-release second-edition draft, chapters 6 and 8–13](https://github.com/YZXBiz/ddia/tree/157c2b303db17188dc4509c809552fd378e78b25/raw) were read for replication, isolation, uncertain outcomes, clocks, and derived data. The mirror was not verified against the final publication. The additions distinguish monotonic reads from read-your-writes, unknown commit from confirmed abort, and transaction isolation from real-time freshness. Product behavior is checked independently below.
+@@ -22,3 +19,0 @@
+-| [PostgreSQL application consistency](https://www.postgresql.org/docs/current/applevel-consistency.html) | Snapshot timing matters when combining locks and isolation | A shared lock alone does not refresh an earlier Repeatable Read snapshot |
+-| [Spanner external consistency](https://docs.cloud.google.com/spanner/docs/true-time-external-consistency) | Difference between isolation, real-time order, and their combination | A semantics example, not a recommendation to change databases |
+-| [RFC 9562](https://www.rfc-editor.org/rfc/rfc9562.html#section-5.7) | UUIDv7 format and ordering limits | Time-sortable identifiers alone do not establish authoritative ownership order |
+--- release-skill/references/transactions.md
++++ trial-skill/references/transactions.md
+@@ -24,4 +23,0 @@
+-Check when the decision snapshot is established relative to locking. A shared guard-row lock does not refresh a PostgreSQL REPEATABLE READ snapshot taken before the lock was acquired. Choose an isolation/locking protocol whose protected decision sees the required state; inspect [application-level consistency](https://www.postgresql.org/docs/current/applevel-consistency.html) before treating a lock as sufficient.
+-
+-Serializable isolation orders committed transactions; it does not alone promise that a read includes every earlier acknowledged external write. Single-object linearizability likewise does not establish multi-row isolation. Verify the combined real-time and transaction contract when both are required.
+-
+@@ -31,2 +26,0 @@
+-
+-A lost COMMIT acknowledgement is an unknown outcome, not a confirmed abort. Resolve it through durable operation identity and outcome lookup, or an independently repeat-safe transaction contract, before reapplying a mutation. Connection loss alone cannot establish that rollback occurred.
+@@ -38 +32 @@
+-For the failing or optimistic schedule, force both actors to reach the decision before either mutation completes. For a repair that locks before reading, observe B attempting or blocking on acquisition, allow A to commit, then verify B rereads the protected state. A barrier requiring B to pass A's held lock would deadlock the test itself. Assert the business invariant and each caller's result, including the conflict path. For cross-row rules, use different target rows; a test competing only on the same row can miss write skew. Verify whole-transaction retries reread state and do not repeat an unsafe external effect.
++Force both actors to reach the decision before either mutation completes. Assert the business invariant and each caller's result, including the conflict path. For cross-row rules, use different target rows; a test competing only on the same row can miss write skew. Verify whole-transaction retries reread state and do not repeat an unsafe external effect.

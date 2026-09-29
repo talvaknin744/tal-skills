@@ -1,0 +1,26 @@
+failure_limit = 3
+handler_slots = 1
+health = READY
+
+poll_forever():
+    while process_alive:
+        delivery = queue.take()
+        pool.submit(run, delivery)
+
+run(delivery):
+    cursor = progress.read(delivery.job_id)
+    try:
+        for page in manifest.after(cursor):
+            cancellation.throw_if_requested()
+            import_page(page)
+            if checkpoint_due():
+                progress.commit(delivery.job_id, page.number)
+        queue.ack(delivery)
+    except Exception as error:
+        queue.fail(delivery, error.name)
+
+shutdown():
+    health = UNAVAILABLE
+    cancellation.cancel_all()
+    pool.wait(timeout=80_seconds)
+    exit(0)

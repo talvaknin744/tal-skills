@@ -1,0 +1,19 @@
+handle(delivery):
+    job = db.claim_if_lease_expired(delivery.export_id, worker_id)
+    if job is None:
+        return
+    cursor = db.read_progress(job.export_id).next_offset
+    while cursor < manifest.length:
+        rows = transform(manifest.slice(cursor, cursor + 10))
+        db.transaction:
+            db.write_rows(job.export_id, rows)
+            db.save_progress(job.export_id, next_offset=cursor + 10)
+        cursor += 10
+    db.transaction:
+        db.append_summary(job.export_id)
+        db.save_progress(job.export_id, next_offset=cursor, state=COMPLETED)
+    retry(3, lambda: queue.ack(delivery))
+
+heartbeat(job):
+    if not db.renew(job.export_id, worker_id, job.generation):
+        log("renewal rejected")

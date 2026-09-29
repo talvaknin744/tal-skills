@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: index-workers
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels: {app: index-workers}
+  template:
+    metadata:
+      labels: {app: index-workers}
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: worker
+          image: registry.internal/index-worker:42
+          readinessProbe:
+            httpGet: {path: /ready, port: 8080}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "curl --fail http://localhost:8080/drain"]
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: index-workers
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels: {app: index-workers}

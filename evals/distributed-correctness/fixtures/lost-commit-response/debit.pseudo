@@ -1,0 +1,22 @@
+debit(request):
+    for attempt in range(3):
+        try:
+            tx = database.begin()
+            debit_id = random_uuid()
+            tx.insert_debit(debit_id, request.account, request.amount)
+            tx.execute("UPDATE accounts SET balance = balance - ? WHERE id = ?",
+                       request.amount, request.account)
+            tx.commit()
+            return {status: "accepted", debit_id: debit_id}
+        except Exception:
+            database.reconnect()
+            continue
+    return {status: "failed"}
+
+-- Request contains request_id, account, and amount; request_id is unused above.
+-- Outcomes table available to the implementation:
+CREATE TABLE outcomes (
+  request_id text PRIMARY KEY,
+  accepted_payload jsonb NOT NULL,
+  result jsonb NOT NULL
+);
