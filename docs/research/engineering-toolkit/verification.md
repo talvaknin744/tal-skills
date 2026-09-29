@@ -1,17 +1,44 @@
 # Engineering toolkit verification
 
-Evidence snapshot: **2026-09-29**. The published toolkit validation
+Evidence snapshot: **2026-09-29**. The initial published toolkit validation
 checkpoint is [`76f77f9`](https://github.com/talvaknin744/tal-skills/commit/76f77f9e478313f75f1eecab6d628ef0cbdc59ca),
 with its exact CI results in the [release record](release-record.json).
 The completed archives contain **20 unique skill cases in 26 attempts** and
 **eight Codex workflows in ten attempts**. Latest skill results are 17 pass and
 3 partial. All eight latest workflows pass their bounded task and observed
 native behavior; all remain partial under the strict isolation criterion.
-Claude model execution was authentication-blocked.
+Claude model execution was authentication-blocked. These are the original release
+results; the later article extension has separate evidence below.
 
 Runtime examples, agent behavior and repository validation are separate forms
 of evidence below. A successful fixture can mean an unsafe control was
 reproduced; it does not turn that control into a recommended implementation.
+
+## Additional article extension
+
+The [additional research](extensions/README.md) adds 17 deep article records
+(41 combined) and updates nine existing skills. Five additional Codex cases ran
+in six attempts; the [latest five task and native outcomes pass](../../../evals/engineering-toolkit/runs/2026-09-29/native-extension/README.md).
+Their strict rubric remains partial for unproven isolation. The first worker
+attempt's missing operational drain owner is retained; a focused workflow
+correction and fresh independent assessment followed. No baseline skill scores
+were silently transferred to the changed packages.
+
+The [ownership probes](../../../examples/ownership-boundaries/evidence/verified-run.json)
+and [independent rerun](../../../examples/ownership-boundaries/evidence/independent-rerun.json)
+observed three passing contracts and four expected unsafe controls, with zero
+failures. They cover public Python semaphore acquisition, Go select operand
+evaluation, and Node observer versus owned-stream cancellation. Two harness
+defects were reproduced and corrected before final verification; the
+[review](extensions/review-ownership-probes.md) preserves those observations and
+the cleanup-evidence limit.
+
+Local release validation passed **365 tests, zero failures/skips**. Runtime
+attribution now checks **75 source hashes in 12 reports**; this check does not
+rerun the experiments. A [fresh both-host installation](extensions/installation-after-workflow-review.json)
+included 319 managed files plus the manifest, with all 320 operations unchanged
+on repeat. The original release gates below keep their historical counts and CI
+identities; extension publication evidence is recorded separately.
 
 ## Release gates
 

@@ -118,6 +118,17 @@ test('append-only supplements bind their base manifest and their own published b
   assert.throws(() => checkEvaluationEvidence(f.root), /supplement\/base manifest/);
 });
 
+test('a substituted native fixture index cannot reuse an earlier prepared-run identity', t => {
+  const f = fixture(t), index = json({ cases: [{ id: 'original-case' }] });
+  f.put('evidence/prepared.json', json({ fixture_index_sha256: sha(index) }));
+  f.put('fixture-index.json', index); f.save();
+  assert.equal(checkEvaluationEvidence(f.root).manifests_checked, 1);
+  // Even internally consistent artifact hashes must bind the index selected
+  // before execution; changing the manifest does not change that preparation.
+  f.put('fixture-index.json', json({ cases: [{ id: 'replacement-case' }] })); f.save();
+  assert.throws(() => checkEvaluationEvidence(f.root), /Binding mismatch: fixture-index.json/);
+});
+
 test('source bindings can resolve through a runtime supplement but cannot remain unpublished', t => {
   const f = fixture(t), score = JSON.parse(fs.readFileSync(path.join(f.directory, 'score.json')));
   const name = 'trial/scratch/report.json', bytes = json({ observed: true });

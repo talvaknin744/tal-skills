@@ -1,0 +1,294 @@
+{
+  "format_version": 1,
+  "status": "authored_not_native_executed",
+  "score_scale": {
+    "0": "absent or wrong",
+    "1": "partial; critical partial remains unresolved",
+    "2": "satisfied with linked evidence"
+  },
+  "planned_hosts": {
+    "codex": "planned",
+    "claude": "blocked_authentication_pending_rerun"
+  },
+  "common_acceptance": [
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "criterion": "The installed workflow and relevant installed native roles were actually loaded/selected by the named host; generic children merely reading role text are reported as fallback.",
+      "evidence": "Host discovery and delegation events, installed-file manifest, host version; final prose alone is insufficient."
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "criterion": "One owner controls each overlapping implementation path; a separate reviewer examines the stable final candidate or review conclusion. Findings return to the owner and affected checks/re-review follow any correction.",
+      "evidence": "Native delegation trace, role assignments, candidate digest, findings and correction chain; no required roster size."
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "criterion": "Candidate receives only prompt/raw files plus installed dependency closure and allowed tools; supplied contract/verifiers/native files remain unchanged, and only declared source/runtime paths change.",
+      "evidence": "Input/final hashes and workspace diff; record capability deviations and case_compliant separately."
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "criterion": "Final claims distinguish local model/adapter checks from real infrastructure, protocol peers, authentication, durability, and actual native host behavior.",
+      "evidence": "Executed commands and observations linked to the final candidate, with unavailable checks explicit."
+    }
+  ],
+  "cases": [
+    {
+      "id": "tal-backend-delivery",
+      "workflow": "tal-backend-delivery",
+      "task_mode": "implement",
+      "prompt_file": "tal-backend-delivery/prompt.md",
+      "fixture_dir": "tal-backend-delivery/rawfiles",
+      "editable_files": [
+        "export.ts",
+        "test_export.mjs"
+      ],
+      "runtime_output_paths": [],
+      "verification_argv": [
+        "node",
+        "verify.mjs"
+      ],
+      "verification_kind": "acceptance",
+      "baseline_expected_exit": 1,
+      "acceptance": [
+        {
+          "id": "completion_after_finish",
+          "severity": "critical",
+          "criterion": "Preserves ordered object-mode records and resolves only after the gated sink final callback/finish; the final protected verifier passes all five checks.",
+          "evidence": "Protected verifier output bound to final export.ts plus source review of the completion boundary."
+        },
+        {
+          "id": "slow_sink_backpressure",
+          "severity": "critical",
+          "criterion": "With both highWaterMarks=1 and the first sink write held, queueing/read-ahead stays bounded instead of draining the entire finite input.",
+          "evidence": "slow_sink_backpressure gate observations; no timing-only throughput assertion."
+        },
+        {
+          "id": "owned_pipeline_cleanup",
+          "severity": "critical",
+          "criterion": "Source error, sink error, and caller abort reject with the required original error/AbortError and close both owned streams exactly once.",
+          "evidence": "sink_error_closes_source, source_error_closes_sink, abort_closes_owned_pipeline checks and resource ownership review."
+        },
+        {
+          "id": "local_stream_limits",
+          "severity": "major",
+          "criterion": "Explains Node stream ownership/backpressure/completion behavior while limiting evidence to the pinned local Node runtime and synthetic streams.",
+          "evidence": "Before/after checks, actual runtime version, and final evidence statement."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-consistency-diagnosis",
+      "workflow": "tal-consistency-diagnosis",
+      "task_mode": "implement",
+      "prompt_file": "tal-consistency-diagnosis/prompt.md",
+      "fixture_dir": "tal-consistency-diagnosis/rawfiles",
+      "editable_files": [
+        "projection.py",
+        "test_projection.py"
+      ],
+      "runtime_output_paths": [],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "verification_kind": "acceptance",
+      "baseline_expected_exit": 1,
+      "acceptance": [
+        {
+          "id": "delete_handoff",
+          "severity": "critical",
+          "criterion": "The diagnostic hook permits a live DELETE and state read to complete while snapshot publication is paused; releasing the snapshot cannot resurrect the key.",
+          "evidence": "paused_snapshot_delete runtime history and final enforcement boundary; hook remains in contract position."
+        },
+        {
+          "id": "restart_frontier",
+          "severity": "critical",
+          "criterion": "Ordering/tombstone information survives JSON restart so delayed snapshot and stale live put cannot resurrect a deleted key; a newer put still succeeds.",
+          "evidence": "Protected restart assertions plus dump/load representation in final source; no crash-durability claim."
+        },
+        {
+          "id": "complete_baseline_and_per_key_order",
+          "severity": "critical",
+          "criterion": "Snapshot omission removes obsolete keys, later live updates survive baseline publication, old baselines cannot regress state, and unrelated keys retain independent live sequence ordering.",
+          "evidence": "snapshot_boundary_and_omission and per_key_and_duplicate_order pass against unchanged verifier."
+        },
+        {
+          "id": "causal_evidence",
+          "severity": "major",
+          "criterion": "Records original forbidden result and passing final candidate using bounded event gates, and distinguishes serialization/threading proof from actual CDC/caching infrastructure.",
+          "evidence": "Before/after outputs, joined threads, local limits; stress-only success is insufficient."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-worker-rollout",
+      "workflow": "tal-worker-rollout",
+      "task_mode": "review",
+      "prompt_file": "tal-worker-rollout/prompt.md",
+      "fixture_dir": "tal-worker-rollout/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [],
+      "verification_argv": [],
+      "verification_kind": "none",
+      "baseline_expected_exit": null,
+      "acceptance": [
+        {
+          "id": "deployment_and_retirement",
+          "severity": "critical",
+          "criterion": "Separates SUCCESSFUL DEFERRED deployment from old-cohort retirement, uses current live task inventory, and does not promise deployment rollback after completion.",
+          "evidence": "Evidence-backed recommendation tied to completion snapshot, live counts and nonterminal job receipts."
+        },
+        {
+          "id": "finite_confirmed_protection",
+          "severity": "critical",
+          "criterion": "Recognizes old-a expires at12:10 and its failed 1440-minute request did not renew protection; requires bounded confirmation/recovery before expiry without inventing revision-3 checkpoint support.",
+          "evidence": "Named task, response body, expiration, deadline and escalation/hold conditions."
+        },
+        {
+          "id": "admission_and_ownership",
+          "severity": "critical",
+          "criterion": "Closes retiring-cohort admission with in-flight claim handling, prevents starting unprotected work, and preserves job identity, ownership epochs and final receipt-before-ack.",
+          "evidence": "Concrete sequence tied to queue/protection contracts; protection is not treated as an application ownership lease."
+        },
+        {
+          "id": "retained_dependencies",
+          "severity": "critical",
+          "criterion": "Retains revision-2 execution/recovery dependencies until jobs are terminal or a compatible recovery path is demonstrated, with separate drain owner and release evidence.",
+          "evidence": "Old-job/dependency inventory and terminal/resume/release gates."
+        },
+        {
+          "id": "capacity_and_limits",
+          "severity": "major",
+          "criterion": "Assesses two protected old tasks, five occupied slots and proposed desired count1; names capacity/scale-in failure limits without inventing AWS execution, guaranteed scaling selection, or crash immunity.",
+          "evidence": "Bounded capacity recommendation, rehearsal/stop criteria, and explicit planning-only scope."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-messaging-evolution",
+      "workflow": "tal-messaging-evolution",
+      "task_mode": "review",
+      "prompt_file": "tal-messaging-evolution/prompt.md",
+      "fixture_dir": "tal-messaging-evolution/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "acceptance": [
+        {
+          "id": "nonportable_offsets",
+          "severity": "critical",
+          "criterion": "Shows copying source next-offset2 to target2 reads A1/A2 and misses B1/B2; source and target offsets are log-specific positions.",
+          "evidence": "Named record/offset history and local observation output, distinguished from a default MM2 topology."
+        },
+        {
+          "id": "translation_and_coverage",
+          "severity": "critical",
+          "criterion": "Validates the named checkpoint source/target incarnations, contiguous coverage and age before selecting conservative target0; missing/stale/uncovered evidence leads to hold rather than guessed progress.",
+          "evidence": "Checkpoint aggregation-map-003, decision time versus120-second bound, and explicit mapping/coverage stop rules."
+        },
+        {
+          "id": "group_ownership",
+          "severity": "critical",
+          "criterion": "Does not treat enabling sync.group.offsets as an installed position with an active target member or as automatic translation of this custom aggregate; resolves group ownership and fences the old effect owner before cutover.",
+          "evidence": "Active east-observer-1, unobserved installed offset, source generation41 fence status, and switchover sequence."
+        },
+        {
+          "id": "replay_effect_boundary",
+          "severity": "critical",
+          "criterion": "Uses durable identity/intent receipts for conservative replay so A1/A2 replay safely and B1/B2 complete; broker replication/transactions are not claimed to protect arbitrary external effects.",
+          "evidence": "Replay/effect reconciliation plan grounded in the specified ledger, plus unresolved real-integration checks."
+        },
+        {
+          "id": "local_observation_scope",
+          "severity": "major",
+          "criterion": "Reports synthetic arithmetic and review only, with no claim of live broker failover, fresh connector checkpoints or actual exactly-once effects.",
+          "evidence": "Executed local observation and final limitations."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-mcp-integration",
+      "workflow": "tal-mcp-integration",
+      "task_mode": "review",
+      "prompt_file": "tal-mcp-integration/prompt.md",
+      "fixture_dir": "tal-mcp-integration/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "probe.py"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "acceptance": [
+        {
+          "id": "composition_authority",
+          "severity": "critical",
+          "criterion": "Traces untrusted public issue content to legitimate private read and public publication; separate tool scopes and an allowed destination do not grant task authority to disclose private content.",
+          "evidence": "Named source/read/sink path in adapter.py and observed same-destination leak."
+        },
+        {
+          "id": "trusted_dataflow_policy",
+          "severity": "critical",
+          "criterion": "Requires application-observed source classification, caller/task intent and destination/visibility authorization before publication, while preserving a specifically authorized cross-repository transfer.",
+          "evidence": "Concrete enforcement location and deny/allow verification cases; client-supplied safe/source labels cannot grant authority."
+        },
+        {
+          "id": "mandatory_gateway_boundary",
+          "severity": "critical",
+          "criterion": "Finds direct origin bypasses the mandatory gateway policy despite a valid scoped caller; requires origin-side enforceable routing/identity or policy evidence, not a forged header or URL substring rule.",
+          "evidence": "Gateway-denied versus origin-accepted publication, deployment-specific enforcement recommendation and direct-path negative case."
+        },
+        {
+          "id": "honest_protocol_limits",
+          "severity": "major",
+          "criterion": "Distinguishes deterministic app-policy observations from model prompt-injection resistance, real authentication, network enforcement and MCP wire/SDK conformance.",
+          "evidence": "Probe output and precise missing deployment/peer checks; exit0 is observation only."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    }
+  ]
+}

@@ -23,7 +23,9 @@ The additions update nine existing packages: `graceful-draining`,
 `concurrency-correctness`, `messaging-reliability`, `python-backend`,
 `typescript-backend`, `go-backend`, `failure-oriented-testing`,
 `recovery-validation`, and `mcp-engineering`. Public skill names, native roles,
-workflow names, protocol pins and model inheritance remain stable. Detailed
+workflow names, protocol pins and model inheritance remain stable. The worker
+rollout workflow also makes post-deployment retirement responsibility explicit.
+Detailed
 advice is conditional reference material; the recovery entrypoint adds a short
 route for artifact provenance and cold recovery capacity.
 
@@ -54,8 +56,12 @@ The [five additional native cases](../../../../evals/engineering-toolkit/extensi
 cover owned streams, snapshot/delete ordering, protected worker retirement,
 regional offset translation, and composed tool authority. They use separate
 fixtures and preserve the original eight workflows' evaluation archive. Author
-calibration establishes useful broken and repaired controls; independent scores
-of actual native candidates are reported separately when completed.
+calibration establishes useful broken and repaired controls. The
+[executed archive](../../../../evals/engineering-toolkit/runs/2026-09-29/native-extension/README.md)
+contains six attempts across the five cases: latest task/native outcomes pass,
+with strict isolation still partial. The initial worker result omitted the
+operational drain owner; its [correction and rerun](workflow-review-correction.md)
+remain separate from that original score.
 
 The [ownership examples](../../../../examples/ownership-boundaries/README.md)
 exercise public Python, Go and Node runtime contracts with finite local probes.
@@ -67,7 +73,8 @@ independent run observed three passing contracts and four expected unsafe
 controls, with zero failures. Unavailable group-disappearance evidence is reported
 as unconfirmed cleanup instead of being converted to a success claim.
 
-The [both-host installation record](installation.json) covers the complete
+The [both-host installation record after workflow review](installation-after-workflow-review.json)
+covers the complete
 15-agent, eight-workflow selection: 319 managed files plus the manifest, with all
 320 operations unchanged on repeated installation. This is a filesystem check;
 it does not substitute for native execution.
