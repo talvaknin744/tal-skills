@@ -84,3 +84,27 @@ recorded source checkpoint. Its skill scores do not automatically validate these
 later reference changes. Claude native behavior remains unavailable until the
 existing authentication problem is resolved; no successful Claude run is inferred
 from adapter generation or loader discovery.
+
+## Subsequent user-requested additions
+
+The completed 17-article pass above remains a historical checkpoint. The user then
+selected technical deprecation, supplied two SQLAlchemy articles and Discord's
+message-storage account, and requested overlooked cache-design pitfalls. The
+pasted Redis recipes were treated as claims to check, not source authority. The
+user explicitly declined a separate Redis skill or agent.
+
+| Addition | Adopted guidance and evidence |
+| --- | --- |
+| Technical deprecation | [Research](technical-deprecation.md), [independent source review](review-technical-deprecation.md), and [evaluation-driven correction](deprecation-evaluation-correction.md) |
+| SQLAlchemy sessions and query tests | [Article and documentation review](sqlalchemy-gotchas.md), [PostgreSQL/ASGI examples](../../../../examples/sqlalchemy-gotchas/README.md), [independent rerun](review-sqlalchemy-gotchas.md) |
+| Discord storage experience | [Hot partitions, shared reads, and migration completeness](discord-message-storage.md); historical performance is not a portable guarantee |
+| Cache miss overload | [Expiry, negatives, Bloom generations, enumeration, and lease boundaries](cache-load-protection.md), [source review](review-cache-and-storage.md), [bounded examples](../../../../examples/cache-load-protection/README.md) |
+| High-read/high-write cache design | [Corrected claims and source scopes](redis-high-throughput.md), covering acknowledgement, backlog, invalidation, replication, memory policy, and command work |
+
+The two Medium articles and Discord article were read through their accessible
+main text. Other records distinguish full article text, selected paper sections,
+current documentation sections, and reused sources. The original publisher and
+book inventories are not inflated by repeated sources. Runtime and model
+observations remain separate from proposed verification schedules.
+
+Follow-up evidence: [deprecation evaluations](../../../../evals/engineering-toolkit/runs/2026-09-29/technical-deprecation/README.md), [cache-design source review](review-cache-design.md), [cache runtime review](review-cache-load-probes.md), and [both-host installation](installation-followup.json).

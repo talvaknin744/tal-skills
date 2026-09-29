@@ -38,7 +38,44 @@ attribution now checks **75 source hashes in 12 reports**; this check does not
 rerun the experiments. A [fresh both-host installation](extensions/installation-after-workflow-review.json)
 included 319 managed files plus the manifest, with all 320 operations unchanged
 on repeat. The original release gates below keep their historical counts and CI
-identities; extension publication evidence is recorded separately.
+identities. The [extension release record](extensions/release-record.json)
+confirms public checkpoint `6e46153` and its
+[successful 365-test CI run](https://github.com/talvaknin744/tal-skills/actions/runs/36571396256).
+
+## Deprecation and cache-design follow-up
+
+The user-requested follow-up adds `technical-deprecation` and focused references
+inside existing Python, operations, consistency, and infrastructure skills. The
+repository now has **41 skill packages, 15 agents, and eight workflows**; no
+Redis-specific skill or agent was added.
+
+The [deprecation archive](../../../evals/engineering-toolkit/runs/2026-09-29/technical-deprecation/README.md)
+contains six independently scored attempts across two relevant cases and one
+nontrigger. Latest results all pass. The original configuration-migration partial
+and its [instruction correction](extensions/deprecation-evaluation-correction.md)
+remain visible. Positive runs read the skill body; no body activation was observed
+in nontriggers. All retain the host confinement qualifications. Review cases did
+not execute migrations; both cleanup nontrigger attempts passed their supplied
+verifier and a separate coordinator execution.
+
+[SQLAlchemy examples](../../../examples/sqlalchemy-gotchas/README.md) and their
+[independent review](extensions/review-sqlalchemy-gotchas.md) reproduce three
+passing contracts and five unsafe controls using real PostgreSQL and in-process
+ASGI. [Cache examples](../../../examples/cache-load-protection/README.md) and
+[independent review](extensions/review-cache-load-probes.md) pass eight bounded
+scenarios. Both distinguish actual datastore observations from application models
+and preserve failed development attempts. Neither establishes production capacity,
+failover durability, or universal schedule coverage.
+
+The [follow-up installation record](extensions/installation-followup.json) covers
+325 managed files plus the manifest; all 326 operations were unchanged on repeat.
+It installs the existing 19-skill dependency closure for all agents/workflows.
+Technical deprecation remains a separately installable package.
+
+Final local validation passed **369 tests with zero failures/skips**. Attribution
+checks verified **86 runtime source hashes in 14 reports**, plus **55 evaluation
+manifests, 882 published artifacts, and 1,006 source bindings**. These checks
+validate packaging and evidence integrity; they do not rerun the experiments.
 
 ## Release gates
 

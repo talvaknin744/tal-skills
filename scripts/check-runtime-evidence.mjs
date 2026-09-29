@@ -19,6 +19,7 @@ const reports = [
   ['examples/protocols/a2a/evidence/verified-run.json', 'source_sha256', 'examples/protocols/a2a'],
   ['examples/ownership-boundaries/evidence/verified-run.json', 'source_sha256', 'examples/ownership-boundaries'],
   ['examples/sqlalchemy-gotchas/evidence/verified-run.json', 'source_sha256', 'examples/sqlalchemy-gotchas'],
+  ['examples/cache-load-protection/evidence/verified-run.json', 'source_sha256', 'examples/cache-load-protection'],
 ];
 const failures = [];
 let checked = 0;

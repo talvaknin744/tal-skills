@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-29T13:26:06.025406+00:00",
+  "status": "pass",
+  "pins": {
+    "schema_version": 1,
+    "python": "3.14.3",
+    "python_packages": [],
+    "redis_version": "8.10.2",
+    "redis_image": "redis@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+    "redis_image_platform": "linux/arm64",
+    "bloom_module_path": "/usr/local/lib/redis/modules/redisbloom.so",
+    "module_loading": "Pinned image automatically loads its bundled modules; an additional --loadmodule would duplicate loading.",
+    "bloom_version_policy": "Record MODULE LIST from the immutable image; require BF.RESERVE and BF.EXISTS at runtime.",
+    "sqlite_version_policy": "Bundled Python sqlite3; observed version recorded in each report."
+  },
+  "source_sha256": {
+    ".gitignore": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
+    "README.md": "cbd0a8cd4ec05b1f53cf63084a0620dfae334eef6f9e9a0c580df7cbd65f8292",
+    "dependencies.lock.json": "27517aa3789c9a3d050bc1bac807df2feaa0d6dc631fb8e9d8660a4e7aa33b0d",
+    "redis_client.py": "dde3c93314bcb42518f4562ab8b306ca50b05b62fb972a313c5f40c13f98d2ff",
+    "probes.py": "ae76b71f4ff5360c2bf0d4c8d3042b8a127fb5d43fc758cc404670c64b00966c",
+    "verify.py": "72c5973b2b089984eb1531a6de40458178fde362db3dba3e675674c8f3e21a63"
+  },
+  "scenarios": [
+    {
+      "id": "bounded-ttl-jitter",
+      "status": "pass",
+      "evidence": {
+        "scope": "Virtual-time expiry buckets plus actual Redis PTTL assignments; no request-load benchmark",
+        "unsafe_control": {
+          "synchronized_peak_bucket": 128,
+          "positive_jitter_max_age_ms": 79896,
+          "slow_fill_with_restarted_ttl_expires_at_ms": 119000
+        },
+        "bounded_jitter_peak_bucket": 13,
+        "expiry_buckets": {
+          "40": 4,
+          "41": 8,
+          "42": 2,
+          "43": 5,
+          "44": 13,
+          "45": 6,
+          "46": 5,
+          "47": 12,
+          "48": 8,
+          "49": 9,
+          "50": 6,
+          "51": 10,
+          "52": 7,
+          "53": 4,
+          "54": 7,
+          "55": 3,
+          "56": 4,
+          "57": 8,
+          "58": 5,
+          "59": 2
+        },
+        "hard_age_ceiling_ms_from_source_sample": 60000,
+        "remaining_after_59s_ms": 1000,
+        "publication_after_61s": "rejected",
+        "actual_redis_ttls": [
+          {
+            "assigned_ms": 49351,
+            "observed_pttl_ms": 49350
+          },
+          {
+            "assigned_ms": 52132,
+            "observed_pttl_ms": 52132
+          },
+          {
+            "assigned_ms": 49781,
+            "observed_pttl_ms": 49780
+          },
+          {
+            "assigned_ms": 41213,
+            "observed_pttl_ms": 41213
+          },
+          {
+            "assigned_ms": 59785,
+            "observed_pttl_ms": 59785
+          },
+          {
+            "assigned_ms": 41448,
+            "observed_pttl_ms": 41448
+          },
+          {
+            "assigned_ms": 44039,
+            "observed_pttl_ms": 44039
+          },
+          {
+            "assigned_ms": 49769,
+            "observed_pttl_ms": 49769
+          }
+        ],
+        "limit": "This fixed 128-key schedule illustrates spreading. It does not bound stochastic collisions, upstream snapshot age, or production source load."
+      }
+    },
+    {
+      "id": "negative-cache-repeated-miss",
+      "status": "pass",
+      "evidence": {
+        "scope": "Real Redis negative entry and SQLite reads, sequential same-key requests",
+        "unsafe_control": {
+          "uncached_requests": 20,
+          "database_reads": 20
+        },
+        "cached_requests": 20,
+        "database_reads_before_expiry": 1,
+        "database_reads_after_observed_expiry": 2,
+        "expiry_gate": "Fixture shortens entry TTL to 10ms using PEXPIRE, then observes absence",
+        "limit": "No bound for many distinct keys, simultaneous cold misses, source failures, or capacity during fallback."
+      }
+    },
+    {
+      "id": "negative-create-stale-fill",
+      "status": "pass",
+      "evidence": {
+        "scope": "Two real Redis connections and SQLite connections; explicit sequential race gates in one process",
+        "unsafe_control": {
+          "database_revision": 2,
+          "later_cached_result": {
+            "revision": 1,
+            "kind": "missing",
+            "value": null
+          },
+          "unsafe_negative_resurrected": true
+        },
+        "guarded": {
+          "database_revision": 2,
+          "stale_publish_result": 0,
+          "later_result": {
+            "path": "database",
+            "snapshot": {
+              "revision": 2,
+              "kind": "value",
+              "value": "created"
+            },
+            "publish": 1
+          },
+          "floor_loss_publish_result": -1,
+          "floor_loss_read_path": "database"
+        },
+        "limit": "DB commit and Redis floor advancement are not atomic. Success follows both; no crash recovery/outbox or automatic missing-floor reconstruction is implemented."
+      }
+    },
+    {
+      "id": "bloom-readiness",
+      "status": "pass",
+      "evidence": {
+        "scope": "Actual RedisBloom with Lua-atomic readiness, type, and membership checks",
+        "unsafe_control": {
+          "readiness_before_filter_loss": "g2",
+          "missing_filter_membership": 0,
+          "wrong_type_membership": 0,
+          "naive_zero_means_database_absent_would_hide": "database-value"
+        },
+        "incomplete_generation": {
+          "raw_membership": 0,
+          "guard": -1,
+          "result": "database-value"
+        },
+        "bloom_type": "MBbloom--",
+        "missing_wrong_type_or_old_generation": "authoritative lookup",
+        "complete_static_generation_absence": 0,
+        "limit": "Generation g2 completeness is established only by quiescent fixture setup. Online DB commits, asynchronous BF.ADD, rebuild fencing, and Redis restart recovery need their own synchronization protocol."
+      }
+    },
+    {
+      "id": "bloom-false-positive",
+      "status": "pass",
+      "evidence": {
+        "scope": "Actual RedisBloom false positive followed by a real SQLite query",
+        "configured_error_rate": 0.5,
+        "capacity": 32,
+        "queries_until_witness": 7,
+        "unsafe_control": {
+          "membership": 1,
+          "treating_positive_as_existence": "incorrect"
+        },
+        "witness": "absent-6",
+        "authoritative_result": "missing",
+        "authoritative_reads": 1,
+        "limit": "High error rate is intentional to find a witness quickly; this is not an error-rate measurement or production parameter recommendation."
+      }
+    },
+    {
+      "id": "lease-resource-fencing",
+      "status": "pass",
+      "evidence": {
+        "scope": "Real Redis lease expiry and owner-safe release; real SQLite conditional resource mutation",
+        "unsafe_control": {
+          "old_owner_deleted_new_lease": true,
+          "unfenced_value": "stale-overwrite"
+        },
+        "stale_release_result": 0,
+        "fences": [
+          1,
+          2
+        ],
+        "stale_mutation_rows": 0,
+        "final_resource": "new-owner",
+        "current_owner_release": 1,
+        "limit": "The sequence and accepted fence live in real SQLite; crash durability is not tested. Random Redis owner values are not fencing tokens. A is rejected once B's fence is installed. Restoring B's lease after the destructive control resets this fixture, not a production reacquisition protocol. No atomic Redis/SQLite grant protocol, external side-effect fence, or failover claim."
+      }
+    },
+    {
+      "id": "scan-prohibited-keys",
+      "status": "pass",
+      "evidence": {
+        "scope": "Actual Redis SCAN over stable fixture keys and ACL-denied KEYS",
+        "unsafe_control": {
+          "prohibited_keys_command": "NOPERM User scan-reader has no permissions to run the 'keys' command"
+        },
+        "unique_expected": 96,
+        "unique_observed": 96,
+        "returned_items": 96,
+        "count_hint": 1,
+        "calls": 136,
+        "largest_batch": 2,
+        "empty_nonterminal_batches": 58,
+        "terminal_cursor": "0",
+        "limit": "COUNT is not a page-size or latency limit. Mutation snapshots, Redis Cluster coverage, and runtime complexity were not measured; full iteration and KEYS complexities come from official documentation."
+      }
+    },
+    {
+      "id": "singleflight-cancellation-bound",
+      "status": "pass",
+      "evidence": {
+        "unsafe_control": "canceling one waiter canceled the shared load and the second waiter",
+        "loader_calls_per_variant": 1,
+        "active_key_bound": 1,
+        "additional_key_rejected": true,
+        "shielded_remaining_waiter": "loaded",
+        "scope": "Event-gated in-process asyncio model; no distributed coalescer or source I/O",
+        "limit": "Cancellation isolation does not make a loader durable. A real service must own loader shutdown, timeouts, shared errors, and capacity across processes."
+      }
+    }
+  ],
+  "runtime": {
+    "python": "3.14.3",
+    "sqlite": "3.53.2",
+    "platform": "macOS-14.2-arm64-arm-64bit-Mach-O"
+  },
+  "errors": [],
+  "container": {
+    "id": "b4f9613482041fcb69c02d099be98875db4fe4117755cc5864c598bef735c760",
+    "image_id": "sha256:675f7644831d85995868250485bf7a71970257f74da31c62969a868d3f3eff2e",
+    "configured_image": "redis@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+    "port": 51458,
+    "redis_version": "8.10.2",
+    "modules": [
+      [
+        "name",
+        "timeseries",
+        "ver",
+        81001,
+        "path",
+        "/usr/local/lib/redis/modules//redistimeseries.so",
+        "args",
+        []
+      ],
+      [
+        "name",
+        "search",
+        "ver",
+        81001,
+        "path",
+        "/usr/local/lib/redis/modules//redisearch.so",
+        "args",
+        []
+      ],
+      [
+        "name",
+        "bf",
+        "ver",
+        81001,
+        "path",
+        "/usr/local/lib/redis/modules//redisbloom.so",
+        "args",
+        []
+      ],
+      [
+        "name",
+        "vectorset",
+        "ver",
+        1,
+        "path",
+        "",
+        "args",
+        []
+      ],
+      [
+        "name",
+        "ReJSON",
+        "ver",
+        81000,
+        "path",
+        "/usr/local/lib/redis/modules//rejson.so",
+        "args",
+        []
+      ]
+    ],
+    "persistence": "disabled",
+    "maxmemory_policy": "noeviction"
+  },
+  "cleanup": {
+    "owner_label": "io.tal-skills.cache-load-protection-run",
+    "owned_ids": [
+      "b4f9613482041fcb69c02d099be98875db4fe4117755cc5864c598bef735c760"
+    ],
+    "removed_ids": [
+      "b4f9613482041fcb69c02d099be98875db4fe4117755cc5864c598bef735c760"
+    ],
+    "errors": [],
+    "remaining_ids": [],
+    "complete": true
+  },
+  "completed_at": "2026-09-29T13:26:07.078777+00:00",
+  "counts": {
+    "scenarios": 8,
+    "passed": 8
+  }
+}

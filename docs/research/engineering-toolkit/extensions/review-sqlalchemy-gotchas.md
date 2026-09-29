@@ -48,12 +48,12 @@ All five source hashes matched both the author's [stored successful report](../.
 | `probe.py` | `faa3b3fc4a473bf1eee9d1093ffb787c38d92b8e52a3bbb6080edff946b205eb` |
 | `verify.py` | `eb8d54e75d247ab755e06e5891d5bca35ff996e7133b00fefb124dc92b43e078` |
 
-Independent scratch evidence, not additional committed example artifacts:
+Independent evidence is preserved byte-for-byte in the example:
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `/tmp/tal-sqla-review-20260929-01.json` | `718f2a532a636537bd7745125a0015d37657304ceff132998fb8f8455d6fbded` |
-| `/tmp/tal-sqla-process-review-20260929.json` | `377e44114803c9519bbd79ee56a8559d920f4424d9425aa71d5cf80bb21ed6a2` |
-| `/tmp/tal-sqla-review-negative-20260929.json` | `f6aca75ae88052bc28f27c04fe31c8a4d6a8959c056208f9a0f5dc30d115457a` |
+| [Independent run](../../../../examples/sqlalchemy-gotchas/evidence/independent-run.json) | `718f2a532a636537bd7745125a0015d37657304ceff132998fb8f8455d6fbded` |
+| [Process cleanup](../../../../examples/sqlalchemy-gotchas/evidence/independent-process-cleanup.json) | `377e44114803c9519bbd79ee56a8559d920f4424d9425aa71d5cf80bb21ed6a2` |
+| [Failure cleanup](../../../../examples/sqlalchemy-gotchas/evidence/independent-failure-cleanup.json) | `f6aca75ae88052bc28f27c04fe31c8a4d6a8959c056208f9a0f5dc30d115457a` |
 
 The cases establish these controlled observations, not all possible schedules. They do not prove production throughput, request-dependency/streaming/background-task lifetimes, ORM lazy-load behavior, query plans, a complete authorization system, or remote-effect rollback. The tenant fixtures validate query predicates, not the whole security boundary. Independent sessions provide independent transactions, not one atomic transaction or a common snapshot. Successful cleanup in these runs is not a global guarantee about arbitrary drivers or uncooperative production processes.
