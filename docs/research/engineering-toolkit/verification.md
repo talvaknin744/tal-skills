@@ -1,7 +1,8 @@
 # Engineering toolkit verification
 
-Evidence snapshot: **2026-09-29**. The latest published validation
-checkpoint is [`a4ec975`](https://github.com/talvaknin744/tal-skills/commit/a4ec975912ef14997b8c6dcbae2c58f4427d45ae).
+Evidence snapshot: **2026-09-29**. The published toolkit validation
+checkpoint is [`76f77f9`](https://github.com/talvaknin744/tal-skills/commit/76f77f9e478313f75f1eecab6d628ef0cbdc59ca),
+with its exact CI results in the [release record](release-record.json).
 The completed archives contain **20 unique skill cases in 26 attempts** and
 **eight Codex workflows in ten attempts**. Latest skill results are 17 pass and
 3 partial. All eight latest workflows pass their bounded task and observed
@@ -16,9 +17,9 @@ reproduced; it does not turn that control into a recommended implementation.
 
 | Gate | Observed evidence | Boundary |
 | --- | --- | --- |
-| Current local validation | **364 tests passed, 0 failed, 0 skipped** in the completed working-tree `npm run validate` run, including the archive-checker regressions. | This is local evidence for the current source snapshot. The published CI checkpoint below remains separately identified. |
-| Published repository validation | **355 tests passed, 0 failed** at `a4ec975`, confirmed in the [successful validation run](https://github.com/talvaknin744/tal-skills/actions/runs/36562226191). The earlier core checkpoint `1b7b68c` passed [276 tests](https://github.com/talvaknin744/tal-skills/actions/runs/36550139240). | Package shape, references, generation, installer behavior and declared regression cases; these counts do not measure model behavior. Later archive additions are not retroactively covered by an earlier CI run. |
-| Backend runtime CI | [Successful Ubuntu run](https://github.com/talvaknin744/tal-skills/actions/runs/36550139340) at core checkpoint `1b7b68c`: Python, TypeScript and Go jobs all passed. | These three backend examples ran in CI. Other examples below have recorded local runs, not an asserted Ubuntu CI run. |
+| Local validation | **364 tests passed, 0 failed, 0 skipped** in the completed `npm run validate` run that preceded `76f77f9`, including archive-checker regressions. | Local checks and the independent CI run below cover the same published implementation. |
+| Published repository validation | **364 tests passed, 0 failed** at `76f77f9` on public `main`, confirmed in the [successful validation run](https://github.com/talvaknin744/tal-skills/actions/runs/36565065139). Earlier checkpoints passed [355 tests at `a4ec975`](https://github.com/talvaknin744/tal-skills/actions/runs/36562226191) and [276 at `1b7b68c`](https://github.com/talvaknin744/tal-skills/actions/runs/36550139240). | Package shape, references, generation, installer behavior and declared regression cases; these counts do not measure model behavior. Later changes require their own validation. |
+| Backend runtime CI | [Successful Ubuntu run](https://github.com/talvaknin744/tal-skills/actions/runs/36565065054) at `76f77f9`: Python, TypeScript and Go jobs all passed. | These three backend examples ran in CI. Other examples below have recorded local runs, not an asserted Ubuntu CI run. |
 | Evidence attribution | Published validation checked **70 source hashes in 11 runtime reports**. | This detects source/report drift. It does not rerun, independently grade or broaden an experiment. |
 | New skill behavior | [Archived independent results](../../../evals/engineering-toolkit/runs/2026-09-29/skills/README.md): latest 20 cases yield **17 pass, 3 partial, 0 fail**; all 55 critical criteria scored 2/2. | One relevant case and one nontrigger per new skill were executed. Ten second relevant cases remain unexecuted; three verification gaps remain. |
 | Codex workflow behavior | [Archived independent results](../../../evals/engineering-toolkit/runs/2026-09-29/native/README.md): **8/8 latest task and native-behavior assessments passed**, with 13 named native children. | Strict rubric remains **partial for all eight** because input/tool confinement was not established. No prohibited scope breach was observed. |
