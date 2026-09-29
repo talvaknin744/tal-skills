@@ -37,6 +37,8 @@ application's intended identity and privileges.
 For PostgreSQL logical archives, physical backups, or PITR, read
 [PostgreSQL recovery](references/postgresql.md). For surviving caches, watches,
 workers, or external effects, read [recovered history](references/recovered-history.md).
+When selecting transformed backups, checking failure signals, or resuming reserved
+work, read [recovery inputs and capacity](references/recovery-inputs.md).
 Read [sources](references/sources.md) when selecting or updating the underlying
 contracts; it records versions, reading scope, and evidence limits.
 

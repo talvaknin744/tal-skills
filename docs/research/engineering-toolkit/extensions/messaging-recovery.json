@@ -1,0 +1,264 @@
+{
+  "extension": "messaging-recovery",
+  "researched_at": "2026-09-29",
+  "status": "research_only",
+  "article_count": 3,
+  "novelty_check": {
+    "scope": ["docs/research/engineering-toolkit/lanes/*.json", "docs/research/**"],
+    "method": "Repository text search for canonical/original URLs and titles before selection; existing relevant skill references read separately.",
+    "result": "No prior citation or deep extraction of the three selected articles found. A different Estuary article with an exactly-once-delivery slug was excluded from this match."
+  },
+  "articles": [
+    {
+      "id": "uber-multiregion-kafka-recovery",
+      "title": "Disaster Recovery for Multi-Region Kafka at Uber",
+      "publisher": "Uber Engineering",
+      "authors": ["Yupeng Fu", "Mingmin Chen"],
+      "url": "https://www.uber.com/us/en/blog/kafka/",
+      "published_at": "2020-12-21",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Complete article prose from Apache Kafka at Uber through conclusion/acknowledgements, including offset-mapping examples and diagram captions; diagram image pixels not inspected.",
+      "kind": "engineering_architecture_retrospective",
+      "practice": {
+        "trigger": "Consumer recovery moves between independently replicated or aggregated logs.",
+        "failure": "Copying a numeric position can skip required events or repeat effects.",
+        "mechanism": "Bind progress to source identity; translate retained mappings conservatively and reconcile duplicates.",
+        "conditions": "Usable mapping history, known replication coverage, correct target identity, exclusive ownership where effects require it.",
+        "limits": "Asynchronous replication can leave unavailable source tail data. Uber's topology and custom mapping are not universal Kafka behavior.",
+        "counterexample": "A restart within the same intact log does not need cross-cluster translation.",
+        "verification": "Permute two-source interleaving; compare effect identities, not equal numeric offsets; reject missing recovery evidence."
+      },
+      "decision": "adopt_conditional_reference_branch",
+      "official_crosschecks": ["kafka-43-mirrormaker", "kafka-43-georeplication"],
+      "gap_ids": ["cross-cluster-progress"]
+    },
+    {
+      "id": "segment-deduplication-recovery",
+      "title": "Delivering billions of messages exactly once",
+      "publisher": "Segment engineering, now hosted by Twilio",
+      "authors": ["Amir Abu Shareb"],
+      "url": "https://www.twilio.com/en-us/blog/insights/exactly-once-delivery",
+      "original_url": "https://segment.com/blog/exactly-once-delivery/",
+      "published_at": "2017-06-29",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html_after_first_party_redirect",
+      "read_scope": "Complete article body: problem, topology, RocksDB performance/deletion code, snapshots, output-topic reconciliation, production results, and abandoned Memcached approach. Code inspected, not copied or executed.",
+      "kind": "engineering_implementation_retrospective",
+      "practice": {
+        "trigger": "Capacity pressure evicts identity evidence or restore rewinds it independently of publication.",
+        "failure": "An old operation appears new; a remembered but unpublished event is skipped.",
+        "mechanism": "Measure usable history and reconcile identity state with authoritative output before resumption.",
+        "conditions": "Stable IDs, retained publication evidence, and a supported way to resolve concurrent publication.",
+        "limits": "The article omits a complete arbitrary-interleaving proof. Its observed retention is historical, not a current promise.",
+        "counterexample": "Lifetime durable uniqueness may make an evictable cache nonauthoritative.",
+        "verification": "Force early eviction and restore both directions of identity/output mismatch; hold inconclusive outcomes."
+      },
+      "decision": "corroborate_existing_rules_add_specific_acceptance_cases",
+      "official_crosschecks": ["segment-current-duplicates", "segment-current-replay"],
+      "gap_ids": ["retention-and-recovered-publication", "replay-intent-and-policy"]
+    },
+    {
+      "id": "trigger-regional-queue-recovery-20260622",
+      "title": "Incident report on June 22, 2026",
+      "publisher": "Trigger.dev",
+      "authors": ["Matt Aitken"],
+      "url": "https://trigger.dev/blog/incident-report-jun-22-2026",
+      "published_at": "2026-06-22",
+      "date_note": "Displayed article date; described incident continued through 2026-06-23.",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Complete article body: impact, proposed changes, full timeline, causes, recovery sequence, reservation/backlog problems, second-region failure, and closing status.",
+      "kind": "incident_postmortem",
+      "practice": {
+        "trigger": "Regional failover or cold recovery with admitted work awaiting execution.",
+        "failure": "Stranded reservations block healthy capacity; restart demand collapses recovering coordination.",
+        "mechanism": "Separate admission, reservation, execution, and completion; recover ownership and ramp observed useful capacity.",
+        "conditions": "Inspect actual scheduler states, shared limits, late pickups, retention, and available downstream headroom.",
+        "limits": "Planned fixes are not shipped evidence. The incident is not proof that maintenance consumes a business-failure attempt.",
+        "counterexample": "Blindly releasing a possibly running task's slot can permit duplicate concurrent execution.",
+        "verification": "Strand reservations, race an old pickup with transfer, and check concurrency plus eventual completion."
+      },
+      "decision": "adopt_specific_failover_fixture_and_conditional_capacity_guidance",
+      "official_crosschecks": ["trigger-current-runs", "trigger-current-queues"],
+      "gap_ids": ["reservation-failover"]
+    }
+  ],
+  "official_crosschecks": [
+    {
+      "id": "kafka-43-mirrormaker",
+      "title": "MirrorMaker Configs",
+      "publisher": "Apache Kafka",
+      "url": "https://kafka.apache.org/43/configuration/mirrormaker-configs/",
+      "version": "4.3",
+      "last_modified": "2026-05-22",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Targeted source/checkpoint configuration entries: offset-sync emission/location, group/topic filters, checkpoint emission, automatic translated group-offset synchronization and intervals.",
+      "finding": "Offset syncs support translation; automatic group-offset installation defaults off and requires no active consumers of that group on the target.",
+      "runtime_verified": false
+    },
+    {
+      "id": "kafka-43-georeplication",
+      "title": "Geo-Replication (Cross-Cluster Data Mirroring)",
+      "publisher": "Apache Kafka",
+      "url": "https://kafka.apache.org/43/operations/geo-replication-cross-cluster-data-mirroring/",
+      "version": "4.3",
+      "last_modified": "2026-05-22",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Overview/replication flows, configuration and exactly-once section, topic/group filters, and monitoring; not every linked connector source file.",
+      "finding": "Inter-cluster mirroring differs from broker replication. Exactly-once mirroring is separately configured; source read_committed visibility and upgrade conditions matter. It does not cover arbitrary external application effects.",
+      "runtime_verified": false
+    },
+    {
+      "id": "segment-current-duplicates",
+      "title": "Handling Duplicate Data",
+      "publisher": "Twilio Segment",
+      "url": "https://www.twilio.com/docs/segment/guides/duplicate-data",
+      "version": "unversioned_current_documentation",
+      "published_at": null,
+      "date_note": "No publication/update date displayed.",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Complete substantive page, including ingress, warehouse, and data-lake distinctions.",
+      "finding": "Current ingress contract describes approximately 24-hour/99% duplicate suppression based on messageId; destination behavior differs. The historical four-week result must not become a present guarantee.",
+      "runtime_verified": false
+    },
+    {
+      "id": "segment-current-replay",
+      "title": "Replay",
+      "publisher": "Twilio Segment",
+      "url": "https://www.twilio.com/docs/segment/guides/what-is-replay",
+      "version": "unversioned_current_documentation",
+      "published_at": null,
+      "date_note": "No publication/update date displayed.",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Complete substantive page: tooling/resilience, eligibility, disabled destinations, filters, integrations/consent, and Engage replay versus resync.",
+      "finding": "Replay may reach disabled destinations, uses destination filters, and has destination-specific deduplication. Historical Engage replay can replace newer state; current-state resync is a distinct operation.",
+      "runtime_verified": false
+    },
+    {
+      "id": "trigger-current-runs",
+      "title": "Runs",
+      "publisher": "Trigger.dev",
+      "url": "https://trigger.dev/docs/runs",
+      "version": "unversioned_current_documentation",
+      "published_at": null,
+      "date_note": "No publication/update date displayed.",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Targeted initial states, attempts/completion, boolean state helpers, cancel/replay operations, and queued TTL sections.",
+      "finding": "DEQUEUED and EXECUTING count toward concurrency; WAITING does not. A queued run can expire under TTL, so an incident's no-loss observation is not an unlimited retention promise.",
+      "runtime_verified": false
+    },
+    {
+      "id": "trigger-current-queues",
+      "title": "Concurrency & Queues",
+      "publisher": "Trigger.dev",
+      "url": "https://trigger.dev/docs/queue-concurrency",
+      "version": "unversioned_current_documentation",
+      "published_at": null,
+      "date_note": "No publication/update date displayed.",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_html",
+      "read_scope": "Concurrency model and shared limits, subtask/wait behavior, checkpoint slot release/reacquisition, pause/resume sections.",
+      "finding": "Broad queued-versus-executing language must be read with the run-state contract. Checkpointed waits release slots; resumed work reacquires them. Pausing a queue leaves executing work running.",
+      "runtime_verified": false
+    }
+  ],
+  "gaps": [
+    {
+      "id": "cross-cluster-progress",
+      "priority": 1,
+      "already_covered": "Completed consumer prefixes, reassignment, recovered history, and external-effect reconciliation.",
+      "actionable": "Add a conditional cluster/topic/partition identity and translated-position check; include mapping availability and asynchronous replication loss boundaries.",
+      "targets": [
+        "skills/messaging/messaging-reliability/references/ordering-and-replay.md",
+        "skills/reliability/recovery-validation/references/recovered-history.md"
+      ]
+    },
+    {
+      "id": "retention-and-recovered-publication",
+      "priority": 3,
+      "already_covered": "Storage limits shortening retention; unknown effects after restore; local effect/completion repair.",
+      "actionable": "Add concrete early-capacity-eviction and restored identity state versus retained publication cases. Do not restate general retention/outbox rules or copy the historical algorithm as a guarantee.",
+      "targets": [
+        "skills/messaging/messaging-reliability/references/delivery-and-recovery.md",
+        "skills/engineering/idempotency/references/verification.md",
+        "skills/reliability/recovery-validation/references/recovered-history.md"
+      ]
+    },
+    {
+      "id": "replay-intent-and-policy",
+      "priority": 3,
+      "already_covered": "Projection rebuild must preserve business effects; stale snapshots and historical schema meaning require validation.",
+      "actionable": "Choose historical replay versus current-state reconciliation and validate destination/effect policy on the actual replay route; disabled status is product-specific.",
+      "targets": ["skills/engineering/microservice-data/references/projections.md"]
+    },
+    {
+      "id": "reservation-failover",
+      "priority": 2,
+      "already_covered": "Reserved work inventory, retiring-generation admission, fencing, capacity warmup, and separate interruption accounting.",
+      "actionable": "Add the pre-execution regional reservation failure schedule and cold recovery acceptance. Inspect counters instead of equating scheduler transitions with business attempts.",
+      "targets": [
+        "skills/engineering/graceful-draining/references/durable-handoff.md",
+        "skills/engineering/microservice-operations/references/capacity.md"
+      ]
+    }
+  ],
+  "verification_proposals": [
+    {
+      "id": "cross-cluster-order",
+      "status": "proposed_not_executed",
+      "scope": "deterministic_application_model",
+      "schedule": "Source A1,A2,B1,B2; target B1,B2,A1,A2; completed A1,A2. Copy next-offset 2, then compare a conservative translated restart.",
+      "bad_control": "Copied position skips both required B events.",
+      "oracle": "All four logical identities complete once under the effect ledger; absent mapping or absent required history blocks acceptance or reports loss.",
+      "limit": "Does not establish MirrorMaker configuration, replication durability, or a general mapping algorithm."
+    },
+    {
+      "id": "restored-identity-versus-output",
+      "status": "proposed_not_executed",
+      "scope": "deterministic_application_model",
+      "schedule": "Restore dedup state behind retained output and then ahead of it; introduce a delayed old publisher and unavailable output evidence.",
+      "bad_control": "Treating absent identity as fresh duplicates publication; treating identity alone as completion skips publication.",
+      "oracle": "Authoritative publication evidence resolves both mismatches; unarbitrated late publication or missing evidence leaves an explicit hold.",
+      "limit": "An in-memory log cannot prove broker transactions or external provider outcomes."
+    },
+    {
+      "id": "capacity-shortened-deduplication",
+      "status": "proposed_not_executed",
+      "scope": "deterministic_retention_model",
+      "schedule": "Exceed a partition's capacity bound while a repeat remains within the promised retry horizon.",
+      "bad_control": "Unexpired TTL is assumed sufficient despite identity eviction.",
+      "oracle": "Retained-coverage failure is visible and cannot silently authorize a new business effect.",
+      "limit": "Requires actual storage/load testing before making a production retention promise."
+    },
+    {
+      "id": "stranded-reservation-failover",
+      "status": "proposed_not_executed",
+      "scope": "deterministic_scheduler_model",
+      "schedule": "Reserve two global slots in an unavailable region, transfer eligibility, race a late old pickup and old cleanup with successor admission.",
+      "bad_control": "Keeping all reservations prevents progress; blindly clearing them permits excess or duplicate execution.",
+      "oracle": "At most two accepted executions, eventual useful completion, and stale pickup/release rejection at the authoritative boundary.",
+      "limit": "Does not establish scheduler implementation or cold-recovery throughput."
+    },
+    {
+      "id": "replay-intent-policy",
+      "status": "proposed_not_executed",
+      "scope": "application_replay_contract_fixture",
+      "schedule": "Replay an older event into newer destination state with changed replay filters and disabled destination status.",
+      "bad_control": "Historical state overwrites newer state or a disabled flag is mistaken for effect isolation.",
+      "oracle": "Version-aware replay or explicit current-state reconciliation reaches intended state; actual replay destination/effect policy is enforced.",
+      "limit": "Product-specific transformation, consent, and destination behavior need their own integration checks."
+    }
+  ],
+  "limits": [
+    "No new runtime experiments, model evaluations, skill edits, or infrastructure changes were performed.",
+    "Two historical retrospectives and one incident are evidence for mechanisms, not a prevalence ranking.",
+    "Current documentation was checked on the access date; no provider or broker deployment was tested.",
+    "Existing transactional outbox, acknowledgement, poison-input, historical-schema, and replay-retention guidance remains the baseline; corroboration is not labeled a new gap."
+  ]
+}

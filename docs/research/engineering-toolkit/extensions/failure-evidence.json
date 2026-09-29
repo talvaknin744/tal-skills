@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "lane": "failure-evidence-extension",
+  "researched_at": "2026-09-29T12:10:00Z",
+  "status": "research complete; selected testing-reference additions implemented; proposed scenarios remain unexecuted",
+  "local_source_snapshot_head": "0cfcb17fd0c8aba7d420d899cd8d1fa1ecb92a11",
+  "selection": {
+    "new_articles_deeply_read": 3,
+    "primary_publishers": 3,
+    "duplicate_check": "Exact canonical URLs were absent from prior docs/research files outside extensions before this record was created; topic searches also found no earlier deep reads of these accounts.",
+    "selection_basis": "Concrete liveness, stale-response, and recovery failures with public maintainer corroboration; no popularity ranking.",
+    "delegation": "A bounded read-only researcher independently examined the Antithesis account and etcd maintainer discussion/diffs."
+  },
+  "articles": [
+    {
+      "id": "tigerbeetle-liveness-2023",
+      "title": "Simulation Testing For Liveness",
+      "url": "https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/",
+      "publisher": "TigerBeetle",
+      "authors": [
+        "matklad"
+      ],
+      "published_at": "2023-07-06",
+      "verified_at": "2026-09-29",
+      "access": "full public HTML",
+      "read_scope": "Complete substantive article; linked papers and talks not read.",
+      "source_type": "First-party simulator engineering account, corroborated by linked issue, fix, and historical source.",
+      "practice": {
+        "trigger": "Fault injection finds safety failures but may obscure stalled recovery.",
+        "failure": "Random restarts accidentally release a permanent repair stall.",
+        "mechanism": "Follow perturbation with a stable recovery phase.",
+        "conditions": "Declare a reachable healthy core, retained required data, permitted residual faults, and finite progress bound.",
+        "counterexample": "Progress is not promised when quorum or required data is unavailable.",
+        "verification": "The bad schedule stalls; the candidate completes specified pending work under the same recovery conditions."
+      },
+      "limitations": "Historical simulator evidence, not proof for arbitrary failures or a comparison against race detectors.",
+      "skill_targets": [
+        "failure-oriented-testing"
+      ],
+      "gap_id": "stable-recovery-phase"
+    },
+    {
+      "id": "gitlab-database-outage-2017",
+      "title": "Postmortem of database outage of January 31",
+      "url": "https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/",
+      "publisher": "GitLab",
+      "authors": [
+        "GitLab"
+      ],
+      "published_at": "2017-02-10",
+      "incident_date": "2017-01-31",
+      "verified_at": "2026-09-29",
+      "access": "full public HTML",
+      "read_scope": "Complete substantive postmortem and FAQ; linked incident document, livestream, and internal issues not read.",
+      "source_type": "First-party production incident account.",
+      "practice": {
+        "trigger": "A recovery claim relies on scheduled backups or a transformed copy.",
+        "failure": "Missing artifacts and undelivered failure notifications conceal unusable recovery inputs.",
+        "mechanism": "Check artifact freshness, delivered failure signals, and source transformations independently.",
+        "conditions": "Use authorized isolated rehearsals with explicit required content.",
+        "counterexample": "A sanitized staging copy may correctly omit production data.",
+        "verification": "Reject absent, stale, or incomplete inputs; demonstrate a failure signal reaches its observer."
+      },
+      "limitations": "The incident is not a recommendation to reuse staging copies or old infrastructure procedures.",
+      "skill_targets": [
+        "recovery-validation"
+      ],
+      "gap_id": "backup-path-and-transformations"
+    },
+    {
+      "id": "antithesis-etcd-causality-2026",
+      "title": "When did the bug start?",
+      "url": "https://antithesis.com/blog/2026/causality_analysis/",
+      "publisher": "Antithesis",
+      "authors": [
+        "Conrad Shock"
+      ],
+      "published_at": "2026-05-11",
+      "verified_at": "2026-09-29",
+      "access": "full public HTML",
+      "read_scope": "Complete article text; figure conclusions through accompanying text. Linked talk, underlying simulation reports, and statistical method not inspected.",
+      "source_type": "Vendor engineering account with product promotion; underlying defect corroborated by etcd maintainers.",
+      "practice": {
+        "trigger": "Rare failures require several prior faults or reordered responses.",
+        "failure": "The final symptom hides the earlier state transition that enabled it.",
+        "mechanism": "Replay selected causal prefixes and vary the later schedule.",
+        "conditions": "Replay preserves relevant state and fault controls.",
+        "counterexample": "A nonreproducible environment cannot support deterministic branching claims.",
+        "verification": "Retain a concrete failing history and neighboring permitted histories."
+      },
+      "limitations": "Reported discovery rates are not independently reproduced; no unit-test or race-detector comparison was shown.",
+      "skill_targets": [
+        "failure-oriented-testing",
+        "concurrency-correctness"
+      ],
+      "gap_id": "attempt-correlation-and-controls"
+    }
+  ],
+  "crosschecks": [
+    {
+      "id": "tigerbeetle-934",
+      "title": "vsr: avoid resonance during repair",
+      "publisher": "TigerBeetle maintainers",
+      "url": "https://github.com/tigerbeetle/tigerbeetle/pull/934",
+      "date": "2023-06-28",
+      "date_kind": "merged",
+      "access": "public GitHub conversation",
+      "read_scope": "Visible description, review discussion, and merge record.",
+      "finding": "Corroborates repair resonance and the change from round-robin peer choice. Randomization is this implementation fix, not a universal progress proof."
+    },
+    {
+      "id": "tigerbeetle-913",
+      "title": "Liveness: 13510902032428962439",
+      "publisher": "TigerBeetle maintainers",
+      "url": "https://github.com/tigerbeetle/tigerbeetle/issues/913",
+      "date": "2023-06-25",
+      "date_kind": "opened",
+      "access": "public GitHub issue",
+      "read_scope": "Header, reported seed/configuration, and relevant debug-log sections; not every log line.",
+      "finding": "Retains seed 13510902032428962439 and failing commit fc219723b30518a705bcb88175c249ad19b14da4. No reproduction performed."
+    },
+    {
+      "id": "tigerbeetle-pinned-simulator",
+      "title": "src/simulator.zig at 9ff5f4a470ed6d66b4be535e689c39eee9f24993",
+      "publisher": "TigerBeetle maintainers",
+      "url": "https://github.com/tigerbeetle/tigerbeetle/blob/9ff5f4a470ed6d66b4be535e689c39eee9f24993/src/simulator.zig",
+      "date": null,
+      "date_kind": "commit-pinned historical source, timestamp not independently resolved",
+      "access": "public source through GitHub and raw endpoint",
+      "read_scope": "Initialization, safety/liveness loops, convergence and failure exclusions; not the complete repository.",
+      "finding": "Uses a bounded liveness phase and checks core progress. Missing-primary, missing-quorum, and unavailable-log cases are explicitly distinguished. Preserve such preconditions/exclusions in transferred tests."
+    },
+    {
+      "id": "etcd-21375",
+      "title": "Fix race between read index and leader change",
+      "publisher": "etcd maintainers",
+      "url": "https://github.com/etcd-io/etcd/pull/21375",
+      "date": "2026-02-26",
+      "date_kind": "merged; correction dated 2026-03-04",
+      "access": "public GitHub conversation",
+      "read_scope": "Description, visible review and subsequent correction.",
+      "finding": "An initially clean simulation interval did not resolve stale reads; the maintainer explicitly corrected the earlier claim. Resolution needs mechanism-specific regression evidence, not just elapsed clean time."
+    },
+    {
+      "id": "etcd-21399",
+      "title": "Don't reuse same ReadIndex in retries",
+      "publisher": "etcd maintainers",
+      "url": "https://github.com/etcd-io/etcd/pull/21399",
+      "date": "2026-03-01",
+      "date_kind": "merged",
+      "access": "public GitHub conversation and files diff",
+      "read_scope": "Visible conversation and both changed files, including response-ID handling and tests.",
+      "finding": "Distinct retry correlation IDs coexist with recognition of earlier valid responses for the same current read. Forgetting earlier IDs caused a slow-network regression. This is different from rotating a business idempotency key.",
+      "additional_url": "https://github.com/etcd-io/etcd/pull/21399/files"
+    },
+    {
+      "id": "postgresql-18-pgdump",
+      "title": "PostgreSQL 18 Documentation: pg_dump",
+      "publisher": "PostgreSQL Global Development Group",
+      "url": "https://www.postgresql.org/docs/18/app-pgdump.html",
+      "date": null,
+      "date_kind": "versioned documentation, checked 2026-09-29",
+      "access": "public versioned HTML",
+      "read_scope": "Description, diagnostics, compatibility notes, and selected options; not the full PostgreSQL manual.",
+      "finding": "The old postmortem overgeneralizes major-version mismatch. PostgreSQL 18 pg_dump supports selected older servers but refuses a server newer than its own major version. Validate the actual source/tool/target combination."
+    }
+  ],
+  "gap_mapping": [
+    {
+      "id": "stable-recovery-phase",
+      "priority": 1,
+      "already_covered": [
+        "Bounded schedules, barriers, known-bad controls, replay, observed cleanup, and simulation limitations."
+      ],
+      "actual_gap": "The fault-history reference has no explicit transition from perturbation into a declared stable progress experiment.",
+      "proposed_change": "A conditional paragraph in the existing fault-history reference, not a universal simulator requirement.",
+      "target_paths": [
+        "skills/testing/failure-oriented-testing/references/fault-histories.md"
+      ],
+      "case_ids": [
+        "FAILURE-PROGRESS-01"
+      ]
+    },
+    {
+      "id": "attempt-correlation-and-controls",
+      "priority": 1,
+      "already_covered": [
+        "Stable effect identity, stale-owner fencing, preserved counterexamples, and bounded conclusions after clean fuzzing."
+      ],
+      "actual_gap": "Attempt-response correlation is not separated explicitly from logical effect identity, with both unsafe and valid late-response controls.",
+      "proposed_change": "Add a narrow retry/response example to fault histories and cross-reference the delayed-work branch; retain existing idempotency semantics.",
+      "target_paths": [
+        "skills/testing/failure-oriented-testing/references/fault-histories.md",
+        "skills/engineering/concurrency-correctness/references/delayed-work.md"
+      ],
+      "case_ids": [
+        "FAILURE-CORRELATION-01"
+      ]
+    },
+    {
+      "id": "backup-path-and-transformations",
+      "priority": 2,
+      "already_covered": [
+        "Version compatibility, dependency inventory, external recovery oracle, application identity, measured RPO/RTO, and unsafe-state rejection."
+      ],
+      "actual_gap": "Recovery input selection does not explicitly trace transformations or test that backup-path failure evidence arrives.",
+      "proposed_change": "Add conditional recovery-input checks to an existing reference; avoid adding a full monitoring workflow to ordinary restores.",
+      "target_paths": [
+        "skills/reliability/recovery-validation/references/recovered-history.md",
+        "skills/reliability/recovery-validation/references/postgresql.md"
+      ],
+      "case_ids": [
+        "RECOVERY-INPUT-01"
+      ]
+    }
+  ],
+  "proposed_cases": [
+    {
+      "id": "FAILURE-PROGRESS-01",
+      "status": "proposed, not executed",
+      "fixture": "A model with recoverable pending work and explicit healthy-core/data assumptions.",
+      "action": "Reach the stalled state; stop destabilizing injections, freeze permitted residual faults, then observe a finite recovery interval.",
+      "acceptance": "Known-bad policy stalls; candidate reaches the declared progress count. Invalid recovery preconditions are reported separately.",
+      "evidence_limit": "Model progress does not establish deployed network or storage guarantees."
+    },
+    {
+      "id": "FAILURE-CORRELATION-01",
+      "status": "proposed, not executed",
+      "fixture": "Distinct old/new logical reads, an acknowledged write before the new read, per-attempt IDs, and explicit freshness authority.",
+      "action": "Deliver old-read confirmation after the write/new-read boundary. Separately: read R sends A1, times out, sends A2, then receives still-valid A1 confirmation while A2 remains pending.",
+      "acceptance": "Old evidence cannot authorize a pre-write result for the new read; valid delayed A1 completes R. Reject both accept-old-evidence and latest-attempt-only defects. Business idempotency is a separate application transfer.",
+      "evidence_limit": "Local protocol-model evidence needs integration verification at the actual authority boundary."
+    },
+    {
+      "id": "RECOVERY-INPUT-01",
+      "status": "proposed, not executed",
+      "fixture": "Synthetic backup job, captured failure sink, and a candidate restore input with declared omitted records.",
+      "action": "Suppress artifact creation, then suppress the failure signal; separately evaluate the transformed restore input.",
+      "acceptance": "Freshness and signal-delivery checks fail independently; the incomplete input cannot pass the application's recovery gate.",
+      "evidence_limit": "A captured local sink does not establish delivery through deployed mail, paging, or backup infrastructure."
+    }
+  ],
+  "local_sources_examined": [
+    {
+      "path": "skills/testing/failure-oriented-testing/SKILL.md",
+      "sha256": "f7ceac4a622c3136a9279433347e2cd3efe3ebda4d2db0ddf8fa57a977c78498"
+    },
+    {
+      "path": "skills/testing/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "9e93e6933924cac882fbb15776285c8068e170af56af953d8ddef095837be8ac"
+    },
+    {
+      "path": "skills/testing/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902"
+    },
+    {
+      "path": "skills/reliability/recovery-validation/SKILL.md",
+      "sha256": "57168792271af076484d823dd690c57cfbcfb7814d13aaba2dd929b22a974c21"
+    },
+    {
+      "path": "skills/reliability/recovery-validation/references/recovered-history.md",
+      "sha256": "06df9b8716e8dfeb19d17f140f9a1aab9fb9e2d6e3767446ab6db3f92a4779dc"
+    },
+    {
+      "path": "skills/reliability/recovery-validation/references/postgresql.md",
+      "sha256": "456e21d37330ec26f3fbe2fabe206fa2bc3730ed10ec3eb32df0772505d5806d"
+    },
+    {
+      "path": "skills/engineering/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b"
+    },
+    {
+      "path": "skills/engineering/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3"
+    }
+  ],
+  "source_boundaries": [
+    "Three new engineering articles were deeply read; supporting issue, code, PR, and versioned-documentation checks are identified separately.",
+    "No source is treated as evidence of bugs missed by a race detector; none supplies that comparison.",
+    "Historical implementation details are not current product guarantees.",
+    "No copied article text, signed report URLs or tokens, or source code is retained.",
+    "No replay, simulation, restore, fault injection, or model trial was executed for this extension; subsequent reference edits are listed separately.",
+    "The proposals do not alter earlier evaluation totals or prove workflow quality improvement."
+  ],
+  "implementation_followup": {
+    "scope": [
+      "skills/testing/failure-oriented-testing/references/fault-histories.md",
+      "skills/testing/failure-oriented-testing/references/sources.md"
+    ],
+    "adopted_gap_ids": [
+      "stable-recovery-phase",
+      "attempt-correlation-and-controls"
+    ],
+    "other_gap_owner": "Recovery-input changes delegated to the parent task; their status is recorded separately.",
+    "evidence": "Focused documentation edits only; no new model evaluation or runtime experiment.",
+    "local_snapshot_note": "local_sources_examined binds the inspected pre-addition files, not the later edited candidate."
+  }
+}

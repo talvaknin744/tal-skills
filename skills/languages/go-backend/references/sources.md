@@ -19,6 +19,7 @@ Direct code review found that `time_out` does not pass context into its worker, 
 
 ## Runtime and driver authority
 
+- Sameer Ajmani, [Go Concurrency Patterns: Pipelines and cancellation](https://go.dev/blog/pipelines), March 13, 2014: additional research read the complete article and in-page examples, including bounded parallelism; linked videos and full downloadable programs were not separately read or run. [Current select specification](https://go.dev/ref/spec#Select_statements) corroborates ready-case selection and operand evaluation. The known-cancellation checkpoint is an application recommendation, not an atomic effect fence.
 - [Go context](https://pkg.go.dev/context): cancellation requests and cancel-function ownership.
 - [Go net/http](https://pkg.go.dev/net/http): response-body ownership.
 - [Go encoding/json](https://pkg.go.dev/encoding/json): decoding, number preservation, and unknown-field handling.

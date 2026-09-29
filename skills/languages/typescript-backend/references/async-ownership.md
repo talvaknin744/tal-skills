@@ -2,6 +2,8 @@
 
 Use this reference when requests own promises, pool leases, transactions, streams, or cancellation handlers.
 
+For Node streams, backpressure, or streaming HTTP, read [Node stream ownership](node-streams.md).
+
 For each resource, identify who creates it, who can request cancellation, and who awaits completion. A request that stops waiting still needs an owner for the work it started. Preserve that owner through errors and handoffs.
 
 ## Cancellation and deadlines

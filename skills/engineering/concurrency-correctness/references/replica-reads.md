@@ -14,6 +14,12 @@ Check that the token describes an acknowledged commit, survives or is invalidate
 
 Use trusted, scoped context; if callers can supply an unreachable future token, bound the wait and reject invalid context rather than allowing unbounded resource consumption. State how caches or projections participate: either they prove the required version has been applied or the read routes around them.
 
+## When the operation requires one snapshot
+
+For snapshot pagination or related reads requiring the same historical view, carry an exact source cut instead of a minimum revision. A newer value can violate that contract. Verify that every source can serve the cut, including deleted or not-yet-created keys; define a bounded failure or restart path when history is unavailable. Test replicas ahead and behind the cut plus history compaction. [Quicksilver's proxy design](https://blog.cloudflare.com/quicksilver-v2-evolution-of-a-globally-distributed-key-value-store-part-1/) illustrates the distinction; [etcd 3.6 Range](https://etcd.io/docs/v3.6/learning/api/) exposes historical revisions and compacted-history errors. Minimum-version reads need no exact-cut protocol.
+
+For a projection whose baseline overlaps live updates, read [projection-rebuild.md](projection-rebuild.md).
+
 ## Preserve semantics during failure
 
 Distinguish “value absent at a source that satisfies the context” from “replica has not applied the creation yet.” Define what happens during lag, partition, timeout, or unavailable primary. Silently falling back to a stale source changes the contract. A pending response can be correct even when an immediate stale success is not.

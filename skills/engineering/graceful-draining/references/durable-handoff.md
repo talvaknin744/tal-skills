@@ -84,7 +84,9 @@ mechanism exists; waiting out a lease does not manufacture exactly-once effects.
 For retained old workers, keep code, configuration, credentials, and compatible
 dependencies available until their owned and reserved jobs reach durable terminal
 state. For resumed jobs, verify successor restoration and rejection of old-owner
-writes. A rollout's replica count is insufficient retirement evidence.
+writes. A rollout's replica count or deployment-success status is insufficient
+retirement evidence. Track live owners and durable job outcomes through an
+explicit retirement deadline; retain a recovery owner after deployment completes.
 
 ## Budgets and recovery
 

@@ -33,3 +33,39 @@ setup is invalid is a different failure.
 **Evidence:** the relevant unsafe schedule fails an identified assertion, recovery
 passes it, and the report distinguishes simulated ordering from actual concurrent
 or distributed execution.
+
+## Progress after faults settle
+
+For a recovery-progress claim, separate fault exploration from a stable recovery
+phase. Declare the reachable quorum or required participants, retained inputs/log,
+and resource assumptions such as available storage. Establish those conditions,
+stop changing unrelated faults, and hold permitted remaining faults fixed. Record
+which pending operations must complete and by what deadline; observe their actual
+completion separately from safety assertions. A quiet run with no wrong results
+may still be stuck.
+
+Exercise the stalled implementation under the same conditions. Report unavailable
+quorum, missing required data, or exhausted resources as unmet preconditions rather
+than silently counting them as recovery success. A permanent partition is covered
+only if the declared reachable participants and data suffice for this protocol;
+continuous fault injection gives no general eventual-progress guarantee.
+[TigerBeetle's liveness account](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/)
+and its [historical simulator exclusions](https://github.com/tigerbeetle/tigerbeetle/blob/9ff5f4a470ed6d66b4be535e689c39eee9f24993/src/simulator.zig)
+motivate this conditional experiment.
+
+## Delayed response evidence
+
+For retried reads or confirmations, distinguish logical operation identity,
+attempt correlation, and the authority/version evidence a response carries.
+Use distinct attempt IDs where reuse could validate the wrong context; the ID
+alone does not establish freshness. Keep a business operation's idempotency
+identity stable across attempts.
+
+Retain two controls. First, complete write W before starting a new read, then
+deliver confirmation belonging to an older read; it must not authorize a result
+predating W when fresh reads are promised. Second, time out attempt A1, start A2
+for the same logical read, and deliver A1's still-valid response while A2 remains
+pending. Accept it when the protocol permits: rejecting every nonlatest attempt
+can break progress. State why its authority remains valid. [etcd's retry
+fix](https://github.com/etcd-io/etcd/pull/21399) preserves that distinction; apply
+the paired regression idea to the actual protocol rather than copying its IDs.
