@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-recovery-validation",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T11:43:38.144389+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/run.json": "5549434e7de6ff2eee5bc3db9ac681d198085e9cdeda992c9533f7633f46c7d1",
+    "evidence/events.jsonl": "1bcc0d0704206cb57abe8fdfa6d2a75ce1d9c8da8046b7d1d7c45c5f7ae6841a",
+    "evidence/prepared.json": "58493542908495f34f87364041c8374171198d74eba8b8fdc17c6dfa8c58a4ff",
+    "evidence/verification.stdout.txt": "36452c2a15f1c9e7191673ac5342b54237e1249361915bfb57c086209b398910",
+    "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/candidate-sha256.json": "527baf2d1e8ba129080a7c54b07b6ccdb0ef9b1e8120376e7b47cc5e49380964",
+    "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/report.md": "4474da4fa286c896b3c4cf5ce49a8a01cd574cdf2b45823656dbe00b69a632b1",
+    "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/evidence.json": "e9510f6a5b4da052df5e383e971f4e6227ea7842ac75723c945ada202874a3c8"
+  },
+  "source_digest": "a08e3ba214eb7c0c34c6a54ab6d88ac91340cb069e4a1b50f20410c8beeb5bd4",
+  "fixture_index_sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+  "criteria": [
+    {
+      "id": "isolated_rehearsal",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "1085",
+          "observation": "Actual owner-run scratch/rehearse.py invokes unchanged restore.py into timestamp/UUID new scratch destination; exit0, captured import2 and measured duration."
+        },
+        {
+          "artifact": "trial/scratch/rehearse.py",
+          "locator": "34-53",
+          "observation": "Asserts target absent, fingerprints supplied sources, invokes supplied restore with30s subprocess timeout, reads newly restored ledger."
+        },
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /independent_verification",
+          "observation": "All source and installed files unchanged; only allowed scratch files created. Coordinator independent restore also succeeds, a behavior observation only."
+        }
+      ]
+    },
+    {
+      "id": "semantic_disagreement",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/report.md",
+          "locator": "Observed data and effects; Checkpoint and proposed replay",
+          "observation": "Names missing order2, unexpected order3, order1 restoredv1/450 versus acceptedv2/500, both falsely completed by checkpoint, and two distinct charge1 receipts. Reports0/2 accepted rows faithfully recovered,3 effects/1700 versus2/1200."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "210,1495",
+          "observation": "Separate native reviewers independently parse authoritative source ledgers and recompute identity/payload/cardinality/checkpoint discrepancies; actual passing assertion output corroborates findings."
+        }
+      ]
+    },
+    {
+      "id": "effect_reconciliation",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/report.md",
+          "locator": "Checkpoint and proposed replay; final paragraph",
+          "observation": "Blind missing-order replay explicitly blocked because charge2/700 already exists; stable charge1 ID does not make stale450 intent equivalent to accepted500; unmanifested order3 processing unsupported. Later repair and provider disposition require authorization and revalidation."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2380",
+          "observation": "Final keeps writes closed and states no external services, repairs, replay or reopening occurred."
+        }
+      ]
+    },
+    {
+      "id": "objective_measurement",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/evidence.json",
+          "locator": "/timing; /objectives",
+          "observation": "Captured monotonic import0.035930291s and processing-through-rejection0.037517917s; no integrity/safe-reopen timestamp. Zero-loss objective fails,30s successful RTO not achieved."
+        },
+        {
+          "artifact": "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/report.md",
+          "locator": "Measured local timings and objectives",
+          "observation": "Boundary explicitly excludes earlier inspection, report serialization and independent review.60s snapshot age is not temporal accepted-work loss; per-order timestamps unavailable. Synthetic reference timestamps distinguished from actual local clock."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "1085,1495",
+          "observation": "Executed harness emits matching durations; independent reviewer inspects instrumentation and validates recorded consistency without pretending to independently rerun timing."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex0.153.4 discovers installed recovery workflow."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "62,92,106,117,2387#/result/thread,2389#/result/thread",
+          "observation": "Actual workflow/recovery/idempotency reads and child metadata identifying tal-reliability and tal-idempotency, both with controller parent IDs."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "1076,1185,1458,1472,1473,1495,2080,2091,2097",
+          "observation": "Parent is sole scratch implementation/report owner. Candidate manifest freezes10files at527baf2d1e8ba129080a7c54b07b6ccdb0ef9b1e8120376e7b47cc5e49380964. Separate reliability reviewer rereads report/evidence/harness, checks all digests and independently recalculates facts; no findings. Parent records review separately then checks frozen candidate unchanged. Idempotency reviewer separately challenges effect accounting."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 1,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_unchanged; /capability_deviations",
+          "observation": "All recorded final hashes independently match current bytes; every prepared baseline file unchanged, global config unchanged and only declared scratch paths created. Strict combined criterion remains partial for unverified input/tool confinement, not observed artifact or external-service breach."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/scratch/rehearsal-20260929T113607077450Z-44764d14/report.md",
+          "locator": "Preservation, candidate identity, and scope",
+          "observation": "Accepts completed local rehearsal/report while recovery itself fails. No live provider, production outage timing, application boot or concurrency/interruption proof claimed; copy/parse success cannot establish integrity."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2080,2380",
+          "observation": "Reviewer explicitly limits acceptance to one supplied local fixture and report, not general validator correctness; final repeats local-processing-only qualification."
+        }
+      ]
+    }
+  ],
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "partial",
+  "case_compliant": false,
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+      "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+    ]
+  },
+  "critical_failures": [],
+  "unresolved_critical_partial": [
+    "isolation_and_scope"
+  ],
+  "limitations": [
+    "Requested task is to rehearse and assess; pass means correctly discovering failed recovery and blocking writes, not accepting restored data.",
+    "Coordinator verifier is copy/parse behavior observation, not the independent semantic oracle. Semantic evidence comes from actual source comparison and separate reviewer assertions.",
+    "Timings cover actual local import and initial rejection only, excluding later report/review; no safe-recovery endpoint exists.",
+    "One synthetic local fixture does not establish a reusable validator, production recovery/provider guarantees or measured workflow uplift."
+  ]
+}

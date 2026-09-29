@@ -1,23 +1,35 @@
 # Engineering toolkit verification
 
-Evidence snapshot: **2026-09-29 09:41 UTC**. The published implementation checkpoint is
-[`1b7b68c5bbf7a546f2d403d60ec6f5ceb0e9ff5b`](https://github.com/talvaknin744/tal-skills/commit/1b7b68c5bbf7a546f2d403d60ec6f5ceb0e9ff5b).
-Runtime examples and repository validation passed within the scopes below.
-Skill trials and complete native workflow observations remain pending in this
-snapshot. A successful fixture can mean an unsafe control was reproduced; it
-does not turn that control into a recommended implementation.
+Evidence snapshot: **2026-09-29**. The latest published validation
+checkpoint is [`a4ec975`](https://github.com/talvaknin744/tal-skills/commit/a4ec975912ef14997b8c6dcbae2c58f4427d45ae).
+The completed archives contain **20 unique skill cases in 26 attempts** and
+**eight Codex workflows in ten attempts**. Latest skill results are 17 pass and
+3 partial. All eight latest workflows pass their bounded task and observed
+native behavior; all remain partial under the strict isolation criterion.
+Claude model execution was authentication-blocked.
+
+Runtime examples, agent behavior and repository validation are separate forms
+of evidence below. A successful fixture can mean an unsafe control was
+reproduced; it does not turn that control into a recommended implementation.
 
 ## Release gates
 
 | Gate | Observed evidence | Boundary |
 | --- | --- | --- |
-| Core repository validation | **276 tests passed, 0 failed** on the published checkpoint, independently confirmed in the [successful validation run](https://github.com/talvaknin744/tal-skills/actions/runs/36550139240). Toolkit checker reported 15 roles, 8 workflows and 46 native artifacts. | Package shape, references, generation, installer behavior and declared regression cases; no model behavior is inferred. |
-| Backend runtime CI | [Successful Ubuntu run](https://github.com/talvaknin744/tal-skills/actions/runs/36550139340) at the same checkpoint: Python, TypeScript and Go jobs all passed. | These three backend examples ran in CI. Other examples below have recorded local runs, not an asserted Ubuntu CI run. |
-| Evidence attribution | The core validation run checked **70 source hashes in 11 reports**. | This detects source/report drift. It does not rerun, independently grade or broaden an experiment. |
-| New skill behavior | **Pending:** 20 trials dispatched; final responses, executed checks and independent scores are not yet recorded here. | Authored cases and a functioning harness do not demonstrate that agents followed a skill. |
-| Codex workflow behavior | **Pending:** eight complete workflow smoke observations and independent scoring. | Research loader probes below are separate from these workflows. |
-| Claude workflow behavior | **Blocked by authentication:** installed host initialization was inspected; model execution returned HTTP 401 with an expired OAuth token. | Do not claim successful Claude workflow execution. Structural adapter validation remains available. |
-| Final evaluation publication | **Pending:** replace these placeholders with immutable run paths, scored outcomes, limitations and the final commit/CI links. | The development harness's reported 340-test run preceded native-runner changes; it is not the published core's 276-test result or a final release count. |
+| Current local validation | **364 tests passed, 0 failed, 0 skipped** in the completed working-tree `npm run validate` run, including the archive-checker regressions. | This is local evidence for the current source snapshot. The published CI checkpoint below remains separately identified. |
+| Published repository validation | **355 tests passed, 0 failed** at `a4ec975`, confirmed in the [successful validation run](https://github.com/talvaknin744/tal-skills/actions/runs/36562226191). The earlier core checkpoint `1b7b68c` passed [276 tests](https://github.com/talvaknin744/tal-skills/actions/runs/36550139240). | Package shape, references, generation, installer behavior and declared regression cases; these counts do not measure model behavior. Later archive additions are not retroactively covered by an earlier CI run. |
+| Backend runtime CI | [Successful Ubuntu run](https://github.com/talvaknin744/tal-skills/actions/runs/36550139340) at core checkpoint `1b7b68c`: Python, TypeScript and Go jobs all passed. | These three backend examples ran in CI. Other examples below have recorded local runs, not an asserted Ubuntu CI run. |
+| Evidence attribution | Published validation checked **70 source hashes in 11 runtime reports**. | This detects source/report drift. It does not rerun, independently grade or broaden an experiment. |
+| New skill behavior | [Archived independent results](../../../evals/engineering-toolkit/runs/2026-09-29/skills/README.md): latest 20 cases yield **17 pass, 3 partial, 0 fail**; all 55 critical criteria scored 2/2. | One relevant case and one nontrigger per new skill were executed. Ten second relevant cases remain unexecuted; three verification gaps remain. |
+| Codex workflow behavior | [Archived independent results](../../../evals/engineering-toolkit/runs/2026-09-29/native/README.md): **8/8 latest task and native-behavior assessments passed**, with 13 named native children. | Strict rubric remains **partial for all eight** because input/tool confinement was not established. No prohibited scope breach was observed. |
+| Claude workflow behavior | [One fresh backend attempt](../../../evals/engineering-toolkit/native-planning/claude-backend-attempt/README.md) initialized installed roles/skills, then returned HTTP 401 for expired OAuth before model work. | The other seven workflows were not run under the same authentication block. Initialization is not behavioral acceptance. |
+| Evaluation archive | [Skill summary](../../../evals/engineering-toolkit/runs/2026-09-29/skills/summary.json) and [workflow summary](../../../evals/engineering-toolkit/runs/2026-09-29/native/summary.json) retain every attempt, exact candidate identity, independent scores and evidence links. | Reruns are not additional independent cases. Prior failures and append-only clarifications remain visible; no effectiveness improvement over an unaided agent was measured. |
+
+The local [evaluation evidence checker](../../../scripts/check-evaluation-evidence.mjs)
+verified **41 manifests, 655 published artifacts and 755 source bindings**.
+Its [regression tests](../../../tests/evaluation-evidence.test.mjs) check altered
+bytes, original-versus-published bindings, native scores and supplemental
+artifacts. These integrity checks do not rerun or grade model experiments.
 
 The installer tests exercise temporary projects, host selection, dependency
 closure, no-op repeated installation, collisions, existing configuration
@@ -103,7 +115,30 @@ is not an exhaustive external-link crawl or live Temporal/production test.
 Independent crosschecks and [review corrections](review-corrections.md) preserve
 the source distinctions and issues found during implementation.
 
-## Native-host and evaluation completion record
+## Skill behavior and remaining gaps
+
+The [skill archive](../../../evals/engineering-toolkit/runs/2026-09-29/skills/README.md)
+contains 30 authored cases, of which 20 unique cases were executed and scored in
+26 attempts. Latest-attempt selection yields **17 pass, 3 partial, 0 fail**.
+The initial 20 scored 15 pass, 4 partial and 1 fail; all attempts and revisions
+remain in the [summary](../../../evals/engineering-toolkit/runs/2026-09-29/skills/summary.json).
+These repeated cases do not establish a causal improvement estimate.
+
+The three remaining partial results are concrete verification gaps: Python did
+not exercise cancellation before connection acquisition; Go did not force the
+interval between a completed `Get` and its worker's result send; messaging did
+not provide a concrete concurrent schedule and assertion. None is represented
+as a pass merely because every latest critical criterion passed.
+
+All latest positives have observed candidate-body reads; none of the latest
+nontriggers has an observed candidate-body read. Absence of a recorded read is
+not proof of absence. Seven implementation-positive attempts have independently
+rerun supplied verifiers bound to final files. These single-skill trials disabled
+subagents and do not establish named-agent behavior. All retain
+`case_compliant: false` because strict capability isolation was not established;
+no protected-input or file-scope violations were recorded.
+
+## Native-host behavior
 
 The [compatibility research](native-compatibility.md) observed Codex desktop
 0.153.4 skill discovery, an explicit skill invocation and a custom role registered
@@ -111,17 +146,47 @@ through invocation-only configuration. Automatic loading in an untrusted scratch
 project was blocked; the captured JSONL did not expose the full V2 spawn payload.
 Homebrew Codex 0.142.5 did not complete a model run. Claude Code 2.1.150 listed the
 test artifacts during initialization but model execution was authentication-blocked.
-These results establish bounded compatibility observations, not eight completed
-workflows or successful Claude agent behavior.
+Those research probes remain historical observations. The later
+[workflow archive](../../../evals/engineering-toolkit/runs/2026-09-29/native/README.md)
+records actual named-role metadata, executed commands, stable candidates and
+independent reviews from Codex 0.153.4 with inherited model settings. Its latest
+selection covers all eight workflows and 13 named specialist children.
 
-<!-- RELEASE-EVIDENCE-PENDING: replace with actual immutable runs and independent scores. -->
+| Workflow and archived independent score | Observed outcome and scope |
+| --- | --- |
+| [Backend delivery](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-backend-20260929-02/independent-score.json) | Main owner plus native idempotency advice and Python review; seven protected SQLite checks and seven added tests passed. Lost response is modeled after successful return, not an injected COMMIT transport failure. |
+| [Consistency diagnosis](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-consistency-diagnosis-20260929-01/independent-score.json) | Two actual threads demonstrate the forbidden lost update, then the repaired result under a forced local schedule. |
+| [Messaging evolution](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-messaging-evolution-20260929-01/independent-score.json) | Local consumer repair and deterministic duplicate/reordering checks; no real broker, restart or concurrent-delivery guarantee. |
+| [Worker rollout](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-worker-rollout-20260929-01/independent-score.json) | Native durability/infrastructure review correctly retains NO-GO until admission, maintenance handoff, fencing and recovery bounds are demonstrated. No cluster deployment occurred. |
+| [Recovery validation](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-recovery-validation-20260929-01/independent-score.json) | Disposable local import and reconciliation expose missing/stale data and duplicate effects; writes remain blocked. No production restore or provider repair occurred. |
+| [MCP integration](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-mcp-integration-20260929-01/independent-score.json) | Native MCP/consistency review identifies warm-cache owner bypass, forged principal and header/body mismatch in the unchanged local adapter. |
+| [A2A integration](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-a2a-integration-20260929-01/independent-score.json) | Native A2A/failure-testing review identifies observer cancellation, missing ownership, context rebinding and terminal continuation producing a second effect. |
+| [Cleanup](../../../evals/engineering-toolkit/runs/2026-09-29/native/tal-native-cleanup-review-20260929-02/independent-score.json) | One README edit, successful documented legacy command and native cleanup review bound to the final document hash. |
 
-| Completion item | Required final evidence | Current status |
-| --- | --- | --- |
-| Ten new skills | Relevant and nontrigger responses, candidate hashes, executed checks, independent rubric scores and any failures | Pending 20 dispatched trials |
-| Eight Codex workflows | Installed artifact manifest, exact host version, invocation, actual delegation/short-path behavior, owner/reviewer handoff and independent result scoring | Pending |
-| Eight Claude workflows | Same evidence, or precise unavailable-capability record without substituting structural validation | Authentication blocked |
-| Final repository state | Final commit, `npm run validate` count at that commit, generated-adapter freshness, evidence hashes and CI result URLs | Pending evaluation publication |
+All eight latest task/native assessments pass; every strict rubric remains
+partial solely on `isolation_and_scope` (1/2). The host retained broad filesystem
+read capability, write scope was audited afterward, and effective tool inventory
+was not fully observed. No prohibited scope breach was found. MCP/A2A workflow
+fixtures are local models; actual SDK interoperability belongs to the separate
+runtime examples above. Successful review can correctly conclude that a
+candidate or rollout must not proceed.
+
+Historical backend attempt 01 lacked independent review because default
+delegation could not load its ephemeral parent. Historical cleanup attempt 01
+used a disclosed generic fallback reviewer. Both remain archived alongside the
+successful fresh attempts. The corrected runner persisted the parent session and
+collected child role metadata. An earlier global-config hash change has unknown
+writer; all eight latest Codex runs record matching before/after hashes.
+Append-only score clarifications correct interpretation or factual errors while
+preserving original records and candidate responses.
+
+Claude Code 2.1.150's fresh backend attempt discovered eight project roles and eleven
+project skill/workflow entries before expired OAuth blocked execution. It performed no
+model task or acceptance verification; the other seven cases are explicitly
+not run. Its observed global JSON configuration hash change also has unknown
+writer. See the [host matrix](../../../evals/engineering-toolkit/runs/2026-09-29/native/summary.json)
+for per-workflow status. Structural Claude validation remains distinct from this
+unavailable behavioral evidence.
 
 Earlier failed attempts remain in example history/development reports. In
 particular, recovery preserves the report whose restore timer included target

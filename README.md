@@ -254,7 +254,7 @@ npm ci --ignore-scripts
 npm run validate
 ```
 
-CI checks packaging, local reference resolution, metadata, provenance, source coverage, contract structure, replacement semantics, and evaluation fixture integrity. These deterministic checks do not execute a model or prove the quality of its advice. Follow [evals/README.md](evals/README.md) for independent behavioral trials and report observed results separately from authored expectations.
+CI checks packaging, local references, metadata, provenance, generated native adapters, installer behavior, evaluation fixtures, and published evidence hashes and bindings. These deterministic checks do not execute a model or prove the quality of its advice. Follow [evals/README.md](evals/README.md) for independent behavioral trials and report observed results separately from authored expectations.
 
 When changing instructions, compare behavior on the affected scenarios. Remove repetition only when the receiving agent still has the necessary context. Keep the user's scope and requested output intact.
 
