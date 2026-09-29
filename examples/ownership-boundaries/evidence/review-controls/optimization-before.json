@@ -1,0 +1,73 @@
+[
+  {
+    "PYTHONOPTIMIZE": "0",
+    "exit_code": 1,
+    "probe": {
+      "language": "python",
+      "runtime": "3.14.3",
+      "implementation": "CPython",
+      "scenarios": [
+        {
+          "id": "semaphore-grant-cancel-before-resume",
+          "status": "fail",
+          "evidence": {
+            "error": "AssertionError('Grant was refunded more than once')"
+          }
+        },
+        {
+          "id": "shielded-acquisition-abandoned-grant",
+          "status": "fail",
+          "evidence": {
+            "error": "AssertionError()"
+          }
+        }
+      ],
+      "limitations": [
+        "Controlled CPython event-loop schedule; not a fairness guarantee for every implementation.",
+        "No private semaphore capacity or waiter fields are used as an oracle.",
+        "Unsafe shield control is repaired and joined by the harness."
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "PYTHONOPTIMIZE": "1",
+    "exit_code": 0,
+    "probe": {
+      "language": "python",
+      "runtime": "3.14.3",
+      "implementation": "CPython",
+      "scenarios": [
+        {
+          "id": "semaphore-grant-cancel-before-resume",
+          "status": "pass",
+          "evidence": {
+            "canceled_waiter_accepted": false,
+            "successor_acquired": true,
+            "third_waiter_blocked_while_successor_held": true,
+            "final_single_permit_recovery": true,
+            "private_semaphore_fields_used": false,
+            "pending_tasks_after_cleanup": 0
+          }
+        },
+        {
+          "id": "shielded-acquisition-abandoned-grant",
+          "status": "observed-unsafe",
+          "evidence": {
+            "observer_canceled": true,
+            "shielded_acquisition_succeeded": true,
+            "next_borrower_blocked_until_harness_repair": true,
+            "harness_repaid_abandoned_grant": true,
+            "pending_tasks_after_cleanup": 0
+          }
+        }
+      ],
+      "limitations": [
+        "Controlled CPython event-loop schedule; not a fairness guarantee for every implementation.",
+        "No private semaphore capacity or waiter fields are used as an oracle.",
+        "Unsafe shield control is repaired and joined by the harness."
+      ]
+    },
+    "stderr": ""
+  }
+]

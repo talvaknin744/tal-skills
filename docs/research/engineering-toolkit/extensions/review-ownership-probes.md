@@ -104,6 +104,8 @@ The final independent report SHA-256 is
 `d6247875a4c87c9e359582b9f1153e4f02577b1904bb1db6eae04e391e764213`.
 An unchanged [copy of that final rerun](../../../../examples/ownership-boundaries/evidence/independent-rerun.json)
 is published with the examples.
+The [review-control manifest](../../../../examples/ownership-boundaries/evidence/review-controls/manifest.json)
+also retains the original before/after optimization and timeout observations.
 The author's regenerated `evidence/verified-run.json` SHA-256 is
 `7e9435ac2a0c485895baae6c1eb096e609e5f77e3cbaf1abcfca61d91445b847`.
 

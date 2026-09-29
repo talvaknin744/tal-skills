@@ -65,6 +65,10 @@ function checkBindings(manifest, files, summary) {
   if (run?.run_id !== undefined && manifest.run_id !== undefined) match(manifest.run_id, run.run_id, 'manifest/run_id');
   if (run?.workflow !== undefined && manifest.workflow !== undefined) match(manifest.workflow, run.workflow, 'manifest/workflow');
   if (prepared && run) match(prepared.workflow, run.workflow, 'prepared/workflow');
+  if (files.has('fixture-index.json')) {
+    if (!prepared) throw new Error('Archived fixture index requires evidence/prepared.json');
+    originalHash('fixture-index.json', prepared.fixture_index_sha256);
+  }
   const clarification = json('scoring-clarification.json');
   if (clarification) {
     originalHash('independent-score.json', clarification.original_score_sha256);

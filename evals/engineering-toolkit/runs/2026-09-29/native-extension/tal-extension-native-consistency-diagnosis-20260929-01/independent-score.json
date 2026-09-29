@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-consistency-diagnosis",
+  "suite": "native-workflow-extension",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T12:33:20.369536+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_extension_guidance": false,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/run.json": "064a49690d64eeced1d89c7f0ce44dcf336ef69a0518c06e37c0ae115cb0068e",
+    "evidence/events.jsonl": "3bb5d80e6c7aa0b09560d21e38b443807d5323a71ae43e3ebb793e6addd67814",
+    "evidence/prepared.json": "94036eb165f4c65a531de358e0609bff9c988587738ea4b8f0750335d7390c89",
+    "evidence/verification.stdout.txt": "331c7bdbd7e17f030c433564c885d71cf613a385e21484d7652ef3d5c1d8384c",
+    "trial/projection.py": "a7cf730cd1328ffc3ba6ef9e9df911892ce219746b6c58a7b3d58ae22cf73119",
+    "trial/test_projection.py": "90633e99f543ffc2bd7dfe587396b30c7d08d4e7677bbf87588edcab7ef35d34",
+    "trial/verify.py": "141be3d5a5c50048bdfd4c91c688a0c825b43e64cadaebeda7ddbe409b6ed6a5",
+    "trial/contract.md": "2c0e910f8c27c1b511ecc2f844b22084cce05e88d748ec44cdd4d621af76d583"
+  },
+  "source_digest": "e26ca9f9cd04408a2f6871b7c073dbcb5be3532fdfde75abe88c0fa5e4411719",
+  "fixture_index_sha256": "af2782f83a7a16c8db7295d45eea531d6e6472a80a5c08c7578a14fc99d4808f",
+  "rubric_path": "evals/engineering-toolkit/extension-fixtures/case-index.json",
+  "runner_sha256": "b8ba06bf55503f08785994b27f1a628acdbf1a4828bc8c9c93276ff98c200b33",
+  "criteria": [
+    {
+      "id": "delete_handoff",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/verify.py",
+          "locator": "paused_snapshot_delete",
+          "observation": "Protected event-gated schedule pauses copied snapshot 10, completes live DELETE 11 plus view/dump before release, joins both threads with bounded waits and rejects resurrection."
+        },
+        {
+          "artifact": "trial/projection.py",
+          "locator": "install_snapshot; apply",
+          "observation": "Diagnostic callback remains after copying input and before acquiring publication lock; merge retains newer key sequence 11 even when the key has no visible row."
+        },
+        {
+          "artifact": "evidence/verification.stdout.txt",
+          "locator": "1",
+          "observation": "Final independent verifier reports all 3 checks passed; exit 0, no timeout, clean owned process group."
+        }
+      ]
+    },
+    {
+      "id": "restart_frontier",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/projection.py",
+          "locator": "__init__; dump_state; install_snapshot; apply",
+          "observation": "JSON-compatible snapshot_sequence and per-key key_sequences preserve tombstones and absorb old keys under newer complete baseline; constructor/dump copy dictionaries under proper ownership."
+        },
+        {
+          "artifact": "trial/verify.py",
+          "locator": "paused_snapshot_delete; snapshot_boundary_and_omission",
+          "observation": "After captured-state JSON restart, delayed snapshot 10 and stale live put 10 remain suppressed after DELETE 11; newer put 12 succeeds. Baseline frontier also survives restart."
+        }
+      ]
+    },
+    {
+      "id": "complete_baseline_and_per_key_order",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/projection.py",
+          "locator": "install_snapshot lines 19-34; apply lines 37-47",
+          "observation": "Snapshot publication atomically rejects older/equal baselines, starts from complete snapshot so omissions remove obsolete state, then overlays only per-key live events newer than boundary including absence. Live events compare baseline plus own key sequence, not an unrelated key maximum."
+        },
+        {
+          "artifact": "evidence/verification.stdout.txt",
+          "locator": "1",
+          "observation": "Protected snapshot_boundary_and_omission and per_key_and_duplicate_order pass with verifier unchanged."
+        }
+      ]
+    },
+    {
+      "id": "causal_evidence",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "67,277,373,767,1008",
+          "observation": "Original verifier fails 0/3 including explicit completed-DELETE resurrection. Final owner tests and independent protected verifier pass; reviewer adds bounded hook-reentry, exception and detached-state checks. Final identifies concrete history and one-process/serialization limits."
+        },
+        {
+          "artifact": "trial/test_projection.py",
+          "locator": "test_snapshots_publish_in_reverse_order; test_delivery_orders_against_authoritative_log",
+          "observation": "Four added tests include bounded actual-thread reverse publication and all 7! = 5,040 operation orders, with independent sorted-source-event oracle, intermediate JSON restart and redelivery. This finite exercise is not a CDC adapter or crash-persistence test."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex 0.153.4 discovers enabled installed consistency workflow."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "57,86,90,96,1015#/result/thread",
+          "observation": "Actual workflow and concurrency skill reads; relevant new projection-rebuild.md reference was read successfully by the reviewer. Native child metadata records tal-consistency with correct controller parent ID, not generic role-text fallback."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "192,265,284,299,300,302,373,767",
+          "observation": "Only controller writes projection.py and optional test_projection.py. Separate native consistency reviewer reopens and hashes final source a7cf730cd1328ffc3ba6ef9e9df911892ce219746b6c58a7b3d58ae22cf73119 and tests 90633e99f543ffc2bd7dfe587396b30c7d08d4e7677bbf87588edcab7ef35d34, inspects oracle/enforcement, executes independent extra cases, and returns no findings. No subsequent candidate change; final coordinator verifier passes."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 1,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_observation; /capability_deviations",
+          "observation": "Only allowed projection.py/test_projection.py changes. All final hashes independently match current bytes; contract, guarded verifier and native closure match baseline. Global-config before/after hashes and mtime match. Broad reads, inherited/effective tool inventory and per-file write enforcement are not established, so compound criterion is partial without an observed scope breach."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "767,1008",
+          "observation": "Final and reviewer restrict claims to one authoritative log incarnation, trusted inputs, finite in-process schedules and JSON serialization. They make no cross-process, real CDC/cache infrastructure or crash-atomic storage claim."
+        }
+      ]
+    }
+  ],
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "partial",
+  "case_compliant": false,
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+      "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+    ]
+  },
+  "critical_failures": [],
+  "unresolved_critical_partial": [
+    "isolation_and_scope"
+  ],
+  "limitations": [
+    "One bounded synthetic in-process source-log/cache contract; no real CDC, stream reconnect, cross-process cache or crash-atomic persistence evidence.",
+    "Actual named specialist loading/reference reads are observed, but no unaided baseline or causal skill uplift comparison was run.",
+    "Reviewer extra check first attempted heredoc failed before Python due shell temporary-file restrictions; successful inline equivalent is the credited run.",
+    "Score inspects coordinator independent verification evidence; evaluator did not perform a new model or candidate test run."
+  ]
+}

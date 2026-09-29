@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-worker-rollout",
+  "suite": "native-workflow-extension",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T12:52:07.928350+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_extension_guidance": false,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/run.json": "073c43198b5140944ce9ce05a15fc87f63bf38691c624fde7a5b7f45de2f364a",
+    "evidence/events.jsonl": "5856efe90409389a230f45286b7959dc81bb4f26f7435f8e02f8de8e29b3ece2",
+    "evidence/prepared.json": "92122ae24937520d341f85d3518a96b09121b3c7ea9237fc827ddd8642b64567",
+    "trial/contract.md": "83dede7e61b2dcc75b7441efb7606c042d44c4f5efedf009420573672fc814e0",
+    "trial/proposed-retirement.md": "16671a7ecf700e613a67b6bc5f61b0d8611377408c7443603e3b2f1e61fd93f4",
+    "trial/rollout.json": "57a6869c9a1072209be88c53336a06ca165698daa6c5677288886bf6186feba2",
+    "trial/.tal-skills/workflows/tal-worker-rollout/WORKFLOW.md": "d710250cfd6b2cbd5f815869441c5fb8cee069f4704668144c9832eda2123b5d"
+  },
+  "source_digest": "29509f8dd00b4248b1d7e39aaf36c41fdd1812af7f40437253faa912e7afb067",
+  "source_checkpoint": "d3a591f10bbb9b121b309c95c13d4f99c2a2d6e2",
+  "candidate_workflow": {
+    "source_path": "workflows/tal-worker-rollout/WORKFLOW.md",
+    "installed_path": "trial/.tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+    "sha256": "d710250cfd6b2cbd5f815869441c5fb8cee069f4704668144c9832eda2123b5d",
+    "matches_frozen_git_blob": true,
+    "observed_read": "evidence/events.jsonl:72"
+  },
+  "fixture_index_sha256": "af2782f83a7a16c8db7295d45eea531d6e6472a80a5c08c7578a14fc99d4808f",
+  "rubric_path": "evals/engineering-toolkit/extension-fixtures/case-index.json",
+  "runner_sha256": "b8ba06bf55503f08785994b27f1a628acdbf1a4828bc8c9c93276ff98c200b33",
+  "criteria": [
+    {
+      "id": "deployment_and_retirement",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2494,3569,5361",
+          "observation": "Rejects the proposed 12:02 retirement. Distinguishes the 11:50 SUCCESSFUL DEFERRED deployment and frozen deployment counts from the independently observed 12:00 live inventory of two source plus three target tasks. Names unfinished jobs with absent receipts and acknowledgments; automatic deployment rollback ceased at completion."
+        }
+      ]
+    },
+    {
+      "id": "finite_confirmed_protection",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "461,2494,3569,5361",
+          "observation": "Old-a has only ten minutes of confirmed protection remaining, expiring at 12:10. The 1440-minute request returned ThrottlingException and established no extension. Requires bounded jittered retries plus matching task ARN, enabled state and confirmed expiration; escalates immediately because recovery margins are unknown. The proposed 12:05 checkpoint is explicitly not proof of sufficient recovery time. Old-b protection is finite and revision-3 checkpoint support remains unavailable."
+        }
+      ]
+    },
+    {
+      "id": "admission_and_ownership",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2494,3569,5361 steps 2\u20134,6",
+          "observation": "Closes authoritative fresh claims for the retiring cohort, stops polling and reconciles in-flight receives, prefetch and claims. Requires confirmed protection before more admission and coordinates enable/disable with pending receives. Keeps explicit compatible v2 recovery eligibility distinct from unrestricted old intake. Separates ECS protection from the application lease, whose current confirmation ends at 12:00:45; observes 15-second renewals, preserves tenant/job identity, requires newer successor epochs, stale-owner fencing and conditional cleanup, and final durable receipt before acknowledgment."
+        }
+      ]
+    },
+    {
+      "id": "retained_dependencies",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2494 finding 6; 3569 procedure 5; 5361 steps 1,4\u20136",
+          "observation": "Retains the v2 decoder, layout, image/task definition, checkpoints and recovery artifacts while live or recoverable work depends on them. Retention alone does not prove usable v2 restoration; revision 3 requires implemented and exercised compatibility. Final explicitly proposes a named service on-call as operational drain/retirement owner with platform support, states the assignment is absent from evidence, and blocks retirement pending acceptance. This responsibility is distinguished from per-job execution ownership. Sets a finite 00:30 completion/recovery review and assigned incident with finite next deadline for unfinished work; separate task-release and dependency-release gates require fresh inventory and demonstrated compatible continuation or terminal outcomes. This is a complete proposed ownership gate for a planning task, not evidence that a person accepted it."
+        }
+      ]
+    },
+    {
+      "id": "capacity_and_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "461,3569,5361",
+          "observation": "Computes all five slots occupied by two sources and three targets; desired 3 at 200% permits a nominal six but no physical sixth slot. Desired 1 threatens coexistence, allows DEPLOYMENT_BLOCKED exposure and leaves scaling selection unknown. Separates a failed task freeing capacity from underlying capacity loss leaving four slots, preserves a compatible recovery slot, and requires a separate capacity decision or safe target admission/capacity reduction. Does not claim crash immunity or actual cloud execution."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex CLI 0.153.4 discovers the enabled installed tal-worker-rollout entrypoint."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "72,108,123,129,130,141; 5367#/result/thread; 5369#/result/thread",
+          "observation": "Actual reads include the installed workflow, graceful-draining and recovery-validation skill bodies, durable-handoff/platform-shutdown/recovery references, and infrastructure-change-safety with rollout guidance. Final native thread metadata establishes tal-durability and tal-infrastructure child roles under controller 01a0ed2f-9bad-7502-b484-8f36767b4189, with inherited gpt-6-astra/ultra; these are named native dispatches rather than generic children merely reading role descriptions."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "88,98,118,123,150,2494,3569,5361",
+          "observation": "Controller owns the read-only synthesis. Separate native durability and infrastructure reviewers inspect the same unchanged proposed-retirement candidate, contract and observations, independently confirm their source hashes, and return evidence-backed no-go findings and gates before the controller final. Final incorporates the independent operational-owner, finite-protection, dependency, capacity and recovery findings. No implementation correction occurred, so no post-edit test or re-review is represented. This is independent review of the unchanged supplied proposal and its conclusions; no claim that a separately frozen final prose draft was reviewed."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 1,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_observation; /capability_deviations",
+          "observation": "No changed files. Independent scoring rechecked all 103 prepared baseline and 103 final-file hashes and modes, with zero mismatches. Global configuration before/after hash and mtime match. Broad read confinement, per-file write enforcement and effective tool inventory remain unproven; no prohibited source mutation, infrastructure action or other actual scope breach is observed."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "461,2494,3569,5361",
+          "observation": "Executed evidence is static source review and local timestamp/capacity arithmetic over synthetic normalized observations. Final separates proposed operational actions from executed or approved actions, limits the synthetic revision-3 smoke test to new input, and lists missing fresh platform observations and recovery/failure rehearsals. Missing retry/DLQ policy, business deadlines, checkpoint timing and recovery duration prevent a claim of bounded successful recovery."
+        }
+      ]
+    }
+  ],
+  "score_total": 17,
+  "score_possible": 18,
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "partial",
+  "case_compliant": false,
+  "operational_ownership_status": {
+    "proposed_role": "Named service on-call as drain and retirement owner, with platform support for protection and capacity",
+    "actual_assignment": "Not evidenced; retirement blocked pending acceptance",
+    "distinct_from_job_execution_ownership": true,
+    "evidence": "evidence/events.jsonl:5361 step 1"
+  },
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector."
+    ]
+  },
+  "critical_failures": [],
+  "unresolved_critical_partial": [
+    "isolation_and_scope"
+  ],
+  "limitations": [
+    "No actual operational owner accepted the proposal during this read-only task; assignment and all real execution gates remain pending.",
+    "All operational facts are synthetic normalized evidence at 12:00, not present cloud state; no infrastructure execution, fault rehearsal or actual recovery occurred.",
+    "Native specialist review and relevant reference loading are observed; this single rerun does not establish causal skill uplift.",
+    "Original worker run01 and its distinct retained-dependencies partial score remain unchanged."
+  ]
+}

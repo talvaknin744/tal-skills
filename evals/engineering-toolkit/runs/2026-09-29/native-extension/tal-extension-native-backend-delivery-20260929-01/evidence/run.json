@@ -1,0 +1,2146 @@
+{
+  "schema_version": 1,
+  "host": "codex",
+  "workflow": "tal-backend-delivery",
+  "task_mode": "implementation",
+  "argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "app-server",
+    "--stdio",
+    "-c",
+    "projects={\"/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial\"={trust_level=\"trusted\"}}",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "agents.max_concurrent_threads_per_session=2",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "sandbox_workspace_write.network_access=false",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.connectors=false",
+    "-c",
+    "features.plugins=false",
+    "-c",
+    "features.remote_plugin=false",
+    "-c",
+    "features.browser_use=false",
+    "-c",
+    "features.browser_use_external=false",
+    "-c",
+    "features.in_app_browser=false",
+    "-c",
+    "features.computer_use=false",
+    "-c",
+    "features.image_generation=false",
+    "-c",
+    "features.imagegenext=false",
+    "-c",
+    "features.hooks=false",
+    "-c",
+    "features.codex_hooks=false",
+    "-c",
+    "features.plugin_hooks=false"
+  ],
+  "registration": "automatic-project-directory",
+  "model_override": false,
+  "primary_thread": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+  "preflight": {
+    "config": {
+      "model": "gpt-6-astra",
+      "reasoning_effort": "ultra",
+      "agents": {
+        "enabled": true,
+        "max_concurrent_threads_per_session": 2,
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null
+      },
+      "sandbox_mode": null,
+      "capabilities": {
+        "web_search": "disabled",
+        "features": {
+          "apps": false,
+          "connectors": false,
+          "plugins": false,
+          "remote_plugin": false,
+          "browser_use": false,
+          "browser_use_external": false,
+          "in_app_browser": false,
+          "computer_use": false,
+          "image_generation": false,
+          "imagegenext": false,
+          "hooks": false,
+          "codex_hooks": false,
+          "plugin_hooks": false
+        },
+        "sandbox_workspace_write": {
+          "writable_roots": [],
+          "network_access": false,
+          "exclude_tmpdir_env_var": true,
+          "exclude_slash_tmp": true
+        },
+        "mcp_servers": {
+          "node_repl": {
+            "enabled": true
+          },
+          "gitnexus": {
+            "enabled": true
+          },
+          "computer-use": {
+            "enabled": false
+          }
+        }
+      },
+      "project_layers": [
+        {
+          "source": {
+            "type": "project",
+            "dotCodexFolder": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/.codex"
+          },
+          "disabled_reason": null
+        }
+      ]
+    },
+    "workflow_skills": [
+      {
+        "name": "tal-backend-delivery",
+        "description": "Deliver a bounded backend change with a language owner, relevant correctness specialists, and independent review of the verified candidate.",
+        "path": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/.agents/skills/tal-backend-delivery/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "skill_errors": []
+  },
+  "effective_thread_model": "gpt-6-astra",
+  "effective_thread_reasoning": "ultra",
+  "thread_persistence": {
+    "requested_ephemeral": false,
+    "observed_ephemeral": false,
+    "root_path": "/Users/idanvaknin/.codex/sessions/2026/09/29/rollout-2026-09-29T15-26-08-01a0ed21-2762-7c83-a79d-3ceee9ac5f4d.jsonl"
+  },
+  "execution_started": true,
+  "terminal_turn": {
+    "id": "01a0ed21-27ae-7930-bd13-3579dbadf99f",
+    "items": [
+      {
+        "type": "agentMessage",
+        "id": "msg_0de03cc751811b25016abbb052e93087d2928d348c3a424e0b",
+        "text": "Implemented while preserving `exportRecords`.\n\n- [export.ts](/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/export.ts) now respects backpressure, waits for finalization and cleanup, and propagates failures and cancellation. Cleanup also handles `autoDestroy: false` and `emitClose: false`.\n- [test_export.mjs](/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/test_export.mjs) adds 12 focused regression cases.\n- `contract.md` and `verify.mjs` remain unchanged.\n\nFinal checks on Node **v25.9.0**: supplied verifier **5/5 passed**, regression tests **12/12 passed**, and both syntax checks passed. Compiler typechecking was unavailable.\n\nIndependent focused review accepted candidate **`aed2e3d5dbda`** with **no remaining material findings**, after correcting the suppressed-close-event cleanup hang.",
+        "phase": "final_answer",
+        "memoryCitation": null,
+        "delivery": null,
+        "questions": null
+      }
+    ],
+    "itemsView": "summary",
+    "status": "completed",
+    "error": null,
+    "startedAt": 1790684768,
+    "completedAt": 1790685272,
+    "durationMs": 504755
+  },
+  "failure": null,
+  "global_config_unchanged": true,
+  "global_config_observation": {
+    "before": {
+      "sha256": "1f9847affe5f796120610b0cdafd49cf4affd44a7a947a77a2c6d0f900669923",
+      "modified_at": "2026-09-29T11:16:31.192Z",
+      "observed_at": "2026-09-29T12:26:08.026Z"
+    },
+    "after": {
+      "sha256": "1f9847affe5f796120610b0cdafd49cf4affd44a7a947a77a2c6d0f900669923",
+      "modified_at": "2026-09-29T11:16:31.192Z",
+      "observed_at": "2026-09-29T12:34:33.069Z"
+    },
+    "change_attribution": "not-applicable"
+  },
+  "observed": {
+    "threads": [
+      {
+        "id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "parent_thread_id": null,
+        "agent_role": null,
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:6"
+      },
+      {
+        "id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "parent_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "agent_role": "tal-failure-testing",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:2013"
+      },
+      {
+        "id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "parent_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "agent_role": "tal-typescript",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:2015"
+      }
+    ],
+    "named_native_children": [
+      {
+        "id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "parent_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "agent_role": "tal-failure-testing",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:2013"
+      },
+      {
+        "id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "parent_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "agent_role": "tal-typescript",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:2015"
+      }
+    ],
+    "observed_reads": [
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": ".agents/skills/tal-backend-delivery/SKILL.md",
+        "evidence": "events.jsonl:53",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": ".tal-skills/workflows/tal-backend-delivery/WORKFLOW.md",
+        "evidence": "events.jsonl:53",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": "export.ts",
+        "evidence": "events.jsonl:58",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": "contract.md",
+        "evidence": "events.jsonl:58",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": "verify.mjs",
+        "evidence": "events.jsonl:58",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": ".tal-skills/workflows/_shared/handoff.md",
+        "evidence": "events.jsonl:60",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": ".agents/skills/typescript-backend/SKILL.md",
+        "evidence": "events.jsonl:60",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:68",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+        "evidence": "events.jsonl:68",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:156",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+        "evidence": "events.jsonl:157",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+        "evidence": "events.jsonl:174",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": "export.ts",
+        "evidence": "events.jsonl:413",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:432",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "contract.md",
+        "evidence": "events.jsonl:539",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "export.ts",
+        "evidence": "events.jsonl:539",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "verify.mjs",
+        "evidence": "events.jsonl:539",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:539",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": ".agents/skills/typescript-backend/references/node-streams.md",
+        "evidence": "events.jsonl:638",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": "export.ts",
+        "evidence": "events.jsonl:997",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:998",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "export.ts",
+        "evidence": "events.jsonl:1604",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:1604",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/0",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/1",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": "export.ts",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/1",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "contract.md",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "export.ts",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "verify.mjs",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": ".agents/skills/typescript-backend/references/node-streams.md",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/6",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "export.ts",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/0",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "path": "test_export.mjs",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/0",
+        "basis": "native best-effort read action on completed zero-exit command"
+      }
+    ],
+    "commands": [
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'cat .agents/skills/tal-backend-delivery/SKILL.md && cat .tal-skills/workflows/tal-backend-delivery/WORKFLOW.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:53"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'export.ts' -g 'contract.md' -g 'verify.mjs' -g 'package.json' -g 'tsconfig.json' -g 'test_export.mjs' -g 'WORKFLOW.md' -g 'SKILL.md' -g '\"'!node_modules'\"' -g '\"'!.git'\"'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:54"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'cat export.ts && cat contract.md && cat verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:58"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/_shared/handoff.md && cat .agents/skills/typescript-backend/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:60"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node --version && ls -la && for p in /AGENTS.md /private/AGENTS.md /private/tmp/AGENTS.md /private/tmp/tal-extension-native-backend-delivery-20260929-01/AGENTS.md; do if test -f \"$p\"; then cat \"$p\"; fi; done'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:62"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md && cat .agents/skills/typescript-backend/references/async-ownership.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:68"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g 'AGENTS.md' -g '*.md' .agents .codex .tal-skills/agents && shasum -a 256 export.ts contract.md verify.mjs\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:70"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:156"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat .agents/skills/failure-oriented-testing/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:157"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat contract.md verify.mjs export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:159"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'cat .agents/skills/typescript-backend/references/node-streams.md && node verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:164"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:169"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"cat .agents/skills/failure-oriented-testing/references/fault-histories.md; rg --files -g AGENTS.md -g package.json -g tsconfig.json -g '*export*' -g '*workflow*'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:174"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'const s = process.binding(\\\"natives\\\")[\\\"internal/streams/pipeline\\\"]; console.log(s.slice(s.indexOf(\\\"function pipelineImpl\\\"), s.indexOf(\\\"function pipe(\\\")));'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:192"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'const s = process.binding(\\\"natives\\\")[\\\"internal/streams/pipeline\\\"]; console.log(s.slice(s.indexOf(\\\"function destroyer\\\"),s.indexOf(\\\"async function pumpToNode\\\")));console.log(s.slice(s.indexOf(\\\"function pipe(\\\")));'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:203"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import {Readable, Writable} from \\\"node:stream\\\"; import {exportRecords} from \\\"./export.ts\\\";const s = Readable.from([1],{autoDestroy:false});const d = new Writable({objectMode:true,autoDestroy:false,write(c,e,cb){cb()}});await exportRecords(s,d);console.log({sourceClosed:s.closed,destinationClosed:d.closed});s.destroy();d.destroy();'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:205"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { Readable, Writable } from '\\\\''node:stream'\\\\'';\nimport { pipeline } from '\\\\''node:stream/promises'\\\\'';\nfor (const scenario of ['\\\\''success'\\\\'', '\\\\''abort'\\\\'', '\\\\''sourceError'\\\\'', '\\\\''sinkError'\\\\'']) {\n  const ctl = new AbortController();\n  let releaseSource, releaseSink, failed = false;\n  const source = new Readable({ objectMode:true, read() { if (failed) return; failed=true; this.push(1); if (scenario==='\\\\''success'\\\\'') this.push(null); }, destroy(err, cb) { releaseSource=()=>cb(err); } });\n  const sink = new Writable({ objectMode:true, write(x,e,cb) { if (scenario==='\\\\''success'\\\\'') cb(); else setImmediate(()=> { if (scenario==='\\\\''abort'\\\\'') ctl.abort(); else if (scenario==='\\\\''sourceError'\\\\'') source.destroy(new Error('\\\\''source'\\\\'')); else cb(new Error('\\\\''sink'\\\\'')); }); }, destroy(err, cb) { releaseSink=()=>cb(err); } });\n  let state='\\\\''pending'\\\\''; const task = pipeline(source,sink,{signal:ctl.signal}).then(()=>state='\\\\''fulfilled'\\\\'', e=>state=e.name+'\\\\'':'\\\\''+e.message);\n  await new Promise(setImmediate); await new Promise(setImmediate);\n  console.log(scenario, '\\\\''before cleanup'\\\\'', state, \"'!!releaseSource, !!releaseSink, source.closed, sink.closed);\n  releaseSink?.();\n  await new Promise(setImmediate);\n  console.log(scenario,'\"'\\\\''after sink cleanup'\\\\'', state, \"'!!releaseSource, !!releaseSink, source.closed,sink.closed);\n  releaseSource?.();\n  await new Promise(setImmediate);\n  releaseSink?.(); await task;\n  console.log(scenario, '\"'\\\\''after all cleanup'\\\\'', state,source.closed,sink.closed);\n}'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:218"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { Readable, Writable } from '\\\\''node:stream'\\\\'';\nimport { pipeline } from '\\\\''node:stream/promises'\\\\'';\nconst controller = new AbortController(); controller.abort();\nlet reads=0,writes=0;\nconst source = new Readable({objectMode:true,read(){reads++;this.push({});}});\nconst sink = new Writable({objectMode:true,write(r,e,c){writes++;c();}});\ntry { await pipeline(source,sink,{signal:controller.signal}); } catch(e) { console.log(e.name,reads,writes,source.closed,sink.closed); }\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:279"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'console.log(process.binding(\\\"natives\\\")[\\\"internal/streams/end-of-stream\\\"]); console.log(process.binding(\\\"natives\\\")[\\\"internal/streams/destroy\\\"].slice(0,7500));'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:284"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'for (const n of [\\\"readable\\\", \\\"writable\\\"]) {const s=process.binding(\\\"natives\\\")[\"'`internal/streams/${n}`]; const i=s.indexOf(\"SymbolAsyncDispose\");console.log(n,s.slice(s.indexOf(\"prototype[SymbolAsyncDispose]\"),s.indexOf(\"prototype[SymbolAsyncDispose]\")+1600));}'\"'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:291"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node verify.mjs && node --check export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:319"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'command -v tsc || true; ls -l test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:329"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:350"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"nl -ba export.ts && rg --files --hidden -g 'test_export.mjs' -g 'tsconfig*' -g 'package.json' -g '\"'!node_modules'\"'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:413"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node test_export.mjs && node verify.mjs && node --check export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:425"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:432"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import {createHash} from \\\"node:crypto\\\";import {readFileSync} from \\\"node:fs\\\";for(const f of [\\\"export.ts\\\",\\\"test_export.mjs\\\",\\\"contract.md\\\",\\\"verify.mjs\\\"]){console.log(createHash(\\\"sha256\\\").update(readFileSync(f)).digest(\\\"hex\\\"),f)}'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:440"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:447"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'tail -80 test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:473"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'shasum -a 256 export.ts test_export.mjs; node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:480"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import {createHash} from \\\"node:crypto\\\";import {readFileSync} from \\\"node:fs\\\";const h=createHash(\\\"sha256\\\");for(const f of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]){const b=readFileSync(f);console.log(createHash(\\\"sha256\\\").update(b).digest(\\\"hex\\\"),f);h.update(f);h.update(\\\"\\\\0\\\");h.update(b);h.update(\\\"\\\\0\\\")}console.log(\\\"candidate\\\",h.digest(\\\"hex\\\"));'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:487"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node verify.mjs && node test_export.mjs && node --check export.ts && node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:490"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { readFile } from '\\\\''node:fs/promises'\\\\'';\nconst test = (await readFile('\\\\''test_export.mjs'\\\\'', '\\\\''utf8'\\\\''))\n  .replace(\\\"import { exportRecords } from '\\\\''./export.ts'\\\\'';\\\", \\\"import { pipeline } from '\\\\''node:stream/promises'\\\\''; const exportRecords = (source, destination, options) => pipeline(source, destination, options);\\\")\n  .replace('\\\\''for (const [name, run] of cases)'\\\\'', \\\"for (const [name, run] of cases.filter(([name]) => name === '\\\\''success_waits_for_close_autoDestroy_false'\\\\''))\\\");\nawait import('\\\\''data:text/javascript;base64,'\\\\'' + Buffer.from(test).toString('\\\\''base64'\\\\''));\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:504"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:506"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'contract.md' -g 'verify.mjs' -g 'export.ts' -g 'test_export.mjs' -g 'CONTRACT.md' -g 'SKILL.md' -g '*typescript*' .tal-skills .agents .codex .\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:531"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/typescript-backend/SKILL.md .tal-skills/agents/languages/tal-typescript.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:537"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'cat contract.md && nl -ba export.ts && cat verify.mjs && cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:539"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { readFile } from '\\\\''node:fs/promises'\\\\'';\nimport { createHash } from '\\\\''node:crypto'\\\\'';\nfor (const path of ['\\\\''export.ts'\\\\'','\\\\''test_export.mjs'\\\\'']) console.log(path, createHash('\\\\''sha256'\\\\'').update(await readFile(path)).digest('\\\\''hex'\\\\''));\nconst test = (await readFile('\\\\''test_export.mjs'\\\\'', '\\\\''utf8'\\\\''))\n  .replace(\\\"import { exportRecords } from '\\\\''./export.ts'\\\\'';\\\", \\\"async function exportRecords(source, destination) { for await (const record of source) { destination.write(record); } destination.end(); }\\\")\n  .replace('\\\\''for (const [name, run] of cases)'\\\\'', \\\"for (const [name, run] of cases.filter(([name]) => name === '\\\\''success_waits_for_close_autoDestroy_true'\\\\'' || name === '\\\\''source_failure_during_blocked_write'\\\\''))\\\");\nawait import('\\\\''data:text/javascript;base64,'\\\\'' + Buffer.from(test).toString('\\\\''base64'\\\\''));\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:545"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import {createHash} from \\\"node:crypto\\\";import {readFileSync} from \\\"node:fs\\\";const h=createHash(\\\"sha256\\\");for(const f of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]){const b=readFileSync(f);console.log(createHash(\\\"sha256\\\").update(b).digest(\\\"hex\\\"),f);h.update(f);h.update(\\\"\\\\0\\\");h.update(b);h.update(\\\"\\\\0\\\")}console.log(\\\"candidate\\\",h.digest(\\\"hex\\\"));for(const f of [\\\"contract.md\\\",\\\"verify.mjs\\\"])console.log(createHash(\\\"sha256\\\").update(readFileSync(f)).digest(\\\"hex\\\"),f);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:550"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node verify.mjs && node test_export.mjs && node --check export.ts && node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:553"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"cat .agents/skills/typescript-backend/references/async-ownership.md && rg --files -g 'package.json' -g 'tsconfig*.json' -g 'AGENTS.md' -g '\"'!node_modules'\"' .\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:558"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:576"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'cat .agents/skills/typescript-backend/references/node-streams.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:638"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import { createHash } from \\\"node:crypto\\\"; import { readFile } from \\\"node:fs/promises\\\"; const hash=createHash(\\\"sha256\\\"); for (const file of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]) { const bytes=await readFile(file); hash.update(file).update(\\\"\\\\0\\\").update(bytes).update(\\\"\\\\0\\\"); console.log(file,createHash(\\\"sha256\\\").update(bytes).digest(\\\"hex\\\")); } console.log(hash.digest(\\\"hex\\\")); console.log(process.version);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:640"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import { Readable, Writable } from \\\"node:stream\\\"; import { exportRecords } from \\\"./export.ts\\\"; const released=[]; const source=new Readable({objectMode:true,emitClose:false,autoDestroy:false,read(){this.push(null)},destroy(error,callback){setImmediate(()=>{released.push(\\\"source\\\");callback(error)})}}); const destination=new Writable({objectMode:true,emitClose:false,autoDestroy:false,write(record,encoding,callback){callback()},destroy(error,callback){setImmediate(()=>{released.push(\\\"destination\\\");callback(error)})}}); let state=\\\"pending\\\"; exportRecords(source,destination).then(()=>state=\\\"fulfilled\\\",error=>state=error.name); setTimeout(()=>console.log({state,released,sourceClosed:source.closed,destinationClosed:destination.closed,sourceCloseListeners:source.listenerCount(\\\"close\\\"),destinationCloseListeners:destination.listenerCount(\\\"close\\\")}),50);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:956"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:997"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:998"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1004"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1006"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:1321"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node verify.mjs && node test_export.mjs && node --check export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1330"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import {createHash} from \\\"node:crypto\\\";import {readFileSync} from \\\"node:fs\\\";const h=createHash(\\\"sha256\\\");for(const f of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]){const b=readFileSync(f);console.log(createHash(\\\"sha256\\\").update(b).digest(\\\"hex\\\"),f);h.update(f);h.update(\\\"\\\\0\\\");h.update(b);h.update(\\\"\\\\0\\\")}console.log(\\\"candidate\\\",h.digest(\\\"hex\\\"));for(const f of [\\\"contract.md\\\",\\\"verify.mjs\\\"])console.log(createHash(\\\"sha256\\\").update(readFileSync(f)).digest(\\\"hex\\\"),f);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1351"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "command": "/bin/zsh -lc 'node verify.mjs && node test_export.mjs && node --check export.ts && node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1354"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1359"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { readFile } from '\\\\''node:fs/promises'\\\\'';\nimport { createHash } from '\\\\''node:crypto'\\\\'';\nfor (const path of ['\\\\''export.ts'\\\\'','\\\\''test_export.mjs'\\\\'']) console.log(path, createHash('\\\\''sha256'\\\\'').update(await readFile(path)).digest('\\\\''hex'\\\\''));\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1361"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1363"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'nl -ba export.ts && cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1604"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import { createHash } from \\\"node:crypto\\\"; import { readFile } from \\\"node:fs/promises\\\"; const hash=createHash(\\\"sha256\\\"); for (const file of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]) { const bytes=await readFile(file); hash.update(file).update(\\\"\\\\0\\\").update(bytes).update(\\\"\\\\0\\\"); console.log(file,createHash(\\\"sha256\\\").update(bytes).digest(\\\"hex\\\")); } console.log(hash.digest(\\\"hex\\\")); console.log(process.version);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1606"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1615"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node --check export.ts && node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1617"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1619"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/0"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat .agents/skills/failure-oriented-testing/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat contract.md verify.mjs export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"cat .agents/skills/failure-oriented-testing/references/fault-histories.md; rg --files -g AGENTS.md -g package.json -g tsconfig.json -g '*export*' -g '*workflow*'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { Readable, Writable } from '\\\\''node:stream'\\\\'';\nimport { pipeline } from '\\\\''node:stream/promises'\\\\'';\nfor (const scenario of ['\\\\''success'\\\\'', '\\\\''abort'\\\\'', '\\\\''sourceError'\\\\'', '\\\\''sinkError'\\\\'']) {\n  const ctl = new AbortController();\n  let releaseSource, releaseSink, failed = false;\n  const source = new Readable({ objectMode:true, read() { if (failed) return; failed=true; this.push(1); if (scenario==='\\\\''success'\\\\'') this.push(null); }, destroy(err, cb) { releaseSource=()=>cb(err); } });\n  const sink = new Writable({ objectMode:true, write(x,e,cb) { if (scenario==='\\\\''success'\\\\'') cb(); else setImmediate(()=> { if (scenario==='\\\\''abort'\\\\'') ctl.abort(); else if (scenario==='\\\\''sourceError'\\\\'') source.destroy(new Error('\\\\''source'\\\\'')); else cb(new Error('\\\\''sink'\\\\'')); }); }, destroy(err, cb) { releaseSink=()=>cb(err); } });\n  let state='\\\\''pending'\\\\''; const task = pipeline(source,sink,{signal:ctl.signal}).then(()=>state='\\\\''fulfilled'\\\\'', e=>state=e.name+'\\\\'':'\\\\''+e.message);\n  await new Promise(setImmediate); await new Promise(setImmediate);\n  console.log(scenario, '\\\\''before cleanup'\\\\'', state, \"'!!releaseSource, !!releaseSink, source.closed, sink.closed);\n  releaseSink?.();\n  await new Promise(setImmediate);\n  console.log(scenario,'\"'\\\\''after sink cleanup'\\\\'', state, \"'!!releaseSource, !!releaseSink, source.closed,sink.closed);\n  releaseSource?.();\n  await new Promise(setImmediate);\n  releaseSink?.(); await task;\n  console.log(scenario, '\"'\\\\''after all cleanup'\\\\'', state,source.closed,sink.closed);\n}'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { Readable, Writable } from '\\\\''node:stream'\\\\'';\nimport { pipeline } from '\\\\''node:stream/promises'\\\\'';\nconst controller = new AbortController(); controller.abort();\nlet reads=0,writes=0;\nconst source = new Readable({objectMode:true,read(){reads++;this.push({});}});\nconst sink = new Writable({objectMode:true,write(r,e,c){writes++;c();}});\ntry { await pipeline(source,sink,{signal:controller.signal}); } catch(e) { console.log(e.name,reads,writes,source.closed,sink.closed); }\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/14"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/18"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'shasum -a 256 export.ts test_export.mjs; node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/21"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { readFile } from '\\\\''node:fs/promises'\\\\'';\nconst test = (await readFile('\\\\''test_export.mjs'\\\\'', '\\\\''utf8'\\\\''))\n  .replace(\\\"import { exportRecords } from '\\\\''./export.ts'\\\\'';\\\", \\\"import { pipeline } from '\\\\''node:stream/promises'\\\\''; const exportRecords = (source, destination, options) => pipeline(source, destination, options);\\\")\n  .replace('\\\\''for (const [name, run] of cases)'\\\\'', \\\"for (const [name, run] of cases.filter(([name]) => name === '\\\\''success_waits_for_close_autoDestroy_false'\\\\''))\\\");\nawait import('\\\\''data:text/javascript;base64,'\\\\'' + Buffer.from(test).toString('\\\\''base64'\\\\''));\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/24"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/25"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { readFile } from '\\\\''node:fs/promises'\\\\'';\nimport { createHash } from '\\\\''node:crypto'\\\\'';\nfor (const path of ['\\\\''export.ts'\\\\'','\\\\''test_export.mjs'\\\\'']) console.log(path, createHash('\\\\''sha256'\\\\'').update(await readFile(path)).digest('\\\\''hex'\\\\''));\nconst test = (await readFile('\\\\''test_export.mjs'\\\\'', '\\\\''utf8'\\\\''))\n  .replace(\\\"import { exportRecords } from '\\\\''./export.ts'\\\\'';\\\", \\\"async function exportRecords(source, destination) { for await (const record of source) { destination.write(record); } destination.end(); }\\\")\n  .replace('\\\\''for (const [name, run] of cases)'\\\\'', \\\"for (const [name, run] of cases.filter(([name]) => name === '\\\\''success_waits_for_close_autoDestroy_true'\\\\'' || name === '\\\\''source_failure_during_blocked_write'\\\\''))\\\");\nawait import('\\\\''data:text/javascript;base64,'\\\\'' + Buffer.from(test).toString('\\\\''base64'\\\\''));\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/27"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/30"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat export.ts'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/1"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/2"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/6"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/9"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc \"node --input-type=module -e '\nimport { readFile } from '\\\\''node:fs/promises'\\\\'';\nimport { createHash } from '\\\\''node:crypto'\\\\'';\nfor (const path of ['\\\\''export.ts'\\\\'','\\\\''test_export.mjs'\\\\'']) console.log(path, createHash('\\\\''sha256'\\\\'').update(await readFile(path)).digest('\\\\''hex'\\\\''));\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/10"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/11"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'contract.md' -g 'verify.mjs' -g 'export.ts' -g 'test_export.mjs' -g 'CONTRACT.md' -g 'SKILL.md' -g '*typescript*' .tal-skills .agents .codex .\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/0"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/typescript-backend/SKILL.md .tal-skills/agents/languages/tal-typescript.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'cat contract.md && nl -ba export.ts && cat verify.mjs && cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"cat .agents/skills/typescript-backend/references/async-ownership.md && rg --files -g 'package.json' -g 'tsconfig*.json' -g 'AGENTS.md' -g '\"'!node_modules'\"' .\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'cat .agents/skills/typescript-backend/references/node-streams.md'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import { createHash } from \\\"node:crypto\\\"; import { readFile } from \\\"node:fs/promises\\\"; const hash=createHash(\\\"sha256\\\"); for (const file of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]) { const bytes=await readFile(file); hash.update(file).update(\\\"\\\\0\\\").update(bytes).update(\\\"\\\\0\\\"); console.log(file,createHash(\\\"sha256\\\").update(bytes).digest(\\\"hex\\\")); } console.log(hash.digest(\\\"hex\\\")); console.log(process.version);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import { Readable, Writable } from \\\"node:stream\\\"; import { exportRecords } from \\\"./export.ts\\\"; const released=[]; const source=new Readable({objectMode:true,emitClose:false,autoDestroy:false,read(){this.push(null)},destroy(error,callback){setImmediate(()=>{released.push(\\\"source\\\");callback(error)})}}); const destination=new Writable({objectMode:true,emitClose:false,autoDestroy:false,write(record,encoding,callback){callback()},destroy(error,callback){setImmediate(()=>{released.push(\\\"destination\\\");callback(error)})}}); let state=\\\"pending\\\"; exportRecords(source,destination).then(()=>state=\\\"fulfilled\\\",error=>state=error.name); setTimeout(()=>console.log({state,released,sourceClosed:source.closed,destinationClosed:destination.closed,sourceCloseListeners:source.listenerCount(\\\"close\\\"),destinationCloseListeners:destination.listenerCount(\\\"close\\\")}),50);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/14"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/15"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'nl -ba export.ts && cat test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/0"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc \"node --input-type=module -e 'import { createHash } from \\\"node:crypto\\\"; import { readFile } from \\\"node:fs/promises\\\"; const hash=createHash(\\\"sha256\\\"); for (const file of [\\\"export.ts\\\",\\\"test_export.mjs\\\"]) { const bytes=await readFile(file); hash.update(file).update(\\\"\\\\0\\\").update(bytes).update(\\\"\\\\0\\\"); console.log(file,createHash(\\\"sha256\\\").update(bytes).digest(\\\"hex\\\")); } console.log(hash.digest(\\\"hex\\\")); console.log(process.version);'\"",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/1"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node verify.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/3"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node --check export.ts && node --check test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/4"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "command": "/bin/zsh -lc 'node test_export.mjs'",
+        "cwd": "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/5"
+      }
+    ],
+    "delegation": [
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "started",
+        "evidence": "events.jsonl:147"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:179"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:212"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:298"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:309"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:336"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:419"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:455"
+      },
+      {
+        "tool": "wait",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [],
+        "status": "completed",
+        "requested_model": null,
+        "requested_reasoning_effort": null,
+        "evidence": "events.jsonl:466"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:496"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed26-0cdb-7d93-8d4b-9296011e2178"
+        ],
+        "agent_path": "/root/focused_review",
+        "status": "started",
+        "evidence": "events.jsonl:517"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:523"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:562"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed26-0cdb-7d93-8d4b-9296011e2178"
+        ],
+        "agent_path": "/root/focused_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:570"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "completed",
+        "evidence": "events.jsonl:954"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:966"
+      },
+      {
+        "tool": "wait",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [],
+        "status": "completed",
+        "requested_model": null,
+        "requested_reasoning_effort": null,
+        "evidence": "events.jsonl:967"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed26-0cdb-7d93-8d4b-9296011e2178"
+        ],
+        "agent_path": "/root/focused_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:977"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:986"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1010"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed26-0cdb-7d93-8d4b-9296011e2178"
+        ],
+        "agent_path": "/root/focused_review",
+        "status": "completed",
+        "evidence": "events.jsonl:1254"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1337"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "interacted",
+        "evidence": "events.jsonl:1343"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1368"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed26-0cdb-7d93-8d4b-9296011e2178"
+        ],
+        "agent_path": "/root/focused_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:1474"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed21-dc9b-7021-92da-fdc6cd1718e9"
+        ],
+        "agent_path": "/root/failure_tests",
+        "status": "completed",
+        "evidence": "events.jsonl:1602"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [
+          "01a0ed26-0cdb-7d93-8d4b-9296011e2178"
+        ],
+        "agent_path": "/root/focused_review",
+        "status": "completed",
+        "evidence": "events.jsonl:1803"
+      },
+      {
+        "tool": "wait",
+        "sender_thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "receiver_thread_ids": [],
+        "status": "completed",
+        "requested_model": null,
+        "requested_reasoning_effort": null,
+        "evidence": "events.jsonl:1804"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/10"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/16"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/26"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/28"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/7"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/12"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/11"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "receiver_thread_ids": [
+          "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/16"
+      }
+    ],
+    "messages": [
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "I’m using the tal-backend-delivery skill to fix the stream lifecycle, verify it on the installed Node runtime, and get an independent review of the final candidate.\n",
+        "evidence": "events.jsonl:50"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "The contract gives this function ownership of both streams, so Node’s promise-based `pipeline` is a good fit for backpressure, completion, error propagation, and cancellation. I’m applying the TypeScript backend skill and checking the cleanup timing on Node v25.9.0, including gaps in the supplied tests.\n",
+        "evidence": "events.jsonl:139"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "The `pipeline` change passes all five supplied checks; the original failed all five. I also found that `pipeline` leaves streams open after success when they use `autoDestroy: false`. I’m checking that ownership edge and delayed cleanup before freezing the candidate.\n",
+        "evidence": "events.jsonl:277"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "The additional probes confirm that `pipeline` waits for delayed cleanup on default streams. I’ve added explicit cleanup for streams using `autoDestroy: false`, with checks for errors or cancellation during that cleanup. The supplied verifier still passes; the focused regression tests are being completed.\n",
+        "evidence": "events.jsonl:411"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "The candidate passes all five supplied checks and nine added regression checks on Node v25.9.0. The added tests also detect premature settlement in the original implementation and the missing cleanup in a bare `pipeline` version. The files are frozen for independent review.\n",
+        "evidence": "events.jsonl:635"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "text": "Completed and frozen [test_export.mjs](/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/test_export.mjs).\n\nNine deterministic Node stream tests pass on v25.9.0; syntax check passes. They cover:\n\n- Successful completion with delayed cleanup, including `autoDestroy:false`.\n- Cancellation and source/destination errors during explicit cleanup.\n- Cancellation already requested or occurring during a blocked write.\n- Source failure during a blocked write and sink failure with source cleanup pending.\n\nGates control write/cleanup ordering; settlement status, original error identity, stream closure, and exactly-once destruction are the discriminators. Watchdogs only bound failures.\n\nSensitivity confirmed without changing workspace files: the original loop fails two intended assertions; a pipeline-only implementation fails the `autoDestroy:false` closure assertion.\n\nCandidate SHA256:\n- `export.ts`: `8bd37b3c8a7ed4b6036e2ead26da88bb40ad488cd763166040ca53d041daa220`\n- `test_export.mjs`: `2c02d255cf9c2a86dc1653c4b80e3041be3ff2e44f4b81d7f412472ffb75b73e`\n\nThese exercise real Node streams with synthetic gates, not external adapters. `emitClose:false` is outside this test set and remains a review consideration. No files beyond the assigned test were changed.",
+        "evidence": "events.jsonl:947"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "text": "Review of candidate `297a2acb73919f351ad78136b0cb9d94e3da6f0c611367fb092fb371f0b82d08`: **one material finding**.\n\n- **P1 — export.ts:13–15:** Cleanup hangs for valid streams configured with `emitClose:false`. Native reproduction with delayed `_destroy` callbacks completed both cleanups (`source.closed === destination.closed === true`), but `exportRecords` remained pending because no `close` event fires. Observe public `.closed` with a low-frequency polling fallback; remove the listener and timer when completion is observed. Add a regression covering delayed destruction with suppressed close events.\n\nNo other material findings in flow control, ordinary error preservation, cancellation, or joined cleanup.\n\nChecks independently run on Node **v25.9.0**: `node verify.mjs` **5/5**, `node test_export.mjs` **9/9**. Native TypeScript stripping supplies execution, not compiler verification; no package or compiler configuration exists. No files changed. Corrected candidate needs focused re-review.",
+        "evidence": "events.jsonl:1248"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "Review found one remaining cleanup hang: valid Node streams can suppress the `close` event with `emitClose: false`. I’m adding a fallback that observes the public `closed` state, plus a regression test for delayed cleanup with that event disabled.\n",
+        "evidence": "events.jsonl:1310"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "text": "Completed and frozen `test_export.mjs`.\n\n- Added `emitClose:false` success cases for both `autoDestroy` settings and cancellation during a blocked write.\n- Gates establish cleanup order; `.closed` and destruction counts establish completed resource release.\n- Before correction, both new success cases timed out after resources closed, demonstrating the missing settlement.\n- Corrected candidate: `node test_export.mjs` passes 12/12; `node --check test_export.mjs` passes on Node v25.9.0.\n\nSHA256:\n\n- Test: `fc8df8f58c50fdde840cc17ff36d92b1408f1a0f0e231fea86cd067e26c6a6d2`\n- Export: `d514514277b5057b9109415965b18aa6541d9a07030259ece500cccc84be71c0`\n\nTests use actual Node streams with synthetic cleanup gates. No remaining work in this assignment; candidate is ready for independent re-review.",
+        "evidence": "events.jsonl:1595"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "text": "Accepted candidate `aed2e3d5dbdaba071b0afda6db8523af8ca3ab8b6e59d24f631194b931a395fc`: **no remaining material findings**.\n\nThe correction observes completed destruction even with `emitClose:false`, removes its listener and timer, joins both streams’ cleanup, and preserves error/cancellation checks. Added regressions cover the previously demonstrated hang.\n\nIndependently rerun on Node **v25.9.0**:\n\n- `node verify.mjs`: **5/5 passed**\n- `node test_export.mjs`: **12/12 passed**\n- `node --check export.ts` and `node --check test_export.mjs`: **passed**\n\nNative TypeScript stripping and syntax checks are not compiler typechecking. No review edits or outstanding corrections.",
+        "evidence": "events.jsonl:1797"
+      },
+      {
+        "thread_id": "01a0ed21-2762-7c83-a79d-3ceee9ac5f4d",
+        "text": "Implemented while preserving `exportRecords`.\n\n- [export.ts](/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/export.ts) now respects backpressure, waits for finalization and cleanup, and propagates failures and cancellation. Cleanup also handles `autoDestroy: false` and `emitClose: false`.\n- [test_export.mjs](/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/test_export.mjs) adds 12 focused regression cases.\n- `contract.md` and `verify.mjs` remain unchanged.\n\nFinal checks on Node **v25.9.0**: supplied verifier **5/5 passed**, regression tests **12/12 passed**, and both syntax checks passed. Compiler typechecking was unavailable.\n\nIndependent focused review accepted candidate **`aed2e3d5dbda`** with **no remaining material findings**, after correcting the suppressed-close-event cleanup hang.",
+        "evidence": "events.jsonl:2006"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "text": "Completed and frozen [test_export.mjs](/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial/test_export.mjs).\n\nNine deterministic Node stream tests pass on v25.9.0; syntax check passes. They cover:\n\n- Successful completion with delayed cleanup, including `autoDestroy:false`.\n- Cancellation and source/destination errors during explicit cleanup.\n- Cancellation already requested or occurring during a blocked write.\n- Source failure during a blocked write and sink failure with source cleanup pending.\n\nGates control write/cleanup ordering; settlement status, original error identity, stream closure, and exactly-once destruction are the discriminators. Watchdogs only bound failures.\n\nSensitivity confirmed without changing workspace files: the original loop fails two intended assertions; a pipeline-only implementation fails the `autoDestroy:false` closure assertion.\n\nCandidate SHA256:\n- `export.ts`: `8bd37b3c8a7ed4b6036e2ead26da88bb40ad488cd763166040ca53d041daa220`\n- `test_export.mjs`: `2c02d255cf9c2a86dc1653c4b80e3041be3ff2e44f4b81d7f412472ffb75b73e`\n\nThese exercise real Node streams with synthetic gates, not external adapters. `emitClose:false` is outside this test set and remains a review consideration. No files beyond the assigned test were changed.",
+        "evidence": "events.jsonl:2013#/result/thread/turns/0/items/31"
+      },
+      {
+        "thread_id": "01a0ed21-dc9b-7021-92da-fdc6cd1718e9",
+        "text": "Completed and frozen `test_export.mjs`.\n\n- Added `emitClose:false` success cases for both `autoDestroy` settings and cancellation during a blocked write.\n- Gates establish cleanup order; `.closed` and destruction counts establish completed resource release.\n- Before correction, both new success cases timed out after resources closed, demonstrating the missing settlement.\n- Corrected candidate: `node test_export.mjs` passes 12/12; `node --check test_export.mjs` passes on Node v25.9.0.\n\nSHA256:\n\n- Test: `fc8df8f58c50fdde840cc17ff36d92b1408f1a0f0e231fea86cd067e26c6a6d2`\n- Export: `d514514277b5057b9109415965b18aa6541d9a07030259ece500cccc84be71c0`\n\nTests use actual Node streams with synthetic cleanup gates. No remaining work in this assignment; candidate is ready for independent re-review.",
+        "evidence": "events.jsonl:2013#/result/thread/turns/1/items/13"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "text": "Review of candidate `297a2acb73919f351ad78136b0cb9d94e3da6f0c611367fb092fb371f0b82d08`: **one material finding**.\n\n- **P1 — export.ts:13–15:** Cleanup hangs for valid streams configured with `emitClose:false`. Native reproduction with delayed `_destroy` callbacks completed both cleanups (`source.closed === destination.closed === true`), but `exportRecords` remained pending because no `close` event fires. Observe public `.closed` with a low-frequency polling fallback; remove the listener and timer when completion is observed. Add a regression covering delayed destruction with suppressed close events.\n\nNo other material findings in flow control, ordinary error preservation, cancellation, or joined cleanup.\n\nChecks independently run on Node **v25.9.0**: `node verify.mjs` **5/5**, `node test_export.mjs` **9/9**. Native TypeScript stripping supplies execution, not compiler verification; no package or compiler configuration exists. No files changed. Corrected candidate needs focused re-review.",
+        "evidence": "events.jsonl:2015#/result/thread/turns/0/items/18"
+      },
+      {
+        "thread_id": "01a0ed26-0cdb-7d93-8d4b-9296011e2178",
+        "text": "Accepted candidate `aed2e3d5dbdaba071b0afda6db8523af8ca3ab8b6e59d24f631194b931a395fc`: **no remaining material findings**.\n\nThe correction observes completed destruction even with `emitClose:false`, removes its listener and timer, joins both streams’ cleanup, and preserves error/cancellation checks. Added regressions cover the previously demonstrated hang.\n\nIndependently rerun on Node **v25.9.0**:\n\n- `node verify.mjs`: **5/5 passed**\n- `node test_export.mjs`: **12/12 passed**\n- `node --check export.ts` and `node --check test_export.mjs`: **passed**\n\nNative TypeScript stripping and syntax checks are not compiler typechecking. No review edits or outstanding corrections.",
+        "evidence": "events.jsonl:2015#/result/thread/turns/1/items/6"
+      }
+    ],
+    "limits": [
+      "Command read actions are the host parser's best-effort classification; retain raw output for review.",
+      "Missing role metadata or read events are inconclusive, not evidence inferred from assistant claims.",
+      "A matching role and a successful process do not independently establish task correctness."
+    ]
+  },
+  "cleanup": {
+    "owned_process_group": 9770,
+    "remaining_live_processes": [],
+    "terminated": true
+  },
+  "capability_deviations": [
+    "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+    "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+    "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+  ],
+  "case_compliant": false,
+  "status": "completed-unscored",
+  "independent_acceptance": "pending",
+  "host_version": "codex-cli 0.153.4",
+  "changed_files": [
+    {
+      "path": "export.ts",
+      "allowed": true,
+      "change": "modified"
+    },
+    {
+      "path": "test_export.mjs",
+      "allowed": true,
+      "change": "created"
+    }
+  ],
+  "independent_verification": {
+    "argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "sandbox",
+      "-P",
+      ":workspace",
+      "--include-managed-config",
+      "--sandbox-state-disable-network",
+      "-C",
+      "/private/tmp/tal-extension-native-backend-delivery-20260929-01/trial",
+      "--",
+      "node",
+      "verify.mjs"
+    ],
+    "kind": "acceptance",
+    "exit_code": 0,
+    "signal": null,
+    "error": null,
+    "timed_out": false,
+    "cleanup": {
+      "owned_process_group": 11028,
+      "remaining_live_processes": [],
+      "terminated": true
+    },
+    "isolation": "native :workspace sandbox, managed configuration included, network explicitly disabled, credential environment variables withheld",
+    "limits": [
+      "The native :workspace profile permits system temporary-directory writes and broad filesystem reads; it does not enforce the fixture per-file allowlist."
+    ]
+  },
+  "final_files": [
+    {
+      "path": ".agents/skills/architecture/agents/openai.yaml",
+      "sha256": "158d739ab321edd7ecfb54de662f55e5c8438022fe322e01f9163cf0a59dd059",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/book-grounding.md",
+      "sha256": "e3403e854a2b034200434d564d3d8a923cc0625a744455aab506a39c2fc64bfc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/contracts/accepted-books.schema.json",
+      "sha256": "1683ab090f87417de9cbe444167f98dc41fb92e5dd47a38d97ce26f5e4f091ec",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/contracts/book-request.schema.json",
+      "sha256": "b41688c30b9b59c44b313309000a3c9190f572ec83c2a12738ca64a464905d3f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/contracts/book-response.schema.json",
+      "sha256": "5d0dde987157958a8c549315e4622e7330450ce7fc72b4d2d90a4e4e1993a55d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/panels.md",
+      "sha256": "fd39e10e27cc6fc36e774ca627b9b1a689925469d7da23f340463b94a0d41884",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/planning.md",
+      "sha256": "a8292dadd87dafeeed9744b96c91e2d63ec905730663efebb74cfbe16b33014a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/references/review.md",
+      "sha256": "6f9e04615b2af3fb4c509ee8fc36bc7558bf6ded4453a90168a77cac5efdca5d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/architecture/SKILL.md",
+      "sha256": "327fc503d2c01a15ab3e9f0cb26e029a4b5987e26cb741a44b2145d674f06931",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/agents/openai.yaml",
+      "sha256": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/cache-coherence.md",
+      "sha256": "d35560bc9e1e478f7d162b91effa1f33eda4fdb04efacc8bb6b743a855bc2ae7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/projection-rebuild.md",
+      "sha256": "9635ce4dc2682bd07922b271f62484052a7086b0cbf0af2f6cdd1a799fc0f998",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/replica-reads.md",
+      "sha256": "26d4eaa7c36cfaeb96fb6e6e07b341901ddcd4589b822eb82159e5d755a6f593",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/sources.md",
+      "sha256": "59036630faa36d57a375bb7c363e1037f233f23e8cef73a8be59f8957e8e0a01",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/transactions.md",
+      "sha256": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/SKILL.md",
+      "sha256": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/agents/openai.yaml",
+      "sha256": "dde157b38977a8c3cdc51ad4276f308a04a79bad0a4d52338bf43f00d509a58d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "2acd49e69bca0dc3426ad805794d2cdf0c5770bdc1e974e444f0b2475bce0a4c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/sources.md",
+      "sha256": "b8b6fc6c58cb6d48038ce9f325fd86e54b86ce60a708f3cf7b380ab2b70d0bcd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+      "sha256": "f7ceac4a622c3136a9279433347e2cd3efe3ebda4d2db0ddf8fa57a977c78498",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/agents/openai.yaml",
+      "sha256": "a8eb43c8b694ea53c4ed539c01a7a146b0d4c7160e4e364293d1c30920edbabd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/ownership.md",
+      "sha256": "3437a7091e90d3eb47c4a2dff054357eed3879a8da5571ab0598033dc4d3e0c1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/runtime-validation.md",
+      "sha256": "51b4eaa629b9bdd21257d6013b99322c76c27ac4a6ef6daf97854cf30b6f33c9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/sources.md",
+      "sha256": "51f7fa10e87ba8c55ecaf1d0de6b502b4e352a3d65a1d8c76e9da532246c2eed",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/transaction-outcomes.md",
+      "sha256": "53226b6126f55c42e5b284e3c51f9d47414e80da397d2ea4f22b32b4af68af9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/SKILL.md",
+      "sha256": "c51a9d8f9d388cd2b73e5a9416da43c39c75ca3a32d954151d728b76fa9e50f9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/agents/openai.yaml",
+      "sha256": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/durable-handoff.md",
+      "sha256": "6551852265b5f7445b76ff64b61366294f32062059e09c8d18a42ece8f0841bc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/platform-shutdown.md",
+      "sha256": "1455fa5df92c9636bbacfe7032b93dda4d1fe22dfcb31499d7f49781605e341d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/sources.md",
+      "sha256": "d88caf22fbe5695a8c70a38c45c26ca70daa37b5d348c57d700769beedabce6f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/SKILL.md",
+      "sha256": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/agents/openai.yaml",
+      "sha256": "6069e983fa2b0411e97bade8b37ed93628649eb93f0b31041ca37fcaf8e986a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/recovery.md",
+      "sha256": "7d137c2d86f71d4fa47ff564833d52ee27ce2061f373bf6c64e30768ead245b1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/sources.md",
+      "sha256": "727c4ccc2c7c2371fe86504fbad2ecf7ca6aeeb7a7c3ab1b53ccc6ed27be7573",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/verification.md",
+      "sha256": "93d3657ec00c7197b2ac0c258783b108a7bff6348f28eef029588e7085670fea",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/SKILL.md",
+      "sha256": "6fb0c4f5bea67f0c31757fb81d207507baabcc0b3f0fca24b3142da37cf1647f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/agents/openai.yaml",
+      "sha256": "b6ef1a6a5ea7ae77356f70a97ec6cdbcae3dc179b0ff05210e9565ea6ebba643",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/references/coupling.md",
+      "sha256": "bfc0a8e78c05f09d5fa2acb59a4576d57a218cbb4541c871e838b2fa79e32b06",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/references/ownership.md",
+      "sha256": "441fbde793f99ad4348e2871bff9eda2c77cc69a9f6073c6d9693c8ca8c476cf",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/references/sources.md",
+      "sha256": "2c0c23d1e100a7e24ea07f76cadd5d74d06d003aa72d7305b02cfc934cc2a399",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/SKILL.md",
+      "sha256": "4553c39d0b63310d78224364fd02c318f80bce5c228f8d5643b3b8b61b094c4e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/agents/openai.yaml",
+      "sha256": "f9b5fd5e4158f0424a06c0e4943b41d2deeed9b1cc9b2b8fc9ba7ebdfa991429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/async-ownership.md",
+      "sha256": "53faf3b084b93bebe73c3b33d06b346c594319fd056b9e84009930f8b74a083d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sources.md",
+      "sha256": "8e251bf259e6c5744aab9174dcfd98a20871d6880563ca9a225eb79531202bd3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/transaction-outcomes.md",
+      "sha256": "9b84d90852fa28198672befde8577bc54aa59f484ba117dbeb149f84e6b61403",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/SKILL.md",
+      "sha256": "c35f4b91b96b14e4401cc81de81d78ebe4027e1b8cd92daff94d16c6cbb538e1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/agents/openai.yaml",
+      "sha256": "d72684099483f29ba2d606ba3f5be81ce2dc8932e4eaa92d966039b35c25e693",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/postgresql.md",
+      "sha256": "456e21d37330ec26f3fbe2fabe206fa2bc3730ed10ec3eb32df0772505d5806d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovered-history.md",
+      "sha256": "06df9b8716e8dfeb19d17f140f9a1aab9fb9e2d6e3767446ab6db3f92a4779dc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovery-inputs.md",
+      "sha256": "fa02610ee95edcfc4f93cbb59fc6224dea93d2b2a37ead134a4e2d0d485f8496",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/sources.md",
+      "sha256": "b74b33426eccc3072f1818462278b598c066d1e8f38671831b8bc14a4b1d3f1c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/SKILL.md",
+      "sha256": "9240367c490ab5e34080a1016de8b92ff5b750c4776ce0675ee35d34d45100a7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/tal-backend-delivery/SKILL.md",
+      "sha256": "44a002985cf889b681adc04d0c5696f13a8776df3cfb2853fa90db587274cfc9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/agents/openai.yaml",
+      "sha256": "2cf07254ce674023c0370bdd28daf327b907f5ef51b1caa67ab54be8d0fc5229",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+      "sha256": "00df3d1d751164cf5b9c116589fb743a2895f0aaf47aad24a57aa76fb66a386e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/node-streams.md",
+      "sha256": "8fa91e3f5c79a98a1c09d6466707506b4cfb289ed466b684b6754f5a949b1283",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/runtime-boundaries.md",
+      "sha256": "d4810aa6488e4c362c9e3e8480838588763c39d69d4d24615737465592469cbb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/sources.md",
+      "sha256": "802061e75cebb73c84c4b31300ec9faa644c77a91d2354b276b1b06cf75358ef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/SKILL.md",
+      "sha256": "760f384a733d487e4df00a563a0ca8cc1ffa51f196b0b821a3561c23fedf7cc7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-boundaries.toml",
+      "sha256": "527b09bbd4baeb174f01b39a1b66efc750b0f5eca060914f2d28999a2c37629a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-consistency.toml",
+      "sha256": "3b1382a752e2d87c01ee7ee651e62a4e5c0930ac1b27468d8f0110bcedfcf91a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-durability.toml",
+      "sha256": "fcb6a5dcb32e4c2693c00e4e8c6e74a43535800f73597bfe51e901610a3410a7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-failure-testing.toml",
+      "sha256": "b12ed74187facb593fcc9e04a34a4072d418af1ab6f5b30755b0075f8e7b08db",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-go.toml",
+      "sha256": "97b4bf2a2f84362ae70c810e1ba5a68985cce8ee99e33d8609702bbf23c6d716",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-idempotency.toml",
+      "sha256": "f44795bd85342ac2309ed7fff1336422a86cfd2e3fce400d1071fe0692557300",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-python.toml",
+      "sha256": "4feed93f86e5745a9e2e00a57b953a107c18a135b443fcbd497e8e8ec6501b5e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-typescript.toml",
+      "sha256": "a2148c15fbe42e079a8576902182da9285cb5c0641fcbcd6e5ca26c261a26b20",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/CONTRACT.md",
+      "sha256": "dfbaa9ca5fef6032cfb606c8c6e50e0dc5ddf6ffebf56d26a34755f3dbadfe60",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-boundaries.md",
+      "sha256": "6530419ddc5700e07da5e6f0636a6d41b2262f9b2264ce9bd890b24a7df765e4",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-consistency.md",
+      "sha256": "5b279f3c7969e9696222de6fa8cd4b6405b708ef9562c4602b5e26a93d678af1",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-durability.md",
+      "sha256": "6b550b0d3f5333386bc6cd403fb997f66571c63bdbc11ca52487c948a7fc12eb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-idempotency.md",
+      "sha256": "e55750308310cbe174298f8b790895766680c79e1a354c927665352b2df708b0",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-go.md",
+      "sha256": "30138fa33296a07d3049f49fe8c35c7be5acb84229b82d4e0bda4ef741e2f1d8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-python.md",
+      "sha256": "b238cca04cf77369b55679537a41241f3aafba8b03c1dcfcc7fe48f6148020a3",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-typescript.md",
+      "sha256": "035f904826b7353789605f1b3ecd3650a5986a4b168124455796f225336e9d71",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/verification/tal-failure-testing.md",
+      "sha256": "a88991b94e598995f6673208b799560c99a63d0262360836860476c1b6d72d3f",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/manifest.json",
+      "sha256": "c970a56ff26c2abeef8fb623879338255d74209c19ca30ceaa6b70f03cae522c",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/_shared/handoff.md",
+      "sha256": "65e39e26613179353d152d18e316b277f1f303fab07f4ef5aa3f3cede2ac6923",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/tal-backend-delivery/WORKFLOW.md",
+      "sha256": "1b3979bf30f2565cd6cb676c5106b080e9b17583d95ecae2e6413c4ad8204f85",
+      "mode": 420
+    },
+    {
+      "path": "contract.md",
+      "sha256": "7b7ec33485589bd095e96e3a2eec0eaad69210c438a376cc5cea69b67070c7dd",
+      "mode": 420
+    },
+    {
+      "path": "export.ts",
+      "sha256": "d514514277b5057b9109415965b18aa6541d9a07030259ece500cccc84be71c0",
+      "mode": 420
+    },
+    {
+      "path": "prompt.md",
+      "sha256": "95db0e4b408760113bb117a22c2d6c45bb30d512fe386f394ec1036b3a970514",
+      "mode": 420
+    },
+    {
+      "path": "test_export.mjs",
+      "sha256": "fc8df8f58c50fdde840cc17ff36d92b1408f1a0f0e231fea86cd067e26c6a6d2",
+      "mode": 420
+    },
+    {
+      "path": "verify.mjs",
+      "sha256": "b7661f42f8666679b9830cd8b68cfa6299fe83011cdce6a3b749dd2922c89e54",
+      "mode": 420
+    }
+  ]
+}

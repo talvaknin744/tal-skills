@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-messaging-evolution",
+  "suite": "native-workflow-extension",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T12:40:55.469123+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_extension_guidance": false,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/run.json": "88b65df9663937afec79210dfa81ae382a324e43516fc77f9a50fae08a61e7a5",
+    "evidence/events.jsonl": "96a27682da04c5db7a64e7f556d51134323b5eaf0768015a301a660ab6e6cd6b",
+    "evidence/prepared.json": "28c3bdc1aa24ae45935f983d111c417aac51519d4999612f2afd832bfb2e5822",
+    "evidence/verification.stdout.txt": "293f9c7fa7a4bb6280ac1eeed5fca207be400bebfa9eafba3a4d5b3ff31eeadc",
+    "trial/contract.md": "b32925bf39fb8d456bbe7756a50492022262826cf15299be31c6fa0e1d650fd7",
+    "trial/proposed-cutover.md": "a13bc78cfad9e1be73840dd9626342e831933436693837296e8167b7bca9ff66",
+    "trial/cutover.json": "6cdad87db8509fe944cb4109207dd838cd745bb9a383527f587eca30d909dc07",
+    "trial/observe.py": "695d5c079e5c3ece95ef668de6a3d9b01fb0c58c6501c844675470df1349c872"
+  },
+  "source_digest": "6acd0f9d46cfefc41502d972ce466788fbb9c1d94d43cc1e3a162df4e117d4a5",
+  "fixture_index_sha256": "af2782f83a7a16c8db7295d45eea531d6e6472a80a5c08c7578a14fc99d4808f",
+  "rubric_path": "evals/engineering-toolkit/extension-fixtures/case-index.json",
+  "runner_sha256": "b8ba06bf55503f08785994b27f1a628acdbf1a4828bc8c9c93276ff98c200b33",
+  "criteria": [
+    {
+      "id": "nonportable_offsets",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "83,243,249,3682",
+          "observation": "Actual observation shows west next-offset2 follows receipted A1/A2 while east2 reads A1/A2 again and skips unreceipted B1/B2 at0/1. Final gives concrete caught-up-but-incomplete history and qualifies offsets by log/partition/incarnation; custom aggregate is not asserted as default MM2 topology."
+        }
+      ]
+    },
+    {
+      "id": "translation_and_coverage",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "243,249,2426,3682",
+          "observation": "Checks aggregation-map-003 source/target identity tuples west-7/east-9 partition0, source next2, contiguous/materialized [0,4), and event/payload equivalence. Decision12:00 age30s reaches120s at12:01:30. Selects0 only conditionally; missing/stale/changed-incarnation/absent-event coverage requires HOLD rather than guessed progress."
+        }
+      ]
+    },
+    {
+      "id": "group_ownership",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2425,2426,3682",
+          "observation": "Names active east-observer-1 and group_sync_position_observed=false; enabling sync is neither permitted active-group installation nor translation of custom aggregation. Requires confirmed generation41 effect fencing, disposition of dispatched work, inactive target group, one position installer, readback and effective-start verification. Concrete different-event overlapping-owner history shows dedup alone is insufficient."
+        }
+      ]
+    },
+    {
+      "id": "replay_effect_boundary",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2425,2426,3682",
+          "observation": "Conservative0 processes B1/B2 and reuses A1/A2 durable receipts under identity+payload contract. Addresses effect/receipt-before-offset crash, changed-intent conflict and unknown external charge response; preserves original operation identity. Requires actual common authoritative arbitration and effect implementation evidence; broker exactly-once does not protect arbitrary provider effects."
+        }
+      ]
+    },
+    {
+      "id": "local_observation_scope",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/verification.stdout.txt",
+          "locator": "1",
+          "observation": "Synthetic log arithmetic only; copied2 misses B1/B2 and checkpoint0 selects all4, source fence/position installation remain false."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "3682",
+          "observation": "Final labels local observation/arithmetic, no broker/replication/ledger/provider runtime. Recommends HOLD pending actual ownership, coverage and effect evidence; no exactly-once execution claim."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex0.153.4 discovers installed messaging workflow."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "69,77,81,111,220,225,234,3688#/result/thread,3690#/result/thread",
+          "observation": "Actual workflow/microservice/messaging/idempotency guidance loaded. Event220 contains Moving consumer progress between clusters reference and current MM2 constraints. Native metadata identifies tal-messaging and tal-idempotency with controller parent IDs. Event77 combined command exits1 after workflow cat because its subsequent rg has no match; returned workflow text is still observed."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "91,236,243,2425,2426,3682",
+          "observation": "No implementation or competing writes. Separate native messaging and idempotency reviewers inspect the unchanged proposal/contract/fixture hashes, independently challenge mapping/replay and ownership/effect conclusions, and support conditional start0 plus HOLD. Messaging reviewer independently enumerates all start positions and verifies identity coverage. Final incorporates those challenges; no unsupported deployment acceptance or corrected code stage is invented."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 1,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_observation; /capability_deviations",
+          "observation": "No changed files; all final hashes independently match bytes and full prepared baseline. Global config recorded hashes/mtime match. Input/tool confinement and per-file enforcement remain unproven, without observed scope breach."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "2425,2426,3682",
+          "observation": "Specified atomic ledger is treated as assumption requiring real implementation checks; effect concurrency/interruption/retention and real connector position installation remain unexecuted. Observation probe exit0 is not conformance, effect safety or permission to cut over."
+        }
+      ]
+    }
+  ],
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "partial",
+  "case_compliant": false,
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+      "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+    ]
+  },
+  "critical_failures": [],
+  "unresolved_critical_partial": [
+    "isolation_and_scope"
+  ],
+  "limitations": [
+    "Read-only finite custom aggregation model, not an MM2 default topology or broker experiment.",
+    "No running ledger/provider proves the specified atomic effect contract, retention or concurrency; conditional replay safety is correctly qualified.",
+    "Reviewers examine frozen unchanged evidence and independently challenge the cutover conclusions; no implementation or post-correction code review was required.",
+    "Actual named role/reference loading does not establish causal skill uplift."
+  ]
+}

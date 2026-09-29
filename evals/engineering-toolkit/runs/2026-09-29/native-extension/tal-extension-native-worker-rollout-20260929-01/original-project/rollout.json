@@ -1,0 +1,139 @@
+{
+  "fixture_kind": "synthetic_normalized_observations",
+  "observed_at": "2026-09-29T12:00:00Z",
+  "service": "tenant-export",
+  "deployment": {
+    "strategy": "ROLLING",
+    "source_revision": 2,
+    "target_revision": 3,
+    "desired_count_at_completion": 3,
+    "minimumHealthyPercent": 100,
+    "maximumPercentage": 200,
+    "earlySuccessCriteria": {
+      "enable": true,
+      "healthyPercent": 100,
+      "sourceServiceRevisionCleanup": "DEFERRED"
+    },
+    "describe_service_deployments": {
+      "read_at": "2026-09-29T12:00:00Z",
+      "status": "SUCCESSFUL",
+      "completed_at": "2026-09-29T11:50:00Z",
+      "source_running_count": 2,
+      "target_running_count": 3,
+      "target_healthy_count": 3,
+      "counts_represent": "completion_snapshot"
+    }
+  },
+  "describe_services": {
+    "read_at": "2026-09-29T12:00:00Z",
+    "desired_count": 3,
+    "running_count": 5,
+    "pending_count": 0,
+    "source_running_count": 2,
+    "target_running_count": 3,
+    "target_healthy_count": 3
+  },
+  "capacity_and_scaling": {
+    "read_at": "2026-09-29T11:59:50Z",
+    "task_slots_available_total": 5,
+    "task_slots_occupied": 5,
+    "additional_capacity_reserved": 0,
+    "autoscaling": {
+      "min_capacity": 1,
+      "max_capacity": 3,
+      "scale_in_enabled": true,
+      "scale_in_decision_evidence": "No future scaling decision has been observed."
+    }
+  },
+  "application_admission": {
+    "read_at": "2026-09-29T11:59:55Z",
+    "revision_2_polling_enabled": true,
+    "revision_3_polling_enabled": true,
+    "worker_receive_sequence": [
+      "receive queue delivery",
+      "acquire application ownership lease",
+      "start job",
+      "request ECS task protection"
+    ],
+    "last_old_cohort_poll_result": "empty"
+  },
+  "source_tasks": [
+    {
+      "task_id": "old-a",
+      "task_arn": "arn:aws:ecs:eu-west-1:000000000000:task/fixture/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "revision": 2,
+      "state": "RUNNING",
+      "job": {
+        "tenant_id": "tenant-blue",
+        "job_id": "export-401",
+        "ownership_epoch": 17,
+        "lease_confirmed_until": "2026-09-29T12:00:45Z",
+        "last_lease_renewal": "2026-09-29T11:59:45Z",
+        "checkpoint_at": "2026-09-29T11:55:00Z",
+        "checkpoint_format": 2,
+        "estimated_remaining_hours": 12,
+        "final_result_receipt": null,
+        "queue_acknowledged": false
+      },
+      "last_confirmed_protection": {
+        "observed_at": "2026-09-29T11:59:40Z",
+        "protection": {
+          "TaskArn": "arn:aws:ecs:eu-west-1:000000000000:task/fixture/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ProtectionEnabled": true,
+          "ExpirationDate": "2026-09-29T12:10:00Z"
+        }
+      },
+      "latest_renewal_attempt": {
+        "at": "2026-09-29T11:59:50Z",
+        "request": { "ProtectionEnabled": true, "ExpiresInMinutes": 1440 },
+        "transport_response_received": true,
+        "body": {
+          "requestID": "synthetic-renewal-a",
+          "error": {
+            "Arn": "arn:aws:ecs:eu-west-1:000000000000:task/fixture/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "Code": "ThrottlingException",
+            "Message": "Rate exceeded"
+          }
+        },
+        "subsequent_success_or_status_read": null
+      }
+    },
+    {
+      "task_id": "old-b",
+      "task_arn": "arn:aws:ecs:eu-west-1:000000000000:task/fixture/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "revision": 2,
+      "state": "RUNNING",
+      "job": {
+        "tenant_id": "tenant-green",
+        "job_id": "export-908",
+        "ownership_epoch": 6,
+        "lease_confirmed_until": "2026-09-29T12:00:45Z",
+        "last_lease_renewal": "2026-09-29T11:59:45Z",
+        "checkpoint_at": "2026-09-29T11:55:00Z",
+        "checkpoint_format": 2,
+        "estimated_remaining_hours": 12,
+        "final_result_receipt": null,
+        "queue_acknowledged": false
+      },
+      "last_confirmed_protection": {
+        "observed_at": "2026-09-29T11:59:40Z",
+        "protection": {
+          "TaskArn": "arn:aws:ecs:eu-west-1:000000000000:task/fixture/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "ProtectionEnabled": true,
+          "ExpirationDate": "2026-09-30T11:30:00Z"
+        }
+      }
+    }
+  ],
+  "old_dependencies": [
+    "export-layout-v2",
+    "checkpoint-decoder-v2",
+    "revision-2 task definition and image"
+  ],
+  "rehearsal_evidence": {
+    "revision_3_new_job_smoke_test": "passed with synthetic input",
+    "revision_3_resume_revision_2_checkpoint": "not implemented or exercised",
+    "protection_renewal_failure_during_long_job": "not exercised",
+    "capacity_loss_with_two_protected_source_tasks": "not exercised"
+  }
+}

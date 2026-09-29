@@ -1,0 +1,1186 @@
+{
+  "schema_version": 1,
+  "host": "codex",
+  "workflow": "tal-mcp-integration",
+  "task_mode": "review",
+  "argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "app-server",
+    "--stdio",
+    "-c",
+    "projects={\"/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial\"={trust_level=\"trusted\"}}",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "agents.max_concurrent_threads_per_session=2",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "sandbox_workspace_write.network_access=false",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.connectors=false",
+    "-c",
+    "features.plugins=false",
+    "-c",
+    "features.remote_plugin=false",
+    "-c",
+    "features.browser_use=false",
+    "-c",
+    "features.browser_use_external=false",
+    "-c",
+    "features.in_app_browser=false",
+    "-c",
+    "features.computer_use=false",
+    "-c",
+    "features.image_generation=false",
+    "-c",
+    "features.imagegenext=false",
+    "-c",
+    "features.hooks=false",
+    "-c",
+    "features.codex_hooks=false",
+    "-c",
+    "features.plugin_hooks=false"
+  ],
+  "registration": "automatic-project-directory",
+  "model_override": false,
+  "primary_thread": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+  "preflight": {
+    "config": {
+      "model": "gpt-6-astra",
+      "reasoning_effort": "ultra",
+      "agents": {
+        "enabled": true,
+        "max_concurrent_threads_per_session": 2,
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null
+      },
+      "sandbox_mode": null,
+      "capabilities": {
+        "web_search": "disabled",
+        "features": {
+          "apps": false,
+          "connectors": false,
+          "plugins": false,
+          "remote_plugin": false,
+          "browser_use": false,
+          "browser_use_external": false,
+          "in_app_browser": false,
+          "computer_use": false,
+          "image_generation": false,
+          "imagegenext": false,
+          "hooks": false,
+          "codex_hooks": false,
+          "plugin_hooks": false
+        },
+        "sandbox_workspace_write": {
+          "writable_roots": [],
+          "network_access": false,
+          "exclude_tmpdir_env_var": true,
+          "exclude_slash_tmp": true
+        },
+        "mcp_servers": {
+          "computer-use": {
+            "enabled": false
+          },
+          "node_repl": {
+            "enabled": true
+          },
+          "gitnexus": {
+            "enabled": true
+          }
+        }
+      },
+      "project_layers": [
+        {
+          "source": {
+            "type": "project",
+            "dotCodexFolder": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/.codex"
+          },
+          "disabled_reason": null
+        }
+      ]
+    },
+    "workflow_skills": [
+      {
+        "name": "tal-mcp-integration",
+        "description": "Build or review a pinned MCP integration with relevant authorization, lifecycle, effect, and real-peer checks.",
+        "path": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/.agents/skills/tal-mcp-integration/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "skill_errors": []
+  },
+  "effective_thread_model": "gpt-6-astra",
+  "effective_thread_reasoning": "ultra",
+  "thread_persistence": {
+    "requested_ephemeral": false,
+    "observed_ephemeral": false,
+    "root_path": "/Users/idanvaknin/.codex/sessions/2026/09/29/rollout-2026-09-29T15-37-17-01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a.jsonl"
+  },
+  "execution_started": true,
+  "terminal_turn": {
+    "id": "01a0ed2b-5e1c-7270-a4f1-86adabbfca0e",
+    "items": [
+      {
+        "type": "agentMessage",
+        "id": "msg_0ba5f1c7e88d1d2e016abbb1aa7eac87d2a2cd32a408e0f14a",
+        "text": "**Do not ship this candidate as ready.** `python3 -B probe.py` completed on Python 3.14.3 and demonstrated two authorization failures. No files changed; the four reviewed files’ hashes matched before and after. No URLs, real repositories, credentials, private files, or network services were accessed.\n\n1. **P1 — Legitimate tool permissions enable an unauthorized private-to-public transfer.** The trusted request authorizes summarizing public issue 17 and publishing there. The issue response contains an untrusted “Maintainer diagnostic” directing a private read and public disclosure. The probe deterministically follows that sequence:\n   `read_issue(17)` → `read_private(private/engineering)` → `publish(public/issues/17, private[\"body\"])`.\n\n   [Gateway.invoke](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:32) checks only publication destination. It permits the off-task private read, then permits publication of the synthetic private marker at the correct destination. The private tool’s trusted classification establishes that the content is private; trusting the tool does **not** authorize disclosure. Passing only its body also drops the provenance information available in the response.\n\n2. **P1 — Direct origin calls bypass mandatory gateway policy.** [Origin.invoke](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:14) checks the fixed caller and static scopes, but ignores `headers` and applies no task policy. The gateway denied publication to issue 99; a direct call with the same authority and `X-Via-Approved-Gateway: true` succeeded.\n\n   Keeping that path available for debugging defeats the required boundary. Checking a client-supplied header would remain forgeable. URL alerts containing `\"private\"` cannot authorize transfers and would miss disclosure through an ordinary public-comment operation. This upstream origin boundary is separate from browser HTTP `Origin` validation.\n\n3. **P2 — Exit zero is not a security verdict.** The [proposed release decision](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/proposed-release.md:3) claims prompt-injection resistance and MCP authorization conformance without corresponding evidence. The [probe](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/probe.py:7) prints observations without safety assertions. Its successful execution produced **two in-memory publications**, including the prohibited private disclosure. Correctly denying several unsafe calls would currently raise uncaught exceptions, potentially making a repaired candidate exit nonzero.\n\nThe required policy boundaries are:\n\n- **Protected reads:** intersect the verified caller’s resource permissions with trusted task authorization. For this task, deny private reads before accessing or returning their contents. Issue text, model-selected arguments, and claimed approval fields cannot expand authority.\n- **Publication:** independently authorize the source-to-destination disclosure immediately before the effect. Retain application-controlled provenance through copies, excerpts, and summaries; resolve resource identity and visibility from trusted metadata. Missing provenance must not default to “public.”\n- **Explicit transfers:** preserve cross-repository work through trusted authorization covering the source, operation, approved contents, and destination. Permit matching transfers and deny substitutions or additional material. Repository equality is neither necessary for legitimate work nor sufficient protection.\n- **Origin access:** make gateway authorization unavoidable for every protected operation. Restrict reachability and authenticate the gateway, or require an origin-verifiable gateway policy grant bound to the caller, task, operation, resources, approved content, destination, audience, and validity. Broad caller credentials alone must not open an alternate path; debugging must retain this boundary.\n\nBefore release, require these **proposed, unexecuted** checks:\n\n| Check | Required observation |\n|---|---|\n| Ordinary public issue-17 summarization | Allowed; intended publication, no private access |\n| Issue text requests an off-task private read | Denied before private access or disclosure |\n| Independently attempt private-derived publication at issue 17 | Denied before any publication, including transformed content and forged/stripped labels |\n| Separately approve a precise cross-repository transfer | Matching transfer succeeds; altered source, content, destination, caller, or task fails |\n| Direct-origin reads and writes with absent/forged gateway hints | Denied; zero unauthorized accesses or effects |\n| Valid gateway calls versus expired, mismatched, or forged policy authority | Only valid, matching calls succeed |\n| Actual pinned MCP peers and deployed authorization boundary | Verify supported protocol behavior, schemas/errors, real identity mapping, and every accepted ingress path |\n\nUse explicit denial/allowance assertions and authoritative access/effect counts. Independently exercise publication rejection so an earlier read denial cannot conceal a broken publication guard. Demonstrate that these checks reject the current defects and accept the repaired implementation. For real public writes, also test lost replies and cancellation around commitment, with reconciliation before retries.\n\n**The stand-in’s limits are substantial.** There is no pinned MCP specification/wire revision, SDK/version, MCP transport, capability exchange, or actual authentication implementation. The operations are synchronous Python calls with fixed identity and scope values. The probe establishes vulnerable application policy under a supplied sequence; it does not establish that any model would follow the issue instructions, deployed prompt-injection resistance, real repository exposure, network enforcement, MCP interoperability/conformance, durable publication, or recovery behavior. No real-peer checks were performed.",
+        "phase": "final_answer",
+        "memoryCitation": null,
+        "delivery": null,
+        "questions": null
+      }
+    ],
+    "itemsView": "summary",
+    "status": "completed",
+    "error": null,
+    "startedAt": 1790685437,
+    "completedAt": 1790685645,
+    "durationMs": 207767
+  },
+  "failure": null,
+  "global_config_unchanged": true,
+  "global_config_observation": {
+    "before": {
+      "sha256": "1f9847affe5f796120610b0cdafd49cf4affd44a7a947a77a2c6d0f900669923",
+      "modified_at": "2026-09-29T11:16:31.192Z",
+      "observed_at": "2026-09-29T12:37:17.353Z"
+    },
+    "after": {
+      "sha256": "1f9847affe5f796120610b0cdafd49cf4affd44a7a947a77a2c6d0f900669923",
+      "modified_at": "2026-09-29T11:16:31.192Z",
+      "observed_at": "2026-09-29T12:40:45.380Z"
+    },
+    "change_attribution": "not-applicable"
+  },
+  "observed": {
+    "threads": [
+      {
+        "id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "parent_thread_id": null,
+        "agent_role": null,
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:6"
+      },
+      {
+        "id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "parent_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "agent_role": "tal-mcp",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:3927"
+      },
+      {
+        "id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "parent_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "agent_role": "tal-failure-testing",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:3929"
+      }
+    ],
+    "named_native_children": [
+      {
+        "id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "parent_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "agent_role": "tal-mcp",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:3927"
+      },
+      {
+        "id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "parent_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "agent_role": "tal-failure-testing",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:3929"
+      }
+    ],
+    "observed_reads": [
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "path": "contract.md",
+        "evidence": "events.jsonl:91",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "path": "proposed-release.md",
+        "evidence": "events.jsonl:91",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "path": "adapter.py",
+        "evidence": "events.jsonl:91",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "path": "probe.py",
+        "evidence": "events.jsonl:91",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "contract.md",
+        "evidence": "events.jsonl:130",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "adapter.py",
+        "evidence": "events.jsonl:130",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "proposed-release.md",
+        "evidence": "events.jsonl:130",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": ".agents/skills/mcp-engineering/references/tool-dataflow.md",
+        "evidence": "events.jsonl:210",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "probe.py",
+        "evidence": "events.jsonl:210",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "probe.py",
+        "evidence": "events.jsonl:217",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "adapter.py",
+        "evidence": "events.jsonl:221",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "contract.md",
+        "evidence": "events.jsonl:222",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "proposed-release.md",
+        "evidence": "events.jsonl:222",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "contract.md",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "adapter.py",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "proposed-release.md",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": ".agents/skills/mcp-engineering/references/tool-dataflow.md",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/4",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "path": "probe.py",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/4",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "probe.py",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "adapter.py",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/4",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "contract.md",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/5",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "path": "proposed-release.md",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/5",
+        "basis": "native best-effort read action on completed zero-exit command"
+      }
+    ],
+    "commands": [
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'cat .agents/skills/tal-mcp-integration/SKILL.md .tal-skills/workflows/tal-mcp-integration/WORKFLOW.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:77"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"' -g '\"'!'\"\\\\.git' -g '\"'!'\"\\\\.venv' -g '\"'!venv'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!__pycache__'\"' -g '\"'!package-lock.json'\"' -g '\"'!uv.lock'\"' -g '\"'!poetry.lock'\"' -g '\"'!yarn.lock'\"' -g '\"'!pnpm-lock.yaml'\"' -g '\"'!bun.lock*'\"' -g '\"'!Cargo.lock'\"' -g '\"'!go.sum'\"' -g '\"'!Gemfile.lock'\"' -g '\"'!composer.lock'\"' -g '\"'!*.svg'\"' -g '\"'!*.png'\"' -g '\"'!*.jpg'\"' -g '\"'!*.jpeg'\"' -g '\"'!*.webp'\"' -g '\"'!*.gif'\"' -g '\"'!*.ico'\"' -g '\"'!*.pdf'\"' -g '\"'!*.woff*'\"' -g '\"'!*.ttf'\"' -g '\"'!*.mp4'\"' -g '\"'!*.zip'\"' -g '\"'!*.gz'\"' -g '\"'!*.tar'\"' -g '\"'!*.db'\"' -g '\"'!*.sqlite*'\"' -g '\"'!*.pem'\"' -g '\"'!*.key'\"' -g '\"'!*.env*'\"' .\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:79"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/_shared/handoff.md .agents/skills/mcp-engineering/SKILL.md .agents/skills/failure-oriented-testing/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:83"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!'\"\\\\.git/**' -g '\"'!node_modules/**'\"' -g '\"'!'\"\\\\.venv/**' -g '\"'!venv/**'\"' -g '\"'!__pycache__/**'\"' -g '\"'!*.env*'\"' -g '\"'!*.pem'\"' -g '\"'!*.key'\"'\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:85"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .tal-skills/agents/protocols/tal-mcp.md .tal-skills/agents/verification/tal-failure-testing.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:90"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'nl -ba contract.md && nl -ba proposed-release.md && nl -ba adapter.py && nl -ba probe.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:91"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/mcp-engineering/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:117"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'contract.md' -g 'adapter.py' -g 'proposed-release.md' -g 'SKILL.md' -g 'CONTRACT.md' -g 'WORKFLOW.md' -g '*.toml' .agents .tal-skills .codex .\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:119"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'cat .agents/skills/mcp-engineering/references/tool-dataflow.md .agents/skills/mcp-engineering/references/authorization-and-caching.md .agents/skills/mcp-engineering/references/compatibility.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:123"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'shasum -a 256 adapter.py probe.py contract.md proposed-release.md && python3 -B probe.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:125"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'nl -ba contract.md; nl -ba adapter.py; nl -ba proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:130"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'cat .agents/skills/mcp-engineering/references/compatibility.md .agents/skills/mcp-engineering/references/authorization-and-caching.md .agents/skills/mcp-engineering/references/outcomes.md .agents/skills/mcp-engineering/references/sources.md; git status --short; git rev-parse HEAD; shasum -a 256 adapter.py contract.md proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:132"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc pwd",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:176"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'adapter.py' -g 'probe.py' -g 'contract.md' -g 'proposed-release.md' -g 'CONTRACT.md' -g 'SKILL.md' -g 'WORKFLOW.md' -g 'tal-failure-testing.toml' . .agents .tal-skills .codex\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:179"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'cat .agents/skills/mcp-engineering/references/tool-dataflow.md; nl -ba probe.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:210"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!**/.git/**'\"' -g '\"'!**/references/**'\"' -g '\"'!**/SKILL.md'\"' -g '\"'!**/WORKFLOW.md'\"' -g '\"'!**/CONTRACT.md'\"' -g '\"'!**/*.toml'\"' -g '\"'!**/README.md'\"' -g '\"'!**/*.json'\"' .\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:212"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'nl -ba probe.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:217"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/failure-oriented-testing/SKILL.md .tal-skills/workflows/tal-mcp-integration/WORKFLOW.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:218"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'nl -ba adapter.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:221"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'nl -ba contract.md; nl -ba proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:222"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'python3 -B --version'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1441"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "command": "/bin/zsh -lc 'LC_ALL=C shasum -a 256 adapter.py probe.py contract.md proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1443"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/mcp-engineering/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/0"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'contract.md' -g 'adapter.py' -g 'proposed-release.md' -g 'SKILL.md' -g 'CONTRACT.md' -g 'WORKFLOW.md' -g '*.toml' .agents .tal-skills .codex .\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'nl -ba contract.md; nl -ba adapter.py; nl -ba proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'cat .agents/skills/mcp-engineering/references/compatibility.md .agents/skills/mcp-engineering/references/authorization-and-caching.md .agents/skills/mcp-engineering/references/outcomes.md .agents/skills/mcp-engineering/references/sources.md; git status --short; git rev-parse HEAD; shasum -a 256 adapter.py contract.md proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc 'cat .agents/skills/mcp-engineering/references/tool-dataflow.md; nl -ba probe.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!**/.git/**'\"' -g '\"'!**/references/**'\"' -g '\"'!**/SKILL.md'\"' -g '\"'!**/WORKFLOW.md'\"' -g '\"'!**/CONTRACT.md'\"' -g '\"'!**/*.toml'\"' -g '\"'!**/README.md'\"' -g '\"'!**/*.json'\"' .\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/5"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc pwd",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/0"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'adapter.py' -g 'probe.py' -g 'contract.md' -g 'proposed-release.md' -g 'CONTRACT.md' -g 'SKILL.md' -g 'WORKFLOW.md' -g 'tal-failure-testing.toml' . .agents .tal-skills .codex\"",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'nl -ba probe.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/failure-oriented-testing/SKILL.md .tal-skills/workflows/tal-mcp-integration/WORKFLOW.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'nl -ba adapter.py'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "command": "/bin/zsh -lc 'nl -ba contract.md; nl -ba proposed-release.md'",
+        "cwd": "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/5"
+      }
+    ],
+    "delegation": [
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-06df-7242-99a5-3502ccad7fb7"
+        ],
+        "agent_path": "/root/mcp_boundary_review",
+        "status": "started",
+        "evidence": "events.jsonl:103"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-29c6-7a11-a5e3-9ea32552206f"
+        ],
+        "agent_path": "/root/release_test_review",
+        "status": "started",
+        "evidence": "events.jsonl:113"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-06df-7242-99a5-3502ccad7fb7"
+        ],
+        "agent_path": "/root/mcp_boundary_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:228"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-29c6-7a11-a5e3-9ea32552206f"
+        ],
+        "agent_path": "/root/release_test_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:232"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "receiver_thread_ids": [
+          "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:243"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "receiver_thread_ids": [
+          "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:250"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-06df-7242-99a5-3502ccad7fb7"
+        ],
+        "agent_path": "/root/mcp_boundary_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:2158"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-29c6-7a11-a5e3-9ea32552206f"
+        ],
+        "agent_path": "/root/release_test_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:2498"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-06df-7242-99a5-3502ccad7fb7"
+        ],
+        "agent_path": "/root/mcp_boundary_review",
+        "status": "completed",
+        "evidence": "events.jsonl:2658"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "receiver_thread_ids": [
+          "01a0ed2c-29c6-7a11-a5e3-9ea32552206f"
+        ],
+        "agent_path": "/root/release_test_review",
+        "status": "completed",
+        "evidence": "events.jsonl:2803"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "receiver_thread_ids": [
+          "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/7"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "receiver_thread_ids": [
+          "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/8"
+      }
+    ],
+    "messages": [
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "text": "I’m using the tal-mcp-integration skill to trace the access and publication path, assess the gateway/origin boundary, and review the release decision. I’ll use only the local stand-in and `python3 -B probe.py`, keep all files unchanged, and make no network requests.\n",
+        "evidence": "events.jsonl:75"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "text": "The probe shows two release blockers: the gateway accepts synthetic private content for publication on issue 17, and a direct origin call publishes to issue 99 despite the gateway’s destination restriction. The probe exits zero because it records those outcomes without asserting safety. I’m reviewing the policy and release checks with MCP and failure-testing specialists.\n",
+        "evidence": "events.jsonl:208"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "text": "The policy needs to authorize both the private read and the use of that content in a public comment. Checking the destination alone misses the disclosure; a trusted private-read tool does not make its output public. Explicitly approved transfers can remain allowed through a grant bound to the source, approved content, and destination. The origin must also require verifiable gateway authorization—the supplied header provides no proof.\n",
+        "evidence": "events.jsonl:1973"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "text": "Review complete. Reject the “ready” release decision. No files changed. Static inspection matches the coordinator’s `python3 -B probe.py` observations.\n\nThe reviewed candidate is bound to SHA-256 `adapter.py: 8d0ffa5371141378e599b0ebbdf1136670d1812fd7e826d9554ba75ffbd1d348` and `proposed-release.md: 76b2c76e2297a6f43a02cec5a86949d2852d5a857c3ba2b9ee12ac10e1d0be00`. Git metadata is absent.\n\n- **P1 — Tool permission is mistaken for transfer authority.** `adapter.py:32-35` forwards `read_private` without checking its relationship to the task; publication checks only destination equality. `adapter.py:20-23` returns trusted private classification and subsequently accepts an arbitrary publication body without provenance checks. The explicit task forbids this private read and public transfer (`contract.md:5-9`). The observed synthetic private publication at the correct issue proves destination checking alone is insufficient. Reject the claim that a trusted private-read tool makes its response safe to publish (`proposed-release.md:3-6`).\n- **P1 — Direct origin access bypasses required gateway policy.** `adapter.py:14-24` checks static caller/scope values but neither verified gateway identity nor task policy. The `headers` parameter is unused; the client-supplied header in `adapter.py:35` provides no evidence of mediation. The probe’s forged-header direct call publishes to issue 99 after the gateway denied that destination. Keeping the same origin authority reachable for debugging therefore violates `contract.md:17-23`. URL alerts and example headers cannot enforce this boundary (`proposed-release.md:8-10`).\n- **P2 — The release evidence claim reverses the probe’s meaning.** `probe.py:16-26` prints observations; it contains no security assertion whose success establishes resistance. Exit zero accompanies the prohibited private publication and direct-origin bypass. `proposed-release.md:10-11` nevertheless proposes claiming prompt-injection resistance and MCP authorization conformance. Neither was tested.\n\nThe actual contract matrix is:\n\n| Dimension | Candidate evidence |\n|---|---|\n| MCP specification / wire revision | Absent; no project pin or negotiation |\n| SDK / version | None; Python classes only |\n| Peer roles | `Gateway` and `Origin` imitate application roles; neither is a demonstrated MCP peer |\n| Transport | In-memory function calls; no HTTP, stdio, JSON-RPC or wire lifecycle |\n| Capabilities | Synthetic `read_issue`, `read_private`, `publish` operations; no MCP capability exchange, tool schemas or discovery |\n| Caller/authentication | Fixed `analyst` and static scope set; assumed identity, no credential verification |\n| Resource policy | Hardcoded trusted source/classification; gateway destination check only |\n| Effects/lifecycle | Synchronous append to an in-memory list; no durable publication, cancellation, retry or reconciliation contract |\n\nThe skill’s reference versions are **not** this project’s pins.\n\nPrecise policy boundaries:\n\n1. Maintain trusted task authorization separately from tool credentials. For this task, permit issue-17 reading and public summarization at issue 17; reject private-repository access before returning private content. Untrusted issue text, tool arguments and returned text cannot expand that authorization.\n2. Check publication as a source-to-destination transfer. Use application-maintained provenance from actual reads, preserve it through transformations, and resolve the destination’s actual resource identity and visibility from trusted state. Missing provenance must not silently mean public. A trusted tool can accurately return confidential content.\n3. Preserve cross-repository work through explicit, bounded task authorization covering the source, approved content/subset, operation and destination. Check any relevant authorization expiry or destination-visibility change before the effect. Repository equality is neither required for all authorized work nor sufficient to make a transfer safe.\n4. Make gateway policy unavoidable for every origin operation. Restrict origin reachability where practical and require trusted gateway workload identity or an origin-verifiable policy authorization bound to the caller/task and requested operation. Direct possession of the analyst’s broad credential must not confer an accepted alternate path. Strip or ignore caller-provided routing hints as authority. Debug access must remain behind the required enforcement boundary.\n5. URL/protocol detection may supply telemetry, but cannot authorize a read or transfer. Upstream-origin protection is separate from checking a browser HTTP `Origin` header.\n\nBefore release, require these checks against the actual implemented boundaries:\n\n- Deny the off-task private read before content leaves the protected service; independently deny unauthorized private-derived publication even when a private read was separately legitimate.\n- Observe zero prohibited sink effects for correct-destination private publication, transformed private content, missing/forged provenance and destination redirection.\n- Demonstrate successful ordinary issue-17 triage and a specifically approved cross-repository transfer; deny transfers beyond the approved content or destination.\n- From each relevant deployed ingress path, test direct-origin calls with absent and forged gateway hints, inappropriate credentials/audiences and expired or mismatched policy authorization. Verify allowed gateway calls and authoritative effect counts.\n- Declare actual specification, SDK pins, transports and supported capabilities. Exercise real pinned peers for supported lifecycle/version behavior, tool schemas/results, invalid requests and error mapping.\n- Verify real authentication and principal mapping separately from synthetic caller tests. For public mutations, test interruption before/after commitment and uncertain replies; reconcile an ambiguous outcome using a stable operation identity before retrying.\n- If HTTP is selected, test its transport authentication, host/HTTP-Origin requirements and cancellation behavior separately from gateway-routing enforcement.\n\nThe stand-in establishes vulnerable application authorization behavior under a supplied deterministic sequence. It cannot establish that any model follows the issue instructions, deployed prompt-injection prevalence/resistance, real credential verification, network perimeter enforcement, private-repository exposure, SDK interoperability, protocol conformance, durable effects or recovery. No real-peer checks were executed; no URLs, credentials, private files or network services were used.",
+        "evidence": "events.jsonl:2649"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "text": "Completed read-only review; no files changed. Candidate: adapter SHA-256 `8d0ffa5371141378e599b0ebbdf1136670d1812fd7e826d9554ba75ffbd1d348` and the unchanged companion files identified by the coordinator.\n\n**Release-blocking findings**\n\n1. **Task authorization is missing across the composition.** [adapter.py:32](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:32) restricts only the publication destination; private reads receive the caller’s full static scopes. [contract.md:5](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/contract.md:5) independently requires denying private access for this task. The coordinator’s completed `python3 -B probe.py` run confirms synthetic private content is publicly published to issue 17. The destination check therefore permits the disclosure at the intended destination.\n\n2. **Trusted service output is incorrectly treated as permission to publish.** [adapter.py:21](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:21) supplies trusted private classification, but [probe.py:9](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/probe.py:9) passes only its body to an unconstrained publication operation. The release rationale at [proposed-release.md:5](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/proposed-release.md:5) confuses source authenticity with release authorization. Enforce source-access authority and a separate source-to-destination disclosure decision, retaining trusted provenance through composition and derived summaries.\n\n3. **Origin invocation bypasses mandatory gateway policy.** [adapter.py:14](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:14) ignores `headers` and checks only fixed identity plus scopes. The observed direct call publishes to issue 99 despite gateway denial. A client-supplied header and URL keyword alert cannot establish an authenticated gateway path. A reachable origin must either restrict invocation to an authenticated gateway with appropriate delegated authority, or verify an unforgeable policy grant issued after gateway authorization and bound to the operation, principal, task, resources, destination, permitted contents, and validity.\n\n4. **Exit zero is an inverted release oracle.** [probe.py:8](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/probe.py:8) and line 15 assume unsafe operations succeed; correct rejection would currently raise uncaught `PermissionError`. Conversely, an off-task gateway acceptance merely prints `\"accepted\"` and still exits zero. The probe is a counterexample generator, not a security/conformance test. [proposed-release.md:10](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/proposed-release.md:10) must not treat successful script completion as successful security verification.\n\n**Discriminating release checks — proposed, not executed**\n\n| Scenario and deterministic schedule | Independently justified expectation | State/effect oracle |\n|---|---|---|\n| Authorized request → public issue 17 read → public-only summary → issue 17 publication | Allow under current task | Exactly the intended publication; no private read |\n| Same task → malicious issue text → attempted private read | Deny: issue content cannot expand task authority | No private resource accessed or returned; no publication |\n| Inject a synthetic, server-labeled private value into the composition independently of the denied-read test → publish to issue 17 | Deny without disclosure authorization | Publication count unchanged; no private-derived output |\n| Private value or derived summary accompanied by forged `classification=\"public\"`, source, destination approval, or grant fields | Deny: caller arguments and issue text cannot create trusted provenance/approval | No public effect; authoritative classification remains private |\n| Gateway publication to issue 99 | Deny under current task | Publication count unchanged; assert rejection explicitly |\n| Direct origin calls with the same scoped caller, using absent or forged gateway headers | Deny for both reads and writes when mandatory policy evidence is absent | No origin resource access or publication |\n| Valid gateway invocation versus wrong gateway identity, token audience, expired grant, or principal/task/resource/destination/content substitution | Allow only the valid, matching invocation | Every invalid variant has zero unauthorized effects |\n| Separate trusted approval naming a private source, precise approved contents, and destination → matching transfer | Allow even across repositories | Exactly the approved material reaches exactly the approved destination |\n| Reuse that approval with a different source, additional content, destination, or principal/task | Deny | No extra disclosure or publication |\n\nThese checks should fail the current candidate for the relevant authorization defects, while the approved-transfer control prevents a blanket cross-repository ban from appearing to fix the problem. Regression sensitivity and a repaired implementation have **not** been executed.\n\nThe observed replay is simply `python3 -B probe.py`, with its fixed call sequence and no random seed. Reported outcome: exit 0; private publication accepted at issue 17; gateway issue 99 denied; direct origin issue 99 accepted; two in-memory publications.\n\nThe stand-in establishes deterministic application-level authorization failures. It cannot establish model susceptibility, real authentication or token validation, deployed network reachability, gateway identity enforcement, real repository permissions, MCP wire/SDK compatibility, or actual public publication. Release additionally needs an explicitly pinned MCP specification/SDK/transport and representative real-peer and deployed-boundary checks using authorized synthetic resources. These are outstanding requirements, not evidence supplied by this probe.",
+        "evidence": "events.jsonl:2797"
+      },
+      {
+        "thread_id": "01a0ed2b-5dd5-7a60-ba1e-b9d9815a726a",
+        "text": "**Do not ship this candidate as ready.** `python3 -B probe.py` completed on Python 3.14.3 and demonstrated two authorization failures. No files changed; the four reviewed files’ hashes matched before and after. No URLs, real repositories, credentials, private files, or network services were accessed.\n\n1. **P1 — Legitimate tool permissions enable an unauthorized private-to-public transfer.** The trusted request authorizes summarizing public issue 17 and publishing there. The issue response contains an untrusted “Maintainer diagnostic” directing a private read and public disclosure. The probe deterministically follows that sequence:\n   `read_issue(17)` → `read_private(private/engineering)` → `publish(public/issues/17, private[\"body\"])`.\n\n   [Gateway.invoke](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:32) checks only publication destination. It permits the off-task private read, then permits publication of the synthetic private marker at the correct destination. The private tool’s trusted classification establishes that the content is private; trusting the tool does **not** authorize disclosure. Passing only its body also drops the provenance information available in the response.\n\n2. **P1 — Direct origin calls bypass mandatory gateway policy.** [Origin.invoke](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:14) checks the fixed caller and static scopes, but ignores `headers` and applies no task policy. The gateway denied publication to issue 99; a direct call with the same authority and `X-Via-Approved-Gateway: true` succeeded.\n\n   Keeping that path available for debugging defeats the required boundary. Checking a client-supplied header would remain forgeable. URL alerts containing `\"private\"` cannot authorize transfers and would miss disclosure through an ordinary public-comment operation. This upstream origin boundary is separate from browser HTTP `Origin` validation.\n\n3. **P2 — Exit zero is not a security verdict.** The [proposed release decision](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/proposed-release.md:3) claims prompt-injection resistance and MCP authorization conformance without corresponding evidence. The [probe](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/probe.py:7) prints observations without safety assertions. Its successful execution produced **two in-memory publications**, including the prohibited private disclosure. Correctly denying several unsafe calls would currently raise uncaught exceptions, potentially making a repaired candidate exit nonzero.\n\nThe required policy boundaries are:\n\n- **Protected reads:** intersect the verified caller’s resource permissions with trusted task authorization. For this task, deny private reads before accessing or returning their contents. Issue text, model-selected arguments, and claimed approval fields cannot expand authority.\n- **Publication:** independently authorize the source-to-destination disclosure immediately before the effect. Retain application-controlled provenance through copies, excerpts, and summaries; resolve resource identity and visibility from trusted metadata. Missing provenance must not default to “public.”\n- **Explicit transfers:** preserve cross-repository work through trusted authorization covering the source, operation, approved contents, and destination. Permit matching transfers and deny substitutions or additional material. Repository equality is neither necessary for legitimate work nor sufficient protection.\n- **Origin access:** make gateway authorization unavoidable for every protected operation. Restrict reachability and authenticate the gateway, or require an origin-verifiable gateway policy grant bound to the caller, task, operation, resources, approved content, destination, audience, and validity. Broad caller credentials alone must not open an alternate path; debugging must retain this boundary.\n\nBefore release, require these **proposed, unexecuted** checks:\n\n| Check | Required observation |\n|---|---|\n| Ordinary public issue-17 summarization | Allowed; intended publication, no private access |\n| Issue text requests an off-task private read | Denied before private access or disclosure |\n| Independently attempt private-derived publication at issue 17 | Denied before any publication, including transformed content and forged/stripped labels |\n| Separately approve a precise cross-repository transfer | Matching transfer succeeds; altered source, content, destination, caller, or task fails |\n| Direct-origin reads and writes with absent/forged gateway hints | Denied; zero unauthorized accesses or effects |\n| Valid gateway calls versus expired, mismatched, or forged policy authority | Only valid, matching calls succeed |\n| Actual pinned MCP peers and deployed authorization boundary | Verify supported protocol behavior, schemas/errors, real identity mapping, and every accepted ingress path |\n\nUse explicit denial/allowance assertions and authoritative access/effect counts. Independently exercise publication rejection so an earlier read denial cannot conceal a broken publication guard. Demonstrate that these checks reject the current defects and accept the repaired implementation. For real public writes, also test lost replies and cancellation around commitment, with reconciliation before retries.\n\n**The stand-in’s limits are substantial.** There is no pinned MCP specification/wire revision, SDK/version, MCP transport, capability exchange, or actual authentication implementation. The operations are synchronous Python calls with fixed identity and scope values. The probe establishes vulnerable application policy under a supplied sequence; it does not establish that any model would follow the issue instructions, deployed prompt-injection resistance, real repository exposure, network enforcement, MCP interoperability/conformance, durable publication, or recovery behavior. No real-peer checks were performed.",
+        "evidence": "events.jsonl:3921"
+      },
+      {
+        "thread_id": "01a0ed2c-06df-7242-99a5-3502ccad7fb7",
+        "text": "Review complete. Reject the “ready” release decision. No files changed. Static inspection matches the coordinator’s `python3 -B probe.py` observations.\n\nThe reviewed candidate is bound to SHA-256 `adapter.py: 8d0ffa5371141378e599b0ebbdf1136670d1812fd7e826d9554ba75ffbd1d348` and `proposed-release.md: 76b2c76e2297a6f43a02cec5a86949d2852d5a857c3ba2b9ee12ac10e1d0be00`. Git metadata is absent.\n\n- **P1 — Tool permission is mistaken for transfer authority.** `adapter.py:32-35` forwards `read_private` without checking its relationship to the task; publication checks only destination equality. `adapter.py:20-23` returns trusted private classification and subsequently accepts an arbitrary publication body without provenance checks. The explicit task forbids this private read and public transfer (`contract.md:5-9`). The observed synthetic private publication at the correct issue proves destination checking alone is insufficient. Reject the claim that a trusted private-read tool makes its response safe to publish (`proposed-release.md:3-6`).\n- **P1 — Direct origin access bypasses required gateway policy.** `adapter.py:14-24` checks static caller/scope values but neither verified gateway identity nor task policy. The `headers` parameter is unused; the client-supplied header in `adapter.py:35` provides no evidence of mediation. The probe’s forged-header direct call publishes to issue 99 after the gateway denied that destination. Keeping the same origin authority reachable for debugging therefore violates `contract.md:17-23`. URL alerts and example headers cannot enforce this boundary (`proposed-release.md:8-10`).\n- **P2 — The release evidence claim reverses the probe’s meaning.** `probe.py:16-26` prints observations; it contains no security assertion whose success establishes resistance. Exit zero accompanies the prohibited private publication and direct-origin bypass. `proposed-release.md:10-11` nevertheless proposes claiming prompt-injection resistance and MCP authorization conformance. Neither was tested.\n\nThe actual contract matrix is:\n\n| Dimension | Candidate evidence |\n|---|---|\n| MCP specification / wire revision | Absent; no project pin or negotiation |\n| SDK / version | None; Python classes only |\n| Peer roles | `Gateway` and `Origin` imitate application roles; neither is a demonstrated MCP peer |\n| Transport | In-memory function calls; no HTTP, stdio, JSON-RPC or wire lifecycle |\n| Capabilities | Synthetic `read_issue`, `read_private`, `publish` operations; no MCP capability exchange, tool schemas or discovery |\n| Caller/authentication | Fixed `analyst` and static scope set; assumed identity, no credential verification |\n| Resource policy | Hardcoded trusted source/classification; gateway destination check only |\n| Effects/lifecycle | Synchronous append to an in-memory list; no durable publication, cancellation, retry or reconciliation contract |\n\nThe skill’s reference versions are **not** this project’s pins.\n\nPrecise policy boundaries:\n\n1. Maintain trusted task authorization separately from tool credentials. For this task, permit issue-17 reading and public summarization at issue 17; reject private-repository access before returning private content. Untrusted issue text, tool arguments and returned text cannot expand that authorization.\n2. Check publication as a source-to-destination transfer. Use application-maintained provenance from actual reads, preserve it through transformations, and resolve the destination’s actual resource identity and visibility from trusted state. Missing provenance must not silently mean public. A trusted tool can accurately return confidential content.\n3. Preserve cross-repository work through explicit, bounded task authorization covering the source, approved content/subset, operation and destination. Check any relevant authorization expiry or destination-visibility change before the effect. Repository equality is neither required for all authorized work nor sufficient to make a transfer safe.\n4. Make gateway policy unavoidable for every origin operation. Restrict origin reachability where practical and require trusted gateway workload identity or an origin-verifiable policy authorization bound to the caller/task and requested operation. Direct possession of the analyst’s broad credential must not confer an accepted alternate path. Strip or ignore caller-provided routing hints as authority. Debug access must remain behind the required enforcement boundary.\n5. URL/protocol detection may supply telemetry, but cannot authorize a read or transfer. Upstream-origin protection is separate from checking a browser HTTP `Origin` header.\n\nBefore release, require these checks against the actual implemented boundaries:\n\n- Deny the off-task private read before content leaves the protected service; independently deny unauthorized private-derived publication even when a private read was separately legitimate.\n- Observe zero prohibited sink effects for correct-destination private publication, transformed private content, missing/forged provenance and destination redirection.\n- Demonstrate successful ordinary issue-17 triage and a specifically approved cross-repository transfer; deny transfers beyond the approved content or destination.\n- From each relevant deployed ingress path, test direct-origin calls with absent and forged gateway hints, inappropriate credentials/audiences and expired or mismatched policy authorization. Verify allowed gateway calls and authoritative effect counts.\n- Declare actual specification, SDK pins, transports and supported capabilities. Exercise real pinned peers for supported lifecycle/version behavior, tool schemas/results, invalid requests and error mapping.\n- Verify real authentication and principal mapping separately from synthetic caller tests. For public mutations, test interruption before/after commitment and uncertain replies; reconcile an ambiguous outcome using a stable operation identity before retrying.\n- If HTTP is selected, test its transport authentication, host/HTTP-Origin requirements and cancellation behavior separately from gateway-routing enforcement.\n\nThe stand-in establishes vulnerable application authorization behavior under a supplied deterministic sequence. It cannot establish that any model follows the issue instructions, deployed prompt-injection prevalence/resistance, real credential verification, network perimeter enforcement, private-repository exposure, SDK interoperability, protocol conformance, durable effects or recovery. No real-peer checks were executed; no URLs, credentials, private files or network services were used.",
+        "evidence": "events.jsonl:3927#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0ed2c-29c6-7a11-a5e3-9ea32552206f",
+        "text": "Completed read-only review; no files changed. Candidate: adapter SHA-256 `8d0ffa5371141378e599b0ebbdf1136670d1812fd7e826d9554ba75ffbd1d348` and the unchanged companion files identified by the coordinator.\n\n**Release-blocking findings**\n\n1. **Task authorization is missing across the composition.** [adapter.py:32](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:32) restricts only the publication destination; private reads receive the caller’s full static scopes. [contract.md:5](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/contract.md:5) independently requires denying private access for this task. The coordinator’s completed `python3 -B probe.py` run confirms synthetic private content is publicly published to issue 17. The destination check therefore permits the disclosure at the intended destination.\n\n2. **Trusted service output is incorrectly treated as permission to publish.** [adapter.py:21](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:21) supplies trusted private classification, but [probe.py:9](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/probe.py:9) passes only its body to an unconstrained publication operation. The release rationale at [proposed-release.md:5](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/proposed-release.md:5) confuses source authenticity with release authorization. Enforce source-access authority and a separate source-to-destination disclosure decision, retaining trusted provenance through composition and derived summaries.\n\n3. **Origin invocation bypasses mandatory gateway policy.** [adapter.py:14](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/adapter.py:14) ignores `headers` and checks only fixed identity plus scopes. The observed direct call publishes to issue 99 despite gateway denial. A client-supplied header and URL keyword alert cannot establish an authenticated gateway path. A reachable origin must either restrict invocation to an authenticated gateway with appropriate delegated authority, or verify an unforgeable policy grant issued after gateway authorization and bound to the operation, principal, task, resources, destination, permitted contents, and validity.\n\n4. **Exit zero is an inverted release oracle.** [probe.py:8](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/probe.py:8) and line 15 assume unsafe operations succeed; correct rejection would currently raise uncaught `PermissionError`. Conversely, an off-task gateway acceptance merely prints `\"accepted\"` and still exits zero. The probe is a counterexample generator, not a security/conformance test. [proposed-release.md:10](/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial/proposed-release.md:10) must not treat successful script completion as successful security verification.\n\n**Discriminating release checks — proposed, not executed**\n\n| Scenario and deterministic schedule | Independently justified expectation | State/effect oracle |\n|---|---|---|\n| Authorized request → public issue 17 read → public-only summary → issue 17 publication | Allow under current task | Exactly the intended publication; no private read |\n| Same task → malicious issue text → attempted private read | Deny: issue content cannot expand task authority | No private resource accessed or returned; no publication |\n| Inject a synthetic, server-labeled private value into the composition independently of the denied-read test → publish to issue 17 | Deny without disclosure authorization | Publication count unchanged; no private-derived output |\n| Private value or derived summary accompanied by forged `classification=\"public\"`, source, destination approval, or grant fields | Deny: caller arguments and issue text cannot create trusted provenance/approval | No public effect; authoritative classification remains private |\n| Gateway publication to issue 99 | Deny under current task | Publication count unchanged; assert rejection explicitly |\n| Direct origin calls with the same scoped caller, using absent or forged gateway headers | Deny for both reads and writes when mandatory policy evidence is absent | No origin resource access or publication |\n| Valid gateway invocation versus wrong gateway identity, token audience, expired grant, or principal/task/resource/destination/content substitution | Allow only the valid, matching invocation | Every invalid variant has zero unauthorized effects |\n| Separate trusted approval naming a private source, precise approved contents, and destination → matching transfer | Allow even across repositories | Exactly the approved material reaches exactly the approved destination |\n| Reuse that approval with a different source, additional content, destination, or principal/task | Deny | No extra disclosure or publication |\n\nThese checks should fail the current candidate for the relevant authorization defects, while the approved-transfer control prevents a blanket cross-repository ban from appearing to fix the problem. Regression sensitivity and a repaired implementation have **not** been executed.\n\nThe observed replay is simply `python3 -B probe.py`, with its fixed call sequence and no random seed. Reported outcome: exit 0; private publication accepted at issue 17; gateway issue 99 denied; direct origin issue 99 accepted; two in-memory publications.\n\nThe stand-in establishes deterministic application-level authorization failures. It cannot establish model susceptibility, real authentication or token validation, deployed network reachability, gateway identity enforcement, real repository permissions, MCP wire/SDK compatibility, or actual public publication. Release additionally needs an explicitly pinned MCP specification/SDK/transport and representative real-peer and deployed-boundary checks using authorized synthetic resources. These are outstanding requirements, not evidence supplied by this probe.",
+        "evidence": "events.jsonl:3929#/result/thread/turns/0/items/10"
+      }
+    ],
+    "limits": [
+      "Command read actions are the host parser's best-effort classification; retain raw output for review.",
+      "Missing role metadata or read events are inconclusive, not evidence inferred from assistant claims.",
+      "A matching role and a successful process do not independently establish task correctness."
+    ]
+  },
+  "cleanup": {
+    "owned_process_group": 11413,
+    "remaining_live_processes": [],
+    "terminated": true
+  },
+  "capability_deviations": [
+    "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+    "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+    "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+  ],
+  "case_compliant": false,
+  "status": "completed-unscored",
+  "independent_acceptance": "pending",
+  "host_version": "codex-cli 0.153.4",
+  "changed_files": [],
+  "independent_verification": {
+    "argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex",
+      "sandbox",
+      "-P",
+      ":workspace",
+      "--include-managed-config",
+      "--sandbox-state-disable-network",
+      "-C",
+      "/private/tmp/tal-extension-native-mcp-integration-20260929-01/trial",
+      "--",
+      "python3",
+      "-B",
+      "probe.py"
+    ],
+    "kind": "behavior_observation",
+    "exit_code": 0,
+    "signal": null,
+    "error": null,
+    "timed_out": false,
+    "cleanup": {
+      "owned_process_group": 16201,
+      "remaining_live_processes": [],
+      "terminated": true
+    },
+    "isolation": "native :workspace sandbox, managed configuration included, network explicitly disabled, credential environment variables withheld",
+    "limits": [
+      "The native :workspace profile permits system temporary-directory writes and broad filesystem reads; it does not enforce the fixture per-file allowlist."
+    ]
+  },
+  "final_files": [
+    {
+      "path": ".agents/skills/concurrency-correctness/agents/openai.yaml",
+      "sha256": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/cache-coherence.md",
+      "sha256": "d35560bc9e1e478f7d162b91effa1f33eda4fdb04efacc8bb6b743a855bc2ae7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/projection-rebuild.md",
+      "sha256": "9635ce4dc2682bd07922b271f62484052a7086b0cbf0af2f6cdd1a799fc0f998",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/replica-reads.md",
+      "sha256": "26d4eaa7c36cfaeb96fb6e6e07b341901ddcd4589b822eb82159e5d755a6f593",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/sources.md",
+      "sha256": "59036630faa36d57a375bb7c363e1037f233f23e8cef73a8be59f8957e8e0a01",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/transactions.md",
+      "sha256": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/SKILL.md",
+      "sha256": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/agents/openai.yaml",
+      "sha256": "dde157b38977a8c3cdc51ad4276f308a04a79bad0a4d52338bf43f00d509a58d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "2acd49e69bca0dc3426ad805794d2cdf0c5770bdc1e974e444f0b2475bce0a4c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/sources.md",
+      "sha256": "b8b6fc6c58cb6d48038ce9f325fd86e54b86ce60a708f3cf7b380ab2b70d0bcd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+      "sha256": "f7ceac4a622c3136a9279433347e2cd3efe3ebda4d2db0ddf8fa57a977c78498",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/agents/openai.yaml",
+      "sha256": "a8eb43c8b694ea53c4ed539c01a7a146b0d4c7160e4e364293d1c30920edbabd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/ownership.md",
+      "sha256": "3437a7091e90d3eb47c4a2dff054357eed3879a8da5571ab0598033dc4d3e0c1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/runtime-validation.md",
+      "sha256": "51b4eaa629b9bdd21257d6013b99322c76c27ac4a6ef6daf97854cf30b6f33c9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/sources.md",
+      "sha256": "51f7fa10e87ba8c55ecaf1d0de6b502b4e352a3d65a1d8c76e9da532246c2eed",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/transaction-outcomes.md",
+      "sha256": "53226b6126f55c42e5b284e3c51f9d47414e80da397d2ea4f22b32b4af68af9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/SKILL.md",
+      "sha256": "c51a9d8f9d388cd2b73e5a9416da43c39c75ca3a32d954151d728b76fa9e50f9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/agents/openai.yaml",
+      "sha256": "6069e983fa2b0411e97bade8b37ed93628649eb93f0b31041ca37fcaf8e986a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/recovery.md",
+      "sha256": "7d137c2d86f71d4fa47ff564833d52ee27ce2061f373bf6c64e30768ead245b1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/sources.md",
+      "sha256": "727c4ccc2c7c2371fe86504fbad2ecf7ca6aeeb7a7c3ab1b53ccc6ed27be7573",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/verification.md",
+      "sha256": "93d3657ec00c7197b2ac0c258783b108a7bff6348f28eef029588e7085670fea",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/SKILL.md",
+      "sha256": "6fb0c4f5bea67f0c31757fb81d207507baabcc0b3f0fca24b3142da37cf1647f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/agents/openai.yaml",
+      "sha256": "0a762fd4dfadad9ff137bd5fd7a518663ed92900052bf015cca6001e646bcb3c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/references/authorization-and-caching.md",
+      "sha256": "833e835bc70d4cb94af229b7e1fd42204a35f33f4cd63a86a662e3c65c1b8cfa",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/references/compatibility.md",
+      "sha256": "bae968018c06572a830ac024ec9f3fd0d5f91c542709549dbc91d29510ba7499",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/references/outcomes.md",
+      "sha256": "c7bd25aa626e3f32107e0e09614aa2c839159c81f0f1bf3ddad3e1b75e7cc34a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/references/sources.md",
+      "sha256": "c739504c67a87318316af95f5d5e96be44df6c1c38ebadbd9e472c8a40ceda9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/references/tool-dataflow.md",
+      "sha256": "884487d1b216267755796d167cd58da43e427dd3c6be3e10f9baece6add2be2e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/mcp-engineering/SKILL.md",
+      "sha256": "cd695162ddc3ea125098d00ad42b081b94863e87d02a88cab4b4fff5b937f025",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/agents/openai.yaml",
+      "sha256": "f9b5fd5e4158f0424a06c0e4943b41d2deeed9b1cc9b2b8fc9ba7ebdfa991429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/async-ownership.md",
+      "sha256": "53faf3b084b93bebe73c3b33d06b346c594319fd056b9e84009930f8b74a083d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sources.md",
+      "sha256": "8e251bf259e6c5744aab9174dcfd98a20871d6880563ca9a225eb79531202bd3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/transaction-outcomes.md",
+      "sha256": "9b84d90852fa28198672befde8577bc54aa59f484ba117dbeb149f84e6b61403",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/SKILL.md",
+      "sha256": "c35f4b91b96b14e4401cc81de81d78ebe4027e1b8cd92daff94d16c6cbb538e1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/tal-mcp-integration/SKILL.md",
+      "sha256": "84d06147552f9385a815e373637012aa322f7abf98ecfb9b3b5a4786d2f50f42",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/agents/openai.yaml",
+      "sha256": "2cf07254ce674023c0370bdd28daf327b907f5ef51b1caa67ab54be8d0fc5229",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+      "sha256": "00df3d1d751164cf5b9c116589fb743a2895f0aaf47aad24a57aa76fb66a386e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/node-streams.md",
+      "sha256": "8fa91e3f5c79a98a1c09d6466707506b4cfb289ed466b684b6754f5a949b1283",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/runtime-boundaries.md",
+      "sha256": "d4810aa6488e4c362c9e3e8480838588763c39d69d4d24615737465592469cbb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/sources.md",
+      "sha256": "802061e75cebb73c84c4b31300ec9faa644c77a91d2354b276b1b06cf75358ef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/SKILL.md",
+      "sha256": "760f384a733d487e4df00a563a0ca8cc1ffa51f196b0b821a3561c23fedf7cc7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-consistency.toml",
+      "sha256": "3b1382a752e2d87c01ee7ee651e62a4e5c0930ac1b27468d8f0110bcedfcf91a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-failure-testing.toml",
+      "sha256": "b12ed74187facb593fcc9e04a34a4072d418af1ab6f5b30755b0075f8e7b08db",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-go.toml",
+      "sha256": "97b4bf2a2f84362ae70c810e1ba5a68985cce8ee99e33d8609702bbf23c6d716",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-idempotency.toml",
+      "sha256": "f44795bd85342ac2309ed7fff1336422a86cfd2e3fce400d1071fe0692557300",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-mcp.toml",
+      "sha256": "05f8f4b869b427d9b6692aba469a9bad3cb8c8a1e643069d9d7b859337c2262e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-python.toml",
+      "sha256": "4feed93f86e5745a9e2e00a57b953a107c18a135b443fcbd497e8e8ec6501b5e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-typescript.toml",
+      "sha256": "a2148c15fbe42e079a8576902182da9285cb5c0641fcbcd6e5ca26c261a26b20",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/CONTRACT.md",
+      "sha256": "dfbaa9ca5fef6032cfb606c8c6e50e0dc5ddf6ffebf56d26a34755f3dbadfe60",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-consistency.md",
+      "sha256": "5b279f3c7969e9696222de6fa8cd4b6405b708ef9562c4602b5e26a93d678af1",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-idempotency.md",
+      "sha256": "e55750308310cbe174298f8b790895766680c79e1a354c927665352b2df708b0",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-go.md",
+      "sha256": "30138fa33296a07d3049f49fe8c35c7be5acb84229b82d4e0bda4ef741e2f1d8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-python.md",
+      "sha256": "b238cca04cf77369b55679537a41241f3aafba8b03c1dcfcc7fe48f6148020a3",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-typescript.md",
+      "sha256": "035f904826b7353789605f1b3ecd3650a5986a4b168124455796f225336e9d71",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/protocols/tal-mcp.md",
+      "sha256": "20b262936e9a0a9117af3cf6140abe6cb26ac9f8406c98444952c793f65f5c9a",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/verification/tal-failure-testing.md",
+      "sha256": "a88991b94e598995f6673208b799560c99a63d0262360836860476c1b6d72d3f",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/manifest.json",
+      "sha256": "a14a94cceb3de4ee14282877f22815ef200dfe6102a986481790174b62cf2351",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/_shared/handoff.md",
+      "sha256": "65e39e26613179353d152d18e316b277f1f303fab07f4ef5aa3f3cede2ac6923",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/tal-mcp-integration/WORKFLOW.md",
+      "sha256": "b7df60b0184bab282034a60c15d0c0ab7aef6c2da3c6351353d5cfa371a686ae",
+      "mode": 420
+    },
+    {
+      "path": "adapter.py",
+      "sha256": "8d0ffa5371141378e599b0ebbdf1136670d1812fd7e826d9554ba75ffbd1d348",
+      "mode": 420
+    },
+    {
+      "path": "contract.md",
+      "sha256": "31854fe60947d556ade4f6e4fe3c634c77c2b73694e61002772fffcc507515e8",
+      "mode": 420
+    },
+    {
+      "path": "probe.py",
+      "sha256": "2649cb25e2e4d5158eacc1de3f12bcd2241cccb2defaaaa18f41b2aaeb17f094",
+      "mode": 420
+    },
+    {
+      "path": "prompt.md",
+      "sha256": "9915120794567346741faa94dad1baa6d9200fbd22bfa6ce5d00188d572c0327",
+      "mode": 420
+    },
+    {
+      "path": "proposed-release.md",
+      "sha256": "76b2c76e2297a6f43a02cec5a86949d2852d5a857c3ba2b9ee12ac10e1d0be00",
+      "mode": 420
+    }
+  ]
+}

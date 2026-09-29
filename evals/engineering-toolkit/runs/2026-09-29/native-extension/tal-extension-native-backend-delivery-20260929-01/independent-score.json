@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-backend-delivery",
+  "suite": "native-workflow-extension",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T12:36:38.326015+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_extension_guidance": false,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/run.json": "e50e864c36e0ea448e843911736619e70886bb5b42c664564cfafa6fa3f36620",
+    "evidence/events.jsonl": "fad7eea41dc69ec38df1618c40d43dc233992c991fe941791537c3646e84e097",
+    "evidence/prepared.json": "2b929000be4025f509dece49f49b8f39d94d10cb704c9ad4654aa4adc575f10b",
+    "evidence/verification.stdout.txt": "a7db7897b0ecd980fe8a302649f93867027825bfcfb237be453535b0fe129a22",
+    "trial/export.ts": "d514514277b5057b9109415965b18aa6541d9a07030259ece500cccc84be71c0",
+    "trial/test_export.mjs": "fc8df8f58c50fdde840cc17ff36d92b1408f1a0f0e231fea86cd067e26c6a6d2",
+    "trial/verify.mjs": "b7661f42f8666679b9830cd8b68cfa6299fe83011cdce6a3b749dd2922c89e54",
+    "trial/contract.md": "7b7ec33485589bd095e96e3a2eec0eaad69210c438a376cc5cea69b67070c7dd"
+  },
+  "source_digest": "a87581e684ff0ca501c3762572252f5d1144d827561c78ac4fec9703146628c5",
+  "fixture_index_sha256": "af2782f83a7a16c8db7295d45eea531d6e6472a80a5c08c7578a14fc99d4808f",
+  "rubric_path": "evals/engineering-toolkit/extension-fixtures/case-index.json",
+  "runner_sha256": "b8ba06bf55503f08785994b27f1a628acdbf1a4828bc8c9c93276ff98c200b33",
+  "criteria": [
+    {
+      "id": "completion_after_finish",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/export.ts",
+          "locator": "exportRecords",
+          "observation": "Awaits Node promise pipeline before success and joins explicit destruction for both disposable owned streams; it does not treat end() as completion."
+        },
+        {
+          "artifact": "trial/verify.mjs",
+          "locator": "completion_after_finish",
+          "observation": "Gate holds sink final callback, observes export pending, then checks finish, ordered exact records and one destruction per stream."
+        },
+        {
+          "artifact": "evidence/verification.stdout.txt",
+          "locator": "checks",
+          "observation": "Independent protected verifier passes all five checks on Node v25.9.0."
+        }
+      ]
+    },
+    {
+      "id": "slow_sink_backpressure",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/verify.mjs",
+          "locator": "slow_sink_backpressure",
+          "observation": "Both highWaterMarks=1; first write gate holds, next check phase asserts sink writableLength<=1 and source produced<=4 of64. Gate release yields all64 exact ordered records."
+        },
+        {
+          "artifact": "trial/export.ts",
+          "locator": "pipeline call",
+          "observation": "Uses actual Node pipeline backpressure; no whole-source buffering or independent greedy enqueue loop."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "164,1615",
+          "observation": "Original greedily queues64 and fails; corrected final reviewer verifier passes this discriminator."
+        }
+      ]
+    },
+    {
+      "id": "owned_pipeline_cleanup",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/export.ts",
+          "locator": "closeOwnedStream; exportRecords",
+          "observation": "Pipeline preserves stream errors/AbortError, finally destroys and awaits both public closed states, including autoDestroy:false/emitClose:false. A close-event listener plus10ms state check is removed on completion; post-cleanup error/cancel checks cover successful-pipeline teardown."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "956,1248,1321,1326,1615,1619",
+          "observation": "Independent reviewer reproduces pending promise after both suppressed-close streams already close. Regression success cases fail before correction. Final protected failure/abort checks5/5 and12 gated resource-lifetime regressions pass, including once-per-stream release, original errors, blocked-write abort and suppressed close events."
+        }
+      ]
+    },
+    {
+      "id": "local_stream_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "62,164,947,1595,1797,2006",
+          "observation": "Runtime actually v25.9.0. Original5/5 fail and final5/5 plus12 regressions pass; specialist report labels real Node streams with synthetic gates. Final reports local runtime, source changes and compiler typechecking unavailable. No remote durability, whole-process memory cap, HTTP response reuse or delivery guarantee claimed."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex0.153.4 discovers enabled backend workflow."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "53,60,68,157,164,537,638,2013#/result/thread,2015#/result/thread",
+          "observation": "Actual workflow/TypeScript/failure-testing reads and new node-streams.md reference read by both owner and reviewer. Native metadata names tal-failure-testing and tal-typescript children with controller parent IDs."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "166,316,326,342,444,501,1312,1326",
+          "observation": "Controller exclusively writes export.ts; test specialist exclusively writes test_export.mjs. No overlapping writers."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "640,956,1248,1321,1326,1351,1604,1606,1615,1617,1619,1797",
+          "observation": "Separate TypeScript reviewer checks frozen first candidate, demonstrates material hang, returns correction to owners, then reopens/re-hashes final candidate aed2e3d5dbdaba071b0afda6db8523af8ca3ab8b6e59d24f631194b931a395fc and reruns affected verifiers/syntax checks before accepting. Final source and tests match those hashes; no later edits."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 1,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_observation; /capability_deviations",
+          "observation": "Only allowed export.ts/test_export.mjs changed; every final-file digest independently matched current bytes, protected contract/verifier/native artifacts unchanged. Global-config recorded hashes and mtime match. Strict confinement and effective per-thread tool inventory remain unproven, with no observed prohibited scope breach."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "1595,1797,2006",
+          "observation": "Observed behavior is pinned local Node streams/synthetic resource gates. Native stripping and syntax checks are explicitly distinguished from unavailable compiler typechecking. Review acceptance follows actual final-candidate executions, not a process-success claim."
+        }
+      ]
+    }
+  ],
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "partial",
+  "case_compliant": false,
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+      "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+    ]
+  },
+  "critical_failures": [],
+  "unresolved_critical_partial": [
+    "isolation_and_scope"
+  ],
+  "limitations": [
+    "Actual Node25.9.0 with synthetic owned streams; no external adapter, delivery durability, shared HTTP response or global memory guarantee.",
+    "Compiler typechecking was unavailable; native TypeScript stripping and node --check are distinct observed checks.",
+    "Initial candidate had a reproduced suppressed-close hang; final acceptance binds corrected candidate and focused re-review, preserving initial failure evidence.",
+    "No unaided comparison or general workflow/skill uplift claim; evaluator inspected captured executions and did not run a new model."
+  ]
+}

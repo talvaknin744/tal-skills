@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "status": "prepared-no-model-execution",
+  "workflow": "tal-messaging-evolution",
+  "task_mode": "review",
+  "editable_files": [],
+  "runtime_output_paths": [],
+  "verification_argv": [
+    "python3",
+    "-B",
+    "observe.py"
+  ],
+  "verification_kind": "behavior_observation",
+  "timeout_seconds": 300,
+  "trial": "/private/tmp/tal-extension-native-messaging-evolution-20260929-01/trial",
+  "evidence": "/private/tmp/tal-extension-native-messaging-evolution-20260929-01/evidence",
+  "prompt": "Review the proposed regional Kafka consumer cutover using the supplied log model,\ncheckpoint, and ownership facts. Identify concrete loss/replay histories and give\na bounded go/hold procedure with the evidence needed to choose a target position.\nRun `python3 -B observe.py` if useful; it only prints local observations. Keep all\nfiles unchanged. No broker, cloud command, package installation, or network call\nis authorized. Distinguish local arithmetic from replication and external-effect\nproof.\n",
+  "baseline": [
+    {
+      "path": ".agents/skills/concurrency-correctness/agents/openai.yaml",
+      "sha256": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/cache-coherence.md",
+      "sha256": "d35560bc9e1e478f7d162b91effa1f33eda4fdb04efacc8bb6b743a855bc2ae7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/projection-rebuild.md",
+      "sha256": "9635ce4dc2682bd07922b271f62484052a7086b0cbf0af2f6cdd1a799fc0f998",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/replica-reads.md",
+      "sha256": "26d4eaa7c36cfaeb96fb6e6e07b341901ddcd4589b822eb82159e5d755a6f593",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/sources.md",
+      "sha256": "59036630faa36d57a375bb7c363e1037f233f23e8cef73a8be59f8957e8e0a01",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/transactions.md",
+      "sha256": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/SKILL.md",
+      "sha256": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/agents/openai.yaml",
+      "sha256": "dde157b38977a8c3cdc51ad4276f308a04a79bad0a4d52338bf43f00d509a58d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "2acd49e69bca0dc3426ad805794d2cdf0c5770bdc1e974e444f0b2475bce0a4c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/sources.md",
+      "sha256": "b8b6fc6c58cb6d48038ce9f325fd86e54b86ce60a708f3cf7b380ab2b70d0bcd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+      "sha256": "f7ceac4a622c3136a9279433347e2cd3efe3ebda4d2db0ddf8fa57a977c78498",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/agents/openai.yaml",
+      "sha256": "a8eb43c8b694ea53c4ed539c01a7a146b0d4c7160e4e364293d1c30920edbabd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/ownership.md",
+      "sha256": "3437a7091e90d3eb47c4a2dff054357eed3879a8da5571ab0598033dc4d3e0c1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/runtime-validation.md",
+      "sha256": "51b4eaa629b9bdd21257d6013b99322c76c27ac4a6ef6daf97854cf30b6f33c9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/sources.md",
+      "sha256": "51f7fa10e87ba8c55ecaf1d0de6b502b4e352a3d65a1d8c76e9da532246c2eed",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/transaction-outcomes.md",
+      "sha256": "53226b6126f55c42e5b284e3c51f9d47414e80da397d2ea4f22b32b4af68af9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/SKILL.md",
+      "sha256": "c51a9d8f9d388cd2b73e5a9416da43c39c75ca3a32d954151d728b76fa9e50f9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/agents/openai.yaml",
+      "sha256": "6069e983fa2b0411e97bade8b37ed93628649eb93f0b31041ca37fcaf8e986a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/recovery.md",
+      "sha256": "7d137c2d86f71d4fa47ff564833d52ee27ce2061f373bf6c64e30768ead245b1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/sources.md",
+      "sha256": "727c4ccc2c7c2371fe86504fbad2ecf7ca6aeeb7a7c3ab1b53ccc6ed27be7573",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/verification.md",
+      "sha256": "93d3657ec00c7197b2ac0c258783b108a7bff6348f28eef029588e7085670fea",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/SKILL.md",
+      "sha256": "6fb0c4f5bea67f0c31757fb81d207507baabcc0b3f0fca24b3142da37cf1647f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/messaging-reliability/agents/openai.yaml",
+      "sha256": "ca8f67599a39b7e134b2639ae5a44424e1620b4c48185aecd1c51d2b3f3dc9a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+      "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+      "sha256": "0c298ebc53279fe31757f580941f46bc740242afe76dfd5bafa2314126209270",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/messaging-reliability/references/sources.md",
+      "sha256": "6c1ef96cccc384edea3588f2c089816c2e2adab304e4fd8f16104bc2b9ce2452",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/messaging-reliability/SKILL.md",
+      "sha256": "6e8205af5afc92e989c9e00f45e681be2339ef2a3a3a397cab82f023d29d0b89",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/agents/openai.yaml",
+      "sha256": "b6ef1a6a5ea7ae77356f70a97ec6cdbcae3dc179b0ff05210e9565ea6ebba643",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/references/coupling.md",
+      "sha256": "bfc0a8e78c05f09d5fa2acb59a4576d57a218cbb4541c871e838b2fa79e32b06",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/references/ownership.md",
+      "sha256": "441fbde793f99ad4348e2871bff9eda2c77cc69a9f6073c6d9693c8ca8c476cf",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/references/sources.md",
+      "sha256": "2c0c23d1e100a7e24ea07f76cadd5d74d06d003aa72d7305b02cfc934cc2a399",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-boundaries/SKILL.md",
+      "sha256": "4553c39d0b63310d78224364fd02c318f80bce5c228f8d5643b3b8b61b094c4e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/agents/openai.yaml",
+      "sha256": "01351ead57002693586a5656635ea5099f8a0a4a5f5d045d1034e952c754b40b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/references/compatibility.md",
+      "sha256": "4f02595717144f4997597971872b9d64f7dcf0ef214f8f8fcfbca1575c562aef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/references/messaging.md",
+      "sha256": "a3df71e0714348eb07b07c48c8ac5c3d8e2fc8740ecb43f1fdf8309be78c7f3f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/references/sources.md",
+      "sha256": "5abe817d1e880c419aa32816fae928d09cc1b22bbbd833051bb3dd62d927e239",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/references/ui-composition.md",
+      "sha256": "7adbb19e70e729ecb5d979c8fa422e6b0b94124162e3d1eb31b0ae3c74f77efc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-integration/SKILL.md",
+      "sha256": "bebace0bcb7222c974b2cfe0feccf4ce606f54ca691c916cc5e3dfc1c57c7d15",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/agents/openai.yaml",
+      "sha256": "f9b5fd5e4158f0424a06c0e4943b41d2deeed9b1cc9b2b8fc9ba7ebdfa991429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/async-ownership.md",
+      "sha256": "53faf3b084b93bebe73c3b33d06b346c594319fd056b9e84009930f8b74a083d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sources.md",
+      "sha256": "8e251bf259e6c5744aab9174dcfd98a20871d6880563ca9a225eb79531202bd3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/transaction-outcomes.md",
+      "sha256": "9b84d90852fa28198672befde8577bc54aa59f484ba117dbeb149f84e6b61403",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/SKILL.md",
+      "sha256": "c35f4b91b96b14e4401cc81de81d78ebe4027e1b8cd92daff94d16c6cbb538e1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/tal-messaging-evolution/SKILL.md",
+      "sha256": "f173d71bcbac5905a3ec5f0a9195de0102cf7ddfa7164a693d66fb56ced03d2c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/agents/openai.yaml",
+      "sha256": "2cf07254ce674023c0370bdd28daf327b907f5ef51b1caa67ab54be8d0fc5229",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+      "sha256": "00df3d1d751164cf5b9c116589fb743a2895f0aaf47aad24a57aa76fb66a386e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/node-streams.md",
+      "sha256": "8fa91e3f5c79a98a1c09d6466707506b4cfb289ed466b684b6754f5a949b1283",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/runtime-boundaries.md",
+      "sha256": "d4810aa6488e4c362c9e3e8480838588763c39d69d4d24615737465592469cbb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/sources.md",
+      "sha256": "802061e75cebb73c84c4b31300ec9faa644c77a91d2354b276b1b06cf75358ef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/SKILL.md",
+      "sha256": "760f384a733d487e4df00a563a0ca8cc1ffa51f196b0b821a3561c23fedf7cc7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-boundaries.toml",
+      "sha256": "527b09bbd4baeb174f01b39a1b66efc750b0f5eca060914f2d28999a2c37629a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-consistency.toml",
+      "sha256": "3b1382a752e2d87c01ee7ee651e62a4e5c0930ac1b27468d8f0110bcedfcf91a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-failure-testing.toml",
+      "sha256": "b12ed74187facb593fcc9e04a34a4072d418af1ab6f5b30755b0075f8e7b08db",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-go.toml",
+      "sha256": "97b4bf2a2f84362ae70c810e1ba5a68985cce8ee99e33d8609702bbf23c6d716",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-idempotency.toml",
+      "sha256": "f44795bd85342ac2309ed7fff1336422a86cfd2e3fce400d1071fe0692557300",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-messaging.toml",
+      "sha256": "9b103a00bfca789af9e687c57c78e25b1c64fb4bac3a1239dda1536f46ecdc58",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-python.toml",
+      "sha256": "4feed93f86e5745a9e2e00a57b953a107c18a135b443fcbd497e8e8ec6501b5e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-typescript.toml",
+      "sha256": "a2148c15fbe42e079a8576902182da9285cb5c0641fcbcd6e5ca26c261a26b20",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/CONTRACT.md",
+      "sha256": "dfbaa9ca5fef6032cfb606c8c6e50e0dc5ddf6ffebf56d26a34755f3dbadfe60",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-boundaries.md",
+      "sha256": "6530419ddc5700e07da5e6f0636a6d41b2262f9b2264ce9bd890b24a7df765e4",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-consistency.md",
+      "sha256": "5b279f3c7969e9696222de6fa8cd4b6405b708ef9562c4602b5e26a93d678af1",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-idempotency.md",
+      "sha256": "e55750308310cbe174298f8b790895766680c79e1a354c927665352b2df708b0",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-go.md",
+      "sha256": "30138fa33296a07d3049f49fe8c35c7be5acb84229b82d4e0bda4ef741e2f1d8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-python.md",
+      "sha256": "b238cca04cf77369b55679537a41241f3aafba8b03c1dcfcc7fe48f6148020a3",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-typescript.md",
+      "sha256": "035f904826b7353789605f1b3ecd3650a5986a4b168124455796f225336e9d71",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-messaging.md",
+      "sha256": "24a1c6b94019df40d7660e9fdb1b5ddff96f967a15e7eb21f365a6ff24cb9bbb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/verification/tal-failure-testing.md",
+      "sha256": "a88991b94e598995f6673208b799560c99a63d0262360836860476c1b6d72d3f",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/manifest.json",
+      "sha256": "e9d7d0cafc470cece68ea3ffe7abeb0b8341c2b0e025b68cd569456499468b50",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/_shared/handoff.md",
+      "sha256": "65e39e26613179353d152d18e316b277f1f303fab07f4ef5aa3f3cede2ac6923",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/tal-messaging-evolution/WORKFLOW.md",
+      "sha256": "b3d81bb7a990bbd49803706a834f444ecbcae884f1778edbeb193d98d16e6690",
+      "mode": 420
+    },
+    {
+      "path": "contract.md",
+      "sha256": "b32925bf39fb8d456bbe7756a50492022262826cf15299be31c6fa0e1d650fd7",
+      "mode": 420
+    },
+    {
+      "path": "cutover.json",
+      "sha256": "6cdad87db8509fe944cb4109207dd838cd745bb9a383527f587eca30d909dc07",
+      "mode": 420
+    },
+    {
+      "path": "observe.py",
+      "sha256": "695d5c079e5c3ece95ef668de6a3d9b01fb0c58c6501c844675470df1349c872",
+      "mode": 420
+    },
+    {
+      "path": "prompt.md",
+      "sha256": "5c8c20974e69ece328bcb4a314084d582fb11e6623c015a5bc3668e95afae007",
+      "mode": 420
+    },
+    {
+      "path": "proposed-cutover.md",
+      "sha256": "a13bc78cfad9e1be73840dd9626342e831933436693837296e8167b7bca9ff66",
+      "mode": 420
+    }
+  ],
+  "source_digest": "6acd0f9d46cfefc41502d972ce466788fbb9c1d94d43cc1e3a162df4e117d4a5",
+  "fixture_index_sha256": "af2782f83a7a16c8db7295d45eea531d6e6472a80a5c08c7578a14fc99d4808f",
+  "scope_enforcement": "post-run hash comparison; native sandbox grants the whole disposable workspace, not per-file writes",
+  "rubric_access": "withheld from trial, not OS read-isolated"
+}

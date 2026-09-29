@@ -1,0 +1,1526 @@
+{
+  "schema_version": 1,
+  "host": "codex",
+  "workflow": "tal-worker-rollout",
+  "task_mode": "review",
+  "argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex",
+    "app-server",
+    "--stdio",
+    "-c",
+    "projects={\"/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial\"={trust_level=\"trusted\"}}",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "agents.max_concurrent_threads_per_session=2",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "sandbox_workspace_write.network_access=false",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.connectors=false",
+    "-c",
+    "features.plugins=false",
+    "-c",
+    "features.remote_plugin=false",
+    "-c",
+    "features.browser_use=false",
+    "-c",
+    "features.browser_use_external=false",
+    "-c",
+    "features.in_app_browser=false",
+    "-c",
+    "features.computer_use=false",
+    "-c",
+    "features.image_generation=false",
+    "-c",
+    "features.imagegenext=false",
+    "-c",
+    "features.hooks=false",
+    "-c",
+    "features.codex_hooks=false",
+    "-c",
+    "features.plugin_hooks=false"
+  ],
+  "registration": "automatic-project-directory",
+  "model_override": false,
+  "primary_thread": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+  "preflight": {
+    "config": {
+      "model": "gpt-6-astra",
+      "reasoning_effort": "ultra",
+      "agents": {
+        "enabled": true,
+        "max_concurrent_threads_per_session": 2,
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null
+      },
+      "sandbox_mode": null,
+      "capabilities": {
+        "web_search": "disabled",
+        "features": {
+          "apps": false,
+          "connectors": false,
+          "plugins": false,
+          "remote_plugin": false,
+          "browser_use": false,
+          "browser_use_external": false,
+          "in_app_browser": false,
+          "computer_use": false,
+          "image_generation": false,
+          "imagegenext": false,
+          "hooks": false,
+          "codex_hooks": false,
+          "plugin_hooks": false
+        },
+        "sandbox_workspace_write": {
+          "writable_roots": [],
+          "network_access": false,
+          "exclude_tmpdir_env_var": true,
+          "exclude_slash_tmp": true
+        },
+        "mcp_servers": {
+          "gitnexus": {
+            "enabled": true
+          },
+          "computer-use": {
+            "enabled": false
+          },
+          "node_repl": {
+            "enabled": true
+          }
+        }
+      },
+      "project_layers": [
+        {
+          "source": {
+            "type": "project",
+            "dotCodexFolder": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/.codex"
+          },
+          "disabled_reason": null
+        }
+      ]
+    },
+    "workflow_skills": [
+      {
+        "name": "tal-worker-rollout",
+        "description": "Prepare or implement a worker rollout that preserves accepted work, bounded shutdown, compatible continuation, and observable recovery.",
+        "path": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/.agents/skills/tal-worker-rollout/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "skill_errors": []
+  },
+  "effective_thread_model": "gpt-6-astra",
+  "effective_thread_reasoning": "ultra",
+  "thread_persistence": {
+    "requested_ephemeral": false,
+    "observed_ephemeral": false,
+    "root_path": "/Users/idanvaknin/.codex/sessions/2026/09/29/rollout-2026-09-29T15-32-03-01a0ed26-9493-7713-a9f7-7e2393f97d91.jsonl"
+  },
+  "execution_started": true,
+  "terminal_turn": {
+    "id": "01a0ed26-94d5-7250-9f2b-acb75f7f9106",
+    "items": [
+      {
+        "type": "agentMessage",
+        "id": "msg_05fa1a78ac730f19016abbb0ab3d1487d2b8f2694b1830ddb9",
+        "text": "**Do not proceed with the proposed 12:02 retirement.** At the supplied observation time—**2026-09-29 12:00 UTC**—the deployment has completed, but accepted work still depends on revision 2. The proposal’s dependency deletion, protection handling, continued source admission, scale-down, and rollback assumptions conflict with the [contract](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/contract.md).\n\nThe [observations](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json) establish:\n\n| Source task / job | Ownership epoch | Confirmed ECS protection expires | Work remaining |\n|---|---:|---|---|\n| old-a / tenant-blue, export-401 | 17 | September 29, 12:10 — **10 minutes away** | Approximately 12 hours |\n| old-b / tenant-green, export-908 | 6 | September 30, 11:30 — **23½ hours away** | Approximately 12 hours |\n\nBoth jobs have checkpoints from 11:55, no final result receipt, and no queue acknowledgment. Their application leases are confirmed only through **12:00:45**, independently of ECS protection. Subsequent renewals cannot be inferred from this snapshot.\n\nThe material findings in the [proposal](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/proposed-retirement.md) are:\n\n- **Deployment success does not establish retirement readiness.** Deployment counts froze at completion, 11:50, but the live 12:00 service observation independently confirms two source tasks and three healthy target tasks. Deferred cleanup requires continued source tracking.\n- **The legacy dependencies remain necessary.** Revision 3 cannot resume revision-2 checkpoints. Retain `export-layout-v2`, the decoder, task definition, image, and required durable state. Protection neither preserves dependencies nor supplies crash recovery.\n- **Old-a’s renewal failed.** The response contains `ThrottlingException`, not a protection confirmation. Its previous protection remains confirmed until 12:10; it has not been extended to 24 hours. An hourly retry would miss that boundary.\n- **Admission remains open and has a protection gap.** Both revisions poll, and workers start jobs before requesting protection. An empty source poll proves neither permanent exclusion nor the absence of receives already in flight.\n- **Capacity supports current coexistence only.** Desired 3 × maximum 200% permits six tasks under the rolling limit, but only five physical slots exist and all are occupied. Desired 1 would reduce that rolling ceiling to two and put two protected sources above desired count, risking `DEPLOYMENT_BLOCKED`. Enabled scale-in and minimum 1 create exposure; no future scaling decision is established.\n- **Automatic deployment rollback is unavailable after completion.** Circuit-breaker and alarm rollback ended at 11:50. Later failures require an explicit recovery operation or another compatible deployment.\n\nFor a later authorized rollout, use this bounded procedure:\n\n1. **Hold retirement and stabilize the current deployment.** Retain legacy assets, keep desired count at three initially, and establish effective controls against downward scaling during the drain. Verify these controls through fresh service/task observations. Target task protection states are unknown: protecting additional target workers could also exceed desired count. Validate admission concurrency, protection responses, and capacity together.\n\n2. **Reconcile ownership and protection immediately.** Observe successful application lease renewals on the normal 15-second cadence; neither job has confirmed ownership beyond 12:00:45 without another renewal. Retry old-a’s protection request with bounded backoff. Accept only a matching task ARN, enabled protection, and a confirmed expiration that provides sufficient margin; inspect errors and failures explicitly.\n\n   The protection cutoff is **12:10 minus measured API, clock, checkpoint, and recovery margins**. Those measurements are absent, so escalate the uncertainty immediately rather than assume ten minutes suffices. If renewal remains unconfirmed, stop rollout advancement and preserve recovery assets. Expiration creates scale-in exposure; it does not prove immediate termination. There is no demonstrated safe forced-termination path in this bundle.\n\n3. **Close source admission and reconcile races.** Establish an authoritative barrier against new claims by the retiring generation while allowing existing owners to renew their leases. Settle outstanding receives, reservations, and claims racing that barrier; add any already accepted work to the drain inventory.\n\n   For eligible consumers, confirm protection before receiving and claiming work, and serialize protection release with admission. Verify routing that sends new or compatible work to revision 3 and legacy recovery to an explicitly eligible compatible worker. An incompatible redelivery must remain recoverable and unacknowledged. Neither continued general source polling nor blind revision-3 retries satisfies this gate.\n\n4. **Assign every accepted job a finish or resume path.**\n   - **Finish:** retain its revision-2 owner and dependencies, renew ownership and protection, and observe durable checkpoint progress.\n   - **Resume:** first demonstrate recovery of the actual checkpoint class with its required dependencies and available capacity. Retained revision-2 artifacts are a recovery candidate, not proof of a tested recovery path.\n\n   On ownership loss or uncertainty, stop mutations under that ownership. Reconcile checkpoints and final receipts under the unchanged `(tenant_id, job_id)`; a successor needs a newer epoch. Verify stale-owner rejection and conditional release/cleanup so a late old worker cannot disturb its successor. **A checkpoint or handoff never permits acknowledgment: the durable final receipt must exist first.**\n\n5. **Prove a feasible replacement schedule within five slots.** A stopped task may free a slot, allowing replacement without overlap. For a lost old worker, that slot must support compatible recovery; an ordinary revision-3 replacement could consume it without recovering the job. Losing an underlying capacity slot leaves four slots, insufficient for two source plus three target tasks.\n\n   Rehearse placement competition and degraded admission. Stop advancement on capacity loss or placement failure; restore capacity or obtain the contract’s separate capacity decision. Clearing protection on unfinished jobs is not a capacity remedy.\n\n6. **Bound the drain with explicit decision points.** Use **September 30 at 00:00 UTC** as a proposed drain review deadline based on the approximately 12-hour estimate—not as guaranteed completion or a kill timer. Establish a measured progress/stall threshold, renewal margins, and a bounded shutdown/handoff duration before relying on them.\n\n   If unfinished at that review, keep retirement blocked and choose a finite, reviewed extension with renewed safeguards or demonstrated compatible recovery. Earlier lease, protection, progress, or capacity failures override that review deadline. Deferred cleanup’s outer attempt horizon is approximately **October 13 at 11:50 UTC**; it does not guarantee task survival until then.\n\n7. **Separate task retirement from dependency deletion.** Release each task only after admission and pending receives are settled and its work has either completed or moved to a proven, observable compatible continuation with ownership fenced. Track live source tasks until zero.\n\n   Delete legacy dependencies only when no unfinished job, checkpoint, or retry path still requires them. A continuation running elsewhere may still require revision-2 assets. Reassess scaling afterward. Any manual recovery deployment must preserve both legacy continuations and already accepted revision-3 work.\n\nThe operator still needs fresh task/job inventories, lease and protection confirmations, effective admission/scaling controls, and placement evidence. Required rehearsals include protection-renewal failure, receive/drain races, checkpoint recovery, stale owners, completion with lost acknowledgment, repeated retirement, and deadline/capacity loss. Retry limits, stall policies, and termination timings are not supplied and must not be assumed.\n\nThis review used local static inspection, timestamp/capacity calculations, and independent durability and infrastructure reviews. The synthetic smoke test establishes only the recorded new-job test result; no real ECS behavior or recovery rehearsal was demonstrated. All supplied files remain unchanged.",
+        "phase": "final_answer",
+        "memoryCitation": null,
+        "delivery": null,
+        "questions": null
+      }
+    ],
+    "itemsView": "summary",
+    "status": "completed",
+    "error": null,
+    "startedAt": 1790685123,
+    "completedAt": 1790685403,
+    "durationMs": 280063
+  },
+  "failure": null,
+  "global_config_unchanged": true,
+  "global_config_observation": {
+    "before": {
+      "sha256": "1f9847affe5f796120610b0cdafd49cf4affd44a7a947a77a2c6d0f900669923",
+      "modified_at": "2026-09-29T11:16:31.192Z",
+      "observed_at": "2026-09-29T12:32:03.674Z"
+    },
+    "after": {
+      "sha256": "1f9847affe5f796120610b0cdafd49cf4affd44a7a947a77a2c6d0f900669923",
+      "modified_at": "2026-09-29T11:16:31.192Z",
+      "observed_at": "2026-09-29T12:36:43.947Z"
+    },
+    "change_attribution": "not-applicable"
+  },
+  "observed": {
+    "threads": [
+      {
+        "id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "parent_thread_id": null,
+        "agent_role": null,
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:6"
+      },
+      {
+        "id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "parent_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "agent_role": "tal-durability",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:5051"
+      },
+      {
+        "id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "parent_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "agent_role": "tal-infrastructure",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:5053"
+      }
+    ],
+    "named_native_children": [
+      {
+        "id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "parent_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "agent_role": "tal-durability",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:5051"
+      },
+      {
+        "id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "parent_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "agent_role": "tal-infrastructure",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "ultra",
+        "evidence": "events.jsonl:5053"
+      }
+    ],
+    "observed_reads": [
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": ".agents/skills/tal-worker-rollout/SKILL.md",
+        "evidence": "events.jsonl:59",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:69",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": ".tal-skills/workflows/_shared/handoff.md",
+        "evidence": "events.jsonl:73",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:77",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": "contract.md",
+        "evidence": "events.jsonl:83",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:83",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:83",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:125",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+        "evidence": "events.jsonl:127",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "contract.md",
+        "evidence": "events.jsonl:129",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:129",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:129",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:136",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:137",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "path": "contract.md",
+        "evidence": "events.jsonl:138",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+        "evidence": "events.jsonl:212",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:217",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "contract.md",
+        "evidence": "events.jsonl:218",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:219",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/6",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/7",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "path": "contract.md",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/8",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/0",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/1",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "contract.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "proposed-retirement.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/4",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "contract.md",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/5",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "path": "rollout.json",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/6",
+        "basis": "native best-effort read action on completed zero-exit command"
+      }
+    ],
+    "commands": [
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'cat .agents/skills/tal-worker-rollout/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:59"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'contract.md' -g 'proposed-retirement.md' -g 'rollout.json' -g 'WORKFLOW.md' -g 'SKILL.md'\"",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:61"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'cat contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:67"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'for p in /AGENTS.md /private/AGENTS.md /private/tmp/AGENTS.md /private/tmp/tal-extension-native-worker-rollout-20260929-01/AGENTS.md /private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/AGENTS.md; do if [ -f \"$p\" ]; then cat \"$p\"; fi; done'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:68"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:69"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/_shared/handoff.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:73"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:77"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'nl -ba contract.md; nl -ba proposed-retirement.md; nl -ba rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:83"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'shasum -a 256 contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:85"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/graceful-draining/SKILL.md .agents/skills/recovery-validation/SKILL.md contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:99"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/durable-handoff.md .agents/skills/graceful-draining/references/platform-shutdown.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:116"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g 'contract.md' -g 'proposed-retirement.md' -g 'rollout.json'\"",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:119"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'shasum -a 256 contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:120"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:125"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:127"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat contract.md; cat proposed-retirement.md; cat rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:129"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'nl -ba proposed-retirement.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:136"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'nl -ba rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:137"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'nl -ba contract.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:138"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/references/rollout.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:212"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'nl -ba proposed-retirement.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:217"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'nl -ba contract.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:218"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'nl -ba rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:219"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc \"rg --files -g AGENTS.md -g '*.toml' -g '*rollout*' -g 'contract.md' -g 'proposed-retirement.md'\"",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:220"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'shasum -a 256 contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:223"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc \"python3 -B -c 'import json\nfrom datetime import datetime, timedelta\nfrom pathlib import Path\nr=json.loads(Path(\\\"rollout.json\\\").read_text())\ndt=lambda x: datetime.fromisoformat(x.replace(\\\"Z\\\",\\\"+00:00\\\"))\nnow=dt(r[\\\"observed_at\\\"])\nfor t in r[\\\"source_tasks\\\"]:\n    j=t[\\\"job\\\"]; p=t[\\\"last_confirmed_protection\\\"][\\\"protection\\\"]\n    print(t[\\\"task_id\\\"], \\\"lease_remaining_seconds=\\\", int((dt(j[\\\"lease_confirmed_until\\\"])-now).total_seconds()), \\\"protection_remaining_seconds=\\\", int((dt(p[\\\"ExpirationDate\\\"])-now).total_seconds()), \\\"checkpoint_age_seconds=\\\", int((now-dt(j[\\\"checkpoint_at\\\"])).total_seconds()), \\\"estimated_finish=\\\", (now+timedelta(hours=j[\\\"estimated_remaining_hours\\\"])).isoformat())\nprint(\\\"cleanup_attempt_outer_horizon=\\\", (dt(r[\\\"deployment\\\"][\\\"describe_service_deployments\\\"][\\\"completed_at\\\"])+timedelta(weeks=2)).isoformat())\nfor desired in (3,1):\n    print(\\\"desired=\\\", desired, \\\"rolling_upper_bound=\\\", desired*r[\\\"deployment\\\"][\\\"maximumPercentage\\\"]//100, \\\"physical_slots=\\\",r[\\\"capacity_and_scaling\\\"][\\\"task_slots_available_total\\\"])\n'\"",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:254"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "command": "/bin/zsh -lc 'LC_ALL=C shasum -a 256 contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3422"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md .agents/skills/graceful-draining/SKILL.md .agents/skills/recovery-validation/SKILL.md contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/0"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/durable-handoff.md .agents/skills/graceful-draining/references/platform-shutdown.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g 'contract.md' -g 'proposed-retirement.md' -g 'rollout.json'\"",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'shasum -a 256 contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'nl -ba proposed-retirement.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'nl -ba rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "command": "/bin/zsh -lc 'nl -ba contract.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/0"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/SKILL.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat contract.md; cat proposed-retirement.md; cat rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/references/rollout.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'nl -ba proposed-retirement.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'nl -ba contract.md'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/5"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'nl -ba rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc \"rg --files -g AGENTS.md -g '*.toml' -g '*rollout*' -g 'contract.md' -g 'proposed-retirement.md'\"",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "command": "/bin/zsh -lc 'shasum -a 256 contract.md proposed-retirement.md rollout.json'",
+        "cwd": "/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/8"
+      }
+    ],
+    "delegation": [
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-2dce-7843-b860-b1b799fc2933"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "started",
+        "evidence": "events.jsonl:95"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-594c-75b1-8a82-b1b264531120"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "started",
+        "evidence": "events.jsonl:111"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:248"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:357"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-594c-75b1-8a82-b1b264531120"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:2515"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-2dce-7843-b860-b1b799fc2933"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "completed",
+        "evidence": "events.jsonl:2811"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-2dce-7843-b860-b1b799fc2933"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:2980"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-594c-75b1-8a82-b1b264531120"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "completed",
+        "evidence": "events.jsonl:3067"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-594c-75b1-8a82-b1b264531120"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:3154"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-2dce-7843-b860-b1b799fc2933"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:3161"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3170"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-594c-75b1-8a82-b1b264531120"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "completed",
+        "evidence": "events.jsonl:3290"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3293"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "receiver_thread_ids": [
+          "01a0ed27-2dce-7843-b860-b1b799fc2933"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "completed",
+        "evidence": "events.jsonl:3416"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/10"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:5051#/result/thread/turns/1/items/1"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/10"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "receiver_thread_ids": [
+          "01a0ed26-9493-7713-a9f7-7e2393f97d91"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:5053#/result/thread/turns/1/items/1"
+      }
+    ],
+    "messages": [
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "text": "I’m using the `tal-worker-rollout` skill to assess the retirement proposal against the contract and timestamped evidence, then define bounded gates for the remaining work. I’ll keep the supplied files unchanged.",
+        "evidence": "events.jsonl:57"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "text": "The records rule out retirement at 12:02: both old jobs are unfinished, revision 3 cannot resume their checkpoints, and old-a’s renewal returned a throttling error. At the 12:00 observation, old-a has ten minutes of confirmed task protection, while both job leases have only 45 seconds remaining. I’m checking the admission and capacity gates needed to preserve those jobs during the drain.",
+        "evidence": "events.jsonl:240"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "text": "**Outcome: continuation/ownership review completed. Retirement is not supported at 12:00 UTC or at the proposed 12:02 time.** Static inspection only; the supplied candidate hashes match. No files changed and no external checks ran.\n\nPrioritized findings:\n\n1. **Accepted work is unfinished, and revision 3 cannot yet recover it.** [proposed-retirement.md:7](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/proposed-retirement.md:7) conflicts with [contract.md:15](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/contract.md:15). `tenant-blue/export-401` on `old-a` has epoch 17; `tenant-green/export-908` on `old-b` has epoch 6. Both have an 11:55 checkpoint, approximately 12 hours remaining, no final result receipt, and no acknowledgment ([rollout.json:66](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:66), [rollout.json:106](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:106)). Retain the decoder, layout, task definition/image, inputs/configuration, and dependencies needed to renew ownership, persist checkpoints, finalize results, and acknowledge. Revision 3's new-job smoke test does not establish old-checkpoint recovery.\n\n2. **The proposal leaves retirement admission open and has an unsafe receive sequence.** Both revisions still poll; an empty old-cohort poll is a historical observation, not a barrier ([rollout.json:48](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:48)). Stop new work on the retiring deployment generation at the authoritative claim/admission boundary. Settle every in-flight receive, prefetched/reserved job, and claim racing the transition; preserve already accepted jobs in the inventory. Retained owners must remain able to renew existing leases. A local process flag alone cannot establish cohort exclusion. If the queue lacks generation-aware claims, demonstrate that all retiring consumers stopped and all outstanding receives were reconciled before releasing work.\n\n3. **Protection must precede receive, with a confirmed per-task expiration.** The observed sequence receives, claims, starts, then requests protection. For newly eligible consumers, establish valid protection before receiving and claiming. Failed or uncertain acquisition closes new admission. Serialize protection enable/release with admission; after closing intake, settle pending receives before deciding a worker is idle. A delayed release must never clear protection underneath newly accepted work. A racing delivery still requires an explicit recoverable disposition.\n\n4. **ECS protection and application ownership have independent clocks.** Both application leases are confirmed only until 12:00:45, with normal renewal every 15 seconds. Continued successful renewals must be observed; neither success nor expiry at 12:02 can be inferred from a 12:00 snapshot. ECS protection does not extend these leases. `old-a`'s confirmed protection lasts only to 12:10, because its latest body contains `ThrottlingException` and no later confirmation exists ([rollout.json:78](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:78)). An hourly retry misses this boundary. `old-b` has confirmed protection until September 30 at 11:30, but that does not itself establish continued ownership or recoverability.\n\n5. **Queue retry is not a compatible recovery plan.** [proposed-retirement.md:14](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/proposed-retirement.md:14) is unsupported. A v2 checkpoint cannot simply be sent to v3. A compatible recovery worker could use retained revision-2 artifacts, but same-version recovery also needs demonstration and available capacity. Distinguish retiring deployment generation from checkpoint version: an explicitly eligible recovery cohort may need v2 support without reopening general admission to retiring workers.\n\nA bounded finish-or-resume procedure:\n\n- **Immediately at the observation boundary:** hold retirement and dependency deletion; close old-generation admission and repair/prove the protection-before-receive gate for target admission. Reconcile racing receives. Inventory stable job key, owning task, epoch, lease expiry, checkpoint identity/time/version, receipt, acknowledgment, reserved work, and last progress. Verify both ongoing lease renewals. The inventory must expand if a race reveals additional accepted work.\n- **Before `old-a`'s confirmed 12:10 expiry:** attempt protection renewal with bounded backoff and inspect the matching task ARN, enabled flag, and returned expiration. A response alone is insufficient. Define an escalation deadline before expiration that leaves a *measured* persistence/transfer margin; the records contain no duration demonstrating that a particular handoff margin is sufficient. Do not wait for the hourly timer. If renewal cannot be confirmed and safe continuation cannot be established, mark an unresolved at-risk incident, retain the recovery artifacts, stop voluntary retirement, and escalate capacity/retention decisions. Ten minutes cannot accommodate a roughly twelve-hour finish. There is no demonstrated safe forced-termination path in this bundle.\n- **Finish path:** keep compatible old owners running, admission closed, leases renewing, checkpoints progressing, and required protection renewed before expiry. Establish a finite progress/stall deadline and retirement decision deadline; the roughly midnight completion estimate is not a guaranteed deadline. Exceeding the deadline triggers recovery/escalation, not fabricated success or unlimited silent retries.\n- **Resume path:** first demonstrate restore of the actual checkpoint class and its required historical inputs/dependencies on available compatible capacity. Reconcile uncertain effects under the unchanged `(tenant_id, job_id)`. Publish durable resumable state; transfer ownership atomically to a newer epoch; verify checkpoint/finalizer rejection of the prior epoch and epoch-conditional release/cleanup. Keep broker delivery discoverable through transfer. Under this contract, **do not acknowledge merely because a checkpoint or continuation exists**: acknowledgment requires the final durable receipt.\n- **Retire:** each accepted job must have durable completion, or a demonstrated compatible continuation with its new owner and visible progress. Old owners must lose mutation authority through fencing; their late cleanup must not clear successor claims. Clear task protection only after admission and pending receives are settled and no owned/reserved work still depends on that task. Remove legacy artifacts only when no unfinished or recoverable job still requires them.\n\nOperator evidence still needed:\n\n- Real task/job inventory, lease-renewal observations, per-task protection status and expiration, and successful old-generation exclusion including receive races.\n- An isolated compatible-checkpoint recovery rehearsal with verified input/configuration identities and resumed progress; v3 recovery remains explicitly unimplemented.\n- Fault schedules covering renewal failure, kill/loss before the next checkpoint, lease expiry followed by an old owner resuming, delayed protection release racing admission, completion before lost acknowledgment, and uncertain effect reconciliation.\n- Independent broker-delivery, application-failure, stall, and total-job deadline policies. These limits are absent from the bundle; do not invent them or assume planned interruption cannot consume retries.\n- Actual stop-signal/termination timing and the checkpoint/lease/finalizer dependency behavior during drain.\n\nThe synthetic contract establishes the intended epoch fencing and receipt rules. The observations establish two unfinished owners and the stated timestamps. They do not demonstrate runtime recovery, historical-input completeness, termination timing, or the above failure paths.",
+        "evidence": "events.jsonl:2803"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "text": "Completed read-only platform review of synthetic `tenant-export`, revision 2 → 3, at **2026-09-29 12:00 UTC**. File SHA256 digests match the coordinator’s candidate. **The proposed 12:02 retirement must not proceed.**\n\n| Priority / locator | Finding and consequence |\n|---|---|\n| Critical — `proposed-retirement.md:7`, `contract.md:15` | Removing the layout, decoder, image or task definition destroys dependencies needed by active jobs and revision-2 recovery. Both old jobs remain unfinished; revision 3 cannot resume their checkpoints. ECS protection supplies neither dependency retention nor crash recovery. |\n| Critical — `proposed-retirement.md:12`, `rollout.json:78` | Old-a’s renewal returned `ThrottlingException`; transport success is not protection success. Its last confirmed expiration remains **12:10**, only **10 minutes** after observation, or eight minutes after proposed retirement. An hourly retry from 11:59:50 would arrive at 12:59:50, **49m50s after expiration**. The error does not establish that existing protection was revoked. |\n| High — `proposed-retirement.md:3`, `rollout.json:17`, `rollout.json:27` | `SUCCESSFUL` establishes completion under deferred cleanup, not retirement. Deployment counts froze at 11:50, but the **live 12:00 service observation independently confirms two source tasks running**. Continue source tracking through live service/task and application evidence. |\n| High — `proposed-retirement.md:17`, `rollout.json:36`, `contract.md:38` | Desired 1 leaves two currently protected sources above desired, exposing protection updates to `DEPLOYMENT_BLOCKED`; it also reduces the rolling maximum to two. Existing autoscaling minimum 1 and enabled scale-in create exposure, but **no subsequent scale-in decision is observed**. |\n| High — `proposed-retirement.md:18` | Current desired 3 × maximum 200% permits **six** tasks at the rolling ceiling, while the hard capacity budget permits **five**. Two old + three new occupies all five: steady coexistence fits, replacement overlap has no spare slot. |\n| High — `proposed-retirement.md:19`, `contract.md:30` | Deployment circuit-breaker/alarm rollback ended at **11:50**. Later failures require an explicitly operated, compatible recovery or new deployment; automatic rollback is unavailable. |\n\n**Protection and cleanup bounds**\n\n- Old-b’s confirmed protection expires **2026-09-30 11:30**, giving **23h30m** from observation. That exceeds its approximate 12-hour work estimate but is neither indefinite nor completion evidence.\n- A request for 1,440 minutes is within the supplied 1–2,880-minute bounds. Credit only a returned/status protection record matching the task ARN, enabled state and sufficiently future expiration; inspect failures/errors explicitly.\n- Deferred source cleanup has a two-week horizon from completion: approximately **2026-10-13 11:50 UTC**, with **13d23h50m** remaining at observation. This is a cleanup-attempt boundary, **not a guarantee that source processes or jobs survive until then**.\n\n**Bounded operator gates**\n\n1. **Immediately hold destructive retirement, desired-count reduction and protection clearing.** Preserve revision-2 artifacts and dependencies. Establish effective scale-in controls and maintain the current desired floor while validating capacity; do not merely change a documented intention.\n2. **Address old-a before 12:10.** Retry with bounded backoff and task-specific confirmation. Budget retries so renewal verification—or checkpointing and compatible recovery arrangements—finishes before expiration with measured clock, API and handoff margin. Those durations are absent here, so the records cannot prove the remaining ten minutes suffice. If confirmation cannot be obtained in the reserved margin, stop rollout advancement/admission as needed, retain dependencies and escalate the recovery condition; do not deliberately clear protection. Expiration creates scale-in exposure, not proof of immediate termination.\n3. **Close admission and ownership races before declaring either cohort safe.** Stop source polling and reconcile deliveries already in flight; require verified protection before starting new long-running work. Protection must remain separate from the 15-second application lease-renewal loop. The existing lease confirmations last only until **12:00:45**.\n4. **Prove a five-slot recovery schedule.** A failed process that releases a slot can potentially be replaced within five, subject to actual scheduler behavior. Losing one underlying capacity slot leaves only four, insufficient for two old plus three target tasks. Recovering an old job also needs an eligible revision-2 worker or demonstrated compatible continuation; an ordinary revision-3 replacement does not satisfy that need. Rehearse both loss cases, competing replacement placement and degraded admission. Additional capacity requires the contract’s separate capacity decision.\n5. **Observe through completion using live counts and business evidence.** Track protection expiration/renewal failures, lease epochs, checkpoint progress, result receipts, acknowledgment, source count, placement failures, queue age and useful target throughput. Have an explicit checkpoint/recovery escalation deadline before the cleanup horizon; the approximate finish near **September 30 00:00** is an estimate, not a retirement timer.\n6. **Retire only after every dependent job is completed or safely transferred**, no source admission/in-flight acquisition remains, live source tasks reach zero, and retained/retry/checkpoint consumers no longer need revision-2 dependencies. Then reassess capacity and scaling against observed demand. Post-completion recovery must retain usable artifacts, reconcile current job ownership/receipts, and perform a deliberate compatible recovery/new deployment.\n\nEvidence executed: local file inspection, numbered locators and SHA256 verification only. Synthetic healthy counts and a synthetic new-job smoke test do not establish renewal behavior, scheduler response, checkpoint continuation or failure recovery on ECS. Those remain operator observations and rehearsals; no infrastructure action or file modification occurred.",
+        "evidence": "events.jsonl:3061"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "text": "The five-slot budget fits the current two old and three new tasks, but leaves no spare slot for replacement overlap. Reducing desired count to one would also leave two protected source tasks above the desired count, risking blocked protection updates. The remaining procedure needs separate gates for finishing or recovering jobs, retiring source tasks, and deleting legacy dependencies; automatic deployment rollback ended at 11:50.",
+        "evidence": "events.jsonl:3152"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "text": "No blocking flaw. Add two qualifications:\n\n- A freed slot must support an eligible revision-2 recovery worker; an automatic revision-3 replacement could consume capacity without recovering the old job.\n- Desired 3 is a holding configuration, not proof that future protection updates succeed. Target protection states are unknown; additional protected workers could exceed desired count. Monitor `DEPLOYMENT_BLOCKED` and validate the combined admission, protection and capacity policy.\n\nThe 12:05 checkpoint is acceptable as a planning cutoff only; unknown recovery margins require immediate escalation.",
+        "evidence": "events.jsonl:3284"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "text": "No material correction. Two clarifications:\n\n- September 30 at 00:00 is a proposed drain review deadline based on the estimate, not guaranteed completion. Extensions must respect confirmed protection expirations and a defined progress/stall policy.\n- Require epoch-conditional release and cleanup during handoff, alongside checkpoint/finalizer fencing. The contract establishes checkpoint/finalizer fencing; safe late cleanup and durable discovery of unacknowledged continuations still require demonstration.\n\nThe candidate correctly separates task retirement, dependency retirement, and receipt-gated acknowledgment.",
+        "evidence": "events.jsonl:3410"
+      },
+      {
+        "thread_id": "01a0ed26-9493-7713-a9f7-7e2393f97d91",
+        "text": "**Do not proceed with the proposed 12:02 retirement.** At the supplied observation time—**2026-09-29 12:00 UTC**—the deployment has completed, but accepted work still depends on revision 2. The proposal’s dependency deletion, protection handling, continued source admission, scale-down, and rollback assumptions conflict with the [contract](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/contract.md).\n\nThe [observations](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json) establish:\n\n| Source task / job | Ownership epoch | Confirmed ECS protection expires | Work remaining |\n|---|---:|---|---|\n| old-a / tenant-blue, export-401 | 17 | September 29, 12:10 — **10 minutes away** | Approximately 12 hours |\n| old-b / tenant-green, export-908 | 6 | September 30, 11:30 — **23½ hours away** | Approximately 12 hours |\n\nBoth jobs have checkpoints from 11:55, no final result receipt, and no queue acknowledgment. Their application leases are confirmed only through **12:00:45**, independently of ECS protection. Subsequent renewals cannot be inferred from this snapshot.\n\nThe material findings in the [proposal](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/proposed-retirement.md) are:\n\n- **Deployment success does not establish retirement readiness.** Deployment counts froze at completion, 11:50, but the live 12:00 service observation independently confirms two source tasks and three healthy target tasks. Deferred cleanup requires continued source tracking.\n- **The legacy dependencies remain necessary.** Revision 3 cannot resume revision-2 checkpoints. Retain `export-layout-v2`, the decoder, task definition, image, and required durable state. Protection neither preserves dependencies nor supplies crash recovery.\n- **Old-a’s renewal failed.** The response contains `ThrottlingException`, not a protection confirmation. Its previous protection remains confirmed until 12:10; it has not been extended to 24 hours. An hourly retry would miss that boundary.\n- **Admission remains open and has a protection gap.** Both revisions poll, and workers start jobs before requesting protection. An empty source poll proves neither permanent exclusion nor the absence of receives already in flight.\n- **Capacity supports current coexistence only.** Desired 3 × maximum 200% permits six tasks under the rolling limit, but only five physical slots exist and all are occupied. Desired 1 would reduce that rolling ceiling to two and put two protected sources above desired count, risking `DEPLOYMENT_BLOCKED`. Enabled scale-in and minimum 1 create exposure; no future scaling decision is established.\n- **Automatic deployment rollback is unavailable after completion.** Circuit-breaker and alarm rollback ended at 11:50. Later failures require an explicit recovery operation or another compatible deployment.\n\nFor a later authorized rollout, use this bounded procedure:\n\n1. **Hold retirement and stabilize the current deployment.** Retain legacy assets, keep desired count at three initially, and establish effective controls against downward scaling during the drain. Verify these controls through fresh service/task observations. Target task protection states are unknown: protecting additional target workers could also exceed desired count. Validate admission concurrency, protection responses, and capacity together.\n\n2. **Reconcile ownership and protection immediately.** Observe successful application lease renewals on the normal 15-second cadence; neither job has confirmed ownership beyond 12:00:45 without another renewal. Retry old-a’s protection request with bounded backoff. Accept only a matching task ARN, enabled protection, and a confirmed expiration that provides sufficient margin; inspect errors and failures explicitly.\n\n   The protection cutoff is **12:10 minus measured API, clock, checkpoint, and recovery margins**. Those measurements are absent, so escalate the uncertainty immediately rather than assume ten minutes suffices. If renewal remains unconfirmed, stop rollout advancement and preserve recovery assets. Expiration creates scale-in exposure; it does not prove immediate termination. There is no demonstrated safe forced-termination path in this bundle.\n\n3. **Close source admission and reconcile races.** Establish an authoritative barrier against new claims by the retiring generation while allowing existing owners to renew their leases. Settle outstanding receives, reservations, and claims racing that barrier; add any already accepted work to the drain inventory.\n\n   For eligible consumers, confirm protection before receiving and claiming work, and serialize protection release with admission. Verify routing that sends new or compatible work to revision 3 and legacy recovery to an explicitly eligible compatible worker. An incompatible redelivery must remain recoverable and unacknowledged. Neither continued general source polling nor blind revision-3 retries satisfies this gate.\n\n4. **Assign every accepted job a finish or resume path.**\n   - **Finish:** retain its revision-2 owner and dependencies, renew ownership and protection, and observe durable checkpoint progress.\n   - **Resume:** first demonstrate recovery of the actual checkpoint class with its required dependencies and available capacity. Retained revision-2 artifacts are a recovery candidate, not proof of a tested recovery path.\n\n   On ownership loss or uncertainty, stop mutations under that ownership. Reconcile checkpoints and final receipts under the unchanged `(tenant_id, job_id)`; a successor needs a newer epoch. Verify stale-owner rejection and conditional release/cleanup so a late old worker cannot disturb its successor. **A checkpoint or handoff never permits acknowledgment: the durable final receipt must exist first.**\n\n5. **Prove a feasible replacement schedule within five slots.** A stopped task may free a slot, allowing replacement without overlap. For a lost old worker, that slot must support compatible recovery; an ordinary revision-3 replacement could consume it without recovering the job. Losing an underlying capacity slot leaves four slots, insufficient for two source plus three target tasks.\n\n   Rehearse placement competition and degraded admission. Stop advancement on capacity loss or placement failure; restore capacity or obtain the contract’s separate capacity decision. Clearing protection on unfinished jobs is not a capacity remedy.\n\n6. **Bound the drain with explicit decision points.** Use **September 30 at 00:00 UTC** as a proposed drain review deadline based on the approximately 12-hour estimate—not as guaranteed completion or a kill timer. Establish a measured progress/stall threshold, renewal margins, and a bounded shutdown/handoff duration before relying on them.\n\n   If unfinished at that review, keep retirement blocked and choose a finite, reviewed extension with renewed safeguards or demonstrated compatible recovery. Earlier lease, protection, progress, or capacity failures override that review deadline. Deferred cleanup’s outer attempt horizon is approximately **October 13 at 11:50 UTC**; it does not guarantee task survival until then.\n\n7. **Separate task retirement from dependency deletion.** Release each task only after admission and pending receives are settled and its work has either completed or moved to a proven, observable compatible continuation with ownership fenced. Track live source tasks until zero.\n\n   Delete legacy dependencies only when no unfinished job, checkpoint, or retry path still requires them. A continuation running elsewhere may still require revision-2 assets. Reassess scaling afterward. Any manual recovery deployment must preserve both legacy continuations and already accepted revision-3 work.\n\nThe operator still needs fresh task/job inventories, lease and protection confirmations, effective admission/scaling controls, and placement evidence. Required rehearsals include protection-renewal failure, receive/drain races, checkpoint recovery, stale owners, completion with lost acknowledgment, repeated retirement, and deadline/capacity loss. Retry limits, stall policies, and termination timings are not supplied and must not be assumed.\n\nThis review used local static inspection, timestamp/capacity calculations, and independent durability and infrastructure reviews. The synthetic smoke test establishes only the recorded new-job test result; no real ECS behavior or recovery rehearsal was demonstrated. All supplied files remain unchanged.",
+        "evidence": "events.jsonl:5045"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "text": "**Outcome: continuation/ownership review completed. Retirement is not supported at 12:00 UTC or at the proposed 12:02 time.** Static inspection only; the supplied candidate hashes match. No files changed and no external checks ran.\n\nPrioritized findings:\n\n1. **Accepted work is unfinished, and revision 3 cannot yet recover it.** [proposed-retirement.md:7](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/proposed-retirement.md:7) conflicts with [contract.md:15](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/contract.md:15). `tenant-blue/export-401` on `old-a` has epoch 17; `tenant-green/export-908` on `old-b` has epoch 6. Both have an 11:55 checkpoint, approximately 12 hours remaining, no final result receipt, and no acknowledgment ([rollout.json:66](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:66), [rollout.json:106](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:106)). Retain the decoder, layout, task definition/image, inputs/configuration, and dependencies needed to renew ownership, persist checkpoints, finalize results, and acknowledge. Revision 3's new-job smoke test does not establish old-checkpoint recovery.\n\n2. **The proposal leaves retirement admission open and has an unsafe receive sequence.** Both revisions still poll; an empty old-cohort poll is a historical observation, not a barrier ([rollout.json:48](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:48)). Stop new work on the retiring deployment generation at the authoritative claim/admission boundary. Settle every in-flight receive, prefetched/reserved job, and claim racing the transition; preserve already accepted jobs in the inventory. Retained owners must remain able to renew existing leases. A local process flag alone cannot establish cohort exclusion. If the queue lacks generation-aware claims, demonstrate that all retiring consumers stopped and all outstanding receives were reconciled before releasing work.\n\n3. **Protection must precede receive, with a confirmed per-task expiration.** The observed sequence receives, claims, starts, then requests protection. For newly eligible consumers, establish valid protection before receiving and claiming. Failed or uncertain acquisition closes new admission. Serialize protection enable/release with admission; after closing intake, settle pending receives before deciding a worker is idle. A delayed release must never clear protection underneath newly accepted work. A racing delivery still requires an explicit recoverable disposition.\n\n4. **ECS protection and application ownership have independent clocks.** Both application leases are confirmed only until 12:00:45, with normal renewal every 15 seconds. Continued successful renewals must be observed; neither success nor expiry at 12:02 can be inferred from a 12:00 snapshot. ECS protection does not extend these leases. `old-a`'s confirmed protection lasts only to 12:10, because its latest body contains `ThrottlingException` and no later confirmation exists ([rollout.json:78](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/rollout.json:78)). An hourly retry misses this boundary. `old-b` has confirmed protection until September 30 at 11:30, but that does not itself establish continued ownership or recoverability.\n\n5. **Queue retry is not a compatible recovery plan.** [proposed-retirement.md:14](/private/tmp/tal-extension-native-worker-rollout-20260929-01/trial/proposed-retirement.md:14) is unsupported. A v2 checkpoint cannot simply be sent to v3. A compatible recovery worker could use retained revision-2 artifacts, but same-version recovery also needs demonstration and available capacity. Distinguish retiring deployment generation from checkpoint version: an explicitly eligible recovery cohort may need v2 support without reopening general admission to retiring workers.\n\nA bounded finish-or-resume procedure:\n\n- **Immediately at the observation boundary:** hold retirement and dependency deletion; close old-generation admission and repair/prove the protection-before-receive gate for target admission. Reconcile racing receives. Inventory stable job key, owning task, epoch, lease expiry, checkpoint identity/time/version, receipt, acknowledgment, reserved work, and last progress. Verify both ongoing lease renewals. The inventory must expand if a race reveals additional accepted work.\n- **Before `old-a`'s confirmed 12:10 expiry:** attempt protection renewal with bounded backoff and inspect the matching task ARN, enabled flag, and returned expiration. A response alone is insufficient. Define an escalation deadline before expiration that leaves a *measured* persistence/transfer margin; the records contain no duration demonstrating that a particular handoff margin is sufficient. Do not wait for the hourly timer. If renewal cannot be confirmed and safe continuation cannot be established, mark an unresolved at-risk incident, retain the recovery artifacts, stop voluntary retirement, and escalate capacity/retention decisions. Ten minutes cannot accommodate a roughly twelve-hour finish. There is no demonstrated safe forced-termination path in this bundle.\n- **Finish path:** keep compatible old owners running, admission closed, leases renewing, checkpoints progressing, and required protection renewed before expiry. Establish a finite progress/stall deadline and retirement decision deadline; the roughly midnight completion estimate is not a guaranteed deadline. Exceeding the deadline triggers recovery/escalation, not fabricated success or unlimited silent retries.\n- **Resume path:** first demonstrate restore of the actual checkpoint class and its required historical inputs/dependencies on available compatible capacity. Reconcile uncertain effects under the unchanged `(tenant_id, job_id)`. Publish durable resumable state; transfer ownership atomically to a newer epoch; verify checkpoint/finalizer rejection of the prior epoch and epoch-conditional release/cleanup. Keep broker delivery discoverable through transfer. Under this contract, **do not acknowledge merely because a checkpoint or continuation exists**: acknowledgment requires the final durable receipt.\n- **Retire:** each accepted job must have durable completion, or a demonstrated compatible continuation with its new owner and visible progress. Old owners must lose mutation authority through fencing; their late cleanup must not clear successor claims. Clear task protection only after admission and pending receives are settled and no owned/reserved work still depends on that task. Remove legacy artifacts only when no unfinished or recoverable job still requires them.\n\nOperator evidence still needed:\n\n- Real task/job inventory, lease-renewal observations, per-task protection status and expiration, and successful old-generation exclusion including receive races.\n- An isolated compatible-checkpoint recovery rehearsal with verified input/configuration identities and resumed progress; v3 recovery remains explicitly unimplemented.\n- Fault schedules covering renewal failure, kill/loss before the next checkpoint, lease expiry followed by an old owner resuming, delayed protection release racing admission, completion before lost acknowledgment, and uncertain effect reconciliation.\n- Independent broker-delivery, application-failure, stall, and total-job deadline policies. These limits are absent from the bundle; do not invent them or assume planned interruption cannot consume retries.\n- Actual stop-signal/termination timing and the checkpoint/lease/finalizer dependency behavior during drain.\n\nThe synthetic contract establishes the intended epoch fencing and receipt rules. The observations establish two unfinished owners and the stated timestamps. They do not demonstrate runtime recovery, historical-input completeness, termination timing, or the above failure paths.",
+        "evidence": "events.jsonl:5051#/result/thread/turns/0/items/12"
+      },
+      {
+        "thread_id": "01a0ed27-2dce-7843-b860-b1b799fc2933",
+        "text": "No material correction. Two clarifications:\n\n- September 30 at 00:00 is a proposed drain review deadline based on the estimate, not guaranteed completion. Extensions must respect confirmed protection expirations and a defined progress/stall policy.\n- Require epoch-conditional release and cleanup during handoff, alongside checkpoint/finalizer fencing. The contract establishes checkpoint/finalizer fencing; safe late cleanup and durable discovery of unacknowledged continuations still require demonstration.\n\nThe candidate correctly separates task retirement, dependency retirement, and receipt-gated acknowledgment.",
+        "evidence": "events.jsonl:5051#/result/thread/turns/1/items/3"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "text": "Completed read-only platform review of synthetic `tenant-export`, revision 2 → 3, at **2026-09-29 12:00 UTC**. File SHA256 digests match the coordinator’s candidate. **The proposed 12:02 retirement must not proceed.**\n\n| Priority / locator | Finding and consequence |\n|---|---|\n| Critical — `proposed-retirement.md:7`, `contract.md:15` | Removing the layout, decoder, image or task definition destroys dependencies needed by active jobs and revision-2 recovery. Both old jobs remain unfinished; revision 3 cannot resume their checkpoints. ECS protection supplies neither dependency retention nor crash recovery. |\n| Critical — `proposed-retirement.md:12`, `rollout.json:78` | Old-a’s renewal returned `ThrottlingException`; transport success is not protection success. Its last confirmed expiration remains **12:10**, only **10 minutes** after observation, or eight minutes after proposed retirement. An hourly retry from 11:59:50 would arrive at 12:59:50, **49m50s after expiration**. The error does not establish that existing protection was revoked. |\n| High — `proposed-retirement.md:3`, `rollout.json:17`, `rollout.json:27` | `SUCCESSFUL` establishes completion under deferred cleanup, not retirement. Deployment counts froze at 11:50, but the **live 12:00 service observation independently confirms two source tasks running**. Continue source tracking through live service/task and application evidence. |\n| High — `proposed-retirement.md:17`, `rollout.json:36`, `contract.md:38` | Desired 1 leaves two currently protected sources above desired, exposing protection updates to `DEPLOYMENT_BLOCKED`; it also reduces the rolling maximum to two. Existing autoscaling minimum 1 and enabled scale-in create exposure, but **no subsequent scale-in decision is observed**. |\n| High — `proposed-retirement.md:18` | Current desired 3 × maximum 200% permits **six** tasks at the rolling ceiling, while the hard capacity budget permits **five**. Two old + three new occupies all five: steady coexistence fits, replacement overlap has no spare slot. |\n| High — `proposed-retirement.md:19`, `contract.md:30` | Deployment circuit-breaker/alarm rollback ended at **11:50**. Later failures require an explicitly operated, compatible recovery or new deployment; automatic rollback is unavailable. |\n\n**Protection and cleanup bounds**\n\n- Old-b’s confirmed protection expires **2026-09-30 11:30**, giving **23h30m** from observation. That exceeds its approximate 12-hour work estimate but is neither indefinite nor completion evidence.\n- A request for 1,440 minutes is within the supplied 1–2,880-minute bounds. Credit only a returned/status protection record matching the task ARN, enabled state and sufficiently future expiration; inspect failures/errors explicitly.\n- Deferred source cleanup has a two-week horizon from completion: approximately **2026-10-13 11:50 UTC**, with **13d23h50m** remaining at observation. This is a cleanup-attempt boundary, **not a guarantee that source processes or jobs survive until then**.\n\n**Bounded operator gates**\n\n1. **Immediately hold destructive retirement, desired-count reduction and protection clearing.** Preserve revision-2 artifacts and dependencies. Establish effective scale-in controls and maintain the current desired floor while validating capacity; do not merely change a documented intention.\n2. **Address old-a before 12:10.** Retry with bounded backoff and task-specific confirmation. Budget retries so renewal verification—or checkpointing and compatible recovery arrangements—finishes before expiration with measured clock, API and handoff margin. Those durations are absent here, so the records cannot prove the remaining ten minutes suffice. If confirmation cannot be obtained in the reserved margin, stop rollout advancement/admission as needed, retain dependencies and escalate the recovery condition; do not deliberately clear protection. Expiration creates scale-in exposure, not proof of immediate termination.\n3. **Close admission and ownership races before declaring either cohort safe.** Stop source polling and reconcile deliveries already in flight; require verified protection before starting new long-running work. Protection must remain separate from the 15-second application lease-renewal loop. The existing lease confirmations last only until **12:00:45**.\n4. **Prove a five-slot recovery schedule.** A failed process that releases a slot can potentially be replaced within five, subject to actual scheduler behavior. Losing one underlying capacity slot leaves only four, insufficient for two old plus three target tasks. Recovering an old job also needs an eligible revision-2 worker or demonstrated compatible continuation; an ordinary revision-3 replacement does not satisfy that need. Rehearse both loss cases, competing replacement placement and degraded admission. Additional capacity requires the contract’s separate capacity decision.\n5. **Observe through completion using live counts and business evidence.** Track protection expiration/renewal failures, lease epochs, checkpoint progress, result receipts, acknowledgment, source count, placement failures, queue age and useful target throughput. Have an explicit checkpoint/recovery escalation deadline before the cleanup horizon; the approximate finish near **September 30 00:00** is an estimate, not a retirement timer.\n6. **Retire only after every dependent job is completed or safely transferred**, no source admission/in-flight acquisition remains, live source tasks reach zero, and retained/retry/checkpoint consumers no longer need revision-2 dependencies. Then reassess capacity and scaling against observed demand. Post-completion recovery must retain usable artifacts, reconcile current job ownership/receipts, and perform a deliberate compatible recovery/new deployment.\n\nEvidence executed: local file inspection, numbered locators and SHA256 verification only. Synthetic healthy counts and a synthetic new-job smoke test do not establish renewal behavior, scheduler response, checkpoint continuation or failure recovery on ECS. Those remain operator observations and rehearsals; no infrastructure action or file modification occurred.",
+        "evidence": "events.jsonl:5053#/result/thread/turns/0/items/12"
+      },
+      {
+        "thread_id": "01a0ed27-594c-75b1-8a82-b1b264531120",
+        "text": "No blocking flaw. Add two qualifications:\n\n- A freed slot must support an eligible revision-2 recovery worker; an automatic revision-3 replacement could consume capacity without recovering the old job.\n- Desired 3 is a holding configuration, not proof that future protection updates succeed. Target protection states are unknown; additional protected workers could exceed desired count. Monitor `DEPLOYMENT_BLOCKED` and validate the combined admission, protection and capacity policy.\n\nThe 12:05 checkpoint is acceptable as a planning cutoff only; unknown recovery margins require immediate escalation.",
+        "evidence": "events.jsonl:5053#/result/thread/turns/1/items/3"
+      }
+    ],
+    "limits": [
+      "Command read actions are the host parser's best-effort classification; retain raw output for review.",
+      "Missing role metadata or read events are inconclusive, not evidence inferred from assistant claims.",
+      "A matching role and a successful process do not independently establish task correctness."
+    ]
+  },
+  "cleanup": {
+    "owned_process_group": 10685,
+    "remaining_live_processes": [],
+    "terminated": true
+  },
+  "capability_deviations": [
+    "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+    "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector."
+  ],
+  "case_compliant": false,
+  "status": "completed-unscored",
+  "independent_acceptance": "pending",
+  "host_version": "codex-cli 0.153.4",
+  "changed_files": [],
+  "final_files": [
+    {
+      "path": ".agents/skills/concurrency-correctness/agents/openai.yaml",
+      "sha256": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/cache-coherence.md",
+      "sha256": "d35560bc9e1e478f7d162b91effa1f33eda4fdb04efacc8bb6b743a855bc2ae7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/projection-rebuild.md",
+      "sha256": "9635ce4dc2682bd07922b271f62484052a7086b0cbf0af2f6cdd1a799fc0f998",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/replica-reads.md",
+      "sha256": "26d4eaa7c36cfaeb96fb6e6e07b341901ddcd4589b822eb82159e5d755a6f593",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/sources.md",
+      "sha256": "59036630faa36d57a375bb7c363e1037f233f23e8cef73a8be59f8957e8e0a01",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/transactions.md",
+      "sha256": "f1beaf7f384db82053de269ccb3167d9c31e21d01e6f906c17b29fa715339e55",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/SKILL.md",
+      "sha256": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/agents/openai.yaml",
+      "sha256": "dde157b38977a8c3cdc51ad4276f308a04a79bad0a4d52338bf43f00d509a58d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "2acd49e69bca0dc3426ad805794d2cdf0c5770bdc1e974e444f0b2475bce0a4c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/sources.md",
+      "sha256": "b8b6fc6c58cb6d48038ce9f325fd86e54b86ce60a708f3cf7b380ab2b70d0bcd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+      "sha256": "f7ceac4a622c3136a9279433347e2cd3efe3ebda4d2db0ddf8fa57a977c78498",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/agents/openai.yaml",
+      "sha256": "a8eb43c8b694ea53c4ed539c01a7a146b0d4c7160e4e364293d1c30920edbabd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/ownership.md",
+      "sha256": "3437a7091e90d3eb47c4a2dff054357eed3879a8da5571ab0598033dc4d3e0c1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/runtime-validation.md",
+      "sha256": "51b4eaa629b9bdd21257d6013b99322c76c27ac4a6ef6daf97854cf30b6f33c9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/sources.md",
+      "sha256": "51f7fa10e87ba8c55ecaf1d0de6b502b4e352a3d65a1d8c76e9da532246c2eed",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/transaction-outcomes.md",
+      "sha256": "53226b6126f55c42e5b284e3c51f9d47414e80da397d2ea4f22b32b4af68af9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/SKILL.md",
+      "sha256": "c51a9d8f9d388cd2b73e5a9416da43c39c75ca3a32d954151d728b76fa9e50f9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/agents/openai.yaml",
+      "sha256": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/durable-handoff.md",
+      "sha256": "6551852265b5f7445b76ff64b61366294f32062059e09c8d18a42ece8f0841bc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/platform-shutdown.md",
+      "sha256": "1455fa5df92c9636bbacfe7032b93dda4d1fe22dfcb31499d7f49781605e341d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/sources.md",
+      "sha256": "d88caf22fbe5695a8c70a38c45c26ca70daa37b5d348c57d700769beedabce6f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/SKILL.md",
+      "sha256": "1f09634d3aeaf6ae78c86969193a9ac963dbf5bbb7aff40ebd2cb39c0fe33426",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/agents/openai.yaml",
+      "sha256": "6069e983fa2b0411e97bade8b37ed93628649eb93f0b31041ca37fcaf8e986a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/recovery.md",
+      "sha256": "7d137c2d86f71d4fa47ff564833d52ee27ce2061f373bf6c64e30768ead245b1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/sources.md",
+      "sha256": "727c4ccc2c7c2371fe86504fbad2ecf7ca6aeeb7a7c3ab1b53ccc6ed27be7573",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/verification.md",
+      "sha256": "93d3657ec00c7197b2ac0c258783b108a7bff6348f28eef029588e7085670fea",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/SKILL.md",
+      "sha256": "6fb0c4f5bea67f0c31757fb81d207507baabcc0b3f0fca24b3142da37cf1647f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/agents/openai.yaml",
+      "sha256": "a981cadc6516e71a91a0a53dbe19e8a6265c6c55b51c10c909e724a69f3d7812",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+      "sha256": "80014924b70820826a5ae0c03c88c5d49de2a05b216343e43734a1e6b4a2903e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/sources.md",
+      "sha256": "65b45e7a9df5681c3dd16b1bb074a4dc641545be2d4c5848637faa54cfef9462",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/terraform-state.md",
+      "sha256": "9736c10f6162ca50d6ff5a14123f613d3f1c0cac0fa5b033f4acb3ea328ca78c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+      "sha256": "c26e318aad4586294bc96a1ea57b8a6c0a665e47beb4af9786b63996c638c71f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/agents/openai.yaml",
+      "sha256": "c4de1b9ea737681a117f65a47b5c1c3378d1fd4b9100a770dd2905c631d9c21b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/capacity.md",
+      "sha256": "8d04f79429d68f45c092b92871f7e902b5d67077a9fe93d84a821a24874fa7b4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/failure-handling.md",
+      "sha256": "74293346b0b0cb8fcde54c63e40e3254ffdc5eeb7b6ef93b0aba9ea747560008",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/security.md",
+      "sha256": "a4b7e57301395720210d199e76839e4f0c60dfdeacb4a5906140508fcbc36b00",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/sources.md",
+      "sha256": "65423aa16fa8efb480de34032f16027393bd28971750df83c327aef26f5437fc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/SKILL.md",
+      "sha256": "a8f2988fa64b4d5c39ddec1d4197edd6b40466be289eff2fa4ef6d650d39d144",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/agents/openai.yaml",
+      "sha256": "f9b5fd5e4158f0424a06c0e4943b41d2deeed9b1cc9b2b8fc9ba7ebdfa991429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/async-ownership.md",
+      "sha256": "53faf3b084b93bebe73c3b33d06b346c594319fd056b9e84009930f8b74a083d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sources.md",
+      "sha256": "8e251bf259e6c5744aab9174dcfd98a20871d6880563ca9a225eb79531202bd3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/transaction-outcomes.md",
+      "sha256": "9b84d90852fa28198672befde8577bc54aa59f484ba117dbeb149f84e6b61403",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/SKILL.md",
+      "sha256": "c35f4b91b96b14e4401cc81de81d78ebe4027e1b8cd92daff94d16c6cbb538e1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/agents/openai.yaml",
+      "sha256": "d72684099483f29ba2d606ba3f5be81ce2dc8932e4eaa92d966039b35c25e693",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/postgresql.md",
+      "sha256": "456e21d37330ec26f3fbe2fabe206fa2bc3730ed10ec3eb32df0772505d5806d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovered-history.md",
+      "sha256": "06df9b8716e8dfeb19d17f140f9a1aab9fb9e2d6e3767446ab6db3f92a4779dc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovery-inputs.md",
+      "sha256": "fa02610ee95edcfc4f93cbb59fc6224dea93d2b2a37ead134a4e2d0d485f8496",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/sources.md",
+      "sha256": "b74b33426eccc3072f1818462278b598c066d1e8f38671831b8bc14a4b1d3f1c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/SKILL.md",
+      "sha256": "9240367c490ab5e34080a1016de8b92ff5b750c4776ce0675ee35d34d45100a7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/tal-worker-rollout/SKILL.md",
+      "sha256": "3b243a18203dd8b1348800f93bf0b3c5927d4f61eb624d13994fc271129ac67e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/agents/openai.yaml",
+      "sha256": "45898857de814d7c88fc55116020f6a63d7fc2fcc699b2320a8a0f9bcc6973d1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/effect-contracts.md",
+      "sha256": "c56d1172cbbd0a6772e9b3a627495a7a3f19f7b44589fa86a796ca12ca11ebfd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/recovery-and-waits.md",
+      "sha256": "1e4da2d46c4584ab89acc3a99140f83b28d4665b7304cd6c439283f99de1c6ff",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/sources.md",
+      "sha256": "5d181e73f922c4f37e192d92286dfc40af4fda585ccee9c3bf112adafc7940e2",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/SKILL.md",
+      "sha256": "b9790cb9ec37a20143820457c1ca16f8ba7c20df5ad80fe4f2fee9c44143f413",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/agents/openai.yaml",
+      "sha256": "3fea3f405af4664e1d47d4ef49ff464e8ad5dc02c3da5d01bba5d781352de3ca",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/deployment-and-cutover.md",
+      "sha256": "37381b18bfee24a44cdc37f255115c1fd0ccd7fe5c9c11c2824a75eba42ad115",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/sources.md",
+      "sha256": "aac06c62e09a75f8719ce8f5276dfe61774ae841e4428b6251ceb4014d15a782",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/state-continuity.md",
+      "sha256": "2799c50ab14d8de6c129516cb3b5a7fb9293739fe4d4a8f0509c31572e86dfdb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/SKILL.md",
+      "sha256": "26859fbf2c80d38a77c636a209b647f026ccba77dc53a51ebb9ed094c4f0cd2d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/agents/openai.yaml",
+      "sha256": "2cf07254ce674023c0370bdd28daf327b907f5ef51b1caa67ab54be8d0fc5229",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+      "sha256": "00df3d1d751164cf5b9c116589fb743a2895f0aaf47aad24a57aa76fb66a386e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/node-streams.md",
+      "sha256": "8fa91e3f5c79a98a1c09d6466707506b4cfb289ed466b684b6754f5a949b1283",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/runtime-boundaries.md",
+      "sha256": "d4810aa6488e4c362c9e3e8480838588763c39d69d4d24615737465592469cbb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/sources.md",
+      "sha256": "802061e75cebb73c84c4b31300ec9faa644c77a91d2354b276b1b06cf75358ef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/SKILL.md",
+      "sha256": "760f384a733d487e4df00a563a0ca8cc1ffa51f196b0b821a3561c23fedf7cc7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-consistency.toml",
+      "sha256": "3b1382a752e2d87c01ee7ee651e62a4e5c0930ac1b27468d8f0110bcedfcf91a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-durability.toml",
+      "sha256": "fcb6a5dcb32e4c2693c00e4e8c6e74a43535800f73597bfe51e901610a3410a7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-failure-testing.toml",
+      "sha256": "b12ed74187facb593fcc9e04a34a4072d418af1ab6f5b30755b0075f8e7b08db",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-go.toml",
+      "sha256": "97b4bf2a2f84362ae70c810e1ba5a68985cce8ee99e33d8609702bbf23c6d716",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-idempotency.toml",
+      "sha256": "f44795bd85342ac2309ed7fff1336422a86cfd2e3fce400d1071fe0692557300",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-infrastructure.toml",
+      "sha256": "19959e183e3d71c684e6ffa89c52bd58d874d6822647f78f8068bd9b95e1dc33",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-python.toml",
+      "sha256": "4feed93f86e5745a9e2e00a57b953a107c18a135b443fcbd497e8e8ec6501b5e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-reliability.toml",
+      "sha256": "a8c0c5557dbaccfbdcf3a7bab47b22dc259be6864094e17dc603753be6f08173",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-typescript.toml",
+      "sha256": "a2148c15fbe42e079a8576902182da9285cb5c0641fcbcd6e5ca26c261a26b20",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/CONTRACT.md",
+      "sha256": "dfbaa9ca5fef6032cfb606c8c6e50e0dc5ddf6ffebf56d26a34755f3dbadfe60",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-consistency.md",
+      "sha256": "5b279f3c7969e9696222de6fa8cd4b6405b708ef9562c4602b5e26a93d678af1",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-durability.md",
+      "sha256": "6b550b0d3f5333386bc6cd403fb997f66571c63bdbc11ca52487c948a7fc12eb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-idempotency.md",
+      "sha256": "e55750308310cbe174298f8b790895766680c79e1a354c927665352b2df708b0",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-go.md",
+      "sha256": "30138fa33296a07d3049f49fe8c35c7be5acb84229b82d4e0bda4ef741e2f1d8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-python.md",
+      "sha256": "b238cca04cf77369b55679537a41241f3aafba8b03c1dcfcc7fe48f6148020a3",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-typescript.md",
+      "sha256": "035f904826b7353789605f1b3ecd3650a5986a4b168124455796f225336e9d71",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-infrastructure.md",
+      "sha256": "a48816cc465031d1ed20a3db99b9de25d6b032287048bf7aae17366391558fdb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-reliability.md",
+      "sha256": "338eda3d5e9609a369a7dd3ce3aef7bde6e56ab8cb5fc0c839e7f64389bbd5a8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/verification/tal-failure-testing.md",
+      "sha256": "a88991b94e598995f6673208b799560c99a63d0262360836860476c1b6d72d3f",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/manifest.json",
+      "sha256": "7a39ba1d534d8e8477ff43b81b509ea81d99616ad5ddbcd352d0dda7e9e84422",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/_shared/handoff.md",
+      "sha256": "65e39e26613179353d152d18e316b277f1f303fab07f4ef5aa3f3cede2ac6923",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+      "sha256": "1cb86be6c004068d2544cd3ef3386b1880e182c53fc0d429c84faefd1860e85d",
+      "mode": 420
+    },
+    {
+      "path": "contract.md",
+      "sha256": "83dede7e61b2dcc75b7441efb7606c042d44c4f5efedf009420573672fc814e0",
+      "mode": 420
+    },
+    {
+      "path": "prompt.md",
+      "sha256": "440b0058a382cde79b508521dbb30c4a08521eca153ddd2cb2697cfb02a60499",
+      "mode": 420
+    },
+    {
+      "path": "proposed-retirement.md",
+      "sha256": "16671a7ecf700e613a67b6bc5f61b0d8611377408c7443603e3b2f1e61fd93f4",
+      "mode": 420
+    },
+    {
+      "path": "rollout.json",
+      "sha256": "57a6869c9a1072209be88c53336a06ca165698daa6c5677288886bf6186feba2",
+      "mode": 420
+    }
+  ]
+}
