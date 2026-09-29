@@ -1,0 +1,70 @@
+{
+  "run_id": "15-code-and-docs-cleanup-similar-policy-cleanup",
+  "run_evidence_sha256": "a5c925022ca62e5c42c7fcae32b699961b40061e7af696666c92b693b5f97d33",
+  "final_workspace_tree_sha256": "288994dece5814bf0c427ec449065fed3120719db51d17f400c38c533974e779",
+  "case_id": "similar-policy-cleanup",
+  "candidate_tree_sha256": "0859fc8a1bd5a0a98876915649e2a14630b36634be3f70971a8e77417bbb4d6d",
+  "rubric_sha256": "532149f0479f70e1b5a44bd2e970aa37af5f89bd4148dce0143083c809babd8f",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "policy-independence",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/policies.py",
+        "locator": "lines 1-6; evidence/workspace.patch",
+        "observation": "Both exported policy functions retain their separate implementations and value 30; the explanatory comment preserves the independently owned change boundary."
+      }
+    },
+    {
+      "id": "evidenced-removal",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_9; evidence/workspace.patch",
+        "observation": "Uses the supplied private/no-callers report to remove only identity_wrapper, retains exported policies, and replaces duplicate demo instructions with one runnable setup block."
+      }
+    },
+    {
+      "id": "reader-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/setup.md",
+        "locator": "lines 1-11; evidence/trace.jsonl items_11-12",
+        "observation": "Preserves TOOL_API_MODE=local, fresh-shell prerequisite and rationale; gives expected outputs and error guidance. Candidate actually runs extracted newcomer commands with no inherited mode and checks missing/incorrect-mode errors, in addition to public policy verification."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "policies.py and setup.md only; evidence/run.json input_integrity; trace.jsonl items_11-14",
+        "observation": "Only the two permitted files change; protected fixture/skill/verifier inputs are unchanged. Recorded verifier, newcomer execution and error checks support the final report; there is no broader runtime claim."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/checks/independent-01.stdout.txt",
+        "observation": "A separately executed supplied verifier is bound to this run/candidate/final fixture and exits 0 without timeout or workspace changes, corroborating candidate item_11. Documentation/ownership are additionally inspected rather than inferred from this verifier alone."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+      "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

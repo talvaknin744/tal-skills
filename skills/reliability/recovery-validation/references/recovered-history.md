@@ -1,7 +1,24 @@
-# Reconcile state outside the restored history
+# Reconcile recovered history
 
-Read this branch when a snapshot is older than surviving consumers, workers,
-or effects. Restoring one store rewinds only that store.
+Read this branch for inconsistent local effects/completion or a snapshot older
+than surviving consumers, workers, or effects. Restoring one store rewinds only
+that store.
+
+## Local effects and completion
+
+For inconsistent local records, specify repair before recommending replay. A
+review proposes the protocol; executing repair requires authorized scope.
+Arbitrate attempts under the original operation identity, bound to accepted
+payload, using uniqueness or a conditional claim rather than separate existence
+checks and writes. Where one transactional store owns effect and completion,
+reuse a matching effect or commit the missing effect and corrected completion
+together; hold conflicting payloads for resolution. Otherwise identify the
+store's supported atomic equivalent or keep resumption closed. Verify repeated
+and concurrent replay, including interruption between effect and completion,
+preserves one effect and consistent progress. PostgreSQL 18
+[transactions](https://www.postgresql.org/docs/18/tutorial-transactions.html) and
+[unique-conflict arbitration](https://www.postgresql.org/docs/18/sql-insert.html)
+illustrate these mechanisms; they do not make external effects transactional.
 
 ## Watches, caches, and projections
 

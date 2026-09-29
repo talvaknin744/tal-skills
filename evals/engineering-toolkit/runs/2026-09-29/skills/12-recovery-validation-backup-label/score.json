@@ -1,0 +1,52 @@
+{
+  "run_id": "12-recovery-validation-backup-label",
+  "run_evidence_sha256": "81861ea0b3a061116470da4cd40ab7743dc98ffcd4c52f91ff6a8d0e6add2d9a",
+  "final_workspace_tree_sha256": "6b99b6f3cb6c24a25fb5cb32ad8bbe638b0cc3dda3716e15c8140a13b62cc071",
+  "case_id": "backup-label",
+  "candidate_tree_sha256": "cc43220ae7fba9e4d54c94450a808f0e6670428f3ca98560fcab6e9e4bdf1510",
+  "rubric_sha256": "113e4d31d98be45409cbbbec71b26185c1dac61019a7f5af9b136be6c72345bc",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_0-6; evidence/run.json activation_observation",
+        "observation": "Captured activity reads the request/dashboard and changes its label; no candidate skill-body read or specialist workflow is observed. This is a trace observation, not a universal activation guarantee."
+      }
+    },
+    {
+      "id": "label-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "single dashboard.json hunk; final-project/dashboard.json:1",
+        "observation": "Changes backupLabel from Nightly copy to Nightly backup and preserves jobId backup-17 and schedule nightly. The brief answer adds no restore or recoverability claim."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "single dashboard.json hunk; evidence/trace.jsonl item_5; evidence/run.json input_integrity",
+        "observation": "The saved diff contains only the requested dashboard label edit; protected inputs and all other files are unchanged. Successful readback supports the short change report. No external operations or unexecuted test claims are observed."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+      "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+    ],
+    "note": "Rubric observations do not establish fully capability-constrained execution or skill uplift."
+  }
+}

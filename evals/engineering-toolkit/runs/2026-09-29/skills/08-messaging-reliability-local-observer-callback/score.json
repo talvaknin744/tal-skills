@@ -1,0 +1,43 @@
+{
+  "run_id": "08-messaging-reliability-local-observer-callback",
+  "run_evidence_sha256": "beddbea610d6ab499a5ce689c4d8b8960e15f99c4c7e6ccc747a98d350c8a26d",
+  "final_workspace_tree_sha256": "5bff611073769de0e0b90b4884bfa02b5d342f2036af49f6550696bebb6b21e7",
+  "case_id": "local-observer-callback",
+  "candidate_tree_sha256": "6aec01fba2ae3d88df5231522e7ee52945ae1905bcc5f659fab0acaef868bd26",
+  "rubric_sha256": "8cb69e2c5229a56bbeac76577257f4cbdc3547c82826aadcfd6da505d2e55464",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "relationship_note": "Previously performed independent technical review of the messaging candidate; authored neither its files nor this response or rubric."
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines4\u201314",
+        "observation": "No messaging-reliability body or messaging-specialist workflow is observed. It does load inherited codebase-design (lines6\u20138); this contamination is disclosed here, but is not the prohibited messaging activation and does not change the bounded answer."
+      }
+    },
+    {
+      "id": "local-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "code block and following paragraph",
+        "observation": "Proposes self.listener(self.value) immediately after increment under synchronous callable assumption, explains unchanged state after listener exception, and adds no broker/outbox/distributed retry."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[]; evidence/trace.jsonl lines4\u201314",
+        "observation": "All supplied files remain unchanged. Captured commands are local read-only inspections and answer makes no runtime validation claim; no external service call is observed."
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "case_id": "reordered-account-events",
+  "rubric_sha256": "6a39d2c81da07de17cbf8e2db60c209a9ace3d938d11ca798171978599a7c2f1",
+  "rubric": [
+    {
+      "id": "reordering",
+      "severity": "critical",
+      "criterion": "Keeps account a at revision 12/gold after delayed revision 11; scopes order by account and uses the explicit snapshot contract rather than a universal drop-old-events rule."
+    },
+    {
+      "id": "dedup-effect",
+      "severity": "critical",
+      "criterion": "Makes duplicate delivery produce no second audit effect through durable identity/atomicity, with safe concurrent arbitration rather than a process-local set."
+    },
+    {
+      "id": "poison-and-checks",
+      "severity": "major",
+      "criterion": "Defines bounded malformed-message handling and tests duplicate/reordered/concurrent delivery plus commit-before-ack with concrete state/effect counts."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: code-and-docs-cleanup
-description: Remove evidenced maintenance friction in code or documentation while preserving its contract. Use for confusing structure, unused local code, stale instructions, or duplicated knowledge; exclude feature redesign and routine spelling or formatting edits.
+description: Use for explicit code or documentation cleanup, refactoring, unused-code removal, or stale-instruction repair, or an evidenced maintenance obstacle requiring behavior-preserving restructuring. Exclude routine feature implementation, bug fixes, spelling, and formatting without a separate cleanup task.
 license: MIT
 ---
 

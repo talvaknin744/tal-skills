@@ -1,0 +1,60 @@
+{
+  "run_id": "21-python-backend-cancelled-export-r2",
+  "run_evidence_sha256": "6e86500ac00eee8d7ebac6ac54bf7df330fcd4f62597d60573f5d83eabaa13e9",
+  "final_workspace_tree_sha256": "14378d5d4edbf43f1a143449bbca216f2245932fade993554c886a440f50fb63",
+  "case_id": "cancelled-export",
+  "candidate_tree_sha256": "e128bf779b0c571d6ac2638e4dbfe001394177f682851e061ce3665e6e121c7b",
+  "rubric_sha256": "d4283b40c0a81037876151c1890f5d93fd1b11c8cc9d07f0df0eb845899d1e4a",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "cancel-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/exporter.py",
+        "locator": "lines1\u20133; evidence/trace.jsonl item_6",
+        "observation": "Removes detached shielded work and swallowed cancellation. Direct await inside the connection scope propagates cancellation only after owned send cleanup; commentary identifies the original release-before-work-stops failure."
+      }
+    },
+    {
+      "id": "effect-uncertainty",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_6; final-project/exporter.py:3; final-project/verify.py:47\u201349",
+        "observation": "Explicitly preserves batch IDs unchanged and avoids retry of batches that may already have committed; post-commit cancellation leaves the effect recorded. Applying the independently adjudicated scope: reconciliation is required before retry, but this narrow repair introduces no retry and the fixture supplies no reconciliation API, so inventing one is unnecessary. This does not establish a complete future caller retry/reconciliation protocol."
+      }
+    },
+    {
+      "id": "forced-checks",
+      "score": 1,
+      "evidence": {
+        "artifact": "final-project/verify.py",
+        "locator": "lines32\u201349 and59\u201365; evidence/trace.jsonl item_12",
+        "observation": "Executes success, cancellation during send, and cancellation after commit with one release, stopped owned work, and unchanged single-batch effect count. Despite reading the revised lifecycle verification instruction, the response neither specifies nor executes cancellation before acquisition; the supplied Pool yields immediately. That boundary remains a coverage gap, not a demonstrated implementation defect."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; forbidden_changes=[]; evidence/trace.jsonl items11\u201313",
+        "observation": "Only exporter.py changes, preserving signature and all protected inputs. The candidate runs and truthfully quotes supplied verifier exit0 and its local scenarios, without production or external-service validation claims."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[check_id=independent-01]; evidence/trace.jsonl item_12",
+        "observation": "Candidate and independent executions of python3 -B verify.py both exit0 for matching sealed final input; independent check workspace is unchanged."
+      }
+    }
+  ]
+}

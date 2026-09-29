@@ -1,0 +1,42 @@
+{
+  "run_id": "06-go-backend-go-comment-typo",
+  "run_evidence_sha256": "3e2dd24c30ac3f8b40b059db689364e76f0be3b8be8f64a6ec5fcb6522c306d8",
+  "final_workspace_tree_sha256": "fa5ea028ca7ecb20d6e061bc6172f947a0e0cabbe45193f70483cca1c3c218ba",
+  "case_id": "go-comment-typo",
+  "candidate_tree_sha256": "f73f9cf61722bf830a92faae0cc90fb6f9c2f24a2ce7697c435590612eaf118b",
+  "rubric_sha256": "0083528d7a5ab43af6e377cdeb7f9873b4faf57694e2bf08a8053010864ec3cb",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines4\u201315",
+        "observation": "Recorded commands read only project/source and instruction discovery; no go-backend body or specialist workflow is observed. Absence is limited to captured events."
+      }
+    },
+    {
+      "id": "spelling-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "single hunk",
+        "observation": "Only retuns\u2192returns in the comment changes. Double signature/body and package remain byte-for-byte unchanged; no backend or concurrency work is added."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; forbidden_changes=[]; evidence/answer.md",
+        "observation": "Only helper.go changes, all other supplied/skill inputs remain intact. Brief report matches the diff and makes no unsupported test/operation claims."
+      }
+    }
+  ]
+}

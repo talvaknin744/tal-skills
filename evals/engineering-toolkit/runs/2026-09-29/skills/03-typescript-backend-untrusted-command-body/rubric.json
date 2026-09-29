@@ -1,0 +1,31 @@
+{
+  "case_id": "untrusted-command-body",
+  "rubric_sha256": "515df9f133ef62222f7766eb82ce431bcfac81ee4e42ac3a3148c640f0b46158",
+  "rubric": [
+    {
+      "id": "runtime-boundary",
+      "severity": "critical",
+      "criterion": "Identifies that the assertion is erased and does not validate input; validates the object and effect-relevant fields before ledger access."
+    },
+    {
+      "id": "trusted-principal",
+      "severity": "critical",
+      "criterion": "Uses authenticated tenant identity rather than the body tenant and rejects malformed amounts/identities without an effect."
+    },
+    {
+      "id": "boundary-cases",
+      "severity": "major",
+      "criterion": "Specifies concrete invalid/valid cases including negative/fractional/oversized amount, malformed body, cross-tenant claim and the valid result shape."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Changes only the explicitly editable fixture files; preserves skill, adapter and verifier inputs; runs the supplied check and reports its actual outcome and limits without claiming production validation."
+    },
+    {
+      "id": "executed-verification",
+      "severity": "critical",
+      "criterion": "The supplied verifier succeeds against the changed fixture; saved command output and independent rerun substantiate the result. A proposed patch or invented test pass does not satisfy this criterion."
+    }
+  ]
+}

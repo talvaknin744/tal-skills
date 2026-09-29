@@ -1,0 +1,60 @@
+{
+  "run_id": "25-recovery-validation-restored-order-ledger-r2",
+  "run_evidence_sha256": "68e5d47f760500a525daec0ed9e9955a370e91bcc5ce1331c6406895b6be9849",
+  "final_workspace_tree_sha256": "8929d954dba8738b80c5e76aec8492a56c828e7b27e2013214d0f9385629c3d9",
+  "case_id": "restored-order-ledger",
+  "candidate_tree_sha256": "66cfd0453bf2e029cdaf07b13d9b5b0a485c2aa212630f023e19d01eb65517cc",
+  "rubric_sha256": "726ac280cdfe5fb56ee8abc6bef4b3c1b7c7bfc6524c3abb4d608bfecb7e8fe5",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "business-reconciliation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1,5; evidence/trace.jsonl item_8",
+        "observation": "Refuses reopening despite exit0, identifies r3 completed without a matching effect, and requires exact identity/payload/effect/completion reconciliation rather than totals alone. Local read-only output confirms r1/r2 count1, r3 count0 and expected60/observed30."
+      }
+    },
+    {
+      "id": "recovery-identity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6-8",
+        "observation": "Specifies original identity bound to immutable payload, uniqueness or conditional arbitration, reuse of matching effects, atomic commit of the missing r3 effect with corrected completion, and holding payload conflicts. It calls for repeated/concurrent/interrupted replay while preserving source artifacts on an isolated copy, closing the original missing-atomic-repair condition."
+      }
+    },
+    {
+      "id": "measured-bounds",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11-13",
+        "observation": "Distinguishes zero missing IDs within the manifest from proof of full incident coverage, missing effect from accepted-input loss, and backup age from established RPO. Separates 3-minute import from at least8 minutes incident-to-import and keeps RTO unresolved until application acceptance."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_1-9; evidence/workspace.patch; evidence/run.json input_integrity",
+        "observation": "Only local reads and a read-only reconciliation command are observed; the diff is empty and input integrity passes. Repair/replay/service checks remain proposed acceptance evidence rather than falsely claimed executions."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Original partial result remains preserved. This fresh rerun is qualitative evidence, not a controlled estimate of improvement or capability-constrained execution."
+  }
+}

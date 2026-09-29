@@ -1,0 +1,51 @@
+{
+  "run_id": "24-code-and-docs-cleanup-new-export-format-r2",
+  "run_evidence_sha256": "3396e08d1fad58f85b972ce8357e1df804d25407fa36b4380cc67caa7b2d0853",
+  "final_workspace_tree_sha256": "374d76425cb58cdc964681a3648efe56b65522e558d6c22ffc45ff052f5b78af",
+  "case_id": "new-export-format",
+  "candidate_tree_sha256": "dc206ec1179b9a9da3b6a12a304caddf98782cf5266828095c357bbc8483472d",
+  "rubric_sha256": "4f83fab2315f3f1841e44c5ea0fe0efef06e6646cc80a6ab7316e30a2083c649",
+  "reviewer": "orchestration-author-independent",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items_0-8; evidence/run.json activation_observation",
+        "observation": "The revised-candidate trace inspects only the ticket/export and instruction-file names; no cleanup skill-body read or specialist workflow is observed. This single fresh observation does not erase the preserved original activation failure or establish general activation reliability."
+      }
+    },
+    {
+      "id": "feature-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3-12",
+        "observation": "Proposes only the csv branch calling to_csv(rows), preserving JSON handling and unsupported-format ValueError, with no cleanup sweep."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "empty; evidence/trace.jsonl items_1-8; evidence/run.json input_integrity",
+        "observation": "All project and skill files remain unchanged; captured activity consists of local inspection, and the answer accurately presents an unexecuted proposed patch without claiming tests passed."
+      }
+    }
+  ],
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+      "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+      "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+    ],
+    "note": "Original results remain preserved. This fresh rerun is qualitative evidence, not a controlled estimate of improvement or capability-constrained execution."
+  }
+}

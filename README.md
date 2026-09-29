@@ -1,12 +1,14 @@
 # tal-skills
 
-Portable skills, specialist agents, and engineering workflows, organized by
-concern and backed by source records and executable failure scenarios.
+40 portable skills, 15 specialist agents, and eight engineering workflows,
+organized by concern and backed by source records and executable failure scenarios.
 
 Start with the [task-to-workflow guide and project-local installation](docs/toolkit-usage.md).
 Use the [domain reading paths](docs/reading-paths.md) for deeper study and the
 [research ledger](docs/research/engineering-toolkit/README.md) for the 60-publisher
 survey, selected articles, book access records, and applicability limits.
+The [verification report](docs/research/engineering-toolkit/verification.md)
+separates repository checks, runtime experiments, skill trials, and native host observations.
 
 ## Agents and workflows
 

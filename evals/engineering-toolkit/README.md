@@ -1,6 +1,10 @@
 # Engineering toolkit evaluations
 
-This corpus contains **30 authored cases**: two positives and one nontrigger for each of ten new skills. The [scenario index](scenario-index.json) marks **20 required first observations**, one positive and one nontrigger per skill. Authored inputs, deterministic checks, model trials, independent scores, runtime examples and native workflow smoke results are separate evidence. No model trials are claimed by this README.
+This corpus contains **30 authored cases**: two positives and one nontrigger for each of ten new skills. The [scenario index](scenario-index.json) marks **20 required first observations**, one positive and one nontrigger per skill. The [29 September 2026 archive](runs/2026-09-29/skills/README.md) contains **26 executed and independently scored attempts covering those 20 unique cases**. Authored inputs, deterministic checks, model trials, independent scores, runtime examples and native workflow smoke results remain separate evidence.
+
+The initial twenty scored **15 pass, 4 partial, 1 fail**. After six revision reruns, selecting the latest attempt by `(skill, case_id)` gives **17 pass, 3 partial, 0 fail**, with all latest critical criteria scoring 2. Remaining gaps concern Python cancellation before acquisition, Go cancellation before a result send, and a concrete concurrent messaging schedule. Original scores, the separate Python adjudication and the failed cleanup nontrigger are preserved. These observations do not estimate skill uplift. Ten second-positive cases remain authored but unexecuted.
+
+All 26 attempts observed native candidate metadata; the latest ten positives have recorded body reads, while no candidate body read was observed in the latest ten nontriggers. All attempts retain `case_compliant: false` because host capability restrictions were not fully enforced. The [machine-readable summary](runs/2026-09-29/skills/summary.json) separates discovery, correctness, verification and these limitations. Native workflow/role smoke evidence is recorded separately in [native-planning](native-planning/README.md).
 
 The first positives for Python, TypeScript, Go, failure testing and cleanup require actual fixture edits plus supplied executable checks. CSS, comment and label nontriggers require bounded edits; other nontriggers are direct explanations. Remaining positives are bounded diagnostic reviews. Each case declares its permitted files. All Node fixture verifiers are named `verify.mjs`, outside automatic test discovery. Python verifiers use `-B`; Go verification explicitly runs `go test -race`.
 
@@ -26,7 +30,7 @@ node scripts/evals/cli.mjs prepare \
 
 `prepare` refuses an existing trial directory or staging under this repository. It copies the selected raw project into `workspace/project` and the whole independently installable candidate into `workspace/.agents/skills/<name>`. It does not preload the body or copy rubrics/answer keys into that workspace. `before/` preserves inputs; `evidence/` and `control.json` remain outside the candidate's working directory. Filesystem reads are **not jailed** to that directory, and global/system/plugin skills remain inherited. These limitations are recorded, not hidden behind the word isolation.
 
-`prompt.txt` and its primary hash contain the exact transmitted prompt, including the short project-location frame. `case-prompt.txt` preserves the authored case separately. The frame only permits normally discovered relevant skills; it does not name the candidate, reveal the rubric or give an expected answer.
+The recorded `command_argv` contains the exact transmitted prompt, including the short project-location frame; `prompt_sha256` hashes that string. `prompt.txt` and `effective-prompt.txt` serialize it with one added final newline, so their whole-file hashes differ from the transmitted-string hash. `case-prompt.txt` likewise preserves the authored case with one added final newline. The frame only permits normally discovered relevant skills; it does not name the candidate, reveal the rubric or give an expected answer.
 
 ## Scheduled native execution
 

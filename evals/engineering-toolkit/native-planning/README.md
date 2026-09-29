@@ -1,7 +1,8 @@
 # Native workflow smoke preparation
 
-This directory contains a plan and read-only host preflights. It contains no
-completed workflow trials. The eight candidate fixtures are owned separately in
+This directory contains preparation evidence, read-only host preflights, and one
+completed native dispatch mechanism probe. It does not grade the eight workflows.
+The eight candidate fixtures are owned separately in
 `evals/engineering-toolkit/native-fixtures/`; their final index supplies editable
 paths and verification commands. The [matrix](smoke-matrix.json) defines a full
 backend implementation and seven representative workflow runs for each host.
@@ -80,20 +81,56 @@ each configured MCP server through `thread/start.config.mcp_servers`.
 
 The RPC sequence is initialize, initialized, config/read, skills/list,
 thread/start, then turn/start. `thread/start` sets the canonical cwd, never-approve
-policy, an ephemeral thread and the fixture's sandbox mode. `turn/start` explicitly
+policy, a normal persisted thread and the fixture's sandbox mode. `turn/start` explicitly
 sets network access false; workspace-write additionally excludes system and
 environment temporary roots. Its text is `$<workflow-id>\n<prompt.md bytes>`.
 The exact argv and protocol fields are recorded by the runner. The installed
-protocol schema supports these fields. Model execution through this collector
-still awaits the scheduled trials.
+protocol schema supports these fields. The initial real runs and the mechanism
+probe distinguish collector behavior from source or schema validation.
+
+Use `ephemeral:false` for the coordinating Codex root. The first real workflow
+attempt exposed a Codex 0.153.4 interaction: V2 delegation defaults to a full-history
+fork, which reads its parent from persistent storage, while ephemeral roots omit
+that storage. The host reported `collab spawn failed: no thread with id` for the
+active parent. Nonforked ephemeral children follow a different implementation
+path; their success would not validate normal full-history delegation. Normal
+persistence does not modify global configuration, trust or model settings, but
+does create ordinary host session history. Record root and child IDs for later
+archival of these temporary evaluation sessions. Public evidence retains only
+observable events; it does not copy native history or hidden reasoning payloads.
+[Fork context loading](https://github.com/openai/codex/blob/3d2ee51ca2d5db578f328aa75e20aa22c0197c9a/codex-rs/core/src/agent/control/spawn.rs#L858),
+[ephemeral persistence omission](https://github.com/openai/codex/blob/3d2ee51ca2d5db578f328aa75e20aa22c0197c9a/codex-rs/core/src/session/session.rs#L845).
+
+The [persisted-session probe](persistent-delegation-probe.json) completed one
+read-only `tal-python` child. A native metadata query confirmed its role, parent,
+fork origin, and inherited `gpt-6-astra` / `ultra` settings. The actual observable
+spawn call omitted `fork_turns`, selecting the pinned V2 parser's `all` default;
+its model and reasoning fields were also omitted. Child events record the
+installed Python skill and common-contract reads. No fixture files changed.
+The first attempt stopped on a usage limit before delegation; the successful
+retry followed external capacity restoration.
+
+V2 exposes a child through `subAgentActivity.agentThreadId` and item-event thread
+IDs even when `thread/started` and spawn payloads are absent. The collector now
+collects those identifiers and requests `thread/read` metadata before shutdown.
+The successful probe used the previous collector; its separate post-run metadata
+observation is clearly labeled. No extra model call was needed to retrieve it.
+These facts prove bounded named-role dispatch, not complete workflow acceptance.
+
+One earlier ephemeral backend run observed a changed global configuration hash.
+The old record retained only equality, so the original hash and writer are
+unknown. Concurrent desktop/plugin refresh is context rather than attribution.
+New runs record exact hashes, modification times and observation times, without
+configuration contents. The persisted probe observed equal before/after hashes;
+that does not establish equality for the earlier run. No configuration was
+restored or rewritten by this investigation.
 
 Wait for each response before dependent messages. Preserve `thread/started`,
 item and terminal turn notifications for the primary and children. The installed
 schema exposes `thread.agentRole`, `parentThreadId`, `model` and `reasoningEffort`;
 record these when returned, and use `thread/read` with `includeTurns:true` for a
 child only when necessary. The runtime metadata fields are not per-token model
-telemetry. This collector path is schema-supported; no workflow turn has yet
-been executed through it. Sanitize config output to the relevant model, agent,
+telemetry. Sanitize config output to the relevant model, agent,
 sandbox and layer-status fields instead of storing a full configuration dump.
 
 A claimed load needs evidence: repository scope from `skills/list`, then actual

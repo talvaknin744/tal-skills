@@ -1,0 +1,42 @@
+{
+  "run_id": "02-python-backend-notebook-list-expression",
+  "run_evidence_sha256": "a369aae3ebb3190b926f08d318e35be6d49bbea0f960f60fcd518c0370e9bbc6",
+  "final_workspace_tree_sha256": "e3ba5369139efc12c13f13992efa260a852756d91dd266ca82f1c91ca256982c",
+  "case_id": "notebook-list-expression",
+  "candidate_tree_sha256": "f03d5a940d10c358cf5c10bce9ae3382d12a4c75ade9e08127b744f8086e5597",
+  "rubric_sha256": "07acb3a7a2b2ce68d57334dfa736224e8f99e87efd7b1476265263b3d5c71bbf",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 4\u201313",
+        "observation": "Captured commands list the skill path but never read its body; execution reads only path/instruction discovery and project/notebook.py. No specialist workflow or delegation is observed. This is a trace observation, not proof against unrecorded loading."
+      }
+    },
+    {
+      "id": "correct-output",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "States `[4, 8]` and explains selection of even values before doubling in exactly two sentences, consistent with original-project/notebook.py lines 2\u20134. No redesign or dependency is introduced."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 4\u201313; evidence/workspace-changes.json changes=[]",
+        "observation": "Only read-only local commands are observed. The workspace diff is empty and all supplied files remain unchanged. The answer explains the expression without claiming a runtime test. Host capability enforcement limitations remain as recorded in run.json; this score does not assert full case compliance."
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "run_id": "09-infrastructure-change-safety-three-pod-rollout",
+  "run_evidence_sha256": "cee533dc15430e8a9e2df622f802ec68786229febcf083dbcd295093f36a99b4",
+  "final_workspace_tree_sha256": "c4f7008ce8693916cbc09b8b5aaefbd7d3089b6481259c1a4a060ee59304ae5b",
+  "case_id": "three-pod-rollout",
+  "candidate_tree_sha256": "51abc0c0b351aac363b187322dc0c339ca294bb282f38405aaf38541e45e79c9",
+  "rubric_sha256": "7d288963845760db8db5f53e9c42043d071e093afd0ae1fdf964f286e8927b5b",
+  "reviewer": "/root/blog_research_plan",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "maintenance-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "opening diagnosis and handoff contract step4",
+        "observation": "Explains A/B/C SIGTERM\u2192fail() consuming1/2/3 attempts. Preserves three-failure poison policy while using supported defer() for confirmed resumable deployment drain; rejects blanket cancellation suppression and increasing retry limit."
+      }
+    },
+    {
+      "id": "admission-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "handoff steps1\u20133 and uncertain-defer paragraph",
+        "observation": "Closes polling/claim admission including in-flight claims; renews lease while quiescing, checkpoints after output durability, releases after handler cannot write and checkpoint confirmation, and reconciles uncertain defer. Explicitly rejects readiness/PDB as sufficient and requires stale-owner fencing."
+      }
+    },
+    {
+      "id": "bounded-rollout",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "shutdown step5, bounded rollout steps1\u20135, acceptance table",
+        "observation": "Proposes checkpoint60s/release75s/exit80s inside90s grace with overhead validation; pauses rollout on missed gates and handles unsafe legacy bootstrap. Tests retirement ofA/B/C while new generation completes without failure increments, poison exhaustion, forced kill, checkpoint/storage failure and lost defer response, with explicit observations. Preventing repeated job handoffs is a valid safer rollout design, not a requirement to recreate the bad A\u2192B\u2192C ownership chain."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items1\u20136; evidence/workspace-changes.json changes=[]",
+        "observation": "Only local source/skill reads occur and all files remain unchanged. Final answer labels timing targets as proposed and acceptance scenarios unexecuted, clearly distinguishes missing runtime/queue evidence, and makes no external-operation/runtime-test claim."
+      }
+    }
+  ]
+}

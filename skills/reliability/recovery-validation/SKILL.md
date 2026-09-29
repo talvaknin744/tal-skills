@@ -52,6 +52,10 @@ what they measure; balanced accounts, valid object references, and complete
 workflow progress need their own checks. If the latest acknowledged boundary is
 unknown, report bounded or unknown loss rather than claiming zero RPO.
 
+If restored local effects and completion records disagree, read
+[local repair](references/recovered-history.md#local-effects-and-completion)
+before recommending replay or write resumption.
+
 Exercise an application operation through the intended admission path when that
 path is in scope. Stop the recovery timer only at the declared acceptance gate.
 Reconcile surviving consumers and uncertain effects before enabling them.
