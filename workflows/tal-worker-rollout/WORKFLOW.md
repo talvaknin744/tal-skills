@@ -47,8 +47,14 @@ not by itself authorize execution in a live environment.
 3. **Prepare and demonstrate the transition.** Have the owner implement or write
    the requested procedure using the selected specialists' findings. Include the
    authoritative admission transition, compatible successor, bounded drain,
-   observable continuation, and recovery action. Use `tal-failure-testing` for a
-   separable verification question. Exercise relevant repeated retirements,
+   observable continuation, and recovery action. If old work outlives rollout
+   completion, identify the accountable operational drain/retirement role,
+   deadline and escalation, and evidence required to release old dependencies.
+   Distinguish this responsibility from per-job execution ownership. If the
+   actual assignment is unknown, propose a role and keep retirement blocked
+   pending assignment; do not invent personnel or require an additional agent.
+   Use `tal-failure-testing` for a separable verification question. Exercise
+   relevant repeated retirements,
    claims already in flight, uncertain checkpoint/effect, stale owner, and forced
    deadline paths. Keep maintenance and business-failure expectations tied to
    the actual queue contract; label simulations and real-platform checks.
@@ -64,7 +70,9 @@ when durable continuation is unproven, successor capacity/compatibility is
 missing, a stop signal fires, or the next environment action lacks authorization.
 Preserve useful completed work and report remaining validation. Return job
 outcomes, counter/progress evidence, candidate, review, and the exact environment
-surface exercised. A readiness setting or process exit alone does not establish
+surface exercised. When work outlives rollout completion, also return the
+operational retirement assignment, deadline/escalation, and release evidence or
+remaining gaps. A readiness setting or process exit alone does not establish
 that accepted work survived.
 
 ## Native invocation
