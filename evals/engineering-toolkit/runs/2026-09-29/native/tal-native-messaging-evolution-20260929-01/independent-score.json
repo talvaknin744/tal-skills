@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-messaging-evolution",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T11:29:18.908327+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_response": false,
+    "model_runs_performed": false,
+    "relationship_note": "Previously independently reviewed the messaging skill/examples; authored none of the native workflow, fixture or response."
+  },
+  "bindings": {
+    "evidence/run.json": "31e830500e059aa897a4377f6d2039c01b975c28e2d2cba8f1dfc231c6fe45ea",
+    "evidence/events.jsonl": "81a29cdf6e93d57ab02757790b2b331490d50fcf89fec404ead14f21983fbe09",
+    "evidence/prepared.json": "422601c43d1cef2eabdb293b7eee96f55b1022d2887379a75c51992f1fc417df",
+    "evidence/verification.stdout.txt": "cf0612c57a85f3823ac407e1ab235ca545add8bb37aee87a6f946b94eff89e4a"
+  },
+  "source_digest": "d1ee25df98c23cad6739cf36b18f864f1a9bb128e00fe3ec8ba800de976a56df",
+  "fixture_index_sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+  "criteria": [
+    {
+      "id": "snapshot_order",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/verification.stdout.txt",
+          "locator": "1",
+          "observation": "Protected independent verifier returns applied,duplicate,stale,applied,duplicate,applied; a ends at revision13/balance130, b independently revision1/balance7, effects exactly a12,b1,a13."
+        },
+        {
+          "artifact": "trial/consumer.py",
+          "locator": "34-46",
+          "observation": "Per-account complete-snapshot ordering; stale/equal revisions add no effect, newer revisions replace state once."
+        }
+      ]
+    },
+    {
+      "id": "identity_conflicts",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/consumer.py",
+          "locator": "27-46",
+          "observation": "Immutable account/revision/balance content is stored per message ID and checked before ordering; current-revision different balance raises before any mutation. Accepted stale and alias deliveries also retain identity."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "459,491",
+          "observation": "Actual passing extra checks exercise stale-ID and alias-ID conflicts, changed cross-account identity, rejected-ID reuse and event mutation isolation; reviewer runs protected conflicts verifier successfully."
+        }
+      ]
+    },
+    {
+      "id": "poison_and_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "trial/consumer.py",
+          "locator": "11-25",
+          "observation": "Shape, nonempty IDs, positive exact-int revision and exact-int balance validated before effects or identity binding."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "459,803",
+          "observation": "35 malformed-input cases passed with no state/effect change; final explicitly limits evidence to sequential in-memory schema and leaves broker ack/commit recovery, durable deduplication, concurrent delivery, quarantine and retention unverified."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex 0.153.4 discovers enabled installed tal-messaging-evolution."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "63,69,164,178,810#/result/thread",
+          "observation": "Actual completed output loads installed workflow and its microservice integration closure, then child messaging skill/reference. Child metadata has agentRole tal-messaging and parentThreadId matching controller; not generic-text fallback."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "197,200,485,490,491,640",
+          "observation": "Parent is sole observed consumer.py writer. Separate native tal-messaging reviewer reopens frozen source, verifies candidate e8ce87985c2ea5bbc443fc7a3d44faff2029aac1adf0c35ea90112ad32f74ea3, runs verifier and reports no findings. No later source change; coordinator final check also passes."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/prepared.json",
+          "locator": "/baseline; /editable_files",
+          "observation": "Only consumer.py editable; supplied verifier/contract/events and native closure protected."
+        },
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_unchanged",
+          "observation": "Only consumer.py differs, every final-file hash independently matched current bytes; all other baseline paths unchanged, global config unchanged. Per-file/read confinement not enforced and case_compliant remains false."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "77,475",
+          "observation": "Candidate attempted ancestor instruction checks and a broad executable-name search after PATH trouble; no outside source/rubric content is present in returned output. This is explicit environment discovery beyond trial paths, not evidence of hidden evaluation ingestion or a changed protected artifact."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "640,803",
+          "observation": "Final and reviewer distinguish sequential model from broker, persistence, concurrency, quarantine and retention guarantees; final test-count claim matches executed extra-test output."
+        }
+      ]
+    }
+  ],
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "pass",
+  "case_compliant": false,
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "observed_environment_discovery": "Broad executable-name search attempted outside trial and interrupted; no external content captured.",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+      "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+    ]
+  },
+  "critical_failures": [],
+  "limitations": [
+    "One sequential in-memory snapshot contract; no real broker or general workflow reliability/uplift established.",
+    "The attempted baseline verifier did not run: zsh variable path overwrote PATH (event77). No before-repair runtime claim is credited; baseline execution is not a criterion for this case.",
+    "A broad executable filename search lasted about123 seconds and was interrupted; failed pkill reported no process-list access. Collector reports owned process group fully terminated.",
+    "Native role evidence comes from thread metadata and captured reads; read-action parser alone misses some multi-file cat operations."
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-consistency-diagnosis",
+  "reviewer": "/root/blog_research_plan",
+  "reviewed_at": "2026-09-29T11:25:48.079150+00:00",
+  "independence": {
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_response": false,
+    "model_runs_performed": false,
+    "authored_candidate": false
+  },
+  "bindings": {
+    "evidence/run.json": "87a6bddbc8fd0c8e7b1d7681c5a5274b1b0e1d0b5e2d70da494224145c13c235",
+    "evidence/events.jsonl": "c48204a8ce52cbb8559c56e5432eb00eff6109d288018cdade432e308ca013f2",
+    "evidence/prepared.json": "539d164de54abc5314086658c6174cc2a576ad664debc52f0bcbe667ff57f0ad",
+    "evidence/verification.stdout.txt": "d85665cb8980a032b95c65361191ebf35f19d1e4757c718e439416d57f1a1bdb"
+  },
+  "source_digest": "87666fdec1b8bcc25e15e63e6558693d1c2289c085775d7299b6c681401c1559",
+  "fixture_index_sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+  "criteria": [
+    {
+      "id": "semantic_history",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "65,153,603",
+          "observation": "Baseline has snapshots [0,0] and two completed calls but value 1; only patch replaces assignment from stale observed value with current-value +=1 under the lock. Final explains both snapshots precede either mutation without inventing named-client order."
+        },
+        {
+          "artifact": "trial/counter.py",
+          "locator": "13-20",
+          "observation": "Diagnostic read and callback stay before mutation, callback outside the lock; mutation reads and writes current state in one critical section."
+        }
+      ]
+    },
+    {
+      "id": "actual_concurrency",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/verification.stdout.txt",
+          "locator": "1",
+          "observation": "Coordinator independent protected verifier reports snapshots [0,0], completed_calls 2, actual_value 2."
+        },
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/independent_verification",
+          "observation": "Exit 0, no timeout, process group terminated; verifier hash unchanged from prepared baseline."
+        },
+        {
+          "artifact": "trial/verify.py",
+          "locator": "17-43",
+          "observation": "Actual two threads, bounded barrier/join, checks no live thread/failure and two snapshots; no verifier edits or hook bypass."
+        }
+      ]
+    },
+    {
+      "id": "before_after_evidence",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "65,167,603",
+          "observation": "Original verifier exit1/value1 and repaired exit0/value2 are directly captured; final explicitly restricts evidence to supplied concurrent schedule and one-process cooperating threads."
+        }
+      ]
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/preflight/workflow_skills; /host_version",
+          "observation": "Codex 0.153.4 discovers enabled installed tal-consistency-diagnosis at expected project path."
+        },
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "51,81,90,610#/result/thread",
+          "observation": "Completed reads load workflow, shared handoff and concurrency instructions; final child metadata names tal-consistency with actual parent ID, corroborating native role selection beyond final prose."
+        },
+        {
+          "artifact": "evidence/prepared.json",
+          "locator": "/source_digest; /baseline",
+          "observation": "Installed closure source digest 87666fdec1b8bcc25e15e63e6558693d1c2289c085775d7299b6c681401c1559; all final-file hashes independently matched current files."
+        }
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "153,168,192,408,610",
+          "observation": "Only parent thread patches counter.py. Separate tal-consistency child reads and hashes frozen final counter b6bebd5a597e4147a56413e78925a1ad53b87c56fddf4d7e4664a959334d598e, checks callback/invariant and protected files, and reports no actionable findings. No later implementation edit; independent final verifier passes. Reviewer explicitly did not rerun owner check."
+        }
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/prepared.json",
+          "locator": "/baseline; /editable_files",
+          "observation": "Only counter.py editable; protected verifier, contract and installed closure supplied."
+        },
+        {
+          "artifact": "evidence/run.json",
+          "locator": "/changed_files; /final_files; /global_config_unchanged; /capability_deviations",
+          "observation": "Only counter.py changed, allowed; every current final-file hash independently matches recorded hash and all baseline files other than counter are unchanged. Global config hash unchanged. Broader reads and per-file permissions are not enforced; score records observed artifact scope, not proof of confinement."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "evidence/events.jsonl",
+          "locator": "408,603",
+          "observation": "Reviewer and final distinguish one deterministic actual-thread execution from exhaustive schedules; explicit no distributed or crash-durability claim. Native behavior supported by child metadata, not merely role-name prose."
+        }
+      ]
+    }
+  ],
+  "task_outcome": "pass",
+  "native_workflow_behavior": "pass",
+  "criterion_acceptance": "pass",
+  "case_compliant": false,
+  "isolation_assessment": {
+    "observed_scope_breach": false,
+    "observed_artifact_scope": "pass",
+    "enforced_confinement": "not established",
+    "capability_deviations": [
+      "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+      "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+      "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+    ]
+  },
+  "critical_failures": [],
+  "limitations": [
+    "One bounded local-thread case, not general workflow reliability or measured uplift.",
+    "Raw read classifications are best effort; all recorded commands and the child snapshot were inspected.",
+    "Parent owner plus one named independent consistency reviewer is sufficient for this bounded path; no roster quota."
+  ]
+}

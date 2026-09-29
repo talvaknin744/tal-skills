@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "workflow": "tal-cleanup-review",
+  "host": "codex",
+  "attempt": "20260929-01",
+  "evaluated_at": "2026-09-29T11:21:18.273881+00:00",
+  "overall": "partial",
+  "task_outcome": "pass",
+  "native_workflow_acceptance": "partial",
+  "case_compliant": false,
+  "summary": "The bounded README cleanup, reader command and independent fallback review pass. Do not count this attempt as a fully validated native specialist workflow: named-role execution is absent and strict fixture isolation was not established.",
+  "independence": {
+    "evaluator": "/root/research_backend",
+    "authored_workflow": false,
+    "authored_fixture": false,
+    "authored_candidate_response": false,
+    "authored_native_runner": false,
+    "method": "Read frozen rubric, canonical/installed workflow, raw event evidence and candidate files; independently compared all baseline hashes and reran only the local reader command. No model execution or raw trial/evidence modifications."
+  },
+  "rubric": {
+    "path": "evals/engineering-toolkit/native-fixtures/case-index.json",
+    "sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+    "matches_prepared_digest": true,
+    "workflow_sha256": "1c3f770be19b59ecdec2608ff385edf117eaf6e1ea2b3599655a2daa28dc0599"
+  },
+  "candidate_sha256": {
+    "README.md": "48044cd09f8374863933e3a2684270ace7b61bdb7e64e1b918c21c837f03cea5",
+    "cli.py": "b4e73b0494c80d8fa08a80940918927d6f16702c7066ef480cbf5000ead2782d"
+  },
+  "evidence_sha256": {
+    "run.json": "6b615d1a50d82f60240b0b5697e62ca9d9659b7c8e21325c2fe96a4ccfc67d36",
+    "prepared.json": "cf30abbf32ff822eaf7923756bc7bc3f4715d9c8e300e77d962ed35a75a31cfa",
+    "events.jsonl": "550274bf753e48a5c6f499eaba15a961657c1ffb87745a34dc58da64d11f70f2",
+    "verification.stdout.txt": "2261771cd6ed124df0208f476802abd956bab10647a42d8f4c9bc919f6dc4f46",
+    "verification.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "criteria": [
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 1,
+      "status": "partial",
+      "finding": "Codex 0.153.4 discovered the installed workflow and actually read its wrapper and installed workflow. No named native specialist execution is evidenced. A real generic fallback reviewer ran and was correctly disclosed; this is not native role coverage.",
+      "evidence": [
+        "evidence/run.json#/host_version",
+        "evidence/run.json#/preflight/workflow_skills",
+        "evidence/events.jsonl:49",
+        "evidence/events.jsonl:162",
+        "evidence/events.jsonl:308",
+        "evidence/events.jsonl:419"
+      ]
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "status": "pass",
+      "finding": "The main session was the only observed implementation owner. A distinct fallback child read README/CLI, checked the frozen hashes and returned no findings on the final candidate. Subsequent hash comparison and current bytes match that candidate. Independent review is observed, but its native specialist identity is not claimed.",
+      "evidence": [
+        "evidence/events.jsonl:73",
+        "evidence/events.jsonl:152",
+        "evidence/events.jsonl:162",
+        "evidence/events.jsonl:174",
+        "evidence/events.jsonl:176",
+        "evidence/events.jsonl:178",
+        "evidence/events.jsonl:273",
+        "evidence/events.jsonl:308"
+      ]
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 1,
+      "status": "partial",
+      "finding": "Independent comparison of all 54 baseline files found only the allowed README modification and no added files. CLI, prompt, installed contracts and native definitions remain unchanged. However the runner reports case_compliant=false: filesystem reads were not OS-isolated to the trial, per-file writes were checked after execution, and effective tool inventory was not independently enumerated. No forbidden source or rubric read was observed, but strict isolation is not established.",
+      "evidence": [
+        "evidence/prepared.json#/baseline",
+        "evidence/run.json#/changed_files",
+        "evidence/run.json#/capability_deviations",
+        "evidence/run.json#/case_compliant",
+        "independent-score.json#/independent_checks/baseline_comparison"
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "status": "pass",
+      "finding": "Final answer accurately limits its claim to the README change and observed local Python command. It identifies the candidate, labels the independent review as generic fallback, and explicitly says native specialist dispatch was unavailable. It makes no broader compatibility or infrastructure claim.",
+      "evidence": [
+        "evidence/events.jsonl:79",
+        "evidence/events.jsonl:308",
+        "evidence/events.jsonl:419",
+        "evidence/verification.stdout.txt:1"
+      ]
+    },
+    {
+      "id": "bounded_edit",
+      "severity": "critical",
+      "score": 2,
+      "status": "pass",
+      "finding": "The only edit deletes the second copy of the setup command. Python 3.10+, the starting directory, legacy command, ready output, zero exit, version-1 consumer compatibility, and output-format versus performance rationale remain intact. CLI hash is unchanged.",
+      "evidence": [
+        "evidence/events.jsonl:73",
+        "evidence/events.jsonl:422",
+        "trial/README.md:3",
+        "trial/README.md:8",
+        "trial/README.md:11",
+        "trial/README.md:14",
+        "independent-score.json#/candidate_sha256"
+      ]
+    },
+    {
+      "id": "short_path",
+      "severity": "major",
+      "score": 2,
+      "status": "pass",
+      "finding": "Direct main-session one-file edit followed by a focused read-only fallback review. No unrelated architecture, durability or failure-injection work was dispatched. The absence of named specialists does not invalidate choosing the short path; native role coverage is separately partial.",
+      "evidence": [
+        "evidence/events.jsonl:73",
+        "evidence/events.jsonl:162",
+        "evidence/events.jsonl:174",
+        "evidence/events.jsonl:176",
+        "evidence/events.jsonl:308"
+      ]
+    },
+    {
+      "id": "reader_command",
+      "severity": "major",
+      "score": 2,
+      "status": "pass",
+      "finding": "The documented command ran from the fixture directory and printed ready (legacy) with exit zero. Both retained runner verification and an independent local rerun confirm the result against unchanged CLI bytes.",
+      "evidence": [
+        "trial/README.md:3",
+        "trial/README.md:8",
+        "trial/README.md:14",
+        "evidence/events.jsonl:79",
+        "evidence/run.json#/independent_verification",
+        "evidence/verification.stdout.txt:1",
+        "independent-score.json#/independent_checks/reader_command"
+      ]
+    }
+  ],
+  "score": {
+    "earned": 12,
+    "maximum": 14,
+    "critical_partial": [
+      "native_loading",
+      "isolation_and_scope"
+    ],
+    "failed_criteria": []
+  },
+  "independent_checks": {
+    "baseline_comparison": {
+      "files_compared": 54,
+      "changed_files": [
+        {
+          "path": "README.md",
+          "before_sha256": "e7fc7a01de35030b647b3bef9fe88ec3dd3768e15e84e4cc4fd158b17ddbae40",
+          "after_sha256": "48044cd09f8374863933e3a2684270ace7b61bdb7e64e1b918c21c837f03cea5"
+        }
+      ],
+      "new_files": [],
+      "native_and_protected_files_unchanged": true
+    },
+    "reader_command": {
+      "argv": [
+        "python3",
+        "-B",
+        "cli.py",
+        "--mode",
+        "legacy"
+      ],
+      "cwd": "trial",
+      "exit_code": 0,
+      "stdout": "ready (legacy)\n",
+      "stderr": "",
+      "scope": "Read-only local execution, no model or network, no generated files"
+    }
+  },
+  "trace_correction": {
+    "runner_observed_delegation_count": 0,
+    "named_native_children_count": 0,
+    "actual_generic_child_observed": true,
+    "child_thread": "01a0ec92-9aa2-7c92-abd2-5165043ac955",
+    "evidence": [
+      "evidence/events.jsonl:162",
+      "evidence/events.jsonl:163",
+      "evidence/events.jsonl:174",
+      "evidence/events.jsonl:308",
+      "evidence/events.jsonl:314"
+    ],
+    "interpretation": "The older collector omitted subAgentActivity from its summary. Zero named native children must not be described as zero children."
+  },
+  "limitations": [
+    "Raw trace does not expose named native role registration/dispatch for the fallback child.",
+    "Runner capability deviations are retained; no claim of strict read isolation.",
+    "One tiny README case does not establish general cleanup effectiveness or compatibility with every supported Python release."
+  ]
+}

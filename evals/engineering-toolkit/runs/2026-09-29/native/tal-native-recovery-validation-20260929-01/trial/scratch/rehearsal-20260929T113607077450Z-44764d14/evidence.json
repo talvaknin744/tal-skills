@@ -1,0 +1,207 @@
+{
+  "mode": "Native local subprocess restore; offline artifact reconciliation; no external calls, replay, repairs, or write reopening",
+  "target": "/private/tmp/tal-native-recovery-validation-20260929-01/trial/scratch/rehearsal-20260929T113607077450Z-44764d14",
+  "runtime": {
+    "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "executable": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "platform": "macOS-14.2-arm64-arm-64bit-Mach-O"
+  },
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "restore.py",
+    "backup.json",
+    "/private/tmp/tal-native-recovery-validation-20260929-01/trial/scratch/rehearsal-20260929T113607077450Z-44764d14"
+  ],
+  "restore": {
+    "exit_code": 0,
+    "stdout": "{\"imported_orders\": 2, \"destination\": \"/private/tmp/tal-native-recovery-validation-20260929-01/trial/scratch/rehearsal-20260929T113607077450Z-44764d14/ledger.json\"}\n",
+    "stderr": ""
+  },
+  "timing": {
+    "started_utc": "2026-09-29T11:36:07.077450+00:00",
+    "validation_finished_utc": "2026-09-29T11:36:07.115112+00:00",
+    "clock": "time.perf_counter_ns",
+    "start_boundary": "before source fingerprinting and local restore",
+    "end_boundary": "after data/effect/checkpoint reconciliation and source-preservation checks; before evidence/report serialization and independent review",
+    "import_seconds": 0.035930291,
+    "elapsed_processing_seconds": 0.037517917,
+    "integrity_validated_at_seconds": null,
+    "writes_could_safely_reopen_at_seconds": null
+  },
+  "source_sha256_before": {
+    "backup.json": "852eb8e2e6b2d269a3aa30f79c5a6ef9ec924e57456b95497cfa15e7a5b648eb",
+    "accepted-manifest.json": "8e4bc8ba87831404163947975dbbee8489d67d2e88c0c815f1e58a8f266c7d30",
+    "effects.json": "2d8d96788e534e0458280680faf2d252e171446f8dae309c20c20a52f7df4483",
+    "recovery-contract.md": "03413484cd9505e83b31692488930b9d2bf04f03e7182d8437296075efc21e29",
+    "restore.py": "d54d05755f797685ea7f4db75e229c0b411eb7a9f3f2adad3821f2c0d33a1f21",
+    "prompt.md": "d50b80ab430392fd832c2d567b681137f67159328bd9ec45d45a9e900c1abd71"
+  },
+  "source_sha256_after": {
+    "backup.json": "852eb8e2e6b2d269a3aa30f79c5a6ef9ec924e57456b95497cfa15e7a5b648eb",
+    "accepted-manifest.json": "8e4bc8ba87831404163947975dbbee8489d67d2e88c0c815f1e58a8f266c7d30",
+    "effects.json": "2d8d96788e534e0458280680faf2d252e171446f8dae309c20c20a52f7df4483",
+    "recovery-contract.md": "03413484cd9505e83b31692488930b9d2bf04f03e7182d8437296075efc21e29",
+    "restore.py": "d54d05755f797685ea7f4db75e229c0b411eb7a9f3f2adad3821f2c0d33a1f21",
+    "prompt.md": "d50b80ab430392fd832c2d567b681137f67159328bd9ec45d45a9e900c1abd71"
+  },
+  "sources_unchanged": true,
+  "restored_ledger_sha256": "852eb8e2e6b2d269a3aa30f79c5a6ef9ec924e57456b95497cfa15e7a5b648eb",
+  "restored_ledger_byte_identical_to_backup": true,
+  "validator_sha256": "6069cedc3f07f2bcb8acb3c09128518a9ba950af5ac0622d5b494414f38bac1c",
+  "manifest_reference_time": "2026-09-29T12:00:00Z",
+  "snapshot_time": "2026-09-29T11:59:00Z",
+  "snapshot_age_at_reference_seconds": 60.0,
+  "data": {
+    "accepted_count": 2,
+    "restored_count": 2,
+    "missing_accepted_orders": [
+      "order-2"
+    ],
+    "unexpected_restored_orders": [
+      "order-3"
+    ],
+    "payload_mismatches": {
+      "order-1": {
+        "payload_version": {
+          "expected": 2,
+          "observed": 1
+        },
+        "amount": {
+          "expected": 500,
+          "observed": 450
+        }
+      }
+    },
+    "exact_accepted_matches": [],
+    "duplicate_accepted_ids": {},
+    "duplicate_restored_ids": {},
+    "accepted_orders": [
+      {
+        "id": "order-1",
+        "payload_version": 2,
+        "amount": 500,
+        "effect_id": "charge-1"
+      },
+      {
+        "id": "order-2",
+        "payload_version": 3,
+        "amount": 700,
+        "effect_id": "charge-2"
+      }
+    ],
+    "restored_orders": [
+      {
+        "id": "order-1",
+        "payload_version": 1,
+        "amount": 450,
+        "effect_id": "charge-1"
+      },
+      {
+        "id": "order-3",
+        "payload_version": 1,
+        "amount": 900,
+        "effect_id": "charge-3"
+      }
+    ],
+    "valid": false
+  },
+  "effects": {
+    "orders": {
+      "order-1": {
+        "expected_effect_id": "charge-1",
+        "expected_amount": 500,
+        "expected_receipts": 1,
+        "observed_receipts": 2,
+        "matching_receipts": 2,
+        "receipts": [
+          {
+            "provider_receipt": "receipt-1",
+            "effect_id": "charge-1",
+            "order_id": "order-1",
+            "amount": 500
+          },
+          {
+            "provider_receipt": "receipt-2",
+            "effect_id": "charge-1",
+            "order_id": "order-1",
+            "amount": 500
+          }
+        ],
+        "valid": false
+      },
+      "order-2": {
+        "expected_effect_id": "charge-2",
+        "expected_amount": 700,
+        "expected_receipts": 1,
+        "observed_receipts": 1,
+        "matching_receipts": 1,
+        "receipts": [
+          {
+            "provider_receipt": "receipt-3",
+            "effect_id": "charge-2",
+            "order_id": "order-2",
+            "amount": 700
+          }
+        ],
+        "valid": true
+      }
+    },
+    "unmapped_effects": [],
+    "duplicate_provider_receipt_ids": {},
+    "expected_count": 2,
+    "observed_count": 3,
+    "expected_total_amount": 1200,
+    "observed_total_amount": 1700,
+    "valid": false
+  },
+  "checkpoint": {
+    "observed": {
+      "completed_order_ids": [
+        "order-1",
+        "order-2"
+      ],
+      "accepted_count": 2
+    },
+    "completed_but_missing": [
+      "order-2"
+    ],
+    "completed_but_payload_mismatched": [
+      "order-1"
+    ],
+    "completed_but_effect_invalid": [
+      "order-1"
+    ],
+    "completed_but_unaccepted": [],
+    "accepted_but_not_completed": [],
+    "restored_but_not_completed": [
+      "order-3"
+    ],
+    "duplicate_completed_ids": false,
+    "count_matches_manifest": true,
+    "count_matches_restored": true,
+    "completed_id_set_matches_accepted": true,
+    "valid": false
+  },
+  "objectives": {
+    "rpo": {
+      "objective": "zero accepted orders or payload changes lost through manifest reference",
+      "met": false,
+      "loss_duration_seconds": null
+    },
+    "rto": {
+      "objective_seconds": 30,
+      "met": false,
+      "time_to_safe_reopening_seconds": null,
+      "reason": "integrity did not pass; processing time is not recovery time"
+    }
+  },
+  "integrity_valid": false,
+  "write_reopening_verdict": "BLOCKED",
+  "limitations": [
+    "Local JSON import and reconciliation do not establish production outage RTO or actual provider behavior.",
+    "No per-order acceptance timestamps are supplied; 60-second snapshot age is not an observed temporal RPO.",
+    "No application schema version, service boot, health check, consumer state, or live dependency evidence is supplied.",
+    "The supplied script only copies and parses; success does not validate application integrity."
+  ]
+}

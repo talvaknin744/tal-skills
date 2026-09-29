@@ -1,0 +1,27 @@
+[
+  {
+    "name": "owner-read",
+    "verified_principal": "alice",
+    "headers": {"mcp-protocol-version": "2026-07-28", "mcp-method": "tools/call", "mcp-name": "read-private"},
+    "body": {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "read-private", "arguments": {"handle": "h-alice"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {}}}}
+  },
+  {
+    "name": "next-caller-same-handle",
+    "verified_principal": "bob",
+    "headers": {"mcp-protocol-version": "2026-07-28", "mcp-method": "tools/call", "mcp-name": "read-private"},
+    "body": {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "read-private", "arguments": {"handle": "h-alice"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {}}}}
+  },
+  {
+    "name": "argument-principal",
+    "fresh_gateway": true,
+    "verified_principal": "bob",
+    "headers": {"mcp-protocol-version": "2026-07-28", "mcp-method": "tools/call", "mcp-name": "read-private"},
+    "body": {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "read-private", "arguments": {"handle": "h-alice", "claimedPrincipal": "alice"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {}}}}
+  },
+  {
+    "name": "method-header-body-disagreement",
+    "verified_principal": "alice",
+    "headers": {"mcp-protocol-version": "2026-07-28", "mcp-method": "tools/list", "mcp-name": "read-private"},
+    "body": {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "read-private", "arguments": {"handle": "h-alice"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {}}}}
+  }
+]

@@ -2,6 +2,12 @@
 
 Checked 29 September 2026. This is feasibility evidence from small loader and execution probes, not evaluation of the finished toolkit. [Machine-readable observations and sanitized events](native-compatibility.json) distinguish those levels.
 
+The later [completed workflow archive](../../../evals/engineering-toolkit/runs/2026-09-29/native/README.md)
+records eight Codex task/native-behavior passes under explicit isolation limits.
+Claude's fresh installed backend attempt remained authentication-blocked; its
+other seven workflows were not run. The observations below retain the earlier
+compatibility investigation and its corrections.
+
 ## Observed host behavior
 
 | Host | What was verified | Limit |
@@ -10,7 +16,7 @@ Checked 29 September 2026. This is feasibility evidence from small loader and ex
 | Desktop-bundled Codex CLI 0.153.4 | Repository skill discovery through `skills/list`; explicit `$tal-probe` invocation; delegated custom-role token returned using invocation-only `config_file` registration; later automatic `tal-python` dispatch observed with a persisted parent | Bounded dispatch proof does not establish complete workflow acceptance. V2 child activity needs a native metadata lookup when spawn payloads and child-start notifications are omitted. |
 | Claude Code 2.1.150 | Native initialization listed the test agent, skill and slash command; `model: inherit` resolved to the configured model | API execution failed with expired OAuth. No Claude model behavior, preloaded-skill use or delegation result was observed. |
 
-The usable Codex binary on this machine is `/Applications/ChatGPT.app/Contents/Resources/codex`; the `codex` command on PATH resolves to the older Homebrew installation. No binary was upgraded. No global configuration, trust record, authentication, model preference or permission setting was changed.
+The usable Codex binary on this machine is `/Applications/ChatGPT.app/Contents/Resources/codex`; the `codex` command on PATH resolves to the older Homebrew installation. This work did not upgrade a binary or intentionally edit global configuration, trust records, authentication, model preferences or permission settings. Later runs observed configuration hash changes whose writers were not established; those observations are retained below and in the host evidence.
 
 The older Codex binary interprets the newer `agents.enabled` value as an agent-role table and rejects the boolean. Ignoring that file was a diagnostic only: the probe explicitly preserved `gpt-6-astra` and its configured reasoning effort, then received the newer-version requirement. An installer must report this compatibility failure rather than rewriting user settings or quietly choosing another model.
 

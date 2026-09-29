@@ -7,6 +7,12 @@ The eight candidate fixtures are owned separately in
 paths and verification commands. The [matrix](smoke-matrix.json) defines a full
 backend implementation and seven representative workflow runs for each host.
 
+Completed observations and independent scores are now in the
+[29 September run archive](../runs/2026-09-29/native/README.md): eight latest Codex
+task/native-behavior passes with explicit isolation limits, and a Claude
+authentication block. This preparation record preserves the earlier probes and
+does not substitute for those results.
+
 ## Codex session trust: corrected and observed
 
 The installed desktop binary is
@@ -33,8 +39,8 @@ config folders supply their `agents/` directory to the role loader.
 
 The [sanitized observation](session-trust-preflight.json) records an enabled
 project layer, discovered repository skill, unchanged global config hash, and
-inherited `gpt-6-astra` / `ultra`. No model call occurred. Automatic **named-agent
-execution still requires observation**. Official guidance separately documents
+inherited `gpt-6-astra` / `ultra`. No model call occurred in this preflight. Automatic
+named-agent execution is observed separately in the completed run archive. Official guidance documents
 trusted project configuration, standalone role files, and invocation overrides.
 [Advanced configuration](https://learn.chatgpt.com/docs/config-file/config-advanced),
 [custom agents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
@@ -181,8 +187,9 @@ coordinator schedules a frozen candidate. Optional flags are `--fixtures`,
 `--binary` and `--timeout` (workflow-turn seconds, maximum 1800). Preparation
 requires an existing output parent and refuses an existing output directory.
 
-The implemented runner currently targets Codex; the Claude command above remains
-a planned path blocked by the last observed OAuth error. The runner has protocol
+The implemented runner targets Codex; the Claude command above was executed in
+the [fresh backend attempt](claude-backend-attempt/README.md) and blocked by expired
+OAuth before model work. The runner has protocol
 tests using a fake JSON-RPC host. Those tests validate collection and refusal
 behavior, not actual Codex model behavior.
 
