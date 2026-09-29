@@ -9,6 +9,9 @@ Use the [domain reading paths](docs/reading-paths.md) for deeper study and the
 survey, selected articles, book access records, and applicability limits.
 The [verification report](docs/research/engineering-toolkit/verification.md)
 separates repository checks, runtime experiments, skill trials, and native host observations.
+The [additional article review](docs/research/engineering-toolkit/extensions/README.md)
+adds practical guidance on worker retirement, cache rebuilds, regional replay,
+cancellation, recovery inputs and composed tool authority.
 
 ## Agents and workflows
 

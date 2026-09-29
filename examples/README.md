@@ -15,6 +15,7 @@ the ordinary repository test suite does not start brokers or model sessions.
 | [Quality](quality/README.md) | Behavior-preserving cleanup, independent oracles, seeded defects and replayable reduced histories | Python standard library |
 | [MCP](protocols/mcp/README.md) | Pinned SDK peers, request boundaries, caller isolation, malformed inputs and cancellation | TypeScript, Python and Go |
 | [A2A](protocols/a2a/README.md) | Pinned SDK peers, task observers, authorization, continuation, duplicate effects and cancellation | TypeScript, Python and Go |
+| [Ownership boundaries](ownership-boundaries/README.md) | Semaphore grant/cancellation, Go send-operand evaluation, and Node observer cancellation versus owned teardown | Python, Go with race detector, and Node standard libraries |
 
 A passing negative control means the verifier observed the deliberately unsafe
 behavior, or rejected it as the scenario requires; inspect the scenario status

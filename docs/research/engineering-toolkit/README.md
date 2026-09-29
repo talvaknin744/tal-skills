@@ -5,6 +5,10 @@ The [session record](research-session.json) separates the research window, its
 usage-limit interruption, and the later implementation and evaluation phases.
 Do not infer completed implementation from a proposed practice or test below.
 
+The subsequent [article extension](extensions/README.md) adds 17 new deep reads
+and focused improvements to nine existing skills. Its source records, reviews
+and evaluation cases are separate from the initial research window below.
+
 ## Coverage and evidence
 
 The [publisher survey](publisher-survey.json) contains **60 distinct engineering
