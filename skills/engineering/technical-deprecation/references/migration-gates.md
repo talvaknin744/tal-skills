@@ -27,6 +27,13 @@ independently. If persistent state changes, specify which versions can read and
 write it during transition and recovery; restoring old code alone may not restore
 compatibility. Name temporary adapters and their retirement dependencies.
 
+For configuration or persisted-format changes, track readers separately from
+writers, templates, and editors. Once a cohort can consume the replacement,
+switch its producers/defaults and prevent new legacy adoption there; retain the
+legacy path for cohorts still entitled to it. Each proposed batch needs a concrete
+stop condition, the role that halts progression, and a bounded escalation point
+if progress or recovery evidence is missing. Leave unassigned roles explicit.
+
 Where policy differentiates advisory/soft deprecation from scheduled removal,
 record that state explicitly. Python's [PEP 387](https://peps.python.org/pep-0387/)
 is one such policy; its core-language and standard-library process does not set
@@ -44,6 +51,9 @@ working while a deliberate legacy reference is detected by the intended check.
 
 Record whether the old contract is merely hidden, disabled, or physically removed.
 An adapter still required by a supported client is unfinished retirement work.
+After an authorized removal, inspect the shipped boundary and exercise a legacy
+use plus a supported control to establish what was actually removed. In a review
+or plan, specify these post-release observations without claiming they ran.
 Retire obsolete instructions, checks, and temporary resources only after their
 remaining responsibilities are accounted for. Service shutdown, data disposal,
 and public-product commitments need their own scoped procedures when applicable.
