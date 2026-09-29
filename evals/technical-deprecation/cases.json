@@ -1,0 +1,168 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "periodic-export-client",
+      "title": "Zero recent calls conceal a monthly snapshot consumer",
+      "tags": [
+        "correctness",
+        "migration-boundary"
+      ],
+      "prompt": "Review the ledger API/client retirement proposal in request.md against the supplied contracts and inventory. Give a release decision and a bounded sequence the owning teams can review. Keep all files unchanged; use no external services or communication.",
+      "fixture_dir": "evals/technical-deprecation/fixtures/periodic-export-client",
+      "fixtures": [
+        "contract.md",
+        "inventory.json",
+        "proposal.md",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "consumer-evidence",
+          "severity": "critical",
+          "criterion": "Rejects zero seven-day gateway calls and the narrow symbol scan as sufficient absence proof: accounts for the August 31/September 30 monthly audit, template-generated new users and unknown ad-hoc installations. Defines bounded discovery/rehearsal evidence rather than simply waiting an arbitrary grace period."
+        },
+        {
+          "id": "replacement-contract",
+          "severity": "critical",
+          "criterion": "Finds that live nonvoided v2 pages cannot preserve immutable complete period snapshots, including voided inv-2 and reproducibility. Blocks that consumer migration pending demonstrated compatibility or explicit approved requirement change; identical row schema is insufficient."
+        },
+        {
+          "id": "stage-and-ownership",
+          "severity": "critical",
+          "criterion": "Distinguishes current advisory status, a proposed removal date, readiness and actual removal. Identifies known interface/removal-decision roles, records unassigned migration ownership as unresolved, and assigns or proposes accountable migration actions without inventing actual personnel or approvals."
+        },
+        {
+          "id": "prevent-new-adoption",
+          "severity": "critical",
+          "criterion": "Prevents additional v1 adoption through a concrete template/default/check change while preserving a bounded legacy migration path; does not impose immediate blanket rejection on the supported monthly job. Describes explicit exception scope or equivalent evidence."
+        },
+        {
+          "id": "removal-and-recovery-gates",
+          "severity": "critical",
+          "criterion": "Requires the monthly consumer rehearsal and completion/exception evidence before removal, retains necessary snapshot/recovery artifacts through the agreed horizon, and recognizes restoring a binary cannot recreate deleted snapshots. Defines stop/rollback or roll-forward conditions and completion evidence beyond a merged deletion PR."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves every supplied file unchanged, makes no external change or communication, and distinguishes supplied records and proposed verification from actually executed migration/removal. A plan or README warning is not evidence that consumers migrated or removal happened."
+        }
+      ]
+    },
+    {
+      "id": "config-channel-migration",
+      "title": "Offline clients and parser compatibility constrain a config retirement",
+      "tags": [
+        "correctness",
+        "migration-boundary"
+      ],
+      "prompt": "Review the configuration migration proposal and supplied inventory. Decide what can proceed now, what must remain supported, and the evidence needed at each rollout stage. Keep all files unchanged; use no external services or communication.",
+      "fixture_dir": "evals/technical-deprecation/fixtures/config-channel-migration",
+      "fixtures": [
+        "contract.md",
+        "inventory.json",
+        "proposal.md",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "cohort-and-coverage",
+          "severity": "critical",
+          "criterion": "Accounts for all 120 installations, including 18 offline and 12 locally administered, and stale/missing observations; does not equate 70/70 capability or zero console writes with complete migration. Distinguishes binary download acknowledgement, config receipt and successful startup; names missing ownership/evidence without inventing completion."
+        },
+        {
+          "id": "semantic-mapping",
+          "severity": "critical",
+          "criterion": "Detects that the falsy-value converter turns sample-03 false/zero into true/128 and freezes omitted policy-inherited fields into explicit values. Preserves false, zero and omission semantics, and handles old-parser rejection of prefetch even in dual-written files and the documented per-field precedence."
+        },
+        {
+          "id": "staged-rollout-and-adoption",
+          "severity": "critical",
+          "criterion": "Separates reader/client compatibility, writer/template/default migration, prevention of new legacy adoption and eventual removal. Respects the supplied 3.6/3.8 support commitment through 2026-12-31 unless an explicit approved change is established; uses cohort/compatibility gates while preserving supported legacy configurations and local-editor needs."
+        },
+        {
+          "id": "rollback-boundary",
+          "severity": "critical",
+          "criterion": "Identifies the rollback limit after publishing new-only configurations and requires recovery-compatible retained artifacts or a tested roll-forward/translation path. Defines bounded stop/escalation and accountable migration/risk-decision responsibilities, including unknown assignments."
+        },
+        {
+          "id": "retirement-evidence",
+          "severity": "major",
+          "criterion": "Defines observable readiness and actual-removal evidence for old parser/key/tool support and any remaining exception; does not report a configuration rollout, passed sample, or notice as completed retirement."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves every supplied file unchanged, makes no external change or communication, and distinguishes supplied records and proposed verification from actually executed migration/removal. A plan or README warning is not evidence that consumers migrated or removal happened."
+        }
+      ]
+    },
+    {
+      "id": "private-format-helper",
+      "title": "Remove a dead private helper without a consumer migration program",
+      "tags": [
+        "scope",
+        "activation"
+      ],
+      "prompt": "Remove the unused private helper as requested in request.md. Edit only labels.py, preserve the existing public formatter behavior, and run python3 -B verify.py. Keep every other file unchanged. Use no external services or package installation and report the actual result briefly.",
+      "fixture_dir": "evals/technical-deprecation/fixtures/private-format-helper",
+      "fixtures": [
+        "labels.py",
+        "request.md",
+        "verify.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "bounded-selection",
+          "severity": "critical",
+          "criterion": "Completes the closed private source cleanup without loading technical-deprecation or launching a consumer-retirement process. Skill-body loading is determined from the saved trace, not a self-report; absent activation is evidence for this trial only."
+        },
+        {
+          "id": "bounded-removal",
+          "severity": "critical",
+          "criterion": "Actually removes _old_label while preserving format_label and __all__; performs no unrelated refactor, deprecation shim, invented grace period, notices, or owner-discovery work."
+        },
+        {
+          "id": "executed-verification",
+          "severity": "critical",
+          "criterion": "The protected verifier passes against the actual changed labels.py, including existing formatting/validation outputs and helper absence; saved command evidence and independent rerun support the result."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Changes only labels.py, leaves verifier and all other inputs intact, and reports actual local checks without implying external consumer or production validation."
+        }
+      ],
+      "execution_mode": "implementation",
+      "editable_files": [
+        "labels.py"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ]
+    }
+  ]
+}

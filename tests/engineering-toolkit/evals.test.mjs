@@ -5,11 +5,11 @@ import path from 'node:path';
 import { REPO, SKILLS, inventory, safeRelative } from '../../scripts/evals/lib.mjs';
 
 const index = JSON.parse(await readFile(path.join(REPO, 'evals/engineering-toolkit/scenario-index.json'), 'utf8'));
-test('toolkit index names 30 cases and 20 required first observations', () => {
+test('toolkit index names three cases and two required first observations per skill', () => {
   assert.deepEqual(new Set(index.skills), new Set(Object.keys(SKILLS)));
-  assert.equal(index.new_cases.length, 30);
-  assert.equal(index.new_cases.filter(item => item.required_first_pass).length, 20);
-  assert.equal(new Set(index.new_cases.map(item => `${item.skill}/${item.case_id}`)).size, 30);
+  assert.equal(index.new_cases.length, Object.keys(SKILLS).length * 3);
+  assert.equal(index.new_cases.filter(item => item.required_first_pass).length, Object.keys(SKILLS).length * 2);
+  assert.equal(new Set(index.new_cases.map(item => `${item.skill}/${item.case_id}`)).size, Object.keys(SKILLS).length * 3);
 });
 for (const skill of Object.keys(SKILLS)) {
   const corpus = JSON.parse(await readFile(path.join(REPO, 'evals', skill, 'cases.json'), 'utf8'));

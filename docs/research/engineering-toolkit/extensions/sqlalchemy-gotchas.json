@@ -1,0 +1,182 @@
+{
+  "extension": "sqlalchemy-gotchas",
+  "researched_at": "2026-09-29",
+  "status": "research_and_reference_update",
+  "articles": [
+    {
+      "id": "fastapi-sqlalchemy-parallel-queries",
+      "title": "FastAPI, SQLAlchemy, and Parallel Queries Walk Into a Bar…",
+      "author": "Liron Ben Yeda",
+      "publisher": "Author's Medium publication",
+      "url": "https://medium.com/@lironbenyeda/fastapi-sqlalchemy-and-parallel-queries-walk-into-a-bar-86dfe40aa878",
+      "published_at": "2023-05-10",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_article_via_normal_web_open",
+      "read_scope": "Complete main text and code: request dependency, shared-session TaskGroup, scoped manager, cleanup, and query helper; comments excluded.",
+      "practice": {
+        "trigger": "Independent asynchronous database operations fan out within a request.",
+        "failure": "Tasks share mutable session/transaction state or outlive its resource owner.",
+        "mechanism": "Give each independent task a context-managed session; retain sequential ownership for one atomic unit.",
+        "conditions": "Inspect driver, pool budget, isolation, task lifetime, and framework teardown.",
+        "limits": "Separate sessions do not share atomicity or necessarily a snapshot; parallelism need not improve latency.",
+        "counterexample": "Sequential request work can safely use one injected session under its transaction contract.",
+        "verification": "Gate overlapping work, observe independent effects and cleanup, then reuse the bounded pool."
+      },
+      "adoption": "Adopt ownership problem; use current explicit-session guidance. Do not copy private registry traversal, numeric task-ID scope, or historical timings.",
+      "interpretation_limit": "No claim that the request-local manager necessarily leaks forever or that every driver produces one shared-session failure mode.",
+      "crosscheck_ids": ["sa-session", "sa-async", "sa-registry", "python-id", "fastapi-lifetime", "pg-isolation"]
+    },
+    {
+      "id": "sqlalchemy-effective-query-testing",
+      "title": "Stop the SQLAlchemy Magic: A Guide to Effective Query Testing",
+      "author": "Liron Ben Yeda",
+      "publisher": "Author's Medium publication",
+      "url": "https://medium.com/@lironbenyeda/stop-the-sqlalchemy-magic-a-guide-to-effective-query-testing-6f1a4f607bbb",
+      "published_at": "2023-11-25",
+      "accessed_at": "2026-09-29",
+      "access": "public_full_article_via_normal_web_open",
+      "read_scope": "Complete main text and code: SQL-file comparison, async query/test snippets, claimed review/debugging benefits; comments excluded.",
+      "practice": {
+        "trigger": "ORM query shape obscures a correctness or performance-sensitive database decision.",
+        "failure": "Approved SQL text conceals wrong parameters/results or an unexecuted async path.",
+        "mechanism": "Review target-dialect SQL and binds; await execution and assert independently specified results.",
+        "conditions": "Use representative data and actual result-consumption paths; inspect plans separately for performance.",
+        "limits": "Compiler snapshots and mocks do not establish database behavior, N+1 absence, or production latency.",
+        "counterexample": "A simple stable query without a relevant regression risk need not acquire a snapshot test.",
+        "verification": "Mutate a tenant bind/filter or join and require semantic checks to reject the wrong result."
+      },
+      "adoption": "Adopt generated-SQL visibility as supplemental review evidence, not the whitespace-stripping comparator or printed unawaited test.",
+      "interpretation_limit": "Snippet defects are code-inspection findings; the author's unseen production suite was not audited.",
+      "crosscheck_ids": ["sa-compilation", "sa-performance", "sa-loading", "python-asyncmock", "pg-explain"]
+    }
+  ],
+  "crosscheck_access": {"access": "public_html", "accessed_at": "2026-09-29", "scope": "Only the sections named in each read_scope were read; publication dates were not inferred for undated documentation."},
+  "official_crosschecks": [
+    {
+      "id": "sa-session",
+      "title": "Session Basics",
+      "publisher": "SQLAlchemy",
+      "url": "https://docs.sqlalchemy.org/en/21/orm/session_basics.html",
+      "version_displayed": "2.1.1",
+      "read_scope": "Concurrency FAQ, sessionmaker scope, transaction framing, and Closing.",
+      "finding": "Session/AsyncSession are mutable transaction state, used per thread/task; close releases transactional resources but does not necessarily make the object unusable."
+    },
+    {
+      "id": "sa-async",
+      "title": "Asynchronous I/O (asyncio)",
+      "publisher": "SQLAlchemy",
+      "url": "https://docs.sqlalchemy.org/en/21/orm/extensions/asyncio.html",
+      "version_displayed": "2.1.1",
+      "read_scope": "ORM synopsis, concurrent tasks, sessionmaker context, scoped-session guidance and close/remove lifecycle.",
+      "finding": "Explicit sessions are preferred for new async designs. Context closure and transaction framing differ. Task-scoped removal belongs in the owning task; closing alone does not remove scope state."
+    },
+    {
+      "id": "sa-registry",
+      "title": "Contextual/Thread-local Sessions",
+      "publisher": "SQLAlchemy",
+      "url": "https://docs.sqlalchemy.org/en/21/orm/contextual.html#sqlalchemy.util.ScopedRegistry",
+      "version_displayed": "2.1.1",
+      "read_scope": "ScopedRegistry public interface and scoped-session removal semantics.",
+      "finding": "Public scope operations do not establish private nested-registry enumeration as a lifecycle recipe."
+    },
+    {
+      "id": "python-id",
+      "title": "Built-in Functions: id",
+      "publisher": "Python",
+      "url": "https://docs.python.org/3/builtins/functions.html#id",
+      "read_scope": "id() lifetime guarantee.",
+      "finding": "Object IDs may be reused after an object's lifetime; retaining numeric task keys requires lifecycle care."
+    },
+    {
+      "id": "fastapi-lifetime",
+      "title": "Dependencies with yield; Advanced Dependencies",
+      "publisher": "FastAPI",
+      "url": "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#early-exit-and-scope",
+      "related_url": "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#background-tasks-and-dependencies-with-yield-technical-details",
+      "read_scope": "Request/function scope, streaming lifetime history, and background-task resources.",
+      "finding": "Current request-scope teardown follows response sending; function scope, added in 0.121.0, precedes it. Background tasks should own resources and receive independent inputs."
+    },
+    {
+      "id": "pg-isolation",
+      "title": "Transaction Isolation",
+      "publisher": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/18/transaction-iso.html",
+      "version_displayed": "18",
+      "read_scope": "Read Committed and Repeatable Read visibility and transaction boundaries.",
+      "finding": "Read Committed may see a new snapshot per statement. Repeatable Read stabilizes one transaction, not independently begun transactions."
+    },
+    {
+      "id": "sa-compilation",
+      "title": "SQL Expressions",
+      "publisher": "SQLAlchemy",
+      "url": "https://docs.sqlalchemy.org/en/21/faq/sqlexpressions.html",
+      "version_displayed": "2.1.1",
+      "read_scope": "Stringification by dialect, binds, literal-rendering limits, and postcompile parameters.",
+      "finding": "Generic rendering is not target-dialect proof; binds are separate. Literal rendering is a limited debugging facility, not secure execution of untrusted values."
+    },
+    {
+      "id": "sa-performance",
+      "title": "Performance",
+      "publisher": "SQLAlchemy",
+      "url": "https://docs.sqlalchemy.org/en/21/faq/performance.html",
+      "version_displayed": "2.1.1",
+      "read_scope": "Query profiling, cursor execution, result fetching, Cartesian products, and ORM materialization.",
+      "finding": "Locate execution/fetch/materialization cost and inspect backend plans instead of inferring performance from SQL text."
+    },
+    {
+      "id": "sa-loading",
+      "title": "Relationship Loading Techniques",
+      "publisher": "SQLAlchemy",
+      "url": "https://docs.sqlalchemy.org/en/21/orm/queryguide/relationships.html",
+      "version_displayed": "2.1.1",
+      "read_scope": "Lazy loading/N+1, raiseload, and eager join behavior.",
+      "finding": "Accessing results can emit further queries; a compiled leading statement does not capture the whole loading path."
+    },
+    {
+      "id": "python-asyncmock",
+      "title": "unittest.mock: AsyncMock",
+      "publisher": "Python",
+      "url": "https://docs.python.org/3/library/unittest.mock.html#unittest.mock.AsyncMock",
+      "version_displayed": "3.14.7 documentation",
+      "read_scope": "AsyncMock call/await distinction, await assertions and await counters.",
+      "finding": "An async mock being called and its result being awaited are separate observations."
+    },
+    {
+      "id": "pg-explain",
+      "title": "Using EXPLAIN",
+      "publisher": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/18/using-explain.html",
+      "version_displayed": "18",
+      "read_scope": "Execution-plan interpretation and EXPLAIN ANALYZE execution/side-effect boundary.",
+      "finding": "ANALYZE executes the statement; a plan probe must account for effects and workload representativeness."
+    }
+  ],
+  "version_observations": {
+    "accessed_at": "2026-09-29",
+    "sqlalchemy_current": {"version": "2.1.1", "release_date": "2026-09-25", "source": "https://docs.sqlalchemy.org/en/21/orm/extensions/asyncio.html"},
+    "sqlalchemy_maintenance": {"version": "2.0.54", "release_date": "2026-09-15", "source": "https://docs.sqlalchemy.org/en/20/faq/sqlexpressions.html"},
+    "fastapi_release_notes": {"version": "0.141.1", "release_date": "2026-07-29", "source": "https://fastapi.tiangolo.com/release-notes/#01411-2026-07-29"},
+    "inspected_interpreter": {"executable": "/opt/homebrew/opt/python@3.14/bin/python3.14", "python": "3.14.3", "not_installed": ["SQLAlchemy", "fastapi", "pytest", "pytest-asyncio", "asyncpg", "aiosqlite", "psycopg"]},
+    "existing_repo_requirements": {"path": "examples/backend/python/requirements.txt", "psycopg": "3.3.6", "psycopg-pool": "3.3.3"},
+    "limit": "Documentation versions and requirement pins are not evidence those packages were installed in the inspected interpreter. No dependency installed during this research/reference update."
+  },
+  "coverage_mapping": {
+    "already_covered": ["task ownership and cancellation", "independent concurrent transactions", "uncertain COMMIT outcomes", "database-backed invariant verification"],
+    "added": ["SQLAlchemy task/session versus request dependency boundaries", "public scoped cleanup versus historical private manager", "separate snapshot/rollback limits", "FastAPI response/background resource lifetimes", "target-dialect SQL and execution binds", "awaited semantic query tests and result-consumption observation"],
+    "modified": ["skills/languages/python-backend/references/async-ownership.md", "skills/languages/python-backend/references/transaction-outcomes.md", "skills/languages/python-backend/references/sources.md"],
+    "created": ["skills/languages/python-backend/references/sqlalchemy-sessions-and-queries.md"],
+    "entry_skill_changed": false,
+    "new_skill_or_agent": false
+  },
+  "runtime_proposals": [
+    {"id": "shared-session-rollback", "status": "proposed_not_executed_by_this_research", "oracle": "Controlled sibling transaction action interferes with shared work; fixed independent tasks preserve each intended transaction, without claiming joint rollback."},
+    {"id": "task-owned-pool-cleanup", "status": "proposed_not_executed_by_this_research", "oracle": "Bound pool demand, cancel at controlled acquisition/work boundaries, join cleanup, and execute fresh work through the same pool."},
+    {"id": "snapshot-boundary", "status": "proposed_not_executed_by_this_research", "oracle": "Separate Repeatable Read snapshots may differ; sequential reads in one correctly framed transaction match the declared snapshot contract."},
+    {"id": "meaningful-query-checks", "status": "proposed_not_executed_by_this_research", "oracle": "Wrong binds/filter/join produce failing independent result expectations despite plausible SQL text; whitespace normalization and unawaited-call controls expose their limited evidence."}
+  ],
+  "limits": [
+    "Source/article inspection and package metadata only; no database container, SQLAlchemy/FastAPI runtime, or model evaluation was launched by this update.",
+    "Existing framework and transaction choices should change only where the task requires them.",
+    "No performance numbers or copyrighted example implementations were copied."
+  ]
+}
