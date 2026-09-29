@@ -23,3 +23,27 @@ PlanetScale Vitess is a concrete limit, not a portable database contract: its in
 - **Verification:** Interrupt a stage and observe useful throughput and accepted-work completion; include cold caches/dependencies when relevant. A canary needs representative work-unit outcomes, not only process readiness.
 
 Cloudflare's outage account supports testing the complete recovery dependency set and controlled recovery admission. Its availability recovery did not eliminate all data gaps; specify acceptable data loss and usable state independently. [Incident account](https://blog.cloudflare.com/post-mortem-on-cloudflare-control-plane-and-analytics-outage/)
+
+## Large storage copies
+
+Use when cutover depends on a bulk copy or backfill. Track every required range
+and unresolved failure, including cold and deletion-heavy history. Establish
+the source position or comparison window and how concurrent writes/deletes
+reach the destination. Ordinary dual writes need durable partial-success
+evidence and reconciliation; sampled live-read equality cannot prove that all
+historical ranges were copied.
+
+Compare payload and relevant deletion, expiry and write-order metadata with
+explicit tolerances. Test an incomplete cold range, changed TTL, missed deletion
+and intervening update; completion remains blocked until required coverage and
+semantic checks pass. Retain the supported recovery path through the authority
+switch. [Discord's migration account](https://discord.com/blog/how-discord-stores-trillions-of-messages)
+motivates checking the unfinished tail. The [ScyllaDB Migrator 2.1.x validator](https://migrator.docs.scylladb.com/stable/validate.html)
+provides timestamp/TTL comparisons; its write-pause instruction is specific to
+MySQL-to-ScyllaDB, not a universal migration procedure.
+
+For tombstone-related timeouts, preserve the deployed engine's deletion/repair
+contract and maintenance capacity budget. [Cassandra's tombstone rules](https://cassandra.apache.org/doc/latest/cassandra/managing/operating/compaction/tombstones.html)
+explain why shortening retention or forcing compaction is not a generic repair
+for missing migration progress. Verify actual version/table settings before
+proposing maintenance.

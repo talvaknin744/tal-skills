@@ -1,0 +1,187 @@
+{
+  "lane": "discord-message-storage",
+  "status": "research complete; conditional reference additions implemented; runtime evaluation not performed by this lane",
+  "verified_at": "2026-09-29",
+  "existing_skill_count": 41,
+  "new_deep_article_count": 1,
+  "new_publisher_count": 0,
+  "deduplication": {
+    "method": "Exact article URL plus Discord/title search across docs/research before writing these files",
+    "prior_exact_article_matches": [],
+    "prior_related_record": "docs/research/engineering-toolkit/lanes/quality.json surveyed Discord and Why Discord is switching from Go to Rust; it did not deeply read this article",
+    "coverage": "Original lanes, publisher survey and existing extensions"
+  },
+  "article": {
+    "id": "discord-trillions-messages",
+    "title": "How Discord Stores Trillions of Messages",
+    "publisher": "Discord Engineering & Developers",
+    "author": "Bo Ingram",
+    "published_at": "2023-03-06",
+    "url": "https://discord.com/blog/how-discord-stores-trillions-of-messages",
+    "access": "Public article accessible through web extraction; a direct urllib HTML request returned HTTP 403",
+    "read_scope": "Complete accessible main narrative from Cassandra Troubles through Several Months Later, including migration and operational outcome; embedded schema/diagram/graph images not independently inspected; linked earlier articles not counted",
+    "fact_summary": "Hot partitions caused cascading latency. Discord added intermediary data services that coalesced overlapping reads and routed channels consistently. Its checkpointed migration stalled on tombstone-heavy ranges; selected reads were compared before cutover. These observations motivate bounded-load and migration-evidence checks, not a portable throughput promise.",
+    "limits": "Historical company account. It does not specify a complete admission algorithm, cross-user authorization/freshness policy, dual-write reconciliation protocol or universal storage durability guarantee."
+  },
+  "practices": [
+    {
+      "id": "hot-key-containment",
+      "provenance": "Engineering inference from the article's failure mechanism, current diagnostic and runtime contracts; not a claim of Discord's unpublished implementation",
+      "trigger": "One tenant/key/partition drives tail latency or origin saturation while aggregate capacity appears adequate.",
+      "failure": "Concentrated concurrent work consumes shared resources; added callers or frontend replicas amplify the same constrained origin.",
+      "mechanism": "Measure request concentration separately from stored size; choose per-key admission/coalescing plus an aggregate origin bound and explicit bounded waiting/rejection.",
+      "conditions": "The constrained resource and routing scope are known; callers may share equivalent reads or accept the selected bounded overload response.",
+      "limits": "Affinity does not spread one hot key. Process-local control is not a global bound; routing changes can create multiple active owners. Unique-key load may offer no coalescing benefit.",
+      "counterexample": "A semaphore limits active queries but an unlimited number of waiting tasks or tracked keys exhausts memory.",
+      "verification": "Mix one hot key, many unique keys and cold traffic; bound active work, waiters and key cardinality, then cancel/error/remap owners and observe release and unaffected work.",
+      "source_ids": ["discord-trillions-messages", "scylla-large-partitions", "tokio-semaphore", "go-singleflight-source"],
+      "target": "skills/engineering/microservice-operations/references/capacity.md",
+      "overlap": "Hot-key behavior and bulkheads already exist; concrete coalescer scope, waiter cardinality and skew-isolation checks are the gap."
+    },
+    {
+      "id": "coalescer-equivalence-and-lifecycle",
+      "provenance": "Proposed correctness analysis supported by the local Group/key API; not a reported Discord bug",
+      "trigger": "Concurrent callers join shared reads with differing visibility, query arguments, consistency requirements or deadlines.",
+      "failure": "A waiter receives another caller's unauthorized or too-old result; cancellation of one caller unintentionally aborts shared work, or detached waiters leak resources.",
+      "mechanism": "Define result equivalence and scope every result-changing input, or check authorization/freshness per waiter. Own the shared operation's deadline/cancellation separately from waiter detachment.",
+      "conditions": "The read contract and result-sharing scope are explicit; freshness is verified by an actual source/version protocol.",
+      "limits": "Singleflight is neither a cache nor a freshness guarantee. Forgetting a key can admit a second operation before the old one finishes. Coalescing mutations needs a separate durable effect protocol.",
+      "counterexample": "A read starts before revision 8 commits; a post-commit read requiring revision 8 joins it and receives revision 7.",
+      "verification": "Force that history and cross-tenant/visibility mismatch; cancel the first then all waiters, fail the origin and verify bounded cleanup under the chosen policy.",
+      "source_ids": ["go-singleflight-api", "go-singleflight-source"],
+      "target": "skills/engineering/microservice-operations/references/capacity.md",
+      "overlap": "Existing concurrency-correctness delayed-fill/version rules remain authoritative. The accepted placement keeps shared in-flight read equivalence and the dependent-reader history in capacity; cache-coherence.md was not changed."
+    },
+    {
+      "id": "migration-tail-and-semantic-coverage",
+      "provenance": "Engineering validation proposal; the article's samples are not treated as proof of every historical record",
+      "trigger": "Bulk storage copy approaches completion, especially with cold ranges, deletions, TTLs or writes continuing during migration.",
+      "failure": "Aggregate progress or popular sampled reads hide missing cold data, incomplete ranges, changed expiry, or incorrect last-write ordering.",
+      "mechanism": "Track every required range and unresolved failure; define the comparison boundary and reconciliation path; compare payload and relevant delete/TTL/write-time semantics with explicit tolerances.",
+      "conditions": "The selected engine and migrator expose sufficient source positions, range identity and comparison evidence.",
+      "limits": "A live scan is not automatically one snapshot. Row counts and absence of sampled mismatches have limited coverage; preserve existing dual-write and cutover recovery rules.",
+      "counterexample": "A cold range times out while all popular sampled records match, or copying a row resets its remaining TTL.",
+      "verification": "Inject a failed range, missing payload, deletion, changed TTL/write timestamp and concurrent update; block completion until coverage and semantic comparison meet the declared contract.",
+      "source_ids": ["discord-trillions-messages", "scylla-migrator-validation", "cassandra-tombstones"],
+      "target": "skills/infrastructure/infrastructure-change-safety/references/rollout.md",
+      "overlap": "Compatibility and business comparison already exist. microservice-extraction/data-transition.md already handles dual-write ambiguity and row-count insufficiency; avoid duplicating its ownership workflow."
+    },
+    {
+      "id": "safe-tombstone-diagnosis",
+      "provenance": "Current primary storage-document constraint, not adoption of Discord's maintenance action",
+      "trigger": "Deletion-heavy ranges or compaction backlog cause timeouts during ordinary reads or migration.",
+      "failure": "An operator trades deletion safety for lower tombstone pressure or mistakes incomplete diagnostic coverage for clean data.",
+      "mechanism": "Inspect deployed engine/version, repair/outage history, deletion retention and compaction resource budget before choosing maintenance.",
+      "conditions": "Applies only where the storage engine uses the relevant tombstone and repair mechanism.",
+      "limits": "Cassandra settings are not portable ScyllaDB defaults; an empty large-partition diagnostic is not an exhaustive absence proof.",
+      "counterexample": "A replica misses a delete, retention is shortened, and the old value returns after rejoin.",
+      "verification": "In an authorized disposable cluster, test delete/TTL across missed replication, repair and compaction, then verify continued absence.",
+      "source_ids": ["cassandra-tombstones", "scylla-large-partitions"],
+      "target": "skills/infrastructure/infrastructure-change-safety/references/rollout.md",
+      "overlap": "Prefer a conditional caveat/source link alongside migration validation, not a new maintenance skill or automatic command."
+    }
+  ],
+  "runtime_sources": [
+    {
+      "id": "go-singleflight-api",
+      "title": "singleflight package",
+      "url": "https://pkg.go.dev/golang.org/x/sync@v0.23.0/singleflight",
+      "publisher": "Go project",
+      "version": "golang.org/x/sync v0.23.0; observed documentation version, not asserted to be latest",
+      "access": "Public full package documentation",
+      "read_scope": "Group, Do, DoChan, Forget and Result contracts",
+      "findings": "Duplicate suppression uses a Group and key; concurrent callers share returned result/error. DoChan's result channel is not closed. Forget allows a future call to run without waiting for an earlier one."
+    },
+    {
+      "id": "go-singleflight-source",
+      "title": "singleflight.go",
+      "url": "https://github.com/golang/sync/blob/v0.23.0/singleflight/singleflight.go",
+      "publisher": "Go project",
+      "version": "v0.23.0",
+      "access": "Full source read via raw.githubusercontent.com/golang/sync/v0.23.0/singleflight/singleflight.go",
+      "read_scope": "Group map/mutex, Do and DoChan registration/waiting, doCall completion, Forget removal",
+      "findings": "State and duplicate tracking are local to a Group. The interface has no context argument; caller cancellation policy is not supplied. The primitive does not bound distinct keys or all waiting callers."
+    },
+    {
+      "id": "tokio-semaphore",
+      "title": "tokio::sync::Semaphore",
+      "url": "https://docs.rs/tokio/1.53.1/tokio/sync/struct.Semaphore.html",
+      "publisher": "Tokio project documentation hosted on docs.rs",
+      "version": "1.53.1 displayed by latest page on access",
+      "access": "Public rustdoc",
+      "read_scope": "Overview/fairness, incoming/outgoing concurrency examples, acquisition/cancellation and try_acquire contracts",
+      "findings": "Permits bound simultaneous holders, with acquisition placement determining whether task creation is bounded. Fair multi-permit acquisition can delay smaller requests; cancelling acquisition loses queue position. Application policy still owns total waiting population."
+    },
+    {
+      "id": "scylla-large-partitions",
+      "title": "ScyllaDB Large Partitions Table",
+      "url": "https://docs.scylladb.com/manual/stable/troubleshooting/large-partition-table.html",
+      "publisher": "ScyllaDB",
+      "version": "Manual 2026.3; virtual-table change described from 2026.2",
+      "access": "Public full technical documentation",
+      "read_scope": "Detection scope, node-local results, metadata-backed virtual tables, feature activation and upgrade limits",
+      "findings": "Measurements are per SSTable partition fragment and node. New virtual tables use bounded metadata written into SSTables; older SSTables may have no records. Empty diagnostics cannot prove absence of large logical partitions or hot request traffic."
+    },
+    {
+      "id": "cassandra-tombstones",
+      "title": "Tombstones",
+      "url": "https://cassandra.apache.org/doc/latest/cassandra/managing/operating/compaction/tombstones.html",
+      "publisher": "Apache Cassandra",
+      "version": "Page displays 5.0; accessed 2026-09-29",
+      "access": "Public full technical documentation",
+      "read_scope": "Deletion markers, unavailable replicas, grace, compaction eligibility and repaired-data gating",
+      "findings": "Expiry alone does not remove deletion evidence; compaction must account for shadowed older data. Replicas missing deletion can resurrect data after evidence disappears. Apply the deployed engine's repair/retention contract before changing maintenance."
+    },
+    {
+      "id": "scylla-migrator-validation",
+      "title": "Validate the Migration",
+      "url": "https://migrator.docs.scylladb.com/stable/validate.html",
+      "publisher": "ScyllaDB",
+      "version": "Migrator 2.1.x; page updated 2026-08-12",
+      "access": "Public full technical documentation",
+      "read_scope": "Validator semantics, comparison configuration, deployment modes; commands read but not executed",
+      "findings": "Supports TTL and write-time comparisons with explicit tolerances. The instruction to pause writes on both sides is specifically for MySQL-to-ScyllaDB validation; it must not be reported as Cassandra-specific or universal."
+    }
+  ],
+  "overlap_review": {
+    "read": [
+      "skills/engineering/concurrency-correctness/SKILL.md",
+      "skills/engineering/concurrency-correctness/references/cache-coherence.md",
+      "skills/engineering/concurrency-correctness/references/projection-rebuild.md",
+      "skills/engineering/microservice-operations/SKILL.md",
+      "skills/engineering/microservice-operations/references/capacity.md",
+      "skills/engineering/microservice-operations/references/failure-handling.md",
+      "skills/messaging/messaging-reliability/SKILL.md",
+      "skills/infrastructure/infrastructure-change-safety/SKILL.md",
+      "skills/infrastructure/infrastructure-change-safety/references/rollout.md",
+      "skills/engineering/microservice-extraction/references/data-transition.md",
+      "skills/engineering/microservice-extraction/references/cutover.md",
+      "skills/engineering/microservice-data/SKILL.md"
+    ],
+    "messaging_reliability": "No new instruction proposed: chat messages in a database are not equivalent to broker messages; effect/checkpoint/replay rules already exist.",
+    "microservice_data": "Its data-ownership trigger should not expand to single-database capacity tuning.",
+    "new_skill_agent_category": "Not proposed. User confirmation would be required before creating any new skill, agent or category."
+  },
+  "not_adopted": [
+    "Rust rewrites, ScyllaDB replacement, node counts or throughput as general recommendations",
+    "A one-endpoint-per-query data service as a required architecture",
+    "Consistent hashing as a complete solution to hot keys or a distributed exclusivity guarantee",
+    "Request coalescing as freshness, authorization, idempotency or durable exactly-once execution",
+    "Dual writes as atomic or sampled read equality as complete migration proof",
+    "Unconditional manual compaction, reduced tombstone retention or the historical storage topology as portable durability guidance"
+  ],
+  "validation": {
+    "performed": ["Complete accessible article-text reading", "Exact URL/title/publisher deduplication", "Primary API/source inspection", "Independent ScyllaDB/Cassandra/migrator doc cross-check", "Existing skill/reference overlap review"],
+    "not_performed": ["Model trial", "Runtime load test", "Database migration", "Cloud or production action", "Runtime implementation or creation of a skill/agent/category"],
+    "independent_reviewer": "discord_storage_check research subagent"
+  },
+  "implementation_scope": {
+    "changed_references": [
+      "skills/engineering/microservice-operations/references/capacity.md",
+      "skills/engineering/microservice-operations/references/sources.md",
+      "skills/infrastructure/infrastructure-change-safety/references/rollout.md"
+    ],
+    "coordinated_reference": "books_operations separately owns microservice-operations/references/cache-load-protection.md; this lane added navigation and source attribution",
+    "limits": "No source-code implementation or runtime test result is implied by these reference changes."
+  }
+}

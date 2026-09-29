@@ -1,0 +1,502 @@
+{
+  "title": "Redis high-throughput claim audit",
+  "checked_at": "2026-09-29",
+  "status": "research complete; conditional guidance adopted in existing microservice-operations skill; independent review pending",
+  "motivation": "User-supplied Redis advice was read in full and treated as hypotheses, not evidence. Private text is not reproduced.",
+  "scope": "Redis Open Source command/configuration contracts; managed products and client support require deployment-specific checks.",
+  "version_policy": "Mutable latest documentation read on the stated date, with observed command-specific minima. No newly installed or executed server in this pass. Existing cache example Redis 8.10.2 is separate bounded evidence.",
+  "sources": [
+    {
+      "id": "persistence",
+      "title": "Redis persistence",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Persistence alternatives, RDB failure windows, AOF fsync policies and rewrite overhead; selected sections.",
+      "version_observed": "latest; page also describes Redis 8.10 BACKUP, which is outside the adopted advice",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "replication",
+      "title": "Redis replication",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/replication/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Asynchronous replication, persistence-disabled restart failure, replication ID/byte offsets, minimum replicas and lag admission; selected sections.",
+      "version_observed": "latest Redis Open Source documentation",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "wait",
+      "title": "WAIT",
+      "url": "https://redis.io/docs/latest/commands/wait/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Availability, same-connection preceding-write receipt, timeout result, transaction behavior, consistency limits and implementation.",
+      "version_observed": "command since 3.0.0; nonblocking-context note since 7.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "waitaof",
+      "title": "WAITAOF",
+      "url": "https://redis.io/docs/latest/commands/waitaof/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Availability, same-connection AOF fsync counts, timeout, AOF prerequisite, propagation caveat and consistency limits.",
+      "version_observed": "command since 7.2.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "lmove",
+      "title": "LMOVE",
+      "url": "https://redis.io/docs/latest/commands/lmove/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Availability, atomic list transfer and reliable-queue processing-list pattern.",
+      "version_observed": "command since 6.2.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "xreadgroup",
+      "title": "XREADGROUP",
+      "url": "https://redis.io/docs/latest/commands/xreadgroup/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Consumer groups, PEL, XACK/NOACK, claiming and ordering; cumulative reply-bound section.",
+      "version_observed": "base command since 5.0.0; CLAIM since 8.4; MAXCOUNT/MAXSIZE since 8.10",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "xclaim",
+      "title": "XCLAIM",
+      "url": "https://redis.io/docs/latest/commands/xclaim/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Availability, pending ownership change, idle threshold, repeated processing, delivery counters and missing-payload handling.",
+      "version_observed": "command since 5.0.0; missing-payload PEL cleanup since 7.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "xtrim",
+      "title": "XTRIM",
+      "url": "https://redis.io/docs/latest/commands/xtrim/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Availability, trimming thresholds, approximate trimming, KEEPREF/DELREF/ACKED semantics.",
+      "version_observed": "command since 5.0.0; LIMIT since 6.2.0; reference policies since 8.2",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "xlen",
+      "title": "XLEN",
+      "url": "https://redis.io/docs/latest/commands/xlen/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Command description, returned stream cardinality and availability.",
+      "version_observed": "command since 5.0.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "xinfo-groups",
+      "title": "XINFO GROUPS",
+      "url": "https://redis.io/docs/latest/commands/xinfo-groups/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Pending versus undelivered lag, heuristic/NULL cases and field history.",
+      "version_observed": "command since 5.0.0; entries-read and lag fields since 7.0.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "info",
+      "title": "INFO",
+      "url": "https://redis.io/docs/latest/commands/info/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Server version, memory/lazyfree/RSS, replication state/offsets, client buffers, CPU and command-stat fields; selected sections.",
+      "version_observed": "latest; fields vary by server version",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "tracking-reference",
+      "title": "Client-side caching reference",
+      "url": "https://redis.io/docs/latest/develop/reference/client-side-caching/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Default tracking, opt-in, BCAST prefixes/fanout, server-side state and NOLOOP; selected sections.",
+      "version_observed": "Redis 6 tracking introduction; latest reference",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "tracking-command",
+      "title": "CLIENT TRACKING",
+      "url": "https://redis.io/docs/latest/commands/client-tracking/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Tracking lifetime, BCAST/PREFIX, redirection disconnection signal, opt-in/out and NOLOOP.",
+      "version_observed": "latest command reference; verify deployed client support",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "cluster",
+      "title": "Redis cluster specification",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/reference/cluster-spec/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Key distribution, hash tags, multi-key colocation and replica-read staleness.",
+      "version_observed": "latest Redis Open Source cluster specification",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "eviction",
+      "title": "Key eviction",
+      "url": "https://redis.io/docs/latest/develop/reference/eviction/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Memory accounting, eligibility/policies, mixed cache/persistent data, rejected writes, approximate LRU and metrics.",
+      "version_observed": "latest; LRM section identifies 8.6, but no LRM recommendation adopted",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "unlink",
+      "title": "UNLINK",
+      "url": "https://redis.io/docs/latest/commands/unlink/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Availability, key detachment and asynchronous allocation reclamation complexity.",
+      "version_observed": "command since 4.0.0",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "del",
+      "title": "DEL",
+      "url": "https://redis.io/docs/latest/commands/del/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "String versus aggregate deletion complexity.",
+      "version_observed": "latest; delegated primary-source read",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "latency",
+      "title": "Redis latency problems troubleshooting",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Slow-command blocking and latency diagnosis sections.",
+      "version_observed": "latest; delegated primary-source read",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "redis8-io",
+      "title": "Redis 8 is now GA, loaded with new features and more than 30 performance improvements",
+      "url": "https://redis.io/blog/redis-8-ga/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Published date and I/O-thread implementation section only; benchmark numbers not adopted.",
+      "version_observed": "Redis 8 feature account; published 2025-05-01",
+      "checked_at": "2026-09-29",
+      "published_at": "2025-05-01"
+    },
+    {
+      "id": "hget",
+      "title": "HGET",
+      "url": "https://redis.io/docs/latest/commands/hget/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Single-field operation complexity.",
+      "version_observed": "command since 2.0.0; delegated primary-source read",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "hgetall",
+      "title": "HGETALL",
+      "url": "https://redis.io/docs/latest/commands/hgetall/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Whole-hash operation complexity and response contents.",
+      "version_observed": "command since 2.0.0; delegated primary-source read",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "slowlog",
+      "title": "SLOWLOG GET",
+      "url": "https://redis.io/docs/latest/commands/slowlog-get/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Execution-time scope excludes client communication; selected command discussion.",
+      "version_observed": "latest; delegated primary-source read",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    },
+    {
+      "id": "pipelining",
+      "title": "Redis pipelining",
+      "url": "https://redis.io/docs/latest/develop/using-commands/pipelining/",
+      "publisher": "Redis",
+      "access": "accessible primary technical body",
+      "read_scope": "Request/response batching, queued reply memory, bounded batches and scripting distinction; selected sections.",
+      "version_observed": "latest documentation; client behavior requires verification",
+      "checked_at": "2026-09-29",
+      "published_at": null
+    }
+  ],
+  "access_failures": [
+    {
+      "url": "https://redis.io/docs/latest/develop/data-types/streams/",
+      "result": "Web fetch rejected content larger than 4 MB; overview not counted as read. Focused command pages used."
+    },
+    {
+      "url": "https://redis.io/docs/latest/commands/xautoclaim/",
+      "result": "Two web fetches returned internal errors; XCLAIM documentation used for recovery contract. No XAUTOCLAIM-specific claims adopted."
+    }
+  ],
+  "claim_corrections": [
+    {
+      "id": "writebehind-default",
+      "assessment": "conditional",
+      "correction": "Buffering changes acceptance and durability; it is not an automatic cure for database saturation.",
+      "practice_ids": [
+        "accepted-work-durability",
+        "consumer-effect-and-capacity"
+      ]
+    },
+    {
+      "id": "stream-or-list-reliability",
+      "assessment": "incomplete",
+      "correction": "Command acknowledgement, recovered delivery and committed external effects are distinct.",
+      "practice_ids": [
+        "consumer-effect-and-capacity"
+      ]
+    },
+    {
+      "id": "xlen-lag",
+      "assessment": "incorrect",
+      "correction": "Stream length, consumer-group progress and server replication progress measure different things.",
+      "practice_ids": [
+        "read-source-proof"
+      ]
+    },
+    {
+      "id": "primary-strong-consistency",
+      "assessment": "overstated",
+      "correction": "Primary routing and replication/fsync waits do not establish strong consistency through async failover.",
+      "practice_ids": [
+        "read-source-proof"
+      ]
+    },
+    {
+      "id": "bcast-invalidation-cure",
+      "assessment": "conditional",
+      "correction": "Prefix broadcasting can increase invalidation fanout.",
+      "practice_ids": [
+        "l1-invalidation-cost"
+      ]
+    },
+    {
+      "id": "salt-hot-mutable-key",
+      "assessment": "conditional",
+      "correction": "Routing distribution and mutable-copy coherence need separate evidence.",
+      "practice_ids": [
+        "hot-key-copy-coherence"
+      ]
+    },
+    {
+      "id": "volatile-policy-ttl-all",
+      "assessment": "unsafe-universal-rule",
+      "correction": "Eviction eligibility must follow acceptable loss, not a universal TTL policy.",
+      "practice_ids": [
+        "loss-eligibility"
+      ]
+    },
+    {
+      "id": "single-thread-and-size-cutoff",
+      "assessment": "overstated",
+      "correction": "Threading and per-command complexity matter; there is no universal few-thousand-members cutoff.",
+      "practice_ids": [
+        "bounded-command-work"
+      ]
+    },
+    {
+      "id": "unlink-immediate-memory",
+      "assessment": "overstated",
+      "correction": "Removal visibility and background memory reclamation are separate observations.",
+      "practice_ids": [
+        "bounded-command-work"
+      ]
+    }
+  ],
+  "practice_cards": [
+    {
+      "id": "accepted-work-durability",
+      "trigger": "Move mutations from synchronous database commits to Redis-buffered processing.",
+      "failure": "An accepted request disappears before the database effect, or a lost reply causes a second enqueue/effect.",
+      "mechanism": "Define the acceptance boundary, allowed loss window, persistence/failover configuration and recovery evidence. Preserve an application operation ID through uncertain replies.",
+      "conditions": "Inspect actual server/client support and same-connection WAIT/WAITAOF result counts. A timeout does not establish that the earlier write failed.",
+      "counterexample": "Disposable telemetry may accept loss; a financial mutation cannot silently inherit that policy. Synchronous database writes do not universally require replacement.",
+      "verification": "Proposed: interrupt after enqueue and after persistence-wait timeout; restart under the chosen configuration and reconcile accepted IDs against committed effects.",
+      "source_ids": [
+        "persistence",
+        "replication",
+        "wait",
+        "waitaof"
+      ],
+      "inference": "Acceptance policy and identity reconciliation are application requirements derived from command boundaries."
+    },
+    {
+      "id": "consumer-effect-and-capacity",
+      "trigger": "Redis work is consumed into a separate database.",
+      "failure": "Destructive pop or premature ACK loses work; commit-before-ACK duplicates effects; trimming or overload destroys replay inputs.",
+      "mechanism": "Use recoverable pending ownership, stable scoped identity, transactional effect/outcome recording and ACK after commit. Bound admission, batches and worker concurrency; track oldest unfinished work and queue bytes.",
+      "conditions": "Reclaiming ownership does not fence external writes. Retain payload and deduplication state for supported recovery; inspect trimming policy and poison-work disposition.",
+      "counterexample": "A processing list alone cannot deduplicate a bank API call. Unbounded buffering only postpones a sustained capacity deficit.",
+      "verification": "Proposed: lose ACK after commit, resume an old worker after reclaim, stop consumers until admission limits activate, then replay retained work.",
+      "source_ids": [
+        "lmove",
+        "xreadgroup",
+        "xclaim",
+        "xtrim"
+      ],
+      "inference": "Database transaction, admission and external-effect fencing requirements are derived application design."
+    },
+    {
+      "id": "l1-invalidation-cost",
+      "trigger": "High write rates invalidate many local cache entries.",
+      "failure": "BCAST amplifies matching-prefix traffic; lost invalidations permit stale local reads.",
+      "mechanism": "Compare selective/default tracking and BCAST using actual subscriptions, mutation rate and hit savings. On uncertain tracking continuity, invalidate or bypass affected local state until tracking is re-established.",
+      "conditions": "Check protocol/client reconnect handling. Narrow prefixes exclude unrelated keys but every subscriber still receives matching changes.",
+      "counterexample": "A write-heavy prefix subscribed by all clients can make BCAST more expensive than selective caching.",
+      "verification": "Proposed: compare two clients that read disjoint keys, update an unread matching key, then disconnect invalidation delivery and check the declared freshness fallback.",
+      "source_ids": [
+        "tracking-reference",
+        "tracking-command"
+      ],
+      "inference": "Local-cache recovery policy and comparative workload measurements are recommendations, not built-in guarantees."
+    },
+    {
+      "id": "read-source-proof",
+      "trigger": "Replica routing must satisfy freshness or read-your-writes across services.",
+      "failure": "Stream cardinality or health timestamps are mistaken for applied database state; failover loses required history.",
+      "mechanism": "Separate XLEN, group pending/lag, and replication ID/offset. Compare offsets only within compatible replication history; require application freshness evidence or an explicit bounded fallback.",
+      "conditions": "Offsets count replication bytes, not elapsed freshness. Last interaction is a health signal. Primary routing remains subject to acknowledgement and failover semantics.",
+      "counterexample": "A fully retained stream can have high XLEN after all effects finish; zero group lag can coexist with pending work.",
+      "verification": "Proposed: pause replication and a consumer independently; record each metric, then exercise required-revision reads and a history-changing failover.",
+      "source_ids": [
+        "xlen",
+        "xinfo-groups",
+        "info",
+        "replication",
+        "wait",
+        "waitaof"
+      ],
+      "inference": "An application revision/fallback protocol is additional design, not a property conferred by a metric."
+    },
+    {
+      "id": "hot-key-copy-coherence",
+      "trigger": "One key dominates command time or network traffic.",
+      "failure": "Randomly selected mutable copies diverge or remain on the same resource.",
+      "mechanism": "Measure the bottleneck and actual slot/node placement. Prefer bounded payload/access patterns; consider immutable version-addressed copies only with an explicit publication/read contract.",
+      "conditions": "Mutable copies require partial-update, deletion and delayed-fill recovery. Shared hash tags can colocate copies; cross-slot atomic operations are restricted.",
+      "counterexample": "Copying one value ten times on a standalone server does not create ten servers. A partitioned counter is a different aggregation contract.",
+      "verification": "Proposed: interrupt a copy update, race a stale fill with deletion and record the selected copy/version; verify slot placement separately.",
+      "source_ids": [
+        "cluster"
+      ],
+      "inference": "Copy coherence hazards and immutable-version alternative are deductions from distribution/atomicity boundaries, not a vendor recipe."
+    },
+    {
+      "id": "loss-eligibility",
+      "trigger": "Memory pressure requires eviction-policy changes.",
+      "failure": "A lock, ordering floor or deduplication record is removed before its required retention boundary.",
+      "mechanism": "Classify disposable values versus correctness state. Choose eligible loss explicitly, isolate roles where appropriate and define behavior for missing metadata or rejected writes.",
+      "conditions": "Volatile policies select TTL-bearing keys; no eligible keys means noeviction-like rejection. Protecting a key from eviction does not establish restart durability.",
+      "counterexample": "Adding TTL to every key makes critical metadata eligible; removing all TTLs merely to avoid eviction changes expiration semantics.",
+      "verification": "Proposed: force early eviction under the chosen policy; assert metadata loss takes the supported recovery/failure path and overload cannot grow without bound.",
+      "source_ids": [
+        "eviction",
+        "persistence"
+      ],
+      "inference": "Early-loss safety and state-role separation apply documented policy eligibility to application invariants."
+    },
+    {
+      "id": "bounded-command-work",
+      "trigger": "Large values, maintenance or deletion correlate with foreground latency.",
+      "failure": "Member-count folklore misses expensive replies; deferred free backlog is mistaken for instantaneous memory recovery.",
+      "mechanism": "Budget command and reply bytes, batch sizes and concurrency from representative measurements. Consider UNLINK for costly aggregate disposal and inspect lazy-free progress separately from RSS. Bound pipeline request/reply bytes; batching alone is not transactional.",
+      "conditions": "I/O/background threads do not remove ordinary command head-of-line blocking. A large batch still has per-key work; allocator retention can keep RSS high.",
+      "counterexample": "One field lookup in a large hash differs from returning the whole hash; a small collection of huge values can still saturate the network.",
+      "verification": "Proposed: compare bounded field reads and whole-object reads while measuring unrelated-request latency; check immediate key absence and later reclamation separately.",
+      "source_ids": [
+        "latency",
+        "redis8-io",
+        "unlink",
+        "del",
+        "info",
+        "hget",
+        "hgetall",
+        "slowlog",
+        "pipelining"
+      ],
+      "inference": "Workload budgets require measurement; no throughput or latency gain is asserted here."
+    }
+  ],
+  "existing_coverage": [
+    {
+      "target": "skills/engineering/concurrency-correctness/references/replica-reads.md",
+      "already_covered": "Required context, bounded fallback, primary/failover qualifications.",
+      "actionable_gap": "Redis metric separation and same-connection WAIT/WAITAOF limits."
+    },
+    {
+      "target": "skills/engineering/concurrency-correctness/references/cache-coherence.md",
+      "already_covered": "Atomic fill rejection, metadata loss, stale fills and authority gap.",
+      "actionable_gap": "BCAST fanout/reconnect evidence and mutable salted-copy placement/coherence."
+    },
+    {
+      "target": "skills/messaging/messaging-reliability/references/delivery-and-recovery.md",
+      "already_covered": "Effect-before-ACK, stable identity, retention/capacity and unknown outcomes.",
+      "actionable_gap": "Redis pending/list recovery, trim policies and enqueue-versus-database acceptance."
+    },
+    {
+      "target": "skills/engineering/microservice-operations/references/cache-load-protection.md",
+      "already_covered": "Refresh/expiry, negative caching, Bloom readiness and SCAN.",
+      "actionable_gap": "Keep those branches with their current owner; add only conditional memory/command-budget guidance elsewhere if selected."
+    }
+  ],
+  "proposed_verification_status": "All practice-card checks are unexecuted proposals. No live Redis, replica, cluster, fault or throughput test ran in this research pass.",
+  "existing_runtime_evidence": {
+    "path": "examples/cache/README.md",
+    "scope": "Two-process standalone Redis/SQLite fill races and explicit expiry, with Redis 8.10.2 persistence disabled.",
+    "not_evidence_for": [
+      "replication/failover freshness",
+      "write-behind durability",
+      "actual memory-pressure eviction",
+      "BCAST fanout",
+      "throughput or latency gains"
+    ]
+  },
+  "coordination": "Early cache pitfalls and cache-load-protection are owned by books_operations. This pass adopted conditional cache-design guidance within microservice-operations; no separate Redis skill and no new runtime checks.",
+  "adopted_files": [
+    "skills/engineering/microservice-operations/references/cache-design.md",
+    "skills/engineering/microservice-operations/references/capacity.md",
+    "skills/engineering/microservice-operations/references/sources.md"
+  ]
+}
