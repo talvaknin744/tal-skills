@@ -1,0 +1,286 @@
+{
+  "lane": "worker-rollouts-extension",
+  "status": "research-only; implementation and evaluations proposed",
+  "verified_at": "2026-09-29",
+  "primary_articles_read": 3,
+  "deduplication": {
+    "scope": "All existing docs/research Markdown and JSON records, including lanes",
+    "method": "Exact URL search before creating this extension; all three article URLs had zero occurrences. Topic overlap separately checked against graceful-draining and tal-worker-rollout.",
+    "limitation": "Exact URL comparison does not detect every alternate URL; title and mechanism were also compared with prior draining research."
+  },
+  "articles": [
+    {
+      "id": "worker-shopify-iteration",
+      "publisher": "Shopify Engineering",
+      "title": "High Availability by Offloading Work Into the Background",
+      "authors": ["Kerstin Puschke"],
+      "published_at": "2021-07-08",
+      "date_precision": "day",
+      "url": "https://shopify.engineering/high-availability-background-jobs",
+      "access": "Public full HTML article",
+      "read_scope": "Complete main narrative, including Background Jobs, Challenges, Long Running Jobs and conclusion; linked talks not watched.",
+      "practice": {
+        "trigger": "Job duration exceeds deployment intervals.",
+        "failure": "Every interruption restarts work before it can finish; queued arguments can outlive their producing binary.",
+        "mechanism": "Interrupt at iteration boundaries, preserve the cursor, and maintain compatible job arguments across rollout.",
+        "conditions": "An iteration fits the shutdown budget and the queue adapter preserves continuation state.",
+        "limits": "This does not make external effects atomic with checkpoint publication or ensure immutable input.",
+        "counterexample": "A non-idempotent effect completes and the process dies before the cursor is persisted.",
+        "verification": "Repeat planned interruptions, verify monotonic durable progress, then kill at the effect/checkpoint boundary and reconcile the original operation identity."
+      },
+      "current_checks": ["job-iteration-readme", "job-iteration-guide", "job-iteration-source", "sidekiq-deployment"],
+      "proposed_change": {
+        "classification": "Article corroborates existing general rules; current framework guide adds a conditional runtime gap",
+        "targets": ["skills/engineering/graceful-draining/references/sources.md", "skills/engineering/graceful-draining/references/platform-shutdown.md"],
+        "gap": "For job-iteration, distinguish Active Job retry continuation from unsupported backend-level retry fallback."
+      },
+      "limitations": "Historical operational account; no Shopify system, Ruby runtime, or linked sample was executed. Broad unrelated saga/Kafka claims were not adopted."
+    },
+    {
+      "id": "worker-ecs-protection",
+      "publisher": "AWS Containers",
+      "title": "Announcing Amazon ECS Task Scale-in protection",
+      "authors": ["Abhishek Nautiyal", "Nathan Peck"],
+      "published_at": "2022-11-10",
+      "date_precision": "day",
+      "url": "https://aws.amazon.com/blogs/containers/announcing-amazon-ecs-task-scale-in-protection/",
+      "access": "Public full HTML article",
+      "read_scope": "Complete main narrative, queue-consumer sample and WebSocket example; code and logs read, not copied or executed.",
+      "practice": {
+        "trigger": "An ECS service scales down or deploys while workers process long tasks.",
+        "failure": "The scheduler cannot infer outstanding work; interruption loses progress and redelivery may spend an independent delivery budget.",
+        "mechanism": "Acquire protection before queue receive; release after work finishes, accounting for every concurrent work unit.",
+        "conditions": "Service-managed ECS tasks, acknowledged protection, sufficient lifetime and replacement capacity.",
+        "limits": "Protection and queue acceptance are separate operations; coverage is service-autoscaling/deployment scale-in, not all termination causes.",
+        "counterexample": "The worker continues polling after acquisition fails or a renewal expires.",
+        "verification": "Inject acquisition and renewal failure, overlap completions, and block replacement capacity; assert bounded recoverable disposition."
+      },
+      "current_checks": ["ecs-protection", "ecs-protection-endpoint", "ecs-protection-api", "ecs-protection-failures", "ecs-early-success", "ecs-fargate-spot", "ecs-explicit-stop", "ecs-health-replacement"],
+      "proposed_change": {
+        "classification": "New conditional platform branch",
+        "targets": ["skills/engineering/graceful-draining/references/platform-shutdown.md", "workflows/tal-worker-rollout/WORKFLOW.md"],
+        "gap": "Protection lifecycle and live old-revision retirement evidence are not described in the existing platform reference."
+      },
+      "limitations": "No ECS service created. Historical sample does not establish a 24-hour retention guarantee, atomic receive/protect, or survival of crashes/host interruption."
+    },
+    {
+      "id": "worker-blu-admission-race",
+      "publisher": "AWS Blu Insights (page now branded AWS Transform for mainframe refactor)",
+      "title": "AWS Blu Insights - Scaling out/in policies and task protection in practice",
+      "authors": [],
+      "published_at": "2023-10",
+      "date_precision": "month; no day or named author shown",
+      "url": "https://m2-beta.bluinsights.aws/blog/scaling-out-in-policies-and-task-protection-in-practice/",
+      "access": "Public full HTML article on first-party .aws domain with Amazon Web Services copyright",
+      "read_scope": "Complete main narrative, scale policies, active-work protection manager, remaining deactivation race and custom scale-in design; diagrams not independently reconstructed.",
+      "practice": {
+        "trigger": "Scale-in overlaps the transition from idle/unprotected to receiving work.",
+        "failure": "Long requests arriving while a task deactivates outlast its remaining lifetime and fail.",
+        "mechanism": "Track active work and protection renewal; test admission against the complete retirement transition.",
+        "conditions": "Actual routing convergence and task lifecycle must be observed in the selected platform.",
+        "limits": "The account does not prove its custom scaler atomically retires exactly the chosen targets.",
+        "counterexample": "An earlier asynchronous unprotect request arrives after fresh work is admitted; this schedule is our inferred risk, not an incident reported by the article.",
+        "verification": "Delay release, attempt admission, and require explicit ordering or closed admission with recoverable work."
+      },
+      "current_checks": ["ecs-protection-endpoint", "alb-deregistration", "ecs-early-success"],
+      "proposed_change": {
+        "classification": "Existing admission rule corroborated; asynchronous protection-transition test is a new refinement",
+        "targets": ["skills/engineering/graceful-draining/references/platform-shutdown.md", "skills/engineering/graceful-draining/references/sources.md"],
+        "gap": "Do not confuse observed idle state, a pending unprotect request, and completed admission closure."
+      },
+      "limitations": "Historical latency and scaling thresholds are not defaults. Its broad full-deregistration-delay claim conflicts with current ALB documentation and is excluded."
+    }
+  ],
+  "runtime_sources": [
+    {
+      "id": "ecs-protection",
+      "title": "Protect your Amazon ECS tasks from being terminated by scale-in events",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-scale-in-protection.html",
+      "kind": "Official current runtime documentation",
+      "version_or_pin": "Latest documentation accessed 2026-09-29; ECS agent requirement documented as 1.65.0 or later",
+      "access": "Public full HTML",
+      "read_scope": "Overview, mechanisms, considerations and IAM permissions",
+      "findings": "Applies to service-managed tasks. Protection can block old-task cleanup and deployment progress; inspect maximumPercentage, capacity, tool timeouts and DEPLOYMENT_BLOCKED. Renewal resets a finite expiry. Current early-success documentation must be considered before generalizing historical deployment-timeout advice."
+    },
+    {
+      "id": "ecs-protection-endpoint",
+      "title": "Amazon ECS task scale-in protection endpoint",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-scale-in-protection-endpoint.html",
+      "kind": "Official current runtime documentation",
+      "version_or_pin": "Endpoint task-protection/v1/state; accessed 2026-09-29",
+      "access": "Public full HTML",
+      "read_scope": "Request parameters, response state, failure and error bodies",
+      "findings": "Protection lasts 1–2,880 minutes, default 120. The stated coverage is service-autoscaling/deployment scale-in. Inspect ProtectionEnabled, ExpirationDate and task identity; timeout, access and throttling errors are documented. A successful transport operation alone is insufficient admission evidence."
+    },
+    {
+      "id": "ecs-protection-api",
+      "title": "UpdateTaskProtection",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateTaskProtection.html",
+      "kind": "Official current API reference",
+      "version_or_pin": "Amazon ECS API; accessed 2026-09-29",
+      "access": "Public full HTML",
+      "read_scope": "Request syntax and parameters, response elements and errors",
+      "findings": "The response separates protectedTasks from failures; inspect per-task results."
+    },
+    {
+      "id": "ecs-protection-failures",
+      "title": "Amazon ECS API failure reasons",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/api_failures_messages.html",
+      "kind": "Official current API documentation",
+      "version_or_pin": "Accessed 2026-09-29",
+      "access": "Public HTML table",
+      "read_scope": "GetTaskProtection and UpdateTaskProtection failure rows",
+      "findings": "TASK_NOT_VALID denotes a task not belonging to an ECS service. DEPLOYMENT_BLOCKED denotes protection preventing deployment stabilization. No exact already-stopping-task rejection code was verified."
+    },
+    {
+      "id": "ecs-fargate-spot",
+      "title": "Amazon ECS clusters for Fargate: Fargate Spot termination notices",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html#fargate-spot-termination-notices",
+      "kind": "Official current runtime documentation",
+      "version_or_pin": "Accessed 2026-09-29",
+      "access": "Public HTML section",
+      "read_scope": "Capacity-provider overview and Spot termination notices",
+      "findings": "Fargate Spot requires interruption-tolerant work and documents a two-minute warning. It does not promise a task-protection exception. Excluding Spot survival from the narrower scale-in guarantee is a conservative inference."
+    },
+    {
+      "id": "ecs-explicit-stop",
+      "title": "StopTask",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_StopTask.html",
+      "kind": "Official current API reference",
+      "version_or_pin": "Accessed 2026-09-29",
+      "access": "Public HTML",
+      "read_scope": "Operation behavior, stop signal and configurable timeout note; response schema not analyzed",
+      "findings": "Explicit stop sends the container stop signal, followed by forceful termination when its timeout elapses. This page does not promise a task-protection exception; do not include manual stops in the narrower protection guarantee."
+    },
+    {
+      "id": "ecs-health-replacement",
+      "title": "HealthCheck",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html",
+      "kind": "Official current API reference",
+      "version_or_pin": "Accessed 2026-09-29",
+      "access": "Public HTML",
+      "read_scope": "Service-managed unhealthy-task replacement lifecycle",
+      "findings": "An unhealthy service-managed task is stopped and replaced. This page does not promise a task-protection exception; retaining recovery for that cause is a conservative interpretation of the protection scope."
+    },
+    {
+      "id": "ecs-early-success",
+      "title": "Complete Amazon ECS rolling deployments early with early success criteria",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/early-success-criteria.html",
+      "kind": "Official current runtime documentation",
+      "version_or_pin": "Rolling strategy, earlySuccessCriteria; accessed 2026-09-29, selected project SDK/IaC support untested",
+      "access": "Public full HTML",
+      "read_scope": "Healthy percent, cleanup ordering, observations and considerations; configuration example read only",
+      "findings": "DEFERRED permits successful deployment before source cleanup. Cleanup is attempted for up to two weeks. Deployment rollback monitoring ends at completion. Completed DescribeServiceDeployments counts are snapshots; DescribeServices provides live service counts."
+    },
+    {
+      "id": "alb-deregistration",
+      "title": "Edit target group attributes for your Application Load Balancer: Deregistration delay",
+      "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html#deregistration-delay",
+      "kind": "Official current runtime documentation",
+      "version_or_pin": "Accessed 2026-09-29",
+      "access": "Public HTML section",
+      "read_scope": "Deregistration-delay behavior and configuration section only",
+      "findings": "No active connections or in-flight requests permits immediate completed deregistration even while the displayed status remains draining. Premature connection closure can produce a 500-level response."
+    },
+    {
+      "id": "job-iteration-readme",
+      "title": "Shopify job-iteration README",
+      "url": "https://github.com/Shopify/job-iteration/blob/c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8/README.md",
+      "kind": "Official framework documentation",
+      "version_or_pin": "Commit c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8, HEAD resolved with git ls-remote on 2026-09-29; not asserted to be an installed release",
+      "access": "Full raw Markdown opened",
+      "read_scope": "Complete README including supported adapters, configuration and interruption/retry FAQ",
+      "findings": "Documents interruption separately from exception retry and resumes from a serialized cursor. Actual iteration timeout depends on the queue adapter; the README's rough 30-second recommendation is not a universal safe bound."
+    },
+    {
+      "id": "job-iteration-guide",
+      "title": "Iteration: how it works",
+      "url": "https://github.com/Shopify/job-iteration/blob/c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8/guides/iteration-how-it-works.md",
+      "kind": "Official framework documentation",
+      "version_or_pin": "Commit c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8",
+      "access": "Full raw Markdown opened",
+      "read_scope": "Complete guide, especially exceptions and signals",
+      "findings": "Configure Active Job retries for continuation. Backend-level retries are documented as unsupported and restarting at the beginning. A deterministic failing iteration can exhaust retries without reaching later items."
+    },
+    {
+      "id": "job-iteration-best-practices",
+      "title": "Job Iteration best practices",
+      "url": "https://github.com/Shopify/job-iteration/blob/c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8/guides/best-practices.md",
+      "kind": "Official framework documentation",
+      "version_or_pin": "Commit c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8",
+      "access": "Full raw Markdown opened",
+      "read_scope": "Complete guide; batch, instrumentation and runtime sections",
+      "findings": "Distinguishes batch loading from the interruptible work unit. Provides interruption/progress instrumentation and optional periodic yielding for capacity. Its specific internal time limits are examples, not adopted defaults."
+    },
+    {
+      "id": "job-iteration-source",
+      "title": "JobIteration::Iteration implementation",
+      "url": "https://github.com/Shopify/job-iteration/blob/c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8/lib/job-iteration/iteration.rb",
+      "kind": "Official pinned source code",
+      "version_or_pin": "Commit c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8",
+      "access": "Full raw Ruby source opened",
+      "read_scope": "Serialization/deserialization, iteration callback/cursor ordering, interruption and re-enqueue functions; remaining file scanned",
+      "findings": "Cursor assignment follows each iteration callback; serialization includes cursor_position, times_interrupted and total_time. Re-enqueue increments the separate interruption counter. This code does not couple an arbitrary external effect atomically to cursor persistence."
+    },
+    {
+      "id": "sidekiq-deployment",
+      "title": "Sidekiq Deployment",
+      "url": "https://github.com/sidekiq/sidekiq/wiki/Deployment",
+      "kind": "Official framework wiki",
+      "version_or_pin": "Current wiki accessed 2026-09-29; installed Sidekiq version not tested",
+      "access": "Public HTML",
+      "read_scope": "Deployment overview, TSTP/TERM order and timeout guidance",
+      "findings": "TSTP stops fetching early, TERM starts bounded shutdown (default timeout 25 seconds). The guide requires timeout plus five seconds before external KILL; early KILL can lose work or cause duplicates depending on fetch implementation."
+    }
+  ],
+  "proposed_acceptance": [
+    {
+      "id": "protection-failure-admission",
+      "status": "proposed, not executed",
+      "scenario": "Protection acquisition is denied, times out, returns a failure body, or renewal is lost near expiry.",
+      "pass": "No new work is admitted without confirmed coverage; accepted or racing receipts retain logical identity and follow an explicit bounded recovery path. Independent broker limits remain visible."
+    },
+    {
+      "id": "protection-transition-order",
+      "status": "proposed, not executed",
+      "scenario": "Delay a release while another work unit attempts admission; overlap two active work units and complete one.",
+      "pass": "Protection is not released while work remains. A retiring process never reopens admission. Reusable idle-worker admission waits for ordered, resolved transitions; unresolved remote ordering is reported rather than hidden by a local boolean."
+    },
+    {
+      "id": "protected-capacity-block",
+      "status": "proposed, not executed",
+      "scenario": "All old workers are protected and replacement capacity or maximumPercentage prevents progress.",
+      "pass": "Report a bounded deployment block and a reviewed finish-or-resume decision; do not discard accepted work merely to clear deployment status."
+    },
+    {
+      "id": "successful-but-not-retired",
+      "status": "proposed, not executed",
+      "scenario": "DEFERRED rollout reports SUCCESSFUL while old tasks retain nonterminal jobs.",
+      "pass": "Retirement remains incomplete; use live task/job inventory, retained dependencies, a cleanup deadline and an explicit post-completion recovery owner. Snapshot deployment counts cannot close the gate."
+    },
+    {
+      "id": "adapter-continuation-boundary",
+      "status": "proposed, not executed",
+      "scenario": "Three planned handoffs, a configured Active Job exception retry, backend retry fallback, and abrupt death after an effect before re-enqueue.",
+      "pass": "Observe progress and each counter layer. Planned continuation preserves the logical failure budget; unsupported fallback exposes restart behavior. Replayed effects use stable identity or reconciliation, and old/new inputs remain compatible."
+    }
+  ],
+  "not_adopted": [
+    "A universal 24-hour shutdown grace or protection against every ECS termination cause.",
+    "The assumption that ECS protection and queue receive form one atomic claim.",
+    "Blu Insights' workload-specific scale thresholds or an unverified custom scaler protocol.",
+    "A universal full deregistration-delay wait inferred from the ALB draining display state.",
+    "A default 30-second iteration independent of the real adapter shutdown budget.",
+    "General saga, Kafka or infinite buffering claims outside this worker-rollout scope."
+  ],
+  "execution_evidence": {
+    "performed": ["Primary article and runtime-document reading", "Pinned framework-source inspection", "Exact-URL duplicate check", "Existing skill/workflow overlap review"],
+    "not_performed": ["ECS/ALB/Kubernetes deployment", "Ruby or Sidekiq execution", "Model evaluation", "12–24-hour worker soak", "New implementation or example edits"],
+    "existing_fixture_scope": "The previously validated PostgreSQL/process draining fixture remains separate evidence; this extension does not expand its platform or duration claims."
+  },
+  "independent_crosscheck": {
+    "reviewer": "ecs_scope_check research subagent",
+    "scope": "Current protection scope and errors, separate termination contracts, DEFERRED completion versus retirement",
+    "result": "Confirmed narrow scope and retirement distinction; corrected against attributing TASK_NOT_VALID to an already-stopping task. No cloud operations or runtime reproduction."
+  }
+}

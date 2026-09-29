@@ -8,6 +8,8 @@ For permissive reads, define acceptable lag and failure behavior. For decisions 
 
 Cache-aside does not itself provide cache/store consistency. Committing to the database and then deleting a cache key leaves an interval before invalidation and can race with an old fill. A TTL limits the lifetime of an inserted entry; it does not establish source freshness when a delayed or replica-stale value is inserted later. A strict freshness claim requires the complete read/write protocol to support it, or an authoritative read path with suitable semantics.
 
+When a write commits but invalidation fails, specify the caller's result, the dependent reader's path, and who repairs the gap. Success may permit stale reads under a declared contract; strict read-after-write needs a supported freshness check, authoritative routing, or explicit pending/unavailable result. Preserve a known database commit separately from the cache error; repeating the mutation requires its own retry safety. Force this failure between commit and response, then read through another service. [Uber's CacheFront account](https://www.uber.com/us/en/blog/how-uber-serves-over-150-million-reads/) illustrates successful writes despite failed invalidation, not cross-store atomicity.
+
 ## Reproduce the competing writes
 
 Use this minimal history as a hypothesis to verify in code:
@@ -30,6 +32,10 @@ When proposing a versioned cache or a cache-issued fill lease, specify:
 Possible repairs include a generation that survives value eviction, revocable cache-issued fill permissions with defined loss semantics, or an authority check/refill protocol after metadata loss. Select one only after specifying how it handles races with a new invalidation. Ordinary cache deployments do not inherit Facebook's historical lease protocol simply by using the word “lease.”
 
 These mechanisms can prevent regression among versions the cache has observed. They do not automatically make reads linearizable with a database write the cache has not yet learned about. State the residual invalidation delay and required fallback honestly.
+
+If strict reads rely on freshness metadata, gate cache admission during startup on evidence that its authority covers the participating writers and recovered history. While that evidence is unavailable, use the contract's authoritative read or unavailable path. Test initialization with surviving stale values and delayed fills, before and after admission. [Dropbox Chrono](https://dropbox.tech/infrastructure/meet-chrono-our-scalable-consistent-metadata-caching-solution) demonstrates why startup belongs in the correctness argument; its storage-enforced timestamp bounds are prerequisites, not portable cache settings.
+
+For a cache or projection rebuilt while source writes continue, read [projection-rebuild.md](projection-rebuild.md) for the snapshot/live-stream handoff.
 
 ## Verify freshness and failure cost
 

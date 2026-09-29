@@ -11,6 +11,23 @@
 
 Kafka-to-Kafka transactions cover output records and consumed offsets when configured correctly, including downstream `read_committed` visibility. They do not include an arbitrary external database or email provider. [Kafka consumer positions](https://kafka.apache.org/43/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html), [transaction boundaries](https://kafka.apache.org/43/design/design/)
 
+## Moving consumer progress between clusters
+
+- **Trigger:** failover, migration, or recovery moves a consumer to another replicated or aggregated log.
+- **Failure:** the same numeric offset identifies different events, skips unreplicated work, or replays effects whose identity evidence has expired.
+- **Mechanism:** qualify progress by cluster, topic identity, partition, and the system's log/recovery epoch; track consumer ownership separately. Use the deployed replication product's position translation and verify its coverage before installing target progress. Do not copy numeric offsets between independent logs.
+- **Conditions:** inspect mapping retention/freshness, topic/group filters, target ownership, and replication lag. An idle target group does not fence an old source consumer; enforce exclusive ownership at protected effects where required. A conservative restart can repeat completed work: allow it only within retained effect-identity coverage or an explicit authoritative reconciliation policy. Missing evidence requires a hold or rebuild from a declared authoritative snapshot and recovery boundary. Report unreplicated acknowledged work against the loss budget.
+- **Counterexample:** moving between brokers of the same intact log does not require cross-cluster translation. Exactly-once mirroring does not include arbitrary downstream effects.
+- **Verification:** in a local aggregation model, source order `A1,A2,B1,B2` has completed `A1,A2`; target order is `B1,B2,A1,A2`. Copying next-offset `2` skips both B events. Verify a translated conservative restart against logical effect identities, then remove mapping/history evidence and require the unsafe cutover to stop. Separately test the installed product; this model is not a default MirrorMaker topology.
+
+Kafka 4.3 MirrorMaker requires offset-sync records for checkpoint translation.
+Automatic installation of translated group offsets defaults off and operates only
+while that group has no active target consumers. Inspect the actual configuration
+and observed checkpoint; configured intervals alone do not prove freshness.
+[MirrorMaker configuration](https://kafka.apache.org/43/configuration/mirrormaker-configs/),
+[replication scope](https://kafka.apache.org/43/operations/geo-replication-cross-cluster-data-mirroring/),
+[Uber's historical aggregation example](https://www.uber.com/us/en/blog/kafka/).
+
 ## Complete state, deltas, and deletion
 
 - **Trigger:** a projection receives delayed, duplicated, missing, or reordered events.

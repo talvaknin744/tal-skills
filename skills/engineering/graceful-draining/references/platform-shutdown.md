@@ -52,6 +52,46 @@ Check [Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/job/) and
 the [failure-policy examples](https://kubernetes.io/docs/tasks/job/pod-failure-policy/)
 before changing configuration. Test the matching and nonmatching failure paths.
 
+## Amazon ECS service-managed workers
+
+Use this branch when task scale-in protection participates in retention. Confirm
+the task's protected state and expiry **before queue receive**. Inspect per-task
+failure/error bodies as well as transport status. Acquisition failure or an
+uncertain response keeps new admission closed. Protection and queue acceptance
+are separate operations; preserve any racing receipt's identity and recoverable
+disposition. See the [protection endpoint](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-scale-in-protection-endpoint.html).
+
+Protection defaults to 120 minutes; requests allow 1–2,880 minutes. Plan renewal
+and checkpoint margin against the confirmed expiry. Failed renewal closes new
+admission and triggers bounded finish-or-resume for accepted work. Serialize
+protection transitions, settle pending receives, and retain protection while
+owned work still needs it. A retiring worker keeps admission closed after release.
+Test a delayed release racing with new admission; a local flag does not order
+remote protection requests.
+
+The protection promise covers service autoscaling and deployment scale-in.
+Keep [Spot interruption](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html#fargate-spot-termination-notices),
+[explicit stops](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_StopTask.html),
+[unhealthy-task replacement](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html),
+and crashes in the recovery plan. Protection cannot replace durable continuation
+or resource-enforced fencing.
+
+Budget protected old workers alongside replacements. Check `maximumPercentage`,
+available capacity, and deployment-tool timeouts. All protected workers can block
+progress; `DEPLOYMENT_BLOCKED` requires a capacity or safe-retirement decision,
+not removal of protection merely to finish deployment. Verify the supported
+service/agent configuration in the [protection guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-scale-in-protection.html).
+
+For rolling deployments configured with
+[`earlySuccessCriteria.sourceServiceRevisionCleanup=DEFERRED`](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/early-success-criteria.html),
+deployment success can precede old-revision cleanup. Automatic deployment
+rollback monitoring ends at completion; cleanup is attempted for up to two weeks.
+Completed `DescribeServiceDeployments` counts are snapshots. Use `DescribeServices`
+for live service counts, plus actual tasks and durable job outcomes, to establish
+retirement. Keep an explicit cleanup deadline and recovery owner after deployment
+completion. Confirm the selected strategy and CLI/SDK/IaC support; early success
+does not establish accepted-work completion.
+
 ## Queues and task frameworks
 
 Find what stops new deliveries, what happens to reserved work, who renews leases
@@ -76,6 +116,17 @@ those background mechanisms alive until durable completion or safe release.
   changed prefork warm shutdown to retain broker heartbeats; a waiting process on
   an older release can lose its deliveries while appearing to drain. See the
   [worker guide](https://docs.celeryq.dev/en/stable/userguide/workers.html#worker-shutdown).
+- **Rails with Shopify job-iteration:** Verify the installed gem, Active Job,
+  and backend together. The [pinned guide](https://github.com/Shopify/job-iteration/blob/c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8/guides/iteration-how-it-works.md)
+  documents cursor continuation through Active Job retries; backend-level retries
+  such as Sidekiq retries restart from the beginning. Exercise configured retry
+  and exhausted-retry fallback separately. For [Sidekiq deployment](https://github.com/sidekiq/sidekiq/wiki/Deployment),
+  `TSTP` stops fetching and `TERM` begins bounded shutdown. Size each iteration,
+  cursor publication, and teardown to the actual remaining timeout. The
+  [iteration implementation](https://github.com/Shopify/job-iteration/blob/c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8/lib/job-iteration/iteration.rb)
+  advances the cursor after the callback; abrupt death can replay a completed
+  effect. Apply the [effect reconciliation boundary](durable-handoff.md#checkpoint-boundaries)
+  and verify planned interruptions separately from logical business failures.
 
 For durable workflow engines, preserve their execution model and version-routing
 guarantees. Use their documented worker shutdown and history/checkpoint semantics

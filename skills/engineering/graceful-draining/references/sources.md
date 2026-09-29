@@ -31,9 +31,21 @@ take precedence over historical or draft examples.
 - Martin Kleppmann's [How to do distributed locking](https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html)
   explains paused owners and resource-enforced fencing. It supports the ownership
   caveat; it does not establish that a chosen provider accepts fencing tokens.
-- Kubernetes, SQS, RabbitMQ, and Celery references are co-located with their
+- Kubernetes, ECS, SQS, RabbitMQ, and worker-framework references are co-located with their
   applicable rules in [platform shutdown](platform-shutdown.md). Recheck versions,
   limits, and enabled features when implementing those branches.
+- Shopify's [background-job account](https://shopify.engineering/high-availability-background-jobs)
+  (2021-07-08) corroborates checkpointed iteration under frequent deployments.
+  The job-iteration guide/source were inspected at commit
+  `c3b0eb1db5bd6681664913d57dfe5b5b28ab2ad8`; installed releases still need checking.
+- AWS's [task-protection introduction](https://aws.amazon.com/blogs/containers/announcing-amazon-ecs-task-scale-in-protection/)
+  (2022-11-10) demonstrates protection before queue receive. The
+  [Blu Insights account](https://m2-beta.bluinsights.aws/blog/scaling-out-in-policies-and-task-protection-in-practice/)
+  (2023-10, month only) reports remaining admission/deactivation races. Its
+  custom scaler and workload thresholds are not adopted. Current
+  [ALB behavior](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html#deregistration-delay)
+  distinguishes completed deregistration from its displayed `draining` state;
+  the historical article's full-delay generalization is not used.
 - [SQS at-least-once delivery](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues-at-least-once-delivery.html)
   supports treating duplicate delivery as a recovery case even while work is
   expected to remain invisible.

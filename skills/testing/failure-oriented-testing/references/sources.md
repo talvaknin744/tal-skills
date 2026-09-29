@@ -83,3 +83,28 @@ as a native-fuzzing experiment; verify current tool/platform behavior when apply
 Controlled fault histories, completion criteria, and finite-budget reporting are
 the repository's application of these sources. A sequential model does not prove
 real concurrency, transaction isolation, or crash durability.
+
+## Stable recovery and delayed confirmations
+
+TigerBeetle, matklad, [Simulation Testing For Liveness](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/),
+2023-07-06. Complete substantive article read, with linked [failure
+report](https://github.com/tigerbeetle/tigerbeetle/issues/913), [repair
+fix](https://github.com/tigerbeetle/tigerbeetle/pull/934), and relevant loops/exclusions
+in the [pinned simulator](https://github.com/tigerbeetle/tigerbeetle/blob/9ff5f4a470ed6d66b4be535e689c39eee9f24993/src/simulator.zig).
+The reference adapts its bounded progress experiment; quorum, retained data, and
+fault assumptions remain explicit. The linked seed was not replayed.
+
+Antithesis, Conrad Shock, [When did the bug start?](https://antithesis.com/blog/2026/causality_analysis/),
+2026-05-11. Complete article text read; linked talk, underlying simulation reports,
+and statistical method were not inspected. The account motivates preserving
+causal prefixes while varying later schedules. Reported discovery rates were not
+reproduced and no race-detector comparison was supplied.
+
+The etcd maintainer discussion and changed files in [PR
+21399](https://github.com/etcd-io/etcd/pull/21399), merged 2026-03-01, qualify that
+account: delayed replies for the same read can remain valid after a retry.
+[PR 21375's later correction](https://github.com/etcd-io/etcd/pull/21375#issuecomment-3997236858)
+states the earlier change did not fix stale reads. The paired controls in
+`fault-histories.md` are an application inference; they preserve logical effect
+identity while testing attempt correlation and authority. No etcd reproduction or
+new agent evaluation was executed for this addition.

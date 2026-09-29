@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-29T12:12:27.592Z",
+  "runtime": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "architecture": "arm64"
+  },
+  "model_calls": 0,
+  "kind": "deterministic-fixture-calibration-not-agent-evaluation",
+  "fixture": "tal-backend-delivery",
+  "source_hashes": {
+    "prompt.md": "95db0e4b408760113bb117a22c2d6c45bb30d512fe386f394ec1036b3a970514",
+    "rawfiles/export.ts": "c4ef5ef8a9de4e6e3f9c2e72f19d990cd7b07fabf4f73b87fc284e0e27c46968",
+    "rawfiles/contract.md": "7b7ec33485589bd095e96e3a2eec0eaad69210c438a376cc5cea69b67070c7dd",
+    "rawfiles/verify.mjs": "b7661f42f8666679b9830cd8b68cfa6299fe83011cdce6a3b749dd2922c89e54"
+  },
+  "fixture_digest": "ef4cf337a6977ea5a8e6f150cb2b597f85170c733a790310c3bfba66bbf15ca7",
+  "baseline": {
+    "command": [
+      "node",
+      "verify.mjs"
+    ],
+    "exit_code": 1,
+    "signal": null,
+    "error": null,
+    "stdout": "{\n  \"node\": \"v25.9.0\",\n  \"checks\": [\n    {\n      \"check\": \"completion_after_finish\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: export resolved before destination finish\\n+ actual - expected\\n\\n+ 'fulfilled'\\n- 'pending'\\n\"\n    },\n    {\n      \"check\": \"slow_sink_backpressure\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: queued 64 records behind a blocked write\"\n    },\n    {\n      \"check\": \"sink_error_closes_source\",\n      \"status\": \"fail\",\n      \"error\": \"Error: Watchdog: sink error propagation\"\n    },\n    {\n      \"check\": \"source_error_closes_sink\",\n      \"status\": \"fail\",\n      \"error\": \"AssertionError: source failure left sink active\\n\\nfalse !== true\\n\"\n    },\n    {\n      \"check\": \"abort_closes_owned_pipeline\",\n      \"status\": \"fail\",\n      \"error\": \"Error: Watchdog: abort propagation\"\n    }\n  ]\n}\n",
+    "stderr": "",
+    "checks": [
+      {
+        "check": "completion_after_finish",
+        "status": "fail",
+        "error": "AssertionError: export resolved before destination finish\n+ actual - expected\n\n+ 'fulfilled'\n- 'pending'\n"
+      },
+      {
+        "check": "slow_sink_backpressure",
+        "status": "fail",
+        "error": "AssertionError: queued 64 records behind a blocked write"
+      },
+      {
+        "check": "sink_error_closes_source",
+        "status": "fail",
+        "error": "Error: Watchdog: sink error propagation"
+      },
+      {
+        "check": "source_error_closes_sink",
+        "status": "fail",
+        "error": "AssertionError: source failure left sink active\n\nfalse !== true\n"
+      },
+      {
+        "check": "abort_closes_owned_pipeline",
+        "status": "fail",
+        "error": "Error: Watchdog: abort propagation"
+      }
+    ]
+  },
+  "compliant_control": {
+    "command": [
+      "node",
+      "verify.mjs"
+    ],
+    "exit_code": 0,
+    "signal": null,
+    "error": null,
+    "stdout": "{\n  \"node\": \"v25.9.0\",\n  \"checks\": [\n    {\n      \"check\": \"completion_after_finish\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"slow_sink_backpressure\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"sink_error_closes_source\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"source_error_closes_sink\",\n      \"status\": \"pass\"\n    },\n    {\n      \"check\": \"abort_closes_owned_pipeline\",\n      \"status\": \"pass\"\n    }\n  ]\n}\n",
+    "stderr": "",
+    "checks": [
+      {
+        "check": "completion_after_finish",
+        "status": "pass"
+      },
+      {
+        "check": "slow_sink_backpressure",
+        "status": "pass"
+      },
+      {
+        "check": "sink_error_closes_source",
+        "status": "pass"
+      },
+      {
+        "check": "source_error_closes_sink",
+        "status": "pass"
+      },
+      {
+        "check": "abort_closes_owned_pipeline",
+        "status": "pass"
+      }
+    ],
+    "method": "Copied raw files to a temporary directory and replaced only export.ts with a standard-library pipeline adapter. Original broken fixture left intact; temporary directory removed.",
+    "export_ts": "import type { Readable, Writable } from 'node:stream';\nimport { pipeline } from 'node:stream/promises';\nexport interface ExportOptions { signal?: AbortSignal; }\nexport async function exportRecords(source: Readable, destination: Writable, options: ExportOptions = {}): Promise<void> {\n  await pipeline(source, destination, { signal: options.signal });\n}\n",
+    "export_ts_sha256": "362cff4995c38338b0a569cc637efc8ca2f0b712e9aea181c023e919c6dc2843"
+  },
+  "gates": [
+    "Controlled first-write callback with highWaterMark1 on source and sink",
+    "Controlled finalization callback; promise reactions observed before release",
+    "Source and sink error events",
+    "Explicit AbortController abort during a held write"
+  ],
+  "watchdogs": {
+    "per_await_ms": 5000,
+    "process_ms": 20000,
+    "purpose": "Failure bounds for a stuck implementation or verifier cleanup; elapsed time is not a passing assertion."
+  },
+  "limits": [
+    "Object-mode finite synthetic streams on Node25.9.0; not global memory-cap proof.",
+    "Owned disposable streams; does not claim this destruction policy is suitable for shared HTTP sockets.",
+    "No real network, external durability, package installation or agent execution."
+  ]
+}

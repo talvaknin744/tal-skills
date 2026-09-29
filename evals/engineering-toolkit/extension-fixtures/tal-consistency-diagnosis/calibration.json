@@ -1,0 +1,67 @@
+{
+  "format_version": 1,
+  "kind": "fixture_author_calibration_not_candidate_or_native_execution",
+  "python_version": "3.14.3",
+  "baseline": {
+    "argv": [
+      "python3",
+      "-B",
+      "verify.py"
+    ],
+    "exit_code": 1,
+    "stdout": "{\"checks\": 3, \"failures\": [{\"check\": \"paused_snapshot_delete\", \"error\": \"paused snapshot resurrected completed DELETE\"}, {\"check\": \"snapshot_boundary_and_omission\", \"error\": \"snapshot omission or later live merge is incorrect\"}, {\"check\": \"per_key_and_duplicate_order\", \"error\": \"per-key stale-event handling failed\"}], \"passed\": 0}\n",
+    "stderr": ""
+  },
+  "scratch_positive_control": {
+    "argv": [
+      "python3",
+      "-B",
+      "verify.py"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"checks\": 3, \"failures\": [], \"passed\": 3}\n",
+    "stderr": ""
+  },
+  "control_source": "\"\"\"Scratch author control for the projection contract.\"\"\"\nimport copy\nimport threading\n\nclass Projection:\n    def __init__(self, state=None):\n        self._lock = threading.Lock()\n        state = copy.deepcopy(state or {})\n        self._rows = state.get(\"rows\", {})\n        self._boundary = state.get(\"boundary\", -1)\n        self._live = state.get(\"live\", {})\n\n    def install_snapshot(self, rows, at_sequence, before_publish=None):\n        snapshot = dict(rows)\n        if before_publish is not None:\n            before_publish()\n        with self._lock:\n            if at_sequence < self._boundary:\n                return\n            self._live = {key: event for key, event in self._live.items() if event[\"sequence\"] > at_sequence}\n            for key, event in self._live.items():\n                if event[\"kind\"] == \"delete\":\n                    snapshot.pop(key, None)\n                else:\n                    snapshot[key] = event[\"value\"]\n            self._rows = snapshot\n            self._boundary = at_sequence\n\n    def apply(self, event):\n        event = dict(event)\n        with self._lock:\n            prior = self._live.get(event[\"key\"])\n            if event[\"sequence\"] <= self._boundary or (prior is not None and event[\"sequence\"] <= prior[\"sequence\"]):\n                return\n            self._live[event[\"key\"]] = event\n            if event[\"kind\"] == \"delete\":\n                self._rows.pop(event[\"key\"], None)\n            else:\n                self._rows[event[\"key\"]] = event[\"value\"]\n\n    def view(self):\n        with self._lock:\n            return dict(self._rows)\n\n    def dump_state(self):\n        with self._lock:\n            return copy.deepcopy({\"rows\": self._rows, \"boundary\": self._boundary, \"live\": self._live})\n",
+  "control_sha256": "0b3125b632472f0535f7c7c2a60276f708ad590036b2274b9b1c2307f01efcc5",
+  "source_files": {
+    "prompt.md": "060c38aadc72cbaa558ab67e3d4505885bc0a2baed6dc5a63ef244378fc5f781",
+    "rawfiles/contract.md": "2c0e910f8c27c1b511ecc2f844b22084cce05e88d748ec44cdd4d621af76d583",
+    "rawfiles/projection.py": "46c2c303cc32184b482023bacd0fac8206812582bc2229e05bd6d0bccfce71ad",
+    "rawfiles/verify.py": "141be3d5a5c50048bdfd4c91c688a0c825b43e64cadaebeda7ddbe409b6ed6a5"
+  },
+  "limits": [
+    "Local threads and JSON serialization only; no CDC service, durable storage, crash, model, or native workflow executed.",
+    "Three-second watchdogs bound deadlocks; event gates establish the tested interleaving."
+  ],
+  "optimization_refusal": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "environment": {
+        "PYTHONOPTIMIZE": "1"
+      },
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/idanvaknin/Documents/ChatGPT/skills/evals/engineering-toolkit/extension-fixtures/tal-consistency-diagnosis/rawfiles/verify.py\", line 3, in <module>\n    raise RuntimeError(\"Acceptance checks require assertions; disable Python optimization\")\nRuntimeError: Acceptance checks require assertions; disable Python optimization\n",
+      "acceptance_tests_started": false
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "environment": {
+        "PYTHONOPTIMIZE": "2"
+      },
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/idanvaknin/Documents/ChatGPT/skills/evals/engineering-toolkit/extension-fixtures/tal-consistency-diagnosis/rawfiles/verify.py\", line 3, in <module>\n    raise RuntimeError(\"Acceptance checks require assertions; disable Python optimization\")\nRuntimeError: Acceptance checks require assertions; disable Python optimization\n",
+      "acceptance_tests_started": false
+    }
+  ]
+}

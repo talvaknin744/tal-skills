@@ -63,5 +63,21 @@ vendor examples are not bundled. It has no mandatory sibling-skill dependency.
   reconciliation. Exercise a stale owner and a missing result record against the
   actual resource; this package's logical restore probe provides no such proof.
 
+## Artifact lineage and recovery admission
+
+- **Sources/read scope:** GitLab's complete [2017 database postmortem](https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/),
+  particularly backup failure notifications and staging transformations;
+  Trigger.dev's complete [June 2026 incident report](https://trigger.dev/blog/incident-report-jun-22-2026),
+  particularly pre-execution reservations and cold recovery. Read 29 September 2026.
+- **Trigger/failure:** the available backup omits a required dependency, failure
+  signals do not arrive, or old reservations and a cold target prevent useful recovery.
+- **Mechanism/conditions:** inspect artifact lineage and actual signal delivery;
+  reconcile reservation ownership and observe useful completion during staged admission.
+- **Counterexample/verification:** sanitized test data can be fit for its own
+  purpose; a store without reserved work needs no queue protocol. Test the relevant
+  transformed record, failed backup signal, or late reservation message. These are
+  inferred checks, not executed cases in the PostgreSQL example or claims that
+  either company's planned mitigations shipped.
+
 [Matt Pocock's writing guidance](https://www.aihero.dev/skills-writing-for-agents)
 informs the activation description, conditional branches, and completion gates.

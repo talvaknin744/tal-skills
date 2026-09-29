@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "topic": "cache consistency and cross-service stale data",
+  "research_date": "2026-09-29",
+  "started_at": "2026-09-29T11:59:08Z",
+  "completed_at": "2026-09-29T12:07:36Z",
+  "counts": {"new_deep_articles": 3, "new_publishers_claimed": 0, "documentation_crosschecks": 5, "runtime_experiments": 0, "model_evaluations": 0},
+  "method": {
+    "selection": "Three first-party engineering accounts, chosen for different consistency contracts and lifecycle assumptions rather than popularity.",
+    "deduplication": "Compared lane article inventories, docs/research/consistency-primary-sources.md, the research tree, and relevant skill references. Exact article URLs/title fragments were absent before this extension.",
+    "excluded_prior_deep_reads": ["Meta: Cache made consistent", "Scaling Memcache at Facebook", "Amazon Builders' Library: Caching challenges and strategies"],
+    "access": "Public first-party HTML; no authentication, purchases, copied article bodies, or source-code downloads.",
+    "inference_policy": "Practice cards are original transfer proposals. Article mechanisms require their stated storage and topology assumptions; none is claimed to be a universal cache design.",
+    "scope_limit": "Read technical body text and captions. Diagrams and performance charts were not independently inspected; no numerical performance claim is adopted. Documentation reads are selected sections, not entire manuals. No code, skills, fixtures, or evaluations changed."
+  },
+  "articles": [
+    {
+      "id": "dropbox-chrono-2024",
+      "title": "Meet Chrono, our scalable, consistent, metadata caching solution",
+      "publisher": "Dropbox engineering",
+      "authors": ["Lihao He", "Ganesh Rapolu", "Yu-Wun Wang"],
+      "url": "https://dropbox.tech/infrastructure/meet-chrono-our-scalable-consistent-metadata-caching-solution",
+      "published_at": "2024-07-25",
+      "accessed_at": "2026-09-29",
+      "access": "complete public technical article text",
+      "read_scope": "Technical body from motivation through design, Panda API prerequisites, read/write protocol, argument for correctness, validation, and lessons. Navigation/advertising excluded.",
+      "synthesis": "A lossy value cache can be safe only because a separate authority and storage-enforced bounds validate it; the boot sequence is part of that proof.",
+      "practice_ids": ["cache-bootstrap-admission"],
+      "limitations": "Proprietary Panda APIs; ordinary SQL timestamps or Redis metadata do not automatically satisfy its assumptions."
+    },
+    {
+      "id": "uber-cachefront-2025",
+      "title": "How Uber Serves over 150 Million Reads per Second from Integrated Cache with Stronger Consistency Guarantees",
+      "publisher": "Uber engineering",
+      "authors": ["Preetham Narayanareddy", "Eli Pozniansky"],
+      "url": "https://www.uber.com/us/en/blog/how-uber-serves-over-150-million-reads/",
+      "published_at": "2025-08-26",
+      "accessed_at": "2026-09-29",
+      "access": "complete public technical article text",
+      "read_scope": "Technical body: architecture recap, stale-value causes and magnitude, conditional-write changes, invalidation flow, measurement, and conclusion. Linked earlier article not counted/read deeply.",
+      "synthesis": "CDC, version-aware cache operations, and write-path invalidation strengthen practical behavior without removing every successful-write/stale-read history.",
+      "practice_ids": ["cache-acknowledgement-contract"],
+      "limitations": "Custom Docstore/Flux integration. Its TTL and hit-rate choices are workload evidence, not defaults to copy."
+    },
+    {
+      "id": "cloudflare-quicksilver-part1-2025",
+      "title": "Quicksilver v2: evolution of a globally distributed key-value store (Part 1)",
+      "publisher": "Cloudflare engineering",
+      "authors": ["Anton Dort-Golts", "Marten van de Sanden"],
+      "url": "https://blog.cloudflare.com/quicksilver-v2-evolution-of-a-globally-distributed-key-value-store-part-1/",
+      "published_at": "2025-07-10",
+      "accessed_at": "2026-09-29",
+      "access": "complete public technical article text",
+      "read_scope": "Technical body: proxy/replica motivation, working sets, persistence/eviction, asynchronous replication, historical reads, retained recent updates, negative lookups, discovery, and results. Part 2 not counted/read deeply.",
+      "synthesis": "Partial replicas must preserve the reader's intended cut, including absence, when load balancing across differing replication positions.",
+      "practice_ids": ["cache-exact-snapshot-contract"],
+      "limitations": "Integrated Quicksilver replication, custom RocksDB storage, and workload-specific retention. No portable two-hour retention recommendation."
+    }
+  ],
+  "crosschecks": [
+    {
+      "id": "redis-wait-current",
+      "title": "Redis WAIT command contract",
+      "url": "https://redis.io/docs/latest/commands/wait/",
+      "version_scope": "Current command documentation, command available since Redis 3.0; nonblocking-context behavior noted since 7.0",
+      "published_at": null,
+      "accessed_at": "2026-09-29",
+      "access": "public documentation, selected command sections",
+      "read_scope": "Acknowledgement count, timeout, connection scope, consistency caveat, implementation, and examples.",
+      "finding": "WAIT does not make Redis strongly consistent or guarantee failover preserves every replicated write; callers must inspect the returned count.",
+      "transfer": "Do not substitute replication acknowledgement for proof that correctness metadata survives failover."
+    },
+    {
+      "id": "etcd-api-3.6",
+      "title": "etcd API",
+      "url": "https://etcd.io/docs/v3.6/learning/api/",
+      "version_scope": "3.6",
+      "published_at": null,
+      "accessed_at": "2026-09-29",
+      "access": "public documentation, selected API sections",
+      "read_scope": "Response header, key/value metadata, revisions, Range request and response.",
+      "finding": "Range revision selects a historical view and compacted history fails; key version resets on deletion, while store revision orders mutations.",
+      "transfer": "Distinguish exact snapshot identity, minimum dependency context, per-key counters, and filters."
+    },
+    {
+      "id": "debezium-postgresql-3.6",
+      "title": "Debezium connector for PostgreSQL",
+      "url": "https://debezium.io/documentation/reference/3.6/connectors/postgresql.html",
+      "version_scope": "3.6 documentation, displayed revision d897dc4c",
+      "published_at": null,
+      "accessed_at": "2026-09-29",
+      "access": "public documentation, selected connector sections",
+      "read_scope": "Incremental snapshot collision handling/window, read-only snapshot prerequisites, supported topology, startup/history failures, cluster failure, and Kafka Connect crash recovery.",
+      "finding": "Snapshot buffers discard a row read when a live event for that key supersedes it; restarts can duplicate events and missing retained history requires recovery.",
+      "transfer": "Use the connector's documented baseline/stream protocol; do not assume output ordering alone fixes downstream parallel effects."
+    },
+    {
+      "id": "postgres-logical-decoding-18",
+      "title": "PostgreSQL Logical Decoding Concepts",
+      "url": "https://www.postgresql.org/docs/18/logicaldecoding-explanation.html",
+      "version_scope": "18",
+      "published_at": null,
+      "accessed_at": "2026-09-29",
+      "access": "public documentation, complete short concepts page",
+      "read_scope": "Sections 47.2.1 through 47.2.5, especially slots, synchronization, and exported snapshots.",
+      "finding": "Slot positions can rewind after crashes. Exported snapshots define the baseline preceding a change stream; failover resume requires suitable persistent synchronized slots.",
+      "transfer": "Validate snapshot/stream continuity and repeated delivery; a recreated slot is not proof historical changes survived."
+    },
+    {
+      "id": "etcd-recovery-3.6-existing",
+      "title": "etcd Disaster recovery",
+      "url": "https://etcd.io/docs/v3.6/op-guide/recovery/",
+      "version_scope": "3.6",
+      "published_at": null,
+      "accessed_at": "2026-09-29",
+      "access": "public documentation; prior section reading crosschecked against existing research",
+      "read_scope": "Revision rollback and restored revision bump with compaction; already analyzed in recovery-caches-and-canaries.md, not a new deep read.",
+      "finding": "Surviving watchers can retain state beyond a restored snapshot; the documented revision procedure forces rebuilding.",
+      "transfer": "Already covered in recovery-validation; no additional generic cache-flush recommendation."
+    }
+  ],
+  "practices": [
+    {
+      "id": "cache-acknowledgement-contract",
+      "trigger": "A database write and cache invalidation have different failure boundaries.",
+      "failure": "Success is mistaken for guaranteed freshness when cache work failed.",
+      "mechanism": "Name commit, cache acknowledgement, dependent-read behavior, and gap repair separately; preserve known committed outcomes.",
+      "limits": "Choose semantics per operation; stronger freshness can require waiting, routing, or explicit unavailability.",
+      "counterexample": "An availability-oriented catalogue may accept documented lag.",
+      "verification": "Commit, fail invalidation, then read through another service; include negative caching followed by insertion.",
+      "source_ids": ["uber-cachefront-2025", "redis-wait-current"],
+      "novelty": "Existing gap explanation; new explicit acknowledgement/failure decision and verification.",
+      "map_to": ["skills/engineering/concurrency-correctness/references/cache-coherence.md"],
+      "priority": 1
+    },
+    {
+      "id": "cache-bootstrap-admission",
+      "trigger": "Freshness authority restarts while cache values or old fills survive.",
+      "failure": "Initialization temporarily loses the evidence required to reject stale data.",
+      "mechanism": "Gate admission on restored validation authority; include startup in the invariant and failure model.",
+      "limits": "A strict protocol requires every writer and the store's actual guarantees; do not invent portable commit timestamps.",
+      "counterexample": "A disposable cache with permitted staleness needs no custom freshness service.",
+      "verification": "Read before initialization, after safe admission, and during delayed-fill delivery.",
+      "source_ids": ["dropbox-chrono-2024", "redis-wait-current"],
+      "novelty": "Restart/loss already covered; explicit admission and startup schedule absent.",
+      "map_to": ["skills/engineering/concurrency-correctness/references/cache-coherence.md"],
+      "priority": 2
+    },
+    {
+      "id": "projection-snapshot-stream-handoff",
+      "trigger": "A projection rebuild reads a baseline while source writes continue.",
+      "failure": "A delayed baseline row overwrites a live update or resurrects a deletion.",
+      "mechanism": "Use supported source-cut and collision rules; persist recoverable progress and validate catch-up before admission.",
+      "limits": "Connector guarantees do not cover arbitrary downstream concurrency; unavailable history requires reconciliation or rebuilding.",
+      "counterexample": "A verified quiescent rebuild need not implement an online collision buffer.",
+      "verification": "Pause a snapshot row, stream its deletion, release the row, then restart processing; deletion and progress remain correct.",
+      "source_ids": ["debezium-postgresql-3.6", "postgres-logical-decoding-18"],
+      "novelty": "Substantive gap: existing known-baseline requirement lacks the online handoff protocol.",
+      "map_to": ["skills/messaging/messaging-reliability/references/ordering-and-replay.md", "skills/reliability/recovery-validation/references/recovered-history.md"],
+      "priority": 3
+    },
+    {
+      "id": "cache-exact-snapshot-contract",
+      "trigger": "One operation requires a common historical view across cache misses.",
+      "failure": "A newer response changes that view; an older replica omits required state.",
+      "mechanism": "Carry the requested cut, serve valid history including absence, and define unavailable-history behavior.",
+      "limits": "Requires comparable source positions and retained history; fixed retention from another workload is insufficient.",
+      "counterexample": "Read-your-writes can accept a later version without requiring one exact snapshot.",
+      "verification": "Use replicas ahead/behind the cut, delete/recreate, and compacted history.",
+      "source_ids": ["cloudflare-quicksilver-part1-2025", "etcd-api-3.6"],
+      "novelty": "Minimum context and monotonic reads exist; exact-cut conditional guidance is new.",
+      "map_to": ["skills/engineering/concurrency-correctness/references/replica-reads.md"],
+      "priority": 4
+    }
+  ],
+  "already_covered": ["Atomic stale-fill rejection", "Ordering evidence across eviction and deletion", "TTL does not prove source freshness", "Tombstone retention", "Delta gaps versus complete-state replacement", "Authoritative mutation checks", "Cache-bypass capacity", "Surviving watch consumers and recovery epochs"],
+  "baseline_references": [
+    {"path": "skills/engineering/concurrency-correctness/references/cache-coherence.md", "sha256": "276ec1bdb77c712707cad92623b553c961bd4f7517f100bd21a991111fde60f5"},
+    {"path": "skills/engineering/concurrency-correctness/references/replica-reads.md", "sha256": "3d50d94c9c61bacb0d8f1695ceeff7c11fb5e6713e8ed44742f6e6bac95859f1"},
+    {"path": "skills/messaging/messaging-reliability/references/ordering-and-replay.md", "sha256": "722d77046a64021f08b8e87e1c940b3db5f73213d5d8d7ecd33ade0bf5eee467"},
+    {"path": "skills/reliability/recovery-validation/references/recovered-history.md", "sha256": "06df9b8716e8dfeb19d17f140f9a1aab9fb9e2d6e3767446ab6db3f92a4779dc"}
+  ],
+  "verification_status": "Research proposals only; no new runtime or agent-behavior claim."
+}

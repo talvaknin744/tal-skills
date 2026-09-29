@@ -6,6 +6,8 @@ A `CancelFunc` requests cancellation and releases context resources; it does not
 
 Returning from a `select` on `ctx.Done()` establishes only that the caller stopped waiting. A buffered result channel can prevent one abandoned send; it cannot stop a worker that never receives the context. For workers that may outlive response delivery, name the supervising owner and how shutdown joins them. Keep sends, receives, and other waits cancellation-aware where their peers can disappear.
 
+When cancellation and a communication are both ready, `select` may choose either; cancellation has no priority. If the operation contract rejects already-canceled dispatch, check `ctx.Err()` after acquisition and before dispatch, releasing any abandoned resource. That checkpoint does not exclude cancellation arriving afterward or fence an external effect. Channel operands and send values are evaluated before case selection, so `case out <- performEffect():` can run the effect even when the cancellation case wins. Keep effectful work out of send operands and under its explicit operation contract. [Go select specification](https://go.dev/ref/spec#Select_statements)
+
 Use the same end-to-end deadline through the work. A fresh full timeout at every operation silently expands that deadline. Choose bounded, separately owned cleanup when cleanup must survive request cancellation; its completion is still observable work.
 
 ## Resource scopes

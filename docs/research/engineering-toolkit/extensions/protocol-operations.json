@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "lane": "protocol-operations-extension",
+  "researched_at": "2026-09-29T12:05:39Z",
+  "status": "research-only; proposals not implemented or executed",
+  "selection": {
+    "new_articles_deeply_read": 2,
+    "primary_publishers": 2,
+    "duplicate_check": "Exact canonical article URLs were absent from docs/research/engineering-toolkit before these files were created.",
+    "selection_basis": "Concrete integration failure mechanisms; no popularity ranking or exhaustive ecosystem survey.",
+    "a2a_addition": "None proposed: the selected new evidence concerns MCP and composed tool use."
+  },
+  "unchanged_pins": {
+    "mcp_specification": "2026-07-28",
+    "a2a_specification": "1.0.1",
+    "a2a_wire": "1.0",
+    "sdk_changes": false
+  },
+  "articles": [
+    {
+      "id": "invariant-github-mcp-composition-2025",
+      "title": "GitHub MCP Exploited: Accessing private repositories via MCP",
+      "url": "https://invariantlabs.ai/blog/mcp-github-vulnerability",
+      "publisher": "Invariant Labs",
+      "authors": ["Marco Milanta", "Luca Beurer-Kellner"],
+      "published_at": "2025-05-26",
+      "verified_at": "2026-09-29",
+      "index_url": "https://invariantlabs.ai/blog",
+      "ownership_evidence": "Publisher index links the article; article identifies authors and Invariant Labs AG.",
+      "access": "full public HTML",
+      "read_scope": "Complete article text; screenshots and linked external execution trace not inspected.",
+      "source_type": "Primary controlled security demonstration, with vendor promotion; not a production incident report.",
+      "practice": {
+        "trigger": "Untrusted content, private reads, and publication tools coexist.",
+        "failure": "Individually permitted calls compose into unauthorized disclosure.",
+        "mechanism": "Enforce task-scoped resource and destination policy before effects.",
+        "conditions": "Application identifies protected data and permitted destinations.",
+        "counterexample": "Single-repository restrictions can block legitimate cross-repository work.",
+        "verification": "Synthetic private marker never reaches a denied sink; permitted triage succeeds."
+      },
+      "limitations": "Historical demonstration, not a current universal exploit claim; no reproduction or model benchmark. Tool-result content differs from tool-metadata poisoning.",
+      "adoption_status": "proposed",
+      "skill_targets": ["mcp-engineering"],
+      "workflow_targets": ["tal-mcp-integration"],
+      "gap_id": "composed-tool-dataflow"
+    },
+    {
+      "id": "cloudflare-mcp-path-observability-2026",
+      "title": "How Cloudflare detects MCP traffic and helps secure it",
+      "url": "https://blog.cloudflare.com/mcp-security-updates/",
+      "publisher": "Cloudflare",
+      "authors": ["AJ Gerstenhaber", "Kenny Johnson"],
+      "published_at": "2026-08-14",
+      "verified_at": "2026-09-29",
+      "index_url": "https://blog.cloudflare.com/",
+      "ownership_evidence": "First-party Cloudflare engineering blog with named authors and dated publication.",
+      "access": "full public HTML",
+      "read_scope": "Complete article body, excluding navigation and linked product documentation.",
+      "source_type": "Primary deployment engineering account mixed with product announcement; not a postmortem.",
+      "practice": {
+        "trigger": "A deployment requires gateway-mediated tools or comprehensive auditing.",
+        "failure": "Direct access bypasses policy; URL heuristics misclassify traffic.",
+        "mechanism": "Enforce the required path at the upstream boundary; declare visibility limits.",
+        "conditions": "Operators control the relevant endpoint and access policy.",
+        "counterexample": "Network inspection does not cover local stdio.",
+        "verification": "Compare permitted gateway and denied direct calls; enumerate unseen paths."
+      },
+      "limitations": "Header detection is incomplete, not authentication. No gateway deployed. Product availability, SDK fallback, and TLS inspection are not adopted recommendations.",
+      "adoption_status": "proposed conditional test extension; general principle already covered",
+      "skill_targets": ["mcp-engineering", "microservice-operations"],
+      "workflow_targets": ["tal-mcp-integration"],
+      "gap_id": "mandatory-path-and-coverage"
+    }
+  ],
+  "gap_mapping": [
+    {
+      "id": "composed-tool-dataflow",
+      "priority": 1,
+      "already_covered": [
+        "MCP verified identity, object ownership, token validation, untrusted annotation hints, and private cache partitioning.",
+        "Temporal AI workflows treat retrieved content and model output as untrusted and require application authorization."
+      ],
+      "actual_gap": "The MCP workflow and example evidence do not explicitly test a forbidden sequence across separately authorized source and destination tools.",
+      "proposed_change": "Add a conditional tool-composition reference and one failure case; preserve concise main instructions.",
+      "implementation_boundary": "Application policy decides permitted resources and destinations; protocol envelopes and agent prompts alone do not enforce it.",
+      "case_ids": ["MCP-COMPOSITION-01"]
+    },
+    {
+      "id": "mandatory-path-and-coverage",
+      "priority": 2,
+      "already_covered": [
+        "microservice-operations/references/security.md explicitly evaluates edge-gateway bypass.",
+        "MCP guidance validates HTTP Origin and authenticates/authorizes calls at the protected handler.",
+        "A2A guidance applies network policy at actual outbound boundaries."
+      ],
+      "actual_gap": "No MCP acceptance case verifies a deployment's mandatory mediation path or documents incomplete traffic visibility.",
+      "proposed_change": "Reuse existing service-security advice; add conditional deployment tests and telemetry scope rather than another generic security skill.",
+      "implementation_boundary": "Upstream endpoint access is different from HTTP Origin validation. Gateway identity cannot be inferred from an arbitrary client header.",
+      "case_ids": ["MCP-PATH-01", "MCP-VISIBILITY-01"]
+    }
+  ],
+  "proposed_cases": [
+    {
+      "id": "MCP-COMPOSITION-01",
+      "status": "authored, not executed",
+      "fixture": "Local issue reader, synthetic private data marker, and captured publication sink.",
+      "action": "Replay the disallowed tool-call sequence directly; also run permitted triage.",
+      "acceptance": "No protected marker reaches the denied sink; allowed behavior remains successful.",
+      "evidence_limit": "A deterministic boundary test does not measure a model's resistance to every indirect prompt injection."
+    },
+    {
+      "id": "MCP-PATH-01",
+      "status": "authored, not executed",
+      "fixture": "A deployment that explicitly requires a gateway, with an upstream endpoint and observable effect count.",
+      "action": "Send equivalent requests through the permitted gateway and directly to the upstream endpoint, including forged untrusted routing hints.",
+      "acceptance": "Permitted access succeeds; prohibited paths cause no effect.",
+      "evidence_limit": "Local routing fixtures do not prove deployed firewall, gateway, or identity configuration."
+    },
+    {
+      "id": "MCP-VISIBILITY-01",
+      "status": "authored, not executed",
+      "fixture": "Inventory of actual client transports, endpoints, and observation boundaries.",
+      "action": "Include an alternate HTTP path and local stdio path in the coverage review.",
+      "acceptance": "Observed and unobserved paths are explicit; a missing detector event never becomes proof of no execution.",
+      "evidence_limit": "Coverage is scoped to the declared environment and measurement window."
+    }
+  ],
+  "local_sources_examined": [
+    {
+      "path": "skills/protocols/mcp-engineering/SKILL.md",
+      "sha256": "cd695162ddc3ea125098d00ad42b081b94863e87d02a88cab4b4fff5b937f025"
+    },
+    {
+      "path": "skills/protocols/mcp-engineering/references/authorization-and-caching.md",
+      "sha256": "b2ac473dccccfab790084fd6903a1cae3abea9ef4c5cd684afde6a19c3897a61"
+    },
+    {
+      "path": "skills/protocols/mcp-engineering/references/outcomes.md",
+      "sha256": "c7bd25aa626e3f32107e0e09614aa2c839159c81f0f1bf3ddad3e1b75e7cc34a"
+    },
+    {
+      "path": "skills/protocols/a2a-engineering/references/authorization-and-validation.md",
+      "sha256": "0cd95e370ee4841735993cd64c95a6c3bd66f29aad8c05b21166b0408c4be6c2"
+    },
+    {
+      "path": "skills/protocols/a2a-engineering/references/lifecycle-and-effects.md",
+      "sha256": "da641b662e27ac87fcbff2504f99db2c83e8a283f03d0e865826d78061079547"
+    },
+    {
+      "path": "workflows/tal-mcp-integration/WORKFLOW.md",
+      "sha256": "b7df60b0184bab282034a60c15d0c0ab7aef6c2da3c6351353d5cfa371a686ae"
+    },
+    {
+      "path": "workflows/tal-a2a-integration/WORKFLOW.md",
+      "sha256": "78bb13c1f8d8f78711c6fe17cf849a5d3eb59daff82d006e05ee98cf907454c1"
+    }
+  ],
+  "additional_local_context": [
+    "skills/engineering/microservice-operations/references/security.md",
+    "skills/temporal/temporal-ai-workflows/SKILL.md",
+    "examples/protocols/mcp/README.md"
+  ],
+  "source_boundaries": [
+    "No article changes a normative protocol contract or the repository's tested SDK pins.",
+    "No universal exploit rate, current-client vulnerability, complete detector coverage, or vendor security guarantee is inferred.",
+    "No package, scanner, cloud service, agent model, or production policy was installed or changed.",
+    "All proposed cases remain unexecuted and must not be added to passing-check totals."
+  ]
+}

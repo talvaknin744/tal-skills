@@ -6,6 +6,8 @@ Resolve the application user and tenant from verified claims or trusted lookup r
 
 At a protected HTTP boundary, validate the token's intended resource, issuer, validity and required permissions using the deployment's actual authentication scheme. A fixture mapping synthetic strings to users proves request routing only.
 
+When tools combine untrusted content, private reads and publication, or a deployment requires gateway-mediated access, read [tool dataflow and access paths](tool-dataflow.md). These branches need application policy beyond a valid token for each individual call.
+
 For every Streamable HTTP deployment, validate incoming `Origin` headers against the deployment's allowed origins before invoking the handler. Reject a present but invalid `Origin` with HTTP 403. For localhost serving, also install host-header checks and bind explicitly to loopback.
 
 Private caches partition by authorization context as well as operation and relevant parameters. A principal-only key can leak across changed credentials or permissions. Include a safe credential/context identifier and the relevant tenant, authorization version and scopes; never log raw credentials. Re-authorize before returning application-cached data. Credential rotation, permission changes and revocation need explicit invalidation/revalidation behavior.

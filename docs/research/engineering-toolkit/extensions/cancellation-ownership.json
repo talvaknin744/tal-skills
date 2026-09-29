@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "lane": "cancellation-ownership",
+  "researched_on": "2026-09-29",
+  "status": "research-only",
+  "article_count": 3,
+  "article_limit": 3,
+  "runtime_experiments_executed": false,
+  "skills_or_code_changed": false,
+  "report": "cancellation-ownership.md",
+  "deduplication": {
+    "scope": [
+      "docs/research/engineering-toolkit",
+      "skills"
+    ],
+    "terms": [
+      "neopythonic",
+      "Reasoning about asyncio",
+      "go.dev/blog/pipelines",
+      "blog.golang.org/pipelines",
+      "backpressuring-in-streams",
+      "Backpressuring in Streams"
+    ],
+    "result": "No previous claimed reads found in inspected records before writing this report.",
+    "limit": "Does not establish contributors' unrecorded reading histories."
+  },
+  "articles": [
+    {
+      "id": "A1",
+      "title": "Reasoning about asyncio.Semaphore",
+      "url": "https://neopythonic.blogspot.com/2022/10/reasoning-about-asynciosemaphore.html",
+      "publisher": "Neopythonic",
+      "author": "Guido van Rossum",
+      "publication_date": "2022-10-04",
+      "date_basis": "Displayed article date",
+      "accessed_on": "2026-09-29",
+      "access": "Public full HTML",
+      "read_scope": "Entire main article, waiter states, and invariants; comments excluded.",
+      "trigger": "Cancellation after a queued grant, before consumer resumption.",
+      "failure": "Capacity lost or unfairly reassigned.",
+      "mechanism": "Track grant acceptance and return abandoned reservations.",
+      "limits": "Historical implementation; no custom semaphore replacement recommended.",
+      "counterexample": "Canceled await with an already-successful grant Future.",
+      "verification": {
+        "performed": "CPython implementation inspection",
+        "sources": [
+          "V1",
+          "V2",
+          "V3"
+        ],
+        "proposed_schedule": "P1"
+      },
+      "gap_ids": [
+        "G1"
+      ]
+    },
+    {
+      "id": "A2",
+      "title": "Go Concurrency Patterns: Pipelines and cancellation",
+      "url": "https://go.dev/blog/pipelines",
+      "publisher": "The Go Blog",
+      "author": "Sameer Ajmani",
+      "publication_date": "2014-03-13",
+      "date_basis": "Article byline",
+      "accessed_on": "2026-09-29",
+      "access": "Public full HTML",
+      "read_scope": "Entire main article and in-page code including bounded parallelism; linked videos and complete downloadable code not separately read.",
+      "trigger": "Consumer stops while producer still sends.",
+      "failure": "Blocked goroutine retains work and resources.",
+      "mechanism": "Propagate abandonment; coordinate sender completion and channel close.",
+      "limits": "Broadcast is not a join; synchronous file reads are not interrupted.",
+      "counterexample": "Buffer sized for one input does not handle changed production.",
+      "verification": {
+        "performed": "Current select specification and pinned context inspection",
+        "sources": [
+          "V4",
+          "V5"
+        ],
+        "proposed_schedule": "P2"
+      },
+      "gap_ids": [
+        "G2",
+        "G5"
+      ]
+    },
+    {
+      "id": "A3",
+      "title": "Backpressuring in Streams",
+      "url": "https://nodejs.org/learn/modules/backpressuring-in-streams",
+      "publisher": "Node.js Learn / OpenJS Foundation and Node.js contributors",
+      "author": null,
+      "publication_date": null,
+      "date_basis": "No publication date or individual byline visible on accessed page",
+      "accessed_on": "2026-09-29",
+      "access": "Public full HTML",
+      "read_scope": "Entire main article, examples, flow diagram, and benchmark tables. Modified-runtime benchmark not reproduced.",
+      "trigger": "Producer outruns downstream consumption.",
+      "failure": "Buffered work and garbage-collection pressure grow.",
+      "mechanism": "Honor write/push feedback at the production boundary.",
+      "limits": "Historical defaults and benchmark figures; no universal memory cap.",
+      "counterexample": "Ignoring write() returning false bypasses the intended feedback.",
+      "verification": {
+        "performed": "Pinned Node stream documentation and default implementation inspection",
+        "sources": [
+          "V6",
+          "V7"
+        ],
+        "proposed_schedule": "P3"
+      },
+      "gap_ids": [
+        "G3"
+      ]
+    }
+  ],
+  "verification_sources": [
+    {
+      "id": "V1",
+      "title": "CPython asyncio semaphore implementation",
+      "publisher": "Python Software Foundation / CPython",
+      "url": "https://github.com/python/cpython/blob/v3.14.3/Lib/asyncio/locks.py#L386-L448",
+      "version": "3.14.3",
+      "accessed_on": "2026-09-29",
+      "read_scope": "Semaphore locked/acquire/release/_wake_up_next; raw source lines 350-453",
+      "kind": "pinned-source",
+      "supports": "Reservation/refund implementation; historical conceptual counter is not the current private field."
+    },
+    {
+      "id": "V2",
+      "title": "asyncio synchronization primitives",
+      "publisher": "Python Software Foundation",
+      "url": "https://docs.python.org/3.14/library/asyncio-sync.html#asyncio.Semaphore",
+      "version": "3.14 rolling documentation displayed 3.14.7",
+      "accessed_on": "2026-09-29",
+      "read_scope": "Lock and Semaphore ownership/use sections",
+      "kind": "current-docs",
+      "supports": "Standard scoped ownership; implementation inspection is not a portable private-state contract."
+    },
+    {
+      "id": "V3",
+      "title": "Coroutines and tasks",
+      "publisher": "Python Software Foundation",
+      "url": "https://docs.python.org/3.14/library/asyncio-task.html",
+      "version": "3.14 rolling documentation displayed 3.14.7",
+      "accessed_on": "2026-09-29",
+      "read_scope": "Cancellation, TaskGroup, timeout, wait_for, wait, shield, Task.cancel sections",
+      "kind": "current-docs",
+      "supports": "Cancellation is cooperative and timeout waiting can exceed the stated timeout."
+    },
+    {
+      "id": "V4",
+      "title": "Go specification: Select statements",
+      "publisher": "Go project",
+      "url": "https://go.dev/ref/spec#Select_statements",
+      "version": "Current specification accessed 2026-09-29",
+      "accessed_on": "2026-09-29",
+      "read_scope": "Select operand evaluation, execution, and ready-case selection",
+      "kind": "current-spec",
+      "supports": "No cancellation priority; send operands evaluate before case selection."
+    },
+    {
+      "id": "V5",
+      "title": "Go context AfterFunc contract",
+      "publisher": "Go project",
+      "url": "https://github.com/golang/go/blob/go1.27.1/src/context/context.go#L309-L322",
+      "version": "go1.27.1",
+      "accessed_on": "2026-09-29",
+      "read_scope": "AfterFunc contract and CancelFunc documentation, also pkg.go.dev/context@go1.27.1",
+      "kind": "pinned-source",
+      "supports": "Stopping a callback registration does not join an already-started callback."
+    },
+    {
+      "id": "V6",
+      "title": "Stream API",
+      "publisher": "Node.js project",
+      "url": "https://nodejs.org/download/release/v25.9.0/docs/api/stream.html",
+      "version": "25.9.0",
+      "accessed_on": "2026-09-29",
+      "read_scope": "Buffering, write/drain, promise pipeline and generator signal, finished, pipeline error teardown and HTTP caveats, addAbortSignal, default HWM",
+      "kind": "pinned-docs",
+      "supports": "Flow control, operation versus observer cancellation, cooperative teardown, and socket/error limitations."
+    },
+    {
+      "id": "V7",
+      "title": "Node stream default state",
+      "publisher": "Node.js project",
+      "url": "https://github.com/nodejs/node/blob/v25.9.0/lib/internal/streams/state.js#L11-L13",
+      "version": "25.9.0",
+      "accessed_on": "2026-09-29",
+      "read_scope": "Default byte/object HWM values and getter/setter",
+      "kind": "pinned-source",
+      "supports": "Platform-dependent defaults; inspect actual configured budgets."
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G1",
+      "target": "skills/languages/python-backend/references/async-ownership.md",
+      "classification": "small-conditional-addition",
+      "recommendation": "Explain custom-adapter grant-to-acceptance ownership.",
+      "already_covered": "Pre-acquisition verification, scoped cleanup, task joins, independent cleanup budgets, uncertain effects.",
+      "trial_gap_classification": "Reported missing pre-acquisition case is primarily evaluation coverage."
+    },
+    {
+      "id": "G2",
+      "target": "skills/languages/go-backend/references/ownership.md",
+      "classification": "small-addition",
+      "recommendation": "Explain ready-select nonpriority and conditional post-acquisition cancellation checkpoint.",
+      "already_covered": "Admission lifetime, body closure, cancellation-aware waits, joins.",
+      "limit": "Checkpoint is not an atomic fence against concurrent cancellation or effects."
+    },
+    {
+      "id": "G3",
+      "target": "skills/languages/typescript-backend/references/async-ownership.md",
+      "classification": "conditional-reference-addition",
+      "recommendation": "Node stream production feedback, owned teardown versus canceled observation, HTTP and generator constraints.",
+      "already_covered": "Generic AbortSignal, late leases, listener cleanup, independent cleanup ownership.",
+      "limit": "Conditional on Node streams; do not generalize to every TypeScript runtime."
+    },
+    {
+      "id": "G4",
+      "target": "skills/messaging/messaging-reliability/SKILL.md",
+      "classification": "evaluation-gap-not-prose-gap",
+      "recommendation": "Use existing explicit-barrier requirements for the missing concurrent schedule.",
+      "already_covered": "Durable-state oracles and controlled schedules in messaging, concurrency, and failure-oriented testing."
+    },
+    {
+      "id": "G5",
+      "target": "skills/languages/go-backend/references/ownership.md",
+      "classification": "optional-api-specific-example",
+      "recommendation": "If AfterFunc appears in a changed path, distinguish stopping registration from joining callback completion.",
+      "already_covered": "General owned-goroutine completion requirement; no mandatory additional generic join prose."
+    }
+  ],
+  "proposed_verification": [
+    {
+      "id": "P1",
+      "status": "not-run",
+      "gate": "Queued, granted before acceptance, accepted before protected work",
+      "oracle": "Grant accounting restored exactly once; next valid operation acquires; owned cleanup observed",
+      "counterexample": "Custom adapter treats every canceled await as an ungranted reservation"
+    },
+    {
+      "id": "P2",
+      "status": "not-run",
+      "gate": "Result and cancellation ready together; separate after-acquisition before-dispatch gate",
+      "oracle": "Every branch retains or releases ownership; already-known cancellation prevents dispatch where required; worker completion observed",
+      "counterexample": "Assume select always chooses Done, or put the only cancellation check before acquisition"
+    },
+    {
+      "id": "P3",
+      "status": "not-run",
+      "gate": "Slow sink, held generator, canceled completion observer, HTTP error",
+      "oracle": "Account for stream and application work; joined teardown or explicit incomplete status; owner terminates work after observer abandonment; declared socket outcome",
+      "counterexample": "Ignoring feedback or generator signal while declaring observer cancellation complete"
+    },
+    {
+      "id": "P4",
+      "status": "not-run",
+      "gate": "Two actors at invariant decision, or second actor observed blocked at protection boundary",
+      "oracle": "Durable effect and progress invariant under forced ordering",
+      "counterexample": "Sequential replay or sleep-only concurrency evidence"
+    }
+  ],
+  "not_new_guidance": [
+    "Stable effect identity and reconciliation",
+    "Unknown COMMIT classification",
+    "Separate request and cleanup budgets",
+    "Owned tasks and goroutine joins",
+    "Explicit barriers instead of sleep-only schedules"
+  ],
+  "limitations": [
+    "No runtime verification performed in this lane",
+    "Historical failures and Node benchmark not reproduced",
+    "Current Python docs and pinned source use distinct versions",
+    "No universal hard shutdown guarantee for uncooperative work",
+    "No transaction or external exactly-once guarantee follows from these articles"
+  ],
+  "local_guidance_sha256": {
+    "skills/languages/python-backend/references/async-ownership.md": "70be25de98a89ffd0015b93884e83de21e090cf39e9eda55a0762ad6c2bfd811",
+    "skills/languages/typescript-backend/references/async-ownership.md": "76e4d7284bb46439260ed77d1aa96d74cf841b6c35d0f5da17c1b6aa94d488bd",
+    "skills/languages/go-backend/references/ownership.md": "09c7a97014aa7375cb38122608e1b83893baedf0e6eecc0d2f9a4b3d2e6e6497",
+    "skills/testing/failure-oriented-testing/references/fault-histories.md": "9e93e6933924cac882fbb15776285c8068e170af56af953d8ddef095837be8ac",
+    "skills/engineering/concurrency-correctness/SKILL.md": "cd85ea4411727760838b5f0bf3b7729b8cf1d1491edb94bbd4507b533d863e49",
+    "skills/messaging/messaging-reliability/SKILL.md": "6e8205af5afc92e989c9e00f45e681be2339ef2a3a3a397cab82f023d29d0b89"
+  }
+}

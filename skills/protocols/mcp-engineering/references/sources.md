@@ -10,5 +10,9 @@ Verified 2026-09-29 against official release metadata, complete pinned source ar
 | [TypeScript v2.2.0](https://github.com/modelcontextprotocol/typescript-sdk/tree/v2.2.0) | HTTP factory, Node adapter, request context, error mapping and conformance exclusions |
 | [Python v2.2.0](https://github.com/modelcontextprotocol/python-sdk/tree/v2.2.0) | Client modes, timeout/cancellation implementation and expected failures |
 | [Go v1.8.0](https://github.com/modelcontextprotocol/go-sdk/tree/v1.8.0) | Negotiation, transport/context cancellation and conformance baseline |
+| [Invariant Labs: GitHub MCP Exploited](https://invariantlabs.ai/blog/mcp-github-vulnerability), 2025-05-26 | Full article text; controlled demonstration of untrusted issue content, private reads and public publication. Linked trace and images not independently inspected; not a current-client vulnerability benchmark. |
+| [Cloudflare: How Cloudflare detects MCP traffic and helps secure it](https://blog.cloudflare.com/mcp-security-updates/), 2026-08-14 | Full article body; observed URL-detection limitations and required-path bypass. Engineering account with product announcements, not a protocol contract or deployed-control verification. |
 
 Local research ran Python and Go clients against a TypeScript server, malformed HTTP requests, interruption before/after simulated effects, and a synthetic user/handle/cache boundary. These observations cover selected SDK behavior. They do not establish complete conformance, OAuth verification, optional task support, multi-process continuation, durable effects or production recovery. Revalidate any relevant claim when changing a pin.
+
+The tool-dataflow and required-gateway cases are conditional application-policy guidance. Article reading supplies motivation; it does not add executed checks to the SDK evidence or change the pinned protocol versions.
