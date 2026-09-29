@@ -1,0 +1,124 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "search-topology",
+      "title": "Search topology must fit the index and preserve complete answers",
+      "tags": ["sharding", "scatter-gather", "colocated-helpers"],
+      "prompt": "Review the topology options and helper proposals in design.md. Choose a justified composition, explain the memory and latency implications quantitatively where possible, and define routing, completeness, and failure checks. Keep all files unchanged and distinguish proposed checks from measurements.",
+      "fixture_dir": "evals/distributed-system-patterns/fixtures/search-topology",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "memory-and-topology",
+          "severity": "critical",
+          "criterion": "Rejects complete-index replication on 48-GiB index budgets despite aggregate cluster memory, identifies 16 shards as the arithmetic minimum before headroom/skew, and distinguishes sharding for data fit from replication for interchangeable copies and scatter/gather for complete queries."
+        },
+        {
+          "id": "fanout-estimate",
+          "severity": "major",
+          "criterion": "Estimates at least one slow required leaf for 64 independent leaves as 1 - 0.99^64, approximately 47.4%, and labels the independence/synthetic-data assumption rather than claiming measured latency or guaranteed improvement from added shards."
+        },
+        {
+          "id": "complete-results",
+          "severity": "critical",
+          "criterion": "Rejects silently returning incomplete HTTP-200 results, preserves each conjunction at the data shard followed by union of all required shard results, and makes missing/late required contributions fail explicitly within the stated deadline unless a separately authorized contract changes."
+        },
+        {
+          "id": "replicated-shards",
+          "severity": "major",
+          "criterion": "Explains that distinct shards are not redundant copies, recommends justified per-shard redundancy or another supported recovery design for upgrades/failure, and includes routing to ready copies, placement/capacity, and coordinator/fan-out measurements without guaranteeing the 300-ms target."
+        },
+        {
+          "id": "helper-contracts",
+          "severity": "major",
+          "criterion": "Identifies metrics conversion as an adapter responsibility and local remote-connection brokering as an ambassador responsibility, evaluates whether the client helper is useful, and specifies concrete shared-resource, readiness, or restart contracts rather than treating every extra container as failure isolation."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied fixtures unchanged and distinguishes calculations or proposed failure checks from measurements, deployments, or experiments actually performed."
+        }
+      ]
+    },
+    {
+      "id": "batch-takeover",
+      "title": "Batch completeness and ownership must survive delayed coordinators",
+      "tags": ["work-queues", "barrier", "ownership"],
+      "prompt": "Review design.md and propose a corrected composition and ownership contract. Explain when source deletion and the final report are allowed, how partial reduction can proceed, and what takeover checks would demonstrate correctness. Stay focused on topology and coordination; keep files unchanged and do not execute the pipeline.",
+      "fixture_dir": "evals/distributed-system-patterns/fixtures/batch-takeover",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "barrier-membership",
+          "severity": "critical",
+          "criterion": "Distinguishes copying, merging, and joining; rejects 30 seconds of queue emptiness as completion; requires durable evidence for both required transformations of every one of the 120 manifest objects before source deletion."
+        },
+        {
+          "id": "incremental-reduction",
+          "severity": "major",
+          "criterion": "Allows sum/count reduction to start as partial outputs arrive while withholding the final complete report until every required statistics contribution is accounted for; retains membership/provenance sufficient to check completeness."
+        },
+        {
+          "id": "stale-owner-enforcement",
+          "severity": "critical",
+          "criterion": "Shows why the local lease flag and downstream owner-name read cannot prevent stale destructive actions, requires generation-carrying requests and an enforceable atomic guard at the protected resource, and addresses delayed requests after the same name reacquires ownership."
+        },
+        {
+          "id": "ownership-generation",
+          "severity": "critical",
+          "criterion": "Requires release as well as renewal to match the acquisition generation, and defines loss/takeover behavior without asserting that a watchdog or terminating a process alone proves that already-issued stale requests cannot take effect."
+        },
+        {
+          "id": "failure-evidence",
+          "severity": "major",
+          "criterion": "Specifies observable checks for delayed branch completion and pause/takeover/resume or delayed delivery after reacquisition, including no premature deletion and rejection of stale protected writes; keeps repeated-delivery implementation separate as requested."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all fixtures unchanged, runs no pipeline or destructive operation, and distinguishes a proposed validation procedure from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "local-retry-nontrigger",
+      "title": "Local parse-error cleanup does not require a distributed topology",
+      "tags": ["activation", "scope"],
+      "prompt": "Review requirements.md and explain the smallest control-flow change to stop retrying the same malformed JSON while preserving successful parsing. Keep the file unchanged and focus on this local parser cleanup.",
+      "fixture_dir": "evals/distributed-system-patterns/fixtures/local-retry-nontrigger",
+      "fixtures": ["requirements.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load distributed-system-patterns or introduce replication, sharding, ownership election, or work queues for a single-process local parse operation."
+        },
+        {
+          "id": "bounded-fix",
+          "severity": "major",
+          "criterion": "Recommends one parse attempt that returns the existing parse error immediately on failure, preserving the successful result and the caller's existing error reporting and exit behavior."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Keeps the response focused on the local control flow without expanding it into backoff infrastructure, duplicate handling, or a production-readiness assessment."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and makes no unsupported claim of runtime or behavioral verification."
+        }
+      ]
+    }
+  ]
+}

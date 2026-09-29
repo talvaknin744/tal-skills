@@ -1,0 +1,109 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "policy-ownership",
+      "title": "Matching code can represent independently changing policies",
+      "tags": ["knowledge-duplication", "orthogonality", "proportionality"],
+      "prompt": "Review the changeability plan in brief.md and the rules in policies.py. Assess the proposed sharing, identify the authoritative ownership and update path, and describe how to verify that future policy changes remain local. Keep all files unchanged.",
+      "fixture_dir": "evals/pragmatic-programming/fixtures/policy-ownership",
+      "fixtures": ["brief.md", "policies.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "meaning-before-similarity",
+          "severity": "critical",
+          "criterion": "Keeps retail and HR policy ownership independent despite their current identical expressions; explains that their separate decision makers and upcoming divergent changes make one shared policy constant or the proposed helper with an implicit common window harmful. A parameterized helper that preserves independent ownership is permissible."
+        },
+        {
+          "id": "same-rule-authority",
+          "severity": "critical",
+          "criterion": "Identifies the returns API, shop policy text, and support-export value as representations of one retail policy and proposes an authoritative source with an ongoing derivation or explicit synchronization mechanism for all three."
+        },
+        {
+          "id": "locality-verification",
+          "severity": "major",
+          "criterion": "Proposes observable checks for the 45-day retail window, retail representation agreement, and the unchanged 30-day HR window, including relevant inside/outside boundaries; may also use the later 14-day HR change to demonstrate independent evolution."
+        },
+        {
+          "id": "proportionate-correction",
+          "severity": "major",
+          "criterion": "Uses a small rule or representation boundary within the current application and explains its cost without requiring a service, policy engine, universal abstraction, or merge of independently owned policies."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all fixture files unchanged and distinguishes proposed verification from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "tracer-or-prototype",
+      "title": "A retained integration slice must differ from a disposable UI mockup",
+      "tags": ["tracer-bullets", "prototype", "reversibility", "feedback"],
+      "prompt": "Assess the pragmatic development plan in design.md. Decide what the existing mockup has established, recommend a bounded next step for the uncertain integration, and explain whether the proposed vendor boundary and rollback preserve future changeability. This is a read-only review.",
+      "fixture_dir": "evals/pragmatic-programming/fixtures/tracer-or-prototype",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "prototype-distinction",
+          "severity": "critical",
+          "criterion": "Treats the hardcoded page as a disposable interaction prototype whose evidence concerns layout, not a proven integration or retained production tracer; does not infer correctness, error handling, persistence, or SDK behavior from the demo."
+        },
+        {
+          "id": "retained-slice",
+          "severity": "critical",
+          "criterion": "Proposes a narrow retained path for one supplier layout through the existing upload/storage, worker, actual SDK test integration, persistence, and editable review result, with appropriate error handling and checks for that path."
+        },
+        {
+          "id": "data-and-boundary",
+          "severity": "critical",
+          "criterion": "Identifies both SDK status leakage and cents versus decimal-unit leakage, recommends a bounded translation to domain-owned values, and explains why code rollback alone cannot repair rows already written in incompatible representations."
+        },
+        {
+          "id": "falsifiable-feedback",
+          "severity": "major",
+          "criterion": "Uses the 20 supported valid sample PDFs to check correct editable fields and separate unreadable-PDF or rejected-request cases to check recoverable errors, while labeling the unmeasured five-second target and missing load profile as unresolved rather than a proven performance result."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves the fixture unchanged, makes no external connection or contact, and distinguishes proposed experiments from results actually observed."
+        }
+      ]
+    },
+    {
+      "id": "local-rounding-nontrigger",
+      "title": "A settled rounding correction does not require a changeability workflow",
+      "tags": ["activation", "scope"],
+      "prompt": "Explain the smallest correction to total.py for the rounding behavior in requirements.md. Keep the files unchanged and keep the answer focused on this local bug.",
+      "fixture_dir": "evals/pragmatic-programming/fixtures/local-rounding-nontrigger",
+      "fixtures": ["requirements.md", "total.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load pragmatic-programming or turn the settled local arithmetic correction into a changeability review, prototype, tracer bullet, or broader redesign."
+        },
+        {
+          "id": "small-correction",
+          "severity": "major",
+          "criterion": "Recommends rounding sum(prices) once to two decimal places, yielding 1.00 for the stated example, while preserving the established rounding behavior and numeric types."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all fixture files unchanged and distinguishes explanation or proposed checks from checks actually executed."
+        }
+      ]
+    }
+  ]
+}

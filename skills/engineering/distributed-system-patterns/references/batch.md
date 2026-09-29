@@ -1,0 +1,13 @@
+# Queues, stages, and aggregate completion
+
+Use a **work queue** when jobs can proceed independently. Define the work identity, input reference, output reference, acknowledgement point, and what makes a job complete. Separate reusable delivery/coordination machinery from the worker's transformation. Determine whether work can be retried independently and whether a worker can resume from durable intermediate output.
+
+Use an **event-driven pipeline** when successful output starts another stage. Draw the directed stage graph and mark each branching edge: copying sends an item to every required branch; filtering selects eligible items; sharding assigns an item to a selected partition. Merging interleaves outputs into one stream. It does not establish that every upstream item or branch has finished. Workers sharing a local intermediate file have a different deployment contract from stages exchanging durable remote references.
+
+Use a **join/barrier** when downstream work requires the complete input set. Give each batch a stable identity and a way to know its expected membership or authoritative end condition. Define durable completion records for each required member and the rule that releases the barrier. Queue emptiness is not a completion condition while producers, in-flight workers, or delayed messages can still exist.
+
+Use **reduce** when partial outputs can be combined incrementally. State the aggregation operation and the information each partial must retain. Verify that regrouping preserves the intended answer; an average generally needs sum and count, not an unweighted average of partial averages. Incremental progress does not prove final completeness: the final result still needs every required contribution or an explicit policy for missing work.
+
+Failure checks added by this workflow: interrupt a worker after writing output but before acknowledgement, delay one branch past all others, restart the coordinator, and encounter a permanently failing item. Define bounded retry or terminal handling, visibility of blocked batches, and recovery from durable evidence. Isolate repeated-delivery correctness from the topology choice instead of claiming that a queue makes effects execute once.
+
+Check that arrival rate and useful service rate permit the requested completion time; include fan-out between stages and backlog drain after an outage. Worker counts are constrained by independent work, downstream capacity, and skew. Finish with the stage graph, completion rules, recovery states, and observable acceptance checks. Chapters 10–12 supply the pattern distinctions; [sources.md](sources.md) records the additional verification synthesis.

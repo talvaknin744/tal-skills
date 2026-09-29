@@ -1,0 +1,143 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "retry-amplification",
+      "title": "Nested retries multiply dependency traffic during an outage",
+      "tags": [
+        "retry-budget",
+        "latency",
+        "failure-propagation"
+      ],
+      "prompt": "Review the outage behavior in incident.md. Quantify the retry amplification, identify the main failure-propagation risks, and recommend a bounded operational correction with measurable validation. Keep files unchanged.",
+      "fixture_dir": "evals/microservice-operations/fixtures/retry-amplification",
+      "fixtures": [
+        "incident.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "amplification",
+          "severity": "critical",
+          "criterion": "Computes up to nine Inventory attempts per original request and a potential offered load of 1,800 Inventory attempts per second under the stated assumptions, while distinguishing the estimate from measured sustained throughput."
+        },
+        {
+          "id": "deadline-budget",
+          "severity": "critical",
+          "criterion": "Recommends an end-to-end deadline and controlled retry ownership or shared retry budget that fits the two-second user requirement, accounting for work that continues after callers time out."
+        },
+        {
+          "id": "capacity-protection",
+          "severity": "major",
+          "criterion": "Addresses concurrency or load shedding and bounded backoff with jitter or another justified overload-control mechanism, rather than only increasing timeouts or adding retries."
+        },
+        {
+          "id": "operational-proof",
+          "severity": "major",
+          "criterion": "Proposes slow-dependency or outage checks observing attempts, active work, response latency, and recovery, with stated bounds and no unsupported assertion that a circuit breaker guarantees recovery."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "canary-metric-gap",
+      "title": "Healthy HTTP metrics can conceal a failed asynchronous rollout",
+      "tags": [
+        "rollout",
+        "observability",
+        "recovery"
+      ],
+      "prompt": "Assess the rollout and rollback plan in rollout.md. Identify what the current canary misses, define useful stop conditions, and explain how recovery must handle already accepted work. Keep the file unchanged.",
+      "fixture_dir": "evals/microservice-operations/fixtures/canary-metric-gap",
+      "fixtures": [
+        "rollout.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "canary-isolation",
+          "severity": "critical",
+          "criterion": "Explains that API traffic percentages do not isolate worker-version exposure in the shared queue and recommends a bounded cohort or version-attributed observation for the actual changed worker."
+        },
+        {
+          "id": "business-signals",
+          "severity": "critical",
+          "criterion": "Uses queue age or growth, completed shipment rate, pending outcomes, and carrier acceptance/receipt evidence to catch failure despite healthy 202 responses; defines meaningful promotion or stop conditions."
+        },
+        {
+          "id": "safe-recovery",
+          "severity": "critical",
+          "criterion": "Rejects blindly replaying all pending jobs after rollback because carrier acceptance may already have occurred, and uses the stated shipment-reference reconciliation before re-sending uncertain work."
+        },
+        {
+          "id": "capacity-and-evidence",
+          "severity": "major",
+          "criterion": "Recognizes v2's 40-per-minute service rate is below 100-per-minute arrivals, accounts for backlog recovery and worker-version attribution, and distinguishes a proposed rollback rehearsal from an executed recovery."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "stylesheet-review-nontrigger",
+      "title": "A visual spacing adjustment is not an operational readiness review",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review style.md and tell me which padding value changes the button's left and right spacing to 12 pixels while leaving top and bottom at 8 pixels. Keep the file unchanged and focus on this CSS question.",
+      "fixture_dir": "evals/microservice-operations/fixtures/stylesheet-review-nontrigger",
+      "fixtures": [
+        "style.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load microservice-operations or add rollout, metrics, error budgets, or failure-injection work to this CSS question."
+        },
+        {
+          "id": "padding",
+          "severity": "major",
+          "criterion": "Supplies padding: 8px 12px and correctly connects the first value to vertical spacing and the second to horizontal spacing."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Keeps the answer bounded to the requested spacing change and makes no unsupported claim of visual or runtime verification."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    }
+  ]
+}

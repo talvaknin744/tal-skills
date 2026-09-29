@@ -1,0 +1,143 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "saga-interleaving",
+      "title": "Compensation does not isolate concurrent workflows",
+      "tags": [
+        "saga",
+        "isolation",
+        "business-invariant"
+      ],
+      "prompt": "Review the saga in design.md. Can the stated compensation steps guarantee the credit-limit invariant under concurrent orders? Give a concrete interleaving, propose an enforceable design, and state remaining compensation limits. Do not modify files.",
+      "fixture_dir": "evals/microservice-data/fixtures/saga-interleaving",
+      "fixtures": [
+        "design.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "interleaving",
+          "severity": "critical",
+          "criterion": "Gives a concrete schedule where A and B both observe 100 available and proceed with 80 each, violating the stated invariant before compensation can restore anything."
+        },
+        {
+          "id": "isolation-gap",
+          "severity": "critical",
+          "criterion": "Explains that compensation does not provide isolation and cannot erase an already dispatched shipment or its business consequences."
+        },
+        {
+          "id": "enforce-invariant",
+          "severity": "major",
+          "criterion": "Places atomic credit reservation or an equivalent enforceable invariant at a single authority before acceptance and irreversible shipping, including reservation completion or release rules."
+        },
+        {
+          "id": "recovery-limits",
+          "severity": "major",
+          "criterion": "States how failed compensation or uncertain dispatch becomes observable and recoverable, distinguishing business compensation from rollback and avoiding an unsupported exactly-once guarantee."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "stale-projection-authorization",
+      "title": "A stale projection cannot enforce a strict credit decision",
+      "tags": [
+        "read-model",
+        "consistency",
+        "ownership"
+      ],
+      "prompt": "Review the proposed use of replicated account data in proposal.md. Assign suitable consistency to each use, recommend the smallest ownership correction, and describe failure cases to validate. Keep all files unchanged.",
+      "fixture_dir": "evals/microservice-data/fixtures/stale-projection-authorization",
+      "fixtures": [
+        "proposal.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "different-consistency",
+          "severity": "critical",
+          "criterion": "Distinguishes the bounded-staleness dashboard requirement from the strict concurrent checkout invariant; rejects treating lag monitoring alone as enforcement."
+        },
+        {
+          "id": "authoritative-reservation",
+          "severity": "critical",
+          "criterion": "Uses or recommends the supplied atomic Account reservation for checkout instead of authorizing solely from the Order projection, and identifies the availability tradeoff."
+        },
+        {
+          "id": "outage-policy",
+          "severity": "major",
+          "criterion": "Flags unresolved checkout behavior when Account is unavailable without silently accepting excess credit, and handles the dashboard's five-minute freshness limit with an observable stale state or equivalent policy."
+        },
+        {
+          "id": "validation",
+          "severity": "major",
+          "criterion": "Specifies concurrent checkouts, delayed events or broker outage, and reservation release or commit scenarios with expected invariant and displayed-freshness outcomes."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "local-transaction-nontrigger",
+      "title": "A single-database rollback question does not need a distributed workflow",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Explain the local transaction outcome in transaction.md. Which balances persist when the second statement fails? Keep the file unchanged and limit the answer to the supplied transaction semantics.",
+      "fixture_dir": "evals/microservice-data/fixtures/local-transaction-nontrigger",
+      "fixtures": [
+        "transaction.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load microservice-data or replace the explicitly local transaction with a saga, event stream, or distributed coordination design."
+        },
+        {
+          "id": "rollback-result",
+          "severity": "major",
+          "criterion": "Correctly explains that A remains 100 and B remains 20 after the full rollback under the given atomic transaction guarantee."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Uses the supplied semantics without inventing an external side effect or unknown transaction engine behavior."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    }
+  ]
+}

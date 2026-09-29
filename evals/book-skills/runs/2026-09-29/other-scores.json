@@ -1,0 +1,854 @@
+{
+  "format_version": 1,
+  "evaluation_method": {
+    "scale": {
+      "pass": 2,
+      "partial": 1,
+      "fail": 0
+    },
+    "selection": "Only the first existing case per skill; explicit skill loading in one-shot positive smoke trials.",
+    "limitations": [
+      "Capability restrictions were instructional, not technically disabled.",
+      "This is not a blind comparison, activation test, nontrigger test, or exhaustive evaluation.",
+      "Answer and tools files are trial-agent reports; raw execution transcripts and independent runtime reproduction were not part of scoring.",
+      "Unavailable model, settings, token, and timing metrics are null."
+    ],
+    "independent_actions": [
+      "Read each selected rubric and supplied project source/design.",
+      "Inspect answer.md and tools.md.",
+      "Recompute SHA-256 for each skill/project file and check manifest omissions and extra files."
+    ]
+  },
+  "complete": true,
+  "results": [
+    {
+      "skill": "legacy-code-changes",
+      "case_id": "member-shipping-threshold",
+      "case_path": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/legacy-code-changes/cases.json",
+      "answer_path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+      "tools_path": "/tmp/book-skill-trials-20260929/legacy-code-changes/tools.md",
+      "skill_path": "/tmp/book-skill-trials-20260929/legacy-code-changes/skill/SKILL.md",
+      "project_path": "/tmp/book-skill-trials-20260929/legacy-code-changes/project",
+      "criteria": [
+        {
+          "id": "intended-correction",
+          "severity": "critical",
+          "criterion": "Distinguishes current member shipping at 4,000 cents (199) from the required result (0) and plans a failing desired-behavior regression; does not preserve the known bug merely because a characterization records it.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+            "excerpt": "The regression must require `{\"subtotal_cents\": 4000, \"shipping_cents\": 0, \"total_cents\": 4000}` and `4000|1|0`. Those expectations fail against the observed current behavior;"
+          },
+          "rationale": "Explicitly distinguishes current fee 199 from required fee 0 and calls for recording intended failures before changing the predicate. The proposed characterization does not freeze the known bug."
+        },
+        {
+          "id": "minimal-boundary",
+          "severity": "critical",
+          "criterion": "Identifies eager CarrierAudit construction and proposes a narrow injection or equivalent substitution that prevents deployment configuration access and external requests while retaining the ordinary ShippingQuote() construction path.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+            "excerpt": "The smallest test boundary is already available: patch `quote.CarrierAudit` before calling `ShippingQuote()`."
+          },
+          "rationale": "Correct lookup-site patch prevents eager CarrierAudit construction and its configuration read while preserving ordinary no-argument construction and actual quote execution. It also warns that replacing service.audit after construction is too late. This meets the rubric's equivalent-substitution allowance without adding a production interface."
+        },
+        {
+          "id": "boundary-checks",
+          "severity": "major",
+          "criterion": "Gives concrete checks for member 3,999/4,000 cents and nonmember 4,999/5,000 cents with the required shipping amounts (199/0 and 399/0), preserving the unaffected pricing rules.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+            "excerpt": "| 4,000 | 399 → 399 | 199 → 0 |"
+          },
+          "rationale": "The concrete matrix gives member 3999/4000 as 199/0 and nonmember 4999/5000 as 399/0, including unchanged surrounding and default-member behavior."
+        },
+        {
+          "id": "meaningful-observation",
+          "severity": "major",
+          "criterion": "Plans checks through the real quote logic that verify total and object keys, the audit line values, and propagation of an audit failure; the replacement controls the audit dependency rather than implementing the pricing logic.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+            "excerpt": "For each case, assert the complete dictionary with exactly `subtotal_cents`, `shipping_cents`, and `total_cents`, and assert exactly one audit line in `subtotal|0-or-1|fee` format."
+          },
+          "rationale": "The substitute only records the audit dependency. Real quote logic is retained, with exact result dictionaries, audit values, and propagation of the identical sentinel exception specified; future fixed-code checks are clearly proposed."
+        },
+        {
+          "id": "bounded-plan",
+          "severity": "major",
+          "criterion": "Separates test-enabling changes from the pricing correction and stays within the ticket, without a broad pricing redesign or whole-system coverage prerequisite.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+            "excerpt": "Expected scope is the one predicate plus focused tests; no carrier, pricing framework, input-validation, or broad refactoring changes."
+          },
+          "rationale": "Separates audit substitution and baseline characterization from intentional expectation changes and then the single free-shipping predicate. No whole-system coverage requirement or pricing redesign is introduced."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged, avoids deployment credentials and carrier requests, and distinguishes source-derived observations and proposed tests from checks actually executed.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/answer.md",
+            "excerpt": "I have not changed the implementation or executed a revised implementation."
+          },
+          "rationale": "All eight supplied skill/project hashes independently match the manifest and no extra files exist in either tree. The tool report describes no credential or carrier access. It separates reported baseline execution from the unexecuted regression and integration plan; runtime results are attributed to the trial logs, not independently rerun."
+        }
+      ],
+      "score": 12,
+      "maximum_score": 12,
+      "critical_failures": [],
+      "critical_partial_criteria": [],
+      "manifest_verification": {
+        "manifest_path": "/tmp/book-skill-trials-20260929/legacy-code-changes/manifest.json",
+        "hash_algorithm": "SHA-256",
+        "all_manifest_hashes_unchanged": true,
+        "file_hashes": [
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/skill/LICENSE",
+            "relative_path": "skill/LICENSE",
+            "expected_sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+            "actual_sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/skill/SKILL.md",
+            "relative_path": "skill/SKILL.md",
+            "expected_sha256": "d2953957bdeb240f0788fd86fd9aa0e2be5597024812b0e5f7e9737aba47fd95",
+            "actual_sha256": "d2953957bdeb240f0788fd86fd9aa0e2be5597024812b0e5f7e9737aba47fd95",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/skill/references/sources.md",
+            "relative_path": "skill/references/sources.md",
+            "expected_sha256": "7233dfd064c642e5d4ff50068f243a39de7fcb55d9b058cf0c18b3e353a084c6",
+            "actual_sha256": "7233dfd064c642e5d4ff50068f243a39de7fcb55d9b058cf0c18b3e353a084c6",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/skill/references/dependency-isolation.md",
+            "relative_path": "skill/references/dependency-isolation.md",
+            "expected_sha256": "6581a8fa700d8d544564bd527825d793785d144630106ed38cf8b1e05b64249a",
+            "actual_sha256": "6581a8fa700d8d544564bd527825d793785d144630106ed38cf8b1e05b64249a",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/skill/agents/openai.yaml",
+            "relative_path": "skill/agents/openai.yaml",
+            "expected_sha256": "e269f41401b254129ee9ec116977db9ecfe69976fb20f11157b741a10041b6d1",
+            "actual_sha256": "e269f41401b254129ee9ec116977db9ecfe69976fb20f11157b741a10041b6d1",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/project/gateway.py",
+            "relative_path": "project/gateway.py",
+            "expected_sha256": "d44c27b93b540d6da272037ae4b2a30b59a431b15329b0ded541984948fe6948",
+            "actual_sha256": "d44c27b93b540d6da272037ae4b2a30b59a431b15329b0ded541984948fe6948",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/project/quote.py",
+            "relative_path": "project/quote.py",
+            "expected_sha256": "36957ea527234eb50b1a9d6c9b882104a7b2b575843f5aac111e7db7fa79977f",
+            "actual_sha256": "36957ea527234eb50b1a9d6c9b882104a7b2b575843f5aac111e7db7fa79977f",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/legacy-code-changes/project/request.md",
+            "relative_path": "project/request.md",
+            "expected_sha256": "ce8d1971df0a45853c303ba4b2f42434500b2053a0a4509fb98bd3f6fa1d8911",
+            "actual_sha256": "ce8d1971df0a45853c303ba4b2f42434500b2053a0a4509fb98bd3f6fa1d8911",
+            "unchanged": true
+          }
+        ],
+        "missing_files": [],
+        "extra_files_in_skill_or_project": []
+      },
+      "runtime_evidence": {
+        "independently_reran_trial_checks": false,
+        "source": "answer.md and tools.md trial-agent reports; raw runtime transcripts were not supplied for scoring",
+        "inference_limit": "No proposed check is counted as an executed or passing runtime check. Hash verification is an evaluator action; trial runtime claims remain attributed to trial logs."
+      },
+      "metrics": {
+        "model": null,
+        "settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "elapsed_seconds": null
+      },
+      "notes": []
+    },
+    {
+      "skill": "pragmatic-programming",
+      "case_id": "policy-ownership",
+      "case_path": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/pragmatic-programming/cases.json",
+      "answer_path": "/tmp/book-skill-trials-20260929/pragmatic-programming/answer.md",
+      "tools_path": "/tmp/book-skill-trials-20260929/pragmatic-programming/tools.md",
+      "skill_path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/SKILL.md",
+      "project_path": "/tmp/book-skill-trials-20260929/pragmatic-programming/project",
+      "criteria": [
+        {
+          "id": "meaning-before-similarity",
+          "severity": "critical",
+          "criterion": "Keeps retail and HR policy ownership independent despite their current identical expressions; explains that their separate decision makers and upcoming divergent changes make one shared policy constant or the proposed helper with an implicit common window harmful. A parameterized helper that preserves independent ownership is permissible.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/answer.md",
+            "excerpt": "Retail returns and employee expenses represent separately owned policies with different change schedules. Keep their public functions distinct."
+          },
+          "rationale": "Rejects the shared policy constant and implicit common-window predicate, keeps Commerce and HR authority separate, and identifies the concrete 45-day retail versus 30/14-day HR evolution."
+        },
+        {
+          "id": "same-rule-authority",
+          "severity": "critical",
+          "criterion": "Identifies the returns API, shop policy text, and support-export value as representations of one retail policy and proposes an authoritative source with an ongoing derivation or explicit synchronization mechanism for all three.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/answer.md",
+            "excerpt": "Generation must be part of the normal build/release path, not a manual copy step. Package the generated file with the corresponding API release, render the shop from it, and configure the support job to consume that same active release’s artifact."
+          },
+          "rationale": "Makes RETAIL_RETURN_WINDOW_DAYS the authoritative retail value, derives API behavior and a deterministic distribution artifact from it, and specifies ongoing synchronization and coordinated activation for shop and support consumers."
+        },
+        {
+          "id": "locality-verification",
+          "severity": "major",
+          "criterion": "Proposes observable checks for the 45-day retail window, retail representation agreement, and the unchanged 30-day HR window, including relevant inside/outside boundaries; may also use the later 14-day HR change to demonstrate independent evolution.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/answer.md",
+            "excerpt": "with retail 45 and HR 30, `can_return(31)` and `can_return(45)` are true, `can_return(46)` is false, and `can_return(-1)` is false. `can_submit_expense(30)` stays true and `can_submit_expense(31)` stays false."
+          },
+          "rationale": "Gives literal expected boundary results, actual shop/export agreement checks, deliberate stale-representation rejection, and a separate HR 14/15-day rehearsal leaving retail outputs unchanged."
+        },
+        {
+          "id": "proportionate-correction",
+          "severity": "major",
+          "criterion": "Uses a small rule or representation boundary within the current application and explains its cost without requiring a service, policy engine, universal abstraction, or merge of independently owned policies.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/answer.md",
+            "excerpt": "This costs one generator, one small artifact contract, and two consumer integrations. It removes recurring manual synchronization of three copies."
+          },
+          "rationale": "Uses two existing-module values and the explicitly permitted small artifact, avoids extra services or policy frameworks, and states the maintenance cost and remaining consumer/release inspection gaps."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all fixture files unchanged and distinguishes proposed verification from checks actually executed.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/answer.md",
+            "excerpt": "The generation, integration, stale-artifact failure, and future-change rehearsals are proposed checks, not demonstrated results."
+          },
+          "rationale": "All eight supplied skill/project hashes independently match the manifest with no extra files. Baseline execution is reported separately from proposed integration and locality checks; the evaluator does not treat those proposals as runtime passes."
+        }
+      ],
+      "score": 10,
+      "maximum_score": 10,
+      "critical_failures": [],
+      "critical_partial_criteria": [],
+      "manifest_verification": {
+        "manifest_path": "/tmp/book-skill-trials-20260929/pragmatic-programming/manifest.json",
+        "hash_algorithm": "SHA-256",
+        "all_manifest_hashes_unchanged": true,
+        "file_hashes": [
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/LICENSE",
+            "relative_path": "skill/LICENSE",
+            "expected_sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+            "actual_sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/SKILL.md",
+            "relative_path": "skill/SKILL.md",
+            "expected_sha256": "9424a8eec3d569f3929e6e9b98b8bf96f95e69c6c9e95b6c5e5fccefefebf4fc",
+            "actual_sha256": "9424a8eec3d569f3929e6e9b98b8bf96f95e69c6c9e95b6c5e5fccefefebf4fc",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/references/experiments.md",
+            "relative_path": "skill/references/experiments.md",
+            "expected_sha256": "e1dec5eac80ae86dbd8aa4326d1acd56273c344c239625a2ce488304bc42f3a1",
+            "actual_sha256": "e1dec5eac80ae86dbd8aa4326d1acd56273c344c239625a2ce488304bc42f3a1",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/references/sources.md",
+            "relative_path": "skill/references/sources.md",
+            "expected_sha256": "1bed32f93bfadb2acf33201b00d797a963cc7238bdfc602b6f7054267e121fdc",
+            "actual_sha256": "1bed32f93bfadb2acf33201b00d797a963cc7238bdfc602b6f7054267e121fdc",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/references/changeability.md",
+            "relative_path": "skill/references/changeability.md",
+            "expected_sha256": "9816706b2adcbfdb5beca852cbed6595aaf8328b380de603b5240396937e1e61",
+            "actual_sha256": "9816706b2adcbfdb5beca852cbed6595aaf8328b380de603b5240396937e1e61",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/skill/agents/openai.yaml",
+            "relative_path": "skill/agents/openai.yaml",
+            "expected_sha256": "3ec66160e07ef36157a8ceeddd3f56c844abe3704d8817b9e2a71ce34ed36e93",
+            "actual_sha256": "3ec66160e07ef36157a8ceeddd3f56c844abe3704d8817b9e2a71ce34ed36e93",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/project/brief.md",
+            "relative_path": "project/brief.md",
+            "expected_sha256": "c3fecae2c9d794f4ac628099bb1d52aa415b029deeaff7cfb5c9d64633c6afda",
+            "actual_sha256": "c3fecae2c9d794f4ac628099bb1d52aa415b029deeaff7cfb5c9d64633c6afda",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/pragmatic-programming/project/policies.py",
+            "relative_path": "project/policies.py",
+            "expected_sha256": "46edec4472642c1aab248aa7921369f9c4435ea06b0fbe64df5100534d8a47ac",
+            "actual_sha256": "46edec4472642c1aab248aa7921369f9c4435ea06b0fbe64df5100534d8a47ac",
+            "unchanged": true
+          }
+        ],
+        "missing_files": [],
+        "extra_files_in_skill_or_project": []
+      },
+      "runtime_evidence": {
+        "independently_reran_trial_checks": false,
+        "source": "answer.md and tools.md trial-agent reports; raw runtime transcripts were not supplied for scoring",
+        "inference_limit": "No proposed check is counted as an executed or passing runtime check. Hash verification is an evaluator action; trial runtime claims remain attributed to trial logs."
+      },
+      "metrics": {
+        "model": null,
+        "settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "elapsed_seconds": null
+      },
+      "notes": []
+    },
+    {
+      "skill": "enterprise-application-patterns",
+      "case_id": "domain-logic-choice",
+      "case_path": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/enterprise-application-patterns/cases.json",
+      "answer_path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+      "tools_path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/tools.md",
+      "skill_path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/SKILL.md",
+      "project_path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/project",
+      "criteria": [
+        {
+          "id": "evidence-based-structure",
+          "severity": "critical",
+          "criterion": "Uses the interacting tariff/eligibility rules, duplicated changes, and batch drift to locate reusable business behavior; proposes concrete ownership and callers rather than only naming a pattern.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+            "excerpt": "all three operations duplicate rules, two changes touched all three, and the batch diverged."
+          },
+          "rationale": "Connects interacting tariff and eligibility rules plus observed batch drift to shared behavior. Assigns concrete responsibilities to Rental, the pricing calculation, eligibility policy, existing application operations, and RentalStore; identifies HTTP and batch callers."
+        },
+        {
+          "id": "table-module-meaning",
+          "severity": "major",
+          "criterion": "Distinguishes a record-set-oriented Table Module from a class merely named after a table and weighs the fixture's lack of Record Set support against adopting that structure.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+            "excerpt": "A Table Module operates on a table-like set of records; naming a class after a table is insufficient. The application has no shared Record Set tooling, and the rules cross table boundaries."
+          },
+          "rationale": "Accurately explains the record-set structure and uses the absent tooling plus cross-table behavior as reasons against per-table Table Modules."
+        },
+        {
+          "id": "proportionate-scope",
+          "severity": "critical",
+          "criterion": "Retains the adequate staff-note and color scripts or gives a concrete evidence-backed reason to change them; does not impose an all-application rewrite, ORM dependency, or service split from the enterprise label.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+            "excerpt": "Keep the staff-note and vehicle-color scripts unchanged."
+          },
+          "rationale": "Retains adequate tested administration scripts and recommends only a focused rental slice, ordinary objects/functions, no ORM dependency, and no service split. Shared functions remain an acceptable first migration increment."
+        },
+        {
+          "id": "persistence-seam",
+          "severity": "major",
+          "criterion": "Accounts for rental values spanning several tables, reuses or evolves RentalStore's existing mapping/transaction capability, and distinguishes independent domain behavior from introducing a specific ORM.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+            "excerpt": "Extend the existing mapping rather than adopt an ORM."
+          },
+          "rationale": "Explicitly covers rental, rental_segment, tariff_period, and distance_band. RentalStore retains mapping, SQL and writes within caller-owned transactions, while domain objects/calculations remain persistence independent."
+        },
+        {
+          "id": "migration-validation",
+          "severity": "major",
+          "criterion": "Proposes an incremental seam preserving API and transaction behavior, with at least one shared rule-variation scenario exercised through both batch and HTTP callers and an explicit expected consistent result.",
+          "score": 1,
+          "verdict": "partial",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+            "excerpt": "| Customer at an age threshold for a vehicle group; replacement after an extension | The shared policy accepts or rejects consistently for HTTP and batch, with existing error behavior. |"
+          },
+          "rationale": "The extraction seam and API/transaction preservation are concrete. However, the validation table only names generic cases and says one approved price or accepts/rejects consistently; it does not specify a shared rule variation with a definite expected price or acceptance result through both HTTP and batch. This misses the rubric's explicit expected-result requirement. Future implementation inspection is correctly identified but does not fill this design-review gap."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes proposed validation from checks actually executed.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/answer.md",
+            "excerpt": "No application tests, database checks, dependency additions, or code changes were performed."
+          },
+          "rationale": "Design inspection is separated from proposed checks; no runtime or integration pass is claimed. All eight supplied skill/project hashes independently match the manifest, with no extra or missing files."
+        }
+      ],
+      "score": 11,
+      "maximum_score": 12,
+      "critical_failures": [],
+      "critical_partial_criteria": [],
+      "manifest_verification": {
+        "manifest_path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/manifest.json",
+        "hash_algorithm": "SHA-256",
+        "all_manifest_hashes_unchanged": true,
+        "file_hashes": [
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/LICENSE",
+            "relative_path": "skill/LICENSE",
+            "expected_sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+            "actual_sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/SKILL.md",
+            "relative_path": "skill/SKILL.md",
+            "expected_sha256": "655f40a31fc8549421411c428c6e6372c84ff741eaef9a2771fb955a812a210f",
+            "actual_sha256": "655f40a31fc8549421411c428c6e6372c84ff741eaef9a2771fb955a812a210f",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/references/sources.md",
+            "relative_path": "skill/references/sources.md",
+            "expected_sha256": "f48078b2950e3389387f0fd12c5f6250bd94f06258add8e9131c7cf0b246396a",
+            "actual_sha256": "f48078b2950e3389387f0fd12c5f6250bd94f06258add8e9131c7cf0b246396a",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/references/persistence.md",
+            "relative_path": "skill/references/persistence.md",
+            "expected_sha256": "bef8eb085da0d16b0f16719fa3512417fc0982701f1da1b708e2d2ace3996b7b",
+            "actual_sha256": "bef8eb085da0d16b0f16719fa3512417fc0982701f1da1b708e2d2ace3996b7b",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/references/domain-logic.md",
+            "relative_path": "skill/references/domain-logic.md",
+            "expected_sha256": "1617b788b471e1c980a2ca20cb30d41b441feb2ebeeaf93e1a7332e8f71a641b",
+            "actual_sha256": "1617b788b471e1c980a2ca20cb30d41b441feb2ebeeaf93e1a7332e8f71a641b",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/references/transactions.md",
+            "relative_path": "skill/references/transactions.md",
+            "expected_sha256": "e664f0472cb976b018a0a4131ad5e5d85e77b469c057493e55365d510c05a12c",
+            "actual_sha256": "e664f0472cb976b018a0a4131ad5e5d85e77b469c057493e55365d510c05a12c",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/skill/agents/openai.yaml",
+            "relative_path": "skill/agents/openai.yaml",
+            "expected_sha256": "3e12734ac80648d5f952f2a54abfdbd3941c06b55b75aeceee23878e5760004e",
+            "actual_sha256": "3e12734ac80648d5f952f2a54abfdbd3941c06b55b75aeceee23878e5760004e",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/enterprise-application-patterns/project/design.md",
+            "relative_path": "project/design.md",
+            "expected_sha256": "347e4d9a73ac1fb770687bcf8a4556327a15af05ab0c15ecbe4f6a982fe0e7e0",
+            "actual_sha256": "347e4d9a73ac1fb770687bcf8a4556327a15af05ab0c15ecbe4f6a982fe0e7e0",
+            "unchanged": true
+          }
+        ],
+        "missing_files": [],
+        "extra_files_in_skill_or_project": []
+      },
+      "runtime_evidence": {
+        "independently_reran_trial_checks": false,
+        "source": "answer.md and tools.md trial-agent reports; raw runtime transcripts were not supplied for scoring",
+        "inference_limit": "No proposed check is counted as an executed or passing runtime check. Hash verification is an evaluator action; trial runtime claims remain attributed to trial logs."
+      },
+      "metrics": {
+        "model": null,
+        "settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "elapsed_seconds": null
+      },
+      "notes": [
+        "The only scoring deficiency is migration-validation: add one concrete rule-change scenario, using clearly labeled synthetic values if needed, with the same explicit expected result through HTTP and batch."
+      ]
+    },
+    {
+      "skill": "distributed-system-patterns",
+      "case_id": "search-topology",
+      "case_path": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/distributed-system-patterns/cases.json",
+      "answer_path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+      "tools_path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/tools.md",
+      "skill_path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/SKILL.md",
+      "project_path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/project",
+      "criteria": [
+        {
+          "id": "memory-and-topology",
+          "severity": "critical",
+          "criterion": "Rejects complete-index replication on 48-GiB index budgets despite aggregate cluster memory, identifies 16 shards as the arithmetic minimum before headroom/skew, and distinguishes sharding for data fit from replication for interchangeable copies and scatter/gather for complete queries.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+            "excerpt": "The capacity lower bound is `ceil(768 / 48) = 16` shards under perfect balance."
+          },
+          "rationale": "Rejects complete-index replication despite aggregate memory, explains 16-shard saturation and 32/64-shard headroom, and distinguishes sharding, per-shard copies, and scatter/gather. Its initial 32-shard choice is conditional on actual maximum memory and latency measurements."
+        },
+        {
+          "id": "fanout-estimate",
+          "severity": "major",
+          "criterion": "Estimates at least one slow required leaf for 64 independent leaves as 1 - 0.99^64, approximately 47.4%, and labels the independence/synthetic-data assumption rather than claiming measured latency or guaranteed improvement from added shards.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+            "excerpt": "| 64 | 12 GiB | 47.4404% | 52.5596% |"
+          },
+          "rationale": "Computes the requested 1 - 0.99^64 estimate accurately, expressly identifies synthetic independent leaf assumptions, and avoids claiming measured speedup or guaranteed improvement from shard growth."
+        },
+        {
+          "id": "complete-results",
+          "severity": "critical",
+          "criterion": "Rejects silently returning incomplete HTTP-200 results, preserves each conjunction at the data shard followed by union of all required shard results, and makes missing/late required contributions fail explicitly within the stated deadline unless a separately authorized contract changes.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+            "excerpt": "Union and deduplicate IDs only after every required shard contributed."
+          },
+          "rationale": "Preserves the full conjunction at each document shard and the union across all required shards. Explicitly rejects partial HTTP 200, treats empty contributions distinctly from missing ones, validates request/shard/generation identity, and reserves response work within the 300-ms deadline."
+        },
+        {
+          "id": "replicated-shards",
+          "severity": "major",
+          "criterion": "Explains that distinct shards are not redundant copies, recommends justified per-shard redundancy or another supported recovery design for upgrades/failure, and includes routing to ready copies, placement/capacity, and coordinator/fan-out measurements without guaranteeing the 300-ms target.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+            "excerpt": "For rolling upgrades that should continue serving queries, add two copies of each logical shard on different machine failure domains and route within each shard's replica group."
+          },
+          "rationale": "Explains unique shards are required data rather than redundant copies. Gives readiness/generation routing, independent failure-domain placement, 64-process/1536-GiB cost, survivor capacity and coordinator/leaf/aggregation measurements. Correctly makes continuity optional because explicit failures are acceptable, and does not guarantee 300-ms success."
+        },
+        {
+          "id": "helper-contracts",
+          "severity": "major",
+          "criterion": "Identifies metrics conversion as an adapter responsibility and local remote-connection brokering as an ambassador responsibility, evaluates whether the client helper is useful, and specifies concrete shared-resource, readiness, or restart contracts rather than treating every extra container as failure isolation.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+            "excerpt": "The proposed local search companion is an **ambassador**: it would broker the client's connection to the coordinator."
+          },
+          "rationale": "Identifies counters conversion as adapter behavior and local connection brokering as ambassador behavior. Recommends omitting the optional client helper absent demonstrated need and provides concrete socket, readiness, reconnection, deadline, error, shutdown, and resource-isolation contracts."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves all supplied fixtures unchanged and distinguishes calculations or proposed failure checks from measurements, deployments, or experiments actually performed.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/answer.md",
+            "excerpt": "Only document inspection and the reported arithmetic were performed. No deployments, traffic experiments, coordinator benchmarks, or fault injections ran."
+          },
+          "rationale": "Keeps calculations distinct from measurements and lists failure tests as proposed. All nine supplied skill/project hashes independently match the manifest, with no extra or missing files. Trial arithmetic claims remain attributed to answer/tools reports."
+        }
+      ],
+      "score": 12,
+      "maximum_score": 12,
+      "critical_failures": [],
+      "critical_partial_criteria": [],
+      "manifest_verification": {
+        "manifest_path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/manifest.json",
+        "hash_algorithm": "SHA-256",
+        "all_manifest_hashes_unchanged": true,
+        "file_hashes": [
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/LICENSE",
+            "relative_path": "skill/LICENSE",
+            "expected_sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+            "actual_sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/SKILL.md",
+            "relative_path": "skill/SKILL.md",
+            "expected_sha256": "25b6aabf64bfa29f5004939ffe925826e59ebfb5bc8f177285fe5e007a2562ed",
+            "actual_sha256": "25b6aabf64bfa29f5004939ffe925826e59ebfb5bc8f177285fe5e007a2562ed",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/references/sources.md",
+            "relative_path": "skill/references/sources.md",
+            "expected_sha256": "3c9532a7b5c7ef7a8325d4b68efd86da522d82005d4ea80dd1a7c415bd6d6532",
+            "actual_sha256": "3c9532a7b5c7ef7a8325d4b68efd86da522d82005d4ea80dd1a7c415bd6d6532",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/references/serving.md",
+            "relative_path": "skill/references/serving.md",
+            "expected_sha256": "d9190838824f05eaace2b884570c2e668d6d2fef57c77d9743bc2190be33c015",
+            "actual_sha256": "d9190838824f05eaace2b884570c2e668d6d2fef57c77d9743bc2190be33c015",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/references/ownership.md",
+            "relative_path": "skill/references/ownership.md",
+            "expected_sha256": "89817cc180ab60867bec34c426701e422e87554c86f058e7c5a6d3612de13d06",
+            "actual_sha256": "89817cc180ab60867bec34c426701e422e87554c86f058e7c5a6d3612de13d06",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/references/single-node.md",
+            "relative_path": "skill/references/single-node.md",
+            "expected_sha256": "f8e5d012d6991638e296385d8f7dbb96627d9fd7f65b0cb4123f7a476022b7fa",
+            "actual_sha256": "f8e5d012d6991638e296385d8f7dbb96627d9fd7f65b0cb4123f7a476022b7fa",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/references/batch.md",
+            "relative_path": "skill/references/batch.md",
+            "expected_sha256": "01e4b8ebda8ee9c308f22d2d79a34e3ab5d1776bae2230542f3a034f58b70036",
+            "actual_sha256": "01e4b8ebda8ee9c308f22d2d79a34e3ab5d1776bae2230542f3a034f58b70036",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/skill/agents/openai.yaml",
+            "relative_path": "skill/agents/openai.yaml",
+            "expected_sha256": "464600e852c6cdaf9daa51ae67afa83093c8cc228376022962ce2a641b8db429",
+            "actual_sha256": "464600e852c6cdaf9daa51ae67afa83093c8cc228376022962ce2a641b8db429",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/distributed-system-patterns/project/design.md",
+            "relative_path": "project/design.md",
+            "expected_sha256": "112ed1f0d5eaa73cf28b4e2027f8c543293dbb0a52d43f072bc50ea98903df30",
+            "actual_sha256": "112ed1f0d5eaa73cf28b4e2027f8c543293dbb0a52d43f072bc50ea98903df30",
+            "unchanged": true
+          }
+        ],
+        "missing_files": [],
+        "extra_files_in_skill_or_project": []
+      },
+      "runtime_evidence": {
+        "independently_reran_trial_checks": false,
+        "source": "answer.md and tools.md trial-agent reports; raw runtime transcripts were not supplied for scoring",
+        "inference_limit": "No proposed check is counted as an executed or passing runtime check. Hash verification is an evaluator action; trial runtime claims remain attributed to trial logs."
+      },
+      "metrics": {
+        "model": null,
+        "settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "elapsed_seconds": null
+      },
+      "notes": []
+    },
+    {
+      "skill": "object-design-patterns",
+      "case_id": "lifecycle-policy",
+      "case_path": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/object-design-patterns/cases.json",
+      "answer_path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+      "tools_path": "/tmp/book-skill-trials-20260929/object-design-patterns/tools.md",
+      "skill_path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/SKILL.md",
+      "project_path": "/tmp/book-skill-trials-20260929/object-design-patterns/project",
+      "criteria": [
+        {
+          "id": "independent-variation",
+          "severity": "critical",
+          "criterion": "Separates lifecycle-dependent publication behavior from independently selected rendering policy; does not retain the status-by-renderer class product or justify Strategy merely from the class diagram.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+            "excerpt": "Reject the proposed eight status/rendering combinations, public `set_strategy` calls, shared mutable `document` references, and silent invalid operations."
+          },
+          "rationale": "Separates lifecycle State from workspace-selected rendering Strategy using demonstrated independent variation, rather than maintaining status-by-renderer classes or relying on naming/class shape."
+        },
+        {
+          "id": "transition-contract",
+          "severity": "critical",
+          "criterion": "Preserves allowed lifecycle events, InvalidTransition with no mutation for invalid events, and publication history; rejects exposing arbitrary lifecycle replacement or silently returning from invalid operations as equivalent behavior.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+            "excerpt": "Every invalid cell raises `InvalidTransition` and leaves body, status, and history unchanged."
+          },
+          "rationale": "Provides the full allowed-event matrix, preserves one publication-history append per valid publication and history across restore/republish, and confines status changes to validated events. Arbitrary lifecycle replacement and silent rejection are explicitly rejected."
+        },
+        {
+          "id": "ownership",
+          "severity": "critical",
+          "criterion": "Identifies shared singleton handlers with mutable document references as unsafe across document instances and assigns per-document state and transition authority explicitly.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+            "excerpt": "Keep per-document mutable state on `Document`. State handlers may be shared only if stateless, receiving the relevant document view or context explicitly for each call and retaining no mutable per-document data."
+          },
+          "rationale": "Explains cross-document and reentrant/concurrent hazards of mutable singleton references. Assigns state/history ownership and validated change application to Document and event dispatch to the existing application command boundary."
+        },
+        {
+          "id": "proportional-design",
+          "severity": "major",
+          "criterion": "Compares State objects with an explicit transition table or existing conditionals and ties the recommendation to repeated state decisions; allows a simple rendering function or policy object and does not require Java-style class infrastructure.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+            "excerpt": "The smallest alternative is a single explicit transition table plus ordinary command functions and two rendering functions."
+          },
+          "rationale": "Compares State with a transition table and ties its conditional preference to repeated decisions in four methods. Permits callable renderers and rejects unnecessary factories/frameworks/singletons."
+        },
+        {
+          "id": "observable-checks",
+          "severity": "major",
+          "criterion": "Specifies expected results for scheduled publication, invalid edit without mutation, changing rendering without lifecycle change, and two independent documents; distinguishes proposed checks from executed validation.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+            "excerpt": "Exercise draft -> scheduled -> published through the scheduler's normal command boundary; body stays intact and history gains exactly one publication entry."
+          },
+          "rationale": "Gives definite expected outcomes for scheduled publication and repeated rejection, invalid-event snapshots, independent A/B documents, and switching render policy without mutation of publication status/history. All checks are explicitly proposed, not executed."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "score": 2,
+          "verdict": "pass",
+          "evidence": {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/answer.md",
+            "excerpt": "These are proposed tests, not executed tests."
+          },
+          "rationale": "Clearly limits evidence to the design artifact and disclaims verified implementation/runtime/persistence behavior. All eight supplied skill/project hashes independently match the manifest, with no extra or missing files."
+        }
+      ],
+      "score": 12,
+      "maximum_score": 12,
+      "critical_failures": [],
+      "critical_partial_criteria": [],
+      "manifest_verification": {
+        "manifest_path": "/tmp/book-skill-trials-20260929/object-design-patterns/manifest.json",
+        "hash_algorithm": "SHA-256",
+        "all_manifest_hashes_unchanged": true,
+        "file_hashes": [
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/LICENSE",
+            "relative_path": "skill/LICENSE",
+            "expected_sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+            "actual_sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/SKILL.md",
+            "relative_path": "skill/SKILL.md",
+            "expected_sha256": "e6d0c95953d5a181608210772f55cf48e8a953f86394b29d7c8fb63cbb29ae34",
+            "actual_sha256": "e6d0c95953d5a181608210772f55cf48e8a953f86394b29d7c8fb63cbb29ae34",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/references/sources.md",
+            "relative_path": "skill/references/sources.md",
+            "expected_sha256": "ef03dbb3c81917a9985de9b8ac98384ba5f1acc034d45afdeb87bb45326e8d15",
+            "actual_sha256": "ef03dbb3c81917a9985de9b8ac98384ba5f1acc034d45afdeb87bb45326e8d15",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/references/structure-and-interfaces.md",
+            "relative_path": "skill/references/structure-and-interfaces.md",
+            "expected_sha256": "12a1e5165dc51b865f694e9db97f17efaddc2cf2b5494907866185f6ed9b722b",
+            "actual_sha256": "12a1e5165dc51b865f694e9db97f17efaddc2cf2b5494907866185f6ed9b722b",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/references/construction.md",
+            "relative_path": "skill/references/construction.md",
+            "expected_sha256": "aa294be2ccf05590047fa3402552c26315bbf5e215e76a1717b28831186c221f",
+            "actual_sha256": "aa294be2ccf05590047fa3402552c26315bbf5e215e76a1717b28831186c221f",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/references/behavior-and-state.md",
+            "relative_path": "skill/references/behavior-and-state.md",
+            "expected_sha256": "fb3d7c3c31e8f62e29e49bcf3ca3edf698e49f95d60f8f8a9ee03e8c701a9b73",
+            "actual_sha256": "fb3d7c3c31e8f62e29e49bcf3ca3edf698e49f95d60f8f8a9ee03e8c701a9b73",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/skill/agents/openai.yaml",
+            "relative_path": "skill/agents/openai.yaml",
+            "expected_sha256": "b290b42cff65eea797b40e86a76e471dfe8cb77147f7965b10fd2d3613c4384b",
+            "actual_sha256": "b290b42cff65eea797b40e86a76e471dfe8cb77147f7965b10fd2d3613c4384b",
+            "unchanged": true
+          },
+          {
+            "path": "/tmp/book-skill-trials-20260929/object-design-patterns/project/design.md",
+            "relative_path": "project/design.md",
+            "expected_sha256": "079c5974acf07265e69a1441da8a194259ae155ac85f958e81db87e44c38cfcc",
+            "actual_sha256": "079c5974acf07265e69a1441da8a194259ae155ac85f958e81db87e44c38cfcc",
+            "unchanged": true
+          }
+        ],
+        "missing_files": [],
+        "extra_files_in_skill_or_project": []
+      },
+      "runtime_evidence": {
+        "independently_reran_trial_checks": false,
+        "source": "answer.md and tools.md trial-agent reports; raw runtime transcripts were not supplied for scoring",
+        "inference_limit": "No proposed check is counted as an executed or passing runtime check. Hash verification is an evaluator action; trial runtime claims remain attributed to trial logs."
+      },
+      "metrics": {
+        "model": null,
+        "settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "elapsed_seconds": null
+      },
+      "notes": []
+    }
+  ],
+  "critical_failures": [],
+  "pending_skills": []
+}

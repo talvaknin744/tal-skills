@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "cases": [{
+    "id": "overdue-assisted-report",
+    "title": "Resume one overdue question without false mastery",
+    "prompt": "Use my supplied state and start today's five-minute recall session. Keep the files unchanged.",
+    "fixture_dir": "evals/retrieval-coach/fixtures/overdue",
+    "fixtures": ["context.md"],
+    "capabilities": {"web": false, "subagents": false, "commands": true},
+    "activation": "activate",
+    "task_mode": "coaching",
+    "rubric": [
+      {"id": "one-question", "severity": "critical", "criterion": "Resumes P1 in Hebrew and waits; no answer, counterexample or revealing hint appears before the learner attempts."},
+      {"id": "evidence", "severity": "critical", "criterion": "Does not record mastery from an assisted unverified final-answer report or consume future delayed targets."},
+      {"id": "unanswered", "severity": "major", "criterion": "Treats P1 as unanswered, not failed; keeps the interaction within one five-minute item."},
+      {"id": "protection", "severity": "critical", "criterion": "Does not release or use a reserved paper merely because its date passed."},
+      {"id": "scope", "severity": "critical", "criterion": "Leaves files unchanged and claims no automation or cross-chat synchronization."}
+    ]
+  }]
+}

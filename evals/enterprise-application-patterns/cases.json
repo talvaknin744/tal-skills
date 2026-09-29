@@ -1,0 +1,124 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "domain-logic-choice",
+      "title": "Choose structure from changing rules and actual data shape",
+      "tags": ["domain-logic", "persistence", "scope"],
+      "prompt": "Review the proposed rental-application redesign in design.md. Choose where its business rules and persistence responsibilities should live, compare the relevant alternatives, and recommend a focused migration seam. Keep the review read-only and preserve the requested scope.",
+      "fixture_dir": "evals/enterprise-application-patterns/fixtures/domain-logic-choice",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "evidence-based-structure",
+          "severity": "critical",
+          "criterion": "Uses the interacting tariff/eligibility rules, duplicated changes, and batch drift to locate reusable business behavior; proposes concrete ownership and callers rather than only naming a pattern."
+        },
+        {
+          "id": "table-module-meaning",
+          "severity": "major",
+          "criterion": "Distinguishes a record-set-oriented Table Module from a class merely named after a table and weighs the fixture's lack of Record Set support against adopting that structure."
+        },
+        {
+          "id": "proportionate-scope",
+          "severity": "critical",
+          "criterion": "Retains the adequate staff-note and color scripts or gives a concrete evidence-backed reason to change them; does not impose an all-application rewrite, ORM dependency, or service split from the enterprise label."
+        },
+        {
+          "id": "persistence-seam",
+          "severity": "major",
+          "criterion": "Accounts for rental values spanning several tables, reuses or evolves RentalStore's existing mapping/transaction capability, and distinguishes independent domain behavior from introducing a specific ORM."
+        },
+        {
+          "id": "migration-validation",
+          "severity": "major",
+          "criterion": "Proposes an incremental seam preserving API and transaction behavior, with at least one shared rule-variation scenario exercised through both batch and HTTP callers and an explicit expected consistent result."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "stale-edit",
+      "title": "An identity map and unit of work do not establish save guarantees",
+      "tags": ["offline-concurrency", "unit-of-work", "identity-map"],
+      "prompt": "Review purchase-order editing in design.md. Explain the actual atomicity and concurrent-edit guarantees, show concrete failure or interleaving outcomes, and propose the smallest enforceable save and conflict policy. Include how identity-map lifetime affects the design. Do not modify files.",
+      "fixture_dir": "evals/enterprise-application-patterns/fixtures/stale-edit",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "check-write-race",
+          "severity": "critical",
+          "criterion": "Shows A and B both passing the version-8 SELECT before either saves, then both being reported successful or one silently overwriting the other's values; identifies the missing atomic check-and-write rather than attributing protection to the earlier SELECT."
+        },
+        {
+          "id": "partial-save",
+          "severity": "critical",
+          "criterion": "Shows that an autocommitted line write can persist when the header write fails, violating the matching totals invariant, and distinguishes the provided UnitOfWork's tracking/flush behavior from a database transaction."
+        },
+        {
+          "id": "atomic-conflict-boundary",
+          "severity": "critical",
+          "criterion": "Places all accepted header and line writes in one short database transaction with a version check that cannot race with persistence, advances the version, checks the conflict result, and rolls back the entire change set on conflict or failure. Covers line edits under the order's conflict scope."
+        },
+        {
+          "id": "business-interval",
+          "severity": "major",
+          "criterion": "Retains original-read evidence across the form interval, specifies a visible stale-edit response, and avoids holding a database transaction open for minutes or silently replacing the stale original version with a fresh one."
+        },
+        {
+          "id": "identity-scope",
+          "severity": "major",
+          "criterion": "Explains that the process-wide mutable Identity Map can return stale data and does not coordinate independent edits; recommends a bounded working scope or an explicit correct refresh/invalidation design while retaining database concurrency enforcement."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "presentation-nontrigger",
+      "title": "Static card alignment does not require enterprise pattern design",
+      "tags": ["activation", "presentation", "scope"],
+      "prompt": "Read card.html and explain the smallest CSS change that puts the two buttons at the right edge of the card's content area while preserving their gap. Do not edit the file or propose other changes.",
+      "fixture_dir": "evals/enterprise-application-patterns/fixtures/presentation-nontrigger",
+      "fixtures": ["card.html"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load enterprise-application-patterns or introduce domain, mapping, transaction, or session architecture for the static layout request."
+        },
+        {
+          "id": "minimal-css",
+          "severity": "major",
+          "criterion": "Recommends changing .card-actions justify-content from flex-start to flex-end while preserving display:flex and gap:8px."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Answers the alignment question using the supplied static markup without inventing data access, event behavior, or a need to replace the layout."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied file unchanged and does not claim to have edited it or visually tested a rendered page without actually doing so."
+        }
+      ]
+    }
+  ]
+}

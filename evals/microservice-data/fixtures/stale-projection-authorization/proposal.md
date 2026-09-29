@@ -1,0 +1,5 @@
+# Account projection use
+
+Account owns customer spending limits and outstanding balances. It publishes changes asynchronously; Order maintains a read model that normally lags by two seconds but can lag by twenty minutes during a broker outage. Support wants a dashboard whose displayed balances may be up to five minutes old if the timestamp is visible. Checkout must reject an order that would exceed the current spending limit, including when multiple checkouts are concurrent.
+
+The proposal uses the Order read model for both the support dashboard and checkout authorization. It will add a created_at timestamp to events and log lag. During a broker outage, checkout will use the most recent projection indefinitely. Account currently offers an atomic reserveCredit(customer, order, amount) operation with success or insufficient-credit outcomes; a successful reservation can later be committed or released. Account availability is not perfect, and product has not approved accepting excess credit when it is unavailable.

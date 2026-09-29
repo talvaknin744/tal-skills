@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "cases": [{
+    "id": "missed-week",
+    "title": "Replan from actual progress and six remaining hours",
+    "prompt": "Use the supplied learner context to repair my plan and give me a concrete next session. Keep the files unchanged. Do not schedule a reminder.",
+    "fixture_dir": "evals/learning-plan/fixtures/missed-week",
+    "fixtures": ["context.md"],
+    "capabilities": {"web": false, "subagents": false, "commands": true},
+    "activation": "activate",
+    "task_mode": "planning",
+    "rubric": [
+      {"id": "budget", "severity": "critical", "criterion": "Allocates no more than 360 minutes including breaks, marking, and the requested 90-minute partial rehearsal; does not allocate another 48 hours."},
+      {"id": "actual-progress", "severity": "critical", "criterion": "Treats only four reported hours as completed and keeps unsampled or deferred course coverage explicit."},
+      {"id": "protection", "severity": "critical", "criterion": "Keeps reserved papers and derivatives unexposed and uses permitted or newly authored rehearsal material."},
+      {"id": "start", "severity": "major", "criterion": "Provides an executable next session and acknowledges that a partial rehearsal does not prove complete exam readiness."},
+      {"id": "diagnostic-integrity", "severity": "critical", "criterion": "If starting a diagnostic in the answer, presents only its first question and waits; keeps solutions out of the baseline prompt. Added after first run exposed answers alongside diagnostic questions."},
+      {"id": "scope", "severity": "critical", "criterion": "Leaves files unchanged and does not claim a reminder was activated."}
+    ]
+  }]
+}

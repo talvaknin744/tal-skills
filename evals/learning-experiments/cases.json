@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "cases": [{
+    "id": "one-bounded-change",
+    "title": "Separate observed error, fatigue and unsupported explanations",
+    "prompt": "Use my recent episode to design a study improvement experiment for tomorrow. Keep files unchanged and stay within twenty minutes.",
+    "fixture_dir": "evals/learning-experiments/fixtures/fatigue",
+    "fixtures": ["context.md"],
+    "capabilities": {"web": false, "subagents": false, "commands": true},
+    "activation": "activate",
+    "task_mode": "experiment",
+    "rubric": [
+      {"id": "diagnosis", "severity": "critical", "criterion": "Identifies the ratio-test-limit error and separates it from hypotheses about copying, fatigue or learner identity."},
+      {"id": "bounded", "severity": "major", "criterion": "Chooses one experiment that replaces part of existing work and totals no more than twenty minutes, rather than adding every technique."},
+      {"id": "evidence", "severity": "critical", "criterion": "Uses fresh independent performance and a later check, leaving results pending rather than claiming the experiment succeeded."},
+      {"id": "claims", "severity": "critical", "criterion": "Does not promise doubled memory, validate a fixed visual learning style, require a tablet, or recommend pushing through substantial fatigue."},
+      {"id": "scope", "severity": "critical", "criterion": "Leaves fixture files unchanged."}
+    ]
+  }]
+}

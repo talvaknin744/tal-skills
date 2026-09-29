@@ -1,0 +1,792 @@
+{
+  "format_version": 1,
+  "evaluation_type": "One-shot forward smoke trials against existing first-case rubrics",
+  "scoring": {
+    "pass": 2,
+    "partial": 1,
+    "fail": 0,
+    "critical_fail_definition": "Any critical criterion scored 0"
+  },
+  "scope": {
+    "executed_cases_scored": 6,
+    "cases_per_skill": 1,
+    "case_selection": "Only the first case in each existing cases.json",
+    "nontrigger_cases_executed": 0,
+    "baseline_or_comparison_trials": 0
+  },
+  "limitations": [
+    "These are one-shot smoke trials, not blind comparisons or proof of general skill quality.",
+    "Only six positive first cases ran. No unexecuted cases or nontrigger/activation cases are scored.",
+    "The trials explicitly loaded candidate skill snapshots and therefore do not establish automatic activation accuracy.",
+    "Capability constraints were instructions, not technically disabled permissions. No prohibited use was observed in the supplied tools.md records; those logs are not full independent traces.",
+    "Scores reflect answer content against the fixed rubrics. Verbosity itself earns no credit.",
+    "No runtime validation pass is inferred. Proposed checks and fixture-reported results remain unexecuted or unverified unless the tool log explicitly records otherwise.",
+    "Model, generation settings, token usage, and elapsed execution metrics were unavailable and are recorded as null."
+  ],
+  "summary": {
+    "total": 60,
+    "maximum": 60,
+    "critical_fail_cases": 0,
+    "criteria_pass": 30,
+    "criteria_partial": 0,
+    "criteria_fail": 0,
+    "manifest_files_checked": 44,
+    "all_skill_and_project_inputs_unchanged": true
+  },
+  "results": [
+    {
+      "skill": "microservice-boundaries",
+      "case_id": "modular-monolith-fit",
+      "criteria": [
+        {
+          "id": "preserve-simple-boundary",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Keep Appointment, Availability, and Room together in the scheduling module and its PostgreSQL transaction.",
+            "**Do not make any of the five proposed service splits now.**"
+          ],
+          "reason": "Retains the modular application and cites one team, absent measured scaling/release pressure, and near-term recurrence delivery. Does not prescribe one service per entity.",
+          "criterion": "Recommends retaining a modular monolith for the current core booking boundary or supplies concrete fixture-based evidence for an equally proportionate alternative; does not assume a service per entity is required.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-boundaries/answer.md"
+        },
+        {
+          "id": "transaction-and-ownership",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Checking availability, creating an appointment, and reserving a room currently happen atomically. Splitting those operations across three databases removes that guarantee.",
+            "Keep the rules and authoritative state needed to prevent overlap under one owner."
+          ],
+          "reason": "Connects all three concepts to the no-overlap invariant and explicitly identifies concurrency and compensation limitations introduced by splitting.",
+          "criterion": "Explains that Appointment, Availability, and Room currently share an atomic booking invariant and that splitting them introduces coordination and consistency work the proposed entity names do not resolve.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-boundaries/answer.md"
+        },
+        {
+          "id": "distinct-billing-case",
+          "severity": "major",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Billing can be delayed by a day",
+            "It is the first seam to investigate if a real bottleneck appears, not an extraction justified today."
+          ],
+          "reason": "Separates the lag-tolerant nightly export from atomic booking and conditions extraction on observed benefit.",
+          "criterion": "Distinguishes the less coupled nightly billing export from the booking transaction and treats independent extraction as an option requiring a demonstrated benefit, not as a mandatory first step.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-boundaries/answer.md"
+        },
+        {
+          "id": "revisit-with-evidence",
+          "severity": "major",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "recurring appointments, due in four weeks, without additional platform or on-call capacity.",
+            "record actual releases delayed by unrelated module changes or coordination.",
+            "Revisit Billing separation if its workload causes booking failures or breaches an agreed booking target despite local isolation measures."
+          ],
+          "reason": "Provides observable release, scaling, fault-isolation, and ownership triggers while respecting current delivery and staffing constraints.",
+          "criterion": "Gives observable reconsideration criteria such as independent release blockage, measured scaling pressure, or an actual ownership split, while respecting the four-week delivery and one-team constraints.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-boundaries/answer.md"
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "This review has not executed that experiment.",
+            "No source code, change history, runtime measurements, or tests were available or executed. The supplied files remain unchanged."
+          ],
+          "reason": "Clearly labels proposed validation. Independent manifest verification confirms every skill/project file is unchanged.",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-boundaries/answer.md"
+        }
+      ],
+      "critical_fail": false,
+      "observed_tool_limitations": [
+        "Only brief and skill/reference documents inspected; no code, runtime evidence, or tests available.",
+        "tools.md reports a shasum locale fallback warning; hashes still returned and independent hashlib verification succeeded.",
+        "No prohibited web or subagent usage is reported in tools.md."
+      ],
+      "total": 10,
+      "maximum": 10,
+      "paths": {
+        "answer": "/tmp/book-skill-trials-20260929/microservice-boundaries/answer.md",
+        "tools": "/tmp/book-skill-trials-20260929/microservice-boundaries/tools.md",
+        "manifest": "/tmp/book-skill-trials-20260929/microservice-boundaries/manifest.json",
+        "project": "/tmp/book-skill-trials-20260929/microservice-boundaries/project",
+        "skill_snapshot": "/tmp/book-skill-trials-20260929/microservice-boundaries/skill",
+        "rubric": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/microservice-boundaries/cases.json"
+      },
+      "manifest_verification": {
+        "method": "Independent SHA-256 recomputation after trial completion",
+        "files_checked": 7,
+        "checked_paths": [
+          "project/brief.md",
+          "skill/LICENSE",
+          "skill/SKILL.md",
+          "skill/agents/openai.yaml",
+          "skill/references/coupling.md",
+          "skill/references/ownership.md",
+          "skill/references/sources.md"
+        ],
+        "mismatches": [],
+        "extra_skill_or_project_files": [],
+        "unchanged": true
+      },
+      "capability_controls": {
+        "configured": {
+          "web": false,
+          "subagents": false,
+          "commands": true
+        },
+        "enforcement": "Instructions only; prohibited tools were not technically disabled.",
+        "observed_prohibited_usage": false,
+        "observation_basis": "No web or subagent use is reported by tools.md; this is not a complete independently captured execution trace."
+      },
+      "execution_metrics": {
+        "model": null,
+        "model_settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "elapsed_seconds": null,
+        "status": "Unavailable in supplied answer, tool-log, and manifest artifacts; not inferred."
+      }
+    },
+    {
+      "skill": "microservice-extraction",
+      "case_id": "rollback-after-new-writes",
+      "criteria": [
+        {
+          "id": "new-write-loss",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Routing back to stale `main_db` and restoring its 01:00 snapshot would lose successful corrections and newly created addresses.",
+            "Reverting a binary or changing a route is a separate action."
+          ],
+          "reason": "Directly identifies acknowledged post-cutover write loss and additionally catches pre-handoff changes lost by restoring the early snapshot.",
+          "criterion": "Explains that switching back or restoring the old snapshot loses or hides acknowledged Address writes and that routing rollback alone is not data rollback.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-extraction/answer.md"
+        },
+        {
+          "id": "one-write-authority",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "old workers can still write `main_db`, creating competing authorities",
+            "Fence old writes at a datastore/permission boundary that survives worker restarts.",
+            "Do not introduce application dual writes as a shortcut."
+          ],
+          "reason": "Maintains a sole authoritative writer through each stage and requires persistent fencing and draining of old workers.",
+          "criterion": "Requires a defined authoritative writer and controls old workers across cutover, avoiding concurrent unsynchronized writes to both databases.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-extraction/answer.md"
+        },
+        {
+          "id": "reconcile-before-return",
+          "severity": "major",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Apply every post-handoff mutation through R to the retained, validated `main_db` state from W.",
+            "Flag equal-version/different-payload or unexpected old-store changes for reconciliation rather than silently choosing a winner.",
+            "If this cannot be demonstrated, do not enable production writes in Address under a promised rollback plan."
+          ],
+          "reason": "Defines durable capture, final checkpoints, idempotent reverse import, version/conflict handling, and validation before returning authority. Also allows keeping Address authoritative while reverting compatible code.",
+          "criterion": "Provides a feasible way to retain accepted writes before returning authority, such as a tested reverse transfer with version/conflict rules, a write pause and reconciliation, or keeping the new data authority while reverting application behavior; marks missing mechanisms as rollout blockers.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-extraction/answer.md"
+        },
+        {
+          "id": "phased-evidence",
+          "severity": "major",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Compare actual records and versions at equivalent positions, not merely row counts.",
+            "Rehearse new address creation, correction, deletion where supported, retries, interrupted imports, and worker restarts on representative disposable data.",
+            "Prove that every acknowledged mutation survives return to the old implementation and later order placement."
+          ],
+          "reason": "Specifies baseline/stream convergence checks, restarted-worker fencing, post-cutover capture, and recovery rehearsal tied to the acknowledged-correction invariant.",
+          "criterion": "Gives concrete checks for snapshot and stream convergence, restart or fencing of old writers, post-cutover writes, and a rollback rehearsal with no loss of acknowledged corrections.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-extraction/answer.md"
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "No replication, fencing, import, rollback rehearsal, runtime measurement, or test was executed; only the supplied rollout and skill references were inspected. The rollout file remains unchanged."
+          ],
+          "reason": "Explicitly distinguishes design gates from executed work. Independent manifest verification confirms unchanged skill/project files.",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-extraction/answer.md"
+        }
+      ],
+      "critical_fail": false,
+      "observed_tool_limitations": [
+        "No source implementation, replication, fencing, import, or recovery rehearsal was available or executed.",
+        "tools.md reports a shasum locale fallback warning; hashes still returned and independent hashlib verification succeeded.",
+        "No prohibited web or subagent usage is reported in tools.md."
+      ],
+      "total": 10,
+      "maximum": 10,
+      "paths": {
+        "answer": "/tmp/book-skill-trials-20260929/microservice-extraction/answer.md",
+        "tools": "/tmp/book-skill-trials-20260929/microservice-extraction/tools.md",
+        "manifest": "/tmp/book-skill-trials-20260929/microservice-extraction/manifest.json",
+        "project": "/tmp/book-skill-trials-20260929/microservice-extraction/project",
+        "skill_snapshot": "/tmp/book-skill-trials-20260929/microservice-extraction/skill",
+        "rubric": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/microservice-extraction/cases.json"
+      },
+      "manifest_verification": {
+        "method": "Independent SHA-256 recomputation after trial completion",
+        "files_checked": 7,
+        "checked_paths": [
+          "project/rollout.md",
+          "skill/LICENSE",
+          "skill/SKILL.md",
+          "skill/agents/openai.yaml",
+          "skill/references/cutover.md",
+          "skill/references/data-transition.md",
+          "skill/references/sources.md"
+        ],
+        "mismatches": [],
+        "extra_skill_or_project_files": [],
+        "unchanged": true
+      },
+      "capability_controls": {
+        "configured": {
+          "web": false,
+          "subagents": false,
+          "commands": true
+        },
+        "enforcement": "Instructions only; prohibited tools were not technically disabled.",
+        "observed_prohibited_usage": false,
+        "observation_basis": "No web or subagent use is reported by tools.md; this is not a complete independently captured execution trace."
+      },
+      "execution_metrics": {
+        "model": null,
+        "model_settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "elapsed_seconds": null,
+        "status": "Unavailable in supplied answer, tool-log, and manifest artifacts; not inferred."
+      }
+    },
+    {
+      "skill": "microservice-integration",
+      "case_id": "mixed-version-response",
+      "criteria": [
+        {
+          "id": "mixed-window",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "It introduces a known Checkout failure from 10:00 to 10:05, a longer compatibility gap for old mobile clients, and failures during either independent server rollback.",
+            "Reversing the two deployments also fails: proposed Checkout v2 cannot use Pricing v1."
+          ],
+          "reason": "Covers old Checkout/mobile against new Pricing, reverse deployment order, and both independent rollback hazards.",
+          "criterion": "Identifies old Checkout and mobile clients failing against Pricing v2, plus the reverse rollback or deployment-order failure when Checkout v2 meets Pricing v1.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-integration/answer.md"
+        },
+        {
+          "id": "compatible-sequence",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "return `{\"amount_cents\":1250,\"amount_minor\":1250,\"currency\":\"USD\"}`.",
+            "Prefer a valid `amount_minor`, fall back to `amount_cents` when the new field is absent",
+            "If supported consumers reject extra fields, retain the exact v1 representation and expose a separately selected v2 contract instead of modifying their response."
+          ],
+          "reason": "Combines an additive bridge or explicit versioning fallback with tolerant clients and rollback floors; deployment reordering alone is not claimed sufficient.",
+          "criterion": "Proposes an additive or explicitly versioned contract and tolerant transition clients so supported version combinations work before removal; does not present swapping the deployment order alone as sufficient.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-integration/answer.md"
+        },
+        {
+          "id": "removal-evidence",
+          "severity": "major",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Add request-level contract/consumer-version identification, validated against the released client builds.",
+            "Establish the last possible activation/distribution date of old builds and the precise meaning of the stated 60-day active lifetime, then cover that full window.",
+            "Zero traffic for a short interval cannot prove that dormant supported mobile clients are gone."
+          ],
+          "reason": "Addresses missing version telemetry, unidentified consumers, full supported mobile lifetime, release-review delay, and rollback contracts before old-field removal.",
+          "criterion": "Ties old-field removal to supported client lifetime and observed or explicitly bounded consumer migration, acknowledging missing version telemetry rather than assuming a five-minute rollout proves completion.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-integration/answer.md"
+        },
+        {
+          "id": "matrix",
+          "severity": "major",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Pricing v1: `amount_cents` only | Works by supplied contract | Cannot read its required amount | Has the field it uses",
+            "Representative consumer tests and deployment/rollback checks pass across every allowed pairing, including old-only, dual-field, and new-only provider responses as appropriate.",
+            "Both amount fields must come from the same authoritative quote and agree in value, type, and units for this rename."
+          ],
+          "reason": "Provides original mixed-version/mobile outcomes and specifies bridge parser checks, independent rollback combinations, long-lived mobile coverage, and expected equivalent 1250 USD quote amounts.",
+          "criterion": "Specifies mixed-version and rollback compatibility checks, including a long-lived mobile client, with concrete expected quote behavior.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-integration/answer.md"
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "No consumer code, test runner, mobile artifacts, runtime telemetry, or production system was supplied or executed.",
+            "The bridge design and retirement criteria are proposals pending those checks. Project and skill files were left unchanged."
+          ],
+          "reason": "No runtime pass is inferred. Independent manifest verification confirms all skill/project inputs remain unchanged.",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-integration/answer.md"
+        }
+      ],
+      "critical_fail": false,
+      "observed_tool_limitations": [
+        "Actual consumer parsers, generated clients, installed mobile versions, test runner, and telemetry were unavailable.",
+        "The compatibility matrix is reasoning from fixture contracts, not an executed compatibility test.",
+        "No prohibited web or subagent usage is reported in tools.md."
+      ],
+      "total": 10,
+      "maximum": 10,
+      "paths": {
+        "answer": "/tmp/book-skill-trials-20260929/microservice-integration/answer.md",
+        "tools": "/tmp/book-skill-trials-20260929/microservice-integration/tools.md",
+        "manifest": "/tmp/book-skill-trials-20260929/microservice-integration/manifest.json",
+        "project": "/tmp/book-skill-trials-20260929/microservice-integration/project",
+        "skill_snapshot": "/tmp/book-skill-trials-20260929/microservice-integration/skill",
+        "rubric": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/microservice-integration/cases.json"
+      },
+      "manifest_verification": {
+        "method": "Independent SHA-256 recomputation after trial completion",
+        "files_checked": 8,
+        "checked_paths": [
+          "project/change.md",
+          "skill/LICENSE",
+          "skill/SKILL.md",
+          "skill/agents/openai.yaml",
+          "skill/references/compatibility.md",
+          "skill/references/messaging.md",
+          "skill/references/sources.md",
+          "skill/references/ui-composition.md"
+        ],
+        "mismatches": [],
+        "extra_skill_or_project_files": [],
+        "unchanged": true
+      },
+      "capability_controls": {
+        "configured": {
+          "web": false,
+          "subagents": false,
+          "commands": true
+        },
+        "enforcement": "Instructions only; prohibited tools were not technically disabled.",
+        "observed_prohibited_usage": false,
+        "observation_basis": "No web or subagent use is reported by tools.md; this is not a complete independently captured execution trace."
+      },
+      "execution_metrics": {
+        "model": null,
+        "model_settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "elapsed_seconds": null,
+        "status": "Unavailable in supplied answer, tool-log, and manifest artifacts; not inferred."
+      }
+    },
+    {
+      "skill": "microservice-data",
+      "case_id": "saga-interleaving",
+      "total": 10,
+      "maximum": 10,
+      "critical_fail": false,
+      "criteria": [
+        {
+          "id": "interleaving",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "A reads available credit = 100",
+            "B reads available credit = 100",
+            "B creates/accepts an order for 80 | **160**",
+            "The invariant fails at step 4, even granting the proposal a reliable overuse check at step 7."
+          ],
+          "reason": "The explicit schedule makes both stale reads precede acceptance and shows the 160 total before any attempted compensation. It also identifies the unspecified acceptance transition rather than silently assuming pending orders are accepted.",
+          "severity": "critical",
+          "criterion": "Gives a concrete schedule where A and B both observe 100 available and proceed with 80 each, violating the stated invariant before compensation can restore anything.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-data/answer.md"
+        },
+        {
+          "id": "isolation-gap",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "they do not provide transaction isolation",
+            "Later cancellation cannot undo the period in which the invariant was false, and requesting a return cannot undo an irreversible dispatch."
+          ],
+          "reason": "Directly rejects compensation as isolation and explains why later business actions cannot erase a dispatched shipment or the earlier invariant violation.",
+          "severity": "critical",
+          "criterion": "Explains that compensation does not provide isolation and cannot erase an already dispatched shipment or its business consequences.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-data/answer.md"
+        },
+        {
+          "id": "enforce-invariant",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "It atomically enforces `active holds + outstanding committed allocations <= limit` for each customer.",
+            "Convert the hold to an outstanding allocation at Credit, without changing the total allocated amount, before Orders commits `Accepted`.",
+            "Release credit only after authoritative order state proves that the allocation is no longer needed and that the order cannot later become accepted under the old attempt."
+          ],
+          "reason": "Places the invariant at Credit, allocates before acceptance and dispatch, and specifies completion, guarded release, cancellation races, late duplicates, and hold-expiry constraints.",
+          "severity": "major",
+          "criterion": "Places atomic credit reservation or an equivalent enforceable invariant at a single authority before acceptance and irreversible shipping, including reservation completion or release rules.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-data/answer.md"
+        },
+        {
+          "id": "recovery-limits",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "A dispatch timeout does not prove that Shipping did nothing. Reconcile dispatch status before retrying or treating the parcel as unshipped.",
+            "The coordinator should expose stalled and failed-compensation states with the last confirmed participant outcomes.",
+            "Order cancellation, allocation release, and parcel return are new committed actions."
+          ],
+          "reason": "Makes uncertain outcomes and failed compensation observable, describes reconciliation and operational escalation, preserves irreversible business consequences, and avoids an exactly-once guarantee.",
+          "severity": "major",
+          "criterion": "States how failed compensation or uncertain dispatch becomes observable and recoverable, distinguishing business compensation from rollback and avoiding an unsupported exactly-once guarantee.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-data/answer.md"
+        },
+        {
+          "id": "read-only",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "no runtime checks were performed",
+            "The proposed guarantee therefore requires implementation and concurrency/failure validation.",
+            "Project and skill files were left unchanged."
+          ],
+          "reason": "Clearly separates manual reasoning and proposed tests from executed checks. Parent independently confirmed snapshot preservation.",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-data/answer.md"
+        }
+      ],
+      "observed_tool_limitations": [
+        "Read the prompt, design fixture, skill, and workflow reference using commands.",
+        "Performed manual interleaving and invariant reasoning; no executable service code, database configuration, concurrency tests, or runtime measurements were available.",
+        "tools.md reports no web or subagent use and access confined to the two authorized trial roots.",
+        "Acceptance semantics, settlement policy, retry thresholds, and operational owners remained explicitly unresolved.",
+        "Tool-use findings rely on tools.md records, not a complete independent execution transcript. Capability restrictions were instructional, not technically disabled. This trial does not establish activation accuracy or improvement over a blinded baseline."
+      ],
+      "paths": {
+        "answer": "/tmp/book-skill-trials-20260929/microservice-data/answer.md",
+        "tools": "/tmp/book-skill-trials-20260929/microservice-data/tools.md",
+        "manifest": "/tmp/book-skill-trials-20260929/microservice-data/manifest.json",
+        "project": "/tmp/book-skill-trials-20260929/microservice-data/project",
+        "skill_snapshot": "/tmp/book-skill-trials-20260929/microservice-data/skill",
+        "rubric": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/microservice-data/cases.json"
+      },
+      "manifest_verification": {
+        "method": "Independent SHA-256 recomputation after trial completion",
+        "files_checked": 7,
+        "checked_paths": [
+          "project/design.md",
+          "skill/LICENSE",
+          "skill/SKILL.md",
+          "skill/agents/openai.yaml",
+          "skill/references/projections.md",
+          "skill/references/sources.md",
+          "skill/references/workflows.md"
+        ],
+        "mismatches": [],
+        "extra_skill_or_project_files": [],
+        "unchanged": true
+      },
+      "capability_controls": {
+        "configured": {
+          "web": false,
+          "subagents": false,
+          "commands": true
+        },
+        "enforcement": "Instructions only; prohibited tools were not technically disabled.",
+        "observed_prohibited_usage": false,
+        "observation_basis": "No web or subagent use is reported by tools.md; this is not a complete independently captured execution trace."
+      },
+      "execution_metrics": {
+        "model": null,
+        "model_settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "elapsed_seconds": null,
+        "status": "Unavailable in supplied answer, tool-log, and manifest artifacts; not inferred."
+      }
+    },
+    {
+      "skill": "microservice-testing",
+      "case_id": "unknown-api-consumers",
+      "total": 10,
+      "maximum": 10,
+      "critical_fail": false,
+      "criteria": [
+        {
+          "id": "bounded-contract-evidence",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "The passing suite does **not** establish that this release is safe for all consumers.",
+            "Three known partners have no contracts, and active older API keys are not attributed to consumer versions. Their requirements remain unknown."
+          ],
+          "reason": "Bounds contract evidence to tested expectations and consumer versions and explicitly excludes unknown partner requirements. It further qualifies whether provider verification actually exercised the candidate artifact.",
+          "severity": "critical",
+          "criterion": "States that the passing contracts establish compatibility only for the represented expectations and do not prove compatibility with unknown or missing partner consumers.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-testing/answer.md"
+        },
+        {
+          "id": "breaking-change",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Removing `email` and replacing `customer_id` with `id` at the same endpoint breaks the existing response contract."
+          ],
+          "reason": "Identifies both removed field names and the unchanged endpoint, and explains how partners or older clients may fail despite migrated internal consumers passing.",
+          "severity": "critical",
+          "criterion": "Identifies removal of email and customer_id at the same endpoint as a potential break for unrepresented clients despite passing internal tests.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-testing/answer.md"
+        },
+        {
+          "id": "targeted-proof",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Attribute active keys to integrations and deployed versions, compare with an inventory of supported consumers, and seek explicit migration evidence.",
+            "Obtain each partner's concrete expectations.",
+            "retain `customer_id` and `email` and add `id`, or expose the breaking response through an explicitly opted-in version",
+            "Treat field removal as a later release gated by the evidence above and an announced deprecation/migration process."
+          ],
+          "reason": "Recommends proportionate inventory, partner, provider-boundary, and representative journey checks using the existing test mechanism, with additive or versioned migration and explicit deprecation conditions.",
+          "severity": "major",
+          "criterion": "Recommends proportionate evidence such as consumer inventory or telemetry, partner contract or representative compatibility checks, and an additive or versioned transition tied to a deprecation policy.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-testing/answer.md"
+        },
+        {
+          "id": "release-risk",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Prepare restoration of the old response and a recovery procedure that identifies processing failures during the interval, determines which work needs replay, and verifies that replay completes safely without duplicating downstream effects.",
+            "A rollback restores fields; it does not automatically repair failed partner work.",
+            "a canary cannot certify unknown or dormant partners."
+          ],
+          "reason": "Addresses the exposure requiring replay, rollback's limited effect, replay feasibility and responsibility, and the limits of passing suites and canaries. Validation is presented as future work.",
+          "severity": "major",
+          "criterion": "Addresses rollback limits and manual replay exposure, labels unexecuted checks as proposed, and avoids claiming a passing suite certifies production safety.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-testing/answer.md"
+        },
+        {
+          "id": "read-only",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "This is a read-only review of the supplied release note.",
+            "No contract suites, provider checks, partner calls, or rollout actions were executed.",
+            "The release note reports passing tests; their raw results and implementation were not supplied."
+          ],
+          "reason": "Distinguishes reported test results from independently executed work, with parent verification that supplied files remained unchanged.",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-testing/answer.md"
+        }
+      ],
+      "observed_tool_limitations": [
+        "Read the release fixture, skill, and its contract and broader-test references.",
+        "Used Python only to write answer artifacts and verify the local source link.",
+        "No contract artifacts, raw reports, implementation, version matrix, deployment configuration, or traffic data were available.",
+        "No suites, partner calls, production checks, or rollout actions were executed; tools.md reports no web or subagent use.",
+        "Tool-use findings rely on tools.md records, not a complete independent execution transcript. Capability restrictions were instructional, not technically disabled. This trial does not establish activation accuracy or improvement over a blinded baseline."
+      ],
+      "paths": {
+        "answer": "/tmp/book-skill-trials-20260929/microservice-testing/answer.md",
+        "tools": "/tmp/book-skill-trials-20260929/microservice-testing/tools.md",
+        "manifest": "/tmp/book-skill-trials-20260929/microservice-testing/manifest.json",
+        "project": "/tmp/book-skill-trials-20260929/microservice-testing/project",
+        "skill_snapshot": "/tmp/book-skill-trials-20260929/microservice-testing/skill",
+        "rubric": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/microservice-testing/cases.json"
+      },
+      "manifest_verification": {
+        "method": "Independent SHA-256 recomputation after trial completion",
+        "files_checked": 7,
+        "checked_paths": [
+          "project/release.md",
+          "skill/LICENSE",
+          "skill/SKILL.md",
+          "skill/agents/openai.yaml",
+          "skill/references/broader-tests.md",
+          "skill/references/contracts.md",
+          "skill/references/sources.md"
+        ],
+        "mismatches": [],
+        "extra_skill_or_project_files": [],
+        "unchanged": true
+      },
+      "capability_controls": {
+        "configured": {
+          "web": false,
+          "subagents": false,
+          "commands": true
+        },
+        "enforcement": "Instructions only; prohibited tools were not technically disabled.",
+        "observed_prohibited_usage": false,
+        "observation_basis": "No web or subagent use is reported by tools.md; this is not a complete independently captured execution trace."
+      },
+      "execution_metrics": {
+        "model": null,
+        "model_settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "elapsed_seconds": null,
+        "status": "Unavailable in supplied answer, tool-log, and manifest artifacts; not inferred."
+      }
+    },
+    {
+      "skill": "microservice-operations",
+      "case_id": "retry-amplification",
+      "total": 10,
+      "maximum": 10,
+      "critical_fail": false,
+      "criteria": [
+        {
+          "id": "amplification",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Checkout \u2192 Inventory | 3 \u00d7 3 = 9 | 1,800/second",
+            "These are configuration-derived rates after retry activity reaches steady state, assuming resources allow all attempts to start.",
+            "Queuing or admission limits can change actual throughput."
+          ],
+          "reason": "Correctly derives nine Inventory attempts per original request and a potential 1,800 attempts per second while explicitly separating offered-load arithmetic from measured or capacity-limited throughput.",
+          "severity": "critical",
+          "criterion": "Computes up to nine Inventory attempts per original request and a potential offered load of 1,800 Inventory attempts per second under the stated assumptions, while distinguishing the estimate from measured sustained throughput.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-operations/answer.md"
+        },
+        {
+          "id": "deadline-budget",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Set Gateway to one Checkout attempt and Checkout to one Inventory attempt for timeouts.",
+            "Set a proposed two-second Gateway deadline, measured from acceptance of a request to completion of its response.",
+            "Reserve 200 ms for mapping errors and returning the response, leaving at most 1.8 seconds for downstream work.",
+            "Cancel outstanding downstream work when the deadline expires or the caller disconnects"
+          ],
+          "reason": "Proposes one propagated overall deadline, explicitly budgets response overhead and downstream waits, removes nested retry amplification, and checks whether remote work actually stops after cancellation.",
+          "severity": "critical",
+          "criterion": "Recommends an end-to-end deadline and controlled retry ownership or shared retry budget that fits the two-second user requirement, accounting for work that continues after callers time out.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-operations/answer.md"
+        },
+        {
+          "id": "capacity-protection",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "Isolate Inventory calls behind a concurrency cap `C` with no waiting backlog: reject excess work promptly.",
+            "If retries are later justified by transient-failure evidence, permit them at one designated layer only, with jitter, a retry budget, and sufficient remaining deadline"
+          ],
+          "reason": "Combines disabled timeout retries with concurrency limits and immediate admission rejection. Any later retry policy requires one owner, jitter, and a bounded budget. The safe numeric cap is correctly left to capacity evidence.",
+          "severity": "major",
+          "criterion": "Addresses concurrency or load shedding and bounded backoff with jitter or another justified overload-control mechanism, rather than only increasing timeouts or adding retries.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-operations/answer.md"
+        },
+        {
+          "id": "operational-proof",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "every affected request completes with the agreed unavailable response within two seconds at Gateway",
+            "Each logical request starts at most one Checkout attempt and one Inventory attempt.",
+            "Inventory call concurrency stays at or below the configured `C`; admission queue depth remains zero.",
+            "Restore Inventory and measure time to normal successful responses and baseline resource use."
+          ],
+          "reason": "Specifies slow, unresponsive, unreachable, saturated, disconnect, unrelated-traffic, and recovery scenarios with attempt, latency, active-work, queue, and recovery measures. It does not claim a circuit breaker guarantees recovery.",
+          "severity": "major",
+          "criterion": "Proposes slow-dependency or outage checks observing attempts, active work, response latency, and recovery, with stated bounds and no unsupported assertion that a circuit breaker guarantees recovery.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-operations/answer.md"
+        },
+        {
+          "id": "read-only",
+          "score": 2,
+          "label": "pass",
+          "evidence": [
+            "No infrastructure was changed, fault injection performed, or metrics collected for this review.",
+            "The arithmetic is calculated from the supplied assumptions; all validation outcomes remain unproven."
+          ],
+          "reason": "Accurately identifies calculated arithmetic versus unexecuted validation and runtime observation. Parent independently confirmed snapshot preservation.",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed.",
+          "evidence_source": "/tmp/book-skill-trials-20260929/microservice-operations/answer.md"
+        }
+      ],
+      "observed_tool_limitations": [
+        "Read the incident fixture, skill, failure-handling reference, and capacity reference.",
+        "Python verified multiplication, incremental load, percentage increase, and estimated outbound-wait occupancy.",
+        "No telemetry, concrete pool limits, precise Gateway attempt timeout, operational owners, or service objectives beyond the two-second preference were supplied.",
+        "No load tests, fault injection, production changes, or runtime measurements were performed; capacity, cleanup, and recovery thresholds remain proposed prerequisites.",
+        "tools.md reports no web or subagent use.",
+        "Tool-use findings rely on tools.md records, not a complete independent execution transcript. Capability restrictions were instructional, not technically disabled. This trial does not establish activation accuracy or improvement over a blinded baseline."
+      ],
+      "paths": {
+        "answer": "/tmp/book-skill-trials-20260929/microservice-operations/answer.md",
+        "tools": "/tmp/book-skill-trials-20260929/microservice-operations/tools.md",
+        "manifest": "/tmp/book-skill-trials-20260929/microservice-operations/manifest.json",
+        "project": "/tmp/book-skill-trials-20260929/microservice-operations/project",
+        "skill_snapshot": "/tmp/book-skill-trials-20260929/microservice-operations/skill",
+        "rubric": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/microservice-operations/cases.json"
+      },
+      "manifest_verification": {
+        "method": "Independent SHA-256 recomputation after trial completion",
+        "files_checked": 8,
+        "checked_paths": [
+          "project/incident.md",
+          "skill/LICENSE",
+          "skill/SKILL.md",
+          "skill/agents/openai.yaml",
+          "skill/references/capacity.md",
+          "skill/references/failure-handling.md",
+          "skill/references/security.md",
+          "skill/references/sources.md"
+        ],
+        "mismatches": [],
+        "extra_skill_or_project_files": [],
+        "unchanged": true
+      },
+      "capability_controls": {
+        "configured": {
+          "web": false,
+          "subagents": false,
+          "commands": true
+        },
+        "enforcement": "Instructions only; prohibited tools were not technically disabled.",
+        "observed_prohibited_usage": false,
+        "observation_basis": "No web or subagent use is reported by tools.md; this is not a complete independently captured execution trace."
+      },
+      "execution_metrics": {
+        "model": null,
+        "model_settings": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "elapsed_seconds": null,
+        "status": "Unavailable in supplied answer, tool-log, and manifest artifacts; not inferred."
+      }
+    }
+  ]
+}

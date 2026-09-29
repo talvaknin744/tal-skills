@@ -6,10 +6,24 @@ Portable agent skills, organized by concern and backed by realistic evaluation c
 
 | Concern | Skill | Use it for |
 |---|---|---|
+| Productivity | [learning-plan](skills/productivity/learning-plan/SKILL.md) | Feasible study schedules, actual progress, prerequisite triage and exam preparation |
+| Productivity | [retrieval-coach](skills/productivity/retrieval-coach/SKILL.md) | Interactive recall, mathematical feedback and spaced review from observed attempts |
+| Productivity | [learning-experiments](skills/productivity/learning-experiments/SKILL.md) | Diagnose a study bottleneck and test one bounded change against fresh performance |
 | Engineering | [architecture](skills/engineering/architecture/SKILL.md) | Architecture planning and review, with optional independent specialists and book grounding |
 | Engineering | [idempotency](skills/engineering/idempotency/SKILL.md) | Designing, implementing, and reviewing retry-safe APIs, webhooks, and queue workers |
 | Engineering | [graceful-draining](skills/engineering/graceful-draining/SKILL.md) | Preserving long-running jobs through shutdown, handoff, and rolling deployment |
 | Engineering | [concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md) | Diagnosing and fixing concurrent writes, stale caches, and replica-read races |
+| Engineering | [microservice-boundaries](skills/engineering/microservice-boundaries/SKILL.md) | Choosing cohesive service boundaries and ownership |
+| Engineering | [microservice-integration](skills/engineering/microservice-integration/SKILL.md) | Evolving service communication and API/event contracts |
+| Engineering | [microservice-data](skills/engineering/microservice-data/SKILL.md) | Data ownership, distributed workflows, and query projections |
+| Engineering | [microservice-extraction](skills/engineering/microservice-extraction/SKILL.md) | Staged service extraction, coexistence, and data cutover |
+| Engineering | [microservice-testing](skills/engineering/microservice-testing/SKILL.md) | Tests that support independent service delivery |
+| Engineering | [microservice-operations](skills/engineering/microservice-operations/SKILL.md) | Cross-service reliability, observability, and recovery |
+| Engineering | [distributed-system-patterns](skills/engineering/distributed-system-patterns/SKILL.md) | Choosing and composing distributed topology patterns |
+| Engineering | [legacy-code-changes](skills/engineering/legacy-code-changes/SKILL.md) | Characterizing untested behavior and isolating dependencies for a change |
+| Engineering | [pragmatic-programming](skills/engineering/pragmatic-programming/SKILL.md) | Changeability, knowledge duplication, and feedback through working slices |
+| Engineering | [enterprise-application-patterns](skills/engineering/enterprise-application-patterns/SKILL.md) | Domain logic, persistence mapping, and transaction boundaries |
+| Engineering | [object-design-patterns](skills/engineering/object-design-patterns/SKILL.md) | Applying object patterns to concrete variation and coupling |
 | Temporal | [temporal-reliability](skills/temporal/temporal-reliability/SKILL.md) | Activity effects, uncertain outcomes, compensation, and durable waits |
 | Temporal | [temporal-safe-deployments](skills/temporal/temporal-safe-deployments/SKILL.md) | Replay compatibility, Worker deployments, history rollover, and migrations |
 | Temporal | [temporal-production-readiness](skills/temporal/temporal-production-readiness/SKILL.md) | Capacity, backlog, data lifetime, isolation, and recovery evidence |
@@ -18,6 +32,8 @@ Portable agent skills, organized by concern and backed by realistic evaluation c
 Also bundled: **eight adapted official Temporal skills** for SDK development, design review, Cloud, operations, worker tuning, observability, serverless Workers, and Cloud setup. See the [official skill catalog and local corrections](integrations/temporal/README.md).
 
 The four focused Temporal skills draw on a [review of all 70 customer-index entries](docs/temporal/README.md), with source-by-source evidence limits and current primary documentation. Talk summaries are labeled separately from complete written stories.
+
+The eleven [book-derived engineering skills](docs/book-skills.md) are independently usable workflows built from the supplied sources using Writing for Agents. Each carries its own conditional references, source locators, and observable completion criteria. The catalog records edition differences and the limited scope of the supplied Legacy Code draft.
 
 The two distributed-correctness skills are backed by [primary-source research, an eight-repository skill audit, and a book shortlist](docs/research/README.md). They focus on concrete interruption and race histories, with [isolated evaluation fixtures](evals/distributed-correctness/README.md).
 
@@ -30,6 +46,7 @@ npx skills@latest add talvaknin744/tal-skills --skill architecture
 npx skills@latest add talvaknin744/tal-skills --skill idempotency
 npx skills@latest add talvaknin744/tal-skills --skill graceful-draining
 npx skills@latest add talvaknin744/tal-skills --skill concurrency-correctness
+npx skills@latest add talvaknin744/tal-skills --skill microservice-extraction
 npx skills@latest add talvaknin744/tal-skills --skill temporal-reliability
 npx skills@latest add talvaknin744/tal-skills --skill temporal-developer
 ```
@@ -39,6 +56,8 @@ Alternatively, copy a complete `skills/<concern>/<skill-name>` directory into yo
 Choose the skills relevant to your work. If an upstream Temporal skill with the same name is already installed, choose which version to retain rather than installing conflicting copies. Bundled adaptations and upstream update instructions are documented in the catalog.
 
 ## Use
+
+For studying, use `$learning-plan` to plan, `$retrieval-coach` to practise, or `$learning-experiments` to improve a habit. The skills include Hebrew study prompts and conditional Infi 2 guidance, while remaining usable for other subjects and everyday learning. Their [research provenance and coverage](docs/productivity/research-synthesis.md) distinguish reviewed transcript advice from independent evidence. They do not activate reminders merely by producing a plan or prompt.
 
 Invoke a skill by name, such as `$architecture` or `$temporal-reliability` in Codex, or use your agent's skill invocation mechanism. Hosts supporting automatic discovery can select a skill when its description matches the request.
 
@@ -74,6 +93,23 @@ Check duplicate tool calls, approval expiry, and the budget across Continue-As-N
 
 The architecture skill excludes routine implementation, debugging, and ordinary PR review. The idempotency skill handles focused design, review, and implementation of duplicate-suppression and recovery behavior. Reviews stay read-only unless execution is already authorized; implementation requests authorize their scoped changes. Required capabilities or evidence that are missing remain explicit limitations.
 
+Choose one book-derived skill for the decision at hand; the collection is not a required pipeline. For example:
+
+```text
+Use $microservice-boundaries to assess this proposed service split.
+Compare it with retaining modules in the current application.
+```
+
+```text
+Use $microservice-extraction to plan extracting fulfillment.
+Account for old workers, shared data, and recovery after the new service accepts writes.
+```
+
+```text
+Use $legacy-code-changes to add this behavior to the untested importer.
+First establish the existing behavior and isolate the external dependency.
+```
+
 ```text
 Use $graceful-draining to review our 24-hour import workers.
 Explain how rolling replacements preserve progress without consuming the business retry budget.
@@ -96,7 +132,7 @@ Source citations, remembered patterns, and agreement between agents do not prove
 ## Repository map
 
 Skills are grouped by concern: `skills/<concern>/<skill-name>/`. Current
-concerns are `engineering` and `temporal`. Add concerns when a real skill needs them;
+concerns include `engineering`, `productivity` and `temporal`. Add concerns when a real skill needs them;
 keep each skill self-contained and its name unique across the repository.
 
 ```text
@@ -105,11 +141,17 @@ skills/
 │   ├── architecture/
 │   ├── idempotency/
 │   ├── graceful-draining/
-│   └── concurrency-correctness/
+│   ├── concurrency-correctness/
+│   └── <book-derived-skill>/
+├── productivity/
+│   ├── learning-plan/
+│   ├── retrieval-coach/
+│   └── learning-experiments/
 └── temporal/
     └── <skill-name>/
 docs/
 ├── research/
+├── book-skills.md
 └── temporal/
 integrations/
 └── temporal/
@@ -118,6 +160,7 @@ evals/
 ├── README.md
 ├── architecture/
 ├── idempotency/
+├── <book-derived-skill>/
 └── temporal/
 scripts/
 ├── check-skills.mjs
@@ -127,6 +170,7 @@ tests/
 ├── distributed-correctness/
 ├── architecture/
 ├── idempotency/
+├── book-skills/
 └── temporal/
 ```
 
@@ -161,6 +205,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for adding the next skill.
 The architecture skill is revised from [NanoClaw's Code Architect](https://github.com/nanocoai/nanoclaw-templates/tree/7d3cb40409a4a7b8f2cf562b0d80fceb612b941b/engineering/code-architect), created by [zvi-fried](https://github.com/zvi-fried), under the MIT license. Its upstream copyright notice is retained in [LICENSE](LICENSE).
 
 The idempotency skill was prompted by Dochia's [Idempotency Is Easy Until the Second Request Is Different](https://blog.dochia.dev/blog/idempotency/). Its independently written instructions link to [primary technical references](skills/engineering/idempotency/references/sources.md); the article is not bundled or relicensed.
+
+The book-derived skills draw on works by Sam Newman, Brendan Burns, Michael Feathers, Andrew Hunt and David Thomas, Martin Fowler and contributors, and the authors of *Head First Design Patterns*. [Source copies and scope](docs/book-skills.md) are documented separately. The original skill instructions are MIT-licensed; the books, illustrations, and examples are not bundled or relicensed.
 
 Temporal customer stories are linked and paraphrased, not redistributed. Official Temporal skill adaptations retain their MIT notices and carry an `UPSTREAM.md` describing the source revision and modifications. Their inclusion does not imply endorsement by Temporal.
 

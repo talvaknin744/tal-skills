@@ -1,0 +1,187 @@
+{
+  "format_version": 1,
+  "case_id": "domain-logic-choice",
+  "trial_directory": "/tmp/book-skill-trials-20260929/enterprise-application-patterns-retest",
+  "rubric_file": "/Users/idanvaknin/Documents/ChatGPT/skills/evals/enterprise-application-patterns/cases.json",
+  "rubric_case_index": 0,
+  "scoring_scale": {
+    "pass": 2,
+    "partial": 1,
+    "fail": 0
+  },
+  "verdict": "pass",
+  "score": 12,
+  "max_score": 12,
+  "criteria": [
+    {
+      "id": "evidence-based-structure",
+      "severity": "critical",
+      "criterion": "Uses the interacting tariff/eligibility rules, duplicated changes, and batch drift to locate reusable business behavior; proposes concrete ownership and callers rather than only naming a pattern.",
+      "rating": "pass",
+      "score": 2,
+      "max_score": 2,
+      "answer_excerpts": [
+        "Two changes affected all three scripts, and the nightly batch retained an obsolete weekly-cap calculation. There is currently no reliably shared authority for those rules.",
+        "| Dated tariff selection, prepaid kilometers, distance bands, and day/week caps | One shared rental pricing policy operating on the rental's dated segments and explicit tariff/band values |",
+        "| Interaction between an existing extension and vehicle replacement | Rental behavior that evaluates the proposed change against the current rental state, using the shared policies |",
+        "HTTP and batch are both callers of application operations and must reach the same rule implementation."
+      ],
+      "rationale": "Grounds the recommendation in the documented duplicate rule changes and batch drift, separates pricing/eligibility and state-dependent rental behavior, and explicitly routes the three application operations plus HTTP/batch callers through shared policy ownership. This is concrete responsibility placement, not a pattern label alone."
+    },
+    {
+      "id": "table-module-meaning",
+      "severity": "major",
+      "criterion": "Distinguishes a record-set-oriented Table Module from a class merely named after a table and weighs the fixture's lack of Record Set support against adopting that structure.",
+      "rating": "pass",
+      "score": 2,
+      "max_score": 2,
+      "answer_excerpts": [
+        "A Table Module operates over a table-like record set, normally coordinating multiple rows. Naming a class after a table does not make it a Table Module.",
+        "No shared mutable record-set representation or toolkit is present, and pricing crosses four tables. Per-table placement would fragment the very rules that should change together."
+      ],
+      "rationale": "Corrects the proposal's table-named-class misconception, describes record-set-oriented behavior, and explicitly weighs the absent Record Set support and cross-table pricing against adopting per-table modules."
+    },
+    {
+      "id": "proportionate-scope",
+      "severity": "critical",
+      "criterion": "Retains the adequate staff-note and color scripts or gives a concrete evidence-backed reason to change them; does not impose an all-application rewrite, ORM dependency, or service split from the enterprise label.",
+      "rating": "pass",
+      "score": 2,
+      "max_score": 2,
+      "answer_excerpts": [
+        "Keep staff-note and vehicle-color administration as Transaction Scripts.",
+        "Reject the application-wide Table Module conversion and ORM introduction: neither addresses the observed problem as directly as giving shared rental rules one authoritative implementation.",
+        "The two-field administration scripts have stable tests and no rental policy. Preserve them; do not make them pay for the rental slice's complexity.",
+        "The three existing operations already provide a useful application boundary for HTTP and batch. They can play the coordinating Service Layer role without adding another forwarding layer."
+      ],
+      "rationale": "Preserves the adequate administration scripts for fixture-supported reasons, scopes change to the duplicated rental behavior, rejects an application-wide conversion and ORM dependency, and uses existing application operations without proposing a service split."
+    },
+    {
+      "id": "persistence-seam",
+      "severity": "major",
+      "criterion": "Accounts for rental values spanning several tables, reuses or evolves RentalStore's existing mapping/transaction capability, and distinguishes independent domain behavior from introducing a specific ORM.",
+      "rating": "pass",
+      "score": 2,
+      "max_score": 2,
+      "answer_excerpts": [
+        "Use `RentalStore` as the persistence gateway and extend its mapping into a Data Mapper role for the affected rental model.",
+        "Pricing values span `rental`, `rental_segment`, `tariff_period`, and `distance_band`; their behavior is not naturally one row per object.",
+        "Data Mapper is a responsibility split, not a requirement to buy an ORM. Keep the handwritten mapper and do not add a persistence dependency.",
+        "`RentalStore` is documented as able to save both in a caller-supplied transaction. The migration must keep that boundary and the existing failure/result contract."
+      ],
+      "rationale": "Accounts for the four-table value shape, builds on the existing handwritten mapping and caller-supplied save transaction, and clearly separates independently testable domain behavior/Data Mapper responsibility from a particular ORM implementation."
+    },
+    {
+      "id": "migration-validation",
+      "severity": "major",
+      "criterion": "Proposes an incremental seam preserving API and transaction behavior, with at least one shared rule-variation scenario exercised through both batch and HTTP callers and an explicit expected consistent result.",
+      "rating": "pass",
+      "score": 2,
+      "max_score": 2,
+      "answer_excerpts": [
+        "Start at the common boundary between `RentalStore`'s mapped inputs and the duplicated rental rule blocks. Keep the three public operation signatures, response shapes, and caller-owned transaction scopes fixed.",
+        "Then extract the dated-segment pricing calculation into one shared implementation, initially accepting the existing mapped records if that keeps the change small. Route all three operations through it before removing the duplicate pricing blocks.",
+        "| Weekly-cap reuse | Illustrative fixture only: seven chargeable days at 50 each, weekly cap 300, no distance or other charges, one tariff period | 300 rather than 350 from the shared calculation, exercised through quote, extension, and replacement for equivalent resulting rental facts, plus HTTP and batch paths. Replace these illustrative numbers with the approved production rule. |",
+        "Sharing the corrected calculation will intentionally change the obsolete batch result; record that as the specific defect fix, preserving API shape and transaction behavior."
+      ],
+      "rationale": "Provides an incremental extraction seam with fixed API and transaction behavior, followed by additional shared behavior only as needed. Its explicitly hypothetical cap-binding scenario states exact input and expected consistent result (300 rather than 350) and explicitly exercises both HTTP and batch as well as the three operations. This earns credit as a proposed validation scenario, not as an executed test or a claim that these are authoritative business numbers. It also separates correction of known batch drift from behavior-preserving refactoring. Vague later promises to obtain approved examples are not used to award this criterion."
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes proposed validation from checks actually executed.",
+      "rating": "pass",
+      "score": 2,
+      "max_score": 2,
+      "answer_excerpts": [
+        "This is a read-only design review of `project/design.md`.",
+        "## Validation specification — not executed",
+        "No application tests or database checks were run because no implementation or runtime was supplied."
+      ],
+      "rationale": "Independent final-state verification matches every supplied skill/project file against the manifest (8/8) and finds no missing or extra files in those trees; the supplied design fixture is unchanged. The answer explicitly labels proposed scenarios unexecuted and identifies the actual checks. The tools log is self-reported and no complete independent transcript exists, so this is an artifact-integrity and disclosure pass, not proof of every historical action or of capability enforcement."
+    }
+  ],
+  "critical_failures": [],
+  "substantive_issues": [],
+  "remaining_substantive_limitation": "The authoritative weekly-cap arithmetic and actual transaction/API behavior are not supplied or independently exercised. The answer correctly treats its numeric cases as illustrative and its checks as proposed; this limitation does not fail the design-review rubric.",
+  "integrity_verification": {
+    "method": "Independent SHA-256 recomputation of every manifest entry and exhaustive file inventory of skill/ and project/.",
+    "manifest_file": "/tmp/book-skill-trials-20260929/enterprise-application-patterns-retest/manifest.json",
+    "file_checks": [
+      {
+        "path": "skill/LICENSE",
+        "expected_sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "actual_sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "matches": true
+      },
+      {
+        "path": "skill/SKILL.md",
+        "expected_sha256": "0d4a60e307e9e2ee1f62bb5b99c17f95c5f441b18efb89437e61773af4afb849",
+        "actual_sha256": "0d4a60e307e9e2ee1f62bb5b99c17f95c5f441b18efb89437e61773af4afb849",
+        "matches": true
+      },
+      {
+        "path": "skill/references/sources.md",
+        "expected_sha256": "f48078b2950e3389387f0fd12c5f6250bd94f06258add8e9131c7cf0b246396a",
+        "actual_sha256": "f48078b2950e3389387f0fd12c5f6250bd94f06258add8e9131c7cf0b246396a",
+        "matches": true
+      },
+      {
+        "path": "skill/references/persistence.md",
+        "expected_sha256": "bef8eb085da0d16b0f16719fa3512417fc0982701f1da1b708e2d2ace3996b7b",
+        "actual_sha256": "bef8eb085da0d16b0f16719fa3512417fc0982701f1da1b708e2d2ace3996b7b",
+        "matches": true
+      },
+      {
+        "path": "skill/references/domain-logic.md",
+        "expected_sha256": "1617b788b471e1c980a2ca20cb30d41b441feb2ebeeaf93e1a7332e8f71a641b",
+        "actual_sha256": "1617b788b471e1c980a2ca20cb30d41b441feb2ebeeaf93e1a7332e8f71a641b",
+        "matches": true
+      },
+      {
+        "path": "skill/references/transactions.md",
+        "expected_sha256": "e664f0472cb976b018a0a4131ad5e5d85e77b469c057493e55365d510c05a12c",
+        "actual_sha256": "e664f0472cb976b018a0a4131ad5e5d85e77b469c057493e55365d510c05a12c",
+        "matches": true
+      },
+      {
+        "path": "skill/agents/openai.yaml",
+        "expected_sha256": "3e12734ac80648d5f952f2a54abfdbd3941c06b55b75aeceee23878e5760004e",
+        "actual_sha256": "3e12734ac80648d5f952f2a54abfdbd3941c06b55b75aeceee23878e5760004e",
+        "matches": true
+      },
+      {
+        "path": "project/design.md",
+        "expected_sha256": "347e4d9a73ac1fb770687bcf8a4556327a15af05ab0c15ecbe4f6a982fe0e7e0",
+        "actual_sha256": "347e4d9a73ac1fb770687bcf8a4556327a15af05ab0c15ecbe4f6a982fe0e7e0",
+        "matches": true
+      }
+    ],
+    "all_hashes_match": true,
+    "missing_files": [],
+    "extra_files": [],
+    "scope": "All manifest-listed skill/project inputs. Root-level answer.md, tools.md, prompt.txt, and manifest.json are outside the manifest input trees.",
+    "historical_no_write_proof": null
+  },
+  "evidence_limits": {
+    "tools_log": "Self-reported tools.md; not a complete independent machine transcript.",
+    "capability_limits": "Instructional, not technically enforced.",
+    "capability_compliance_independently_verified": null,
+    "full_independent_machine_transcript_available": false,
+    "runtime_pass": null,
+    "application_tests_executed": "None reported; no implementation or test suite was supplied.",
+    "model": null,
+    "settings": null,
+    "token_usage": null,
+    "elapsed_time": null
+  },
+  "scorer_inputs_read": [
+    "answer.md",
+    "tools.md",
+    "manifest.json",
+    "project/design.md",
+    "prompt.txt",
+    "First case in the authored rubric"
+  ],
+  "other_trial_outputs_or_scores_read": false
+}

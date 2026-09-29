@@ -1,0 +1,61 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "member-shipping-threshold",
+      "title": "Characterize surrounding behavior without freezing the requested shipping bug",
+      "tags": ["characterization", "intended-change", "dependency-isolation"],
+      "prompt": "Review request.md and the Python implementation. Plan the focused shipping correction, including the smallest test-enabling change and concrete baseline and regression checks. Preserve the requested compatibility constraints. This is read-only: leave all files unchanged, use no deployment credentials, and do not contact the carrier.",
+      "fixture_dir": "evals/legacy-code-changes/fixtures/member-shipping-threshold",
+      "fixtures": ["quote.py", "gateway.py", "request.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "intended-correction", "severity": "critical", "criterion": "Distinguishes current member shipping at 4,000 cents (199) from the required result (0) and plans a failing desired-behavior regression; does not preserve the known bug merely because a characterization records it."},
+        {"id": "minimal-boundary", "severity": "critical", "criterion": "Identifies eager CarrierAudit construction and proposes a narrow injection or equivalent substitution that prevents deployment configuration access and external requests while retaining the ordinary ShippingQuote() construction path."},
+        {"id": "boundary-checks", "severity": "major", "criterion": "Gives concrete checks for member 3,999/4,000 cents and nonmember 4,999/5,000 cents with the required shipping amounts (199/0 and 399/0), preserving the unaffected pricing rules."},
+        {"id": "meaningful-observation", "severity": "major", "criterion": "Plans checks through the real quote logic that verify total and object keys, the audit line values, and propagation of an audit failure; the replacement controls the audit dependency rather than implementing the pricing logic."},
+        {"id": "bounded-plan", "severity": "major", "criterion": "Separates test-enabling changes from the pricing correction and stays within the ticket, without a broad pricing redesign or whole-system coverage prerequisite."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves supplied files unchanged, avoids deployment credentials and carrier requests, and distinguishes source-derived observations and proposed tests from checks actually executed."}
+      ]
+    },
+    {
+      "id": "constructor-substitution",
+      "title": "A factory override cannot prevent this C++ base constructor's remote effects",
+      "tags": ["constructor-dispatch", "separation", "ownership"],
+      "prompt": "Review proposal.md against receipt_batch.hpp. Determine whether the proposed test construction avoids the remote adapter, assess the fallback, and recommend a minimal path to characterization tests while retaining existing production callers. Explain what the tests should observe. Keep this review read-only and do not contact production services.",
+      "fixture_dir": "evals/legacy-code-changes/fixtures/constructor-substitution",
+      "fixtures": ["receipt_batch.hpp", "proposal.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "constructor-dispatch", "severity": "critical", "criterion": "Explains that the virtual call in ReceiptBatch's C++ base constructor resolves to the base implementation, so TestReceiptBatch's override does not prevent RemoteReceiptSink construction."},
+        {"id": "late-replacement", "severity": "critical", "criterion": "Rejects replacing the sink after construction as protection against the already-performed connection and batch registration; identifies that substitution must occur before the remote constructor runs."},
+        {"id": "compatible-injection", "severity": "major", "criterion": "Recommends constructor injection or an equivalent small pre-construction boundary that preserves the ordinary zero-argument production path and gives clear ownership of the injected sink, without a broad framework rewrite."},
+        {"id": "link-isolation", "severity": "major", "criterion": "Accounts for possible remaining link references from the virtual makeSink implementation to the unavailable adapter after adding injection; proposes separating production construction from the focused test's linked path or explicitly identifies link isolation as still unverified."},
+        {"id": "real-formatting", "severity": "major", "criterion": "Keeps ReceiptBatch::record executing and uses the sink to observe its emitted content, including the expected INV-73:1205 line, rather than replacing record or reproducing its formatting in a test subclass."},
+        {"id": "confidence-limit", "severity": "major", "criterion": "Distinguishes local formatting and isolation evidence from unverified production-adapter construction or integration, and does not claim the absent adapter was validated."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves supplied files unchanged, performs no production-service access, and accurately identifies which checks were performed versus merely proposed."}
+      ]
+    },
+    {
+      "id": "tested-helper-nontrigger",
+      "title": "A documented and tested pure helper needs only a wording review",
+      "tags": ["activation", "scope"],
+      "prompt": "Review the docstring clarification requested in request.md against labels.py and its focused tests. Explain whether the wording accurately describes the function. Keep files unchanged; no behavior change or testability redesign is requested.",
+      "fixture_dir": "evals/legacy-code-changes/fixtures/tested-helper-nontrigger",
+      "fixtures": ["labels.py", "test_labels.py", "request.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Does not automatically invoke legacy-code-changes or impose characterization and dependency-isolation work on this tested pure helper's documentation-only request."},
+        {"id": "accurate-wording", "severity": "major", "criterion": "Confirms that the requested wording describes the strip() followed by title() operations, without inventing a runtime change."},
+        {"id": "scope", "severity": "major", "criterion": "Keeps the review focused on the docstring and existing evidence, without proposing wrappers, injected dependencies, new tests, or broad refactoring as prerequisites."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all supplied fixtures unchanged and distinguishes any checks actually executed from source inspection or proposed validation."}
+      ]
+    }
+  ]
+}

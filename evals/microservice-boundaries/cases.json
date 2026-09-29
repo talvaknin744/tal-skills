@@ -1,0 +1,144 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "modular-monolith-fit",
+      "title": "Independent modules need not become separate deployable services",
+      "tags": [
+        "decomposition",
+        "proportionality",
+        "team-ownership"
+      ],
+      "prompt": "Review the proposed microservice boundaries in brief.md. Recommend what should stay together or split now, explain the evidence behind the decision, and give observable conditions that would justify revisiting it. Keep all files unchanged.",
+      "fixture_dir": "evals/microservice-boundaries/fixtures/modular-monolith-fit",
+      "fixtures": [
+        "brief.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "preserve-simple-boundary",
+          "severity": "critical",
+          "criterion": "Recommends retaining a modular monolith for the current core booking boundary or supplies concrete fixture-based evidence for an equally proportionate alternative; does not assume a service per entity is required."
+        },
+        {
+          "id": "transaction-and-ownership",
+          "severity": "critical",
+          "criterion": "Explains that Appointment, Availability, and Room currently share an atomic booking invariant and that splitting them introduces coordination and consistency work the proposed entity names do not resolve."
+        },
+        {
+          "id": "distinct-billing-case",
+          "severity": "major",
+          "criterion": "Distinguishes the less coupled nightly billing export from the booking transaction and treats independent extraction as an option requiring a demonstrated benefit, not as a mandatory first step."
+        },
+        {
+          "id": "revisit-with-evidence",
+          "severity": "major",
+          "criterion": "Gives observable reconsideration criteria such as independent release blockage, measured scaling pressure, or an actual ownership split, while respecting the four-week delivery and one-team constraints."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "distributed-monolith-boundaries",
+      "title": "Separate processes remain coupled through shared data and release order",
+      "tags": [
+        "coupling",
+        "data-ownership",
+        "independent-deployment"
+      ],
+      "prompt": "Assess whether the service boundaries in design.md support independent change. Identify the most consequential coupling, propose a bounded boundary correction, and describe how to verify the claimed independence. This is a read-only architecture review.",
+      "fixture_dir": "evals/microservice-boundaries/fixtures/distributed-monolith-boundaries",
+      "fixtures": [
+        "design.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "coupling-evidence",
+          "severity": "critical",
+          "criterion": "Uses direct shared writes and the mandated joint release to explain why process separation has not produced independent deployment; identifies semantic ownership as unresolved."
+        },
+        {
+          "id": "business-boundary",
+          "severity": "major",
+          "criterion": "Assigns or explicitly resolves authority for product descriptions, offers, quotes, and accepted order data using the stated valid-quote requirement rather than simply replacing the database with APIs."
+        },
+        {
+          "id": "failure-coupling",
+          "severity": "major",
+          "criterion": "Connects repeated synchronous Catalog calls to checkout availability and proposes a bounded correction that honors valid quotes while stating the accepted freshness tradeoff."
+        },
+        {
+          "id": "independence-proof",
+          "severity": "major",
+          "criterion": "Proposes a compatibility or failure scenario demonstrating one component can change or be unavailable without coordinated deployment or invalid order acceptance, and labels it as proposed validation."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "single-function-refactor-nontrigger",
+      "title": "A local pricing helper review does not require service decomposition",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review calculate.py for the arithmetic bug described in requirements.md. Explain the smallest correction and keep the files unchanged. The deployment architecture is outside this request.",
+      "fixture_dir": "evals/microservice-boundaries/fixtures/single-function-refactor-nontrigger",
+      "fixtures": [
+        "requirements.md",
+        "calculate.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load the microservice-boundaries skill or turn the local arithmetic question into service decomposition or deployment advice."
+        },
+        {
+          "id": "small-correction",
+          "severity": "major",
+          "criterion": "Identifies that the discount is subtracted once instead of once per item and recommends quantity multiplied by unit price minus per-unit discount, yielding 270 for the stated example."
+        },
+        {
+          "id": "preserve-scope",
+          "severity": "major",
+          "criterion": "Keeps the answer focused on the helper and does not invent missing product requirements or require infrastructure changes."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Invoice extraction proposal
+
+A monolith handles orders, invoicing, and customer support. Invoices are generated after fulfillment; a one-minute delay is acceptable. The invoice module reads finalized order items and writes invoice rows. A support endpoint also updates invoice tax identifiers directly. A nightly job joins invoice and order tables to export accounting records. Generating an invoice currently runs in the fulfillment transaction. Only one engineer can work on extraction this month.
+
+The proposal starts by copying all invoice tables into a new database, then immediately changing the UI to call the new Invoice service. It leaves the support endpoint and nightly job unchanged. The proposed service still queries the monolith database for live order items. The actual business rule is one invoice per fulfilled order revision; revisions become immutable at fulfillment, and corrections create a new revision. The business allows initial rollout to a small cohort and can tolerate delayed invoice generation, but not lost invoices.

@@ -1,0 +1,143 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "rollback-after-new-writes",
+      "title": "Routing rollback must preserve writes accepted by an extracted service",
+      "tags": [
+        "migration",
+        "rollback",
+        "data-authority"
+      ],
+      "prompt": "Review the extraction and rollback plan in rollout.md. Focus on rollback after the new service accepts writes, propose a workable staged cutover, and state the evidence required before each irreversible transition. Keep the file unchanged.",
+      "fixture_dir": "evals/microservice-extraction/fixtures/rollback-after-new-writes",
+      "fixtures": [
+        "rollout.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "new-write-loss",
+          "severity": "critical",
+          "criterion": "Explains that switching back or restoring the old snapshot loses or hides acknowledged Address writes and that routing rollback alone is not data rollback."
+        },
+        {
+          "id": "one-write-authority",
+          "severity": "critical",
+          "criterion": "Requires a defined authoritative writer and controls old workers across cutover, avoiding concurrent unsynchronized writes to both databases."
+        },
+        {
+          "id": "reconcile-before-return",
+          "severity": "major",
+          "criterion": "Provides a feasible way to retain accepted writes before returning authority, such as a tested reverse transfer with version/conflict rules, a write pause and reconciliation, or keeping the new data authority while reverting application behavior; marks missing mechanisms as rollout blockers."
+        },
+        {
+          "id": "phased-evidence",
+          "severity": "major",
+          "criterion": "Gives concrete checks for snapshot and stream convergence, restart or fencing of old writers, post-cutover writes, and a rollback rehearsal with no loss of acknowledged corrections."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "incremental-invoice-extraction",
+      "title": "An extraction seam must account for old writers and atomic dependencies",
+      "tags": [
+        "strangler",
+        "shared-database",
+        "migration-seam"
+      ],
+      "prompt": "Evaluate the invoice extraction proposal in design.md. Identify a useful first seam and migration sequence that the team can verify incrementally, including the remaining database dependencies. Keep this to a read-only plan.",
+      "fixture_dir": "evals/microservice-extraction/fixtures/incremental-invoice-extraction",
+      "fixtures": [
+        "design.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "remaining-writers",
+          "severity": "critical",
+          "criterion": "Identifies the support endpoint, nightly join, and live monolith reads as migration dependencies; does not treat copying tables and changing the UI as a complete extraction."
+        },
+        {
+          "id": "bounded-seam",
+          "severity": "major",
+          "criterion": "Proposes an incremental facade or seam around invoice behavior, with explicit handling of direct support writes and an achievable first stage for one engineer."
+        },
+        {
+          "id": "durable-handoff",
+          "severity": "critical",
+          "criterion": "Accounts for removing invoice creation from the fulfillment transaction using a durable handoff or equivalent recovery mechanism and immutable order-revision identity; does not rely on an unrecorded best-effort notification."
+        },
+        {
+          "id": "cohort-validation",
+          "severity": "major",
+          "criterion": "Defines checks for cohort routing, invoice completeness, export correctness, data authority, and rollback, while preserving one invoice per fulfilled revision without claiming those checks ran."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "static-asset-copy-nontrigger",
+      "title": "Moving static icons is not a service extraction",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review move-plan.md for moving the static icon directory. Check whether the described relative asset URL will still resolve and explain the one necessary path edit. Keep files unchanged; this task does not change any service or database.",
+      "fixture_dir": "evals/microservice-extraction/fixtures/static-asset-copy-nontrigger",
+      "fixtures": [
+        "move-plan.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load microservice-extraction or introduce a strangler, replication, data cutover, or migration-governance workflow."
+        },
+        {
+          "id": "relative-path",
+          "severity": "major",
+          "criterion": "Explains that the unchanged reference still resolves to the old location and supplies ../../assets/ui/icons/info.svg or the equivalent root-relative /assets/ui/icons/info.svg."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Answers the static URL question without treating the word move as evidence of service extraction."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    }
+  ]
+}

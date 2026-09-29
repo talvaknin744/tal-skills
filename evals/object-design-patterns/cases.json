@@ -1,0 +1,60 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "lifecycle-policy",
+      "title": "Lifecycle events and rendering policies require distinct ownership",
+      "tags": ["state", "strategy", "substitutability"],
+      "prompt": "Review the object design proposal in design.md. Recommend whether patterns would help, map any useful roles to this domain, explain which existing behaviors the refactor must preserve, and describe concrete validation. Keep this a read-only design review.",
+      "fixture_dir": "evals/object-design-patterns/fixtures/lifecycle-policy",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "independent-variation", "severity": "critical", "criterion": "Separates lifecycle-dependent publication behavior from independently selected rendering policy; does not retain the status-by-renderer class product or justify Strategy merely from the class diagram."},
+        {"id": "transition-contract", "severity": "critical", "criterion": "Preserves allowed lifecycle events, InvalidTransition with no mutation for invalid events, and publication history; rejects exposing arbitrary lifecycle replacement or silently returning from invalid operations as equivalent behavior."},
+        {"id": "ownership", "severity": "critical", "criterion": "Identifies shared singleton handlers with mutable document references as unsafe across document instances and assigns per-document state and transition authority explicitly."},
+        {"id": "proportional-design", "severity": "major", "criterion": "Compares State objects with an explicit transition table or existing conditionals and ties the recommendation to repeated state decisions; allows a simple rendering function or policy object and does not require Java-style class infrastructure."},
+        {"id": "observable-checks", "severity": "major", "criterion": "Specifies expected results for scheduled publication, invalid edit without mutation, changing rendering without lifecycle change, and two independent documents; distinguishes proposed checks from executed validation."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."}
+      ]
+    },
+    {
+      "id": "provider-construction",
+      "title": "A wrapper must translate semantics and construction must retain account ownership",
+      "tags": ["adapter", "construction", "lifetime"],
+      "prompt": "Assess the pattern choices and client contract in design.md. Recommend the smallest useful object design for adding Boreal, show the responsibility boundaries, and state the behavioral checks needed before implementation. Leave all files unchanged.",
+      "fixture_dir": "evals/object-design-patterns/fixtures/provider-construction",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "semantic-translation", "severity": "critical", "criterion": "Identifies all three semantic defects: grams need decimal kilograms, total must include the surcharge, and NoRoute versus Timeout must preserve their distinct public exception meanings."},
+        {"id": "wrapper-intent", "severity": "major", "criterion": "Chooses or describes an Adapter because the SDK must satisfy the client's existing interface, distinguishing this from adding responsibilities through Decorator; keeps checkout dependent on QuoteProvider."},
+        {"id": "construction-scope", "severity": "critical", "criterion": "Centralizes provider selection at a composition point or simple supplier without requiring Abstract Factory families, creator subclasses, or subclasses per account that the fixture does not need."},
+        {"id": "account-lifetime", "severity": "critical", "criterion": "Rejects overwriting account and signing-key fields on a single provider during overlapping traffic, and proposes account-bound immutable instances or another explicit design preserving account isolation."},
+        {"id": "client-contract-checks", "severity": "major", "criterion": "Proposes contract checks with a concrete unit conversion and full total, separate route and timeout results, and overlapping accounts; keeps quote-only behavior and does not invent label purchases."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."}
+      ]
+    },
+    {
+      "id": "local-label-nontrigger",
+      "title": "A local wording correction does not require object design patterns",
+      "tags": ["activation", "scope"],
+      "prompt": "Read notes.md and state the one-line Python change needed to correct the label while preserving the count interpolation. Keep files unchanged; this is only a local wording review.",
+      "fixture_dir": "evals/object-design-patterns/fixtures/local-label-nontrigger",
+      "fixtures": ["notes.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Does not automatically load object-design-patterns or introduce pattern comparison, strategy classes, factories, or a formatting abstraction."},
+        {"id": "correct-change", "severity": "major", "criterion": "Provides print(f\"Files selected: {count}\") or an exactly equivalent one-line Python change, preserving interpolation of the existing count variable."},
+        {"id": "scope", "severity": "major", "criterion": "Keeps the response bounded to the label change without inventing localization, alternate renderers, or consumers contrary to the fixture."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."}
+      ]
+    }
+  ]
+}

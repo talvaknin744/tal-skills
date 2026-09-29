@@ -1,0 +1,13 @@
+# Replication, sharding, and scatter/gather
+
+Choose along the constrained dimension. **Replication** sends a request to one interchangeable instance to add throughput or tolerate an instance loss. **Sharding** routes by a key to the subset of instances holding the relevant data. **Scatter/gather** divides one request across multiple participants and combines their outputs. Replicated shards can support scatter/gather; these choices are complementary when the requirements justify each layer.
+
+For replication, prove that any eligible instance can answer the routed request. Locate session or durable state, define readiness, and describe what happens after routing moves to another instance. Session affinity preserves a routing preference; it does not itself preserve state through failure. Include remaining capacity when one replica is unavailable.
+
+For sharding, record the data key, partition map, routing owner, and expected distribution. Separate a routing key from a cache identity: all response-varying inputs need representation in cache identity, although distinct cache entries may share a shard. Check the largest working set, hottest key, and cross-shard requests. More shards need not relieve one hot key. Compare added replicas of a hot shard with repartitioning. Consistent hashing can limit reassignment; it does not move durable data or settle concurrent ownership. Specify how routing and data movement stay compatible. For caches, check origin capacity during cold starts and lost shards.
+
+For scatter/gather, establish whether interchangeable leaves receive different computational tasks or distinct data shards must each contribute. Define the aggregation operation and the rule for a complete answer. If partial results are permitted, expose their incompleteness; otherwise a missing required contribution must prevent a complete-success response. Put fan-out, outstanding work, and aggregation within the request budget.
+
+Failure checks added by this workflow: remove a replica, delay a required leaf, saturate the coordinator, and change membership while requests run. Measure both root latency and leaf work. Under independent per-leaf slow-response probability `p`, the chance of at least one slow leaf among `n` required leaves is `1 - (1-p)^n`; real correlations and retries can change it. Label this as an estimate. Replication requires usable copies, suitable placement, routing, and capacity before it supports a failure-tolerance claim.
+
+Finish with a topology, sizing assumptions, partition/aggregation contracts, and acceptance checks for normal load, participant loss, and membership change. Chapters 5–7 provide the pattern basis; [sources.md](sources.md) separates that basis from these verification requirements.

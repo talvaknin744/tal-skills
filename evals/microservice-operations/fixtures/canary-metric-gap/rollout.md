@@ -1,0 +1,5 @@
+# Shipping worker release
+
+The API accepts shipment requests, durably queues a job, and responds HTTP 202. Worker v1 consumes jobs and stores carrier receipts. Worker v2 introduces a new carrier adapter. The canary sends five percent of API traffic to a new API instance, but all requests enter one shared queue consumed by both worker versions. Canary promotion watches only API HTTP 5xx and API p95 latency for ten minutes.
+
+The new adapter returns before persisting the carrier receipt in some cases. The carrier can accept a shipment while the job remains pending. Worker v2 also drains only 40 jobs per minute while arrivals average 100 per minute; v1 normally drains 140. Operators have queue age, completed shipments per minute, pending job count, and carrier reconciliation records, but no metric or trace field identifies worker version. The rollback runbook restarts v1 and replays every pending job immediately. Carrier acceptance may already have happened, and support can reconcile by stable shipment reference before authorizing another send.

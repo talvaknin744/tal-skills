@@ -1,0 +1,143 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "unknown-api-consumers",
+      "title": "Passing known consumer contracts does not account for unknown public clients",
+      "tags": [
+        "consumer-contracts",
+        "coverage",
+        "compatibility"
+      ],
+      "prompt": "Review the release evidence in release.md. What do the passing consumer contract tests establish, what remains unproven, and what targeted validation or rollout conditions are needed? Keep this read-only.",
+      "fixture_dir": "evals/microservice-testing/fixtures/unknown-api-consumers",
+      "fixtures": [
+        "release.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "bounded-contract-evidence",
+          "severity": "critical",
+          "criterion": "States that the passing contracts establish compatibility only for the represented expectations and do not prove compatibility with unknown or missing partner consumers."
+        },
+        {
+          "id": "breaking-change",
+          "severity": "critical",
+          "criterion": "Identifies removal of email and customer_id at the same endpoint as a potential break for unrepresented clients despite passing internal tests."
+        },
+        {
+          "id": "targeted-proof",
+          "severity": "major",
+          "criterion": "Recommends proportionate evidence such as consumer inventory or telemetry, partner contract or representative compatibility checks, and an additive or versioned transition tied to a deprecation policy."
+        },
+        {
+          "id": "release-risk",
+          "severity": "major",
+          "criterion": "Addresses rollback limits and manual replay exposure, labels unexecuted checks as proposed, and avoids claiming a passing suite certifies production safety."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "mocked-checkout-gap",
+      "title": "Happy-path mocks cannot demonstrate timeout and broker recovery behavior",
+      "tags": [
+        "test-boundaries",
+        "failure-injection",
+        "observability"
+      ],
+      "prompt": "Assess the testing plan in testing.md. Propose the smallest useful set of tests across the relevant boundaries, identify what each would prove, and define observable success criteria. Do not implement tests or edit files.",
+      "fixture_dir": "evals/microservice-testing/fixtures/mocked-checkout-gap",
+      "fixtures": [
+        "testing.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "distinct-boundaries",
+          "severity": "major",
+          "criterion": "Preserves useful fast mapping tests and adds targeted datastore, broker/relay, and consumer-boundary checks rather than treating one website success assertion as comprehensive coverage."
+        },
+        {
+          "id": "replay-schedules",
+          "severity": "critical",
+          "criterion": "Specifies both broker acceptance before relay mark crash and consumer commit before acknowledgment loss, followed by restart or redelivery."
+        },
+        {
+          "id": "observable-outcome",
+          "severity": "critical",
+          "criterion": "Defines observable results including one reservation per order, eventual outbox or processing completion, and a correct status after recovery, using the supplied uniqueness boundary rather than inferring success from a UI message."
+        },
+        {
+          "id": "confidence-limit",
+          "severity": "major",
+          "criterion": "Distinguishes what local broker/database tests and a narrow end-to-end journey demonstrate from untested production behavior, including pending age or error observability."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "pure-unit-test-nontrigger",
+      "title": "A pure helper assertion does not require a service testing strategy",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review the single assertion in test.md. Is the expected result correct for the supplied pure function? Explain only the correction needed and keep the file unchanged.",
+      "fixture_dir": "evals/microservice-testing/fixtures/pure-unit-test-nontrigger",
+      "fixtures": [
+        "test.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load microservice-testing or expand the unit assertion into contract tests, service environments, or an end-to-end testing program."
+        },
+        {
+          "id": "expected-value",
+          "severity": "major",
+          "criterion": "Identifies 6 as the correct expected value for double(3) while leaving the multiplication behavior unchanged."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Keeps the answer to the local assertion without claiming to execute a test or discovering nonexistent dependencies."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    }
+  ]
+}

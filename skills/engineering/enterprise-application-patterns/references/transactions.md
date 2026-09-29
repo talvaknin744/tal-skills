@@ -1,0 +1,13 @@
+# Transactions across application interactions
+
+Name the business transaction in user terms, then mark the system transactions that implement it. A user reading an edit form, considering changes, and submitting later spans an interval that a short save transaction does not protect by itself. Keep human interaction outside a long-held database transaction unless an explicit operating requirement and the actual platform justify that cost.
+
+For one short operation, inspect the datastore's atomicity and isolation plus the constraints enforcing its invariant. Identify every participating write and the outcome if any fails. Framework transaction annotations, autocommit settings, and nested transaction behavior need verification against the actual implementation.
+
+For optimistic offline control, retain the version or equivalent evidence from the original read. Validate that evidence and persist the accepted change within the same database transaction, using a conditional write or another mechanism that closes the check/write race. Advance the version on each accepted update so older submissions become stale. Treat an affected-row count of zero as a conflict when it represents a version mismatch. Choose the conflict scope to cover all data whose changes invalidate the edit, including relevant child records or read dependencies. Every writer must participate in that policy or its equivalent enforcement.
+
+Specify the visible conflict outcome: reload and reconsider, an explicit merge, or a safely recomputed operation where business semantics permit it. Resubmitting stale values with a freshly fetched version discards the protection. Compare two overlapping edits and state which can commit.
+
+For pessimistic offline control, model a business lock separately from a database row lock. Define the owner, acquisition point, protected set, rejection behavior, and release or recovery after abandonment. Acquire before loading protected state, or revalidate previously loaded state after acquisition. Normally release at business-transaction completion. Prefer it when avoiding work likely to be rejected merits its coordination and availability cost; it still needs correct coordination with the final system transaction. Lock expiry introduces a stale-owner problem requiring an enforceable policy.
+
+For either strategy, distinguish temporary session edits from durable facts. An identity map or server session does not serialize other sessions' writes. Verify a failed save leaves no partial durable update, and that a conflict cannot leave child changes committed separately. Present database-specific guarantees as verified facts or open validation items, not consequences of a pattern's name.

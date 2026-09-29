@@ -1,0 +1,143 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "mixed-version-response",
+      "title": "A response rename breaks old consumers during an independent rollout",
+      "tags": [
+        "api-compatibility",
+        "mixed-versions",
+        "consumer-contract"
+      ],
+      "prompt": "Review the API rollout in change.md for compatibility across independently deployed consumers. Explain the failure window, propose an evolution sequence, and describe what must be observed before removing the old contract. Leave files unchanged.",
+      "fixture_dir": "evals/microservice-integration/fixtures/mixed-version-response",
+      "fixtures": [
+        "change.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "mixed-window",
+          "severity": "critical",
+          "criterion": "Identifies old Checkout and mobile clients failing against Pricing v2, plus the reverse rollback or deployment-order failure when Checkout v2 meets Pricing v1."
+        },
+        {
+          "id": "compatible-sequence",
+          "severity": "critical",
+          "criterion": "Proposes an additive or explicitly versioned contract and tolerant transition clients so supported version combinations work before removal; does not present swapping the deployment order alone as sufficient."
+        },
+        {
+          "id": "removal-evidence",
+          "severity": "major",
+          "criterion": "Ties old-field removal to supported client lifetime and observed or explicitly bounded consumer migration, acknowledging missing version telemetry rather than assuming a five-minute rollout proves completion."
+        },
+        {
+          "id": "matrix",
+          "severity": "major",
+          "criterion": "Specifies mixed-version and rollback compatibility checks, including a long-lived mobile client, with concrete expected quote behavior."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "event-meaning-drift",
+      "title": "An unchanged event name can hide a breaking semantic change",
+      "tags": [
+        "event-contract",
+        "semantic-compatibility",
+        "replay"
+      ],
+      "prompt": "Assess the proposed event change in design.md. Explain how current and replaying consumers will interpret it, recommend a compatible contract evolution, and identify required validation. This is a read-only integration review.",
+      "fixture_dir": "evals/microservice-integration/fixtures/event-meaning-drift",
+      "fixtures": [
+        "design.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "semantic-break",
+          "severity": "critical",
+          "criterion": "Identifies that changing PaymentCompleted from captured funds to authorization allows fulfillment before capture and is breaking despite additive schema compatibility."
+        },
+        {
+          "id": "distinct-facts",
+          "severity": "critical",
+          "criterion": "Preserves the established captured meaning or introduces distinct authorization and capture facts with an explicit consumer migration, rather than relying on old consumers honoring a new optional field."
+        },
+        {
+          "id": "replay-semantics",
+          "severity": "major",
+          "criterion": "Addresses the interpretation of archived events without capture_status and avoids retroactively interpreting historical captured events as pending or current authorizations."
+        },
+        {
+          "id": "consumer-checks",
+          "severity": "major",
+          "criterion": "Proposes checks showing existing fulfillment does not release goods for authorization-only events, capture failure remains observable, and replay retains the old contract's meaning."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    },
+    {
+      "id": "local-json-pretty-print-nontrigger",
+      "title": "A local formatting task does not change a service contract",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review notes.md and explain whether changing the local diagnostic JSON indentation from two spaces to four changes the parsed value. Keep files unchanged. This file is a developer-only diagnostic artifact, not an API response or event.",
+      "fixture_dir": "evals/microservice-integration/fixtures/local-json-pretty-print-nontrigger",
+      "fixtures": [
+        "notes.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load microservice-integration or introduce consumer migration, API versioning, or event compatibility work."
+        },
+        {
+          "id": "value-preserved",
+          "severity": "major",
+          "criterion": "Correctly states that formatting whitespace outside JSON strings does not change the parsed object and applies that statement to the supplied indentation-only change."
+        },
+        {
+          "id": "scope",
+          "severity": "major",
+          "criterion": "Keeps the result bounded to the stated local artifact and does not invent raw-byte consumers contrary to the fixture."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+        }
+      ]
+    }
+  ]
+}
