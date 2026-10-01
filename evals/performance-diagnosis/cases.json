@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "held-pool",
+      "title": "Connections remain borrowed during unrelated downstream waits",
+      "tags": [
+        "performance-diagnosis",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Diagnose the p99 regression using incident.md. Identify the best-supported constraint, one bounded intervention, and the measurements needed to validate it while preserving behavior. Keep the review read-only.",
+      "fixture_dir": "evals/performance-diagnosis/fixtures/held-pool",
+      "fixtures": [
+        "incident.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "constraint",
+          "severity": "critical",
+          "criterion": "Connects pool acquisition delay and connection hold time to the observed path, while treating sampled absence of other bottlenecks as bounded evidence."
+        },
+        {
+          "id": "ownership",
+          "severity": "critical",
+          "criterion": "Targets shortening unnecessary connection ownership while preserving authoritative transaction checks and rejects the unbudgeted fleet pool increase."
+        },
+        {
+          "id": "measurement",
+          "severity": "major",
+          "criterion": "Separates offered demand from completed throughput and proposes matched workload, pool wait/hold, endpoint latency, database pressure and correctness checks."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "throttled-container",
+      "title": "Host CPU averages conceal a container CPU limit",
+      "tags": [
+        "performance-diagnosis",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Review incident.md and explain the likely source of the latency regression. Propose a discriminating measurement and a bounded change, including remaining uncertainty. Do not edit files.",
+      "fixture_dir": "evals/performance-diagnosis/fixtures/throttled-container",
+      "fixtures": [
+        "incident.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "effective-limits",
+          "severity": "critical",
+          "criterion": "Explains that the container limit and burst-level throttling can matter despite low averaged node CPU and identifies evidence needed to confirm their contribution."
+        },
+        {
+          "id": "distributed-path",
+          "severity": "major",
+          "criterion": "Accounts for increased serialization and required-leaf fan-out without treating independently measured percentiles as additive or claiming correlated stragglers were proven."
+        },
+        {
+          "id": "bounded-proof",
+          "severity": "major",
+          "criterion": "Proposes a measured workload comparison of CPU demand, throttling, endpoint outcomes and leaf work rather than prescribing more fan-out blindly."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "format-only",
+      "title": "Formatting a telemetry field is a local presentation edit",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review change.md and provide the requested wording correction only. Keep the file unchanged; the request concerns the dashboard label, with no performance investigation.",
+      "fixture_dir": "evals/performance-diagnosis/fixtures/format-only",
+      "fixtures": [
+        "change.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Keeps the response to the requested label correction without loading performance-diagnosis or beginning profiling and load testing."
+        },
+        {
+          "id": "correct-label",
+          "severity": "major",
+          "criterion": "Supplies Request latency (ms) as the corrected label."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    }
+  ]
+}

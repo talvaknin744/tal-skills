@@ -1,0 +1,4 @@
+# Arrival-rate test
+An arrival-rate executor schedules 3000 iterations/s, one request each, for ten minutes. It starts 1900 iterations/s and records 1100 dropped iterations/s. Completed response throughput is 1895/s during the measured steady interval, with 5/s request failures. Successful-response p99 is 150 ms. Generator CPU is 99%; its maximum virtual-user setting is reached. Server CPU is 35% and connection-pool wait is low in the same interval.
+The report claims the server handles 3000 requests/s at p99 150 ms and recommends halving the fleet. It omits failure latency, final outstanding requests, and generator resource details. The generator's slow or failed iterations are not represented in the success-only latency histogram.
+The request authorizes an offline review and a future test proposal; no environment mutation is authorized.

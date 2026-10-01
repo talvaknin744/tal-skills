@@ -14,6 +14,42 @@ Runtime examples, agent behavior and repository validation are separate forms
 of evidence below. A successful fixture can mean an unsafe control was
 reproduced; it does not turn that control into a recommended implementation.
 
+## October distributed-systems and performance expansion
+
+The repository now contains **49 skill packages, 15 agents, and eight workflows**.
+The [October archive review](2026-10-01/README.md) records the same 60 surveyed
+publishers, 58,178 metadata URLs, and 29 selected substantive article readings,
+with historical/access boundaries explicit. Two new skills cover streaming
+semantics and background maintenance; ten conditional branches deepen existing
+guidance, including coordinated retries.
+
+The [two-skill native archive](../../../evals/engineering-toolkit/runs/2026-10-01/README.md)
+retains all six cases in nine attempts: latest results **4 pass, 2 partial**.
+Startup failures and a timeout are retained. The original partial scores identify
+verification and effect-boundary omissions. All attempts retain inherited-tool
+and read-isolation limits; these were read-only reviews, not production engines
+or current native workflow/role execution.
+
+The [performance addition](../performance-capacity/README.md) supplies six
+independent skills and 18 authored cases. Its
+[verification record](../performance-capacity/verification.md) distinguishes the
+six selected forward trials actually executed from corpus checks and unexecuted
+scenarios. No production benchmark or portable speedup was established.
+
+The [retry example](../../../examples/retry-coordination/README.md) passed eight
+author and eight independent checks on custom loopback HTTP peers and bounded
+models. It demonstrates nested amplification and propagation gaps; it does not
+reproduce Uber middleware or prove fleet-wide admission/cancellation guarantees.
+
+The [selectable launcher](../../toolkit-usage.md#choose-with-npx) resolves standalone
+skills alongside agents/workflows. Actual
+[packed npx installation](2026-10-01/launcher-installation.json) checks selection,
+repeat installation, settings preservation, and collision rejection. Remote
+GitHub fetch and release CI are recorded separately after publication. Combined
+local validation passed **438 tests, zero failures/skips**; the
+[command record](2026-10-01/validation.json) retains code identities and output. Installer
+checks do not execute a model or establish native host task completion.
+
 ## Additional article extension
 
 The [additional research](extensions/README.md) adds 17 deep article records

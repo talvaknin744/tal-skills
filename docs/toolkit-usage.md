@@ -22,13 +22,82 @@ For retirement of a supported library, API, configuration option, or internal
 tool, use [technical-deprecation](../skills/engineering/technical-deprecation/SKILL.md)
 as a standalone skill to establish consumer transitions and removal gates.
 
+For event-time windows, late arrivals, duplicates or streaming joins, use [stream-processing-design](../skills/messaging/stream-processing-design/SKILL.md), with the messaging specialist when delivery also matters. For backfills, compaction or rebalancing competing with live traffic, use [background-maintenance](../skills/engineering/background-maintenance/SKILL.md), with the reliability specialist when shared capacity needs review.
+
 A spelling fix or local pure function does not need the complete delivery path.
+For performance work, select a standalone skill by the decision:
+
+| Decision | Skill |
+| --- | --- |
+| Bound overload, shed work, preserve tenant outcomes and recover | [overload-control](../skills/performance/overload-control/SKILL.md) |
+| Explain a latency regression or throughput constraint | [performance-diagnosis](../skills/performance/performance-diagnosis/SKILL.md) |
+| Construct or assess representative benchmark evidence | [load-testing](../skills/performance/load-testing/SKILL.md) |
+| Size growth, failure headroom, recovery or scaling | [capacity-planning](../skills/performance/capacity-planning/SKILL.md) |
+| Diagnose database plans, waits, pools and maintenance | [database-performance](../skills/performance/database-performance/SKILL.md) |
+| Optimize a measured CPU/cache-sensitive Go or Python hot path | [data-layout-performance](../skills/performance/data-layout-performance/SKILL.md) |
+
+These packages support normal automatic discovery and explicit invocation. Install
+them through the ordinary skills CLI or copy each complete package as described
+below. Existing workflow dependency sets remain focused on their declared tasks.
+
 Workflows specify a short path, entry conditions and stopping conditions. The
 [shared handoff](../workflows/_shared/handoff.md) carries objective, scope, files,
 invariants, current evidence and acceptance criteria. One owner edits each
 overlapping file set. Independent reviewers return findings to that owner.
 
 ## Install in a project
+
+### Choose with npx
+
+From the destination project, start the interactive toolkit picker:
+
+```sh
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills
+```
+
+Select Codex, Claude, or both; then choose skills, agents, or workflows by number
+or range. The launcher shows the target, dependency counts, and planned file
+actions before asking whether to apply. Canceling the menu leaves the target
+unchanged. `--yes` belongs to npx's package-download prompt, not the install plan.
+
+With **npm 12**, use its command-scoped Git opt-in:
+
+```sh
+npx --yes --allow-git=all --package=github:talvaknin744/tal-skills -- tal-skills
+```
+
+This is the same public GitHub package; no npm registry publication is required.
+Use Node.js 22 or later for the toolkit. The separate `skills@latest` CLI currently
+requires Node.js 22.20 or later. npm's [npx documentation](https://docs.npmjs.com/cli/v12/commands/npx/)
+and [Git policy](https://docs.npmjs.com/cli/v12/using-npm/config/#allow-git) describe
+the package-fetch options.
+
+List available packages or make an explicit selection:
+
+```sh
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills list
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills --host both --workflow tal-backend-delivery --skill capacity-planning --dry-run
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills --host both --workflow tal-backend-delivery --skill capacity-planning
+```
+
+Add `--allow-git=all` to these commands on npm 12. For a reproducible source
+revision, replace the package spec with `github:talvaknin744/tal-skills#<commit-sha>`.
+The package version alone does not pin a moving Git branch.
+
+Repeat `--skill`, `--agent`, or `--workflow` to select additional packages in one
+invocation. Explicit selections describe the entire desired set; they replace
+the previous managed selection. Omitted dependency packages remain included when
+selected agents or workflows require them. `--all` explicitly selects everything;
+avoid it when a focused install is sufficient. Noninteractive installation
+requires an explicit selection. `--json` reports plans/results, and `--target`
+overrides the current directory.
+
+Use one installer to own a combined setup. A same-named package previously
+installed by the standalone skills CLI is unowned by the toolkit installer and
+will stop installation. Retain or relocate the existing version before choosing
+the desired ownership; the toolkit never silently takes it over.
+
+### Use a repository checkout
 
 Clone this repository, install its maintainer dependencies, then select a host
 and an existing project. The commands run from the repository checkout:
@@ -42,7 +111,7 @@ node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex
 Use `--host claude` or `--host both` for the other host. Repeat `--workflow` or
 `--agent` to select more entrypoints. With no explicit selection, a first install
 selects all 15 agents and eight workflows, then their dependencies (currently
-19 skills). A later install retains its selection. Explicit selections describe
+21 skills). A later install retains its selection. Explicit selections describe
 the desired set. `--json` gives machine-readable plans and results. Inspect the
 plan before changing selections or removing a host.
 

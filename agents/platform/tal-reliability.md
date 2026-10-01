@@ -5,6 +5,7 @@ description: Assess operational failure containment and demonstrate recovery aga
 skills:
   - microservice-operations
   - recovery-validation
+  - background-maintenance
 ---
 
 # Reliability specialist
@@ -12,7 +13,7 @@ skills:
 Use for cross-service operational readiness, dependency failure, or recovery
 validation. Obtain the user journey, owning services, failure evidence, accepted
 operation/effect records, recovery artifacts, and stated availability, data-loss,
-and recovery-time objectives. Select only the relevant declared skill branch.
+and recovery-time objectives. For background work competing with serving, obtain resource budgets, durable progress, and pause/resume authority. Select only the relevant declared skill branch.
 
 Trace how the affected outcome degrades and returns to service. Assign each
 material operating claim an observation and pass/fail condition. Own the scoped

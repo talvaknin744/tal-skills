@@ -1,0 +1,131 @@
+{
+  "lane": "agents",
+  "research_date": "2026-10-01",
+  "articles": [
+    {
+      "id": "anthropic-managed-agent-boundaries",
+      "publisher_id": "anthropic",
+      "title": "Scaling Managed Agents: Decoupling the brain from the hands",
+      "url": "https://www.anthropic.com/engineering/managed-agents",
+      "published_at": "2026-04-08",
+      "read_scope": "Complete main article, introduction through Conclusion and acknowledgements. Linked sources separately scoped; image pixels not inspected. No article code executed.",
+      "six_dimensions": {
+        "trigger": "Long-running work needs independent compute replacement, customer execution environments, and recoverable context.",
+        "failure_constraint": "One container couples session survival, harness availability, tool compute and credentials; provisioning delays even tasks needing no sandbox.",
+        "mechanism": "Separate an append-only session log, stateless orchestration and replaceable tool environments through stable interfaces; provision execution only when needed.",
+        "limits": "Service-specific latency results; durable history does not establish exactly-once external effects or indefinite artifact retention.",
+        "counterexample": "Analyst inference: replaying a logged tool request after an unrecorded successful remote effect can duplicate work.",
+        "verification": "Proposed distinct harness/sandbox/stream interruptions, resume from durable state, reconcile ambiguous effects, and compare latency/retention; not executed."
+      },
+      "existing_reference_placement": [
+        "skills/engineering/distributed-system-patterns/references/serving.md",
+        "skills/engineering/architecture/references/planning.md",
+        "skills/protocols/mcp-engineering/references/outcomes.md"
+      ],
+      "crosscheck_ids": [
+        "managed-agents-current-contract",
+        "managed-event-lifetimes",
+        "managed-vault-authority"
+      ]
+    },
+    {
+      "id": "anthropic-harness-ablation",
+      "publisher_id": "anthropic",
+      "title": "Harness design for long-running application development",
+      "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+      "published_at": "2026-03-24",
+      "read_scope": "Complete main article and shown appendix, including frontend criteria, sprint contracts, both examples and component-ablation discussion. Embedded videos/images not played; code/examples not executed.",
+      "six_dimensions": {
+        "trigger": "Choose orchestration and evaluation scaffolding for a model/task combination or reassess it after a model upgrade.",
+        "failure_constraint": "Self-grading misses real interactions; indiscriminate simplification obscures which harness component contributes.",
+        "mechanism": "Calibrate an independent evaluator on concrete criteria, exercise the running product, and remove one harness component at a time on realistic tasks.",
+        "limits": "Few internal examples with changed feature scope and long expensive runs; no controlled general productivity guarantee.",
+        "counterexample": "A generator/evaluator pair sharing a blind spot can approve a nonworking core flow; more iterations need not improve human preference.",
+        "verification": "Proposed fixed prompt/model/environment comparisons with behavior checks, trace review, human calibration, cost and latency; not executed."
+      },
+      "existing_reference_placement": [
+        "skills/testing/failure-oriented-testing/SKILL.md",
+        "skills/engineering/architecture/references/planning.md",
+        "skills/quality/code-and-docs-cleanup/references/sources.md"
+      ],
+      "crosscheck_ids": [
+        "claude-sdk-session-semantics"
+      ]
+    },
+    {
+      "id": "vercel-shared-instance-concurrency",
+      "publisher_id": "vercel",
+      "title": "Serverless servers: Efficient serverless Node.js with in-function concurrency",
+      "url": "https://vercel.com/blog/serverless-servers-node-js-with-in-function-concurrency",
+      "published_at": "2024-10-03",
+      "read_scope": "Complete main article from introduction through Acknowledgements, including architecture, efficiency example, beta tradeoffs, case study and enabling instructions. Diagrams interpreted from accompanying text only; runtime not executed.",
+      "six_dimensions": {
+        "trigger": "Interactive requests spend substantial time waiting on I/O while assigned compute sits idle.",
+        "failure_constraint": "Invocation-per-instance provisioning underutilizes compute; changing to shared execution changes process/global-state isolation.",
+        "mechanism": "An invocation service reuses connected instances for concurrent requests, with a runtime controlling dispatch and response streaming.",
+        "limits": "Benefits depend on traffic and I/O overlap; CPU-heavy work can worsen latency. Historical beta/cost claims are not current sizing guarantees.",
+        "counterexample": "Analyst inference: shared request-specific globals leak across tenants; larger concurrency exhausts a database pool before CPU capacity.",
+        "verification": "Proposed workload sweep measuring throughput, p99, CPU, memory, pool waits, downstream load and caller isolation; compare serial and concurrent execution. Not executed."
+      },
+      "existing_reference_placement": [
+        "skills/engineering/distributed-system-patterns/references/serving.md",
+        "skills/engineering/concurrency-correctness/SKILL.md",
+        "skills/engineering/microservice-operations/SKILL.md"
+      ],
+      "crosscheck_ids": [
+        "vercel-fluid-current-contract"
+      ]
+    }
+  ],
+  "current_contract_crosschecks": [
+    {
+      "id": "managed-agents-current-contract",
+      "url": "https://platform.claude.com/docs/en/managed-agents/overview",
+      "title": "Claude Managed Agents overview",
+      "retrieved_at": "2026-10-01",
+      "version": "managed-agents-2026-04-01 beta",
+      "read_scope": "Core concepts, How it works, Beta access",
+      "supported_claim": "Server-side event history can be fetched; managed API remains beta and requires its documented header. Historical architecture interfaces are conceptual, not literal current SDK method names."
+    },
+    {
+      "id": "managed-event-lifetimes",
+      "url": "https://platform.claude.com/docs/en/managed-agents/events-and-streaming",
+      "title": "Session event stream",
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Resuming an idle session; custom-tool result correlation and session budget behavior inspected",
+      "supported_claim": "Conversation history persists until deletion, but sandbox state is preserved only 30 days after sandbox creation; activity does not extend this window. Required outputs must leave ephemeral execution state before expiry."
+    },
+    {
+      "id": "managed-vault-authority",
+      "url": "https://platform.claude.com/docs/en/managed-agents/vaults",
+      "title": "Authenticate with vaults",
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Vault scope, credential types, session references, lifecycle",
+      "supported_claim": "Vaults are workspace-scoped and referenced per session; credential placeholders can be substituted at egress, MCP credentials match server URL. Binding the correct caller/vault still requires application authorization."
+    },
+    {
+      "id": "claude-sdk-session-semantics",
+      "url": "https://code.claude.com/docs/en/agent-sdk/sessions",
+      "title": "Work with sessions",
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Conversation-versus-filesystem distinction, continue/resume/fork, cross-host resume",
+      "supported_claim": "SDK sessions persist conversation history, not the filesystem; forking history does not isolate shared file edits. Cross-host resume requires a session store/transcript transfer or explicit application artifacts."
+    },
+    {
+      "id": "vercel-fluid-current-contract",
+      "url": "https://vercel.com/docs/fluid-compute",
+      "title": "Fluid compute",
+      "retrieved_at": "2026-10-01",
+      "last_updated": "2026-08-24",
+      "read_scope": "Enabling, optimized concurrency, isolation/global state",
+      "supported_claim": "Current Fluid compute defaults differ from the 2024 beta: enabled for new projects since 2025-04-23; optimized concurrency supports Node.js/Python, and concurrent invocations share process/global state. Runtime general support list is broader than concurrency support."
+    }
+  ],
+  "verification": {
+    "articles_new_to_previous_corpus": true,
+    "vendor_examples_executed": false,
+    "model_evaluation_runs_executed": false,
+    "article_bodies_saved": false
+  },
+  "claim_policy": "Six-dimension cards distinguish reported mechanism from analyst inference and proposed verification. Publication reports are historical; current platform contracts have separate sources."
+}

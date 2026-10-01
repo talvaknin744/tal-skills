@@ -11,3 +11,13 @@ Failure checks added by this workflow: pause an owner beyond expiry, allow a suc
 Also test delayed renewals, coordinator unavailability, and a stale release. Record when a candidate stops initiating work and how in-flight work resolves. Treat repeated external effects as a separate correctness concern where present; election alone is not duplicate suppression.
 
 Finish with the exclusive invariant, transition table, enforcement point, and takeover evidence. Chapter 9 supplies singleton trade-offs, leases, generation-aware release, and downstream owner/version checks. The enforceable protected-write boundary and acceptance procedure extend that basis, as recorded in [sources.md](sources.md).
+
+## Asynchronous finalization and ownership transfer
+
+Use this branch when retries or recovery can overlap background finalization. Enumerate every durable-write path, including delayed flushers. An ownership record protects those writes only when the write authority checks the current owner atomically with each mutation. Unguarded external effects need their own conditional operation or reconciliation contract.
+
+For voluntary transfer, stop admitting work under the old owner and resolve its pending commits before handing ownership to a successor. Distinguish a known abort from an unknown commit result: a timeout or canceled wait can leave an already-dispatched commit successful. Reconcile that result using durable operation identity; waiting for a fixed duration is not proof that transfer is safe.
+
+For recovery takeover, establish the authoritative condition permitting a successor to claim ownership. A durable death record can participate in a conditional claim; a missed heartbeat alone does not prove the previous worker or its writes have stopped. Keep owner acquisition, effect protection, and death detection separate.
+
+Verify a delayed background write during transfer, an unknown commit, and competing recovery claims. Observe accepted mutations at the protected resource and the successor's progress. Report unresolved effect boundaries and the actual recovery evidence. The Snowflake execution-anchor account and FoundationDB commit semantics are scoped in [sources.md](sources.md).

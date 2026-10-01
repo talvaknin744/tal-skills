@@ -1,0 +1,130 @@
+{
+  "lane": "agents",
+  "subassignment": "deepchecks",
+  "research_date": "2026-10-01",
+  "deep_read_count": 2,
+  "dedupe": {
+    "scope": "all docs/research before writing this handoff",
+    "method": "fixed-string canonical URL and article-slug search, including JSON and Markdown",
+    "result": "no existing occurrences for either extracted article or the blocked third candidate",
+    "new_means": "new to this research corpus, not necessarily newly published"
+  },
+  "articles": [
+    {
+      "id": "snowflake-execution-anchors",
+      "publisher": "Snowflake",
+      "title": "Strengthening Snowflake’s Distributed Query Lifecycle with Execution Anchors",
+      "url": "https://www.snowflake.com/en/blog/engineering/snowflake-distributed-query-execution-anchors/",
+      "published_date": "2026-05-05",
+      "authors": ["Yu Zhang", "Kirutthika Raja"],
+      "source_type": "first-party engineering account; positive design",
+      "first_party_evidence": "Snowflake domain, Engineering Blog branding, Staff Software Engineer / Engineering Manager biographies and company copyright",
+      "read_status": "complete-main-body",
+      "read_scope": "Introduction through Looking ahead: problem, anchor contract, normal execution, voluntary transfer, involuntary transfer, correctness, rollout, conclusion. Biographies/navigation excluded.",
+      "six_dimensions": {
+        "trigger": "Retries, recovery and asynchronous finalization share operation-level durable writes.",
+        "failure_constraint": "Multiple owners can finalize one query; ownership conventions multiply across paths.",
+        "mechanism": "FDB owner record, every-transaction guard, pending-write completion before voluntary transfer, durable death proof before conditional recovery claim, piggybacked acquisition.",
+        "limits": "Requires every durable effect to cross the guarded store; ambiguous pending-commit resolution is not described, and normal-path cost is workload-specific.",
+        "counterexample": "Analyst inference: unguarded external effects or a sent commit completing after timeout defeat handoff based only on local ownership.",
+        "verification": "Reported staged dry runs, separate rollback flags and dashboards. Proposed delayed-worker/flusher handoff and recovery-overlap probes; not executed."
+      },
+      "evidence_sections": ["The core idea: An execution anchor", "Voluntary transfer: Query retry", "Involuntary transfer: Crash recovery", "Rolling out seamlessly"],
+      "crosscheck_ids": ["foundationdb-7.4.8-transactions"],
+      "transferable_practice": "Put ownership enforcement at every durable-write boundary and test the full handoff protocol, including background work.",
+      "claim_boundary": "The blog reports internal design and successful rollout; no source code or independent proof was reviewed. Missing ambiguous-commit detail is an evidence gap, not a demonstrated product defect."
+    },
+    {
+      "id": "pinterest-tidb-adoption",
+      "publisher": "Pinterest",
+      "title": "TiDB Adoption at Pinterest",
+      "url": "https://medium.com/pinterest-engineering/tidb-adoption-at-pinterest-1130ab787a10",
+      "published_date": "2024-07-19",
+      "authors": ["Alberto Ordonez Pereira", "Lianghong Xu"],
+      "source_type": "first-party engineering account; positive design and operating constraints",
+      "first_party_evidence": "Official https://www.pinterestcareers.com/ footer Engineering Blog link resolves to https://medium.com/pinterest-engineering; that publication links back to Pinterest Careers. Named company engineers author the article.",
+      "read_status": "complete-main-body",
+      "read_scope": "Motivation through Acknowledgements: methodology, 2022 evaluation, production deployment/compute/access, offline analytics, CDC, disaster recovery, wins, learnings and next steps. Newsletter/comments/recommendations excluded.",
+      "six_dimensions": {
+        "trigger": "Choose a replacement distributed store for indexed, high-throughput online serving plus exports and recovery.",
+        "failure_constraint": "Synthetic tests miss sustained-load behavior; exports, backups and maintenance compete with serving.",
+        "mechanism": "Requirements filter, synthetic finalists, identical production shadow workloads, operational failure tests, learner snapshot offload and backup throttling.",
+        "limits": "Pinterest-specific 2022 evaluation; network remains shared, and historical competitor/CDC throughput observations are not current product facts.",
+        "counterexample": "Analyst inference: a synthetic winner fails if exports violate serving p99 targets; snapshot isolation can permit write skew.",
+        "verification": "Reported node/AZ loss, scale, termination and redeployment tests. Proposed p99/CDC-lag/RTO/RPO measurement under maintenance, snapshots, duplicate delivery and replica fallback; not executed."
+      },
+      "evidence_sections": ["Methodology for Selecting a Datastore", "The TiDB Adoption Journey", "Offline Analytics", "Disaster Recovery", "Learnings"],
+      "crosscheck_ids": ["tidb-v8.5-isolation", "tidb-v8.5-ticdc", "tidb-v8.5-follower-read"],
+      "transferable_practice": "Select infrastructure against representative traffic and failure/maintenance behavior, and budget shared resources after offload.",
+      "claim_boundary": "Avoid adopting historical product exclusions, speedup/cost claims or the old TiCDC throughput observation as universal guidance."
+    }
+  ],
+  "current_contract_crosschecks": [
+    {
+      "id": "foundationdb-7.4.8-transactions",
+      "title": "Developer Guide — FoundationDB 7.4.8 documentation",
+      "url": "https://apple.github.io/foundationdb/developer-guide.html",
+      "source_owner": "FoundationDB / Apple",
+      "version": "7.4.8",
+      "last_updated": "2026-09-24",
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Transactions with unknown results; The commit_unknown_result Error; Non-Retryable Errors",
+      "supported_claim": "An already-sent commit may succeed after timeout/cancellation. commit_unknown_result retries can repeat committed effects, requiring idempotency.",
+      "qualification": "A bounded wait alone is not abort proof. The Snowflake article does not disclose exact unknown-commit resolution."
+    },
+    {
+      "id": "tidb-v8.5-isolation",
+      "title": "TiDB Transaction Isolation Levels",
+      "url": "https://docs.pingcap.com/tidb/stable/transaction-isolation-levels/",
+      "source_owner": "PingCAP",
+      "version": "TiDB Self-Managed v8.5, stable route at retrieval",
+      "published_date": null,
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Supported isolation levels; Snapshot Isolation; write skew",
+      "supported_claim": "Snapshot Isolation permits write skew.",
+      "qualification": "Pinterest's strong-consistency claim must not be expanded into serializability."
+    },
+    {
+      "id": "tidb-v8.5-ticdc",
+      "title": "TiCDC Overview",
+      "url": "https://docs.pingcap.com/tidb/stable/ticdc-overview/",
+      "section_urls": ["https://docs.pingcap.com/tidb/stable/ticdc-overview/#replication-order", "https://docs.pingcap.com/tidb/stable/ticdc-overview/#replication-consistency"],
+      "source_owner": "PingCAP",
+      "version": "TiDB Self-Managed v8.5, stable route at retrieval",
+      "published_date": null,
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Replication order, replication consistency and new/classic architecture",
+      "supported_claim": "DDL/DML is at least once. MySQL sink single-row update order does not imply upstream transaction execution order; docs now describe new/classic architecture.",
+      "qualification": "Plan deduplication and ordering explicitly. Historical throughput is not a current capacity guarantee; no exactly-once or synchronous-DR claim adopted."
+    },
+    {
+      "id": "tidb-v8.5-follower-read",
+      "title": "Follower Read",
+      "url": "https://docs.pingcap.com/tidb/stable/follower-read/",
+      "source_owner": "PingCAP",
+      "version": "TiDB Self-Managed v8.5, stable route at retrieval",
+      "published_date": null,
+      "retrieved_at": "2026-10-01",
+      "read_scope": "Learner preference/fallback, ReadIndex and retry behavior",
+      "supported_claim": "Learner preference can fall back to available leaders/followers, with leader coordination and retry paths.",
+      "qualification": "Snapshot offload reduces load without proving complete resource isolation."
+    }
+  ],
+  "access_limited_candidates": [
+    {
+      "publisher": "Snowflake",
+      "title": "Automated Query Retries: Improving Snowflake’s fault tolerance",
+      "url": "https://www.snowflake.com/en/blog/engineering/automated-query-retries-improving-snowflakes-fault-tolerance/",
+      "read_status": "not-deep-read",
+      "access": "Search metadata and anchor-article link available; full-body retries timed out twice.",
+      "included_in_deep_read_count": false
+    }
+  ],
+  "verification": {
+    "article_bodies_saved": false,
+    "vendor_examples_executed": false,
+    "proposed_probes_executed": false,
+    "publisher_archives_drained": false,
+    "request_cadence": "Sequential same-host requests spaced at least one second; no article crawling performed by this subassignment."
+  }
+}

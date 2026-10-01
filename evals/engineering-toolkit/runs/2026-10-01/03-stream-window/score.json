@@ -1,0 +1,145 @@
+{
+  "run_id": "tal-october-stream-positive-02",
+  "run_evidence_sha256": "a90d3fbb6dad071aaca970eede17313a6bae45d64c12efded53b81f037577868",
+  "final_workspace_tree_sha256": "fcfb661c7fe846bccee3f41d9572d44db93b99cf9a963964a633890fd87aab2a",
+  "case_id": "window-finality",
+  "candidate_tree_sha256": "acf15a811355dc38f6af26dd6588364304d34a134408ad92f0521c303bef595d",
+  "rubric_sha256": "55bff49eb4fc30b0af6683bda3e69caa888863f09c76c4ae53884aa73d137bc2",
+  "reviewer": "archive-quality-independent-reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "relationship": "Previously reviewed the package and supplied a wording finding; did not author candidate, case, fixture, or trial response."
+  },
+  "criteria": [
+    {
+      "id": "event-time-progress",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-11, 19, 25-26",
+        "observation": "Uses UTC source event time and half-open windows, rejects checkpoint/wall-clock completion at 12:05, takes the minimum of both required watermarks and finalizes at 12:08. Admission behind observed progress and post-finality audit explicitly allow physically older arrivals rather than treating the watermark as physical completeness."
+      }
+    },
+    {
+      "id": "late-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 8, 22, 25-26",
+        "observation": "Admits e3 with event time 12:02 behind F=12:03 while open, keeps aggregates internal, emits one final row when both required watermarks reach the end at 12:08, and drops e4 with durable audit without changing that output."
+      }
+    },
+    {
+      "id": "identity-revision-composition",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9, 20-24",
+        "observation": "Keys by logical event_id across deliveries; identical e1 contributes once, e2 v2 replaces 5 with 8 at unchanged count, v1 replay cannot undo v2, and conflicting e1 v1 amount 11 is audited and rejected while amount 10 remains accepted."
+      }
+    },
+    {
+      "id": "independent-aggregate",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 17-31; supporting trace.jsonl item_8 / line 18",
+        "observation": "The table derives 5/1,15/2,15/2,18/2,25/3,25/3,25/3, final 25/3 and unchanged output after e4. Surviving independent contributions 10+8+7=25 are stated. The recorded pure in-memory oracle completed with exit 0 and the same schedule; it is not an engine observation."
+      }
+    },
+    {
+      "id": "retention-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 34-44",
+        "observation": "Retains accepted revision, contribution and conflict evidence through stalled open-window progress and replay; distinguishes two-hour replay from completeness and challenges the 60-second cache as a correctness bound. Detail retirement requires durable/reconstructible final output and closure; compact evidence must permanently refuse reopening. Proposed checks include replay after TTL, two-hour stalls, boundaries, restart and retirement with expected one output/no recreated state."
+      }
+    },
+    {
+      "id": "scope-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 42-44; supporting workspace-changes.json changes/forbidden_changes; trace.jsonl completed command events item_1-item_8",
+        "observation": "Explicitly limits observed validation to document inspection and in-memory arithmetic, leaving engine/restart/cleanup/memory checks proposed. Workspace change arrays and patch are empty, original/final fixture hashes match, and all seven observed tool calls are local reads/calculation; no external service, delegation, broker-effect redesign or file edit appears."
+      }
+    }
+  ],
+  "scored_at": "2026-10-01T18:46:12.026168+00:00",
+  "rubric_result": "pass",
+  "critical_results": [
+    {
+      "id": "event-time-progress",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "late-policy",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "identity-revision-composition",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "independent-aggregate",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "scope-evidence",
+      "score": 2,
+      "result": "pass"
+    }
+  ],
+  "major_results": [
+    {
+      "id": "retention-verification",
+      "score": 2,
+      "result": "pass"
+    }
+  ],
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "interpretation": "Observable rubric pass for this completed captured trial under recorded capability deviations. The run is not strictly case-compliant; no claim of isolated candidate causality, engine correctness, memory bound, or comparative efficacy.",
+  "activation_evidence": {
+    "metadata": {
+      "observed": true,
+      "artifact": "evidence/discovery.json",
+      "locator": "candidate_metadata_observed and enabled candidate_entries[0]",
+      "observation": "Metadata-only native repository discovery exposed enabled candidate alongside 53 other skills; it did not preload the body."
+    },
+    "entrypoint_body": {
+      "observed": true,
+      "artifact": "evidence/trace.jsonl",
+      "locator": "item_1 completed / line 5",
+      "observation": "Successful cat returned the complete candidate SKILL.md body."
+    },
+    "reference_bodies": {
+      "observed": [
+        "time-and-finality",
+        "identity-and-corrections",
+        "state-and-history",
+        "sources"
+      ],
+      "artifact": "evidence/trace.jsonl",
+      "locator": "item_4 completed / line 11",
+      "observation": "Successful command returned all four named reference bodies; joins was not requested or observed."
+    }
+  },
+  "reviewer_checks": {
+    "evidence_file_hashes": "passed against run.json evidence_files",
+    "raw_final_fixture_hashes": "passed against manifest fixture_files",
+    "workspace_patch_bytes": 0,
+    "supplied_verifier": "not applicable: review case has verification_argv=null",
+    "engine_or_service_validation": "not run"
+  }
+}

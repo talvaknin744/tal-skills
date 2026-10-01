@@ -1,0 +1,4 @@
+# Invoice endpoint incident
+PostgreSQL 18 is used through an application pool capped at 20 connections. The endpoint p99 is 5 seconds. Sampled pool acquisition p99 is 2 seconds. A query run alone on representative data with EXPLAIN ANALYZE completes in 18 ms using an existing index.
+During the incident, many active endpoint sessions show wait_event_type Lock, wait_event transactionid. The observed blocker is an open transaction that updates an account row, then waits about 3 seconds for an external provider before committing. Other requests update the same account. Their effects must preserve the account balance invariant. Per-service connection reservations across the fleet are not documented.
+The proposal adds another index and doubles every application's pool. Query statistics are cumulative since last reset and have not been differenced over the incident. The supplied standalone plan contains no end-to-end client timing or lock wait from the incident.

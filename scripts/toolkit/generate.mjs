@@ -9,14 +9,14 @@ export function hostsFor(host) {
   if (!['codex', 'claude', 'both'].includes(host)) throw new Error(`Invalid host: ${host}`);
   return host === 'both' ? ['claude', 'codex'] : [host];
 }
-export function select(catalog, { agents, workflows } = {}) {
-  if (agents === undefined && workflows === undefined) return { agents: sorted(catalog.agents.keys()), workflows: sorted(catalog.workflows.keys()) };
-  for (const [kind, values] of [['agents', agents ?? []], ['workflows', workflows ?? []]]) {
+export function select(catalog, { agents, workflows, skills } = {}) {
+  if (agents === undefined && workflows === undefined && skills === undefined) return { agents: sorted(catalog.agents.keys()), workflows: sorted(catalog.workflows.keys()) };
+  for (const [kind, values] of [['agents', agents ?? []], ['workflows', workflows ?? []], ['skills', skills ?? []]]) {
     if (!Array.isArray(values) || new Set(values).size !== values.length) throw new Error(`Invalid selection: ${kind}`);
     for (const name of values) if (!catalog[kind].has(name)) throw new Error(`Unknown ${kind}: ${name}`);
   }
-  if (!(agents?.length || workflows?.length)) throw new Error('Select at least one agent or workflow');
-  return { agents: sorted(agents ?? []), workflows: sorted(workflows ?? []) };
+  if (!(agents?.length || workflows?.length || skills?.length)) throw new Error('Select at least one skill, agent or workflow');
+  return { agents: sorted(agents ?? []), workflows: sorted(workflows ?? []), ...(skills === undefined ? {} : { skills: sorted(skills) }) };
 }
 const markdown = (metadata, body) => `---\n${stringify(metadata, { lineWidth: 0 }).trimEnd()}\n---\n\n${body.trim()}\n`;
 const textFile = (text, source, kind) => ({ bytes: Buffer.from(text.replace(/\r\n/g, '\n')), mode: 0o644, source, kind });
@@ -27,9 +27,9 @@ function roleText(role, host) {
   if (role.skills.length) pointers.push('Use these declared skills for the assigned task:\n', ...role.skills.map(name => `- [${name}](${path.posix.relative(path.posix.dirname(native), `${skillsRoot(host)}/${name}/SKILL.md`)})`));
   return `${role.body}\n\n${pointers.join('\n')}\n`;
 }
-export function generateBundle(catalog, { host, agents, workflows } = {}) {
-  const hosts = hostsFor(host), selection = select(catalog, { agents, workflows });
-  const roleNames = new Set(selection.agents), skillNames = new Set();
+export function generateBundle(catalog, { host, agents, workflows, skills } = {}) {
+  const hosts = hostsFor(host), selection = select(catalog, { agents, workflows, skills });
+  const roleNames = new Set(selection.agents), skillNames = new Set(selection.skills ?? []);
   for (const name of selection.workflows) {
     const workflow = catalog.workflows.get(name);
     workflow.agents.forEach(id => roleNames.add(id));

@@ -108,3 +108,20 @@ states the earlier change did not fix stale reads. The paired controls in
 `fault-histories.md` are an application inference; they preserve logical effect
 identity while testing attempt correlation and authority. No etcd reproduction or
 new agent evaluation was executed for this addition.
+
+## Explicit state models
+
+Trail of Bits, JP Smith, [State Machine Testing with Echidna](https://blog.trailofbits.com/2018/05/03/state-machine-testing-with-echidna/),
+2018-05-03. Complete substantive prose, model, commands, and counterexamples read
+2026-10-01. The historical Solidity/Haskell API was not executed and is not a
+current installation prescription. One prose sentence reverses the locked and
+unlocked outcomes; the code and falsifying histories provide the consistent
+interpretation. Finite generated agreement is not a proof over all histories.
+
+The reference generalizes independently specified state transitions to the
+project's own lifecycle. Current [Hypothesis stateful documentation](https://hypothesis.readthedocs.io/en/latest/stateful.html),
+6.168.3 displayed, was checked for rule-based models, bundles, initialization,
+preconditions, and after-step invariants. Its database comparison illustrates an
+independent simple model; preconditions that exclude an operation do not test
+that operation's rejection behavior. The rejection partition, seeded-defect
+sensitivity, and real-boundary limits are this repository's application.

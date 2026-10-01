@@ -1,0 +1,4 @@
+# Backlog recovery
+At recovery start there are 7200 retained jobs. Accepted arrival rate remains 40 jobs/s throughout recovery. All workers are stopped for the first 120 seconds while replacements start; during this interval arrivals are durably queued. After startup the workers and downstream dependency together complete 60 jobs/s, which is the dependency's demonstrated sustained limit for this job mix. No expiry or dropping is permitted for accepted jobs.
+The proposal claims the backlog drains in 7200 / 60 = 120 seconds after workers return, meeting a ten-minute objective measured from recovery start. Service time and job size are variable; byte capacity is unrecorded. The objective also requires correct effects and eventual visibility of every accepted job.
+Assume constant rates and no additional failures for an estimate, then identify which assumptions require validation.

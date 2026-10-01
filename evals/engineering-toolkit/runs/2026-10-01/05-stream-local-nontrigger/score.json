@@ -1,0 +1,93 @@
+{
+  "run_id": "tal-october-stream-nontrigger-01",
+  "run_evidence_sha256": "5ce5d4da50e4f491a89e26d60e72e3d8f813b1d9a80b47a12ff4c3667e63c3b9",
+  "final_workspace_tree_sha256": "99436683e339f9bbe24c1f054091fdc335e9a1f88627ae90929319bc3d8c8af2",
+  "case_id": "local-date-group-nontrigger",
+  "candidate_tree_sha256": "acf15a811355dc38f6af26dd6588364304d34a134408ad92f0521c303bef595d",
+  "rubric_sha256": "c0c9973d5afea7e58b9967df059467021fe85b10751cef4c12a7aacac24024b1",
+  "reviewer": "archive-quality-independent-reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "relationship": "Previously reviewed the package and supplied a wording finding; did not author candidate, case, fixture, or trial response."
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed command events item_1-item_6 / lines 5,7,10,11,13,15; supporting answer.md lines 1-19",
+        "observation": "All six command calls are the unrelated local code-review guidance read, local fixture/guidance inventory and an in-memory grouping calculation. No stream-processing-design entrypoint/reference body read appears, and the answer introduces no watermark, lateness, ongoing-state, join or replay workflow. Native metadata discovery exposed the candidate but does not establish body activation; no unrecorded-loading claim is made."
+      }
+    },
+    {
+      "id": "bounded-result",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4-16; supporting trace.jsonl item_6 / line 15",
+        "observation": "Recommends a plain dictionary accumulation under row[date] with every row amount included, explicitly preserving identical rows. Derives 2026-10-01=7 and 2026-10-02=4, with no deduplication or new event identity. The recorded in-memory proposed function execution completed with exit 0 and these exact totals."
+      }
+    },
+    {
+      "id": "scope-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_6 completed / line 15; supporting answer.md line 19, workspace-changes.json changes/forbidden_changes, empty workspace.patch",
+        "observation": "Only local reads and the proposed grouping function compiled from a string were executed; item_6 prints File unchanged: True. Original/final fixture hashes match, change arrays and patch are empty, and no external or delegation event is observed. Final answer accurately reports only local in-memory verification and keeps the recommendation local to grouping."
+      }
+    }
+  ],
+  "scored_at": "2026-10-01T18:55:39.529910+00:00",
+  "rubric_result": "pass",
+  "critical_results": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "scope-evidence",
+      "score": 2,
+      "result": "pass"
+    }
+  ],
+  "major_results": [
+    {
+      "id": "bounded-result",
+      "score": 2,
+      "result": "pass"
+    }
+  ],
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "interpretation": "Observable nontrigger rubric pass for this completed captured trial under recorded capability deviations. The candidate metadata was available, but no body loading or streaming workflow is observed. This is not proof about unrecorded loading or an isolated-candidate causal comparison; the run is not strictly case-compliant.",
+  "activation_evidence": {
+    "metadata": {
+      "observed": true,
+      "artifact": "evidence/discovery.json",
+      "locator": "candidate_metadata_observed and candidate_entries[0]",
+      "observation": "Metadata-only native repository discovery exposed enabled candidate among 54 total skills."
+    },
+    "entrypoint_body": {
+      "observed": false,
+      "artifact": "evidence/trace.jsonl",
+      "locator": "all six completed command events item_1-item_6",
+      "observation": "No candidate entrypoint or reference body read in captured calls. Unrecorded loading cannot be excluded."
+    }
+  },
+  "reviewer_checks": {
+    "evidence_file_hashes": "passed against run.json evidence_files",
+    "raw_final_fixture_hashes": "passed against manifest fixture_files",
+    "workspace_patch_bytes": 0,
+    "supplied_verifier": "not applicable: nontrigger review case has verification_argv=null",
+    "external_or_engine_validation": "not run",
+    "sealed_original_trial": "passed assertSealedEvidence: captured evidence and actual final workspace unchanged"
+  }
+}

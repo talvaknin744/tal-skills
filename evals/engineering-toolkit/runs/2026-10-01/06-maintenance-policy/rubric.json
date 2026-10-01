@@ -1,0 +1,41 @@
+{
+  "case_id": "sparse-tail-metadata-pressure",
+  "rubric_sha256": "75077af25fc324a295a03ccfcb6e93be81cd94a2133eb9f4bf18672a8fcd771a",
+  "rubric": [
+    {
+      "id": "distribution-cause",
+      "severity": "critical",
+      "criterion": "Uses the dense/middle/tail distribution and changed producer behavior to explain why the old dense-first policy wastes work; separates reducing new fragmentation from clearing existing debt, treats the producer correlation as evidence to investigate, and does not declare aggregate CPU/disk headroom sufficient."
+    },
+    {
+      "id": "net-yield",
+      "severity": "critical",
+      "criterion": "Distinguishes gross source retirement from net capacity after destination allocation; recognizes dense trial yield of zero versus 300 GiB middle and 400 GiB tail, and reasons from metadata operation counts as well as bytes rather than ranking only by copy throughput."
+    },
+    {
+      "id": "foreground-budget",
+      "severity": "critical",
+      "criterion": "Identifies metadata as the currently constrained shared resource and the foreground p99 violation; rejects a blanket increase to 64 workers, calls for shared downstream rate/outstanding-work accounting and foreground throttle or pause criteria, and avoids assigning unsupported universal settings."
+    },
+    {
+      "id": "policy-and-planner",
+      "severity": "major",
+      "criterion": "Recommends eligibility and selection suited to the supplied distribution, addresses overlap/gaps and deferred debt, and bounds candidates, planning CPU/memory/time, queued plans, and downstream work independently; does not require copying named proprietary algorithms or using three strategies regardless of evidence."
+    },
+    {
+      "id": "controller-direction",
+      "severity": "critical",
+      "criterion": "Explains that lowering the occupancy threshold for live_fraction < threshold admits fewer volumes, contradicting the stated admission-count goal; separates that fact from useful yield, since excluding zero-yield dense work may help, and requires verifying the debt response. Addresses delayed observations, doubling/halving oscillation, actuator bounds, and controlled recovery rather than assuming stability."
+    },
+    {
+      "id": "observable-validation",
+      "severity": "major",
+      "criterion": "Proposes baseline/candidate checks on dense, middle, tail, small-object and shifting inputs plus concurrent foreground traffic and delayed/missing signals; records net yield, metadata/planner/IO/network peaks, serving p99/errors, debt age, and a semantic content/deletion oracle with explicit success/failure conditions."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves fixture files unchanged, gives no production mutation command, and distinguishes supplied measurements, recommendations, and unexecuted validation rather than claiming the tuning or producer correction was verified."
+    }
+  ]
+}

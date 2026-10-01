@@ -1,0 +1,4 @@
+# Aggregation latency
+The service runs on Kubernetes. Each container requests 250m CPU and has a 500m CPU limit. The node dashboard averages 30% CPU over five minutes. The container reaches 0.50 CPU cores during request bursts; cgroup throttled periods increase during those bursts. Process samples show runnable application threads, little database pool wait, and no corresponding network or database latency change.
+After a feature release, each request performs more JSON serialization and invokes eight required leaves. The root waits for all leaves and has a 300 ms deadline. Root p99 increased from 180 to 600 ms. Leaf latency samples are available only for successful completed calls, and no per-leaf correlation analysis has been performed.
+The proposed fix adds more fan-out because the host has spare CPU. A test environment with the same container limits and representative response sizes is available, but no experiment has run.

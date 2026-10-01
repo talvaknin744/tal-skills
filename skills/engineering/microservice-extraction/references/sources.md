@@ -22,3 +22,19 @@ All numeric locators below are one-based **PDF pages**, verified 2026-09-29. Use
 The first edition recommends separating schemas while keeping application code together before separating the services. The second explicitly considers code-first and data-first extraction and weighs their different benefits and risks. This skill therefore requires a reasoned sequence and a viable plan for both layers, rather than imposing data-first for every migration.
 
 Migration tooling, replication guarantees, and supported schema operations depend on the actual platform. Consult current primary documentation when those details determine whether a proposed handoff is safe; historical product examples in the books are not an implementation contract.
+
+## Executable boundary rehearsal
+
+Sentry, Mark Story, [Removing risk from our multi-region design with simulations](https://blog.sentry.io/removing-risk-from-our-multiregion-design-with-simulations/),
+2024-05-16. Complete substantive prose and examples read 2026-10-01, including
+runtime boundary metadata, incremental enforcement, tests in both modes, CI cost,
+confusing stack traces, and missed branches found in staging. Diagrams were not
+independently measured; the reported company outcome was not reproduced.
+
+The reference adapts the idea into a project-specific rehearsal with separate
+physical validation. It does not require Django monkeypatching or treat a passing
+simulation as proof of a network or database split. Current [Django 5.2 database
+documentation](https://docs.djangoproject.com/en/5.2/topics/db/multi-db/#cross-database-relations)
+confirms that foreign keys and many-to-many relationships cannot span databases;
+replacing one still requires an explicit application contract. This framework
+crosscheck applies only to the selected Django version, not every datastore.

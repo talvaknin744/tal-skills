@@ -1,0 +1,46 @@
+{
+  "case_id": "reclaim-after-owner-takeover",
+  "rubric_sha256": "c6078839e0ca15add972e6ce98ea3d8b19d81e122b507ab91deb3c08933afead",
+  "rubric": [
+    {
+      "id": "stale-publication",
+      "severity": "critical",
+      "criterion": "Gives A's copy/pause, deletion of x, authoritative update of y to version 2, B's takeover, and A's resumed unconditional publication as a concrete schedule that can restore x or overwrite y's newer value/location; identifies that the final epoch check cannot undo protected effects and acknowledges claim itself is atomic."
+    },
+    {
+      "id": "source-coverage",
+      "severity": "critical",
+      "criterion": "Identifies has_more=true, unprocessed z, and saving a cursor before durable publication as failures to prove complete backfill. Requires a source membership/cursor or rescan/catch-up contract supported by the supplied APIs, durable progress tied to accepted outcomes, and distinct incomplete/scan-complete/safely-published states; does not invent snapshot or change-log guarantees for the mutable scan."
+    },
+    {
+      "id": "durable-before-retire",
+      "severity": "critical",
+      "criterion": "Identifies buffered copy followed by source deletion as data-loss risk after a crash and requires durable_seal plus content/version evidence before publication and eventual retirement; a successful buffered-copy return is not accepted as durability."
+    },
+    {
+      "id": "atomic-publication",
+      "severity": "critical",
+      "criterion": "Uses metadata_tx to validate ownership/input or manifest versions and conditionally publish while preserving tombstones, or an equivalent protocol supported by the supplied contract; rejects a separate pre-effect lease check as sufficient fencing and avoids unprovided cross-store atomic transactions."
+    },
+    {
+      "id": "retirement-proof",
+      "severity": "critical",
+      "criterion": "Uses the authoritative no-live-reference/no-reader-pin/no-retention-hold conditions, atomic retired-state admission gate, and generation-bound proof with delete_retired; checks reader resolve/pin versus retirement races, rejects force deletion based on completion or copying, and recognizes a valid immutable proof can permit repeated cleanup after ownership changes."
+    },
+    {
+      "id": "recoverable-boundaries",
+      "severity": "major",
+      "criterion": "Covers recovery after durable output before publication, lost publication response, publication before cleanup, and old-owner resumption; reconciles durable state and accounts for orphan output/incomplete cleanup while retaining stable job and source generation identity."
+    },
+    {
+      "id": "semantic-oracle",
+      "severity": "major",
+      "criterion": "Proposes deterministic schedules checking y's authoritative version-2 bytes after crash/restart, x remaining deleted, z coverage/readability, pinned-reader/admission behavior, conditional publication outcomes, source-generation retirement, and recoverable temporary space; does not substitute scan status, worker exit, or successful claim for semantic correctness."
+    },
+    {
+      "id": "scope-and-source-limit",
+      "severity": "critical",
+      "criterion": "Leaves the fixture unchanged, bases the protocol on supplied APIs, marks suggested schedules unexecuted, and does not infer a universal crash-safe reclamation, ownership, or engine-expiration guarantee from source article strategy names."
+    }
+  ]
+}

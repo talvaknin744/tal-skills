@@ -1,0 +1,11 @@
+# Airbnb archive coverage — 2026-10-01
+
+`index.json` contains 71 distinct entries from the [official Airbnb engineering RSS feed](https://medium.com/feed/airbnb-engineering) and 25 successful publication-scoped tag feeds, dated February 1, 2016 through September 29, 2026. Tags were discovered from RSS item/category metadata. Enumeration retained titles, link URLs, publication timestamps and category metadata only. Feed article bodies were not read or saved.
+
+Coverage is **partial**. The main RSS payload has ten entries and no next-page link; `limit=100` and `before=2026-06-09` returned the same payload. Direct requests to the [publication archive](https://medium.com/airbnb-engineering/archive), its current `/all` route and JSON probes received HTTP 403. Browser extraction showed an archive shell with topic/year controls but no story metadata. A feed terminal is not a historical archive terminal.
+
+Medium began returning HTTP 429 during tag discovery. Of 94 requested tag feeds, 25 succeeded and 69 returned 429. The recorded bounded run continued after the first rate-limit response; all observed failures remain in the ledger. The rerun script now stops subsequent tag requests at the first 429. That updated behavior has not been rerun. Failed tags remain an unresolved frontier, and older posts that no longer appear in any discovered feed remain unenumerated.
+
+The [official Medium sitemap index](https://medium.com/sitemap/sitemap.xml) exposes 27,974 child sitemaps for the whole platform. Its root was parsed in full. Those global descendants were not walked, and no Airbnb-specific sitemap was found by the recorded probes. Earlier publication history remains a gap.
+
+All previous engineering-toolkit JSON ledgers were checked for normalized URL and Medium story-ID duplicates. They contain one older Airbnb payments candidate; none of the 71 enumerated entries overlaps it. No deep reading or article recommendation was performed. `coverage.json` records all 107 endpoint requests, response statuses, page/count units, terminal conditions, exclusions and gaps. `enumerate.py` fetches metadata using serial requests at least 1.1 seconds apart and 10/25-second connect/read timeouts, with a 100-tag / 240-second discovery bound.

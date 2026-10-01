@@ -1,0 +1,58 @@
+{
+  "id": "infra-datadog-config-distribution",
+  "publisher_id": "datadog",
+  "title": "How we scaled fast, reliable configuration distribution to thousands of workload containers",
+  "url": "https://www.datadoghq.com/blog/engineering/scaling-config-delivery-containers/",
+  "published_at": "2025-06-17",
+  "read_status": "deep_read",
+  "read_scope": "Complete substantive body from configuration challenge through lessons and future work; diagrams cross-read with prose; no code executed.",
+  "prior_deep_read_duplicate": false,
+  "topics": [
+    "configuration distribution",
+    "data placement",
+    "control plane",
+    "static stability",
+    "deployment bootstrap"
+  ],
+  "practice": {
+    "trigger": "Many workers repeatedly read small, slowly changing tenant configuration.",
+    "problem": "Worker reads, connections, cold caches and missing invalidations couple serving to the central configuration database.",
+    "mechanism": "Publish snapshots through object storage and full tenant updates through Kafka; workers serve from local RocksDB; initial snapshot gates readiness and both distribution paths run normally.",
+    "limits": "Configuration must fit locally and update traffic must stay manageable; stale configuration needs an operation-specific freshness contract; reported fleet results are not guarantees.",
+    "counterexample": "Direct-database fallback can recreate overload; policy revocations can require stricter freshness than parsing rules.",
+    "verification": "Check versions and policy effect through snapshot/update overlap, missing notification, deletion, stale replay, each path outage and simultaneous startup."
+  },
+  "crosschecks": [
+    {
+      "url": "https://kafka.apache.org/43/design/design/",
+      "read_scope": "Message Delivery Semantics and Log Compaction guarantees; current docs linked as latest from Kafka 4.1.",
+      "finding": "External output and consumer position require coordination. Compaction preserves record order but deletion markers have a configured retention horizon."
+    }
+  ],
+  "unresolved": [
+    "Snapshot watermark and update replay boundary",
+    "Per-tenant ordering and application version rule",
+    "Deletion semantics",
+    "Local state and consumer offset atomicity"
+  ],
+  "packaging": {
+    "recommendation": "existing references",
+    "targets": [
+      "skills/engineering/distributed-system-patterns/references/serving.md",
+      "skills/engineering/microservice-operations/references/capacity.md",
+      "skills/infrastructure/infrastructure-change-safety/references/rollout.md"
+    ],
+    "new_skill_justified": false,
+    "reason": "Existing workflows already own topology, capacity and rollout; the account omits protocol details needed for a separate implementation skill."
+  },
+  "checks_executed": "Sources read and crosschecked; no runtime model, fault injection or production test executed.",
+  "implementation": {
+    "status": "implemented conditional reference in existing package",
+    "paths": [
+      "skills/infrastructure/infrastructure-change-safety/references/configuration-distribution.md",
+      "skills/infrastructure/infrastructure-change-safety/SKILL.md",
+      "skills/infrastructure/infrastructure-change-safety/references/sources.md"
+    ],
+    "runtime_checks": "not executed"
+  }
+}

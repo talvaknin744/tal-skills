@@ -1,0 +1,63 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "sparse-tail-metadata-pressure",
+      "title": "A shifted distribution needs useful-yield and downstream budgets",
+      "tags": ["distribution", "metadata-amplification", "control", "foreground-protection"],
+      "prompt": "Review observations.md and proposal.md. Explain the maintenance bottleneck and whether the proposed tuning is justified. Recommend the smallest evidence-based policy and control changes, including what to investigate in the producer, and a validation plan with explicit success and failure outcomes. Keep all files unchanged; no production commands are authorized.",
+      "fixture_dir": "evals/background-maintenance/fixtures/sparse-tail-metadata-pressure",
+      "fixtures": ["observations.md", "proposal.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "distribution-cause", "severity": "critical", "criterion": "Uses the dense/middle/tail distribution and changed producer behavior to explain why the old dense-first policy wastes work; separates reducing new fragmentation from clearing existing debt, treats the producer correlation as evidence to investigate, and does not declare aggregate CPU/disk headroom sufficient."},
+        {"id": "net-yield", "severity": "critical", "criterion": "Distinguishes gross source retirement from net capacity after destination allocation; recognizes dense trial yield of zero versus 300 GiB middle and 400 GiB tail, and reasons from metadata operation counts as well as bytes rather than ranking only by copy throughput."},
+        {"id": "foreground-budget", "severity": "critical", "criterion": "Identifies metadata as the currently constrained shared resource and the foreground p99 violation; rejects a blanket increase to 64 workers, calls for shared downstream rate/outstanding-work accounting and foreground throttle or pause criteria, and avoids assigning unsupported universal settings."},
+        {"id": "policy-and-planner", "severity": "major", "criterion": "Recommends eligibility and selection suited to the supplied distribution, addresses overlap/gaps and deferred debt, and bounds candidates, planning CPU/memory/time, queued plans, and downstream work independently; does not require copying named proprietary algorithms or using three strategies regardless of evidence."},
+        {"id": "controller-direction", "severity": "critical", "criterion": "Explains that lowering the occupancy threshold for live_fraction < threshold admits fewer volumes, contradicting the stated admission-count goal; separates that fact from useful yield, since excluding zero-yield dense work may help, and requires verifying the debt response. Addresses delayed observations, doubling/halving oscillation, actuator bounds, and controlled recovery rather than assuming stability."},
+        {"id": "observable-validation", "severity": "major", "criterion": "Proposes baseline/candidate checks on dense, middle, tail, small-object and shifting inputs plus concurrent foreground traffic and delayed/missing signals; records net yield, metadata/planner/IO/network peaks, serving p99/errors, debt age, and a semantic content/deletion oracle with explicit success/failure conditions."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Leaves fixture files unchanged, gives no production mutation command, and distinguishes supplied measurements, recommendations, and unexecuted validation rather than claiming the tuning or producer correction was verified."}
+      ]
+    },
+    {
+      "id": "reclaim-after-owner-takeover",
+      "title": "Paginated backfill and retirement need complete coverage and durable publication",
+      "tags": ["backfill", "reclamation", "ownership", "pause-resume", "deletion-semantics"],
+      "prompt": "Review the paginated backfill and reclamation worker in design.md against the supplied storage contract. Are the persisted cursor and completion lease check sufficient? Give a concrete pause/delete/update/takeover and crash schedule, recommend a minimal enforceable protocol using the stated APIs, and specify coverage and semantic checks after recovery. Keep the file unchanged; do not run destructive operations or invent extra datastore guarantees.",
+      "fixture_dir": "evals/background-maintenance/fixtures/reclaim-after-owner-takeover",
+      "fixtures": ["design.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "stale-publication", "severity": "critical", "criterion": "Gives A's copy/pause, deletion of x, authoritative update of y to version 2, B's takeover, and A's resumed unconditional publication as a concrete schedule that can restore x or overwrite y's newer value/location; identifies that the final epoch check cannot undo protected effects and acknowledges claim itself is atomic."},
+        {"id": "source-coverage", "severity": "critical", "criterion": "Identifies has_more=true, unprocessed z, and saving a cursor before durable publication as failures to prove complete backfill. Requires a source membership/cursor or rescan/catch-up contract supported by the supplied APIs, durable progress tied to accepted outcomes, and distinct incomplete/scan-complete/safely-published states; does not invent snapshot or change-log guarantees for the mutable scan."},
+        {"id": "durable-before-retire", "severity": "critical", "criterion": "Identifies buffered copy followed by source deletion as data-loss risk after a crash and requires durable_seal plus content/version evidence before publication and eventual retirement; a successful buffered-copy return is not accepted as durability."},
+        {"id": "atomic-publication", "severity": "critical", "criterion": "Uses metadata_tx to validate ownership/input or manifest versions and conditionally publish while preserving tombstones, or an equivalent protocol supported by the supplied contract; rejects a separate pre-effect lease check as sufficient fencing and avoids unprovided cross-store atomic transactions."},
+        {"id": "retirement-proof", "severity": "critical", "criterion": "Uses the authoritative no-live-reference/no-reader-pin/no-retention-hold conditions, atomic retired-state admission gate, and generation-bound proof with delete_retired; checks reader resolve/pin versus retirement races, rejects force deletion based on completion or copying, and recognizes a valid immutable proof can permit repeated cleanup after ownership changes."},
+        {"id": "recoverable-boundaries", "severity": "major", "criterion": "Covers recovery after durable output before publication, lost publication response, publication before cleanup, and old-owner resumption; reconciles durable state and accounts for orphan output/incomplete cleanup while retaining stable job and source generation identity."},
+        {"id": "semantic-oracle", "severity": "major", "criterion": "Proposes deterministic schedules checking y's authoritative version-2 bytes after crash/restart, x remaining deleted, z coverage/readability, pinned-reader/admission behavior, conditional publication outcomes, source-generation retirement, and recoverable temporary space; does not substitute scan status, worker exit, or successful claim for semantic correctness."},
+        {"id": "scope-and-source-limit", "severity": "critical", "criterion": "Leaves the fixture unchanged, bases the protocol on supplied APIs, marks suggested schedules unexecuted, and does not infer a universal crash-safe reclamation, ownership, or engine-expiration guarantee from source article strategy names."}
+      ]
+    },
+    {
+      "id": "finite-local-cleanup-nontrigger",
+      "title": "A finite local filename filter does not require a maintenance controller",
+      "tags": ["activation", "scope", "local-cleanup"],
+      "prompt": "Review cleanup.py against requirements.md. Which listed filenames would the filter select, and what is the smallest correction needed? Keep both files unchanged and limit the answer to this finite local filename-filter review.",
+      "fixture_dir": "evals/background-maintenance/fixtures/finite-local-cleanup-nontrigger",
+      "fixtures": ["requirements.md", "cleanup.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Handles the finite local filename-filter question without automatically loading background-maintenance or introducing distributed ownership, resource budgets, control loops, compaction, or production maintenance procedures."},
+        {"id": "actual-selection", "severity": "major", "criterion": "Correctly identifies a.tmp, b.tmp.backup, and tmp-report.txt as selected by the current substring predicate, while c.txt is not selected."},
+        {"id": "smallest-correction", "severity": "major", "criterion": "Recommends name.endswith('.tmp') or an equivalent exact case-sensitive suffix predicate, which selects only a.tmp under the stated requirements; does not redesign the script or execute deletion."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves both fixture files unchanged, stays within the supplied local semantics, and makes no unsupported claim that cleanup or a production check ran."}
+      ]
+    }
+  ]
+}

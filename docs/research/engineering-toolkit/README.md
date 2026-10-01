@@ -9,6 +9,11 @@ The subsequent [article extension](extensions/README.md) adds 17 new deep reads
 and focused improvements to nine existing skills. Its source records, reviews
 and evaluation cases are separate from the initial research window below.
 
+The [1 October archive review](2026-10-01/README.md) revisits all 60 publishers,
+indexes metadata with named history gaps, reads 29 selected articles, and adds
+focused stream-processing and background-maintenance guidance. Its research and
+verification records are separate from the initial window.
+
 ## Coverage and evidence
 
 The [publisher survey](publisher-survey.json) contains **60 distinct engineering

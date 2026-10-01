@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-october-maintenance-positive-03",
+  "run_evidence_sha256": "aaa732c66d7d050f918ccc3b4b05dd924e4995b6218def4aeef394dbe259b690",
+  "final_workspace_tree_sha256": "1d1d2163bb091235af2c2d6830db2f7b03d48f8c36a46e9df499ac821fc07e10",
+  "case_id": "sparse-tail-metadata-pressure",
+  "candidate_tree_sha256": "eb7254883b66001e6dac82626d785764aff6c70129e1e90ff558788be7acd15f",
+  "rubric_sha256": "75077af25fc324a295a03ccfcb6e93be81cd94a2133eb9f4bf18672a8fcd771a",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "distribution-cause",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7-13, 25-27, 41, 43",
+        "observation": "Explains zero-yield dense batches versus middle/tail work under the shifted distribution and rejects aggregate CPU/disk/network headroom as metadata headroom. Producer investigation uses low-byte-rate small-object traces, closure reasons and latency bounds, explicitly treating the timer correlation as unproved. Clearing measured debt is distinguished from reducing new debt and from all recoverable slack."
+      }
+    },
+    {
+      "id": "net-yield",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-13, 25-27, 31, 41",
+        "observation": "Table gives dense/middle/tail net yields 0/300/400 GiB after whole destination allocation, with 250,000/10,000,000/10,000,000 updates and GiB per million updates. Explains why gross retirement/jobs and copied bytes conceal actual progress; accounts for temporary allocation. Independently checked stated 800 million updates and 29,000 GiB net for repeating middle/tail five-source batches."
+      }
+    },
+    {
+      "id": "foreground-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1-3, 29-39, 50-51",
+        "observation": "Names metadata and foreground p99 180 ms versus <100 ms objective, rejects 64 workers, and treats nominal 40,000/s headroom as unsafe without mixed-load evidence. Requires shared operation-level rate/burst accounting across strategies/repairs/retries, bounded outstanding work/temp capacity and throttle/pause on latency/queue pressure. Eight workers and threshold examples are scoped experimental bounds, not universal settings."
+      }
+    },
+    {
+      "id": "policy-and-planner",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 19-21, 25-33, 41, 49, 51, 53",
+        "observation": "Proposes one bounded positive-net-yield policy: measured tail then middle, with age/deadline treatment and a separately investigated dense candidate if its slack matters. One initial policy avoids overlap; actual updates and all strategies share budget if concurrent. Bounds candidate enumeration, planning time/memory, active work, admission slots and pending plans via on-demand planning; separately bounds downstream operations and temporary space. No prescribed proprietary algorithm or fixed three-policy count."
+      }
+    },
+    {
+      "id": "controller-direction",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 17-20, 25, 37-41, 52-53",
+        "observation": "Demonstrates 0.95->0.475 excludes dense, 0.2375 excludes middle, and repeated halving excludes tail under live_fraction < threshold; doubling can exceed meaningful bounds. Separates excluding zero-yield work from admitting more work. Recommends removing automatic tuning initially, verifies bounded debt progress/arrival assumptions, accounts for three-minute lag and job delay, missing/stale signals, hysteresis, bounded increases, gradual resume and escalation."
+      }
+    },
+    {
+      "id": "observable-validation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 43, 45-55; especially lines 51 and 54",
+        "observation": "Partial: baseline/candidate dense/middle/tail and shifted replay, small-object producer traces, concurrent foreground work, shared limits, delayed/missing/noisy signals, net-yield/SLO/debt-horizon outcomes and interruption/resource reconciliation are concrete. However, line 54 says live data remains correct and locations are not lost without defining an independent content/checksum and preserved-deletion oracle. The plan also does not explicitly require recording planner/metadata/I/O/network resource peaks as requested; disk/network budgets elsewhere do not supply those observations. These material verification omissions prevent full credit."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[]; forbidden_changes=[]; evidence/workspace.patch empty; evidence/trace.jsonl completed items 1-8; evidence/answer.md lines 3, 41, 43, 57",
+        "observation": "Original/final fixture byte and manifest-hash checks match; patch and changes are empty. All seven commands are file reads/listings; no production mutation, web or delegation event is captured. The answer separates supplied observations, arithmetic estimates, producer correlation and proposed unexecuted validation. It does not claim tuning or producer correction verified. Native candidate body read is observed at trace item_1 and references at item_5; inherited guidance/read-isolation/network-enforcement deviations remain, with case_compliant=false. This score binds only completed retry 03 and leaves earlier timeout evidence untouched."
+      }
+    }
+  ]
+}
