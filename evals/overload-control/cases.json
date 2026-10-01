@@ -1,0 +1,133 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "tenant-fanout",
+      "title": "Local limits do not bound fleet work or establish fairness",
+      "tags": [
+        "overload-control",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Design an overload-control policy for service.md. Explain admission placement, resource and tenant budgets, accepted-work ownership, feedback signals and recovery checks. Keep the design read-only.",
+      "fixture_dir": "evals/overload-control/fixtures/tenant-fanout",
+      "fixtures": [
+        "service.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "planning",
+      "rubric": [
+        {
+          "id": "budget-scope",
+          "severity": "critical",
+          "criterion": "Accounts for four local limits, three-query fan-out and the shared 100-connection budget without claiming local caps establish fleet enforcement."
+        },
+        {
+          "id": "fairness",
+          "severity": "critical",
+          "criterion": "Defines trusted tenant/work-class isolation or scheduling with bounded queues and meaningful fairness observations rather than equal request tokens alone."
+        },
+        {
+          "id": "ownership",
+          "severity": "critical",
+          "criterion": "Preserves accepted durable exports and holds execution capacity until underlying work has actually finished or stopped despite caller disconnect."
+        },
+        {
+          "id": "feedback-recovery",
+          "severity": "major",
+          "criterion": "Separates admitted useful-work latency from rejection feedback, bounds retries, considers autoscaling demand signals and specifies controlled overload/recovery checks."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "adaptive-feedback",
+      "title": "Fast rejection latency poisons a concurrency controller",
+      "tags": [
+        "overload-control",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Review controller.md and identify the consequential control-loop defects. Propose a bounded correction and a verification plan for overload and recovery. Leave files unchanged.",
+      "fixture_dir": "evals/overload-control/fixtures/adaptive-feedback",
+      "fixtures": [
+        "controller.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "sample-population",
+          "severity": "critical",
+          "criterion": "Identifies that fast local rejections corrupt the latency feedback and selects clearly defined admitted-work samples plus explicit rejection and demand measurements."
+        },
+        {
+          "id": "control-scope",
+          "severity": "critical",
+          "criterion": "Accounts for bypass traffic and shared downstream resources before claiming the proxy controls total concurrency."
+        },
+        {
+          "id": "stability",
+          "severity": "major",
+          "criterion": "Retains justified bounds, controlled baseline/probe behavior, damping and bounded retries, validating goodput, latency, queue/resource bounds and recovery rather than total response count."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "status-copy",
+      "title": "An error-message wording edit does not require shedding",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review message.md and provide the requested spelling correction only. Keep the file unchanged; response policy and admission behavior are outside this request.",
+      "fixture_dir": "evals/overload-control/fixtures/status-copy",
+      "fixtures": [
+        "message.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not load overload-control or redesign admission/retry policies for the wording correction."
+        },
+        {
+          "id": "wording",
+          "severity": "major",
+          "criterion": "Supplies Temporarily unavailable as the corrected wording."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    }
+  ]
+}

@@ -43,3 +43,22 @@ successor eligibility, checkpoint compatibility, and how an old owner loses the
 right to act before declaring the handoff complete.
 [Python handler](https://github.com/a2aproject/a2a-python/blob/v1.1.5/src/a2a/server/request_handlers/default_request_handler_v2.py),
 [Go handler](https://github.com/a2aproject/a2a-go/blob/v2.6.0/a2asrv/handler.go)
+
+## Recovery state and lifetime
+
+For A2A executor replacement, record each state's owner, retention, restoration
+source, and cleanup authority:
+
+| State | Required recovery contract |
+| --- | --- |
+| Task/event history | Authorized caller scope, identity, lifecycle state, and observation position |
+| Executor checkpoint | Compatible implementation and resumption boundary |
+| Sandbox files | Environment identity, retained inputs, and restoration steps |
+| Output artifacts | Immutable identity, accessible content, and valid keys |
+| Effect receipts | Operation identity and authoritative committed, rejected, or unknown outcome |
+
+Rehearse executor loss and artifact expiry separately. Check required inputs,
+outputs, and pending effects before resuming or redispatching. If restoration
+fails, report the missing input or declared terminal outcome. History alone
+cannot restore files, execution, or effect results. These application checks
+add no A2A wire guarantee; claim recovery only after observing it.

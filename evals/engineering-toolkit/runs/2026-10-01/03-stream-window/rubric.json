@@ -1,0 +1,36 @@
+{
+  "case_id": "window-finality",
+  "rubric_sha256": "55bff49eb4fc30b0af6683bda3e69caa888863f09c76c4ae53884aa73d137bc2",
+  "rubric": [
+    {
+      "id": "event-time-progress",
+      "severity": "critical",
+      "criterion": "Uses event time for the half-open window, rejects wall-clock/checkpoint finality at 12:05, and waits for both required watermarks at 12:08 without treating a watermark as physical proof that old events cannot arrive."
+    },
+    {
+      "id": "late-policy",
+      "severity": "critical",
+      "criterion": "Admits the specified changes while the window remains unfinalized, including e3 behind the observed progress boundary; emits one immutable final row at 12:08, and rejects e4 after finality with a durable late-data audit rather than changing the append-only result."
+    },
+    {
+      "id": "identity-revision-composition",
+      "severity": "critical",
+      "criterion": "Deduplicates by logical event/version under the source contract rather than transport delivery ID, replaces e2 revision 1 contribution 5 with revision 2 contribution 8 without increasing count, ignores old-revision replay, and visibly rejects the conflicting e1 revision 1 payload without altering the trusted contribution."
+    },
+    {
+      "id": "independent-aggregate",
+      "severity": "critical",
+      "criterion": "Derives intermediate sum/count as 5/1, 15/2, 15/2, 18/2, 25/3, 25/3, 25/3, followed by finalized 25/3 and unchanged output after e4; does not sum correction/replay/conflict rows as independent measurements."
+    },
+    {
+      "id": "retention-verification",
+      "severity": "major",
+      "criterion": "Challenges the 60-second processing-time identity TTL against a two-hour replay horizon and stalled progress; retains identity/revision/prior contribution evidence while repeats remain admissible, or gives a proved permanently closed-window rejection condition. Proposes discriminating arrival/progress/expiry checks with expected output and retained state."
+    },
+    {
+      "id": "scope-evidence",
+      "severity": "critical",
+      "criterion": "Leaves fixtures unchanged, uses no external service, keeps broker-effect redesign outside the requested computation, and separates proposed checks from executed validation."
+    }
+  ]
+}

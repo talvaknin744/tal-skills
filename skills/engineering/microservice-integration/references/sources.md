@@ -30,3 +30,9 @@ Chapter 4, “Integration”:
 Both editions support explicit service boundaries, consumer-aware contracts, and the costs of coupling. The second edition gives more explicit treatment to semantic compatibility, event payload tradeoffs, and UI/team ownership. The workflow preserves contextual choices rather than prescribing one protocol or an event-only architecture.
 
 The concrete rollout/rollback matrix, per-step completion criteria, treatment of inaccessible consumers, scoped test selection, and durable-handoff inspection are independently authored applications of these ideas. Product limits, framework preferences, and historical tooling recommendations from the books are intentionally not installation recipes or claims about current products.
+
+## API evolution field evidence
+
+Shopify's [How Shopify Manages API Versioning and Breaking Changes](https://shopify.engineering/shopify-manages-api-versioning-breaking-changes) (2019-12-17; read 2026-10-01, including its linked controller example) describes named behavioral changes and affected-path instrumentation for definite or possible consumer impact. Its private Ruby tooling is a historical example. The observation-coverage caveat and affected/unaffected telemetry checks in this skill are independently authored applications.
+
+Shopify's [current API versioning documentation](https://shopify.dev/docs/api/usage/versioning) (rolling, checked 2026-10-01) documents fall-forward for inaccessible versions and `X-Shopify-API-Version` as the version served. Its policy distinguishes versioned from unversioned surfaces. The schedule diagram and table differed on one retirement status when checked; this skill adopts no exact retirement deadline. Verify the target surface's current policy and effective contract.

@@ -1,0 +1,522 @@
+{
+  "schema_version": 1,
+  "lane": "infrastructure-and-reliability",
+  "topic": "positive distributed-system design mechanisms",
+  "research_date": "2026-10-01",
+  "counts": {
+    "new_article_text_deep_reads": 3,
+    "new_incident_article_deep_reads": 0,
+    "current_documentation_or_maintainer_crosschecks": 12,
+    "historical_example_policy_section_checks": 1,
+    "runtime_experiments": 0,
+    "model_evaluations": 0,
+    "skills_created": 0,
+    "skills_edited": 0
+  },
+  "method": {
+    "selection": "Positive first-party design guidance complements existing incident and correctness coverage. No archive enumeration performed in this file.",
+    "read_completion_definition": "Complete accessible article text, code and captions; excluded embedded image pixels and linked implementations are declared per article.",
+    "inference": "Six-dimension practices, counterexamples, placement decisions and scenario acceptance conditions are original conditional transfers.",
+    "action_scope": "Research files only; no production mutation, command/config copying, deployment, runtime load test or evaluation.",
+    "retrieval_notes": [
+      "AWS first-party PDF supplied all ten pages of text; screenshots did not return viewable image blocks, so diagram pixels are excluded.",
+      "Google browser follow-up fetches timed out. Direct Python urllib HTTPS fetch from the same Google-owned URL supplied complete body and publication metadata; body was not saved.",
+      "Alloy latest documentation labels v1.20 on inspection. Installed binaries/dependency revisions were not verified."
+    ]
+  },
+  "deduplication": {
+    "inspected_records": [
+      "docs/research/engineering-toolkit/lanes/infra.md",
+      "docs/research/engineering-toolkit/lanes/infra.json",
+      "docs/research/engineering-toolkit/extensions/*.json (recursive exact URL/text matching)",
+      "docs/research/engineering-toolkit/extensions/cache-load-protection.md",
+      "docs/research/engineering-toolkit/extensions/failure-evidence.md",
+      "docs/research/engineering-toolkit/extensions/review-cache-design.md",
+      "docs/research/engineering-toolkit/infrastructure-feasibility.md"
+    ],
+    "exact_matches": [
+      {
+        "source_id": "grafana-gateway-article",
+        "path": "docs/research/engineering-toolkit/lanes/infra.json",
+        "json_path": ".publishers[6].article_candidates[0].url",
+        "previous_status": "surveyed candidate only",
+        "counted_here": "new complete text deep read"
+      }
+    ],
+    "overlaps": [
+      "Retry bounds and bulkheads already belong to microservice-operations/failure-handling.",
+      "Cache surges, hot-key sharing and cold recovery already belong to microservice-operations/capacity and its cache references.",
+      "Whole-domain recovery already belongs to recovery-validation; Terraform resource identity belongs to infrastructure-change-safety."
+    ],
+    "inspected_skill_paths": [
+      "skills/engineering/microservice-operations/SKILL.md",
+      "skills/engineering/microservice-operations/references/capacity.md",
+      "skills/engineering/microservice-operations/references/failure-handling.md",
+      "skills/engineering/distributed-system-patterns/SKILL.md",
+      "skills/infrastructure/infrastructure-change-safety/SKILL.md"
+    ]
+  },
+  "articles": [
+    {
+      "id": "aws-static-article",
+      "publisher": "AWS",
+      "authors": [
+        "Becky Weiss",
+        "Mike Furr"
+      ],
+      "published_at": null,
+      "publication_evidence": "First-party PDF copyright 2019; exact publication date not established.",
+      "new_complete_text_deep_read": true,
+      "previous_status": "not found in prior infra or extension source registers",
+      "read_scope_ref": "aws-static-article",
+      "section_locators": [
+        "Static stability, PDF pages 2–4",
+        "Static stability patterns, pages 4–6",
+        "Under the hood, pages 6–9",
+        "Conclusion, page 10"
+      ],
+      "practice": {
+        "id": "INFRA-DESIGN-STATIC",
+        "trigger": "Zone or provisioning resilience claim.",
+        "problem": "Recovery depends on replacement startup.",
+        "mechanism": "Keep survivor capacity and serving state ready; separate change dependencies.",
+        "limits": "Declare stale-state, durability and routing contracts.",
+        "counterexample": "Replicas share failed egress/config startup.",
+        "verification": "Lose a domain and block control changes; measure useful service.",
+        "evidence_refs": [
+          "aws-static-article",
+          "aws-static-current",
+          "aws-nat-zonal",
+          "aws-nat-regional",
+          "aws-rds-failover"
+        ],
+        "verification_status": "proposed-not-executed"
+      },
+      "skill_recommendation": {
+        "new_distinct_skill": false,
+        "owner": "microservice-operations",
+        "type": "conditional reference extension",
+        "potential_existing_navigation": [
+          "distributed-system-patterns/references/serving.md",
+          "infrastructure-change-safety/references/rollout.md"
+        ],
+        "reason": "Existing owners cover capacity/topology/change safety; deepen control-path independence rather than duplicate broad reliability guidance."
+      }
+    },
+    {
+      "id": "google-slo-cost-article",
+      "publisher": "Google Cloud",
+      "authors": [
+        "Myk Taylor"
+      ],
+      "published_at": "2019-09-09",
+      "publication_evidence": {
+        "structured_datePublished": "2019-09-09",
+        "live_localized_display": "2019-09-10",
+        "published_time": "2019-09-10T00:00:03+0300",
+        "editorial_clarification": "2019-12-12",
+        "interpretation": "Record both observations; structured publication date used for sortable metadata."
+      },
+      "new_complete_text_deep_read": true,
+      "previous_status": "not found in prior infra or extension source registers",
+      "read_scope_ref": "google-slo-cost-article",
+      "section_locators": [
+        "Understanding the production incident cycle",
+        "Graphing user happiness vs. reliability vs. cost",
+        "Laying the foundation to shrink production incidents",
+        "What's next and footnote"
+      ],
+      "practice": {
+        "id": "INFRA-DESIGN-SLO-COST",
+        "trigger": "Choose reliability versus other investment.",
+        "problem": "Unpriced uptime targets miss user value.",
+        "mechanism": "Use outcome SLOs and incident learning to prioritize cost.",
+        "limits": "Cost curve is explanatory; preserve integrity/security constraints.",
+        "counterexample": "Aggregate success hides a critical cohort.",
+        "verification": "Compare alternatives under identical outcome/window/cost assumptions.",
+        "evidence_refs": [
+          "google-slo-cost-article",
+          "google-targets",
+          "google-budget-example"
+        ],
+        "verification_status": "proposed-not-executed"
+      },
+      "skill_recommendation": {
+        "new_distinct_skill": false,
+        "owner": "microservice-operations",
+        "type": "conditional reference extension",
+        "reason": "Its operating claim already includes user objectives; add costed design choice and cohort sensitivity."
+      }
+    },
+    {
+      "id": "grafana-gateway-article",
+      "publisher": "Grafana Labs",
+      "authors": [
+        "Fatjon Nebiu",
+        "Marco Musso"
+      ],
+      "published_at": "2026-08-21",
+      "publication_evidence": "Date and Professional Services author affiliation in first-party article.",
+      "new_complete_text_deep_read": true,
+      "previous_status": "surveyed candidate in 2026-09-29 infra lane",
+      "read_scope_ref": "grafana-gateway-article",
+      "section_locators": [
+        "Knowing your numbers: capacity planning",
+        "Architecture: what the deployment looks like",
+        "Load testing: simulating real traffic",
+        "What to monitor",
+        "Lessons learned",
+        "What's next"
+      ],
+      "practice": {
+        "id": "INFRA-DESIGN-TELEMETRY",
+        "trigger": "Shared telemetry ingestion gateway.",
+        "problem": "Pressure obscures gateway health.",
+        "mechanism": "Separate diagnostics; provision baseline and test real ingress.",
+        "limits": "Customer numbers and thresholds need workload verification.",
+        "counterexample": "Admission succeeds while export fails.",
+        "verification": "Reconcile identities through pressure/restart and measured catch-up.",
+        "evidence_refs": [
+          "grafana-gateway-article",
+          "alloy-otlp",
+          "alloy-remote-write",
+          "go-memory-limit",
+          "kubernetes-hpa",
+          "otel-internal-metrics",
+          "alloy-memory-limiter",
+          "otel-memory-limiter-pinned"
+        ],
+        "verification_status": "proposed-not-executed"
+      },
+      "skill_recommendation": {
+        "new_distinct_skill": false,
+        "owner": "microservice-operations",
+        "type": "conditional reference extension",
+        "reason": "Capacity and impact diagnosability already belong here; add telemetry-stage accounting and diagnostic-path dependency review."
+      }
+    }
+  ],
+  "crosscheck_findings": [
+    {
+      "id": "STATIC-CURRENT",
+      "claim": "Static serving should not require provisioning during impairment.",
+      "resolution": "Current AWS guidance retains pre-provisioning and local state; application discovery, credentials and update dependencies still need project inspection.",
+      "source_refs": [
+        "aws-static-current"
+      ],
+      "kind": "confirmed-with-application-boundary"
+    },
+    {
+      "id": "NAT-MODE",
+      "claim": "Historical article uses NAT as a zonal foundation.",
+      "resolution": "Current zonal and regional modes differ. Regional expansion may take up to 60 minutes with temporary cross-zone routing; private NAT remains zonal.",
+      "source_refs": [
+        "aws-nat-zonal",
+        "aws-nat-regional"
+      ],
+      "kind": "historical-example-qualified"
+    },
+    {
+      "id": "RDS-RECONNECT",
+      "claim": "Prepared standby avoids new infrastructure.",
+      "resolution": "Multi-AZ DB-instance failover still needs existing connections re-established and appropriate DNS cache behavior.",
+      "source_refs": [
+        "aws-rds-failover"
+      ],
+      "kind": "availability-claim-qualified"
+    },
+    {
+      "id": "SLO-COST",
+      "claim": "Reliability spending follows user requirements.",
+      "resolution": "Current guidance includes failure consequences, risk tolerance, RTO/RPO and cost-benefit analysis; illustrative numeric targets are not defaults.",
+      "source_refs": [
+        "google-targets"
+      ],
+      "kind": "confirmed-with-objective-boundary"
+    },
+    {
+      "id": "BUDGET-POLICY",
+      "claim": "Error budget guides permitted change.",
+      "resolution": "Example policy has scoped-user and emergency/security exceptions. Its four-week window and thresholds are not adopted.",
+      "source_refs": [
+        "google-budget-example"
+      ],
+      "kind": "historical-example-only"
+    },
+    {
+      "id": "OTLP-RETENTION",
+      "claim": "Retry plus buffering avoids transient loss.",
+      "resolution": "Retries are enabled by default but elapsed budget expires; queue is in-memory unless storage is configured; overflow can return retryable error; component health does not establish delivery.",
+      "source_refs": [
+        "alloy-otlp"
+      ],
+      "kind": "guarantee-qualified"
+    },
+    {
+      "id": "WAL-SIGNAL-SCOPE",
+      "claim": "Alloy WAL preserves restart data.",
+      "resolution": "Prometheus remote-write WAL is component-specific; truncation/retention can remove unsent samples. No uniform logs/traces durability follows.",
+      "source_refs": [
+        "alloy-remote-write"
+      ],
+      "kind": "guarantee-qualified"
+    },
+    {
+      "id": "GO-SOFT-LIMIT",
+      "claim": "GC CPU pressure triggers protective scale-out.",
+      "resolution": "GOMEMLIMIT is soft, omits non-runtime memory, and can be exceeded; live queues cannot be collected. Proposed scaling reaction requires measured verification.",
+      "source_refs": [
+        "go-memory-limit"
+      ],
+      "kind": "mechanism-not-guarantee"
+    },
+    {
+      "id": "HPA-DENOMINATOR",
+      "claim": "Utilization thresholds imply safe capacity.",
+      "resolution": "Utilization is relative to requests; HPA is intermittent and depends on metrics. Usable new capacity still requires readiness and schedulable nodes.",
+      "source_refs": [
+        "kubernetes-hpa"
+      ],
+      "kind": "implementation-contract"
+    },
+    {
+      "id": "REFUSAL-LOSS",
+      "claim": "Any refused span means terminal drop.",
+      "resolution": "Metrics record stage outcomes. Upstream limiter returns non-permanent errors; final preservation depends on predecessor retry/retention. Names depend on export format and version.",
+      "source_refs": [
+        "otel-internal-metrics",
+        "alloy-memory-limiter",
+        "otel-memory-limiter-pinned"
+      ],
+      "kind": "overstatement-corrected"
+    }
+  ],
+  "recommendation": {
+    "create_distinct_new_skill": false,
+    "edit_skills_now": false,
+    "preferred_owner": "microservice-operations",
+    "potential_new_reference": "skills/engineering/microservice-operations/references/resilience-design.md (proposal only; not created)",
+    "reason": "All three triggers fit existing operational design. Add conditional depth and navigation instead of a broad overlapping SRE package.",
+    "priorities": [
+      "Control/serving dependency inventory and prepared survivor capacity.",
+      "Costed SLO choices with cohort and integrity boundaries.",
+      "Telemetry stage delivery accounting and diagnostic independence."
+    ]
+  },
+  "verification_scenarios": [
+    {
+      "id": "INFRA-STATIC-01",
+      "practice_id": "INFRA-DESIGN-STATIC",
+      "status": "proposed-not-executed",
+      "setup": "Finite measured workload on warmed replicas across declared domains, with an explicit stale-state policy.",
+      "schedule": [
+        "Remove one domain while provisioning and configuration updates are denied.",
+        "Compare a design that requires replacement startup.",
+        "Expire a required local configuration/credential and verify the declared safety policy.",
+        "Resume updates and reconcile state."
+      ],
+      "oracle": "Successful eligible operations, latency, survivor saturation, actual control calls, safe stale-state behavior and update resumption.",
+      "passing_control": "Adequate ready survivors within the measured workload and a valid retained-state contract.",
+      "failing_control": "Survivors require replacement launch or fetch missing configuration.",
+      "limits": "A local model cannot establish AWS fault-domain isolation or real client reconnection."
+    },
+    {
+      "id": "INFRA-SLO-COST-01",
+      "practice_id": "INFRA-DESIGN-SLO-COST",
+      "status": "proposed-not-executed",
+      "setup": "Two reliability options with declared costs and user-outcome measurements.",
+      "schedule": [
+        "Include an improvement that raises aggregate success but misses a critical cohort.",
+        "Compare a cohort-targeted option under the same window.",
+        "Introduce an integrity failure that is outside the availability budget."
+      ],
+      "oracle": "Decision retains cohort evidence and integrity constraint, prices failure consequences, and records reversible assumptions.",
+      "passing_control": "Objective/cost tradeoff can be reproduced from supplied measurements.",
+      "failing_control": "Highest replica count or average uptime chosen without user/cost evidence.",
+      "limits": "Hypothetical cost comparison is not a deployed reliability or financial result."
+    },
+    {
+      "id": "INFRA-TELEMETRY-01",
+      "practice_id": "INFRA-DESIGN-TELEMETRY",
+      "status": "proposed-not-executed",
+      "setup": "Finite spans with stable test identities, explicit sender retention, exporter queue/retry settings and independent diagnostic route.",
+      "schedule": [
+        "Rate-limit the sink until queue pressure appears.",
+        "Restart the gateway with in-memory and configured-persistent queue alternatives.",
+        "Expire a retry window and include a sender that retries a refusal.",
+        "Recover the sink and measure catch-up."
+      ],
+      "oracle": "Source/admission/sink identity reconciliation, duplicates/loss, resource bounds, diagnostic continuity and recovery deadline.",
+      "passing_control": "Expected delivery or explicit bounded loss matches the chosen contract, with stage evidence still available.",
+      "failing_control": "Accepted count alone is reported as delivery, or health telemetry uses the saturated gateway.",
+      "limits": "Runtime verification needs actual binary, storage volume, sink contract and authorized environment; no experiment ran."
+    }
+  ],
+  "sources": [
+    {
+      "id": "aws-static-article",
+      "title": "Static stability using Availability Zones",
+      "url": "https://d1.awsstatic.com/builderslibrary/pdfs/static-stability-using-availability-zones.pdf",
+      "kind": "deep-read-article",
+      "read_scope": "All text on ten PDF pages; diagram pixels not inspected.",
+      "publisher": "AWS",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "google-slo-cost-article",
+      "title": "Shrinking the impact of production incidents using SRE principles—CRE Life Lessons",
+      "url": "https://cloud.google.com/blog/products/devops-sre/shrinking-the-impact-of-production-incidents-using-sre-principles-cre-life-lessons",
+      "kind": "deep-read-article",
+      "read_scope": "Complete article text/captions through final footnote; graphic pixels and linked materials excluded.",
+      "publisher": "Google Cloud",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "grafana-gateway-article",
+      "title": "How to scale Alloy as a central telemetry gateway: capacity planning, load testing, and production lessons",
+      "url": "https://grafana.com/blog/how-to-scale-alloy-as-a-central-telemetry-gateway-capacity-planning-load-testing-and-production-lessons/",
+      "kind": "deep-read-article",
+      "read_scope": "Complete article text, code and captions through Get started; embedded image pixels and linked scripts excluded.",
+      "publisher": "Grafana Labs",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "aws-static-current",
+      "title": "Static stability — AWS Fault Isolation Boundaries",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html",
+      "kind": "current-official-guidance",
+      "read_scope": "Static stability section body: retained state, planes and pre-provisioned capacity.",
+      "publisher": "AWS",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "aws-nat-zonal",
+      "title": "NAT gateway basics",
+      "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html",
+      "kind": "current-official-documentation",
+      "read_scope": "First two paragraphs on zonal redundancy and cross-zone dependency; remaining numeric sizing claims not adopted.",
+      "publisher": "AWS",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "aws-nat-regional",
+      "title": "Regional NAT gateways for automatic multi-AZ expansion",
+      "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html",
+      "kind": "current-official-documentation",
+      "read_scope": "Benefits, use cases, how it works and conversion cautions; console/CLI procedure text inspected, no commands executed.",
+      "publisher": "AWS",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "aws-rds-failover",
+      "title": "Failing over a Multi-AZ DB instance for Amazon RDS",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.Failover.html",
+      "kind": "current-official-documentation",
+      "read_scope": "Failover opening paragraphs and Setting the JVM TTL for DNS name lookups; DB-instance scope.",
+      "publisher": "AWS",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "google-targets",
+      "title": "Set realistic targets for reliability",
+      "url": "https://docs.cloud.google.com/architecture/framework/reliability/set-targets",
+      "kind": "current-official-guidance",
+      "read_scope": "Principle overview and recommendations, including consequences, cost-benefit analysis, RTO/RPO; last reviewed 2024-12-30.",
+      "publisher": "Google Cloud",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "google-budget-example",
+      "title": "Example Error Budget Policy",
+      "url": "https://sre.google/workbook/error-budget-policy/",
+      "kind": "historical-example-policy-section",
+      "read_scope": "Selected Goals, Non-Goals, SLO Miss Policy and Background sections; not a complete workbook read or current universal policy.",
+      "publisher": "Google SRE",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "alloy-otlp",
+      "title": "otelcol.exporter.otlp",
+      "url": "https://grafana.com/docs/alloy/latest/reference/components/otelcol/otelcol.exporter.otlp/",
+      "kind": "current-official-documentation",
+      "read_scope": "retry_on_failure, sending_queue, batching, component health and debug metrics; page version label v1.20 (latest).",
+      "publisher": "Grafana Labs",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "alloy-remote-write",
+      "title": "prometheus.remote_write",
+      "url": "https://grafana.com/docs/alloy/latest/reference/components/prometheus/prometheus.remote_write/",
+      "kind": "current-official-documentation",
+      "read_scope": "WAL, Data retention, Extended remote_write outages and corruption sections; page version label v1.20 (latest).",
+      "publisher": "Grafana Labs",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "go-memory-limit",
+      "title": "A Guide to the Go Garbage Collector",
+      "url": "https://go.dev/doc/gc-guide#Memory_limit",
+      "kind": "current-official-documentation",
+      "read_scope": "Memory limit section and Suggested uses only; no complete guide read.",
+      "publisher": "Go project",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "kubernetes-hpa",
+      "title": "Horizontal Pod Autoscaling",
+      "url": "https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/",
+      "kind": "current-official-documentation",
+      "read_scope": "How does a HorizontalPodAutoscaler work and initial Algorithm details: intermittent loop, requests denominator and metrics availability.",
+      "publisher": "Kubernetes project",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "otel-internal-metrics",
+      "title": "Internal telemetry",
+      "url": "https://opentelemetry.io/docs/collector/internal-telemetry/",
+      "kind": "current-official-documentation",
+      "read_scope": "Summary of values observable with internal metrics and Metric names: stage semantics, version/export-format naming.",
+      "publisher": "OpenTelemetry project",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "alloy-memory-limiter",
+      "title": "otelcol.processor.memory_limiter",
+      "url": "https://grafana.com/docs/alloy/latest/reference/components/otelcol/otelcol.processor.memory_limiter/",
+      "kind": "current-official-documentation",
+      "read_scope": "Overview, limits, forced-GC behavior and component health; page version label v1.20 (latest).",
+      "publisher": "Grafana Labs",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    },
+    {
+      "id": "otel-memory-limiter-pinned",
+      "title": "Memory Limiter Processor README",
+      "url": "https://github.com/open-telemetry/opentelemetry-collector/blob/17657ded70ae99a74637ae43859a58f737fa08cf/processor/memorylimiterprocessor/README.md",
+      "kind": "current-pinned-maintainer-documentation",
+      "read_scope": "Functionality and Best Practices sections; upstream source contract only, not the dependency revision inside a deployed Alloy binary.",
+      "publisher": "OpenTelemetry project",
+      "access": "public first-party",
+      "checked_at": "2026-10-01"
+    }
+  ],
+  "verification": {
+    "record_checks": "Passed JSON parsing, unique source IDs, article/count consistency, six required practice dimensions, source references, scenario/practice references, inspected skill paths, local Markdown links, conflict-marker and trailing-whitespace checks. git diff --check was clean; explicit whitespace validation included the new files.",
+    "production_or_runtime_status": "No experiments executed.",
+    "permission_or_environment_block": "None encountered for research. Global subagent capacity was exhausted; all source work completed in this lane."
+  }
+}

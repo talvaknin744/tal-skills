@@ -71,3 +71,29 @@ coherence requirements are original deductions from the documented boundaries.
 These sources establish command contracts, not tested application throughput,
 recovery, or freshness. The reference's failure checks require project-specific
 execution; no new runtime result is claimed by this source ledger.
+
+## Retry coordination contracts
+
+Checked 2026-10-01. The conditional [retry reference](retry-coordination.md) is
+original operational synthesis; these sources are reading evidence, not required
+libraries or a prescribed mesh implementation.
+
+| Source | Read scope and transfer limit |
+| --- | --- |
+| Uber, [How Uber Protects Against Retry Storms](https://www.uber.com/us/en/blog/protecting-against-retry-storms/) (2026-09-17) | Complete substantive text; mechanism figures 3, 4, 6, 8–12, 14 inspected. Ownership, partial adoption, and preservation of an existing retry opportunity inform the reference. Uber's reported production reductions were not reproduced. |
+| Uber, [Large-Scale Automated Dependency Analysis Across Uber's Service Mesh](https://www.uber.com/us/en/blog/automated-dependency-analysis/) (2026-09-15) | Complete substantive text; figures 1 and 12 inspected. Per-request linkage and final outbound outcome support attribution; statistical co-failure thresholds do not prove application causality. |
+| AWS, [Retry behavior](https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html) and [updated retry announcement](https://aws.amazon.com/blogs/developer/announcing-updated-retry-behavior-for-aws-sdks-and-tools/) (2026-05-20) | Retry flow, configuration, quota scope, rollout, and support sections. The described 2026 behavior is opt-in as checked; effective SDK/version/configuration remains the implementation authority. |
+| Envoy, [HTTP routing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing), [retry budget](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/circuit_breaker.proto), [retry policy and route timeout](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto) | Retry/hedging and selected API fields, not the whole manual. `/latest/` resolved to development documentation; concurrent budget, per-try timer, route timer, and attempt count have different scopes. |
+| gRPC, [Retry](https://grpc.io/docs/guides/retry/), [Deadlines](https://grpc.io/docs/guides/deadlines/), [Cancellation](https://grpc.io/docs/guides/cancellation/) | Complete substantive guides. Transparent retry, configured policy, propagation, and cooperative cleanup are separate contracts; RPC commitment and cancellation do not certify a business effect's outcome. |
+
+The derivations, trust-boundary rules, and test oracles are project-independent
+checks to instantiate against the requested system. No model run, network fault
+experiment, or production validation is claimed by this addition.
+
+## Prepared survivor capacity
+
+The conditional static-stability branch in [capacity.md](capacity.md) draws on Becky Weiss and Mike Furr, [Static stability using Availability Zones](https://d1.awsstatic.com/builderslibrary/pdfs/static-stability-using-availability-zones.pdf), AWS Builders’ Library: complete text of ten PDF pages read 2026-10-01; diagrams were not separately inspected, copyright 2019, exact publication date unknown. The current [AWS fault-isolation section](https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html) was also read for retained state, plane separation and provisioned capacity. Historical capacity percentages are not portable recommendations. State/credential validity, application admission and rehearsal acceptance are original synthesis; no cloud failover was executed.
+
+## Resource-specific admission
+
+Sumeer Bhola, Cockroach Labs, [Here’s how CockroachDB keeps your database from collapsing under load](https://www.cockroachlabs.com/blog/admission-control-in-cockroachdb/), 2022-06-06: full body read 2026-10-01, including resource lifetimes, slots/tokens, grant chaining, tenancy and epoch-LIFO. [Current admission-control documentation](https://docs.cockroachlabs.com/docs/stable/admission-control) was checked for node-local scope, queue/starvation and SQL connection limitations. Historical queue discipline, settings and graphs are not defaults. Application queue/deadline policies, useful-completion acceptance and proposed resource cleanup checks in [capacity.md](capacity.md) are original synthesis; no scheduler or database load test was executed.

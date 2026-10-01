@@ -1,0 +1,150 @@
+{
+  "lane": "backend",
+  "verified_at": "2026-10-01",
+  "method": "Two new first-party articles read through the complete extracted main text. No article bodies or source pseudocode retained. Prior-record URL-slug search found no mentions before this dated run. Runtime checks below are current documentation crosschecks, not executed experiments.",
+  "articles": [
+    {
+      "id": "dropbox-adaptive-maintenance",
+      "publisher_id": "dropbox",
+      "title": "Improving storage efficiency in Magic Pocket, our immutable blob store",
+      "url": "https://dropbox.tech/infrastructure/improving-storage-efficiency-in-magic-pocket-our-immutable-blob-store",
+      "published_at": "2026-04-02",
+      "read_scope": "Complete main prose, all seven sections, pseudocode and textual captions; diagrams not independently decoded.",
+      "prior_record_mentions": [],
+      "practice": {
+        "trigger": "Background maintenance must keep resource overhead bounded as workload distributions change.",
+        "problem": "A policy efficient near steady state can leave a sparse tail consuming disproportionate capacity.",
+        "mechanism": "Select complementary strategies by distribution; bound planning, downstream work and locality; tune from fleet signals.",
+        "limits": "Rewriting data can move the bottleneck into metadata, bandwidth or user-facing I/O.",
+        "counterexample": "Increasing compactor concurrency may accelerate reclamation while degrading foreground latency.",
+        "verification": "Replay dense, moderately sparse and extreme-tail inputs; measure reclaimed bytes against I/O, metadata and latency budgets."
+      },
+      "source_limits": "Proprietary implementation; production improvements are company observations. Source-specific thresholds are not portable configuration.",
+      "current_crosschecks": [
+        "cassandra-compaction-cost"
+      ],
+      "ranked_existing_reference_placements": [
+        {
+          "rank": 1,
+          "path": "skills/engineering/microservice-operations/references/capacity.md",
+          "reason": "Extend measured-bottleneck guidance to background work, distribution shifts and budgets across downstream resources."
+        },
+        {
+          "rank": 2,
+          "path": "skills/engineering/distributed-system-patterns/references/batch.md",
+          "reason": "Use as a bounded worker/planner example; preserve the existing topology and completion contracts."
+        },
+        {
+          "rank": 3,
+          "path": "skills/engineering/architecture/references/review.md",
+          "reason": "Add a distribution-shift scenario when a proposal optimizes average resource cost."
+        }
+      ]
+    },
+    {
+      "id": "spotify-disjoint-write-model",
+      "publisher_id": "spotify",
+      "title": "Inside the Archive: The Tech Behind Your 2025 Wrapped Highlights",
+      "url": "https://engineering.atspotify.com/2026/3/inside-the-archive-2025-wrapped",
+      "published_at": "2026-03-12",
+      "read_scope": "Complete extracted main article through lessons and credits; embedded architecture image not independently decoded.",
+      "prior_record_mentions": [],
+      "practice": {
+        "trigger": "Independent results for one entity arrive concurrently, followed by an abrupt serving launch.",
+        "problem": "Updating one serialized collection creates lost-update races; cold reactive capacity misses a synchronized demand step.",
+        "mechanism": "Give independent facts disjoint storage identities; persist content before readiness; prepare and warm serving capacity before launch.",
+        "limits": "Disjoint writes do not protect shared invariants or make multi-record publication atomic.",
+        "counterexample": "Two independently stored reservations can still oversell one inventory quantity.",
+        "verification": "Interleave same-entity distinct-result writes, crash between content/readiness, and run the expected launch-shaped load after warmup."
+      },
+      "source_limits": "Database product unspecified. Read ordering and routing must be verified for the adopted datastore; reported scale is source testimony.",
+      "current_crosschecks": [
+        "bigtable-atomicity-routing",
+        "kubernetes-reactive-capacity"
+      ],
+      "ranked_existing_reference_placements": [
+        {
+          "rank": 1,
+          "path": "skills/engineering/concurrency-correctness/references/transactions.md",
+          "reason": "Add schema redesign as a way to eliminate unnecessary shared mutation before choosing locks."
+        },
+        {
+          "rank": 2,
+          "path": "skills/engineering/microservice-operations/references/capacity.md",
+          "reason": "Add synchronized launch demand, scheduled capacity and end-to-end warmup to autoscaling analysis."
+        },
+        {
+          "rank": 3,
+          "path": "skills/engineering/microservice-data/references/projections.md",
+          "reason": "Use content/readiness ordering to require an explicit publication and repair contract for derived results."
+        }
+      ]
+    }
+  ],
+  "current_primary_docs_crosschecks": [
+    {
+      "id": "cassandra-compaction-cost",
+      "url": "https://cassandra.apache.org/doc/latest/cassandra/managing/operating/compaction/ucs.html",
+      "checked_at": "2026-10-01",
+      "version_observed": "5.0 documentation selector",
+      "read_scope": "UCS workload tradeoffs, sizing controls, unsafe expiration warning and concurrent_compactors section.",
+      "finding": "Compaction settings trade read and write amplification; increased concurrency can raise foreground latency. Unsafe expiration can resurrect deleted data.",
+      "implication": "Validate the adopted engine's correctness boundary and every resource budget; Magic Pocket's strategy names do not map directly to Cassandra settings.",
+      "applicability": "Independent corroboration of the maintenance tradeoff, not a claim that Dropbox runs this Cassandra algorithm."
+    },
+    {
+      "id": "bigtable-atomicity-routing",
+      "url": "https://docs.cloud.google.com/bigtable/docs/routing",
+      "checked_at": "2026-10-01",
+      "source_updated_at": "2026-09-24",
+      "read_scope": "Single/multi-cluster routing, row affinity and single-row transactions.",
+      "finding": "Mutations are atomic within one row and operation; multi-row atomicity is absent. Replicated multi-cluster routing is eventually consistent; row affinity does not guarantee read-your-writes during failover.",
+      "implication": "Writing content before a completion pointer is insufficient if reader routing may observe the pointer first. Use a compatible consistency/publication contract and repair orphaned content.",
+      "applicability": "Concrete adoption crosscheck; Spotify's article does not name Bigtable, so no datastore identity inference is made."
+    },
+    {
+      "id": "kubernetes-reactive-capacity",
+      "url": "https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/",
+      "checked_at": "2026-10-01",
+      "version_observed": "Current documentation, v1.37 navigation",
+      "read_scope": "Control-loop timing, algorithm readiness handling and pod-readiness guidance.",
+      "finding": "HPA evaluates periodically and handles initializing or missing-metric pods conservatively. Readiness and CPU initialization settings affect observations during startup.",
+      "implication": "Desired replica count is not immediately usable throughput. Validate detection, scheduling, startup, connection/caching warmup and downstream readiness against the demand shape.",
+      "applicability": "General platform boundary; the exact source deployment configuration is unavailable."
+    }
+  ],
+  "new_skill_opportunities": [
+    {
+      "rank": 1,
+      "candidate": "background-maintenance-control",
+      "trigger": "Designing or tuning compaction, reclamation, rebalancing or index maintenance that competes with user workloads.",
+      "distinct_boundary": "Distribution-aware job selection, resource-yield accounting and stable control loops across foreground/background budgets.",
+      "evidence_state": "Candidate only; one deep article plus a platform-doc corroboration is insufficient for a general standalone skill.",
+      "root_approval_required_before_creation": true,
+      "initial_recommendation": "Prefer the capacity reference extension now; collect independent rebalance/index-maintenance cases before proposing creation.",
+      "status": "subsequently-user-approved-package-and-corpus-frozen",
+      "root_approval_received": true,
+      "approved_name": "background-maintenance",
+      "approval_note": "User approval was conveyed by root after the initial reference-first recommendation. The original evidence limits remain applicable; additional procedural checks are independent engineering synthesis.",
+      "package_path": "skills/engineering/background-maintenance",
+      "corpus_path": "evals/background-maintenance",
+      "model_trials_owner": "parent task"
+    }
+  ],
+  "verification_status": "Documentation analysis only. The proposed concurrency, interruption and launch-load scenarios were not executed.",
+  "approved_reference_implementation": {
+    "status": "complete",
+    "paths": [
+      "skills/engineering/microservice-data/SKILL.md",
+      "skills/engineering/microservice-data/references/result-publication.md",
+      "skills/engineering/microservice-data/references/sources.md"
+    ],
+    "checks": [
+      "Package-local Markdown resource containment and existence passed.",
+      "Scoped git diff --check passed.",
+      "Independent read-only technical audit found no actionable issue."
+    ],
+    "runtime_scenarios_executed": false,
+    "model_trials_owner": "parent task"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "case_id": "historical-enrichment",
+  "rubric_sha256": "b696f6b50e089718846f94d05906a2fd4003d384e5760b5916eaeb9e011064a9",
+  "rubric": [
+    {
+      "id": "temporal-meaning",
+      "severity": "critical",
+      "criterion": "Distinguishes maintained-current, historical event-time, and processing-time latest lookup. Uses the rate effective at f1 event time 09:30 rather than the latest 10:00 rate; initial historical value is USD 110, while latest lookup would yield 120 and answer a different question."
+    },
+    {
+      "id": "changes-and-identity",
+      "severity": "critical",
+      "criterion": "Keeps one logical fact after its duplicate, changes its reporting value from 110 to 115 after r1 revision 2, and withdraws the matched result or emits an explicit unmatched state after r1 revision 3; never falls back to r2 for the 09:30 fact."
+    },
+    {
+      "id": "sink-representation",
+      "severity": "critical",
+      "criterion": "Requires keyed replacements/retractions or an explicitly interpreted correction changelog that materializes one fact result, challenges unkeyed append-only rows, and distinguishes these projection changes from repeating payments or invoices."
+    },
+    {
+      "id": "history-state",
+      "severity": "major",
+      "criterion": "Rejects ten-minute TTL as sufficient for 24-hour late facts and 48-hour replay/correction, retains the dimension version covering the oldest admissible time plus intervening versions and identity evidence, and does not infer a memory bound from visible result size."
+    },
+    {
+      "id": "progress-verification",
+      "severity": "major",
+      "criterion": "Does not infer cross-input transaction consistency from a checkpoint alone; proposes late fact, duplicate fact, historical correction/withdrawal, effective-interval conflict, and retention/replay checks with concrete values and output operations."
+    },
+    {
+      "id": "scope-evidence",
+      "severity": "critical",
+      "criterion": "Leaves fixtures unchanged, runs no external service/migration, and separates proposed validation from actually executed checks."
+    }
+  ]
+}

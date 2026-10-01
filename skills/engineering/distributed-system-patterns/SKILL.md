@@ -21,7 +21,7 @@ Honor task mode: review produces evidence and recommendations, design produces a
 Compare the simplest adequate arrangement with the proposed topology. Load only references needed for the decision:
 
 - For colocated extension, connection brokering, or interface normalization, read [single-node.md](references/single-node.md).
-- For interchangeable replicas, data partitioning, or parallel request execution, read [serving.md](references/serving.md).
+- For interchangeable replicas, data partitioning, or parallel request execution, read [serving.md](references/serving.md). When choosing a durable partition key or distributed table/index partition layout or moving stateful shards, also read [partitioning-and-movement.md](references/partitioning-and-movement.md).
 - For one active owner across independent processes, read [ownership.md](references/ownership.md).
 - For independent jobs, branching stages, or aggregate completion, read [batch.md](references/batch.md).
 

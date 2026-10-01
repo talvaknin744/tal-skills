@@ -25,6 +25,8 @@ Use direct analysis for a bounded decision. Add independent specialists when dis
 
 Use [book-grounding.md](references/book-grounding.md) when the user requests book-based analysis or a specific book materially supports a disputed decision. Ordinary analysis has no book quota and no librarian requirement.
 
+When choosing an analytical read model over changing source data, read [analytical-read-models.md](references/analytical-read-models.md) for query meaning, update identity, materialization, and freshness decisions.
+
 Check capabilities before promising independent agents, current research, or source verification. If an optional capability is unavailable, continue with available evidence and disclose the limit. If the user explicitly requires that capability or strict book verification, report the unmet requirement and keep dependent conclusions unresolved rather than presenting a substitute as completion.
 
 ## 3. Analyze against evidence

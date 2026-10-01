@@ -1,0 +1,4 @@
+# Adaptive concurrency draft
+A reverse proxy limits requests to one service. The backend is also reached by a batch client that bypasses this proxy; that client's in-flight work is unmeasured. The proxy measures median latency across all HTTP responses, including locally rejected requests. Rejections take 1 ms. During overload, 90% of responses are rejections; the remaining accepted calls take 800 ms. The controller interprets the 1 ms median as spare capacity and doubles the limit each sample interval.
+It resets its baseline from arbitrary busy traffic, runs synchronized baseline probes on all four proxies every minute, and removes the upper cap after any healthy interval. The proposed verification checks only that total response rate rises. Clients retry every rejection immediately. The backend shares a bounded database pool with another workload.
+No active request, queue-age, useful completion, per-tenant or recovery observations are recorded.

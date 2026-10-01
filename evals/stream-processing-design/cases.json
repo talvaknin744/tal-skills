@@ -1,0 +1,151 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "id": "window-finality",
+      "title": "Window finality composes late arrival with duplicate and correction identity",
+      "tags": [
+        "event-time",
+        "late-arrival",
+        "duplicates",
+        "corrections",
+        "finality"
+      ],
+      "prompt": "Review design.md. Define the smallest corrected stream computation contract, trace independently expected aggregate values through the arrival schedule, and state when output and state retirement are allowed. Keep all files unchanged; distinguish proposed engine checks from observations.",
+      "fixture_dir": "evals/stream-processing-design/fixtures/window-finality",
+      "fixtures": [
+        "design.md"
+      ],
+      "rubric": [
+        {
+          "id": "event-time-progress",
+          "severity": "critical",
+          "criterion": "Uses event time for the half-open window, rejects wall-clock/checkpoint finality at 12:05, and waits for both required watermarks at 12:08 without treating a watermark as physical proof that old events cannot arrive."
+        },
+        {
+          "id": "late-policy",
+          "severity": "critical",
+          "criterion": "Admits the specified changes while the window remains unfinalized, including e3 behind the observed progress boundary; emits one immutable final row at 12:08, and rejects e4 after finality with a durable late-data audit rather than changing the append-only result."
+        },
+        {
+          "id": "identity-revision-composition",
+          "severity": "critical",
+          "criterion": "Deduplicates by logical event/version under the source contract rather than transport delivery ID, replaces e2 revision 1 contribution 5 with revision 2 contribution 8 without increasing count, ignores old-revision replay, and visibly rejects the conflicting e1 revision 1 payload without altering the trusted contribution."
+        },
+        {
+          "id": "independent-aggregate",
+          "severity": "critical",
+          "criterion": "Derives intermediate sum/count as 5/1, 15/2, 15/2, 18/2, 25/3, 25/3, 25/3, followed by finalized 25/3 and unchanged output after e4; does not sum correction/replay/conflict rows as independent measurements."
+        },
+        {
+          "id": "retention-verification",
+          "severity": "major",
+          "criterion": "Challenges the 60-second processing-time identity TTL against a two-hour replay horizon and stalled progress; retains identity/revision/prior contribution evidence while repeats remain admissible, or gives a proved permanently closed-window rejection condition. Proposes discriminating arrival/progress/expiry checks with expected output and retained state."
+        },
+        {
+          "id": "scope-evidence",
+          "severity": "critical",
+          "criterion": "Leaves fixtures unchanged, uses no external service, keeps broker-effect redesign outside the requested computation, and separates proposed checks from executed validation."
+        }
+      ]
+    },
+    {
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "id": "historical-enrichment",
+      "title": "Historical enrichment survives delayed facts and dimension corrections",
+      "tags": [
+        "temporal-joins",
+        "history",
+        "retractions",
+        "state-lifetime"
+      ],
+      "prompt": "Review design.md and recommend a result, state-history, and sink contract for this reporting projection. Trace the expected fact result through all provided source changes, explain the alternatives that answer different time questions, and propose verification schedules. Keep files unchanged and perform no external operation.",
+      "fixture_dir": "evals/stream-processing-design/fixtures/historical-enrichment",
+      "fixtures": [
+        "design.md"
+      ],
+      "rubric": [
+        {
+          "id": "temporal-meaning",
+          "severity": "critical",
+          "criterion": "Distinguishes maintained-current, historical event-time, and processing-time latest lookup. Uses the rate effective at f1 event time 09:30 rather than the latest 10:00 rate; initial historical value is USD 110, while latest lookup would yield 120 and answer a different question."
+        },
+        {
+          "id": "changes-and-identity",
+          "severity": "critical",
+          "criterion": "Keeps one logical fact after its duplicate, changes its reporting value from 110 to 115 after r1 revision 2, and withdraws the matched result or emits an explicit unmatched state after r1 revision 3; never falls back to r2 for the 09:30 fact."
+        },
+        {
+          "id": "sink-representation",
+          "severity": "critical",
+          "criterion": "Requires keyed replacements/retractions or an explicitly interpreted correction changelog that materializes one fact result, challenges unkeyed append-only rows, and distinguishes these projection changes from repeating payments or invoices."
+        },
+        {
+          "id": "history-state",
+          "severity": "major",
+          "criterion": "Rejects ten-minute TTL as sufficient for 24-hour late facts and 48-hour replay/correction, retains the dimension version covering the oldest admissible time plus intervening versions and identity evidence, and does not infer a memory bound from visible result size."
+        },
+        {
+          "id": "progress-verification",
+          "severity": "major",
+          "criterion": "Does not infer cross-input transaction consistency from a checkpoint alone; proposes late fact, duplicate fact, historical correction/withdrawal, effective-interval conflict, and retention/replay checks with concrete values and output operations."
+        },
+        {
+          "id": "scope-evidence",
+          "severity": "critical",
+          "criterion": "Leaves fixtures unchanged, runs no external service/migration, and separates proposed validation from actually executed checks."
+        }
+      ]
+    },
+    {
+      "id": "local-date-group-nontrigger",
+      "title": "Completed local rows need grouping without streaming policy",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review group.py and recommend the smallest change so totals_by_date groups this completed list by the supplied UTC date. Each row is an intentional contribution, including identical rows. State the expected result for ROWS, keep the file unchanged, and use no external services.",
+      "fixture_dir": "evals/stream-processing-design/fixtures/local-date-group-nontrigger",
+      "fixtures": [
+        "group.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load stream-processing-design or introduce watermark, lateness, continuous-state, temporal-join, or replay workflows for a completed local list."
+        },
+        {
+          "id": "bounded-result",
+          "severity": "major",
+          "criterion": "Recommends accumulating row amounts under row date keys, preserves both identical intentional rows, and derives {2026-10-01: 7, 2026-10-02: 4} without deduplicating values or adding event identity."
+        },
+        {
+          "id": "scope-evidence",
+          "severity": "critical",
+          "criterion": "Leaves the fixture unchanged, performs no external operation, and reports only checks actually executed; keeps the change local to grouping."
+        }
+      ]
+    }
+  ]
+}

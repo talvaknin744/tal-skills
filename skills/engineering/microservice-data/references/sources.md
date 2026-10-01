@@ -30,3 +30,32 @@ Locators are **one-based PDF pages in the exact linked files**, not printed page
 The first edition supplies ownership and data-splitting foundations; the second develops saga modeling and makes the limits of compensation and whole-process atomicity explicit. The CQRS/event-sourcing distinction follows the second edition's event-history formulation. Neither edition is treated as a mandate to replace local transactions, adopt sagas everywhere, or introduce a new read architecture for every query.
 
 The invariant ledger, concurrency scenarios, durable-handoff checks, bootstrap/repair requirements, and step completion criteria are independently authored engineering applications. They are not presented as book quotations or a reproduced checklist. Database- and broker-specific guarantees must be checked against the actual system when the skill is used.
+
+## Independent result publication
+
+Checked **1 October 2026**.
+
+- **Source/read scope:** Spotify Engineering, [Inside the Archive: The Tech Behind
+  Your 2025 Wrapped Highlights](https://engineering.atspotify.com/2026/3/inside-the-archive-2025-wrapped),
+  published 12 March 2026. Complete extracted main prose through lessons and
+  credits; embedded architecture image not independently decoded.
+- **Trigger/problem:** independent results for one entity arrive concurrently;
+  replacing a shared serialized collection can lose another worker's update.
+- **Mechanism/conditions:** store independent facts at distinct identities and
+  write result content before completion metadata when the reader's consistency
+  contract preserves valid visibility.
+- **Limits/counterexample:** the database is unnamed. Disjoint identities do not
+  enforce shared inventory or other cross-result invariants; write order alone
+  cannot guarantee visibility across replicated stores.
+- **Verification:** the concurrent publication, same-identity collision,
+  interruption, reader routing and retention scenarios in
+  [result publication](result-publication.md) are independently authored checks.
+  Reading the account does not demonstrate those scenarios in this repository.
+
+Current [Bigtable routing documentation](https://docs.cloud.google.com/bigtable/docs/routing),
+single/multi-cluster routing, row affinity and single-row transaction sections,
+was read as an adoption crosscheck; the page displayed an update of 24 September
+2026. Mutations within one row and operation are atomic; cross-row transactions
+are unavailable. Replicated multi-cluster routing is eventually consistent, and
+row affinity does not guarantee read-your-writes during failover. This identifies
+a concrete boundary to verify, without inferring that Spotify used Bigtable.

@@ -1,51 +1,100 @@
 # tal-skills
 
-41 portable skills, 15 specialist agents, and eight engineering workflows,
-organized by concern and backed by source records and executable failure scenarios.
+[![Validate skills](https://github.com/talvaknin744/tal-skills/actions/workflows/validate.yml/badge.svg)](https://github.com/talvaknin744/tal-skills/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Start with the [task-to-workflow guide and project-local installation](docs/toolkit-usage.md).
-Use the [domain reading paths](docs/reading-paths.md) for deeper study and the
-[research ledger](docs/research/engineering-toolkit/README.md) for the 60-publisher
-survey, selected articles, book access records, and applicability limits.
-The [verification report](docs/research/engineering-toolkit/verification.md)
-separates repository checks, runtime experiments, skill trials, and native host observations.
-The [additional article review](docs/research/engineering-toolkit/extensions/README.md)
-adds practical guidance on worker retirement, cache rebuilds, regional replay,
-cancellation, recovery inputs and composed tool authority.
+Practical skills for building reliable backend and distributed systems with coding agents.
 
-## Agents and workflows
+**49 skills · 15 specialist agents · 8 workflows · Codex and Claude adapters**
 
-The canonical [agents](agents/) cover coordination, Python, TypeScript, Go,
-boundaries, idempotency, consistency, durability, messaging, infrastructure,
-reliability, failure testing, MCP, A2A, and cleanup. Generated adapters support
-Codex and Claude while inheriting the user's model settings.
+Use them to investigate stale reads, make retries safe, deploy long-running workers,
+handle late events, measure performance, or review a system's recovery path.
+Each skill has a specific trigger, a short workflow, conditional references,
+and a result you can check against your code. Install the parts you need.
 
-The eight [workflows](workflows/) handle backend delivery, consistency diagnosis,
-messaging evolution, worker rollout, recovery validation, MCP integration, A2A
-integration, and cleanup. The main session selects relevant specialists, assigns
-one writer per overlapping file set, and returns independent findings to that
-owner. Small changes use a short path.
+[Quick start](#quick-start) · [Choose a skill](#choose-a-skill) · [Agents and workflows](#agents-and-workflows) · [Evidence](#sources-and-verification) · [Contributing](CONTRIBUTING.md)
+
+## Quick start
+
+With Node.js **22.20 or later**, open the interactive skill picker from your
+project's directory:
 
 ```sh
-npm ci --ignore-scripts
-node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex --workflow tal-backend-delivery --dry-run
-node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex --workflow tal-backend-delivery
+npx skills@latest add talvaknin744/tal-skills
 ```
 
-Choose `claude` or `both` for the other host. Installation is project-local,
-includes selected dependencies, tracks owned files, and stops on collisions.
-The [usage guide](docs/toolkit-usage.md) explains selection updates, native
-invocation, recovery and host limitations. [Runnable examples](examples/) test
-backend contracts, messaging, stale cache fills, worker handoffs, restore
-validation, infrastructure changes, cleanup and protocol boundaries.
+Choose the skills and coding agents you want to install. For a focused selection:
 
-## Skills
+```sh
+npx skills@latest add talvaknin744/tal-skills --skill idempotency --skill graceful-draining
+```
+
+To inspect the available skills first:
+
+```sh
+npx skills@latest add talvaknin744/tal-skills --list
+```
+
+The [skills CLI](https://github.com/vercel-labs/skills) handles standalone skill
+installation. Native specialist agents and complete workflows use the
+[toolkit installer](docs/toolkit-usage.md#install-in-a-project), which also supplies
+and tracks their dependencies. Its interactive picker supports all three types:
+
+```sh
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills
+```
+
+For npm 12, which disables Git dependencies by default, add `--allow-git=all`
+before `--package`. This is a command-scoped npm option; the launcher still asks
+you to choose packages and review its plan. See the usage guide for copyable
+commands, dry runs, and reproducible revision selection. If you want a combined
+setup, use the toolkit installer from the start: it preserves existing unowned
+skills by reporting collisions.
+
+Keep each skill's complete package together when
+copying manually. Reading instructions requires no repository dependency install;
+implementation and examples use the target project's tools.
+
+Then ask your agent for a concrete task. In Codex:
+
+```text
+Use $idempotency to review this webhook handler.
+Check concurrent duplicates, changed payloads, and a crash after downstream success.
+Cite the code and propose a regression that forces each important ordering.
+```
+
+In Claude, use `/idempotency` or request the skill by name. Hosts can also select
+skills automatically from their descriptions. Existing model settings stay yours.
+
+## Choose a skill
+
+Start with the decision in front of you:
+
+| Situation | Start here |
+| --- | --- |
+| A deployment repeatedly interrupts a 24-hour job | [graceful-draining](skills/engineering/graceful-draining/SKILL.md) |
+| A timeout or duplicate delivery may repeat a business effect | [idempotency](skills/engineering/idempotency/SKILL.md) |
+| Services disagree, a cache fill races a write, or updates are lost | [concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md) |
+| Late events, replay, corrections, or joins change a streaming result | [stream-processing-design](skills/messaging/stream-processing-design/SKILL.md) |
+| Backfills or compaction compete with serving traffic | [background-maintenance](skills/engineering/background-maintenance/SKILL.md) |
+| Latency rose and the cause is unclear | [performance-diagnosis](skills/performance/performance-diagnosis/SKILL.md) |
+| Offered load exceeds useful service capacity | [overload-control](skills/performance/overload-control/SKILL.md) |
+| You need a safe service split or data migration | [microservice-boundaries](skills/engineering/microservice-boundaries/SKILL.md), [microservice-extraction](skills/engineering/microservice-extraction/SKILL.md) |
+| A backup restored, but safe application recovery is unproven | [recovery-validation](skills/reliability/recovery-validation/SKILL.md) |
+| A supported API or library needs retirement | [technical-deprecation](skills/engineering/technical-deprecation/SKILL.md) |
+
+A routine local change can stay local. These skills are composable, and the
+collection is not a required pipeline. The [task guide](docs/toolkit-usage.md)
+explains when to use a skill, a specialist, or a coordinated workflow.
+
+### Full catalog
 
 | Concern | Skill | Use it for |
 |---|---|---|
 | Languages | [python-backend](skills/languages/python-backend/SKILL.md) | Python service boundaries, async ownership, cancellation and transactions |
 | Languages | [typescript-backend](skills/languages/typescript-backend/SKILL.md) | Runtime validation, trusted context and owned asynchronous resources |
 | Languages | [go-backend](skills/languages/go-backend/SKILL.md) | Context propagation, goroutine completion and transaction cleanup |
+| Messaging | [stream-processing-design](skills/messaging/stream-processing-design/SKILL.md) | Event time, late arrivals, duplicates, revisions, streaming joins and bounded state |
 | Messaging | [messaging-reliability](skills/messaging/messaging-reliability/SKILL.md) | Publication, acknowledgement, replay, ordering and bounded consumer failure |
 | Infrastructure | [infrastructure-change-safety](skills/infrastructure/infrastructure-change-safety/SKILL.md) | Partial applies, identity-preserving changes, rollout and recovery |
 | Reliability | [recovery-validation](skills/reliability/recovery-validation/SKILL.md) | Restored application contracts, accepted work, effects and recovery objectives |
@@ -53,9 +102,16 @@ validation, infrastructure changes, cleanup and protocol boundaries.
 | Quality | [code-and-docs-cleanup](skills/quality/code-and-docs-cleanup/SKILL.md) | Evidence-backed simplification that preserves behavior and useful rationale |
 | Protocols | [mcp-engineering](skills/protocols/mcp-engineering/SKILL.md) | Pinned MCP versions, authority, resource isolation and request lifecycle |
 | Protocols | [a2a-engineering](skills/protocols/a2a-engineering/SKILL.md) | Pinned A2A versions, task ownership, observers and duplicate business effects |
+| Performance | [overload-control](skills/performance/overload-control/SKILL.md) | Load shedding, admission budgets, bounded queues, tenant fairness and recovery |
+| Performance | [performance-diagnosis](skills/performance/performance-diagnosis/SKILL.md) | Latency regressions, execution versus waiting, runtime limits and verified improvements |
+| Performance | [load-testing](skills/performance/load-testing/SKILL.md) | Representative arrivals, generator limits, workload accounting and saturation evidence |
+| Performance | [capacity-planning](skills/performance/capacity-planning/SKILL.md) | Resource-demand models, backlog drain, failure headroom, autoscaling and cost |
+| Performance | [database-performance](skills/performance/database-performance/SKILL.md) | Query plans, workload impact, pool/lock waits and maintenance tradeoffs |
+| Performance | [data-layout-performance](skills/performance/data-layout-performance/SKILL.md) | Measured Go/Python hot paths, locality, false sharing and bounded-structure correctness |
 | Productivity | [learning-plan](skills/productivity/learning-plan/SKILL.md) | Feasible study schedules, actual progress, prerequisite triage and exam preparation |
 | Productivity | [retrieval-coach](skills/productivity/retrieval-coach/SKILL.md) | Interactive recall, mathematical feedback and spaced review from observed attempts |
 | Productivity | [learning-experiments](skills/productivity/learning-experiments/SKILL.md) | Diagnose a study bottleneck and test one bounded change against fresh performance |
+| Engineering | [background-maintenance](skills/engineering/background-maintenance/SKILL.md) | Backfills, compaction and rebalancing alongside serving traffic |
 | Engineering | [architecture](skills/engineering/architecture/SKILL.md) | Architecture planning and review, with optional independent specialists and book grounding |
 | Engineering | [idempotency](skills/engineering/idempotency/SKILL.md) | Designing, implementing, and reviewing retry-safe APIs, webhooks, and queue workers |
 | Engineering | [graceful-draining](skills/engineering/graceful-draining/SKILL.md) | Preserving long-running jobs through shutdown, handoff, and rolling deployment |
@@ -77,207 +133,136 @@ validation, infrastructure changes, cleanup and protocol boundaries.
 | Temporal | [temporal-production-readiness](skills/temporal/temporal-production-readiness/SKILL.md) | Capacity, backlog, data lifetime, isolation, and recovery evidence |
 | Temporal | [temporal-ai-workflows](skills/temporal/temporal-ai-workflows/SKILL.md) | Durable agent loops, tool effects, context, budgets, and approvals |
 
-Also bundled: **eight adapted official Temporal skills** for SDK development, design review, Cloud, operations, worker tuning, observability, serverless Workers, and Cloud setup. See the [official skill catalog and local corrections](integrations/temporal/README.md).
 
-The four focused Temporal skills draw on a [review of all 70 customer-index entries](docs/temporal/README.md), with source-by-source evidence limits and current primary documentation. Talk summaries are labeled separately from complete written stories.
+Eight additional [adapted official Temporal skills](integrations/temporal/README.md)
+cover SDK development, design review, Cloud, operations, worker tuning,
+observability, serverless Workers, and Cloud setup. Their upstream revisions,
+licenses, local corrections, and update path are recorded separately.
 
-The eleven [book-derived engineering skills](docs/book-skills.md) are independently usable workflows built from the supplied sources using Writing for Agents. Each carries its own conditional references, source locators, and observable completion criteria. The catalog records edition differences and the limited scope of the supplied Legacy Code draft.
+The [domain reading paths](docs/reading-paths.md) connect related skills and
+conditional references. [Book-derived skills](docs/book-skills.md) and the
+[learning skills](docs/productivity/research-synthesis.md) record their source scope,
+including edition differences, excerpts, and supplied material.
 
-The two distributed-correctness skills are backed by [primary-source research, an eight-repository skill audit, and a book shortlist](docs/research/README.md). They focus on concrete interruption and race histories, with [isolated evaluation fixtures](evals/distributed-correctness/README.md).
+## Agents and workflows
 
-## Install
+Skills contain technical guidance. [Agents](agents/README.md) define bounded
+specialist assignments. [Workflows](workflows/README.md) coordinate ownership,
+review, and acceptance across those assignments.
 
-Using the [skills CLI](https://github.com/vercel-labs/skills):
+| Workflow | Outcome |
+| --- | --- |
+| `tal-backend-delivery` | A backend change with independent correctness review and meaningful checks |
+| `tal-consistency-diagnosis` | A reconstructed race or stale-read history and a verified correction |
+| `tal-messaging-evolution` | Explicit publication, replay, ordering, and event evolution contracts |
+| `tal-worker-rollout` | A deployment path that preserves long-running work and separates maintenance from business failure |
+| `tal-recovery-validation` | Evidence that restored application behavior and accepted work can resume safely |
+| `tal-mcp-integration` | A pinned MCP integration with authority and lifecycle checks |
+| `tal-a2a-integration` | A pinned A2A integration with task ownership and effect handling |
+| `tal-cleanup-review` | A smaller maintenance burden with behavior and useful rationale preserved |
+
+The main session chooses relevant specialists, assigns **one implementation owner
+per overlapping file set**, and sends independent findings back to that owner.
+The shared handoff carries the objective, files, invariants, and acceptance criteria.
+Small tasks take a short path without the full roster.
+
+To select one workflow without a checkout:
 
 ```sh
-npx skills@latest add talvaknin744/tal-skills --skill architecture
-npx skills@latest add talvaknin744/tal-skills --skill idempotency
-npx skills@latest add talvaknin744/tal-skills --skill graceful-draining
-npx skills@latest add talvaknin744/tal-skills --skill concurrency-correctness
-npx skills@latest add talvaknin744/tal-skills --skill microservice-extraction
-npx skills@latest add talvaknin744/tal-skills --skill technical-deprecation
-npx skills@latest add talvaknin744/tal-skills --skill temporal-reliability
-npx skills@latest add talvaknin744/tal-skills --skill temporal-developer
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills --host codex --workflow tal-worker-rollout --dry-run
+npx --yes --package=github:talvaknin744/tal-skills -- tal-skills --host codex --workflow tal-worker-rollout
 ```
 
-Alternatively, copy a complete `skills/<concern>/<skill-name>` directory into your agent's supported skills directory. Keep its references, scripts, license, and metadata together. Reading a skill requires no package installation or particular model. Execution uses the target project's tools and dependencies; Temporal operations and setup may require its CLI, credentials, and explicitly requested infrastructure. Optional architecture panels need subagents.
+Add `--skill <name>` or `--agent <name>` to the same invocation. Explicit selections
+describe the complete desired set, so inspect the dry run when updating a managed
+installation. Run commands from the destination project or pass `--target`.
 
-Choose the skills relevant to your work. If an upstream Temporal skill with the same name is already installed, choose which version to retain rather than installing conflicting copies. Bundled adaptations and upstream update instructions are documented in the catalog.
+For a checkout-based installation, Node.js 22 or later is required:
 
-## Use
+```sh
+git clone https://github.com/talvaknin744/tal-skills.git
+cd tal-skills
+npm ci --ignore-scripts
+node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex --workflow tal-worker-rollout --dry-run
+node scripts/install-toolkit.mjs --target /absolute/path/to/project --host codex --workflow tal-worker-rollout
+```
 
-For studying, use `$learning-plan` to plan, `$retrieval-coach` to practise, or `$learning-experiments` to improve a habit. The skills include Hebrew study prompts and conditional Infi 2 guidance, while remaining usable for other subjects and everyday learning. Their [research provenance and coverage](docs/productivity/research-synthesis.md) distinguish reviewed transcript advice from independent evidence. They do not activate reminders merely by producing a plan or prompt.
-
-Invoke a skill by name, such as `$architecture` or `$temporal-reliability` in Codex, or use your agent's skill invocation mechanism. Hosts supporting automatic discovery can select a skill when its description matches the request.
+Choose `claude` or `both` for the other host. The installer is project-local,
+resolves dependencies, records owned files, and rejects conflicting or locally
+edited files. It preserves existing host configuration. See the
+[installation and invocation guide](docs/toolkit-usage.md) for selection updates,
+recovery, native loading, and compatibility limits.
 
 ```text
-Use $architecture to review our checkout architecture.
-Prioritize data consistency and recovery. Cite the code behind each risk.
+Use $tal-worker-rollout to review our three-pod rolling deployment for 18-hour jobs.
+Inspect admission, retained input, checkpoint ownership, and retry accounting.
+Force successive maintenance handoffs and a genuine failure control.
 ```
 
-```text
-Use $idempotency to review this webhook handler.
-Check concurrent deliveries, changed payloads, and crashes after downstream success.
-```
+## Sources and verification
 
-```text
-Use $idempotency to fix duplicate invoice creation in this endpoint.
-Preserve its public contract and add regression tests in the existing framework.
-```
+Advice carries a trigger, failure mechanism, applicability limits, counterexample,
+and verification method. Historical company accounts inform a design question;
+they do not establish guarantees for a different system.
 
-```text
-Use $architecture to evaluate this design against the named book and edition.
-Strictly verify each attribution and report anything you cannot substantiate.
-```
+- [Research ledger](docs/research/engineering-toolkit/README.md): the 60-publisher survey, book access, selected readings, and adoption decisions.
+- [October archive review](docs/research/engineering-toolkit/2026-10-01/README.md): 58,178 metadata URLs, 29 selected article-body readings, terminal collection evidence, and explicit historical/access gaps. Metadata enumeration is separate from article reading.
+- [Performance research](docs/research/performance-capacity/README.md): measurement, capacity, overload, database work, and conditional Go/Python data-layout experiments.
+- [Temporal story review](docs/temporal/README.md): all 70 customer-index entries, with written-story and talk-summary scope distinguished.
+- [Runnable examples](examples/README.md): TypeScript, Python, and Go backend contracts plus messaging, cache races, worker handoffs, recovery, protocols, and retry coordination.
+- [Verification report](docs/research/engineering-toolkit/verification.md) and [evaluation guide](evals/README.md): deterministic checks, runtime observations, independently scored agent trials, and known host limitations.
 
-```text
-Use $temporal-safe-deployments to review this Workflow change.
-Account for open executions, old Worker versions, and rollback.
-```
+Repository checks validate packaging, references, generated adapters, installer
+behavior, fixtures, and evidence bindings. They do not run a model or prove
+production reliability. Behavioral trials retain failed and blocked attempts and
+state their environment limits. Native loading and configuration parsing are
+reported separately from observed workflow execution.
 
-```text
-Use $temporal-ai-workflows to review our refund agent.
-Check duplicate tool calls, approval expiry, and the budget across Continue-As-New.
-```
+## Repository layout
 
-The architecture skill excludes routine implementation, debugging, and ordinary PR review. The idempotency skill handles focused design, review, and implementation of duplicate-suppression and recovery behavior. Reviews stay read-only unless execution is already authorized; implementation requests authorize their scoped changes. Required capabilities or evidence that are missing remain explicit limitations.
+| Directory | Contents |
+| --- | --- |
+| [skills/](skills/) | Self-contained packages grouped by engineering concern |
+| [agents/](agents/) | Canonical specialist roles and their shared contract |
+| [workflows/](workflows/) | Task paths, stopping conditions, and handoff format |
+| [adapters/](adapters/) | Generated Codex and Claude native files |
+| [examples/](examples/) | Runnable experiments, commands, observations, and limits |
+| [docs/](docs/) | Usage, reading paths, research, provenance, and publication drafts |
+| [evals/](evals/) | Behavioral cases, isolated inputs, and published evidence |
+| [tests/](tests/) | Deterministic regression and integrity checks |
+| [scripts/](scripts/) | Installation, generation, validation, and evaluation tools |
+| [integrations/temporal/](integrations/temporal/) | Official upstream attribution and local adaptation records |
 
-Choose one book-derived skill for the decision at hand; the collection is not a required pipeline. For example:
+## Contribute
 
-```text
-Use $microservice-boundaries to assess this proposed service split.
-Compare it with retaining modules in the current application.
-```
-
-```text
-Use $microservice-extraction to plan extracting fulfillment.
-Account for old workers, shared data, and recovery after the new service accepts writes.
-```
-
-```text
-Use $legacy-code-changes to add this behavior to the untested importer.
-First establish the existing behavior and isolate the external dependency.
-```
-
-```text
-Use $technical-deprecation to review retirement of this supported API.
-Check remaining consumers, replacement behavior, and the next removal gate.
-```
-
-```text
-Use $graceful-draining to review our 24-hour import workers.
-Explain how rolling replacements preserve progress without consuming the business retry budget.
-```
-
-```text
-Use $concurrency-correctness to fix this stale-cache race.
-Reconstruct the competing operations and force the failing ordering in a regression.
-```
-
-## Design principles
-
-- Keep triggers specific and the common workflow short; load conditional references only when relevant.
-- Work from concrete project evidence and preserve the user's scope and technology choices.
-- Give failure and recovery paths an observable outcome instead of claiming unsupported guarantees.
-- Test behavior with realistic inputs; distinguish deterministic repository checks from agent evaluations.
-
-Source citations, remembered patterns, and agreement between agents do not prove a system works in production.
-
-## Repository map
-
-Skills are grouped by concern: `skills/<concern>/<skill-name>/`. Current
-concerns include languages, engineering, messaging, infrastructure, reliability,
-testing, quality, protocols, productivity and Temporal. Add concerns when a real skill needs them;
-keep each skill self-contained and its name unique across the repository.
-
-```text
-skills/
-├── languages/
-├── messaging/
-├── infrastructure/
-├── reliability/
-├── testing/
-├── quality/
-├── protocols/
-├── engineering/
-│   ├── architecture/
-│   ├── idempotency/
-│   ├── graceful-draining/
-│   ├── concurrency-correctness/
-│   └── <book-derived-skill>/
-├── productivity/
-│   ├── learning-plan/
-│   ├── retrieval-coach/
-│   └── learning-experiments/
-└── temporal/
-    └── <skill-name>/
-agents/                 Canonical roles grouped by concern
-workflows/              Eight task paths and a shared handoff
-adapters/               Generated native agent files and workflow templates
-examples/               Explicit runnable runtime experiments
-docs/
-├── research/
-├── book-skills.md
-└── temporal/
-integrations/
-└── temporal/
-evals/
-├── distributed-correctness/
-├── README.md
-├── architecture/
-├── idempotency/
-├── <book-derived-skill>/
-└── temporal/
-scripts/
-├── check-skills.mjs
-├── architecture/
-└── lib/
-tests/
-├── distributed-correctness/
-├── architecture/
-├── idempotency/
-├── book-skills/
-└── temporal/
-```
-
-| Path | Purpose |
-|---|---|
-| [agents](agents/) | Canonical bounded specialist roles and shared execution contract |
-| [workflows](workflows/) | Task routing, ownership, review and acceptance paths |
-| [adapters](adapters/) | Generated Codex and Claude definitions; installed through the toolkit installer |
-| [examples](examples/) | Pinned runtime scenarios, commands, observations and limitations |
-| [skills/engineering](skills/engineering) | Self-contained skills: each has SKILL.md, optional references, and UI metadata |
-| [skills/temporal](skills/temporal) | Focused Temporal skills and attributed adaptations of official skills |
-| [docs/temporal](docs/temporal) | Customer-story coverage, observations, inferences, and evidence limits |
-| [docs/research](docs/research) | Architecture/programming source audits, book reading scope, and focused additions |
-| [integrations/temporal](integrations/temporal) | Official upstream revisions, licenses, and documented local corrections |
-| [scripts](scripts) | Shared packaging checks and skill-specific maintainer tools |
-| [tests](tests) | Deterministic regression and fixture-integrity tests, grouped by skill |
-| [evals](evals) | Behavioral scenarios and isolated project fixtures, grouped by skill |
-
-## Validate changes
-
-Maintainers need Node.js 22 or later:
+Use [CONTRIBUTING.md](CONTRIBUTING.md) to add a focused skill or improve an existing
+one. Maintainers run:
 
 ```sh
 npm ci --ignore-scripts
 npm run validate
 ```
 
-CI checks packaging, local references, metadata, provenance, generated native adapters, installer behavior, evaluation fixtures, and published evidence hashes and bindings. These deterministic checks do not execute a model or prove the quality of its advice. Follow [evals/README.md](evals/README.md) for independent behavioral trials and report observed results separately from authored expectations.
+Keep public skill names stable, references local to each installable package,
+and completion criteria observable. Changes to agent instructions need behavioral
+evidence in addition to structural checks.
 
-When changing instructions, compare behavior on the affected scenarios. Remove repetition only when the receiving agent still has the necessary context. Keep the user's scope and requested output intact.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for adding the next skill.
+See the [change log](CHANGELOG.md) for release scope and the
+[publication drafts](docs/publication/README.md) for a LinkedIn introduction and
+a longer Medium article grounded in the recorded evidence.
 
 ## Attribution and license
 
-The architecture skill is revised from [NanoClaw's Code Architect](https://github.com/nanocoai/nanoclaw-templates/tree/7d3cb40409a4a7b8f2cf562b0d80fceb612b941b/engineering/code-architect), created by [zvi-fried](https://github.com/zvi-fried), under the MIT license. Its upstream copyright notice is retained in [LICENSE](LICENSE).
+Original instructions and repository tooling are [MIT-licensed](LICENSE).
+Books, blog articles, illustrations, and source-site material are linked and
+paraphrased; their copyrights remain with their authors.
 
-The idempotency skill was prompted by Dochia's [Idempotency Is Easy Until the Second Request Is Different](https://blog.dochia.dev/blog/idempotency/). Its independently written instructions link to [primary technical references](skills/engineering/idempotency/references/sources.md); the article is not bundled or relicensed.
+The architecture skill began with [NanoClaw's Code Architect](https://github.com/nanocoai/nanoclaw-templates/tree/7d3cb40409a4a7b8f2cf562b0d80fceb612b941b/engineering/code-architect),
+created by [zvi-fried](https://github.com/zvi-fried); its MIT notice is retained.
+The idempotency work was prompted by [Dochia's article](https://blog.dochia.dev/blog/idempotency/).
+Official Temporal adaptations retain their notices and `UPSTREAM.md` records.
 
-The book-derived skills draw on works by Sam Newman, Brendan Burns, Michael Feathers, Andrew Hunt and David Thomas, Martin Fowler and contributors, and the authors of *Head First Design Patterns*. [Source copies and scope](docs/book-skills.md) are documented separately. The original skill instructions are MIT-licensed; the books, illustrations, and examples are not bundled or relicensed.
-
-Temporal customer stories are linked and paraphrased, not redistributed. Official Temporal skill adaptations retain their MIT notices and carry an `UPSTREAM.md` describing the source revision and modifications. Their inclusion does not imply endorsement by Temporal.
-
-Instruction design follows the principles described in Matt Pocock's [Writing for Agents](https://www.aihero.dev/skills-writing-for-agents): precise routing, progressive disclosure, observable completion, and removing instructions that do not change useful behavior. This repository is an independent revision and is not endorsed by those projects.
+Instruction design follows Matt Pocock's [Writing for Agents](https://www.aihero.dev/skills-writing-for-agents):
+precise activation, short workflows, conditional context, and instructions that
+change useful behavior. This is an independent project; inclusion or citation
+of another project's work does not imply endorsement.

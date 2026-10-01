@@ -34,6 +34,10 @@ For a shared-table split, identify the original invariant before replacing each 
 
 For cross-service joins, reporting, or copied state, read [projections.md](references/projections.md). Select direct queries, aggregation, or a projection using freshness, latency, volume, and availability requirements. Keep copies distinguishable from authoritative state. Explain what a user sees while a write has committed but a read model has not caught up.
 
+When parallel workers publish independent results and a completion index, read
+[result publication](references/result-publication.md) for mutation scope and
+reader-visible readiness.
+
 **Done:** each affected read identifies its source of truth, freshness contract, and missing/stale-data behavior; new projections also have a bootstrap and repair path.
 
 ## 5. Verify convergence and failure

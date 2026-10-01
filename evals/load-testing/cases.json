@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "closed-arrivals",
+      "title": "A closed workload lowers demand when the service slows",
+      "tags": [
+        "load-testing",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Assess the capacity claim in benchmark.md. Explain what the test establishes, identify missing evidence, and propose a workload and reporting plan for the stated demand. Keep this read-only.",
+      "fixture_dir": "evals/load-testing/fixtures/closed-arrivals",
+      "fixtures": [
+        "benchmark.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "arrival-model",
+          "severity": "critical",
+          "criterion": "Identifies closed-loop demand reduction and rejects the claim that the second run demonstrates 1000 independent arrivals per second."
+        },
+        {
+          "id": "accounting",
+          "severity": "critical",
+          "criterion": "Requires scheduled/offered, started, completed, failed/dropped and unfinished work accounting rather than success among completed responses alone."
+        },
+        {
+          "id": "representativeness",
+          "severity": "major",
+          "criterion": "Proposes the appropriate arrival model, representative mix/data/skew/cache states, generator monitoring, correctness and recovery observations."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "generator-ceiling",
+      "title": "Dropped iterations limit offered load before the server does",
+      "tags": [
+        "load-testing",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Review benchmark.md and determine whether the report identifies server capacity. Specify the smallest follow-up experiment and the counters it must reconcile. Do not modify files.",
+      "fixture_dir": "evals/load-testing/fixtures/generator-ceiling",
+      "fixtures": [
+        "benchmark.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "offered-load",
+          "severity": "critical",
+          "criterion": "Distinguishes the 3000 scheduled rate from about 1900 started requests and does not attribute generator-dropped iterations to demonstrated server handling."
+        },
+        {
+          "id": "latency-population",
+          "severity": "critical",
+          "criterion": "Limits the 150 ms claim to successful completed responses and accounts for failures and unfinished work separately."
+        },
+        {
+          "id": "follow-up",
+          "severity": "major",
+          "criterion": "Proposes removing or measuring the generator ceiling before inferring server saturation or shrinking capacity, with explicit workload/outcome reconciliation."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "unit-assertion",
+      "title": "A pure arithmetic assertion needs no workload model",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review test.md and state the correct expected value for this assertion. Keep the file unchanged and limit the answer to this local unit-test correction.",
+      "fixture_dir": "evals/load-testing/fixtures/unit-assertion",
+      "fixtures": [
+        "test.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not load load-testing or introduce benchmark infrastructure for the pure arithmetic assertion."
+        },
+        {
+          "id": "correct-value",
+          "severity": "major",
+          "criterion": "Identifies 6 as the correct expected value."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    }
+  ]
+}

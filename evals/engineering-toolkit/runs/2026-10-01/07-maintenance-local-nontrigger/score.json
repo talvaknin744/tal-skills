@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-october-maintenance-nontrigger-01",
+  "run_evidence_sha256": "3171b7a1fa7ad167e966d10fb03502f8770aa0b5c9bb6f4f023eeca6ed625b0f",
+  "final_workspace_tree_sha256": "a82da0861d2c5ac87c4c50f6b3c97eef5734e258d9aedc9013419682112469f0",
+  "case_id": "finite-local-cleanup-nontrigger",
+  "candidate_tree_sha256": "eb7254883b66001e6dac82626d785764aff6c70129e1e90ff558788be7acd15f",
+  "rubric_sha256": "82e461f1276e52eaea7aa811eab99f5bdc8fc9252e671a7687f47d7e8137d01c",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "events item_0 through item_6; lines 3-14; evidence/answer.md lines 1-9; evidence/discovery.json candidate_entries",
+        "observation": "Pass in the captured observable behavior: the five commands read/list the local fixture and execute its pure filename predicate; none reads the background-maintenance body or references, and the final answer contains only the filename result and minimal suffix correction. Discovery metadata confirms the candidate was available alongside 53 other skills; no matching body read was observed, not proof of absence of unrecorded loading. The run is not an isolated or case-compliant environment."
+      }
+    },
+    {
+      "id": "actual-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; trace.jsonl line 13, completed item_5",
+        "observation": "Explicitly selects a.tmp, b.tmp.backup, and tmp-report.txt, excludes c.txt. The recorded Python output independently matches all four supplied filenames."
+      }
+    },
+    {
+      "id": "smallest-correction",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3-7; trace.jsonl line 13, completed item_5",
+        "observation": "Replaces the substring predicate with name.endswith(\".tmp\") and states only a.tmp meets the requirement. This preserves the exact case-sensitive suffix semantics; the captured command prints the corrected selection without rewriting the script or deleting files."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/manifest.json workspace_before; evidence/workspace.patch empty; evidence/answer.md line 9",
+        "observation": "Both fixture files are byte-identical between original-project and final-project, their hashes match the manifest, changes and forbidden_changes are empty, and the patch is empty. Recorded commands read files or run a pure filter; the final answer accurately says files remain unchanged and makes no cleanup or production verification claim."
+      }
+    }
+  ]
+}

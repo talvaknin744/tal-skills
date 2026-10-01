@@ -1,0 +1,197 @@
+{
+  "format_version": 1,
+  "run_id": "tal-october-maintenance-nontrigger-01",
+  "case_id": "finite-local-cleanup-nontrigger",
+  "skill": "background-maintenance",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "eb7254883b66001e6dac82626d785764aff6c70129e1e90ff558788be7acd15f",
+  "fixture_tree_sha256": "99f10346acdde0333c9a7be74f3c69223356a1fdb01187a8d7df1729ea9bb486",
+  "prompt_sha256": "c67a5a1851ad7092497c9ddfda8281680e7bc922ff434bc59631583c357a74bc",
+  "case_prompt_sha256": "c9c2db2e909ce15a65089357b5988a1ee2a5db3d45b60266090921b4051af9e0",
+  "rubric_sha256": "82e461f1276e52eaea7aa811eab99f5bdc8fc9252e671a7687f47d7e8137d01c",
+  "freeze_sha256": "31a5f50b6e6c4aba41bd468ecae0887580d31fe8cce7efb905900d3907bb539e",
+  "runner_tree_sha256": "0227659e2ad34c1134396fc666db981f74f33b0121e3632db4c2da1819f17766",
+  "dependencies_tree_sha256": "1247b1ba1c81746efb6a915d1eeef4b49579a87eb3f68ef8137cc06898583f8f",
+  "task_mode": "nontrigger",
+  "execution_mode": "nontrigger",
+  "activation_expected": "do_not_auto_activate",
+  "editable_files": [],
+  "verification_argv": null,
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "read-only",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "host_version": "codex-cli 0.159.2",
+  "activation_observation": {
+    "status": "not_observed",
+    "evidence_events": [],
+    "note": "No matching body read in captured events; this is not proof that no unrecorded loading occurred."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 42.591,
+  "token_usage": {
+    "input_tokens": 67511,
+    "cached_input_tokens": 41088,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 773,
+    "reasoning_output_tokens": 295
+  },
+  "started_at": "2026-10-01T18:48:08.501Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "<trial>/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nReview cleanup.py against requirements.md. Which listed filenames would the filter select, and what is the smallest correction needed? Keep both files unchanged and limit the answer to this finite local filename-filter review."
+  ],
+  "effective_prompt_sha256": "c67a5a1851ad7092497c9ddfda8281680e7bc922ff434bc59631583c357a74bc",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"read-only\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 54,
+    "candidate_entries": [
+      {
+        "name": "background-maintenance",
+        "description": "Design, review, or tune compaction, reclamation, rebalancing, backfills, and index maintenance sharing foreground resources. Use for poor yield, shifting distributions, resource pressure, or unsafe resume; exclude finite local cleanup.",
+        "path": "/private<trial>/workspace/.agents/skills/background-maintenance/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "requested_setting_observations": {
+      "sandbox_mode": "read-only",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-10-01T18:48:51.092Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 5,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "a82da0861d2c5ac87c4c50f6b3c97eef5734e258d9aedc9013419682112469f0",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "94aea85eb6e525f85657ada069e4e59f3a23fefb48564338c20e5c01f3e834fd",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "63b0751462726fba5338ec57572233a227082a66045e627c776a11afda9cc9bb",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "6003d9d32eeefcd796f50c032ee877d0c2e1254a541024351848dbc3a1f13fa7",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "98069d4a532bf94a1549e9c3e08f85fb1288bd766253d61d96a568d980685616",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "ddcc653b48dbab0f6fa1e5648a70bacf8b795690a9290781bb4af0f5370c727b",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "98069d4a532bf94a1549e9c3e08f85fb1288bd766253d61d96a568d980685616",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "77c9c68e3684fa1f967f19970e4004501737f91aee8ae75362f6e3e31dd5c329",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "a17a0e81f4773fcaf8ba0cfb2f0e530dfee979eb18e623e13cc597a7dc643835",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "350748c930187452c4587033a51f15328630d8f37a82603328f3468e96e09532",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "3171b7a1fa7ad167e966d10fb03502f8770aa0b5c9bb6f4f023eeca6ed625b0f"
+}

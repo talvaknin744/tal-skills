@@ -30,7 +30,8 @@ actually deployed, including a native extension when that is the risky boundary.
 A fake cannot establish a real database, broker, or network guarantee.
 
 For generated inputs, differential checks, or native fuzzing, read
-[generated-inputs.md](references/generated-inputs.md). For timeouts, interruption,
+[generated-inputs.md](references/generated-inputs.md). When an operation's meaning
+depends on prior actions, read [state-models.md](references/state-models.md). For timeouts, interruption,
 retries, or out-of-order work, read [fault-histories.md](references/fault-histories.md).
 Use synthetic local resources by default; external failure injection stays within
 the user's authorized environment and impact.

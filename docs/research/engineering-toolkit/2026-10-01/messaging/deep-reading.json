@@ -1,0 +1,506 @@
+{
+  "archive": "messaging-general-streaming-design",
+  "researched_at": "2026-10-01",
+  "status": "research_only",
+  "article_count": 4,
+  "runtime_verified": false,
+  "markdown": "deep-reading.md",
+  "novelty_check": {
+    "scope": "docs/research/engineering-toolkit/**/*.md and **/*.json",
+    "files_checked_before_write": 181,
+    "method": "Canonical URL searches with trailing slash normalized; publisher/title search; current skill description inventory and nearest references read.",
+    "result": "No prior canonical article URL occurrence found. Prior Materialize consistency, Estuary exactly-once, RisingWave schema-evolution, and Decodable join-considerations candidates are different articles."
+  },
+  "articles": [
+    {
+      "id": "gazette-serving-history",
+      "title": "A decade of Gazette: a streaming broker that doesn’t store data",
+      "publisher": "Estuary",
+      "authors": [
+        "Dani Pálma"
+      ],
+      "url": "https://estuary.dev/blog/gazette-streaming-broker-architecture/",
+      "published_at": "2026-09-17",
+      "accessed_at": "2026-10-01",
+      "access": "public_full_html",
+      "read_scope": "Complete substantive prose, thirteen sections, append/transaction/ownership examples and captions. Images not inspected; snippets not executed.",
+      "kind": "architecture_explanation",
+      "practice": {
+        "trigger": {
+          "text": "Historical replay beside a latency-sensitive live stream.",
+          "provenance": "application_synthesis",
+          "evidence": [
+            "gazette-serving-history"
+          ]
+        },
+        "problem": {
+          "text": "Replay and live traffic require different capacity paths.",
+          "provenance": "article",
+          "evidence": [
+            "gazette-serving-history"
+          ]
+        },
+        "mechanism": {
+          "text": "Hot replication and immutable fragments share journal offsets; clients can read stored history directly.",
+          "provenance": "article_crosschecked",
+          "evidence": [
+            "gazette-serving-history",
+            "gazette-current-concepts"
+          ]
+        },
+        "limits": {
+          "text": "Single-journal write capacity remains bounded; partition across journals to scale further.",
+          "provenance": "current_docs",
+          "evidence": [
+            "gazette-current-concepts"
+          ]
+        },
+        "counterexample": {
+          "text": "Live-only consumption may not justify another historical path.",
+          "provenance": "original_synthesis",
+          "evidence": [
+            "gazette-serving-history"
+          ]
+        },
+        "verification": {
+          "text": "Replay across sealed/live seam; assert contiguous committed bytes and bounded live latency.",
+          "provenance": "original_proposed_test",
+          "evidence": [
+            "gazette-current-concepts"
+          ],
+          "executed": false
+        }
+      },
+      "best_existing_reference": "skills/engineering/distributed-system-patterns/references/serving.md",
+      "placement_decision": "bounded_reference_extension",
+      "related_existing_reference": "skills/engineering/distributed-system-patterns/references/ownership.md",
+      "official_crosschecks": [
+        "gazette-current-concepts"
+      ],
+      "gap_ids": [
+        "independent-history-serving",
+        "offset-space-seam"
+      ],
+      "reading_depth": "deep_read"
+    },
+    {
+      "id": "materialize-future-state",
+      "title": "Replica expiration: Limiting temporal filters' resource requirements",
+      "publisher": "Materialize",
+      "authors": [
+        "Moritz Hoffmann"
+      ],
+      "url": "https://materialize.com/blog/replica-expiration/",
+      "published_at": "2025-01-15",
+      "accessed_at": "2026-10-01",
+      "access": "public_full_html",
+      "read_scope": "Complete body and constant-collection appendix, including SQL and update tables; no execution.",
+      "kind": "implementation_design_explanation",
+      "practice": {
+        "trigger": {
+          "text": "Continuously maintained time-filtered views and their state budget.",
+          "provenance": "application_synthesis",
+          "evidence": [
+            "materialize-future-state"
+          ]
+        },
+        "problem": {
+          "text": "Visible rows omit pending future state.",
+          "provenance": "article",
+          "evidence": [
+            "materialize-future-state"
+          ]
+        },
+        "mechanism": {
+          "text": "Schedule result changes; bound replica execution before discarded future updates become relevant.",
+          "provenance": "historical_article",
+          "evidence": [
+            "materialize-future-state"
+          ]
+        },
+        "limits": {
+          "text": "Retractions consume resources; late records and materialization syntax have explicit limits.",
+          "provenance": "current_docs",
+          "evidence": [
+            "materialize-current-temporal-filters"
+          ]
+        },
+        "counterexample": {
+          "text": "A far-future row can be invisible yet require pending state.",
+          "provenance": "original_synthesis",
+          "evidence": [
+            "materialize-future-state"
+          ]
+        },
+        "verification": {
+          "text": "Pin times around admission/expiry, include future and late rows, then measure pending state separately.",
+          "provenance": "original_proposed_test",
+          "evidence": [
+            "materialize-current-temporal-filters",
+            "materialize-current-unit-test"
+          ],
+          "executed": false
+        }
+      },
+      "best_existing_reference": "skills/engineering/microservice-data/references/projections.md",
+      "placement_decision": "conditional_projection_reference_or_distinct_general_design_skill",
+      "official_crosschecks": [
+        "materialize-current-temporal-filters",
+        "materialize-current-unit-test"
+      ],
+      "gap_ids": [
+        "time-and-output-contract",
+        "retained-versus-visible-state"
+      ],
+      "unverified_current_claims": [
+        "Exact replica-expiration deployment eligibility",
+        "Historical observed memory reduction on a new workload"
+      ],
+      "reading_depth": "deep_read"
+    },
+    {
+      "id": "risingwave-trigger-semantics",
+      "title": "Deep Dive Into the RisingWave Stream Processing Engine (Part 3): Trigger Mechanism",
+      "publisher": "RisingWave",
+      "authors": [
+        "RisingWave Labs"
+      ],
+      "url": "https://risingwave.com/blog/deep-dive-into-the-risingwave-stream-processing-engine-part-3-trigger-mechanism/",
+      "published_at": "2023-11-24",
+      "accessed_at": "2026-10-01",
+      "access": "public_full_html",
+      "read_scope": "Complete computation, barriers, injection, watermarks, EOWC and conclusion prose, SQL and captions; diagram pixels not inspected.",
+      "kind": "computational_model_explanation",
+      "practice": {
+        "trigger": {
+          "text": "Select changing window results versus finalized append-only output.",
+          "provenance": "application_synthesis",
+          "evidence": [
+            "risingwave-trigger-semantics"
+          ]
+        },
+        "problem": {
+          "text": "Batch progress and event-time completeness differ.",
+          "provenance": "article",
+          "evidence": [
+            "risingwave-trigger-semantics"
+          ]
+        },
+        "mechanism": {
+          "text": "Align barriers for incremental flush; wait for watermarks to finalize windows.",
+          "provenance": "article_crosschecked",
+          "evidence": [
+            "risingwave-trigger-semantics",
+            "risingwave-current-eowc"
+          ]
+        },
+        "limits": {
+          "text": "Late-data exclusion, downstream TTL effects, and connector transaction limits need explicit contracts.",
+          "provenance": "current_docs",
+          "evidence": [
+            "risingwave-current-watermarks",
+            "risingwave-current-transactions"
+          ]
+        },
+        "counterexample": {
+          "text": "A max-observed-event watermark may stall on a quiet source.",
+          "provenance": "original_inference_from_formula",
+          "evidence": [
+            "risingwave-current-watermarks"
+          ]
+        },
+        "verification": {
+          "text": "Permute arrival order, advance watermark explicitly, inject late changes, compare update/final output.",
+          "provenance": "original_proposed_test",
+          "evidence": [
+            "risingwave-current-watermarks",
+            "risingwave-current-eowc"
+          ],
+          "executed": false
+        }
+      },
+      "best_existing_reference": "skills/engineering/microservice-data/references/projections.md",
+      "placement_decision": "conditional_projection_reference_or_distinct_general_design_skill",
+      "official_crosschecks": [
+        "risingwave-current-watermarks",
+        "risingwave-current-eowc",
+        "risingwave-current-transactions"
+      ],
+      "gap_ids": [
+        "time-and-output-contract",
+        "window-admission-and-finality"
+      ],
+      "current_doc_corrections": [
+        "Use current /processing/ pages rather than old /docs/current/ routes.",
+        "Do not repeat the article's historical experimental label as current feature status."
+      ],
+      "reading_depth": "deep_read"
+    },
+    {
+      "id": "decodable-continuous-joins",
+      "title": "Real Time Streaming Joins With SQL",
+      "publisher": "Decodable",
+      "authors": [
+        "Robert Metzger"
+      ],
+      "url": "https://www.decodable.co/blog/real-time-joins-with-decodable",
+      "published_at": "2022-10-14",
+      "accessed_at": "2026-10-01",
+      "access": "public_full_html_prose",
+      "read_scope": "Complete textual body, examples, benefits, change-stream pipeline and conclusion. HTML SQL block empty; embedded images not inspected.",
+      "kind": "continuous_query_explanation",
+      "practice": {
+        "trigger": {
+          "text": "Enrich events or continuously maintain a joined relation.",
+          "provenance": "application_synthesis",
+          "evidence": [
+            "decodable-continuous-joins"
+          ]
+        },
+        "problem": {
+          "text": "Source changes update joined results; required reference-data time remains a design choice.",
+          "provenance": "article_and_synthesis",
+          "evidence": [
+            "decodable-continuous-joins",
+            "decodable-current-temporal"
+          ]
+        },
+        "mechanism": {
+          "text": "Choose maintained, event-time historical, or processing-time latest-value joins.",
+          "provenance": "current_docs",
+          "evidence": [
+            "decodable-current-overview",
+            "decodable-current-temporal"
+          ]
+        },
+        "limits": {
+          "text": "Regular joins retain state; outer joins can emit nulls before corrections.",
+          "provenance": "current_docs",
+          "evidence": [
+            "decodable-current-overview",
+            "decodable-current-regular"
+          ]
+        },
+        "counterexample": {
+          "text": "Latest rates can misprice a delayed historical transaction.",
+          "provenance": "original_synthesis",
+          "evidence": [
+            "decodable-current-temporal"
+          ]
+        },
+        "verification": {
+          "text": "Change dimensions between event and processing time; assert chosen semantics, corrections and sink representation.",
+          "provenance": "original_proposed_test",
+          "evidence": [
+            "decodable-current-temporal",
+            "decodable-current-regular"
+          ],
+          "executed": false
+        }
+      },
+      "best_existing_reference": "skills/engineering/microservice-data/references/projections.md",
+      "placement_decision": "conditional_projection_reference_or_distinct_general_design_skill",
+      "official_crosschecks": [
+        "decodable-current-overview",
+        "decodable-current-temporal",
+        "decodable-current-regular"
+      ],
+      "gap_ids": [
+        "join-temporal-contract",
+        "retained-versus-visible-state"
+      ],
+      "doc_ambiguity": "Overview calls lookup output append; temporal example calls it a change stream. Inspect deployed schema/output contract before promising either.",
+      "not_adopted": [
+        "Broad exactly-once delivery wording without effect-boundary evidence",
+        "Automatic efficiency or vendor latency promises",
+        "Historical connector availability as a current list"
+      ],
+      "reading_depth": "deep_read"
+    }
+  ],
+  "official_crosschecks": [
+    {
+      "id": "gazette-current-concepts",
+      "title": "Broker Concepts",
+      "publisher": "Gazette",
+      "url": "https://gazette.readthedocs.io/en/latest/brokers-concepts.html",
+      "version": "latest/master, unversioned",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive concepts page: journals, clustering, specifications, fragments/files/index, labels, APIs and gazctl.",
+      "finding": "Serializable journal appends and offset-defined fragments support local/proxied/direct reads. Per-journal append rate stays tied to assigned brokers.",
+      "runtime_verified": false
+    },
+    {
+      "id": "materialize-current-temporal-filters",
+      "title": "Temporal filters (time windows)",
+      "publisher": "Materialize",
+      "url": "https://materialize.com/docs/transform-data/patterns/temporal-filters/",
+      "version": "unversioned current docs",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive page: definition, requirements/restrictions, sliding-window, TTL, periodic-results examples, late events.",
+      "finding": "Virtual-time filters schedule result changes and require pending-retraction resources; grace periods determine admission of late records.",
+      "runtime_verified": false
+    },
+    {
+      "id": "materialize-current-unit-test",
+      "title": "EXECUTE UNIT TEST",
+      "publisher": "Materialize",
+      "url": "https://materialize.com/docs/sql/execute-unit-test/",
+      "version": "public preview",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive page, preview warning, runner distinction, AT TIME, mocks, set equality and examples.",
+      "finding": "mz-deploy runs preview tests; AT TIME pins mz_now(). Set comparison alone does not prove a subscription history or resource bound.",
+      "runtime_verified": false
+    },
+    {
+      "id": "risingwave-current-watermarks",
+      "title": "Watermarks",
+      "publisher": "RisingWave",
+      "url": "https://docs.risingwave.com/processing/watermarks",
+      "version": "unversioned current docs",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive page: semantics, max-time example, syntax, WITH TTL, generated-column and table/source examples.",
+      "finding": "Watermark-based late admission and table TTL are explicit; TTL cleanup does not delete prior downstream materialized results.",
+      "runtime_verified": false
+    },
+    {
+      "id": "risingwave-current-eowc",
+      "title": "Emit on window close",
+      "publisher": "RisingWave",
+      "url": "https://docs.risingwave.com/processing/emit-on-window-close",
+      "version": "current docs; includes v2.3 change note",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive page: update/close policies, required watermark, syntax, output timing, specialized operators.",
+      "finding": "Default output updates through barriers; window-close output waits for watermark passage and omits recent partial results.",
+      "runtime_verified": false
+    },
+    {
+      "id": "risingwave-current-transactions",
+      "title": "Transactions",
+      "publisher": "RisingWave",
+      "url": "https://docs.risingwave.com/processing/transactions",
+      "version": "unversioned current docs",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive page: read-only snapshots/restrictions and CDC-table transaction option.",
+      "finding": "CDC transaction option is native MySQL/PostgreSQL only; more than 4096 changed rows is outside the documented guarantee.",
+      "runtime_verified": false
+    },
+    {
+      "id": "decodable-current-overview",
+      "title": "Joining streaming data",
+      "publisher": "Decodable",
+      "url": "https://docs.decodable.co/pipelines/joins.html",
+      "version": "unversioned current docs",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete substantive page, including join-type/state/input-output comparison table.",
+      "finding": "Regular joins retain record state indefinitely; windowed and lookup joins establish different state and output contracts.",
+      "runtime_verified": false
+    },
+    {
+      "id": "decodable-current-temporal",
+      "title": "Time-based lookup joins",
+      "publisher": "Decodable",
+      "url": "https://docs.decodable.co/pipelines/joins/temporal-joins.html",
+      "version": "unversioned current docs",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Complete prose, historical/latest-value distinctions, exchange-rate tables and SYSTEM_TIME AS OF example; caption only for diagram.",
+      "finding": "Historical lookup uses event time; latest-value lookup uses processing time. Output terminology differs from overview.",
+      "runtime_verified": false
+    },
+    {
+      "id": "decodable-current-regular",
+      "title": "Regular joins",
+      "publisher": "Decodable",
+      "url": "https://docs.decodable.co/pipelines/joins/regular-joins.html",
+      "version": "unversioned current docs",
+      "accessed_at": "2026-10-01",
+      "read_scope": "Targeted join-type examples, Joins that produce nulls section, and multistream CDC update/deletion example; not every displayed payload line counted as prose reading.",
+      "finding": "Outer joins may initially emit nulls, then correct through a change stream when matching input arrives.",
+      "runtime_verified": false
+    }
+  ],
+  "skills_inspected": {
+    "description_inventory": "Every skills/**/SKILL.md description on 2026-10-01",
+    "full_skills": [
+      "distributed-system-patterns",
+      "microservice-data",
+      "messaging-reliability",
+      "architecture"
+    ],
+    "relevant_references": [
+      "distributed-system-patterns/references/serving.md",
+      "distributed-system-patterns/references/ownership.md",
+      "distributed-system-patterns/references/batch.md",
+      "microservice-data/references/projections.md",
+      "messaging-reliability/references/ordering-and-replay.md"
+    ]
+  },
+  "ranked_placements": [
+    {
+      "rank": 1,
+      "type": "distinct_new_skill_candidate",
+      "target": "stream-processing-design",
+      "reason": "General time/output/join/state decisions have a narrow trigger gap independent of service decomposition or delivery failure.",
+      "status": "research_candidate_only"
+    },
+    {
+      "rank": 2,
+      "type": "existing_reference",
+      "target": "skills/engineering/microservice-data/references/projections.md",
+      "reason": "Strongest existing fit when the task already concerns service-owned read projections.",
+      "status": "conditional_reference_extension"
+    },
+    {
+      "rank": 3,
+      "type": "existing_reference",
+      "target": "skills/engineering/distributed-system-patterns/references/serving.md",
+      "reason": "Gazette history-serving and partition-capacity decisions are topology branches.",
+      "status": "bounded_reference_extension"
+    },
+    {
+      "rank": 4,
+      "type": "existing_reference",
+      "target": "skills/messaging/messaging-reliability/references/ordering-and-replay.md",
+      "reason": "A reliability entry point only when replay, late events or consumer progress is the active issue.",
+      "status": "conditional_cross_reference"
+    }
+  ],
+  "candidate_contract": {
+    "name": "stream-processing-design",
+    "positive_triggers": [
+      "Choose regular versus historical streaming joins and bound their state.",
+      "Make a window append-only while stating allowed lateness."
+    ],
+    "countertriggers": [
+      "Repair a lost consumer acknowledgement.",
+      "Routine bounded in-process transformation."
+    ],
+    "completion_criterion": "Each selected branch specifies time domain, source change model, output change model, lateness/finality rule, retained-state horizon and a discriminating verification schedule.",
+    "reference_branches": [
+      "time-and-windows",
+      "join-semantics",
+      "backfill-and-state-placement"
+    ],
+    "reuse": [
+      "microservice-data for service authority",
+      "messaging-reliability for disposition/replay",
+      "distributed-system-patterns for topology/ownership"
+    ],
+    "implementation_authorized_by_this_record": false,
+    "broad_architecture_overlap": "Architecture already accepts broad design requests. The candidate is justified only by a repeatable streaming semantic workflow, not lack of any general design route."
+  },
+  "verification": {
+    "executed": [
+      "Repository canonical-URL dedupe and skill description/reference inspection",
+      "Read-only first-party article and current documentation access"
+    ],
+    "not_executed": [
+      "Broker replay",
+      "Streaming SQL",
+      "Product unit tests",
+      "Memory or live-latency measurements",
+      "Model evaluations"
+    ],
+    "next_step": "Build a small semantic evaluation set before drafting a new skill or widening pointers."
+  }
+}

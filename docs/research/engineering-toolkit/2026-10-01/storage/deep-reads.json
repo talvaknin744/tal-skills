@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "lane": "storage",
+  "researched_at": "2026-10-01",
+  "status": "complete",
+  "scope": "Four new primary technical articles on general systems design, with current primary contract crosschecks and independently authored verification specifications. This records the research phase; subsequent authorized skill implementation is documented in README.md. No models, runtime benchmarks, or commits.",
+  "prior_source_check": {
+    "root": "docs/research/engineering-toolkit",
+    "files_checked": 103,
+    "file_types": [
+      "json",
+      "md"
+    ],
+    "unique_prior_urls": 603,
+    "excluded_current_wave": "2026-10-01",
+    "normalization": "Trailing slash removed before exact URL comparison; all earlier lane and extension ledgers included.",
+    "result": "No selected article URL appears in an earlier engineering-toolkit ledger. Current-wave archive discovery is not counted as earlier reading."
+  },
+  "reading_method": {
+    "access": "Official publisher pages opened through web browsing; full substantive textual article bodies read, including examples and conclusions. Diagrams were not used as unique evidence.",
+    "request_bounds": "Synchronous web calls; no batch requested more than one page from the same target host. Repeated target-host calls were separated by at least one second. Search results were discovery evidence, not substitutes for full article reads.",
+    "evidence_boundary": "Source mechanisms are summarized below. Counterexamples and proposed checks may be independently derived; they are labelled and no runtime result is claimed. Current documentation overrides historical version/default claims."
+  },
+  "articles": [
+    {
+      "id": "storage-shard-reconfiguration",
+      "publisher_id": "meta",
+      "title": "Scaling services with Shard Manager",
+      "url": "https://engineering.fb.com/2020/08/24/production-engineering/scaling-services-with-shard-manager/",
+      "published_at": "2020-08-24",
+      "new_source": true,
+      "access": "public full HTML",
+      "read_scope": "Full textual body, from sharding introduction through design, architecture, and upcoming challenges.",
+      "source_locators": [
+        "Shard state transition interface",
+        "Intent-based specification of various functionalities",
+        "Shard Manager design and implementation"
+      ],
+      "practice": {
+        "trigger": "Design or rebalance a stateful, sharded service.",
+        "problem": "Static placement ignores uneven load, hardware, locality, and maintenance.",
+        "mechanism": "Opaque lifecycle callbacks separate placement control from application data movement; constraints express replication and placement intent.",
+        "limits": "Basic drop-then-add causes downtime; applications validate consensus membership; small services may find the abstraction excessive.",
+        "counterexample": "Hash routing alone cannot supply safe ownership transfer.",
+        "verification": "Independently proposed: exercise relocation with delayed callbacks and old routing; observe readiness, accepted writes, replica availability, and transfer cost. Require the selected exclusivity and downtime contracts to hold throughout."
+      },
+      "current_contract_crosschecks": [
+        {
+          "url": "https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html",
+          "kind": "current official dependency contract",
+          "locator": "ZooKeeper Sessions",
+          "finding": "The cluster expires sessions and removes ephemeral nodes; a disconnected former owner learns expiration only after reconnecting. Inference: election-record exclusivity does not by itself establish that a protected external resource rejects stale work.",
+          "disposition": "Do not present a copied lifecycle callback as a complete fencing protocol. No public current Meta Shard Manager API or implementation was verified; the article remains a historical design account."
+        }
+      ],
+      "verification_specification": {
+        "authorship": "independently authored design checks, not executed",
+        "setup": "Model one movable shard, two hosts, a routing snapshot, and a protected mutable resource. Specify whether the move permits an availability gap or overlapping read-only replicas.",
+        "actions": [
+          "Pause the old owner after acquiring authority, expire its coordination session, admit a successor, then resume the old owner.",
+          "Delay or duplicate lifecycle completions and serve a request through an old routing snapshot.",
+          "Move a large shard during normal traffic, then make the control plane unavailable."
+        ],
+        "observations": [
+          "Resource-side accepted/rejected mutations and ownership generation",
+          "Time without an eligible ready replica",
+          "Movement bandwidth, CPU, memory, and serving latency",
+          "Whether existing placements continue serving while control is unavailable"
+        ],
+        "acceptance": "No obsolete owner performs a forbidden mutation; routing/readiness meets the declared availability policy; movement remains within an explicit serving-resource budget. If the resource cannot enforce ownership, state the weaker supported contract.",
+        "limitations": "A local state-machine exercise would not establish distributed consensus or production failover safety."
+      },
+      "placement_rank": [
+        {
+          "rank": 1,
+          "kind": "existing-reference-extension",
+          "skill": "distributed-system-patterns",
+          "reference": "skills/engineering/distributed-system-patterns/references/serving.md",
+          "rationale": "Already covers keys, routing, data movement, hot shards, and membership changes. Add lifecycle completion/readiness and movement-cost questions; refer to its existing ownership branch."
+        },
+        {
+          "rank": 2,
+          "kind": "new-skill-candidate",
+          "skill": "storage-design",
+          "rationale": "Would own physical storage and reconfiguration decisions, but this source alone adds insufficient scope beyond the existing topology and ownership workflow."
+        }
+      ]
+    },
+    {
+      "id": "storage-resource-admission",
+      "publisher_id": "cockroach-labs",
+      "title": "Here's how CockroachDB keeps your database from collapsing under load",
+      "url": "https://www.cockroachlabs.com/blog/admission-control-in-cockroachdb/",
+      "published_at": "2022-06-06",
+      "author": "Sumeer Bhola",
+      "new_source": true,
+      "access": "public full HTML",
+      "read_scope": "Full body: resources, architecture, slots/tokens, grant chaining, locking, tenancy, epoch-LIFO, and conclusion.",
+      "source_locators": [
+        "Queues and servicing using tokens or slots",
+        "Priority inversion and throughput",
+        "Epoch LIFO Queueing"
+      ],
+      "practice": {
+        "trigger": "Allocate saturated resources across heterogeneous, multi-stage work.",
+        "problem": "Uncontrolled queues waste deadlines, obscure fairness, and delay lock release.",
+        "mechanism": "Use slots for observable ongoing work, tokens for delayed or unobservable resource consumption; coordinate admission across stages and priorities.",
+        "limits": "Epoch-LIFO assumes clock alignment and deadline slack; prioritization can starve work and worsen tails.",
+        "counterexample": "Independent LIFO at each stage may prevent any transaction completing.",
+        "verification": "Independently proposed: overload uneven stages with variable cost and deadlines. Measure completed operations, waiting, tails, fairness, and cleanup rather than admission rate alone."
+      },
+      "current_contract_crosschecks": [
+        {
+          "url": "https://docs.cockroachlabs.com/docs/stable/admission-control",
+          "kind": "current official documentation",
+          "locator": "Known limitations; Considerations; Replication admission control",
+          "finding": "Admission remains node-local, does not preemptively reject long queues, and can starve lower priorities. Aggressive timeouts can reduce useful throughput. SQL connection counts are separate. Current documentation adds replication pacing absent from the 2022 account.",
+          "disposition": "Do not promise admission alone bounds queue length, memory, connections, or end-to-end latency. Historical numeric settings and experiment results are not deployment defaults."
+        }
+      ],
+      "verification_specification": {
+        "authorship": "independently authored design checks, not executed",
+        "setup": "Define foreground and background workloads, shared bottlenecks, operation deadlines, queue bounds, and useful-completion objectives. Include a transaction that already holds a lock.",
+        "actions": [
+          "Increase offered load beyond capacity with a mix of cheap and expensive operations.",
+          "Saturate one storage node while the aggregate cluster has spare capacity.",
+          "Queue later stages of a lock-holding transaction behind unrelated work and cancel expired waiters.",
+          "Continue high-priority arrivals long enough to reveal the chosen starvation policy."
+        ],
+        "observations": [
+          "Useful completed transactions per second",
+          "Queue depth/age, execution time, timeout and rejection rate",
+          "Resource consumption after cancellation",
+          "Latency distribution and service by class or tenant",
+          "Connection-pool pressure and background recovery progress"
+        ],
+        "acceptance": "Useful throughput and stated priority objectives hold within declared resource bounds; expired work releases owned queue state; the design specifies starvation, excess connection, and overload rejection policies separately.",
+        "limitations": "A generic application semaphore does not reproduce CockroachDB's stage hierarchy, storage feedback, or replication pacing."
+      },
+      "placement_rank": [
+        {
+          "rank": 1,
+          "kind": "existing-reference-extension",
+          "skill": "microservice-operations",
+          "reference": "skills/engineering/microservice-operations/references/capacity.md",
+          "rationale": "Already selects bottlenecks and bounded waiting. Add resource lifetime, work cost, useful completion, priority inversion, and fairness questions for cross-service admission."
+        },
+        {
+          "rank": 2,
+          "kind": "new-skill-candidate",
+          "skill": "resource-admission-design",
+          "rationale": "Distinct enough for repeated scheduler-design tasks across databases and services; premature from one product account and outside storage selection alone."
+        }
+      ]
+    },
+    {
+      "id": "storage-workload-partitioning",
+      "publisher_id": "yugabyte",
+      "title": "Four Data Sharding Strategies We Analyzed in Building a Distributed SQL Database",
+      "url": "https://www.yugabyte.com/blog/four-data-sharding-strategies-we-analyzed-in-building-a-distributed-sql-database/",
+      "published_at": "2020-01-14",
+      "author": "Karthik Ranganathan",
+      "new_source": true,
+      "access": "public full HTML",
+      "read_scope": "Full body: four strategies, implementation examples, default rationale, future work, and conclusion.",
+      "source_locators": [
+        "Algorithmic Sharding",
+        "Linear Hash Sharding",
+        "Consistent Hash Sharding",
+        "Range Sharding",
+        "Putting it all together"
+      ],
+      "practice": {
+        "trigger": "Choose table or index partitioning for point and range access.",
+        "problem": "Distribution, range locality, resize movement, and initial parallelism conflict.",
+        "mechanism": "Compare modulo, order-preserving, consistent-hash, and range placement against access patterns; choose table and index layouts separately.",
+        "limits": "Range placement can concentrate load; hash placement can enlarge range-query work.",
+        "counterexample": "Adding nodes does not immediately parallelize an initially single range tablet.",
+        "verification": "Independently proposed: replay point, range, monotonic-insert, skew, and resize workloads. Record per-tablet distribution, routed work, latency, and movement cost at equal resource budgets."
+      },
+      "current_contract_crosschecks": [
+        {
+          "url": "https://docs.yugabyte.com/stable/architecture/docdb-sharding/sharding/",
+          "kind": "current official documentation",
+          "locator": "Hash sharding; Range sharding",
+          "finding": "Current documentation retains hash/range tradeoffs and explicit YSQL key syntax; YCQL supports hash sharding only.",
+          "disposition": "Do not transfer API capabilities across YSQL and YCQL, or interpret statistical hash distribution as a guarantee for one hot key."
+        },
+        {
+          "url": "https://docs.yugabyte.com/stable/architecture/docdb-sharding/tablet-splitting/",
+          "kind": "current official documentation",
+          "locator": "Automatic tablet splitting; Post-split compactions; Limitations",
+          "finding": "Automatic splitting has been enabled by default since 2.18, superseding the article's future-work text. Range tables initially have one tablet unless explicitly partitioned; post-split compaction consumes CPU/disk, and colocated tables cannot split.",
+          "disposition": "Inspect effective layout, version, colocation, splitting, and capacity limits instead of relying on the historical roadmap."
+        }
+      ],
+      "verification_specification": {
+        "authorship": "independently authored design checks, not executed",
+        "setup": "Use equal replication, resources, data volume, and a documented query mix. Separate key cardinality, byte distribution, and request concentration.",
+        "actions": [
+          "Compare point reads and bounded ranges with hash, range, and hash-prefix/range-suffix layouts supported by the target platform.",
+          "Insert monotonic keys and repeat traffic against one key or tenant.",
+          "Add a node and observe redistribution; record initial tablet count separately from later count.",
+          "Run a supported split while normal traffic continues."
+        ],
+        "observations": [
+          "Per-tablet bytes, requests, CPU, and leader distribution",
+          "Tablets contacted and rows scanned per query",
+          "p95/p99 latency, useful throughput, and write/index cost",
+          "Split/rebalance duration and compaction resource consumption"
+        ],
+        "acceptance": "The layout meets both routing/query and write-distribution objectives, including startup and growth. A secondary index is accepted only with its added storage, write, backfill, and compatibility costs recorded.",
+        "limitations": "Uniform synthetic keys can hide skew; a successful resize cannot demonstrate every production placement policy."
+      },
+      "placement_rank": [
+        {
+          "rank": 1,
+          "kind": "existing-reference-extension",
+          "skill": "distributed-system-patterns",
+          "reference": "skills/engineering/distributed-system-patterns/references/serving.md",
+          "rationale": "The current sharding branch already asks about distribution, hottest keys, and movement. Add hash-versus-range query locality and startup/split-cost comparison."
+        },
+        {
+          "rank": 2,
+          "kind": "new-skill-candidate",
+          "skill": "storage-design",
+          "rationale": "Would give table/index layout a specific decision workflow, but avoid duplicating topology and ownership guidance already present."
+        }
+      ]
+    },
+    {
+      "id": "storage-analytical-read-model",
+      "publisher_id": "clickhouse",
+      "title": "Postgres to ClickHouse: Data Modeling Tips V2",
+      "url": "https://clickhouse.com/blog/postgres-to-clickhouse-data-modeling-tips-v2",
+      "published_at": "2025-03-06",
+      "authors": [
+        "Lionel Palacin",
+        "Sai Srirampur"
+      ],
+      "new_source": true,
+      "access": "public full HTML",
+      "read_scope": "Full body: CDC, versioned rows, deduplication, ordering keys, JOINs, raw/aggregated materializations, and summary.",
+      "source_locators": [
+        "Deduplication strategy",
+        "Ordering keys",
+        "JOINs and Denormalization",
+        "Aggregated denormalization using Incremental Materialized View"
+      ],
+      "practice": {
+        "trigger": "Choose an analytical read model over changing transactional data.",
+        "problem": "Source schemas and query semantics do not transfer unchanged.",
+        "mechanism": "Compare query-time deduplication, scheduled recomputation, and incremental transformations using freshness, identity, query flexibility, and computation cost.",
+        "limits": "Ordering keys also determine deduplication; historical distinct aggregates retain deleted identities.",
+        "counterexample": "Ever-created counts cannot answer how many records currently exist.",
+        "verification": "Independently proposed: compare a projection with a known source snapshot after repeated versions, deletion, changed grouping, dimension-only updates, refresh delay, and rebuild. Verify meaning and freshness before latency."
+      },
+      "current_contract_crosschecks": [
+        {
+          "url": "https://clickhouse.com/docs/integrations/clickpipes/postgres/ordering-keys",
+          "kind": "current official documentation",
+          "locator": "Custom ordering keys without refreshable materialized views; Set Replica Identity",
+          "finding": "Current guidance still requires extra direct CDC ordering-key columns to remain stable per row and requires replica identity to carry custom ordering-key values for deletes.",
+          "disposition": "Appending source ID does not repair a mutable key. The custom direct-CDC layout needs a complete identity/change contract."
+        },
+        {
+          "url": "https://clickhouse.com/docs/concepts/features/materialized-views/incremental-materialized-view",
+          "kind": "current official documentation",
+          "locator": "Background; Materialized views and JOINs",
+          "finding": "Incremental views process inserted blocks. JOIN views trigger only on the left/source table; right-side changes do not retroactively update earlier materialized rows. Refreshable views rerun the full query periodically.",
+          "disposition": "An insertion-time enrichment is not automatically a continuously current join. Declare whether dimension values reflect ingestion time or current state and provide recomputation when required."
+        }
+      ],
+      "verification_specification": {
+        "authorship": "independently authored design checks, not executed",
+        "setup": "Define exact versus approximate answers, current-state versus historical counting, acceptable CDC/refresh age, source authority, and whether a multi-table consistent snapshot is required.",
+        "actions": [
+          "Insert one identity, replay its version, update a value, change a grouping field, and delete it.",
+          "Update only a joined dimension while no source/fact insert occurs.",
+          "Exercise a supported immutable custom ordering key and a deliberately mutable control case, including deletion identity.",
+          "Interrupt and rebuild the view, then inspect lag and refresh completion under normal serving load."
+        ],
+        "observations": [
+          "Latest visible identity/value and aggregate meaning",
+          "Projection/source comparison at a declared comparable boundary",
+          "Dimension values before and after recomputation",
+          "Rows/bytes scanned, memory, refresh duration, and ingestion overhead"
+        ],
+        "acceptance": "Every query meets its declared meaning, freshness, and approximation contract. Historical identity accumulation is accepted only for a historical metric. A source/derived comparison waits for a known watermark or quiescent boundary; FINAL does not itself prove CDC caught up or a cross-table source snapshot.",
+        "limitations": "No CDC pipeline or SQL example was executed. The blog's historical projection-versus-FINAL behavior was not revalidated and is not adopted as a current blanket rule."
+      },
+      "placement_rank": [
+        {
+          "rank": 1,
+          "kind": "existing-reference-extension",
+          "skill": "architecture",
+          "reference": "skills/engineering/architecture/references/planning.md",
+          "rationale": "A small linked storage/read-model reference can compare query/update shape, freshness, layout, and cost without widening microservice-data beyond cross-owner reads."
+        },
+        {
+          "rank": 2,
+          "kind": "new-skill-candidate",
+          "skill": "storage-design",
+          "rationale": "Strongest standalone candidate: datastore/layout/read-model choice has a repeatable artifact and is excluded by existing single-database tuning exclusions. Needs enough evidence beyond one vendor to justify a new trigger."
+        },
+        {
+          "rank": 3,
+          "kind": "conditional-existing-reference-extension",
+          "skill": "microservice-data",
+          "reference": "skills/engineering/microservice-data/references/projections.md",
+          "rationale": "Use only when the actual projection crosses service-owned data. Existing trigger intentionally excludes single-database tuning; product presence alone should not activate it."
+        }
+      ]
+    }
+  ],
+  "overall_placement_ranking": [
+    {
+      "rank": 1,
+      "choice": "Minimal additions to existing references",
+      "placement": [
+        "distributed-system-patterns/references/serving.md",
+        "microservice-operations/references/capacity.md",
+        "architecture: linked storage/read-model decision reference"
+      ],
+      "reason": "Existing workflows already own topology, resource limits, and architecture choices. Add only missing decision questions, conditions, and acceptance checks; preserve current triggers."
+    },
+    {
+      "rank": 2,
+      "choice": "Distinct new storage-design skill",
+      "proposed_trigger": "Choose or evolve a datastore, physical table/index layout, partition key, or analytical read model against a workload and correctness/freshness contract.",
+      "proposed_exclusions": "Routine query fixes; microservice ownership/sagas; race diagnosis; restoration; topology choice without a storage decision.",
+      "distinct_return_contract": "A workload-to-storage decision matrix, authoritative/derived state model, physical key/layout and update contract, adoption sequence, and comparative verification specification.",
+      "reason": "This boundary is real and broader than failure repair, but the four reads mostly fit existing branches. Promote only when archive screening establishes recurring storage-choice tasks and a vendor-neutral evidence base; do not create it merely to house source summaries."
+    },
+    {
+      "rank": 3,
+      "choice": "Distinct resource-admission-design skill",
+      "reason": "Has an independent scheduler/resource-lifecycle boundary, but requires multiple sources and task demand across runtimes and services. Admission is not inherently a storage-only concern."
+    }
+  ],
+  "quality_checks": {
+    "four_new_articles": true,
+    "all_full_substantive_text_bodies_read": true,
+    "six_dimensions_per_article": true,
+    "current_primary_crosschecks": true,
+    "placement_compared_with_existing_trigger_boundaries": true,
+    "runtime_validation_executed": false,
+    "source_or_skill_files_modified_during_reading_phase": false
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "run_id": "tal-october-stream-history-01",
+  "run_evidence_sha256": "3bc808759730956ed2462dda5dff70b77af34be6a1c431d603bcba5a34efe9cb",
+  "final_workspace_tree_sha256": "32efed63881909bca46280e48913591c986c8df0cded894417bf99b0fc3b7ddc",
+  "case_id": "historical-enrichment",
+  "candidate_tree_sha256": "acf15a811355dc38f6af26dd6588364304d34a134408ad92f0521c303bef595d",
+  "rubric_sha256": "b696f6b50e089718846f94d05906a2fd4003d384e5760b5916eaeb9e011064a9",
+  "reviewer": "archive-quality-independent-reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "relationship": "Previously reviewed the package and supplied a wording finding; did not author candidate, case, fixture, or trial response."
+  },
+  "criteria": [
+    {
+      "id": "temporal-meaning",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1-7,15,22,55-63",
+        "observation": "Uses the rate effective at fact time 09:30 and initial USD110; distinguishes maintained historical, historical first-publication, processing-time latest (120), maintained-current (120), and bitemporal alternatives instead of treating them as interchangeable."
+      }
+    },
+    {
+      "id": "changes-and-identity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 15-28",
+        "observation": "The duplicate fact leaves one keyed result at 110; r1 revision2 replaces it with 115; withdrawal gives an explicit unmatched/null row. Later r2 cannot fill the historical gap. Keeps accepted revision/tombstone authority so old replay cannot resurrect r1."
+      }
+    },
+    {
+      "id": "sink-representation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1,15-20,47-51",
+        "observation": "Correctly requires one current fact-keyed row with atomic replacements/retractions, or a keyed interpreted changelog, and rejects unkeyed append output. All described mutations are projection rows. However, it never explicitly distinguishes these reporting corrections from re-sending payments/invoices or other original business actions, as the final part of this critical rubric criterion requires. It does not propose such repeated actions; this is an omitted boundary, not a wrong value or unsafe executed effect."
+      }
+    },
+    {
+      "id": "history-state",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1,30-43",
+        "observation": "Challenges ten-minute TTL; identifies ambiguity between arrival-based recovery and event-age horizons rather than silently assuming a clock. Retains the anchor rate covering the oldest admissible fact, later boundaries, revisions/tombstones, facts/indexes and deduplication evidence. Small visible output does not imply memory bounds; retirement requires closed admission/correction and recoverability."
+      }
+    },
+    {
+      "id": "progress-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 45,51,65-73",
+        "observation": "States checkpoints do not establish a cross-source business transaction. Proposed schedules cover late facts, repeated identities, old/conflicting rate revisions, correction/withdrawal, interval overlap, retention/replay/stall and bootstrap/restart ordering, including concrete 110/115/unmatched outputs and keyed operations."
+      }
+    },
+    {
+      "id": "scope-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 75; supporting trace.jsonl completed events item_1,item_2,item_4,item_3,item_5 / lines 5,7,10,11,13, workspace-changes.json changes/forbidden_changes and empty workspace.patch",
+        "observation": "Accurately reports local-file reads only and marks schedules as proposed rather than engine validation. All five recorded command calls are local reads/inventory, no external/delegation operation is observed, original/final fixture hashes match and the workspace patch/change lists are empty."
+      }
+    }
+  ],
+  "scored_at": "2026-10-01T19:02:49.835237+00:00",
+  "rubric_result": "partial",
+  "critical_results": [
+    {
+      "id": "temporal-meaning",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "changes-and-identity",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "sink-representation",
+      "score": 1,
+      "result": "partial"
+    },
+    {
+      "id": "scope-evidence",
+      "score": 2,
+      "result": "pass"
+    }
+  ],
+  "major_results": [
+    {
+      "id": "history-state",
+      "score": 2,
+      "result": "pass"
+    },
+    {
+      "id": "progress-verification",
+      "score": 2,
+      "result": "pass"
+    }
+  ],
+  "critical_failure": false,
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "interpretation": "Five observable criteria pass; sink-representation is partial for its omitted explicit reporting-versus-repeated-business-action boundary. All joined values and output operations are correct, with no observed external effect. Recorded capability deviations mean the run is not strictly case-compliant. No engine correctness, comparative efficacy or isolated-candidate causality claim is made.",
+  "activation_evidence": {
+    "metadata": {
+      "observed": true,
+      "artifact": "evidence/discovery.json",
+      "locator": "candidate_metadata_observed and enabled candidate_entries[0]",
+      "observation": "Native repository metadata-only discovery exposed candidate among 54 total skills; body not preloaded by that request."
+    },
+    "entrypoint_body": {
+      "observed": true,
+      "artifact": "evidence/trace.jsonl",
+      "locator": "item_1 completed / line 5",
+      "observation": "Successful cat returned complete candidate SKILL.md body."
+    },
+    "reference_bodies": {
+      "observed": [
+        "time-and-finality",
+        "identity-and-corrections",
+        "joins",
+        "state-and-history",
+        "sources"
+      ],
+      "artifact": "evidence/trace.jsonl",
+      "locator": "item_3 completed / line 11",
+      "observation": "Successful cat returned all five package reference bodies."
+    }
+  },
+  "reviewer_checks": {
+    "evidence_file_hashes": "passed against run.json evidence_files",
+    "raw_final_fixture_hashes": "passed against manifest fixture_files",
+    "workspace_patch_bytes": 0,
+    "supplied_verifier": "not applicable: review case has verification_argv=null",
+    "engine_or_service_validation": "not run",
+    "sealed_original_trial": "passed assertSealedEvidence: actual captured evidence and final workspace unchanged"
+  }
+}

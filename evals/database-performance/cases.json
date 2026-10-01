@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "pool-and-lock",
+      "title": "A fast standalone plan does not explain pool and lock waits",
+      "tags": [
+        "database-performance",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Diagnose database-related latency from incident.md and assess the proposed index change. Identify the first bounded intervention and validation evidence while preserving the transaction contract. Keep this read-only.",
+      "fixture_dir": "evals/database-performance/fixtures/pool-and-lock",
+      "fixtures": [
+        "incident.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "wait-boundary",
+          "severity": "critical",
+          "criterion": "Distinguishes application pool wait, server lock wait and standalone query execution; does not treat the 18 ms plan as proof of endpoint capacity."
+        },
+        {
+          "id": "transaction-contract",
+          "severity": "critical",
+          "criterion": "Targets blocker/transaction lifetime with an invariant-preserving workflow or reconciliation design instead of moving a required check outside protection blindly."
+        },
+        {
+          "id": "validation",
+          "severity": "major",
+          "criterion": "Requests incident-window deltas, blocker evidence, fleet pool budget and representative contention/endpoint checks before recommending another index or larger pools."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "cardinality-skew",
+      "title": "Estimated row counts and repeated inner work reveal a plan risk",
+      "tags": [
+        "database-performance",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Review plan.md and recommend the next diagnostic and smallest justified intervention. Explain the measurement limits and read/write tradeoffs. Do not execute database commands or edit files.",
+      "fixture_dir": "evals/database-performance/fixtures/cardinality-skew",
+      "fixtures": [
+        "plan.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "plan-reading",
+          "severity": "critical",
+          "criterion": "Connects the cardinality underestimate and 120000 repeated inner executions to the plan risk, interpreting per-loop values and avoiding double counting inclusive parent time."
+        },
+        {
+          "id": "parameter-scope",
+          "severity": "major",
+          "criterion": "Proposes checking statistics and tenant/parameter skew with representative plans rather than assuming one index or one plan fits every tenant."
+        },
+        {
+          "id": "measurement-tradeoff",
+          "severity": "critical",
+          "criterion": "Distinguishes EXPLAIN execution from client/network latency, preserves read-only scope and query semantics, and assesses index write/storage costs before claiming improvement."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "transaction-only",
+      "title": "A duplicate-effect correctness question needs its existing route",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review contract.md and identify the duplicate-effect correctness issue and an appropriate bounded repair. Keep this read-only; query performance and capacity are outside the request.",
+      "fixture_dir": "evals/database-performance/fixtures/transaction-only",
+      "fixtures": [
+        "contract.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not load database-performance or prescribe query tuning for the duplicate-effect correctness request; routes to idempotency or concurrency reasoning as appropriate."
+        },
+        {
+          "id": "bounded-repair",
+          "severity": "major",
+          "criterion": "Identifies the check-then-insert race and a durable uniqueness/atomic conflict boundary with retry identity handling."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    }
+  ]
+}

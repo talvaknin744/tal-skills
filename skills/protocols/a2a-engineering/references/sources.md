@@ -35,3 +35,26 @@ neither full A2A conformance nor real OAuth, webhook, distributed ownership,
 durable deduplication, production recovery, or long-duration reliability.
 SDK source tags and installed package versions were verified separately; no
 bit-for-bit package-to-repository attestation was performed.
+
+## Recovery-state lifetime extension
+
+Reviewed 2026-10-01. The recovery matrix in
+[lifecycle-and-effects.md](lifecycle-and-effects.md) is original application-level
+synthesis; it adds no A2A protocol requirement.
+
+- Anthropic, [Scaling Managed Agents: Decoupling the brain from the hands](https://www.anthropic.com/engineering/managed-agents),
+  April 8, 2026: complete main article read, covering independent session,
+  harness and sandbox interfaces, recoverable event history, and disposable
+  execution. Its service-specific architecture is an example, not an A2A API.
+- Current [Managed Agents session event stream](https://platform.claude.com/docs/en/managed-agents/events-and-streaming),
+  “Resuming an idle session”: conversation history persists until deletion, while
+  sandbox state expires 30 days after creation; activity does not extend the
+  window. This dated vendor contract motivates distinct retention checks.
+- Current [Claude Agent SDK sessions](https://code.claude.com/docs/en/agent-sdk/sessions),
+  conversation/filesystem distinction and cross-host resume: sessions preserve
+  conversation, while filesystem restoration and shared storage require their
+  own mechanisms. Forked histories also share actual edits in one directory.
+
+Owner, retention, restoration, artifact-access and effect-receipt checks are
+independently authored verification proposals. No executor-loss, artifact-expiry,
+Managed Agents, or Agent SDK runtime test was executed for this extension.

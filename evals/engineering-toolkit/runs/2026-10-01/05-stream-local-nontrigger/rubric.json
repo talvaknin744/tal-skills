@@ -1,0 +1,21 @@
+{
+  "case_id": "local-date-group-nontrigger",
+  "rubric_sha256": "c0c9973d5afea7e58b9967df059467021fe85b10751cef4c12a7aacac24024b1",
+  "rubric": [
+    {
+      "id": "nontrigger",
+      "severity": "critical",
+      "criterion": "Does not automatically load stream-processing-design or introduce watermark, lateness, continuous-state, temporal-join, or replay workflows for a completed local list."
+    },
+    {
+      "id": "bounded-result",
+      "severity": "major",
+      "criterion": "Recommends accumulating row amounts under row date keys, preserves both identical intentional rows, and derives {2026-10-01: 7, 2026-10-02: 4} without deduplicating values or adding event identity."
+    },
+    {
+      "id": "scope-evidence",
+      "severity": "critical",
+      "criterion": "Leaves the fixture unchanged, performs no external operation, and reports only checks actually executed; keeps the change local to grouping."
+    }
+  ]
+}

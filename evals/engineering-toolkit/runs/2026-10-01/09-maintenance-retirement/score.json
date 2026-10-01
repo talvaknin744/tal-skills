@@ -1,0 +1,87 @@
+{
+  "run_id": "tal-october-maintenance-reclaim-01",
+  "run_evidence_sha256": "5e46f8778f1321d17f3ea14f09659d62fed227573f42d01a3c6d0b7fb4450c5d",
+  "final_workspace_tree_sha256": "0005a377e8e923889305fa510f241a815998ff96e17a93825da0631ad88f3439",
+  "case_id": "reclaim-after-owner-takeover",
+  "candidate_tree_sha256": "eb7254883b66001e6dac82626d785764aff6c70129e1e90ff558788be7acd15f",
+  "rubric_sha256": "c6078839e0ca15add972e6ce98ea3d8b19d81e122b507ab91deb3c08933afead",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "stale-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 7-14, 22-29",
+        "observation": "Gives A claiming epoch 1, copying/pausing; user delete of x and version-2 update of y; B takeover at epoch 2; A resuming unconditional publication that restores x and points y to old bytes; unsafe deletion and crash. Explains final completion rejection cannot undo publication/deletion. The schedule respects the supplied atomic claim through successive distinct epochs and locates the defect in later unprotected writes, not a claim race; publication must check the current epoch atomically at its operation."
+      }
+    },
+    {
+      "id": "source-coverage",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 7-14, 18, 27, 31-35, 43, 50-51",
+        "observation": "Identifies ignored has_more, z beyond the first page, and early checkpointing that hides unfinished work. Commits progress only after known conditional outcomes, honors has_more and bounded continuation, rescans from the beginning if references remain, and separates traversal/publications/retirement/cleanup states. Explicitly denies a snapshot or mutation watermark; late-before-cursor admissions are exercised, and ongoing admissions may prevent completion indefinitely."
+      }
+    },
+    {
+      "id": "durable-before-retire",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-12, 20, 22-27, 37, 51",
+        "observation": "Buffered D1 may be lost after unsafe source deletion and crash. Requires durable_seal before publication, retained manifest/checksums and selected-input/content mapping, immutability of sealed output, and recorded seal evidence at conditional publication and retirement. The oracle checks actual contents and seal evidence, not just a matching version label or copy return."
+      }
+    },
+    {
+      "id": "atomic-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 18, 22-29, 31, 49",
+        "observation": "One metadata_tx checks current ownership epoch, live object version/exact source location and seal evidence, then atomically publishes its destination and durable replacement record. Tombstones/newer versions/changed locations reject stale results. Pre-effect selection/claim and final completion do not fence publication; lost replies are reconciled from authoritative records without unconditional replay. Storage durability and physical deletion stay separate from the metadata transaction."
+      }
+    },
+    {
+      "id": "retirement-proof",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11-14, 18, 37-43, 49, 52-53",
+        "observation": "Requires the supplied atomic retirement gate: no live reference, reader pin or hold and durable replacements, followed by ACTIVE->RETIRED closed admission and immutable S/7 token. Calls only delete_retired, makes valid-token cleanup repeatable across owner changes, rejects generation mismatch, and retains pins/holds despite takeover. Exercises admission-before-retirement and retirement-before-admission orders and lets already pinned readers finish; no force-delete or separate zero-count proof."
+      }
+    },
+    {
+      "id": "recoverable-boundaries",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 18-20, 29-35, 39-45, 49, 53",
+        "observation": "Persists destination intent before output creation, retains selected identity/version and stable J/S/7 identity, and reconciles sealed-unpublished output, lost publication responses, accepted publication before cleanup, checkpoints, old-owner resumption and uncertain deletion. Accounts for orphan/incomplete output, explicitly recognizing no destination deletion/listing or automatic pin-expiry API; unresolved output remains tracked and limits copying instead of promising unsupported collection."
+      }
+    },
+    {
+      "id": "semantic-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 47-53",
+        "observation": "Proposes deterministic interruption and old-owner schedules at every boundary, late admissions around mutable cursors/restart/end, y version-2 serving bytes, x authoritative tombstone, z/late-admission completeness or readable recoverable source, correct contents plus seal evidence, pin/hold and admission ordering, epoch rejection, valid/mismatched generation-token behavior and registered-output inventory. Oracle is explicitly independent of cursor/job status; these are proposed checks, not executed crash tests."
+      }
+    },
+    {
+      "id": "scope-and-source-limit",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/workspace.patch empty; evidence/trace.jsonl completed items 1-7; evidence/answer.md lines 33-35, 41, 45, 55",
+        "observation": "Original/final design.md bytes match each other and the sealed fixture manifest; changes and patch are empty. All seven captured commands read/list fixture or installed candidate material; no destructive, external or delegation events. The answer marks the work a static review with unexecuted crash tests, uses supplied transaction/seal/retired-delete APIs, and identifies missing snapshot/log/orphan-cleanup/pin-expiry guarantees. Candidate body activation is observed at trace item_1 and relevant reference reads at item_6; inherited skills, filesystem read access and network-enforcement limitations remain recorded, so this is not isolated causal evidence. Scored sealed completed run without rerun or frozen edits; later dependency changes do not alter the bound run artifacts."
+      }
+    }
+  ]
+}

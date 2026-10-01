@@ -1,0 +1,2 @@
+# Duplicate invoices
+A handler checks whether an invoice for an order exists, then inserts a new invoice. Two concurrent deliveries can both observe absence and insert. The table has no unique constraint on the order identity. The requested contract is one invoice per order under concurrent delivery, including retries after a lost response. No slow query, throughput issue or performance target is reported.

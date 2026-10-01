@@ -23,6 +23,8 @@ export const SKILLS = {
   'mcp-engineering': 'skills/protocols/mcp-engineering',
   'a2a-engineering': 'skills/protocols/a2a-engineering',
   'technical-deprecation': 'skills/engineering/technical-deprecation',
+  'background-maintenance': 'skills/engineering/background-maintenance',
+  'stream-processing-design': 'skills/messaging/stream-processing-design',
 };
 export const sha256 = value => createHash('sha256').update(value).digest('hex');
 export const canonical = value => JSON.stringify(value);

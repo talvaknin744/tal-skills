@@ -18,7 +18,7 @@ Compare the proposed extraction with a smaller local change that could achieve t
 
 ## 2. Choose a migration sequence
 
-Separate the code move from the data move. Choose their order from the dominant risk: code first can expose value sooner; data first can establish whether independence is feasible. Sketch both before starting either. Use an internal abstraction or routing seam that can direct the selected operation to its old or new implementation.
+Separate the code move from the data move. Choose their order from the dominant risk: code first can expose value sooner; data first can establish whether independence is feasible. Sketch both before starting either. When the proposed boundary is uncertain or changes many existing code paths, read [boundary-rehearsal.md](references/boundary-rehearsal.md) to exercise it before moving storage. Use an internal abstraction or routing seam that can direct the selected operation to its old or new implementation.
 
 For each stage, state which implementation handles each caller, which store owns reads and writes, what remains shared, and what allows the next stage. Give temporary shared access an exit condition. Read [data-transition.md](references/data-transition.md) whenever state changes ownership, schema, or location.
 

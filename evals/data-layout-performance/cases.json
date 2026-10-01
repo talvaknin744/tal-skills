@@ -1,0 +1,129 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "ring-history",
+      "title": "A bounded ring query requests more history than it retains",
+      "tags": [
+        "data-layout",
+        "correctness",
+        "criticality"
+      ],
+      "prompt": "Review ring.py and brief.md for the proposed hot-path optimization. Assess retained-history correctness, measurement credibility and when this structure is justified. Run safe local checks if useful, but leave the project unchanged.",
+      "fixture_dir": "evals/data-layout-performance/fixtures/ring-history",
+      "fixtures": [
+        "brief.md",
+        "ring.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "retained-horizon",
+          "severity": "critical",
+          "criterion": "Identifies duplicate/reused slots when the request exceeds retained capacity, and defines the usable horizon with capacity, observations seen and requested count plus empty/zero-size outcomes."
+        },
+        {
+          "id": "criticality",
+          "severity": "critical",
+          "criterion": "Limits the endpoint payoff using the measured 2% contribution and treats the CPU-heavy batch workload as a separate justified optimization candidate."
+        },
+        {
+          "id": "measurement",
+          "severity": "major",
+          "criterion": "Rejects a universal speedup from four rows and includes conversion/gather allocations, working-set sizes, repeated matched runs and exact retained-history checks."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves supplied project files unchanged and separates local correctness checks from unexecuted performance or hardware experiments."
+        }
+      ]
+    },
+    {
+      "id": "native-shapes",
+      "title": "Disabling native bounds checks requires validated shape and ownership",
+      "tags": [
+        "data-layout",
+        "correctness",
+        "criticality"
+      ],
+      "prompt": "Review proposal.md and recommend the smallest safe data-layout experiment for the hot batch path. Account for correctness, allocations, runtime compatibility and benchmarking. Keep this read-only.",
+      "fixture_dir": "evals/data-layout-performance/fixtures/native-shapes",
+      "fixtures": [
+        "proposal.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "native-preconditions",
+          "severity": "critical",
+          "criterion": "Requires shape/length, dtype/range and concurrent-ownership validation before disabling bounds checks or treating a contiguous/nogil buffer as safe."
+        },
+        {
+          "id": "cost-boundary",
+          "severity": "major",
+          "criterion": "Includes conversion/copy costs, representative working sets and controlled runtime/native thread settings in repeated end-to-end batch comparisons."
+        },
+        {
+          "id": "proportionate-rules",
+          "severity": "major",
+          "criterion": "Treats cache/layout lint rules as evidence-dependent heuristics rather than universal refactors; adjacency, modulo or object records alone do not prove a bottleneck."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves supplied project files unchanged and separates local correctness checks from unexecuted performance or hardware experiments."
+        }
+      ]
+    },
+    {
+      "id": "field-rename",
+      "title": "A response field rename has no measured layout decision",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Review change.md and provide the requested response-field rename only. Keep the file unchanged; no data-layout or performance change is requested.",
+      "fixture_dir": "evals/data-layout-performance/fixtures/field-rename",
+      "fixtures": [
+        "change.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Keeps the answer to the mapping correction without loading data-layout-performance or proposing NumPy, padding or custom containers."
+        },
+        {
+          "id": "correct-key",
+          "severity": "major",
+          "criterion": "Identifies customer_name as the corrected response key while preserving its value."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves supplied project files unchanged and separates local correctness checks from unexecuted performance or hardware experiments."
+        }
+      ]
+    }
+  ]
+}

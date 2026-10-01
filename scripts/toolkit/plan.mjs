@@ -28,9 +28,9 @@ export function allowedDirectory(name) {
 export function validateManifest(value) {
   if (!value || value.schema_version !== 1 || value.toolkit !== 'tal-skills' || value.generator_version !== 1) throw new Error('Unsupported installation manifest');
   if (!/^[a-f0-9]{64}$/.test(value.source_digest ?? '') || !Array.isArray(value.hosts) || !value.hosts.length || value.hosts.some(x => !['codex', 'claude'].includes(x)) || new Set(value.hosts).size !== value.hosts.length) throw new Error('Invalid manifest metadata');
-  for (const kind of ['agents', 'workflows']) {
+  for (const kind of ['agents', 'workflows', ...(value.selection?.skills === undefined ? [] : ['skills'])]) {
     if (!Array.isArray(value.selection?.[kind]) || new Set(value.selection[kind]).size !== value.selection[kind].length) throw new Error('Invalid manifest selection');
-    value.selection[kind].forEach(id => checkId(id, kind, true));
+    value.selection[kind].forEach(id => checkId(id, kind, kind !== 'skills'));
   }
   if (!Array.isArray(value.files) || !Array.isArray(value.package_roots) || !Array.isArray(value.created_directories)) throw new Error('Invalid manifest collections');
   assertDistinctPaths(value.files.map(x => x.path));
@@ -95,14 +95,14 @@ export function verifyInstallPreconditions(plan) {
   const conflicts = discoveryConflicts(plan.target, plan.discovery, []);
   if (conflicts.length) throw new Error(conflicts.map(item => `${item.reason}: ${item.path}`).join('; '));
 }
-export function buildInstallPlan({ sourceRoot, target: targetInput, host, agents, workflows, discoveryRoots } = {}) {
+export function buildInstallPlan({ sourceRoot, target: targetInput, host, agents, workflows, skills, discoveryRoots } = {}) {
   const target = fs.realpathSync(targetInput);
   if (!fs.statSync(target).isDirectory()) throw new Error('Target must be an existing directory');
   const conflicts = [], warnings = [], operations = [];
   for (const name of [LOCK, JOURNAL]) if (inspect(target, name)) conflicts.push({ path: name, reason: 'Incomplete or active installation; inspect and recover first' });
   const previous = readManifest(target), catalog = loadCatalog(sourceRoot);
-  if (agents === undefined && workflows === undefined && previous) ({ agents, workflows } = previous.value.selection);
-  const bundle = generateBundle(catalog, { host, agents, workflows });
+  if (agents === undefined && workflows === undefined && skills === undefined && previous) ({ agents, workflows, skills } = previous.value.selection);
+  const bundle = generateBundle(catalog, { host, agents, workflows, skills });
   const oldFiles = new Map(previous?.value.files.map(file => [file.path, file]) ?? []);
   const oldPackages = new Set(previous?.value.package_roots ?? []);
   for (const root of bundle.packageRoots) {

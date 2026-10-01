@@ -1,0 +1,128 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "zone-loss",
+      "title": "Fleet capacity and downstream capacity constrain failover",
+      "tags": [
+        "capacity-planning",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Review sizing.md and assess the peak-load and zone-loss claims. Show the relevant calculations, binding constraints, and evidence needed for a defensible sizing decision. Keep this read-only.",
+      "fixture_dir": "evals/capacity-planning/fixtures/zone-loss",
+      "fixtures": [
+        "sizing.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "planning",
+      "rubric": [
+        {
+          "id": "zone-arithmetic",
+          "severity": "critical",
+          "criterion": "Calculates 2160 nominal normal replica throughput and 1440 after one zone loss, and rejects the 1500 peak zone-loss claim even under the linear estimate."
+        },
+        {
+          "id": "downstream",
+          "severity": "critical",
+          "criterion": "Identifies the measured 1400 database workload capacity as an additional binding constraint rather than solving the proposal solely by adding replicas."
+        },
+        {
+          "id": "transition",
+          "severity": "major",
+          "criterion": "Accounts for startup/cold-cache/retry assumptions and proposes representative fleet and failure-state validation, with estimates clearly labeled."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "backlog-drain",
+      "title": "Continuing arrivals and startup delay determine drain time",
+      "tags": [
+        "capacity-planning",
+        "measurement",
+        "resource-boundaries"
+      ],
+      "prompt": "Assess queue.md against the ten-minute recovery objective. Derive a drain-time estimate with its assumptions and explain whether the proposed scale-up is sufficient. Do not edit files.",
+      "fixture_dir": "evals/capacity-planning/fixtures/backlog-drain",
+      "fixtures": [
+        "queue.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "net-drain",
+          "severity": "critical",
+          "criterion": "Computes 12000 jobs after startup, a net drain rate of 20 jobs/s, and total recovery time of 720 seconds under the stated assumptions."
+        },
+        {
+          "id": "required-capacity",
+          "severity": "major",
+          "criterion": "Recognizes that finishing by 600 seconds needs at least 65 jobs/s after startup under this model, exceeding the measured dependency limit."
+        },
+        {
+          "id": "durable-contract",
+          "severity": "critical",
+          "criterion": "Preserves all accepted jobs and includes effect correctness, byte/age constraints, variation and measured recovery validation."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "inventory-only",
+      "title": "An inventory request does not require sizing",
+      "tags": [
+        "activation",
+        "scope"
+      ],
+      "prompt": "Read inventory.md and list the supplied deployment names and replica counts only. Keep the file unchanged; there is no sizing or capacity recommendation requested.",
+      "fixture_dir": "evals/capacity-planning/fixtures/inventory-only",
+      "fixtures": [
+        "inventory.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not load capacity-planning or invent a headroom analysis for a request to list inventory."
+        },
+        {
+          "id": "inventory",
+          "severity": "major",
+          "criterion": "Returns api 3, importer 2 and notifier 1 without unsupported sizing advice."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    }
+  ]
+}

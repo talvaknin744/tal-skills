@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "lane": "uber-retry-coordination-adoption",
+  "verified_at": "2026-10-01",
+  "status": "primary research and conditional reference implemented; proposed scenarios unexecuted",
+  "local_source_snapshot_head": "6bb1183550a08ea156486b5731f441557d01fc6a",
+  "selection": {
+    "basis": "User-requested Uber retry-storm account and its prerequisite dependency analysis, checked against current SDK, RPC, and proxy contracts.",
+    "deeply_read_articles": 3,
+    "primary_publishers": [
+      "Uber",
+      "AWS",
+      "Envoy",
+      "gRPC"
+    ],
+    "delegation": "This record was prepared by the parent's delegated research agent; parent independent review is separate.",
+    "runtime_experiments_run": 0,
+    "model_evaluations_run": 0
+  },
+  "articles": [
+    {
+      "id": "uber-retry-storms-2026",
+      "title": "How Uber Protects Against Retry Storms",
+      "url": "https://www.uber.com/us/en/blog/protecting-against-retry-storms/",
+      "publisher": "Uber Engineering",
+      "authors": [
+        "Deepanshu Mehndiratta",
+        "Alok Srivastava",
+        "Vibhor Dhingra",
+        "Ankit Srivastava"
+      ],
+      "published_at": "2026-09-17",
+      "verified_at": "2026-10-01",
+      "access": "Full public HTML through web reader and direct retrieval; selected original figure pixels.",
+      "read_scope": "Complete substantive text, arithmetic tables, edge cases, production account and conclusion. Figures 3, 4, 6, 8, 9, 10, 11, 12 and 14 inspected as pixels. Decorative images, simple node diagrams and production screenshot 15 not separately inspected.",
+      "source_type": "First-party engineering and production account; no public implementation or independent benchmark read.",
+      "practice": {
+        "trigger": "Retries can occur at several ancestors of a failing dependency.",
+        "failure": "Repeated ancestor attempts multiply traffic and can delay recovery.",
+        "mechanism": "Attribute error ownership and coordinate existing retry opportunities.",
+        "conditions": "Trusted request context, causal mandatory dependency, explicit opportunity and fallback semantics.",
+        "counterexample": "Closest caller has no retries; blanket ancestor suppression removes every configured opportunity.",
+        "verification": "Count actual attempts and preserve the disabled-closest, quota-denied and missing-context controls."
+      },
+      "limitations": [
+        "RetryCriteriaSatisfied in figures includes an eligible attempt denied by quota or downstream unclaimed ownership; it does not mean an attempt necessarily occurred.",
+        "The source's at-least-once framing preserves an existing configured opportunity; it introduces no retries and cannot override eligibility or exhausted resources.",
+        "Header naming is Uber-specific, not a standard HTTP or SDK contract. Trust-boundary handling is original adoption guidance.",
+        "The R-to-depth notation is ambiguous about retries versus total attempts; local guidance uses a product of explicitly defined total attempts.",
+        "Availability arithmetic assumes independent failures and useful repeat attempts; correlated overload can invalidate it.",
+        "Reported production volumes, avoided requests and storm-radius reductions remain Uber claims, not repository results."
+      ],
+      "local_html_sha256": "15394f99aae8e9d8596676a619f05fc1fb6cc4aef591297c82ec961912bd38a2",
+      "skill_targets": [
+        "microservice-operations"
+      ]
+    },
+    {
+      "id": "uber-dependency-analysis-2026",
+      "title": "Large-Scale Automated Dependency Analysis Across Uber's Service Mesh",
+      "url": "https://www.uber.com/us/en/blog/automated-dependency-analysis/",
+      "publisher": "Uber Engineering",
+      "authors": [
+        "Deepanshu Mehndiratta",
+        "Alok Srivastava",
+        "Shivam Jindal",
+        "Ankit Srivastava"
+      ],
+      "published_at": "2026-09-15",
+      "verified_at": "2026-10-01",
+      "access": "Full public HTML through web reader; original figures 1 and 12 retrieved separately. Direct article retrieval returned HTTP 406.",
+      "read_scope": "Complete substantive text through conclusion; dependency definitions, correlation model, middleware context and ordering, probability heuristics. Figures 1 and 12 inspected as pixels; image-only code listings not separately inspected.",
+      "source_type": "First-party architecture account with implementation examples.",
+      "practice": {
+        "trigger": "A caller's failure could originate locally or follow a downstream failure.",
+        "failure": "Endpoint aggregation and coincidental errors can misattribute the cause.",
+        "mechanism": "Link inbound requests with final outbound outcomes using request context.",
+        "conditions": "Context survives handoffs and attribution observes the final result after local retries.",
+        "counterexample": "Optional enrichment and an independent local fault fail together.",
+        "verification": "Controlled mandatory and optional failures discriminate actual propagation from co-failure."
+      },
+      "limitations": [
+        "Co-failure probability thresholds are Uber heuristics, not universal causal proof or defaults to adopt.",
+        "Successful observations do not establish a dependency's behavior when it fails.",
+        "No yarpc code compatibility, atomic-counter lifetime, shared-store concurrency or production telemetry capacity claim is adopted.",
+        "Linked USENIX failover paper and yarpc sources were not read."
+      ],
+      "skill_targets": [
+        "microservice-operations"
+      ]
+    },
+    {
+      "id": "aws-updated-retries-2026",
+      "title": "Announcing updated retry behavior for AWS SDKs and Tools",
+      "url": "https://aws.amazon.com/blogs/developer/announcing-updated-retry-behavior-for-aws-sdks-and-tools/",
+      "publisher": "AWS Developer Tools Blog",
+      "authors": [
+        "Matthew Miller"
+      ],
+      "published_at": "2026-05-20",
+      "verified_at": "2026-10-01",
+      "access": "Full public HTML.",
+      "read_scope": "Complete substantive article, rollout and revert notes, support table; navigation and author portrait excluded.",
+      "source_type": "First-party rollout announcement, crosschecked with current documentation.",
+      "practice": {
+        "trigger": "A retry plan relies on inferred SDK defaults.",
+        "failure": "An opt-in rollout or configuration override makes those inferred defaults wrong.",
+        "mechanism": "Verify SDK support, active mode and effective configuration.",
+        "conditions": "Actual runtime version, opt-in state and precedence are available.",
+        "counterexample": "A legacy SDK or explicit override retains different retry behavior.",
+        "verification": "Observed attempt counts and timing match the installed configuration."
+      },
+      "limitations": "Support table is a dated rollout snapshot; linked language tracking issues not read. Future default dates are announced plans, not verified later deployments.",
+      "skill_targets": [
+        "microservice-operations"
+      ]
+    }
+  ],
+  "crosschecks": [
+    {
+      "id": "aws-retry-guide",
+      "title": "Retry behavior - AWS SDKs and Tools",
+      "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html",
+      "publisher": "AWS",
+      "date": null,
+      "date_kind": "Mutable documentation, checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "Configuration, retry flow, classification, backoff, retry quota, service-specific behavior and SDK support sections.",
+      "practice": {
+        "trigger": "A client quota is used as an application retry bound.",
+        "failure": "Additional SDK clients, processes and upstream layers own separate quotas.",
+        "mechanism": "Inventory quota scopes and total attempts alongside upstream retry policy.",
+        "conditions": "Verify the deployed SDK; described 2026 behavior requires opt-in as checked.",
+        "counterexample": "An adaptive client shared by unrelated resources can delay unaffected initial requests.",
+        "verification": "Count initial and retry dispatches at each client and check unrelated work."
+      },
+      "limitations": "No default backoff numbers or token costs adopted; scope can vary by SDK. Documentation does not provide end-to-end ownership coordination."
+    },
+    {
+      "id": "envoy-http-routing",
+      "title": "HTTP routing",
+      "url": "https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing",
+      "publisher": "Envoy maintainers",
+      "date": null,
+      "date_kind": "Mutable latest development documentation, checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "Retry semantics and request hedging sections; not the whole routing guide.",
+      "practice": {
+        "trigger": "A proxy also retries or hedges an application request.",
+        "failure": "Overlapping attempts add work invisible to an application-only count.",
+        "mechanism": "Account for retry policy, overall timeout and hedge concurrency separately.",
+        "conditions": "Inspect the effective route, headers and runtime configuration.",
+        "counterexample": "A hedge can retain an initial timed-out request while issuing another.",
+        "verification": "Transport dispatch counts and simultaneous active work stay within the declared bound."
+      },
+      "limitations": "Latest resolved to 1.40.0-dev documentation with changing build suffixes; not a deployment version pin."
+    },
+    {
+      "id": "envoy-retry-budget",
+      "title": "Circuit breakers (proto)",
+      "url": "https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/circuit_breaker.proto",
+      "publisher": "Envoy maintainers",
+      "date": null,
+      "date_kind": "Mutable latest development documentation, checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "Threshold priority, max_retries, retry_budget, budget_percent, budget_interval and min_retry_concurrency fields.",
+      "practice": {
+        "trigger": "A retry-budget percentage is interpreted as a request-ratio cap.",
+        "failure": "Concurrency floor and budget denominator produce a different bound.",
+        "mechanism": "Calculate the active-retry limit in its actual cluster and priority scope.",
+        "conditions": "Inspect minimum concurrency and optional budget interval as deployed.",
+        "counterexample": "A configured minimum retry concurrency exceeds the percentage result at low load.",
+        "verification": "Concurrency observations satisfy the effective budget, including low-load and recovery cases."
+      },
+      "limitations": "Budget semantics differ from Uber's simplifying aggregate model; no fleet-wide cap follows from this field."
+    },
+    {
+      "id": "envoy-route-timeouts",
+      "title": "HTTP route components (proto)",
+      "url": "https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto",
+      "publisher": "Envoy maintainers",
+      "date": null,
+      "date_kind": "Mutable latest development documentation, checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "RouteAction timeout and retry_policy; RetryPolicy retry_on, num_retries and per_try_timeout; attempt-count fields. Other API sections not deeply read.",
+      "practice": {
+        "trigger": "A per-attempt proxy timer is mistaken for a complete caller lifetime.",
+        "failure": "Queueing, request receipt or repeated attempts exceed the intended useful lifetime.",
+        "mechanism": "Place route and per-try timers inside the caller's remaining end-to-end budget.",
+        "conditions": "Verify timer start boundaries and route-versus-virtual-host precedence.",
+        "counterexample": "An unspecified per-try timer can exhaust the overall route timeout on the first attempt.",
+        "verification": "Completion, backoff and dispatch stop within the declared logical-operation lifetime."
+      },
+      "limitations": "Envoy route timeout begins after the downstream request's end-of-stream is processed. Attempt count can be overwritten by another Envoy; it is not an end-to-end logical-operation identity."
+    },
+    {
+      "id": "grpc-retry",
+      "title": "Retry",
+      "url": "https://grpc.io/docs/guides/retry/",
+      "publisher": "gRPC maintainers",
+      "date": "2025-11-26",
+      "date_kind": "Page last modified; checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "Complete substantive guide: transparent retries, policy, backoff, throttling, commitment and observability. Linked gRFC and language examples not read.",
+      "practice": {
+        "trigger": "An inventory assumes no configured retry policy means no attempts can repeat.",
+        "failure": "Transparent retry or another library policy is missing from the count.",
+        "mechanism": "Distinguish transparent retry from configured RPC retry and application retry.",
+        "conditions": "Use the chosen language/library's effective support and configuration.",
+        "counterexample": "An RPC unseen by application logic may transparently retry without a retry policy.",
+        "verification": "Attempt and logical-call measurements identify the actual replay boundary."
+      },
+      "limitations": "Receiving response headers commits library retry behavior; this is not proof about durable business effects."
+    },
+    {
+      "id": "grpc-deadlines",
+      "title": "Deadlines",
+      "url": "https://grpc.io/docs/guides/deadlines/",
+      "publisher": "gRPC maintainers",
+      "date": "2025-07-07",
+      "date_kind": "Page last modified; checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "Complete substantive guide: client/server deadlines, propagation and language support. Linked examples not read.",
+      "practice": {
+        "trigger": "Nested RPCs need the original caller's useful lifetime.",
+        "failure": "Each nested attempt acquires a fresh full timeout.",
+        "mechanism": "Propagate remaining deadline budget and account for elapsed work.",
+        "conditions": "Verify whether propagation is enabled in the selected implementation.",
+        "counterexample": "No explicit client deadline can leave a call waiting indefinitely.",
+        "verification": "Elapsed time, dispatch and spawned-work cleanup obey the original deadline."
+      },
+      "limitations": "Server application remains responsible for stopping spawned activity; deadlines are not a business rollback protocol."
+    },
+    {
+      "id": "grpc-cancellation",
+      "title": "Cancellation",
+      "url": "https://grpc.io/docs/guides/cancellation/",
+      "publisher": "gRPC maintainers",
+      "date": "2024-02-29",
+      "date_kind": "Page last modified; checked 2026-10-01",
+      "access": "Public HTML",
+      "read_scope": "Complete substantive guide: cancellation signal, handler cooperation and language support. Linked examples not read.",
+      "practice": {
+        "trigger": "A caller cancels while remote application work is in progress.",
+        "failure": "Stopped waiting is treated as proof of no effect or complete resource cleanup.",
+        "mechanism": "Coordinate handler cleanup and reconcile uncertain effect outcomes.",
+        "conditions": "Handler cooperates and downstream cancellation behavior is verified.",
+        "counterexample": "A handler can be busy when cancellation arrives, with a remote effect already committed.",
+        "verification": "Observe resource release and durable effects independently of the caller's cancelled result."
+      },
+      "limitations": "Uncertain-effect reconciliation is original operational guidance; the guide establishes cooperative cancellation rather than a rollback guarantee."
+    }
+  ],
+  "figures_inspected": [
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 3,
+      "url": "https://tb-static.uber.com/prod/udam-assets/dc8590e3-9371-4387-be8a-6c771bda0ae4.png",
+      "sha256": "760e2aad8f681d29eb00efcf498e0f416ec28ebf2f4b99a04b1826d73a016a5c"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 4,
+      "url": "https://tb-static.uber.com/prod/udam-assets/06c7e417-28d8-421b-8a8a-b4843664d2f8.png",
+      "sha256": "b3e446d7c46f5be1273f009363b76fbd2aeb7fa66d485c04dd0b49f93ac1aa40"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 6,
+      "url": "https://tb-static.uber.com/prod/udam-assets/129368c3-3441-4d20-b8d7-9b98cafe14ad.png",
+      "sha256": "09e72ce3c41890b6f8ee7ef0c56a5476cefeb33781c71faeaae6b770a6f745d6"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 8,
+      "url": "https://tb-static.uber.com/prod/udam-assets/9f701683-4ca9-4e17-a0aa-74672a05843e.png",
+      "sha256": "bac22894ce7becea687cee39912253ade859df2ae8771235e9f42af6075eaa9b"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 9,
+      "url": "https://tb-static.uber.com/prod/udam-assets/99a56a06-c314-4446-bafa-71ab82fbc2df.png",
+      "sha256": "193abda87dbfa241883a9a54ddbd658bf39af57737a0a123d74a45e2a030b45f"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 10,
+      "url": "https://tb-static.uber.com/prod/udam-assets/5f417499-0fd2-466f-b7b8-b25a606b6024.png",
+      "sha256": "46d3268ff72ca861cef20acaf399f4dfb49f6f794397286ab00ef3bb106a8171"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 11,
+      "url": "https://tb-static.uber.com/prod/udam-assets/3c8a039a-0026-4aee-9798-3a083749fc41.png",
+      "sha256": "378bd52d9843b4e372a005446e34a277d3f95f3fa80d024a125a05b9ddd2d623"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 12,
+      "url": "https://tb-static.uber.com/prod/udam-assets/ce82b552-75a9-43ac-858d-0f230c07ff62.png",
+      "sha256": "4c9ebd6c7705e478e7a7b02679b00f1a0daaac1b7e98d9a09d3ab672dc955bcd"
+    },
+    {
+      "article_id": "uber-retry-storms-2026",
+      "figure": 14,
+      "url": "https://tb-static.uber.com/prod/udam-assets/9ab066f3-b566-4076-a056-86c049be2d47.png",
+      "sha256": "035e90c80c774cf7c2959efe24b2e00c61b2c0e05cf9bc8008b48c17ceecd97f"
+    },
+    {
+      "article_id": "uber-dependency-analysis-2026",
+      "figure": 1,
+      "url": "https://tb-static.uber.com/prod/udam-assets/d6063ac5-640b-4e49-bf25-7985aa6bfa9a.png",
+      "sha256": "1f140424a2c3fb106777836f0e17e1f8182a8f89756d883b489d8aba754280a8"
+    },
+    {
+      "article_id": "uber-dependency-analysis-2026",
+      "figure": 12,
+      "url": "https://tb-static.uber.com/prod/udam-assets/664969e8-a551-493d-992f-b3cc066c6a81.png",
+      "sha256": "a3ae48534312e3780cc05a6fa9ea09a11627a1e187fc35314e89afa41b3c1c8d"
+    }
+  ],
+  "unavailable_or_unread": [
+    {
+      "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+      "resolved_url": "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter",
+      "checked_at": "2026-10-01",
+      "outcome": "Redirect followed; no substantive body returned. No claims adopted."
+    },
+    {
+      "scope": "Uber internal implementation, linked yarpc source, USENIX paper, external outage news",
+      "outcome": "Not read; no implementation compatibility or independent production verification claimed."
+    }
+  ],
+  "gap_mapping": {
+    "already_covered": [
+      "Retrying-layer inventory",
+      "bounded attempts and elapsed time",
+      "jitter",
+      "effect identity and reconciliation",
+      "bulkheads and recovery"
+    ],
+    "actual_gap": "Cross-layer coordination, causal ownership, configured retry opportunity preservation and bounded partial adoption.",
+    "implemented_paths": [
+      "skills/engineering/microservice-operations/references/failure-handling.md",
+      "skills/engineering/microservice-operations/references/retry-coordination.md",
+      "skills/engineering/microservice-operations/references/sources.md"
+    ],
+    "installation_contract": "All runtime instructions and routing remain inside microservice-operations; research record and any demonstration are not installation dependencies.",
+    "source_refresh_contract": "Refresh implementation-specific mutable contracts when a task depends on them; no mandatory full-source reading on every invocation."
+  },
+  "proposed_cases": [
+    {
+      "id": "RETRY-CHAIN-01",
+      "oracle": "Declared call-path dispatch bound holds; uncoordinated control exposes multiplicative attempts.",
+      "status": "unexecuted"
+    },
+    {
+      "id": "RETRY-CAUSE-01",
+      "oracle": "Mandatory causal failure attributed; optional failure plus local fault retains local ownership.",
+      "status": "unexecuted"
+    },
+    {
+      "id": "RETRY-OPPORTUNITY-01",
+      "oracle": "Disabled closest retries preserve eligible ancestor opportunity; attempted or quota-denied opportunity prevents redundant ancestors; unsafe effects remain ineligible.",
+      "status": "unexecuted"
+    },
+    {
+      "id": "RETRY-CONTEXT-01",
+      "oracle": "Missing/foreign metadata and internal context drops obey explicit finite fallback, preserving existing policy and counting residual multiplication.",
+      "status": "unexecuted"
+    },
+    {
+      "id": "RETRY-LIFETIME-01",
+      "oracle": "Original deadline covers waiting, connection, attempts and backoff; cancelled result does not substitute for effect and cleanup checks.",
+      "status": "unexecuted"
+    },
+    {
+      "id": "RETRY-RECOVERY-01",
+      "oracle": "Useful traffic resumes within bound without retry surge or resource loss for unrelated work.",
+      "status": "unexecuted"
+    }
+  ],
+  "verification_limits": "No runtime/network experiment or model evaluation performed by this research task. Independent source review, local bounded model results and real integrations must retain separate records."
+}
