@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-10-01",
+  "lane": "coordination-design",
+  "status": "research_complete_adoption_proposed",
+  "sources": [
+    {
+      "id": "calm-2019-v2",
+      "title": "Keeping CALM: When Distributed Consistency is Easy",
+      "authors": ["Joseph M. Hellerstein", "Peter Alvaro"],
+      "canonical_url": "https://arxiv.org/abs/1901.01930",
+      "read_url": "https://arxiv.org/pdf/1901.01930",
+      "pinned_version_url": "https://arxiv.org/pdf/1901.01930v2",
+      "edition_metadata_url": "https://arxiv.org/abs/1901.01930v2",
+      "version": "arXiv v2, 2019-01-26",
+      "access": "full_text_public_author_paper",
+      "actual_read_scope": "Complete extracted main body, sections 1 through 6; nine-page PDF including bibliography. Figures not visually inspected; reference entries not treated as read works.",
+      "new_to_this_batch": true,
+      "limits": "The theorem's consistency is confluence of program outcomes under the stated model; it is not a storage freshness guarantee or an implementation recipe."
+    },
+    {
+      "id": "bailis-2014-explanation",
+      "title": "When Does Consistency Require Coordination?",
+      "author": "Peter Bailis",
+      "canonical_url": "https://www.bailis.org/blog/when-does-consistency-require-coordination/",
+      "published_date": "2014-11-12",
+      "access": "full_text_public_author_blog",
+      "actual_read_scope": "Complete substantive text including author notes; comments excluded.",
+      "new_to_this_batch": true,
+      "limits": "Author explanation, not an independent reading of the linked paper or its formal proofs. The reported performance result is not a toolkit benchmark."
+    }
+  ],
+  "not_counted_as_deep_readings": [
+    {"url": "https://arxiv.org/abs/1402.2237", "scope": "Search metadata/abstract only; linked paper not read."},
+    {"url": "https://www.bailis.org/papers/bailis-thesis.pdf", "scope": "Search metadata only; thesis not read."},
+    {"url": "https://arxiv.org/abs/2210.12605", "scope": "Abstract only; no theorem or implementation adoption from this paper."}
+  ],
+  "practices": [
+    {
+      "id": "merge-closure-review",
+      "trigger": "Independent replicas admit updates to a shared business resource.",
+      "problem": "Each local transition can be valid while their merged result violates the global acceptance rule.",
+      "mechanism": "Enumerate a common starting state, concurrent admissible transitions and the merge; put enforcement at the decision that fails, rather than serializing every unrelated read.",
+      "applicability_limits": "Depends on the actual transaction set, merge, invariant and authority. A finite counterexample can disprove a proposed rule; a finite pass does not prove all executions safe.",
+      "counterexample": "From stock=1, two replicas each accept a distinct sale. Union preserves both identities and yields stock=-1.",
+      "verification": "Executed finite counterexample plus an atomic sequential reservation model. Real concurrent database sessions and recovery remain required for an implementation.",
+      "fit": "Conditional concurrency-correctness reference; no new agent.",
+      "source_ids": ["bailis-2014-explanation"]
+    },
+    {
+      "id": "completion-boundary",
+      "trigger": "A decision depends on absence, a final aggregate or all required inputs having arrived.",
+      "problem": "Later admissible facts can overturn a decision made from partial information.",
+      "mechanism": "Declare who can seal the input set and how a consumer validates the cut; keep provisional projections and irreversible effects under separate contracts.",
+      "applicability_limits": "A client manifest covers only the input identities its authority can seal. Eventual convergence does not authorize irreversible actions on an incomplete view.",
+      "counterexample": "A late sale or cart update arrives after a supposedly final checkout decision.",
+      "verification": "Proposed: delay a declared dependency, deliver duplicates, and admit an undeclared update after the cut; verify the target's explicit rejection or correction policy.",
+      "fit": "Existing concurrency and stream-processing finality branches.",
+      "source_ids": ["calm-2019-v2"]
+    }
+  ],
+  "execution": {
+    "interpreter": "Python 3.14.3",
+    "script": "coordination-oracle.py",
+    "result": "coordination-oracle-result.json",
+    "kind": "finite_in_memory_model",
+    "production_or_protocol_validation": false
+  }
+}

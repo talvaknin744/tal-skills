@@ -26,16 +26,21 @@ npx skills@latest add talvaknin744/tal-skills
 ```
 
 In an interactive terminal, the CLI lets the user select skills and installation
-targets. The upstream README and selection implementation were inspected; this
-drafting pass did not repeat a remote installation. Repository changes must be
-published before the remote command can discover them.
+targets. The upstream README and selection implementation were inspected;
+[fresh public discovery](../research/engineering-toolkit/2026-10-01/public-skills-discovery.json)
+then found all 49 expected names with CLI 1.7.0 and left the disposable destination
+project unchanged. This list-mode check did not install a skill or exercise the
+interactive picker.
 
 For the agent roster and workflows, link to the
 [repository README](../../README.md) and [usage guide](../toolkit-usage.md).
 The selectable launcher is now implemented and [tested through an actual packed
 npx installation](../research/engineering-toolkit/2026-10-01/launcher-installation.json).
 The usage guide gives both the interactive command and the npm 12 Git opt-in.
-Remote GitHub discovery and release CI are separate post-publication checks.
+After publication, the full toolkit launcher passed a
+[fresh public GitHub npx install and repeat](../research/engineering-toolkit/2026-10-01/public-installation.json).
+The [release record](../research/engineering-toolkit/2026-10-01/release-record.json)
+binds successful Ubuntu validation to published commit `fe36680` with 438 tests.
 
 ## Editorial boundaries
 

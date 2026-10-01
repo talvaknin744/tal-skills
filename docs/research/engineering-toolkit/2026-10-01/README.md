@@ -123,6 +123,12 @@ native delegation or production correctness. The
 [integration review](review-integration.md) preserves discovered archive-binding
 gaps, corrections, and independently checked negative controls.
 
+After publication, a [fresh installation from public GitHub](public-installation.json)
+resolved the chosen workflow and skill for both hosts and repeated with zero
+changes. The [release record](release-record.json) binds the successful 438-test
+CI run to `fe36680`. The [later focused research](../../distributed-systems-followup/2026-10-01/README.md)
+is a separate batch; its counts are not silently added to this archive pass.
+
 ## Publisher inventory
 
 The following table is an index into coverage evidence, not a completeness ranking.

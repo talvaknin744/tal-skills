@@ -1,0 +1,564 @@
+{
+  "schema_version": 1,
+  "topic": "online schema, index, and data evolution",
+  "research_date": "2026-10-01",
+  "baseline_commit": "fe3668013d7ae9d59f292c1f4d6101aeb4f44fda",
+  "scope": {
+    "new_substantive_body_reads": 3,
+    "new_articles": 2,
+    "new_papers": 1,
+    "books_or_chapters_read": 0,
+    "archive_enumeration": false,
+    "skill_changes": false,
+    "runtime_or_model_checks_executed": false
+  },
+  "read_sources": [
+    {
+      "id": "f1",
+      "title": "Online, Asynchronous Schema Change in F1",
+      "authors": [
+        "Ian Rae",
+        "Eric Rollins",
+        "Jeff Shute",
+        "Sukhdeep Sodhi",
+        "Radek Vingralek"
+      ],
+      "canonical_url": "https://research.google/pubs/online-asynchronous-schema-change-in-f1/",
+      "full_text_url": "https://research.google.com/pubs/archive/41376.pdf",
+      "publisher_pdf_url": "https://www.vldb.org/pvldb/vol6/p1045-rae.pdf",
+      "date": "2013-08",
+      "date_precision": "month",
+      "date_evidence": "PVLDB Vol.6 No.11 official front matter cover p1/copyright p2: https://www.vldb.org/pvldb/vol6/FrontMatterVol6No11.pdf",
+      "edition": "Proceedings of the VLDB Endowment 6(11), pp.1045–1056",
+      "read_status": "full_substantive_paper_text",
+      "read_scope": "Complete extracted text across all 12 PDF pages: abstract, sections 1–9, Claims 1–9, Theorem 1 and references; extracted Figure 1–3 labels/captions and Table 1–3 text. Read by research subagent. Independent inspection of rendered figure/table pixels is not claimed.",
+      "new_body_read": true,
+      "applicability": "Historical F1 engine protocol, not current Spanner implementation promise.",
+      "equivalence_check": "Research subagent compared publisher/Google extracted text page by page; all 12 pages match after removing added publication page footers.",
+      "alternate_response_evidence": {
+        "url": "https://www.vldb.org/pvldb/vol6/p1045-rae.pdf",
+        "status": 200,
+        "bytes": 679747,
+        "sha256": "b0ae669e09780858c28f3d27050f023c44076c5071e0af4999c11256f0b868a0",
+        "retrieved_at": null,
+        "time_gap": "Exact publisher-PDF retrieval timestamp was not supplied; do not infer it."
+      },
+      "read_modality": "PDF text extraction; figure/table labels, captions and table text included. No independent rendered-pixel inspection claimed."
+    },
+    {
+      "id": "gh-ost",
+      "title": "gh-ost: GitHub’s online schema migration tool for MySQL",
+      "authors": [
+        "Shlomi Noach"
+      ],
+      "canonical_url": "https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/",
+      "date": "2016-08-01",
+      "date_precision": "day",
+      "read_status": "full_substantive_article_text",
+      "read_scope": "Entire main text from introduction through acknowledgements. Navigation/related posts excluded. Diagram text/described operating modes read; diagrams not independently inspected.",
+      "new_body_read": true,
+      "applicability": "Historical launch account; current tool and engine requirements crosschecked separately."
+    },
+    {
+      "id": "shopify-vitess",
+      "title": "Horizontally scaling the Rails backend of Shop app with Vitess",
+      "authors": [
+        "Hammad Khalid",
+        "Vahe Khachikyan",
+        "Hanying (Elsa) Huang",
+        "Thibault Gautriaud",
+        "Adam Renberg Tamm",
+        "Brendan Dougherty"
+      ],
+      "canonical_url": "https://shopify.engineering/horizontally-scaling-the-rails-backend-of-shop-app-with-vitess",
+      "date": "2024-01-17",
+      "date_precision": "day",
+      "read_status": "full_substantive_article_text",
+      "read_scope": "Entire main text: preparation/data model/query verifiers, schema migration and cache sections, all three phases, cleanup, parting thoughts and lessons. Navigation/related posts excluded. Images not independently inspected.",
+      "new_body_read": true,
+      "applicability": "Historical Rails7.0/Vitess14–15 application account. Its performance figures/success statements are not our measurements."
+    }
+  ],
+  "six_dimensional_cards": [
+    {
+      "source_id": "f1",
+      "title": "F1: permission to maintain precedes permission to read",
+      "dimensions": {
+        "trigger": "Servers concurrently interpret shared data using different schema versions.",
+        "problem": "A reader can use a new index while an older writer omits its maintenance, producing incorrect answers.",
+        "mechanism": "Preserve both adjacent versions’ invariants; adding an index passes through delete-only and write-only permissions before readers may use it. Permit only one version of lag, advance at most once per lease period, and reject expired-schema writes at storage commit. Begin backfill only after delete-only writers lose commit eligibility and every eligible writer maintains the index; expose reads after reorganization.",
+        "limits": "The proof assumes F1’s shared transactional storage, schema interpretation and lease/commit machinery. Application deployment versions do not automatically inherit it. Lock-coverage changes need their own timestamp-preservation protocol.",
+        "counterexample": "Waiting for a server’s refresh timer does not prevent its paused, expired-schema write from committing later.",
+        "verification": "Proposed: pause a writer across the version boundary, mutate and delete indexed rows during reorganization, and compare index answers with a base-data oracle. Verify rejection at the protected commit, not only a refresh log."
+      },
+      "verification_status": "proposed_not_executed"
+    },
+    {
+      "source_id": "gh-ost",
+      "title": "gh-ost: controllability and cutover are separate contracts",
+      "dimensions": {
+        "trigger": "A live MySQL table needs a structural change while serving writes.",
+        "problem": "Migration work competes with serving traffic, and an apparently finished copy may omit subsequent mutations.",
+        "mechanism": "Tail row-based binary logs into an altered shadow table; serialize copying and event application. Throttle migration writes and postpone cutover while continuing catch-up when appropriate. Replica test mode freezes replication for original/shadow comparison.",
+        "limits": "Historical motivation is not a current MySQL capability matrix. Replica tests do not reproduce all primary contention or application-version behavior.",
+        "counterexample": "Successful row copying does not prove the shadow is caught up, or that old application SQL accepts the new schema.",
+        "verification": "Proposed: include concurrent update/delete, pause/resume, binlog backlog and a long transaction obstructing cutover. Compare transformed rows at a common source boundary, plus foreground outcomes and acknowledged writes."
+      },
+      "verification_status": "proposed_not_executed"
+    },
+    {
+      "source_id": "shopify-vitess",
+      "title": "Shopify: schema publication is a fleet-wide application boundary",
+      "dimensions": {
+        "trigger": "A Rails application uses cached schema metadata while shards complete migrations independently.",
+        "problem": "An arbitrary shard can supply a schema that other shards do not yet serve. Reverse replication can also encounter a uniqueness violation when events from different shards arrive in a different order.",
+        "mechanism": "Keep changing columns out of generated application SQL during transition; publish a schema-cache dump only after every shard completes and no competing migration remains. Verify future routing/transaction constraints before sharding.",
+        "limits": "`ignored_columns` affects Active Record’s model SQL, not every handwritten SQL path or external writer. The account’s reverse-replication error concerns a specific resharding flow, not every schema migration.",
+        "counterexample": "Merely retaining the old database does not establish a usable rollback target after new writes diverge or reverse replication stops.",
+        "verification": "Proposed: vary shard completion order, restart a process with a cached schema, and exercise direct SQL. For a reversible traffic switch, inspect reverse-stream progress and reconcile post-switch acknowledged mutations before declaring recovery available."
+      },
+      "verification_status": "proposed_not_executed"
+    }
+  ],
+  "current_contracts": [
+    {
+      "id": "gh-ost-current",
+      "edition": "master resolved2026-10-01 to f7a42f6b8028e96d3c8abd47a4da38baedb1161d",
+      "commit_date": "2026-08-28T15:29:44Z",
+      "urls": [
+        "https://github.com/github/gh-ost/blob/f7a42f6b8028e96d3c8abd47a4da38baedb1161d/doc/requirements-and-limitations.md",
+        "https://github.com/github/gh-ost/blob/f7a42f6b8028e96d3c8abd47a4da38baedb1161d/doc/cut-over.md"
+      ],
+      "read_scope": "Both complete substantive Markdown documents.",
+      "already_crosschecked_prior": true,
+      "read_status": "documentation_body_read",
+      "boundary": "Supported topology, FULL RBR, shared usable unique key; unsupported foreign keys/triggers/active-active writes. Default atomic cutover briefly blocks; failed attempt leaves original accessible. Whole migration/application rollout is not atomic."
+    },
+    {
+      "id": "mysql8.4-online",
+      "edition": "MySQL8.4 Reference Manual, live as of2026-10-01; not claimed newest MySQL release",
+      "urls": [
+        "https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-operations.html",
+        "https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-performance.html",
+        "https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html"
+      ],
+      "read_scope": "Online operations index/primary-key/column tables and relevant notes; complete17.12.2 performance/concurrency; atomic-DDL introduction/support and characteristics read through supported statements/visible behavior via web output. Rest of manual not claimed read.",
+      "read_status": "selected_documentation_sections_read",
+      "boundary": "Algorithm/lock capability is operation dependent; LOCK=NONE still permits metadata-lock waits/blocked subsequent traffic. Atomic DDL crash recovery does not combine application writes and several DDLs into a transaction."
+    },
+    {
+      "id": "postgres18-index",
+      "edition": "PostgreSQL18",
+      "urls": [
+        "https://www.postgresql.org/docs/18/sql-createindex.html"
+      ],
+      "read_scope": "Complete Building Indexes Concurrently section; CONCURRENTLY/IF NOT EXISTS parameter text and related validity/snapshot notes. Rest of manual not read.",
+      "read_status": "selected_documentation_sections_read",
+      "boundary": "Multi-transaction/two-scan build waits for old transactions/snapshots; invalid failed index may retain maintenance and unique enforcement. IF NOT EXISTS is not definition validation."
+    },
+    {
+      "id": "vitess24-online",
+      "edition": "Vitess24.0, site-labelled stable",
+      "urls": [
+        "https://vitess.io/docs/24.0/user-guides/schema-changes/postponed-migrations/",
+        "https://vitess.io/docs/24.0/user-guides/schema-changes/validating-migrations/",
+        "https://vitess.io/docs/24.0/user-guides/schema-changes/revertible-migrations/",
+        "https://vitess.io/docs/24.0/user-guides/schema-changes/ddl-strategy-flags/"
+      ],
+      "read_scope": "Complete substantive postponed, validation and revert pages; complete flags text through notes.",
+      "displayed_updates": {
+        "postponed_migrations": "2025-10-29",
+        "validating_migrations": "2025-10-29",
+        "revertible_migrations": "2025-10-29",
+        "ddl_strategy_flags": "2026-05-27"
+      },
+      "already_crosschecked_prior": true,
+      "read_status": "documentation_body_read",
+      "boundary": "Observe all-shard completion rather than COMPLETE return. VDiff postponed/readiness preconditions. Revert catches up from cutover GTID; strategy/latest-successful/artifact/new-data representation limits. Retention24h statement vs newer override flags explicitly unresolved for an uninspected deployment. Instant path may have no revert artifact."
+    },
+    {
+      "id": "rails-model-schema",
+      "edition": "Live unversioned API2026-10-01; linked source c3466ea00d7121798e3aa3144ffdf7174b81d8cb",
+      "urls": [
+        "https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html#method-i-ignored_columns-3D",
+        "https://github.com/rails/rails/blob/c3466ea00d7121798e3aa3144ffdf7174b81d8cb/activerecord/lib/active_record/model_schema.rb"
+      ],
+      "read_scope": "ignored_columns/getter/setter descriptions and code; load_schema,reset_column_information,reload_schema_from_cache API/code. Pinned raw source lines334–376 additionally read. No claim to read entire Rails source.",
+      "read_status": "selected_documentation_sections_read",
+      "boundary": "Excluded columns have no model accessor/generated SQL; two-step remove-reference-before-drop protects cached schema. Custom SQL/external writers remain separate."
+    },
+    {
+      "id": "spanner-current-schema",
+      "edition": "Current Spanner schema-updates page",
+      "urls": [
+        "https://docs.cloud.google.com/spanner/docs/schema-updates"
+      ],
+      "displayed_update": "2026-09-30",
+      "read_scope": "Research subagent read complete substantive page: supported updates, performance, validation, schema versions and change-stream effects.",
+      "read_status": "documentation_body_read",
+      "boundary": "Single DDL can create multiple internal versions; validation may reject new conflicting writes before eventual failure; earlier reads may use retained old schemas. Not an F1 public API guarantee."
+    },
+    {
+      "id": "cockroach-current-schema",
+      "edition": "Live CockroachDB stable documentation2026-10-01; deployed version not inferred",
+      "urls": [
+        "https://docs.cockroachlabs.com/docs/stable/online-schema-changes"
+      ],
+      "read_scope": "Research subagent read substantive online-schema-change behavior, complete Known limitations through column-drop rollback, and Undoing a schema change.",
+      "read_status": "selected_documentation_sections_read",
+      "boundary": "Background bridge/backfill costs; non-atomic multi-statement DDL, prepared-plan errors, missing/stale dropped-column data after rollback, and GC-bounded undo."
+    }
+  ],
+  "deduplication": {
+    "searched_roots": [
+      "docs/research",
+      "skills"
+    ],
+    "match_rule": "URL/title and schema/version mechanism terms against recorded adoption Markdown/JSON; metadata inventory presence does not equal body reading.",
+    "prior_records": [
+      {
+        "url": "https://stripe.com/blog/online-migrations",
+        "prior_status": "full_body_read_and_adopted",
+        "record": "docs/research/engineering-toolkit/crosscheck-backend-quality.md",
+        "treatment": "Excluded from new account count; already adopted staged dual-write/read/write migration lacks complete disclosed concurrency/cross-store atomicity protocol."
+      },
+      {
+        "url": "https://github.blog/enterprise-software/automation/automating-mysql-schema-migrations-with-github-actions-and-more/",
+        "prior_status": "full_body_read_and_adopted",
+        "record": "docs/research/engineering-toolkit/lanes/backend.md",
+        "treatment": "Excluded from new account count; later automation account differs from newly read2016launch."
+      },
+      {
+        "url": "https://planetscale.com/blog/how-planetscale-makes-schema-changes",
+        "prior_status": "full_body_read_and_adopted",
+        "record": "skills/infrastructure/infrastructure-change-safety/references/sources.md",
+        "treatment": "Excluded from new account count."
+      },
+      {
+        "url": "https://shopify.engineering/horizontally-scaling-the-rails-backend-of-shop-app-with-vitess",
+        "prior_status": "metadata_indexed_only",
+        "record": "docs/research/engineering-toolkit/2026-10-01/backend/shopify/index.json",
+        "treatment": "New full substantive body read in this batch; archive indexing was not reading."
+      }
+    ],
+    "limits": "Does not establish every earlier human reading. Current gh-ost/Vitess readings were prior contract adoptions and are not new article counts."
+  },
+  "retrieval_evidence": {
+    "method": "Direct read-only HTTPS GET with 8s connect/25s read timeouts; metadata logging. Web-reader scope recorded separately. No raw response bodies retained in repository.",
+    "note": "Logged retrieval is not proof of reading. Some URLs were fetched more than once while locating content; only declared scopes count as read. Subagent current-doc reads have scope evidence but no supplied HTTP hash log.",
+    "requests": [
+      {
+        "url": "https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/",
+        "response_url": "https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:24:39.377668+00:00",
+        "bytes": 184004,
+        "sha256": "4b1d396f45b65bd3cabaa2d9301abefc6d637c7f9241ddd67cfdcf5390f687fb"
+      },
+      {
+        "url": "https://api.github.com/repos/github/gh-ost/commits/master",
+        "response_url": "https://api.github.com/repos/github/gh-ost/commits/master",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:24:39.822258+00:00",
+        "bytes": 21820,
+        "sha256": "2a21b6d665672ebe067ba5fd0a311700b0c0fcd03a0252914936fd02f2b28a42"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/github/gh-ost/f7a42f6b8028e96d3c8abd47a4da38baedb1161d/doc/requirements-and-limitations.md",
+        "response_url": "https://raw.githubusercontent.com/github/gh-ost/f7a42f6b8028e96d3c8abd47a4da38baedb1161d/doc/requirements-and-limitations.md",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:24:41.330289+00:00",
+        "bytes": 3920,
+        "sha256": "7e2e0703e15d7e0ec717066c770a4d05977c3f51fd98df103efb31a64ee4431c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/github/gh-ost/f7a42f6b8028e96d3c8abd47a4da38baedb1161d/doc/cut-over.md",
+        "response_url": "https://raw.githubusercontent.com/github/gh-ost/f7a42f6b8028e96d3c8abd47a4da38baedb1161d/doc/cut-over.md",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:24:42.847033+00:00",
+        "bytes": 2390,
+        "sha256": "faa17b01e8241d421dc2cbf58db6448a97bd74ae17e4b5dc685107be8084cb38"
+      },
+      {
+        "url": "https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/",
+        "response_url": "https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:25:07.161359+00:00",
+        "bytes": 183815,
+        "sha256": "4269c9f71c3ad4ed173c0afa7aea0b4444be743da245416eec0944513507caed"
+      },
+      {
+        "url": "https://shopify.engineering/horizontally-scaling-the-rails-backend-of-shop-app-with-vitess",
+        "response_url": "https://shopify.engineering/horizontally-scaling-the-rails-backend-of-shop-app-with-vitess",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:26:12.446763+00:00",
+        "bytes": 442640,
+        "sha256": "ae301cc6c24474bc29d6a3a9b00ea0e5191c874d57680ebe6d3dcc769b284cb5"
+      },
+      {
+        "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-performance.html",
+        "response_url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-performance.html",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:26:51.207563+00:00",
+        "bytes": 100633,
+        "sha256": "76ba6d39a6598bbc1a7eff6cd569d372d5e2c0a9c90fad7d62bf690aaf18ee34"
+      },
+      {
+        "url": "https://www.postgresql.org/docs/18/sql-createindex.html",
+        "response_url": "https://www.postgresql.org/docs/18/sql-createindex.html",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:26:51.741266+00:00",
+        "bytes": 54641,
+        "sha256": "ea898f208d865d52cdaea6b7bff1be0609a7e4adb04164ba33ada6018ad5614d"
+      },
+      {
+        "url": "https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html",
+        "response_url": "https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:26:52.350217+00:00",
+        "bytes": 66378,
+        "sha256": "a754a9c81a8bdaf39034d76fcbaf5649357a66c81873c0b8128fd6782a442e83"
+      },
+      {
+        "url": "https://vitess.io/docs/24.0/user-guides/schema-changes/revertible-migrations/",
+        "response_url": "https://vitess.io/docs/24.0/user-guides/schema-changes/revertible-migrations/",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:26:53.314762+00:00",
+        "bytes": 78914,
+        "sha256": "57e525896a25141f3ac58844f0e53194ae98edac9530cfc1221b545a96b31ef3"
+      },
+      {
+        "url": "https://vitess.io/docs/24.0/user-guides/schema-changes/validating-migrations/",
+        "response_url": "https://vitess.io/docs/24.0/user-guides/schema-changes/validating-migrations/",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:26:53.829349+00:00",
+        "bytes": 31637,
+        "sha256": "e3a45f24344b184ac9c91e27817df6ba651c52ee7157e0193bfb42585a6bdc26"
+      },
+      {
+        "url": "https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html",
+        "response_url": "https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:27:31.581882+00:00",
+        "bytes": 66378,
+        "sha256": "a754a9c81a8bdaf39034d76fcbaf5649357a66c81873c0b8128fd6782a442e83"
+      },
+      {
+        "url": "https://vitess.io/docs/24.0/user-guides/schema-changes/ddl-strategy-flags/",
+        "response_url": "https://vitess.io/docs/24.0/user-guides/schema-changes/ddl-strategy-flags/",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:30:23.740106+00:00",
+        "bytes": 39341,
+        "sha256": "74630cb0374142ca550b6f8f93f89e5d65313ab0b20e51285911bdfead78abc7"
+      },
+      {
+        "url": "https://vitess.io/docs/24.0/user-guides/schema-changes/postponed-migrations/",
+        "response_url": "https://vitess.io/docs/24.0/user-guides/schema-changes/postponed-migrations/",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:30:24.835339+00:00",
+        "bytes": 85379,
+        "sha256": "21642af8cc4ad41d7d34645cbdbc50afd6a88539a219e0a2fd4b970a0ecc5328"
+      },
+      {
+        "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-operations.html",
+        "response_url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-operations.html",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:30:26.012945+00:00",
+        "bytes": 171114,
+        "sha256": "614f93f78feafc8705247d0323cb979ab1d0f87c8777a5f9121173c504d1ef72"
+      },
+      {
+        "url": "https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html",
+        "response_url": "https://dev.mysql.com/doc/refman/8.4/en/atomic-ddl.html",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:30:26.950605+00:00",
+        "bytes": 136516,
+        "sha256": "871ae408566a49d4a2c06bb1eef3465b435b2d62395813bdff57ce8901303c89"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/rails/rails/c3466ea00d7121798e3aa3144ffdf7174b81d8cb/activerecord/lib/active_record/model_schema.rb",
+        "response_url": "https://raw.githubusercontent.com/rails/rails/c3466ea00d7121798e3aa3144ffdf7174b81d8cb/activerecord/lib/active_record/model_schema.rb",
+        "status": 200,
+        "retrieved_at": "2026-10-01T19:30:27.450158+00:00",
+        "bytes": 25038,
+        "sha256": "c593dd71fb08f82742b72dad61011c66aaf06019d860ddb85f53672ff13d5214"
+      },
+      {
+        "url": "https://research.google.com/pubs/archive/41376.pdf",
+        "response_url": "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41376.pdf",
+        "status": 200,
+        "started_at": "2026-10-01T19:31:15.930875+00:00",
+        "retrieved_at": "2026-10-01T19:31:16.466994+00:00",
+        "bytes": 618545,
+        "sha256": "2673216a6df230e0b8233136445b1331f689a26ce327e815884095577420e1f5",
+        "content_type": "application/pdf",
+        "last_modified": "Tue, 03 Mar 2020 20:15:00 GMT",
+        "metadata_note": "Last-Modified is retrieval metadata, not publication date. Research subagent supplied evidence."
+      }
+    ]
+  },
+  "original_rehearsal": {
+    "status": "proposed_not_executed",
+    "example": "orders.status_text pending/paid to status_code0/1",
+    "assumptions": [
+      "Every original V0 business writer already increments source_rev in the same local transaction; every row creation has an immutable, non-reused source_incarnation.",
+      "V1 writes both representations and matching source_rev/mapped_rev atomically in one database.",
+      "Backfill reads one consistent row snapshot, then conditionally updates an existing row by observed source_incarnation AND source_rev; it cannot insert a deleted row. V2 reads all compatibility fields in one consistent row snapshot.",
+      "Version floor must be enforceable at actual commit/write boundary or unsupported transactions must be proven drained.",
+      "Actual engine supplies schema/index publication and selected snapshot/log comparison semantics."
+    ],
+    "stages": [
+      {
+        "stage": 1,
+        "instruction": "**Expand without exposing.** Add nullable `status_code` and `mapped_rev` using the selected engine’s supported algorithm. Keep both columns out of application-generated SQL during partial shard completion. Observe actual schema on every required shard before a bridge begins writing them; do not publish a cache from whichever shard answers first."
+      },
+      {
+        "stage": 2,
+        "instruction": "**Introduce V1 bridge writers.** In one local transaction, write the old text, new code, next `source_rev`, and matching `mapped_rev`. V0 may still write only text and increment `source_rev`; a mapped value can therefore become stale even when non-null."
+      },
+      {
+        "stage": 3,
+        "instruction": "**Run a bounded backfill.** Read text, incarnation and revision in one consistent row snapshot; compute the code, and conditionally update the still-existing row only when both `source_incarnation` and `source_rev` match that observation. Set `mapped_rev` to that revision. On mismatch, reread/reconcile. Do not insert a row that disappeared. Track required source membership, coverage and catch-up; a cursor’s end alone is insufficient."
+      },
+      {
+        "stage": 4,
+        "instruction": "**Allow V2 readers with a compatibility rule.** Read text, code and both revisions in one consistent row snapshot. Use a supported, non-null code only when non-null `mapped_rev == source_rev`; otherwise derive the answer from authoritative text. Keep predicates on a path that includes stale/unmapped rows. An index on code alone cannot find rows whose text changed under V0 but whose code did not."
+      },
+      {
+        "stage": 5,
+        "instruction": "**Close the V0 writer boundary.** Stop new admission and account for queued jobs, retry/replay entry points and open transactions. Enforce the chosen version floor at the actual write/commit boundary or prove those writers drained. A deployment percentage and an expired process heartbeat do not prove this. Complete the final reconciliation and the engine’s index publication checks before code-only predicates become authoritative."
+      },
+      {
+        "stage": 6,
+        "instruction": "**Keep a rollback-compatible interval.** V2 reads the new representation; V1 still maintains both. Preserve the old readers’ supported values and old schema while their rollback/replay contract remains active. Keep rollback writers behind the V1 bridge. If rollback must reactivate V0-only writers, first restore V2’s text fallback and stop code-only predicates; otherwise retain the writer floor. Rehearse old code against post-switch writes."
+      },
+      {
+        "stage": 7,
+        "instruction": "**Retire deliberately.** Only after old readers/writers and recovery dependencies are accounted for may V3 stop maintaining the old text and remove it. Record that accepting a new value such as `archived → 2`, which V0 cannot interpret, or destroying the old representation changes the recovery options."
+      }
+    ],
+    "oracle": "Independent fixture ledger of definitively committed business operations, transaction identities, authoritative incarnations/revisions, rejected attempts, and manually specified expected statuses/deletions. Record acknowledgements and reconcile unknown outcomes; response arrival is not commit order. No migration transformation code, success flags or sampled equality. Freeze fixture writers at reconciled committed H or use supported common snapshot/log boundary. Enumerate expected AND actual base/index identities/values. Require exact set equality in both directions, including missing, extra/resurrected and orphan entries; then compare query answers.",
+    "scenarios": [
+      {
+        "schedule": "Backfill reads pending/revision 1; V0 commits paid/revision 2; old backfill resumes",
+        "required_observation": "Old conditional update affects zero rows. V2 returns paid through the compatibility path; later reconciliation maps revision 2.",
+        "status": "proposed_not_executed"
+      },
+      {
+        "schedule": "Backfill reads row B; V0 deletes B; backfill resumes",
+        "required_observation": "No resurrection; B is absent from all authoritative answers at H.",
+        "status": "proposed_not_executed"
+      },
+      {
+        "schedule": "Backfill reads B/incarnation X/revision 1; delete and recreate B/incarnation Y/revision 1; old backfill resumes",
+        "required_observation": "Incarnation comparison rejects the old result. New B’s acknowledged value survives; equal revisions alone cannot authorize an update.",
+        "status": "proposed_not_executed"
+      },
+      {
+        "schedule": "V1 commits a new status/revision; an older copy is replayed",
+        "required_observation": "Acknowledged new value survives; the oracle matches both representations when their revisions match.",
+        "status": "proposed_not_executed"
+      },
+      {
+        "schedule": "One shard completes before another; a new process refreshes its cache",
+        "required_observation": "New-column exposure remains gated; ordinary requests do not depend on a schema absent on another required shard.",
+        "status": "proposed_not_executed"
+      },
+      {
+        "schedule": "V0 pauses before commit, then resumes after the version floor",
+        "required_observation": "The protected boundary rejects the unsupported write, or verified draining establishes that no such transaction remains. No success acknowledgement is invented.",
+        "status": "proposed_not_executed"
+      },
+      {
+        "schedule": "Concurrent unique-index build fails, or table-swap attempt times out",
+        "required_observation": "Inspect engine state and query/write behavior. Failed build status alone does not prove constraints are absent; failed cutover does not imply writes stopped.",
+        "status": "proposed_not_executed"
+      }
+    ],
+    "resource_observations": [
+      "migration I/O",
+      "temporary space",
+      "log retention/backlog",
+      "foreground latency/errors",
+      "outstanding work"
+    ],
+    "recovery_limits": [
+      "Old application code must still understand post-switch values/schema.",
+      "After code-only reads become authoritative, keep rollback writers behind V1 bridge or restore V2 fallback and stop code-only predicates before permitting V0-only writes; otherwise preserve the writer floor.",
+      "Bridge interval maintains both representations but does not make every transform invertible.",
+      "Widened type then out-of-range value, or removed unique constraint then duplicates, can defeat schema reversion.",
+      "Old retained table needs post-cutover acknowledged-write catch-up; reverse-stream status and ordering constraints matter.",
+      "Once recovery route closes choose compatible forward repair or scoped restore/replay; recreating a column does not recover discarded values."
+    ],
+    "engine_index_gate_schedule": {
+      "scope": "Historical F1-style engine protocol, separate from application representation backfill with V2 fallback.",
+      "schedule": "Pause delete-only writer across planned backfill entry.",
+      "required_observation": "Backfill entry remains blocked while writer may commit without index insertion. Once writer loses commit eligibility and all eligible writers maintain index, allow entry; resumed expired-schema commit must fail.",
+      "status": "proposed_not_executed"
+    }
+  },
+  "placement_ranking": [
+    {
+      "rank": 1,
+      "package": "infrastructure-change-safety",
+      "existing_reference": "references/rollout.md",
+      "proposed_change": "Conditional schema/index publication and version-overlap boundary; add short references/schema-evolution.md only if details overwhelm existing reference.",
+      "distinct_trigger": "Existing schema rollout/overlapping application generations trigger already fits; no new skill."
+    },
+    {
+      "rank": 2,
+      "package": "distributed-system-patterns",
+      "proposed_change": "Only for actual database-engine schema-version protocol design; bound F1 details to engine-controlled versions and storage commit fence.",
+      "distinct_trigger": "Implementing engine schema interpretation/permissions under concurrent versions, not ordinary app deployment."
+    },
+    {
+      "rank": 3,
+      "package": "none",
+      "proposed_change": "No separate skill recommended.",
+      "reason": "background-maintenance already covers conditional stale backfill, source coverage/catch-up and independent index oracle; technical-deprecation covers generations/retirement."
+    }
+  ],
+  "limitations": [
+    "No finite model/oracle, real database migration, benchmark or production test was executed.",
+    "F1 historical proof does not verify current Spanner implementation.",
+    "Database/topology/application deployed versions not inspected.",
+    "Current Vitess retention documentation tension requires actual deployed configuration.",
+    "Some response hashes identify complete HTTP responses; published artifacts retain metadata and original paraphrases only."
+  ],
+  "artifact_verification": {
+    "json_parse_and_required_fields": "passed",
+    "new_body_read_count_and_six_dimensions": "passed",
+    "relative_markdown_links": "passed",
+    "prior_adoption_record_paths": "passed_after_correcting_GitHub_path",
+    "copyright_body_key_scan": "passed",
+    "technical_independent_review": {
+      "reviewer": "research subagent",
+      "status": "all_five_findings_closed",
+      "observations": [
+        {
+          "finding": "Per-row revision can be reused after deletion/reinsertion.",
+          "correction": "Immutable non-reused source_incarnation plus source_rev in backfill CAS; explicit adverse schedule."
+        },
+        {
+          "finding": "Separate compatibility field reads can misclassify stale code.",
+          "correction": "Backfill and V2 read all relevant fields in one consistent row snapshot."
+        },
+        {
+          "finding": "Old-writer rollback breaks code-only maintenance.",
+          "correction": "Retain bridge/write floor, or restore text fallback and disable code-only predicates before reactivating V0-only writes."
+        },
+        {
+          "finding": "F1 reorganization may start with delete-only writers still eligible.",
+          "correction": "Explicit engine backfill entry gate: delete-only loses commit eligibility and all eligible writers maintain index; separate from application backfill example."
+        },
+        {
+          "finding": "Expected-only enumeration misses extra/orphan rows.",
+          "correction": "Complete expected and actual base/index set enumeration; equality checked in both directions."
+        }
+      ],
+      "runtime_validation": "not_executed"
+    },
+    "runtime_or_model_evidence": "None executed; schedules remain proposed.",
+    "diff_whitespace": "passed"
+  }
+}

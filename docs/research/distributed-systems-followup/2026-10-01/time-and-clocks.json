@@ -1,0 +1,654 @@
+{
+  "schema_version": 1,
+  "title": "Clock contracts for distributed design",
+  "research_date": "2026-10-01",
+  "baseline_commit": "fe3668013d7ae9d59f292c1f4d6101aeb4f44fda",
+  "status": "frozen research proposal; no skill edits",
+  "owned_files": [
+    "docs/research/distributed-systems-followup/2026-10-01/time-and-clocks.md",
+    "docs/research/distributed-systems-followup/2026-10-01/time-and-clocks.json"
+  ],
+  "scope": {
+    "substantive_new_primary_paper_readings": 2,
+    "question": "Select an appropriate clock/authority for elapsed budgets, durable expiry, causal dependencies and globally coordinated snapshots.",
+    "out_of_scope": [
+      "streaming watermarks and window finality",
+      "new skill creation",
+      "shared package edits",
+      "model runs",
+      "real clock changes",
+      "production clock/lease experiments"
+    ],
+    "guidance_read": [
+      "research",
+      "writing-for-agents"
+    ],
+    "source_body_copies_in_repository": false,
+    "temporary_reading_method": "PDF bytes acquired in memory; page text temporarily extracted outside the repository; no downloaded PDF retained.",
+    "temporary_page_text_removed_after_reading": true,
+    "temporary_page_text_files_removed": 22,
+    "guidance_read_normalization": "Private local filesystem paths normalized to skill names; reading identities unchanged."
+  },
+  "deduplication": {
+    "searched_record_paths": [
+      "docs/research/ddia-faults-consistency.md",
+      "docs/research/consistency-primary-sources.md",
+      "docs/research/architecture-book-sources.md",
+      "skills/engineering/concurrency-correctness/references/sources.md"
+    ],
+    "searched_terms": [
+      "Lamport",
+      "TrueTime",
+      "time-clocks.pdf",
+      "spanner-osdi2012.pdf"
+    ],
+    "interpretation": "No prior adoption of these exact paper URLs was found in the searched records. Existing clock and fencing guidance is not counted as a new discovery. Metadata inventory mentions are not body readings. Search is of recorded adoption, not all past human reading.",
+    "already_covered": [
+      "Local monotonic drain budgets and wall-clock jumps in ddia-faults-consistency.md",
+      "Lease expiry does not stop an old owner; generation checks at protected resources in delayed-work.md",
+      "Local monotonic versus persisted shared-authority clock in durable-handoff.md",
+      "End-to-end logical deadline versus attempt timeout and unknown effect after dispatch in microservice-operations",
+      "Event/processing time and finality in stream-processing-design"
+    ]
+  },
+  "papers": [
+    {
+      "id": "lamport-1978-clocks",
+      "canonical_url": "https://lamport.azurewebsites.net/pubs/time-clocks.pdf",
+      "title": "Time, Clocks, and the Ordering of Events in a Distributed System",
+      "authors": [
+        "Leslie Lamport"
+      ],
+      "edition": "Communications of the ACM 21(7), July 1978, pp. 558–565",
+      "publication_date": "1978-07",
+      "pdf_pages": 8,
+      "pdf_sha256": "c55e7cab4230aa3d7126748a149b2db6f0d7a67296d5eccfdd50a210299a96b2",
+      "read_scope": {
+        "pdf_pages_text_read": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "printed_pages": "558–565",
+        "sections_read": [
+          "Introduction",
+          "The Partial Ordering",
+          "Logical Clocks",
+          "Ordering the Events Totally",
+          "Anomalous Behavior",
+          "Physical Clocks",
+          "Conclusion",
+          "Appendix: Proof of the Theorem"
+        ],
+        "substantive_article_text_read": true,
+        "entire_document_all_modalities_read": false,
+        "proof_read": true,
+        "proof_independently_verified": false,
+        "figures_pixels_inspected": false,
+        "bibliography_and_footnotes_read": true,
+        "exclusions": [
+          "Neighboring Shallow Binding in Lisp 1.5 article at end of page 8"
+        ],
+        "limitations": [
+          "Text extraction imperfect for mathematical glyphs",
+          "Two screenshot requests failed",
+          "No reproduction of synchronization theorem or coordination algorithm"
+        ]
+      },
+      "finding": {
+        "trigger": "Order work across independently executing participants.",
+        "problem": "Local timestamp comparisons do not establish causal dependencies.",
+        "mechanism": "Advance logical clocks along process/message edges; deterministic tie-breaks extend causal partial order.",
+        "limits": "Concurrent events can receive arbitrary order; example mutual exclusion requires live participants and message delivery.",
+        "counterexample": "Independent logical values 1 and 2 imply neither causality nor elapsed seconds.",
+        "verification": "Compare edge constraints against a recorded communication graph, including independent events."
+      },
+      "positive_architecture_use": "Carry explicit prerequisite tokens across services; define deterministic command order with a separate delivery/progress contract.",
+      "not_adopted": [
+        "Treat logical counters as global wall time",
+        "Infer happens-before from numeric timestamp inequality",
+        "Use the illustrative coordination algorithm as fault-tolerant consensus",
+        "Import physical-clock theorem without drift/communication bounds"
+      ],
+      "evidence_basis": "Historical paper text, not a current protocol or runtime implementation."
+    },
+    {
+      "id": "spanner-osdi-2012",
+      "canonical_url": "https://research.google.com/archive/spanner-osdi2012.pdf",
+      "resolved_url": "https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf",
+      "alternate_primary_url": "https://www.usenix.org/system/files/conference/osdi12/osdi12-final-16.pdf",
+      "title": "Spanner: Google’s Globally-Distributed Database",
+      "authors": "James C. Corbett et al.",
+      "edition": "OSDI 2012 conference PDF",
+      "publication_date": "2012",
+      "pdf_pages": 14,
+      "pdf_sha256": "8cf30f4b379da5873dc9f7d82595d5cdc402083091cfff0e7beb00fd84473ea5",
+      "read_scope": {
+        "pdf_pages_text_read": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "sections_read": [
+          "Abstract",
+          "1 Introduction",
+          "2 Implementation",
+          "3 TrueTime",
+          "4 Concurrency Control",
+          "5 Evaluation",
+          "6 Related Work",
+          "7 Future Work",
+          "8 Conclusions",
+          "Appendix A: Paxos Leader Leases"
+        ],
+        "substantive_article_text_read": true,
+        "entire_document_all_modalities_read": false,
+        "page_8_reread_after_truncated_output": true,
+        "figure_table_captions_and_extracted_labels_read": true,
+        "figures_pixels_inspected": false,
+        "bibliography_exhaustively_read": false,
+        "appendix_lease_proof_read": true,
+        "proof_independently_verified": false,
+        "evaluation_reproduced": false,
+        "limitations": [
+          "Historical implementation/defaults/performance are edition-scoped",
+          "Late bibliography entries not exhaustively read",
+          "USENIX web reader timed out twice"
+        ]
+      },
+      "edition_warning": {
+        "landing_page": "https://research.google/pubs/spanner-googles-globally-distributed-database/",
+        "landing_page_edition": "ACM Transactions on Computer Systems 31 (2013), article 8",
+        "used_edition": "The linked OSDI 2012 PDF, not the 2013 landing-page edition"
+      },
+      "finding": {
+        "trigger": "Globally meaningful transaction order and coordinated read snapshots.",
+        "problem": "Timestamp values alone prove neither visibility order nor replica readiness.",
+        "mechanism": "Containing time intervals, timestamp selection and commit wait cooperate with transaction/replication protocols; safe time gates replica snapshots.",
+        "limits": "Clock containment, storage coordination and durable quorum votes are assumptions, not properties of ordinary wall time.",
+        "counterexample": "An application TTL or ordinary runtime wall clock does not inherit TrueTime or the quorum lease proof.",
+        "verification": "Check uncertainty predicates separately from replica progress, pending transactions and lease vote durability."
+      },
+      "positive_architecture_use": "Consistent reporting/audit snapshots; coordination based on an explicit uncertainty contract.",
+      "not_adopted": [
+        "Historical millisecond uncertainty or latency as current guarantee",
+        "Read timestamps as proof replicas are caught up",
+        "Generic TTL ownership from the appendix lease proof",
+        "Current API/default behavior from the 2012 edition"
+      ],
+      "evidence_basis": "Paper design and proof text plus separately dated current primary-documentation crosscheck."
+    }
+  ],
+  "current_primary_docs": [
+    {
+      "id": "spanner-current-contract",
+      "canonical_url": "https://docs.cloud.google.com/spanner/docs/true-time-external-consistency",
+      "requested_url": "https://cloud.google.com/spanner/docs/true-time-external-consistency",
+      "title": "TrueTime and external consistency",
+      "displayed_updated_date": "2026-09-30 UTC",
+      "read_by": "archive_quality",
+      "sections_read": [
+        "TrueTime",
+        "External consistency",
+        "Snapshot reads and MVCC",
+        "Isolation-level qualification and notes"
+      ],
+      "contract": "Current external-consistency description applies to default/serializable isolation; repeatable-read has its separate semantics. MVCC enables nonblocking read snapshots.",
+      "limits": "No current low-level lease proof, customer clock API, numeric uncertainty SLA or target-application behavior inferred."
+    },
+    {
+      "id": "go-time",
+      "canonical_url": "https://pkg.go.dev/time",
+      "title": "Package time",
+      "displayed_edition": "go1.27.1",
+      "displayed_publication_date": "2026-09-01",
+      "read_by": "delegated read-only runtime_clock_docs researcher and its Go documentation child",
+      "sections_read": [
+        "Monotonic Clocks",
+        "Time",
+        "Now",
+        "Add",
+        "AddDate",
+        "Equal",
+        "In/Local/UTC",
+        "Round/Truncate",
+        "Sub"
+      ],
+      "contract": "Now carries wall and process-local monotonic readings. Add preserves both. After, Before, Equal, Compare and Sub use monotonic only when both operands retain it; otherwise they use wall time. Go == compares the stored representation including Location and the monotonic reading. Serialization, AddDate, Round, Truncate, In, Local and UTC strip monotonic information; Round(0) is an explicit example. Suspend may stop monotonic on some systems.",
+      "limits": "No local Go installation tested. No cross-process/host preservation or durable epoch promised.",
+      "version_crosschecks": [
+        "https://go.dev/dl/",
+        "https://go.dev/doc/devel/release"
+      ],
+      "display_anomaly": "A not-latest badge conflicted with the displayed edition; downloads/release history corroborated go1.27.1. Only the displayed verified edition is claimed.",
+      "contract_precision_review": "Root independently rechecked official time documentation comparison paragraphs following reviewer feedback; no additional individual-method reading is claimed here."
+    },
+    {
+      "id": "go-context",
+      "canonical_url": "https://pkg.go.dev/context",
+      "title": "Package context",
+      "displayed_edition": "go1.27.1",
+      "read_by": "delegated read-only runtime_clock_docs researcher and its Go documentation child",
+      "sections_read": [
+        "Overview",
+        "WithCancel",
+        "WithDeadline",
+        "WithTimeout",
+        "CancelFunc",
+        "Context Deadline/Done/Err"
+      ],
+      "contract": "Earlier parent deadline wins; WithTimeout constructs WithDeadline from time.Now().Add(timeout). Cancel signals termination but does not wait for completion.",
+      "limits": "Documentation does not define wire propagation or synchronized clocks. Cancellation completion was not tested."
+    },
+    {
+      "id": "python-time",
+      "canonical_url": "https://docs.python.org/3/library/time.html",
+      "title": "time — Time access and conversions",
+      "displayed_edition": "Python 3.14.8",
+      "displayed_footer_updated_at": "2026-10-01 10:41 UTC",
+      "read_by": "delegated read-only runtime_clock_docs researcher",
+      "sections_read": [
+        "get_clock_info",
+        "monotonic/monotonic_ns",
+        "perf_counter/perf_counter_ns",
+        "sleep",
+        "time/time_ns",
+        "CLOCK_BOOTTIME",
+        "CLOCK_MONOTONIC",
+        "CLOCK_MONOTONIC_RAW"
+      ],
+      "contract": "Monotonic origin is undefined; documented clock is shared across processes. No shared host/reboot epoch follows. Linux CLOCK_BOOTTIME includes suspend; ordinary sleep is not a portable suspend guarantee. get_clock_info.adjustable excludes gradual NTP rate adjustment.",
+      "limits": "No local Python clock, platform suspend or NTP behavior measured."
+    },
+    {
+      "id": "python-asyncio-task",
+      "canonical_url": "https://docs.python.org/3/library/asyncio-task.html",
+      "title": "Coroutines and Tasks",
+      "displayed_edition": "Python 3.14.8",
+      "read_by": "delegated read-only runtime_clock_docs researcher",
+      "sections_read": [
+        "Task cancellation caveat",
+        "Timeouts: timeout/Timeout/timeout_at/wait_for",
+        "wait"
+      ],
+      "contract": "timeout_at uses loop clock and handles already-expired deadlines on a subsequent loop iteration. wait_for waits for cancellation and may exceed its allowance; wait does not cancel pending tasks on timeout.",
+      "limits": "No event-loop/cancellation calls executed. A timeout signal does not prove a remote side effect stopped."
+    },
+    {
+      "id": "python-asyncio-eventloop",
+      "canonical_url": "https://docs.python.org/3/library/asyncio-eventloop.html",
+      "title": "Event Loop",
+      "displayed_edition": "Python 3.14.8",
+      "read_by": "delegated read-only runtime_clock_docs researcher",
+      "sections_read": [
+        "Scheduling delayed callbacks: call_later/call_at",
+        "loop.time"
+      ],
+      "contract": "loop.time is internal monotonic time; call_at uses the same reference. Timed callbacks may run up to one clock-resolution early.",
+      "limits": "An epoch from time.time is not directly an event-loop deadline; scheduler lateness and suspend behavior not measured."
+    }
+  ],
+  "clock_contracts": [
+    {
+      "domain": "event time",
+      "question": "When did the business event occur?",
+      "required": "Producer/authority and precision/provenance",
+      "existing_owner": "stream-processing-design for windows/finality; no watermark extension here"
+    },
+    {
+      "domain": "processing time",
+      "question": "When did this handler observe/process it?",
+      "required": "Named local clock and observation boundary",
+      "limit": "Receipt order is not necessarily occurrence or causal order"
+    },
+    {
+      "domain": "monotonic elapsed",
+      "question": "How much local budget remains?",
+      "required": "Debiting elapsed time, clock-preserving operations and suspend policy",
+      "limit": "No durable cross-host epoch"
+    },
+    {
+      "domain": "persisted deadline/lease expiry",
+      "question": "Is authority deadline expired?",
+      "required": "Shared epoch, authority, uncertainty and restart policy; protected mutation ownership checks",
+      "limit": "Local elapsed timer or stale wall read does not establish renewed/exclusive authority"
+    },
+    {
+      "domain": "logical causal order",
+      "question": "Does B depend on A?",
+      "required": "Actual communication edge/dependency context and counter update rules",
+      "limit": "One-direction clock condition; neither converse nor physical elapsed time"
+    },
+    {
+      "domain": "bounded uncertainty",
+      "question": "Is instant definitely before/after now?",
+      "required": "Containing interval with justified clock-service assumptions and overlap policy",
+      "limit": "Bounds modeled or claimed without evidence are not guarantees"
+    }
+  ],
+  "executed_oracles": {
+    "artifact_kind": "Finite author-created arithmetic/predicate examples",
+    "executed_at": "2026-10-01T19:30:53.709767+00:00",
+    "result": "all assertions passed",
+    "runtime": "Python arithmetic, booleans and assertions only",
+    "real_runtime_clock_api_calls": false,
+    "real_clock_changes": false,
+    "real_lease_or_spanner_calls": false,
+    "raw_temporary_result_sha256": "9811ed967a270fe7e5bb52fe8b280925ee1680043280df10c1e7721b8aa0fdcc",
+    "limitations": [
+      "No OS clock was changed",
+      "No Go/Python scheduler suspend or cancellation behavior was executed",
+      "No real clock service, lease store, fencing resource or Spanner transaction was tested",
+      "Clock-containment and authority assumptions are modeled, not measured"
+    ],
+    "inputs_and_rules": {
+      "deadline_wall_jump": {
+        "start_wall": 1000,
+        "start_monotonic": 100,
+        "budget_seconds": 10,
+        "wall_now": "1000 + elapsed_seconds + wall_jump",
+        "monotonic_now": "100 + elapsed_seconds",
+        "remaining": "deadline - now",
+        "expired": "remaining <= 0",
+        "wall_deadline": 1010,
+        "monotonic_deadline": 110
+      },
+      "lease_owner_resume": {
+        "authority_epoch_expiry": 1010,
+        "authority_now": 1011,
+        "old_local_wall": 981,
+        "old_generation": 7,
+        "resource_highest_accepted_generation": 8,
+        "old_local_valid": "old_local_wall < expiry",
+        "resource_accepts": "generation >= highest_accepted_generation",
+        "qualification": "Only after resource accepts generation 8; no automatic clock-expiry revocation or same-generation deduplication"
+      },
+      "uncertainty_expiry": {
+        "expiry": 1010,
+        "interval_contains_actual_time": "assumed, not measured",
+        "definitely_before": "latest < expiry",
+        "definitely_after": "earliest > expiry",
+        "equality": "not modeled as takeover; requires explicit policy"
+      },
+      "commit_wait": {
+        "initial_interval": [
+          1000,
+          1004
+        ],
+        "chosen_stamp": 1004,
+        "finish_wait": "current_earliest > chosen_stamp",
+        "qualification": "Uncertainty predicate only; no complete transaction protocol"
+      },
+      "causal_clock": {
+        "recorded_edges": [
+          "A_send -> B_receive"
+        ],
+        "independent_events": [
+          "A_send",
+          "B_independent_event"
+        ],
+        "receive_update": "max(local_counter, incoming_counter) + 1",
+        "qualification": "Communication graph supplies causality; numeric inequality alone does not"
+      }
+    },
+    "results": {
+      "deadline_wall_jump": [
+        {
+          "schedule": "normal",
+          "elapsed_seconds": 4,
+          "wall": 1004,
+          "monotonic": 104,
+          "wall_remaining": 6,
+          "monotonic_remaining": 6,
+          "wall_expired": false,
+          "monotonic_expired": false
+        },
+        {
+          "schedule": "backward_after_4s",
+          "elapsed_seconds": 4,
+          "wall": 974,
+          "monotonic": 104,
+          "wall_remaining": 36,
+          "monotonic_remaining": 6,
+          "wall_expired": false,
+          "monotonic_expired": false
+        },
+        {
+          "schedule": "backward_at_deadline",
+          "elapsed_seconds": 10,
+          "wall": 980,
+          "monotonic": 110,
+          "wall_remaining": 30,
+          "monotonic_remaining": 0,
+          "wall_expired": false,
+          "monotonic_expired": true
+        },
+        {
+          "schedule": "forward_after_4s",
+          "elapsed_seconds": 4,
+          "wall": 1034,
+          "monotonic": 104,
+          "wall_remaining": -24,
+          "monotonic_remaining": 6,
+          "wall_expired": true,
+          "monotonic_expired": false
+        }
+      ],
+      "lease_owner_resume": {
+        "expiry_shared_epoch": 1010,
+        "authority_now": 1011,
+        "old_owner_wall_after_jump": 981,
+        "old_owner_local_check_says_valid": true,
+        "authority_expiry_passed": true,
+        "old_owner_generation": 7,
+        "resource_highest_accepted_generation": 8,
+        "old_write_accepted": false
+      },
+      "uncertainty_expiry": [
+        {
+          "earliest": 1008,
+          "latest": 1009,
+          "definitely_before": true,
+          "definitely_after": false
+        },
+        {
+          "earliest": 1009,
+          "latest": 1011,
+          "definitely_before": false,
+          "definitely_after": false
+        },
+        {
+          "earliest": 1011,
+          "latest": 1013,
+          "definitely_before": false,
+          "definitely_after": true
+        }
+      ],
+      "commit_wait": [
+        {
+          "commit_stamp": 1004,
+          "interval": [
+            1003,
+            1007
+          ],
+          "can_finish_wait": false
+        },
+        {
+          "commit_stamp": 1004,
+          "interval": [
+            1005,
+            1009
+          ],
+          "can_finish_wait": true
+        }
+      ],
+      "causal_clock": {
+        "A_send": 1,
+        "B_independent_event": 2,
+        "A_send_numeric_less_than_B_independent": true,
+        "A_send_causes_B_independent": false,
+        "B_receive_after_A_message": 3,
+        "A_send_causes_B_receive": true,
+        "elapsed_seconds_inferred_from_counter": null
+      }
+    }
+  },
+  "proposed_placement": [
+    {
+      "package": "concurrency-correctness",
+      "references": [
+        "skills/engineering/concurrency-correctness/references/delayed-work.md",
+        "skills/engineering/concurrency-correctness/references/replica-reads.md"
+      ],
+      "conditional_trigger": "Delayed messages, stale ownership, visibility or order-sensitive writes",
+      "addition": "Name clock authority and dependencies; bound uncertainty/replica readiness; avoid generalizing the historical lease proof"
+    },
+    {
+      "package": "graceful-draining",
+      "references": [
+        "skills/engineering/graceful-draining/references/durable-handoff.md"
+      ],
+      "conditional_trigger": "Shutdown budget and durable handoff",
+      "addition": "Keep local monotonic/persisted authority split; add suspend/restart and domain verification"
+    },
+    {
+      "package": "microservice-operations",
+      "references": [
+        "skills/engineering/microservice-operations/references/failure-handling.md",
+        "skills/engineering/microservice-operations/references/retry-coordination.md"
+      ],
+      "conditional_trigger": "End-to-end timeout and retry/cancellation decisions",
+      "addition": "Clock-preservation/serialization examples; separate logical deadline from attempt timeout and cancellation completion"
+    },
+    {
+      "package": "distributed-system-patterns",
+      "references": [
+        "skills/engineering/distributed-system-patterns/SKILL.md"
+      ],
+      "conditional_trigger": "Selecting an ordering or clock-dependent architecture mechanism",
+      "addition": "Positive dependency-token and consistent-snapshot examples with declared assumptions"
+    }
+  ],
+  "new_skill_assessment": {
+    "recommend_new_skill": false,
+    "potential_distinct_future_trigger": "Design or audit a cross-host clock authority and uncertainty/causality contract across restarts",
+    "reason": "Two paper readings and runtime contracts enrich existing owners. No demonstrated underserved workflow or discriminating corpus yet.",
+    "avoid_duplicate_triggers": [
+      "Ordinary request deadlines",
+      "Graceful draining",
+      "Lease fencing",
+      "Event-time windows/watermarks"
+    ]
+  },
+  "proposed_unexecuted_checks": [
+    "Target Go version: compare Now/Add deadline against wall-only reconstructed/serialized/Round(0) deadline under a fake wall clock; inspect actual representation and operations",
+    "Target Python version: construct loop-domain absolute timeout and exercise cancellation cleanup; test wait versus wait_for observable pending/finished work",
+    "Chosen platform: check suspend/resume semantics separately from ordinary sleep and verify reboot/restart authority conversion",
+    "Clock authority: substantiate containment, fault detection and behavior when interval overlaps boundary or bound cannot be maintained",
+    "Actual ownership resource: pause/resume old owner across takeover; verify protected-write generation boundary and same-generation replay separately",
+    "Actual storage protocol: verify snapshot safe time/applied progress and pending transactions; clock predicate tests alone are insufficient"
+  ],
+  "access": {
+    "direct_pdf_requests": [
+      {
+        "requested_url": "https://lamport.azurewebsites.net/pubs/time-clocks.pdf",
+        "started_at": "2026-10-01T19:23:08.290578+00:00",
+        "status": 200,
+        "timeout_seconds": 20,
+        "automatic_redirects": false,
+        "bytes": 854562,
+        "sha256": "c55e7cab4230aa3d7126748a149b2db6f0d7a67296d5eccfdd50a210299a96b2",
+        "pages": 8
+      },
+      {
+        "requested_url": "https://research.google.com/archive/spanner-osdi2012.pdf",
+        "started_at": "2026-10-01T19:23:10.051776+00:00",
+        "status": 301,
+        "timeout_seconds": 20,
+        "automatic_redirects": false,
+        "location": "https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf"
+      },
+      {
+        "requested_url": "https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf",
+        "started_at": "2026-10-01T19:23:10.216179+00:00",
+        "status": 200,
+        "timeout_seconds": 20,
+        "automatic_redirects": false,
+        "bytes": 446673,
+        "sha256": "8cf30f4b379da5873dc9f7d82595d5cdc402083091cfff0e7beb00fd84473ea5",
+        "pages": 14
+      }
+    ],
+    "direct_policy": {
+      "timeout_seconds_per_request": 20,
+      "maximum_response_bytes": 10485760,
+      "automatic_redirects": false,
+      "redirect_hops_followed": 1,
+      "per_host_request_counts": {
+        "lamport.azurewebsites.net": 1,
+        "research.google.com": 1,
+        "static.googleusercontent.com": 1
+      },
+      "rate_statement": "Each direct requested host was contacted once. The helper enforced a 1.05-second minimum before repeating a host; no host-repeat interval was exercised. The different-host redirect was not delayed as a same-host repeat."
+    },
+    "web_provider_limits": "Web provider request pacing, automatic redirect chains and backend byte limits are not observable. Do not extend the direct-request rate/redirect assertion to provider browsing.",
+    "gaps": [
+      {
+        "source": "USENIX OSDI PDF",
+        "url": "https://www.usenix.org/system/files/conference/osdi12/osdi12-final-16.pdf",
+        "operation": "web PDF text continuation",
+        "attempts_failed": 2,
+        "reason": "Reader timeout; official Google archive used instead"
+      },
+      {
+        "source": "Lamport PDF",
+        "url": "https://lamport.azurewebsites.net/pubs/time-clocks.pdf",
+        "operation": "web screenshot",
+        "pdf_page_indices": [
+          1,
+          7
+        ],
+        "attempts_failed": 2,
+        "reason": "Provider reported non-application/pdf content type and screenshot unavailable"
+      },
+      {
+        "source": "Spanner publication landing page",
+        "url": "https://research.google/pubs/spanner-googles-globally-distributed-database/",
+        "operation": "edition crosscheck",
+        "reason": "Landing metadata is 2013 journal edition; edition of retrieved conference PDF recorded separately"
+      }
+    ]
+  },
+  "artifact_validation": {
+    "json_parse": "passed",
+    "six_dimensional_paper_cards": "passed",
+    "owned_markdown_local_links": "passed",
+    "placement_paths_exist": "passed",
+    "runtime_execution_claims_bounded": true,
+    "repository_check_docs_observed": {
+      "result": "failed outside owned files",
+      "command": "node scripts/check-docs.mjs",
+      "failures": [
+        "docs/research/engineering-toolkit/2026-10-01/README.md: missing ../../distributed-systems-followup/2026-10-01/README.md",
+        "docs/research/engineering-toolkit/verification.md: missing ../distributed-systems-followup/2026-10-01/README.md"
+      ],
+      "interpretation": "Follow-up README target was not yet present at check time; parent owns integration. Owned local links passed separately."
+    }
+  }
+}

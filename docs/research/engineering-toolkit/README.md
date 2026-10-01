@@ -14,6 +14,12 @@ indexes metadata with named history gaps, reads 29 selected articles, and adds
 focused stream-processing and background-maintenance guidance. Its research and
 verification records are separate from the initial window.
 
+The [focused follow-up](../distributed-systems-followup/2026-10-01/README.md)
+continues after publication with ten further primary readings and three complete
+sample/public book chapters. It proposes enrichment of existing schema, clock,
+scheduling and coordination references; these research records do not change
+the skill catalog or inherit earlier native evaluation results.
+
 ## Coverage and evidence
 
 The [publisher survey](publisher-survey.json) contains **60 distinct engineering
