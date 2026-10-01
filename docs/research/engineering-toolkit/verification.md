@@ -44,11 +44,22 @@ reproduce Uber middleware or prove fleet-wide admission/cancellation guarantees.
 The [selectable launcher](../../toolkit-usage.md#choose-with-npx) resolves standalone
 skills alongside agents/workflows. Actual
 [packed npx installation](2026-10-01/launcher-installation.json) checks selection,
-repeat installation, settings preservation, and collision rejection. Remote
-GitHub fetch and release CI are recorded separately after publication. Combined
-local validation passed **438 tests, zero failures/skips**; the
+repeat installation, settings preservation, and collision rejection. The
+[fresh public GitHub installation](2026-10-01/public-installation.json) resolved
+the selected dependency closure and repeated with zero changes. The
+[published release](2026-10-01/release-record.json) at `fe36680` passed
+[Ubuntu CI](https://github.com/talvaknin744/tal-skills/actions/runs/36913341558)
+with **438 tests, zero failures/skips**. Combined local validation also passed
+the same counts; the
 [command record](2026-10-01/validation.json) retains code identities and output. Installer
 checks do not execute a model or establish native host task completion.
+The upstream [skills CLI discovery check](2026-10-01/public-skills-discovery.json)
+found all 49 expected names from public GitHub; list mode changed no destination
+files and did not exercise an installed skill or interactive selection.
+
+The later [focused research follow-up](../distributed-systems-followup/2026-10-01/README.md)
+records online schema evolution, clock semantics, scheduling/isolation and
+coordination design separately from the release's 29 selected readings.
 
 ## Additional article extension
 

@@ -1,0 +1,629 @@
+{
+  "schema_version": 1,
+  "title": "Scheduling, placement, and resource isolation",
+  "research_date": "2026-10-01",
+  "retrieved_at_utc": "2026-10-01",
+  "checkpoint_base": "fe36680",
+  "owner": "archive_messaging",
+  "scope": "Three primary deep readings; targeted current official runtime/broker checks; authored finite scheduling oracle. No skill edits.",
+  "counts": {
+    "primary_deep_readings": 3,
+    "targeted_documentation_checks": 9
+  },
+  "deduplication": {
+    "searched": [
+      "docs/research/**/*.md",
+      "docs/research/**/*.json",
+      "skills/**/*.md"
+    ],
+    "keys": [
+      "canonical URL",
+      "Borg and Omega publication aliases/PDF URLs",
+      "title and product name"
+    ],
+    "result": "No previous deep-reading record found for the three main readings.",
+    "overlap_checked_not_counted": [
+      "AWS Fairness in multi-tenant systems (2020)",
+      "Google SRE overload sources",
+      "current Kubernetes resource-container documentation already used for a different earlier scope"
+    ],
+    "limitation": "Repository records are not proof that a human or unrecorded prior agent has never read a source."
+  },
+  "readings": [
+    {
+      "id": "borg-2015",
+      "canonical_url": "https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/",
+      "title": "Large-scale cluster management at Google with Borg",
+      "authors": [
+        "Abhishek Verma",
+        "Luis Pedrosa",
+        "Madhukar Korupolu",
+        "David Oppenheimer",
+        "Eric Tune",
+        "John Wilkes"
+      ],
+      "publication_date": "2015",
+      "date_precision": "year",
+      "conference_dates": [
+        "2015-04-21",
+        "2015-04-24"
+      ],
+      "publisher": "Google Research / EuroSys ACM",
+      "document_url": "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43438.pdf",
+      "document_alias": "https://research.google.com/pubs/archive/43438.pdf",
+      "sha256": "2fdacd3b69f8af91477412fc91d1d858a43e764929a4edb646bd517ededdad94",
+      "bytes": 856540,
+      "physical_pages": 18,
+      "read_scope": {
+        "text": "Complete main prose sections 1 through 8.3, physical pages 1–14.",
+        "visual": "Figures 5 (p7) and 12 (p10) rendered and inspected; other captions and surrounding prose read.",
+        "excluded": [
+          "Acknowledgments and references",
+          "Referenced papers",
+          "Code/cluster experiments"
+        ]
+      },
+      "status": "deep_read",
+      "novel_to_recorded_corpus": true,
+      "evidence": [
+        {
+          "section": "2.5",
+          "physical_pages": [
+            3
+          ],
+          "claim": "Admission can leave tasks pending; production band forbids self-preemption."
+        },
+        {
+          "section": "3.2",
+          "physical_pages": [
+            4,
+            5
+          ],
+          "claim": "Placement combines failure spread, package locality, preemption cost and multidimensional packing; spreading fragments capacity and tight packing exposes underestimated requests."
+        },
+        {
+          "section": "3.2; 2.3; 4",
+          "physical_pages": [
+            3,
+            5,
+            6
+          ],
+          "claim": "Preemption kills/requeues; application recovery uses durable state/checkpoints, with no assured notice."
+        },
+        {
+          "section": "5.1",
+          "physical_pages": [
+            7,
+            8
+          ],
+          "claim": "Static snapshot compaction studies packing, not completion replay; some constraints are relaxed and a small fraction of picky tasks may remain pending."
+        },
+        {
+          "section": "6.2",
+          "physical_pages": [
+            11,
+            12
+          ],
+          "claim": "Runtime interference remains; compressible resources can throttle while reclaimed noncompressible memory can kill batch tasks. Greedy latency-sensitive CPU is capped to avoid long batch starvation."
+        }
+      ],
+      "card": {
+        "trigger": "Place mixed latency-sensitive services and interruptible long-running batch work on shared machines.",
+        "problem": "Reconcile packing, bursts, correlated failures and batch progress; occupancy is not useful completion.",
+        "mechanism": "Evaluate placement dimensions with runtime resource controls; name preempted-work recovery owner and admission boundary.",
+        "limits": "Static packing evidence does not establish completion or ongoing-service latency; not every shared-resource effect is eliminated.",
+        "counterexample": "Repeatedly evicted long batch work consumes CPU without durable progress; dedicated placement can be justified despite packing cost.",
+        "verification": "Compare shared/separated and spread/tight placement; measure pending age/reasons, service latency, durable batch progress, lost/repeated CPU work, memory kills and runnable delay; exercise kill without notice and repeated reclaim."
+      },
+      "provider_results": {
+        "kind": "Historical Google-reported observations and simulation",
+        "reproduced_here": false,
+        "limits": "Snapshot compaction is not completion evidence; historical chroot/cgroups are not adopted as an untrusted-code security recommendation."
+      }
+    },
+    {
+      "id": "omega-2013",
+      "canonical_url": "https://research.google/pubs/omega-flexible-scalable-schedulers-for-large-compute-clusters/",
+      "title": "Omega: flexible, scalable schedulers for large compute clusters",
+      "authors": [
+        "Malte Schwarzkopf",
+        "Andy Konwinski",
+        "Michael Abd-El-Malek",
+        "John Wilkes"
+      ],
+      "publication_date": "2013",
+      "date_precision": "year",
+      "conference_dates": [
+        "2013-04-15",
+        "2013-04-17"
+      ],
+      "publisher": "Google Research / EuroSys ACM",
+      "document_url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/3295.pdf",
+      "document_alias": "https://research.google/pubs/pub41684/",
+      "sha256": "41457f149c2cad8ea6e858707fb0bb38370595bd4abd918c2f17a0cb3a28823f",
+      "physical_pages": 14,
+      "proceedings_pages": [
+        351,
+        364
+      ],
+      "read_scope": {
+        "text": "All 14 pages extracted locally: sections 1–8, acknowledgments, reference metadata, all figure captions and surrounding prose.",
+        "visual": "Graph pixels not inspected.",
+        "excluded": [
+          "Referenced papers",
+          "Simulator/code runs",
+          "Production reproduction"
+        ]
+      },
+      "retrieval_gap": "Web PDF fetch rejected application/octet-stream; bounded local HTTPS fetch and pypdf extraction succeeded.",
+      "status": "deep_read",
+      "novel_to_recorded_corpus": true,
+      "evidence": [
+        {
+          "section": "2.1; 3",
+          "proceedings_pages": [
+            352,
+            353,
+            354
+          ],
+          "claim": "Slow placement causes planner head-of-line blocking; fixed pools fragment resources and exclusive offers can lock capacity during decisions."
+        },
+        {
+          "section": "3.4",
+          "proceedings_pages": [
+            355
+          ],
+          "claim": "Parallel planners use refreshed local cell-state copies and validated atomic commits; conflicting claims retry. Incremental task placement differs from all-or-nothing gang transactions."
+        },
+        {
+          "section": "3.4; 8",
+          "proceedings_pages": [
+            355,
+            363
+          ],
+          "claim": "Common allocation/precedence rules are enforced; strict global fairness and starvation guarantees remain separate/future work."
+        },
+        {
+          "section": "5.2",
+          "proceedings_pages": [
+            361,
+            362
+          ],
+          "claim": "Coarse conflict detection and universal gang semantics cause additional retries; gang use depends on actual job needs."
+        },
+        {
+          "section": "6.1; 6.2",
+          "proceedings_pages": [
+            362
+          ],
+          "claim": "Opportunistic MapReduce acceleration uses an idealized linear performance model and incomplete worker setup accounting."
+        }
+      ],
+      "card": {
+        "trigger": "Expensive service placement blocks simpler jobs or different job classes need independent placement policies.",
+        "problem": "Serialize all planning or partition resources and lose flexibility/packing.",
+        "mechanism": "Plan concurrently over full shared state; validate resource claims, resynchronize on conflict, and choose incremental or gang transaction semantics per job.",
+        "limits": "Redoing conflicted planning costs time; physical execution capacity and fairness/starvation require separate policies.",
+        "counterexample": "A slow planner repeatedly loses a contested resource to fast planners; no bounded start time follows from parallel planning.",
+        "verification": "Race two claims for one slot; require one owner, refresh before retry, no over-allocation; test partial/gang utility, planning delay, conflicts, actual start, durable completion and starvation."
+      },
+      "provider_results": {
+        "kind": "Google trace-driven and synthetic simulations plus simplified acceleration model",
+        "reproduced_here": false,
+        "limits": "Do not transfer historical Mesos/YARN comparisons to current versions; do not use potential acceleration as a measured result or acceptance threshold."
+      }
+    },
+    {
+      "id": "sqs-fair-queues-2025",
+      "canonical_url": "https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/",
+      "title": "Building resilient multi-tenant systems with Amazon SQS fair queues",
+      "authors": [
+        "Maximilian Schellhorn",
+        "Dirk Fröhner"
+      ],
+      "publication_date": "2025-07-21",
+      "date_precision": "day",
+      "publisher": "AWS Compute Blog",
+      "read_scope": {
+        "text": "Complete main article Overview through Conclusion, Java producer snippet, metrics and example-application explanation, six figure captions.",
+        "visual": "Figure/dashboard pixels not inspected.",
+        "excluded": [
+          "Linked sample repository execution",
+          "AWS deployment",
+          "Benchmark reproduction"
+        ]
+      },
+      "status": "deep_read",
+      "novel_to_recorded_corpus": true,
+      "evidence": [
+        {
+          "section": "How it works",
+          "claim": "Prioritizes quiet-tenant delivery using in-flight distribution; long processing and high volume can both produce imbalance."
+        },
+        {
+          "section": "How to use",
+          "claim": "MessageGroupId on standard queues identifies tenants without imposing per-group FIFO order or per-tenant consumption-rate limits."
+        },
+        {
+          "section": "Metrics and example application",
+          "claim": "Quiet-group queue metrics distinguish tenant impact from whole-queue backlog; figures/sample are provider illustration, not our experiment."
+        }
+      ],
+      "card": {
+        "trigger": "Noisy or slow tenants in a shared standard queue inflate quiet tenants’ waiting.",
+        "problem": "Global queue age hides tenant outcomes and message counts underprice expensive work.",
+        "mechanism": "Meaningful MessageGroupId and quiet-prioritized delivery plus tenant-specific dwell/cost observations.",
+        "limits": "Delivery fairness is not per-tenant rate enforcement, strict ordering, worker reservation or preemption; current detection differs from launch explanation.",
+        "counterexample": "Every worker already runs a nonpreemptible long job; changing the next delivery cannot free a slot. Fabricated tenant identities invalidate intended grouping.",
+        "verification": "Fast/slow/high-volume labeled and unlabeled inputs; measure queue dwell, prefetch residency, processing cost, useful completions, redelivery and eventual noisy-tenant progress."
+      },
+      "provider_results": {
+        "kind": "Provider explanation, sample application and dashboard illustration",
+        "reproduced_here": false,
+        "limits": "No quantitative hard latency or worker scheduling guarantee adopted."
+      }
+    }
+  ],
+  "documentation_checks": [
+    {
+      "id": "sqs-fair-overview",
+      "canonical_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fair-queues.html",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Complete substantive page; diagrams read by captions, not pixels.",
+      "boundary": "Standard fairness uses MessageGroupId, does not impose order or per-tenant consumption-rate limits, and uses spare capacity for noisy traffic."
+    },
+    {
+      "id": "sqs-fair-detailed",
+      "canonical_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fair-queues-detailed.html",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Complete substantive page: identification, detection, delivery changes, quiet transition, consumer capacity.",
+      "boundary": "Current detection measures concurrency share and processing-time share; >10% plus >=30 in-flight tenant messages for concurrency, or >10% recent processing-time share. Approximate thresholds. Ungrouped messages each form a tenant; no in-flight for five continuous minutes or fully consumed backlog ends noisy status.",
+      "difference_from_launch_article": "Adds explicit processing-time share and approximate numeric detection thresholds; do not present launch explanation as exhaustive current algorithm."
+    },
+    {
+      "id": "sqs-message-group",
+      "canonical_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/using-messagegroupid-property.html",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Complete substantive overview only; linked subtopics not read.",
+      "boundary": "FIFO groups have sequential order; standard groups enable fairness without ordering."
+    },
+    {
+      "id": "sqs-standard-quotas",
+      "canonical_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-queues.html",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Complete standard-queue quota table and in-flight footnotes.",
+      "boundary": "Approximately 120,000 in-flight messages for most standard queues, traffic/backlog dependent; short poll OverLimit versus long poll no new messages; quota increases require request.",
+      "limit": {
+        "unit": "in-flight messages",
+        "value": 120000,
+        "precision": "approximate",
+        "scope": "most standard queues, dependent on traffic/backlog"
+      }
+    },
+    {
+      "id": "sqs-visibility",
+      "canonical_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Complete substantive page and timeline caption; linked APIs not read.",
+      "boundary": "Visibility max 12 hours from receipt; extension does not reset the clock. Standard delivery may duplicate inside visibility. This does not reserve CPU/checkpoint progress.",
+      "limit": {
+        "unit": "seconds from receipt",
+        "value": 43200,
+        "scope": "visibility duration",
+        "reset_by_extension": false
+      }
+    },
+    {
+      "id": "k8s-resource-quota",
+      "canonical_url": "https://kubernetes.io/docs/concepts/policy/resource-quotas/",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Introduction, how quotas work, infrastructure resource sums, quota/cluster capacity. Scope examples and newer DRA behavior excluded from conclusions.",
+      "boundary": "Namespace aggregate ceiling and 403 for conflicting creation/update; no reclamation of existing resources, cluster-capacity reservation or node separation."
+    },
+    {
+      "id": "k8s-container-resources",
+      "canonical_url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Requests/limits, per-node scheduling, Linux enforcement, pending and node allocatable troubleshooting. Newer gated features excluded from conclusions.",
+      "boundary": "Requests guide node fit; actual use differs. CPU limits throttle, memory limits can react with OOM kill. Node allocatable excludes system use.",
+      "prior_source_reuse": "Previously present in corpus for a different scope; counted only as current targeted check, not a new deep reading."
+    },
+    {
+      "id": "k8s-scheduling-framework",
+      "canonical_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "read_scope": "Framework overview, scheduling/binding cycles, Filter/PostFilter, Reserve/Unreserve and Permit. Plugin code not read.",
+      "boundary": "Scheduling cycles serial, binding may be concurrent; Reserve covers pre-bind race and failed/later phases invoke idempotent non-failing Unreserve. Not equivalent to independent Omega planners."
+    },
+    {
+      "id": "k8s-priority-preemption",
+      "canonical_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/",
+      "retrieved": "2026-10-01",
+      "publication_date": null,
+      "date_modified_metadata": "2026-06-24T14:31:42+00:00",
+      "footer_date": "June 24, 2026 at 2:31 PM PST",
+      "metadata_note": "Timezone disagreement preserved; no normalization invented.",
+      "commit": "326022dff5aaa46fe7090333dfb872ea2b7d6237",
+      "read_scope": "Standalone-Pod ordering, Never/default, preemption/nomination, limitations and troubleshooting. Gated group scheduling and in-place resize excluded.",
+      "boundary": "Never means cannot evict others, not immune; backoff may allow lower priorities. Victim grace creates delay; PDB best effort; no cross-node preemption. No immediate placement or useful completion guarantee."
+    }
+  ],
+  "authored_oracles": {
+    "tenant_serving": {
+      "units": "seconds; CPU requests; GiB reservations",
+      "nodes": [
+        {
+          "id": "n1",
+          "slots": 2,
+          "allocatable_cpu": 2,
+          "usable_memory_GiB": 4
+        },
+        {
+          "id": "n2",
+          "slots": 2,
+          "allocatable_cpu": 2,
+          "usable_memory_GiB": 4
+        }
+      ],
+      "per_job_resources": {
+        "slots": 1,
+        "requested_cpu": 1,
+        "reserved_memory_GiB": 2
+      },
+      "assumptions": [
+        "Fixed duration independent of interference",
+        "Correct results assumed",
+        "No failure or overrun",
+        "Nonpreemptible",
+        "Half-open execution intervals",
+        "Dispatch/setup/settlement/deletion/cleanup instantaneous",
+        "Deadlines label usefulness; do not cancel expired work",
+        "A3/A4 wait in durable backlog outside worker ownership",
+        "System reserves already excluded",
+        "Cap includes prefetched, retrying, blocked and executing A ownership",
+        "No A borrowing of quiet reserve"
+      ],
+      "jobs": [
+        {
+          "id": "A1",
+          "tenant": "A",
+          "arrival": 0,
+          "duration": 8,
+          "deadline": 20
+        },
+        {
+          "id": "A2",
+          "tenant": "A",
+          "arrival": 0,
+          "duration": 8,
+          "deadline": 20
+        },
+        {
+          "id": "A3",
+          "tenant": "A",
+          "arrival": 0,
+          "duration": 8,
+          "deadline": 20
+        },
+        {
+          "id": "A4",
+          "tenant": "A",
+          "arrival": 0,
+          "duration": 8,
+          "deadline": 20
+        },
+        {
+          "id": "B1",
+          "tenant": "B",
+          "arrival": 1,
+          "duration": 1,
+          "deadline": 3
+        },
+        {
+          "id": "C1",
+          "tenant": "C",
+          "arrival": 1,
+          "duration": 1,
+          "deadline": 3
+        }
+      ],
+      "schedules": {
+        "fifo": {
+          "intervals": [
+            {
+              "job": "A1",
+              "start": 0,
+              "end": 8,
+              "node": "n1"
+            },
+            {
+              "job": "A2",
+              "start": 0,
+              "end": 8,
+              "node": "n1"
+            },
+            {
+              "job": "A3",
+              "start": 0,
+              "end": 8,
+              "node": "n2"
+            },
+            {
+              "job": "A4",
+              "start": 0,
+              "end": 8,
+              "node": "n2"
+            },
+            {
+              "job": "B1",
+              "start": 8,
+              "end": 9,
+              "node": "n1"
+            },
+            {
+              "job": "C1",
+              "start": 8,
+              "end": 9,
+              "node": "n1"
+            }
+          ],
+          "expected": {
+            "slot_seconds": 34,
+            "reserved_cpu_seconds": 34,
+            "reserved_GiB_seconds": 68,
+            "useful_completions_by_3": 0,
+            "quiet_wait_seconds": 7,
+            "quiet_finish": 9,
+            "latest_A_finish": 8,
+            "eventually_timely_completions": 4,
+            "makespan": 9,
+            "idle_slot_seconds_at_own_drain": 2,
+            "idle_slot_seconds_at_common_horizon_16": 30
+          }
+        },
+        "protected": {
+          "policy": "Hard A resident/in-flight cap 2, including prefetch; remaining 2 slots reserved for B/C; no borrowing.",
+          "intervals": [
+            {
+              "job": "A1",
+              "start": 0,
+              "end": 8,
+              "node": "n1"
+            },
+            {
+              "job": "A2",
+              "start": 0,
+              "end": 8,
+              "node": "n1"
+            },
+            {
+              "job": "A3",
+              "start": 8,
+              "end": 16,
+              "node": "n1"
+            },
+            {
+              "job": "A4",
+              "start": 8,
+              "end": 16,
+              "node": "n1"
+            },
+            {
+              "job": "B1",
+              "start": 1,
+              "end": 2,
+              "node": "n2"
+            },
+            {
+              "job": "C1",
+              "start": 1,
+              "end": 2,
+              "node": "n2"
+            }
+          ],
+          "expected": {
+            "slot_seconds": 34,
+            "reserved_cpu_seconds": 34,
+            "reserved_GiB_seconds": 68,
+            "useful_completions_by_3": 2,
+            "quiet_wait_seconds": 0,
+            "quiet_finish": 2,
+            "latest_A_finish": 16,
+            "eventually_timely_completions": 6,
+            "makespan": 16,
+            "idle_slot_seconds_at_own_drain": 30,
+            "idle_slot_seconds_at_common_horizon_16": 30
+          }
+        }
+      },
+      "independent_review": {
+        "reviewer": "/root/archive_messaging/borg_account",
+        "method": "Independent in-memory arithmetic from supplied inputs/intervals; no writes.",
+        "confirmed": [
+          "34 slot-seconds and 68 GiB-seconds both",
+          "0 versus 2 useful completions by 3",
+          "7 versus 0 quiet wait",
+          "8 versus 16 latest A finish",
+          "4 versus 6 eventually timely jobs",
+          "Common horizon avoids misleading utilization comparison"
+        ],
+        "counterexamples": [
+          "Hidden prefetch holds spare slots unless counted",
+          "A deadline 10 reverses success of A3/A4",
+          "More than two simultaneous quiet arrivals invalidate all-quiet deadline claim",
+          "Dropping FIFO expired B/C reduces cost to 32 slot-seconds"
+        ]
+      },
+      "local_execution": {
+        "status": "passed",
+        "date": "2026-10-01",
+        "method": "Python interval sweep against fixed expected arithmetic; resource capacity, A cap, arrivals/durations, costs and quiet waiting/useful counts checked.",
+        "scope": "Finite arithmetic only; no scheduler implementation or runtime/broker experiment."
+      }
+    },
+    "concurrent_claim": {
+      "input": "Two independent planners observe one free resource slot; fast claim commits first, slow claim conflicts and refreshes.",
+      "expected": "One owner maximum. Second placement cannot commit until resource release and fresh validation.",
+      "executed": false,
+      "limit": "Does not prove bounded retry or starvation; explicit policy required."
+    },
+    "multidimensional_fit": {
+      "input": "Two nodes, each free 4 CPUs/8 GiB; single-node job requires 2 CPUs/10 GiB.",
+      "expected_feasible_placements": 0,
+      "aggregate_free": {
+        "cpu": 8,
+        "memory_GiB": 16
+      },
+      "executed": false,
+      "limit": "Aggregate memory does not fit a single-node execution; splitting requires an actual distributed job model."
+    }
+  },
+  "security_boundary": "Placement spread, fair groups and resource throttles are not application data authorization, credential, network or untrusted-code isolation boundaries.",
+  "recommendations": [
+    {
+      "rank": 1,
+      "existing_reference": "skills/performance/overload-control/references/queues-and-fairness.md",
+      "scope": "Cost/resident accounting, reserve versus borrowing/reclaim, SQS delivery boundary; avoid repeating existing overload material.",
+      "edit_performed": false
+    },
+    {
+      "rank": 2,
+      "existing_references": [
+        "skills/engineering/distributed-system-patterns/references/serving.md",
+        "skills/engineering/distributed-system-patterns/references/batch.md"
+      ],
+      "scope": "Conditional placement/scheduling reference for per-node feasibility, planner versus runtime scheduling, partial/gang useful work and durable completion.",
+      "edit_performed": false
+    },
+    {
+      "rank": 3,
+      "existing_reference": "skills/engineering/background-maintenance/references/policy-and-control.md",
+      "scope": "Only for maintenance: durable long-work progress, preemption loss and reclaim budget.",
+      "edit_performed": false
+    },
+    {
+      "rank": 4,
+      "candidate_new_skill": "cluster-scheduling-design",
+      "trigger": "Design/review distributed placement scheduler constraints, resource-claim transactions, gang semantics, preemption and starvation.",
+      "output": "Feasibility/ownership contract with conflict and useful-completion schedules.",
+      "decision": "Defer; batch does not establish sufficient independent demand over existing references.",
+      "created": false
+    }
+  ],
+  "verification_limits": [
+    "No cluster/broker deployment",
+    "No provider performance reproduced",
+    "No generalized fairness proof",
+    "No runtime recovery or preemption experiment",
+    "No full source bodies retained or republished",
+    "No skills/shared catalog/runner changes"
+  ]
+}

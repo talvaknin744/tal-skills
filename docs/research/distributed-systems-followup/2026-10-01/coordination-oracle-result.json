@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "finite_coordination_and_arithmetic_oracle",
+  "merge_domain": {
+    "unique_facts": 3,
+    "states": 8
+  },
+  "checks": {
+    "idempotence": 8,
+    "commutativity": 64,
+    "associativity": 512
+  },
+  "delivery_schedules_length_zero_through_four": 121,
+  "lagging_read_has_less_information": true,
+  "locally_valid_stock_states_merge_to_negative_stock": -1,
+  "atomic_reservation_accepted_orders": [
+    [
+      "sale-a"
+    ],
+    [
+      "sale-b"
+    ]
+  ],
+  "duplicate_effects": {
+    "naive": 2,
+    "receipt_model": 1
+  },
+  "independent_disk_model": {
+    "disks": 1000,
+    "daily_probability": 0.001,
+    "expected_failures": 1.0,
+    "probability_at_least_one": 0.6323045752290359
+  },
+  "limitations": [
+    "Finite in-memory sets and sequential authority model; no network, broker, database, crash, or multi-process execution.",
+    "The receipt model assumes atomic admission and persistence; it does not demonstrate either in an implementation.",
+    "The disk calculation assumes independent equal-probability trials; it is not a fleet incident forecast."
+  ]
+}

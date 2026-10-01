@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-01T20:00:10.506495+00:00",
+  "scope": "Research/documents and release evidence only; no skill, agent, workflow, installer or runtime implementation changes.",
+  "baseline_commit": "fe3668013d7ae9d59f292c1f4d6101aeb4f44fda",
+  "checks": [
+    {
+      "command": "node scripts/check-skills.mjs",
+      "result": "passed",
+      "scope": "49 skill packages and local references"
+    },
+    {
+      "command": "node scripts/check-toolkit.mjs",
+      "result": "passed",
+      "scope": "15 roles, 8 workflows, 46 native artifacts"
+    },
+    {
+      "command": "node scripts/check-docs.mjs",
+      "result": "passed",
+      "scope": "803 local links across 178 Markdown files before this JSON record was added"
+    },
+    {
+      "command": "node scripts/check-runtime-evidence.mjs",
+      "result": "passed",
+      "scope": "89 source hashes in 15 reports; experiments not rerun"
+    },
+    {
+      "command": "node scripts/check-evaluation-evidence.mjs",
+      "result": "passed",
+      "scope": "65 manifests, 1043 artifacts, 1168 source bindings; model attempts not rerun or graded"
+    },
+    {
+      "command": "node scripts/check-research-archive.mjs",
+      "result": "passed",
+      "scope": "60-publisher archive, 58178 metadata records; follow-up sources are separate"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "python3 coordination-oracle.py; compare parsed output with coordination-oracle-result.json",
+      "result": "passed",
+      "scope": "Finite in-memory examples only"
+    }
+  ],
+  "json_records": "All authored follow-up JSON parsed; selected readings resolve to exactly 10 distinct source IDs/URLs, six papers and four articles; book chapters counted separately.",
+  "independent_review": "review.json",
+  "limitations": [
+    "Structural/evidence verifiers were run; the unchanged 438-test suite was not locally repeated for this document-only change.",
+    "Independent source scope and finite-oracle results remain bounded as described in review.json.",
+    "No new native skill trial, real migration, clock authority, broker or cluster experiment executed in this follow-up."
+  ]
+}

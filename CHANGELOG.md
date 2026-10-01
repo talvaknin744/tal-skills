@@ -9,6 +9,8 @@
 - Added a selectable project-local `npx` launcher for skills, native agents, and workflows, with dependency closure and protected configuration.
 - Reorganized the README around installation and task choice; added agent/workflow catalogs and publication drafts.
 - Recorded 60-publisher archive coverage, selected readings, access gaps, independent reviews, actual installation checks, and behavioral results with partial and failed attempts retained.
+- Added a separate [research follow-up](docs/research/distributed-systems-followup/2026-10-01/README.md) on online schema evolution, clocks, scheduling and coordination, with ten primary readings, three complete sample/public chapters and explicit proposed-versus-executed checks.
+- Confirmed the public GitHub `npx` installation and bound the 438-test release CI result to `fe36680`.
 
 The repository contains 49 skills, 15 specialist roles, and eight workflows.
 See [verification](docs/research/engineering-toolkit/verification.md) for the scope
