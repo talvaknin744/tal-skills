@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-02",
+  "reviewer": "/root/archive_quality",
+  "kind": "independent-runner-source-review",
+  "scope": [
+    "scripts/native-smoke.mjs",
+    "scripts/native-linux-smoke.mjs",
+    "tests/toolkit/native-smoke.test.mjs"
+  ],
+  "independence": {
+    "authored_reviewed_runner": false,
+    "authored_model_response": false,
+    "fixture_authorship_declared": true,
+    "historical_selected_skill_authorship": true,
+    "full_native_closure_grading": "excluded"
+  },
+  "execution": {
+    "model_turns": 0,
+    "docker_runs_by_reviewer": 0,
+    "auth_contents_inspected": false,
+    "private_config_values_inspected": false,
+    "host_settings_changed": false
+  },
+  "guidance": [
+    "code-review",
+    "openai-docs"
+  ],
+  "first_freeze": {
+    "disposition": "changes-requested",
+    "source_sha256": {
+      "scripts/native-smoke.mjs": "61a789fbf4a8f95cd9ceb121039e2d7c5037f4282bde558e989530520d0da97c",
+      "scripts/native-linux-smoke.mjs": "cf49c8455d2b85f3ee0d8052d6f2f73bdb673aa73ee5b8f2a01d033716288d28",
+      "tests/toolkit/native-smoke.test.mjs": "4c9d67e43a2252e420c05732e7429a6d4d201eae7a0ec4e8e063e5bfae0a00bb"
+    },
+    "checks": [
+      {
+        "command": "node --test tests/toolkit/native-smoke.test.mjs",
+        "executed_by": "reviewer",
+        "exit_code": 0,
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "command": "git diff --check -- scripts/native-smoke.mjs scripts/native-linux-smoke.mjs tests/toolkit/native-smoke.test.mjs",
+        "executed_by": "reviewer",
+        "exit_code": 0
+      }
+    ],
+    "findings": [
+      {
+        "id": "uncertain-create-cleanup",
+        "priority": 2,
+        "file": "scripts/native-linux-smoke.mjs",
+        "lines": [
+          105,
+          109,
+          115
+        ],
+        "basis": "static-code-failure-schedule",
+        "observation": "Daemon-side creation followed by client timeout leaves containerId null; known UUID/name/label are not used to remove the owned container. Cleanup command exceptions can skip final audit persistence.",
+        "fault_injection_executed": false
+      },
+      {
+        "id": "transport-cleanup-pass-gate",
+        "priority": 2,
+        "file": "scripts/native-linux-smoke.mjs",
+        "lines": [
+          123
+        ],
+        "basis": "static-predicate-counterexample",
+        "observation": "Success omits execution.cleanup.terminated, although exit zero and unsuccessful cleanup can be returned separately.",
+        "fault_injection_executed": false
+      },
+      {
+        "id": "tested-engine-pin",
+        "priority": 2,
+        "file": "scripts/native-linux-smoke.mjs",
+        "lines": [
+          29,
+          77,
+          78
+        ],
+        "basis": "static-acceptance-contract",
+        "observation": "Any immutable image is accepted, and actual binary digest is recorded after account/preflight rather than compared before use. Docker create also omits --pull=never although the documented default is missing; absent-image no-install behavior is not enforced.",
+        "fault_injection_executed": false
+      }
+    ],
+    "evidence": {
+      "root": "/tmp/tal-native-linux-wrapper-20261002-01",
+      "sha256": {
+        "freeze.json": "d258a869b7f3d3e47cdbad7dc6982c779d799894b1959b6b05106d108c553a44",
+        "evidence/prepared.json": "3dbc731dbee80fcd2f1899b80c3d8ab96d9d453f4e84afd09dcf7377fc44f9d9",
+        "evidence/run.json": "eeb489ce3b475a719a42413cd2b1a4ed9926bd1f850d0f511587dcbabeeac937",
+        "evidence/linux-host.json": "e4fa94ec87308f065d5fb238d3cd0b44685bf4f15b09c92b331b3b38f66dfbff"
+      },
+      "scope_comparison": {
+        "executed_by": "reviewer",
+        "baseline_count": 119,
+        "final_count": 119,
+        "byte_and_mode_identity": true,
+        "changed_files": []
+      },
+      "native_record": {
+        "produced_by": "author",
+        "preflight_only": true,
+        "preflight_passed": true,
+        "execution_started": false,
+        "case_compliant": false,
+        "boundary_checks_passed": 12,
+        "boundary_checks_total": 12,
+        "instruction_sources": [],
+        "owned_container_absent": true,
+        "owned_transport_terminated": true,
+        "auth_fingerprint_unchanged": true,
+        "config_fingerprint_unchanged": true
+      }
+    }
+  },
+  "official_docs_read": [
+    {
+      "url": "https://learn.chatgpt.com/docs/permissions",
+      "accessed": "2026-10-02",
+      "scope": [
+        "profile selection",
+        "Scope and enforcement"
+      ],
+      "claim_limit": "Local sandboxed commands; separate controls and empirical gaps retained."
+    },
+    {
+      "url": "https://docs.docker.com/reference/cli/docker/container/create/",
+      "accessed": "2026-10-02",
+      "scope": [
+        "description",
+        "--pull option default"
+      ],
+      "claim_limit": "Documented create policy only; no reviewer image pull performed."
+    }
+  ],
+  "replacement_freeze": {
+    "disposition": "no-residual-material-finding-within-bounded-review-only-runner-scope",
+    "source_sha256": {
+      "scripts/native-smoke.mjs": "42123d63cbe4c473bf42e2cdcfb6566481ede1ae5157b5b2fd164ab699a0ae9b",
+      "scripts/native-linux-smoke.mjs": "7585a5ecf677f90cd395471eea16dcde9213eb0d8b48561dd62852e0f7950e07",
+      "tests/toolkit/native-smoke.test.mjs": "ac24fc378784d811e781c84f9a58242c033231e6c99538a0b23e7ec1c6442c3e"
+    },
+    "copied_runner_matches": true,
+    "checks": [
+      {
+        "command": "node --test tests/toolkit/native-smoke.test.mjs",
+        "executed_by": "reviewer",
+        "exit_code": 0,
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "command": "git diff --check -- scripts/native-smoke.mjs scripts/native-linux-smoke.mjs tests/toolkit/native-smoke.test.mjs",
+        "executed_by": "reviewer",
+        "exit_code": 0
+      }
+    ],
+    "findings_resolution": [
+      {
+        "id": "uncertain-create-cleanup",
+        "status": "closed-for-reviewed-contract",
+        "evidence": [
+          "scripts/native-linux-smoke.mjs:45",
+          "scripts/native-linux-smoke.mjs:70",
+          "scripts/native-linux-smoke.mjs:158",
+          "tests/toolkit/native-smoke.test.mjs:183",
+          "tests/toolkit/native-smoke.test.mjs:193"
+        ],
+        "verification": "synthetic Docker create timeout, wrong ownership and removal failure tests; final audit code read"
+      },
+      {
+        "id": "transport-cleanup-pass-gate",
+        "status": "closed",
+        "evidence": [
+          "scripts/native-linux-smoke.mjs:79",
+          "tests/toolkit/native-smoke.test.mjs:205"
+        ],
+        "verification": "exit-0 plus failed/missing transport cleanup rejected"
+      },
+      {
+        "id": "tested-engine-pin",
+        "status": "closed",
+        "evidence": [
+          "scripts/native-linux-smoke.mjs:30",
+          "scripts/native-linux-smoke.mjs:35",
+          "scripts/native-linux-smoke.mjs:109",
+          "tests/toolkit/native-smoke.test.mjs:151",
+          "linux-host.json#/argv",
+          "run.json#/host_binary_sha256"
+        ],
+        "verification": "alternate immutable image rejected; pre-account binary hash comparison; actual exact-target no-model record includes pull=never"
+      }
+    ],
+    "evidence": {
+      "root": "/tmp/tal-native-linux-worker-original-preflight-20261002-04",
+      "sha256": {
+        "freeze.json": "b2edd422b67fba207479679cc297376a5bc4409961596303e76659e1164cecfa",
+        "evidence/prepared.json": "9d9628de50274df1c2bbd5398511936b1c1d27e6e8a98507467a24c02caa7e58",
+        "evidence/run.json": "ece002c6341430f91ff38c6109bdddbee66a60165ed97b0a49744b6df9437c34",
+        "evidence/linux-host.json": "106750eaf82b3881bbe66b54c2dcbc1dd03c4200011c5edb3e77444b8a4f75b4"
+      },
+      "fixture": {
+        "index_sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+        "source_digest": "89fce94b0332eadd6f7a6bbcb2f3fee014503fad22fdd950cb0ac066064b6a25",
+        "raw_plus_prompt_count": 5,
+        "source_and_staged_bytes_match": true,
+        "modes_match": true
+      },
+      "scope_comparison": {
+        "executed_by": "reviewer",
+        "baseline_count": 120,
+        "recorded_final_count": 120,
+        "current_trial_count": 120,
+        "baseline_vs_recorded_bytes_and_modes": true,
+        "baseline_vs_current_bytes_and_modes": true,
+        "changed_files": []
+      },
+      "native_record": {
+        "produced_by": "author",
+        "preflight_only": true,
+        "preflight_passed": true,
+        "execution_started": false,
+        "case_compliant": false,
+        "boundary_checks_passed": 13,
+        "boundary_checks_total": 13,
+        "instruction_sources": [],
+        "observed_native_items": [],
+        "owned_container_absent": true,
+        "owned_transport_terminated": true,
+        "cleanup_errors": [],
+        "audit_errors": [],
+        "auth_fingerprint_unchanged": true,
+        "config_fingerprint_unchanged": true
+      }
+    },
+    "runtime_output_policy": {
+      "declared": [
+        "__pycache__/"
+      ],
+      "granted": [],
+      "trial_mount_readonly": true,
+      "actual_mkdir_denial": {
+        "check": "trial-runtime-directory-write-denied-1",
+        "exit_code": 1,
+        "cleanup_terminated": true,
+        "path_remained_absent": true
+      },
+      "current_directory_absence_checked_by_reviewer": true
+    },
+    "pin": {
+      "image": "sha256:9076492a589ef293008a171ecf4a118d735f775f78fc4c04ccbc5cac5b252783",
+      "binary_sha256": "113aa5d5952a6fd3950a88323219747d0c91978ebee948509a540c8a460e59a3",
+      "seccomp_sha256": "a10f9206f58d22c6b7d1fe4b82899bd4b5f0e5362cfbc4d9030ffab30678e5e7",
+      "pull_policy": "never"
+    },
+    "model_defaults": {
+      "overridden": false,
+      "effective_matches_inherited": true
+    },
+    "future_dispatch": "prepare final instruction closure afresh; no model or full tool enforcement acceptance follows from this review"
+  },
+  "limitations": [
+    "No model behavior or task correctness grade.",
+    "No full native model-tool inventory.",
+    "No implementation file-write or atomic editor guarantee.",
+    "No reviewer-induced Docker fault in first review.",
+    "First supplied wrapper used extension fixture; original fixture optional runtime declaration was initially rejected before container/model.",
+    "Credential equality observations are endpoint fingerprints; contents were never inspected."
+  ],
+  "final_disposition": "no-residual-material-finding-within-bounded-review-only-runner-scope"
+}

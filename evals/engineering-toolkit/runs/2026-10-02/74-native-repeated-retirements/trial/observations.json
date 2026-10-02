@@ -1,0 +1,197 @@
+{
+  "fixture_kind": "authored_independent_schedules_not_runtime_evidence",
+  "schedules": {
+    "three_retirements": {
+      "job": [
+        "tenant-blue",
+        "imp-884"
+      ],
+      "estimated_total_hours": 18,
+      "failure_limit": 3,
+      "events": [
+        {
+          "hours": 1,
+          "pod": "worker-a",
+          "epoch": 8,
+          "kind": "DeploymentInterrupted",
+          "business_failures_after": 1,
+          "maintenance_deferrals_after": 0
+        },
+        {
+          "hours": 1.1,
+          "pod": "worker-b",
+          "epoch": 9,
+          "kind": "DeploymentInterrupted",
+          "business_failures_after": 2,
+          "maintenance_deferrals_after": 0
+        },
+        {
+          "hours": 1.2,
+          "pod": "worker-c",
+          "epoch": 10,
+          "kind": "DeploymentInterrupted",
+          "business_failures_after": 3,
+          "maintenance_deferrals_after": 0
+        }
+      ],
+      "terminal_queue_state": "dead_letter",
+      "final_result_receipt": null
+    },
+    "poison_control": {
+      "job": [
+        "tenant-blue",
+        "bad-309"
+      ],
+      "causes": [
+        "MalformedInput",
+        "MalformedInput",
+        "MalformedInput"
+      ],
+      "business_failures_after": [
+        1,
+        2,
+        3
+      ],
+      "terminal_queue_state": "dead_letter"
+    },
+    "signal_prefetch": {
+      "pod": "worker-a",
+      "active": [
+        "imp-885",
+        "imp-886"
+      ],
+      "buffered_not_started": [
+        "imp-887",
+        "imp-888"
+      ],
+      "events": [
+        {
+          "seconds_from_sigterm": -0.05,
+          "kind": "receive_started",
+          "delivery": "imp-889"
+        },
+        {
+          "seconds_from_sigterm": 0,
+          "kind": "readiness_false"
+        },
+        {
+          "seconds_from_sigterm": 0.12,
+          "kind": "receive_returned",
+          "delivery": "imp-889"
+        },
+        {
+          "seconds_from_sigterm": 0.13,
+          "kind": "handler_submitted",
+          "delivery": "imp-889"
+        }
+      ],
+      "poll_stop_set": false
+    },
+    "checkpoint_reply_loss": {
+      "job": [
+        "tenant-blue",
+        "imp-885"
+      ],
+      "epoch": 41,
+      "last_confirmed_cursor": 400,
+      "attempt": {
+        "operation_id": "imp-885/batch/401-500",
+        "cursor": 500,
+        "format": 2,
+        "client_result": "timeout"
+      },
+      "store_inspect": {
+        "operation_id": "imp-885/batch/401-500",
+        "receipt": "batch-r-500",
+        "cursor": 500,
+        "unique_rows": 500,
+        "current_epoch": 41
+      },
+      "final_result_receipt": null
+    },
+    "pause_resume": {
+      "job": [
+        "tenant-blue",
+        "imp-886"
+      ],
+      "events": [
+        {
+          "step": 1,
+          "actor": "A",
+          "epoch": 41,
+          "kind": "reads_cursor",
+          "cursor": 400
+        },
+        {
+          "step": 2,
+          "actor": "A",
+          "epoch": 41,
+          "kind": "paused_before_write"
+        },
+        {
+          "step": 3,
+          "actor": "server",
+          "kind": "epoch41_lease_expires"
+        },
+        {
+          "step": 4,
+          "actor": "B",
+          "epoch": 42,
+          "kind": "claim_and_commit_batch",
+          "cursor": 600
+        },
+        {
+          "step": 5,
+          "actor": "A",
+          "epoch": 41,
+          "kind": "resumes_save_progress",
+          "cursor": 500
+        }
+      ],
+      "current_epoch_before_step5": 42
+    },
+    "final_ack_loss": {
+      "job": [
+        "tenant-blue",
+        "imp-890"
+      ],
+      "finalize": {
+        "operation_id": "imp-890/final",
+        "receipt": "result-890",
+        "committed": true
+      },
+      "ack_result": "response_lost",
+      "redelivery": true,
+      "stored_final_result_receipt": "result-890"
+    },
+    "mixed_version": {
+      "nonterminal_jobs": [
+        {
+          "key": [
+            "tenant-blue",
+            "imp-885"
+          ],
+          "checkpoint_format": 2,
+          "final_result_receipt": null
+        },
+        {
+          "key": [
+            "tenant-green",
+            "imp-901"
+          ],
+          "checkpoint_format": 3,
+          "written_by_revision": 8,
+          "final_result_receipt": null
+        }
+      ],
+      "rollback_revision": 7,
+      "retained_inputs": [
+        "accepted-manifest-v2"
+      ],
+      "retained_layouts": [
+        "export-layout-v2",
+        "export-layout-v3"
+      ]
+    }
+  }
+}

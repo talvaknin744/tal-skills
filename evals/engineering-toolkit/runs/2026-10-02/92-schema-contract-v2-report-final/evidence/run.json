@@ -1,0 +1,200 @@
+{
+  "evaluation_suite": "worker-rollout-integration",
+  "format_version": 1,
+  "run_id": "tal-worker-rollout-oct02-schema-report-integration-15",
+  "case_id": "shard-publication-rollback-floor-v2",
+  "skill": "infrastructure-change-safety",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "a3e43540def7958af6fcce24be2499873588b74264c996af4a0c4c86b0ce13f3",
+  "fixture_tree_sha256": "a91577f3b09b12f09d90a56bfedfa06d15576fdb176171940b6df72d585792b4",
+  "prompt_sha256": "32d74153462ef43f9ce1b64044a036ad598945f93bc0aff6ce449c96cb831b64",
+  "case_prompt_sha256": "ec14851e4d0d99ac0f4ec73cc7c4d36de85091cc38b42909f514998cfeb168fe",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "freeze_sha256": "a710509827f196d83b42b6e56cbc47958f9fc318dccebcc964e1a5bd5e492d14",
+  "runner_tree_sha256": "5228a920c35c3741c13798dd7be2f3fa00f31b135b51c997b8d7a0508ae89721",
+  "dependencies_tree_sha256": "5d004843331a70718f449e5f3ba8d2f7e7486c3fb266157ffa4a5f10e1fde359",
+  "task_mode": "review",
+  "execution_mode": "review",
+  "activation_expected": "activate",
+  "editable_files": [],
+  "verification_argv": null,
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "read-only",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "host_version": "codex-cli 0.159.2",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 356.956,
+  "token_usage": {
+    "input_tokens": 143021,
+    "cached_input_tokens": 124288,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 8650,
+    "reasoning_output_tokens": 5098
+  },
+  "started_at": "2026-10-02T13:51:47.797Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/TRIAL/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nReview rollout.md against the supplied fleet, writer and row evidence and the authoritative status-code-contract.json. Give a bounded sequence for exposing the new representation, identify the rollback limits and specify acceptance checks. Keep every file unchanged and use no external services. Separate current evidence from checks that still need execution."
+  ],
+  "effective_prompt_sha256": "32d74153462ef43f9ce1b64044a036ad598945f93bc0aff6ce449c96cb831b64",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"read-only\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 54,
+    "candidate_entries": [
+      {
+        "name": "infrastructure-change-safety",
+        "description": "Plan, implement, or review infrastructure changes when resource replacement, Terraform state ownership, mixed-version rollout, or partial apply can interrupt service or lose data.",
+        "path": "/TRIAL/workspace/.agents/skills/infrastructure-change-safety/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-sol",
+    "reasoning_effort": "xhigh",
+    "requested_setting_observations": {
+      "sandbox_mode": "read-only",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-10-02T13:57:44.753Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 8,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "454ef5740a8be1409c85aa099babcb12f36dfc3746521ed231541cb0d4d2b6f8",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "14cb703878bf6f34ddefc61d49b8d61b0a6e335699a6b2175b6cf606a7d71ac7",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "0cb13dbcc900a1205cae38942ca19d162cd246dc3a195a5c05793dc5b9a24089",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "79fbb14484c5128ca9821dfc2a9bbd459a74dab2bb08f91428795e065fc50577",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "164689b05e1d19e90c13a53867413c7ea453f47b094b7661bfd4488ed4373e25",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "86b874f03d7712be6cee68d4f2b1483679402e7517e24765fe8c94c67976bfdd",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "164689b05e1d19e90c13a53867413c7ea453f47b094b7661bfd4488ed4373e25",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "dddbfe7bb97c3c53b5272983016079e6523588c9b2edaf8dcb18019b9e2d3756",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "7362f07b5aeea62cdf70fa52db71cff96c22ee707a9a69688543f144e8d0d0e8",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "5e3b756446d598cfe68b228e575d84125f951456f41ec31bdb2f5c3d1a8ffc01",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "d15dbf7b3d1cbf38f04e23d92c252a0e7501bf7e4ba6ec726c86a019bf13482b"
+}

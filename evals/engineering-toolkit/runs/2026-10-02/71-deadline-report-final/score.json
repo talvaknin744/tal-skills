@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadline-report-integration-10",
+  "run_evidence_sha256": "2bf4bb31bfb64d2c97c3455e6215760610f89f7cda7cf1a182f83b03cabc3c61",
+  "final_workspace_tree_sha256": "84131ce34d6c5be85521cad2dafbc9500bb4ad4b14ed90bf92d1a7df835200f0",
+  "case_id": "python-cancellation-completion",
+  "candidate_tree_sha256": "23f7986b50ece9a6e444c38dd87627e9afe188f6573ed3a4eec9d77b091969c9",
+  "rubric_sha256": "7d50667757cf80f19e68874631a4817d7dd901bc4ee6dd4a8cf187fb78fac97c",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "loop-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7, 17",
+        "observation": "Identifies wall time.time epoch passed to loop-clock timeout_at and shows the admission/acquisition remaining budget versus fresh wait/incorrect deadline. Proposes one loop-clock admission deadline with earlier upstream cap, charging acquisition/send only remaining allowance rather than a new 500 ms budget."
+      }
+    },
+    {
+      "id": "cancel-is-not-join",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 5, 9, 17",
+        "observation": "Explains pending wait and cancellation request without join. Cites release 400.601, next acquisition 400.61 and cleanup finish 400.95; requires exclusive supervised connection ownership until actual child cleanup/result, then exactly one release. Also identifies upstream cancellation entering finally without child cancellation."
+      }
+    },
+    {
+      "id": "bounded-cleanup",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9, 15, 17",
+        "observation": "Separates caller deadline/return, cancellation request and child cleanup completion. Caps acquisition/cleanup ownership, backpressures when occupied and alerts/escalates cleanup age; no finite recovery bound without maximum cleanup/forced stop contract. Explicitly says wait_for may exceed nominal timeout waiting for cancellation; task supervision is scoped to this child/acquisition design, not a universal separate-task property."
+      }
+    },
+    {
+      "id": "effect-and-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 9, 13\u201315",
+        "observation": "Preserves stable shipment ID/receipt reconciliation after acceptance before resend. Proposed checks cover expiry during acquisition/pre-dispatch cancellation, cancellation while accepted send remains in flight, held cleanup, actual child completion, no reuse before child_done, exactly one release/no blind duplicate resend and a subsequent useful shipment. Pending outcome carries tracked reconciliation rather than implying rollback."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/trace.jsonl lines 5, 7, 11\u201312, 15\u201316, 18; evidence/answer.md lines 3, 5, 11\u201317",
+        "observation": "Three original/final fixture hashes match and patch/change arrays are empty. Seven commands only inspect inputs/candidate references. Answer uses supplied trace observations, labels checks not executed and expressly says no files changed/no fixture/external service run; claims no measured runtime/production cleanup."
+      }
+    }
+  ]
+}

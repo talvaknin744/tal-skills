@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-go-deadline-final-01",
+  "run_evidence_sha256": "50165c12bb5452d5120096a0b36792e62fabb66632b438b3cad2772bd29fdf57",
+  "final_workspace_tree_sha256": "414770ced5e6bd1c079876db4b6275113754161083c001aa93e0e02806ba2709",
+  "case_id": "go-deadline-handoff",
+  "candidate_tree_sha256": "fa2ade9d9a8f17467610fb05daa40ac41a04ccc3b0f1abc42fbd6bc4aea79b12",
+  "rubric_sha256": "0a9990f6a5cedbe86964b49b93b008359501b38fce0397163a7be0e55beeef56",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "representation-boundary",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 5; original-project/clock-samples.jsonl lines 1\u20134",
+        "observation": "Correctly explains loss of Go local monotonic data in JSON and wall-dependent reconstructed decisions, without claiming that a context timer continually rereads wall time. Uses the later 2.6 s elapsed / 5.4 s wall-remaining sample, but does not give the rubric-required before-attempt-1 distinction: 0.6 s elapsed leaves 1.4 s of original budget, while the reconstructed epoch yields 7.4 s remaining. This is partial, not a full representation comparison."
+      }
+    },
+    {
+      "id": "logical-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9, 15, 19, 25",
+        "observation": "Rejects Background-rooted fresh two-second attempt contexts and proposes one parent-capped two-second ingress context/original local deadline. Serialization, acquisition, retries and cancellation waiting consume the same allowance; attempts use remaining slices, retries stop on cancellation/permanent errors/insufficient budget and prior work must complete or be safely disposed."
+      }
+    },
+    {
+      "id": "handoff-authority",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 10, 17",
+        "observation": "Explicitly limits the samples to each host, identifies absent epoch/skew/handoff bounds and supplies a declared custom duration policy: compute remaining time immediately before dispatch, enforce a finite handoff bound H, subtract H at the worker, honor its parent and drop requests exceeding H. Acknowledges no H is supplied and hence no end-to-end worker deadline claim; does not claim UTC/JSON synchronizes hosts or transfers monotonic state."
+      }
+    },
+    {
+      "id": "completion-and-recovery",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 19, 23, 25",
+        "observation": "Proposes caller response within two seconds, no dispatch after exhaustion, parent expiry, delayed handoff, actual worker completion, exactly one release, no overlapping retry and useful subsequent work after cleanup. Separates cancellation from termination and acknowledges missing finite cleanup bound. However the proposed controls do not explicitly cover host skew or wall adjustments both before and after serialization, so complete control coverage remains partial."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/trace.jsonl lines 5, 7, 11\u201312, 14, 17\u201318, 20, 22, 24; evidence/answer.md lines 5, 21\u201325",
+        "observation": "Change arrays and patch are empty; all four original/final fixture SHA256 values match. Ten completed commands only read fixtures/candidate references. Answer calls samples synthetic, labels acceptance observations proposed, and explicitly says no fixture or external service was executed and files are unchanged; no invented runtime/transport/production pass."
+      }
+    }
+  ]
+}

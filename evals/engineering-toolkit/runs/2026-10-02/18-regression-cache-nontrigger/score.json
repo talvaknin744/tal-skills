@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-nontrigger-02",
+  "run_evidence_sha256": "c7cc780eb5453c7f758e257d67975ef2244d15e9685b28a280f85336223cb175",
+  "final_workspace_tree_sha256": "0108476bbcf21f1c47b37cae16675f0a6033e3a59f2eb917c4fdad8cc556f830",
+  "case_id": "sequential-file-transform",
+  "candidate_tree_sha256": "f765ba1f99ccc414b74bfabd6e76205a19cf7950e2a7a361f94fdc33ddc5ebac",
+  "rubric_sha256": "70f30265fbcd5c96d242ae7fc13f26a96e0f2d695566980c3dd560edad69dc56",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "correct-result",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 2-5; evidence/trace.jsonl completed item_5 line 12",
+        "observation": "The CSV contains exactly header id,name, followed by 2,Noah Cohen; 17,Sofia Martin; 30,Amara Patel, preserving spelling in ascending numeric order. Reviewer CSV parsing confirms the exact four rows against the supplied values."
+      }
+    },
+    {
+      "id": "no-unrelated-workflow",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 3-12, completed item_1-item_5; evidence/answer.md lines 1-6",
+        "observation": "Four captured commands only list the local fixture and read names.csv/request.md; the result is solely the requested CSV. No candidate body/reference loading, distributed-systems workflow, locks, consistency contracts, deployment or provisioning request is recorded. Candidate metadata discovery was observed, while body activation was not observed; absence in the captured trace is not proof of absence of unrecorded loading."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[], forbidden_changes=[]; evidence/workspace.patch empty; evidence/manifest.json fixture_files; evidence/trace.jsonl lines 4-11; evidence/answer.md lines 1-6",
+        "observation": "Original/final fixture bytes and original manifest hashes match for both names.csv and request.md, with empty change list and patch. Captured tools perform local reads/listings only, with no network/delegation event. The answer makes no system inspection, verifier execution or production-check claim; no verifier is supplied or required."
+      }
+    }
+  ]
+}

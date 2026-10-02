@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-report-regression-10",
+  "run_evidence_sha256": "5c4eb5c954fa26d644748fd6f0df83c35969965f8a95b155a20ca7e2579f18b5",
+  "final_workspace_tree_sha256": "7af6219b74ece7ddc103b838841089a0807f7804f53868a56e109f0f634877d4",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "3c6640491bc773487d4fa0eba18decf154cd17609bc2be32c295710da7916c22",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[0] independent-01; evidence/checks/independent-01.stdout.txt lines1-6; evidence/trace.jsonl line30 item_14",
+        "observation": "Original node verify.mjs executed against final service, exit0 and5/5 protected checks. The response actual execution and matching sealed independent-01 both pass. This grader separately overlaid only finalservice onto copied original protected inputs and obtained exit0,5/5, empty stderr and unchanged inventory."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "lines7-18; original-project/model.mjs lines45-67",
+        "observation": "Reads use cache.get and awaited shared atomic publishIfFresh; writes await shared monotonic advanceFloor before successful return. Supplied adapter max-floors survive value eviction and reject below-floor/current-revision publication; service introduces no local mutex, sleep or unguarded cache.set. Protected eviction/reordered-notification checks pass."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; forbidden_changes=[]; evidence/run.json input_integrity",
+        "observation": "Only project/service.mjs changes; protected model.mjs,verify.mjs,requirements.md match original hashes, API and cached-read fast path remain. Repeated-hit/different-key tests pass. No unavailable infrastructure, fixture weakening or unconditional authority-read bypass is introduced."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line1",
+        "observation": "The final answer explicitly states successful write acknowledgement and subsequently invoked read revision boundary, while already overlapping reads may return captured older snapshots and cannot leave those stale fills cached. It does not claim latest-at-response semantics."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line5",
+        "observation": "The answer scopes the guarantee to supplied authoritative database/shared atomic cache adapters, value eviction and two service instances in one process. Crashes, adapter failures, floor expiry, replica reads and independent processes/hosts are explicitly unestablished and require intended production checks. This bounds successful-call adapter/lifetime evidence and does not claim production atomicity or failure recovery; no exact wording or table format is required."
+      }
+    }
+  ]
+}

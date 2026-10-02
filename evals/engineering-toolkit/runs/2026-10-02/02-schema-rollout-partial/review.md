@@ -1,0 +1,34 @@
+Independently score the saved observable result, not hidden reasoning. Read rubric.json, the raw project, answer, diff, command evidence and input hashes. Assign each criterion 0 fail, 1 partial, or 2 pass with an artifact path/line or event and observation. Report critical results separately. Do not convert a blocked/invalid/timed-out host attempt into a skill pass. Re-run the supplied verifier locally when applicable without modifying candidate artifacts. Distinguish native discovery from unobserved selection, process completion from correctness, and simulated adapters from real infrastructure. Record your reviewer identifier and any relationship to the skill/response author.
+
+
+# Independent schema review score
+
+**Partial:** three criteria score 2; two critical criteria score 1. Reviewer
+`/root/archive_quality` authored neither the skill nor this response/fixture.
+
+The response correctly blocks partial-shard publication, retains revision-aware
+fallback and listing coverage, requires a real old-writer admission floor,
+identifies incompatible code 2 and incomplete reverse-stream rollback, and derives
+the live ledger identities/statuses with missing 43 and extra deleted 99.
+
+Two details remain unresolved under the frozen rubric:
+
+- `maintained-writer-floor`: answer lines 13 and 15 confirm V1's row transaction
+  and eventual V0 exclusion, but do not state the all-writer atomic source-revision
+  prerequisite during overlap, particularly for V0. This matters while fallback
+  detects old-only changes, before V0 eligibility closes.
+- `independent-bidirectional-oracle`: answer line 6 and trace line 40 correctly
+  derive expected text/revision tuples and both identity differences. They do not
+  specify an independent supported text-to-code mapping or compare every common
+  row's incarnation/revision/mapped revision/status. A complete comparison is
+  proposed in later checks. The gap is review detail, not failure to execute an
+  unrequested live or runtime test.
+
+All supplied original/final project bytes match. Native metadata discovery and
+entrypoint plus relevant reference reads are observed separately; commands remain
+inspection/arithmetic. No production engine guarantee is asserted. The host's
+broad reads/inherited tools remain deviations and `case_compliant: false`.
+
+Score-template identities were retained. `check-score` exited 0 and returned
+`rubric_result: partial`, with both critical partials preserved. Detailed locators
+are in [score.json](score.json).

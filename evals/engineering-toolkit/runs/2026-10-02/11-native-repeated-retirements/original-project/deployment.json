@@ -1,0 +1,62 @@
+{
+  "fixture_kind": "authored_normalized_release_facts",
+  "replicas": 3,
+  "pods": [
+    "worker-a",
+    "worker-b",
+    "worker-c"
+  ],
+  "strategy": {
+    "type": "RollingUpdate",
+    "maxUnavailable": 1,
+    "maxSurge": 1
+  },
+  "pdb": {
+    "minAvailable": 2
+  },
+  "terminationGracePeriodSeconds": 90,
+  "preStop": {
+    "seconds": 15,
+    "action": "sleep"
+  },
+  "handler_wait_seconds": 85,
+  "image_matrix": {
+    "7": {
+      "reads": [
+        2
+      ],
+      "writes": 2,
+      "dependencies": [
+        "accepted-manifest-v2",
+        "export-layout-v2"
+      ]
+    },
+    "8": {
+      "reads": [
+        2,
+        3
+      ],
+      "default_writes": 3,
+      "dependencies": [
+        "accepted-manifest-v2",
+        "export-layout-v2",
+        "export-layout-v3"
+      ]
+    }
+  },
+  "eligible_claim_revisions": [
+    7,
+    8
+  ],
+  "compatibility_checks": {
+    "revision8_new_job": "synthetic smoke passed",
+    "revision8_resume_format2": "not exercised",
+    "revision7_resume_format3": "unsupported"
+  },
+  "proposed_dependency_release": "When three revision8 pods are Ready",
+  "capacity": {
+    "replicas": 3,
+    "surge_slots": 1,
+    "last_successor_ready": null
+  }
+}

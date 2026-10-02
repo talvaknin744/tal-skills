@@ -1,0 +1,20 @@
+diff --git a/TRIAL/before/project/service.mjs b/TRIAL/workspace/project/service.mjs
+index ed81f51..a153742 100644
+--- a/TRIAL/before/project/service.mjs
++++ b/TRIAL/workspace/project/service.mjs
+@@ -8,13 +8,13 @@ export class LabelService {
+     const cached = await this.cache.get(id);
+     if (cached) return cached;
+     const record = await this.database.read(id);
+-    await this.cache.set(id, record);
++    await this.cache.publishIfFresh(id, record);
+     return record;
+   }
+ 
+   async write(id, label) {
+     const record = await this.database.write(id, label);
+-    await this.cache.delete(id);
++    await this.cache.publishIfFresh(id, record);
+     return record;
+   }
+ }

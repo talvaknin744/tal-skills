@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-ops-01",
+  "run_evidence_sha256": "3b1de8c2cefb0401d52dfbb499a60bc3d0724c2a1934076b1c88de6d54829cee",
+  "final_workspace_tree_sha256": "88715145b4c3dad055cc2099b4447fa22765b62ee25d694db8a573696a83cae3",
+  "case_id": "retry-amplification",
+  "candidate_tree_sha256": "a3fbcb874805c0705619b848a2a9be0f531046d11cf85f19b8ae01a30edfec6d",
+  "rubric_sha256": "3a3f8318d020d66008f95e1816afc9b96057249756627cd8ce790c3f8a8d933d",
+  "reviewer": "/root/archive_storage \u2014 independent full-candidate ops regression reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "amplification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Computes 3 Gateway attempts times 3 Checkout attempts = up to 9 Inventory attempts per original request and 200 times 9 = 1,800 offered attempts/second. Labels arithmetic as an estimate and says saturation may prevent dispatch, while separating additional client retries."
+      }
+    },
+    {
+      "id": "deadline-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 5 and 7",
+        "observation": "Identifies continued downstream work after callers give up. Removes immediate retries at both boundaries, uses one Inventory attempt per original request in this failure mode and propagates a Gateway end-to-end deadline with return margin within 2 seconds. Combines expired-work cancellation/drain observation with explicit active/queued caps rather than treating response timeout alone as a work bound."
+      }
+    },
+    {
+      "id": "capacity-protection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 5",
+        "observation": "Addresses synchronized immediate retries and worker/queue occupation, selects no retries for the availability check in this failure mode, caps active and queued calls and fast-rejects when full. This is a justified alternative overload policy, so jitter is not required for a removed retry path."
+      }
+    },
+    {
+      "id": "operational-proof",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 7",
+        "observation": "Proposes a controlled slow-dependency run at 200 original requests/second and recovery observations: Inventory dispatch at most 200/second, response within 2 seconds, configured active/queue bounds, expired-work drain and no retry surge. Separately records client retries and makes no circuit-breaker recovery guarantee."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/trace.jsonl completed command items 1\u20137; evidence/answer.md lines 1 and 7",
+        "observation": "Original/final incident bytes match and workspace diff is empty. All recorded commands inspect files. Arithmetic is labelled estimated, validation is proposed and no application/outage exercise is claimed executed."
+      }
+    }
+  ]
+}

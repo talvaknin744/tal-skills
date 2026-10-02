@@ -1,0 +1,45 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-report-regression-nontrigger-13",
+  "run_evidence_sha256": "be9da62f88a8f41548f110cc0cb60892335f32ef69b19f4549358ddc169dbb31",
+  "final_workspace_tree_sha256": "4a2ec4f0aec3c7470d6dd6583f3f7b9314e9b63bdb8dd7bbf76b2ffe6d1b1fda",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "442a9c09ac10ee16a248b123ce705e316d863ce75a847afa680c85bac5d99340",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control candidate package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. Candidate metadata was discovered, but no candidate body read was observed; this is not proof against unrecorded loading. These host conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md and evidence/run.json",
+        "locator": "answer.md:1; run.json: activation_observation.status=not_observed, evidence_events=[]; tool_calls=1",
+        "observation": "The response gives only the spelling correction and does not redesign admission or retry policy. No candidate body read was observed. Native metadata discovery occurred, so this is evidence about the observed body-read/response behavior, not proof that no unrecorded loading happened."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Provides the requested exact correction: \u201cTemporarly unavailable\u201d \u2192 \u201cTemporarily unavailable\u201d."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "workspace-changes.json: changes=[]; run.json: input_integrity.baseline_unchanged=true, allowed_changes_only=true; answer.md:1",
+        "observation": "The supplied fixture remains unchanged. The response contains no claim that any proposed check or runtime behavior was executed."
+      }
+    }
+  ]
+}

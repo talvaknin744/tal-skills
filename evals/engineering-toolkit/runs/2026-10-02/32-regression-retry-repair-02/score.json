@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-ops-repaired-03",
+  "run_evidence_sha256": "59995e4ea884385da3709a0bd7eb3fc07011f5be6231c74f951ee3f944f45c78",
+  "final_workspace_tree_sha256": "e64c9ddf6cc602bf8fc7fc665e3d7f8e864492517b9be9f3a8753d909ea5f505",
+  "case_id": "retry-amplification",
+  "candidate_tree_sha256": "fa2ade9d9a8f17467610fb05daa40ac41a04ccc3b0f1abc42fbd6bc4aea79b12",
+  "rubric_sha256": "3a3f8318d020d66008f95e1816afc9b96057249756627cd8ce790c3f8a8d933d",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "amplification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3\u20135",
+        "observation": "Computes 3 \u00d7 3 = 9 Inventory calls per original request and up to 1,800 attempts/s from 200 requests/s. Presents this as a potential amplified load/steady-state implication under the stated timeout assumptions, distinguishes additional client retries and unknown overlap, and does not claim measured sustained throughput."
+      }
+    },
+    {
+      "id": "deadline-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9\u201317",
+        "observation": "Proposes one Checkout and one Inventory attempt, a 1.8-second ingress deadline with propagated remaining budget, 100 ms acquisition and a one-second full Inventory-call cap. Accounts for ongoing downstream work after caller expiry: retain connection/capacity ownership until actual completion or confirmed abort; five-second supervisor escalation does not permit unsafe reuse."
+      }
+    },
+    {
+      "id": "capacity-protection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9\u201311, 19",
+        "observation": "Removes timeout retry amplification for the read-only availability path, caps concurrency against measured healthy capacity, rejects excess work rather than allowing an unbounded queue, and retains accounting for unfinished work. Removing retries plus bounded admission is a justified alternative overload-control mechanism; backoff/jitter is not needed on a removed retry path."
+      }
+    },
+    {
+      "id": "operational-proof",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 19",
+        "observation": "Proposes 200 requests/s with one-second Inventory timeouts and explicit limits: at most 200 Inventory dispatches/s, responses within two seconds, active calls below the configured cap and queue wait at most 100 ms. Measures cancellation completion and temporary unavailability, restores Inventory and checks useful work/retry-surge/stranded-work recovery. No circuit-breaker recovery guarantee is claimed."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/trace.jsonl lines 5, 8\u20139, 11, 14\u201315, 17, 19; evidence/answer.md line 19",
+        "observation": "Both change arrays are empty and raw/final incident.md SHA256 is 643a43d79398ef8406ddfdcd25ace98f2ffe215146fad633c3d40436ef5afb2a. All eight completed commands are reads (cat, rg, nl); answer expressly says no change or runtime test occurred and labels validation proposed."
+      }
+    }
+  ]
+}

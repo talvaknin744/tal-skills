@@ -1,0 +1,81 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-report-integration-15",
+  "run_evidence_sha256": "dab3874ab427c09328c92f787645e5740556f937f89ec5d0675d4ca75bb2c8f4",
+  "final_workspace_tree_sha256": "8914ddef6e174eedfa85872c1ba5e56ddbda9dafc68d4037a0ea0554d985faf8",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "1fbcff1cfc7ed2a331a7ce422a80c5ac72677f856200120b621702660a240e17",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. Candidate body read was observed. These conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7-8, 33, 37",
+        "observation": "Explains all four slots are occupied from receipt through release including prefetch and cleanup, and that active_A/idle CPU do not indicate available capacity; verification enumerates prefetched, blocked, retrying, cleanup and cancellation-signaled residency."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-10",
+        "observation": "Shows current and borrowing B/C finish at 9 against deadline 3, with A3/A4 running 8-16; no deadline claim from fair delivery."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9-20",
+        "observation": "Gives a feasible one-slot reserve with A residency <=3, A4 recoverable outside worker receipt, B1 1-2 and C1 2-3; also explains the zero slack and conservative two-slot alternative."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 8, 16-18, 39",
+        "observation": "Does not release executing A slots on cancellation; requires actual local release and recognizes B/C still miss under the borrowed execution schedule."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9-12, 24-33",
+        "observation": "Separates useful deadlines, delivery, utilization, and slot residency; preserves eventual A progress and compares the same horizon. It does not explicitly address lost/repeated useful work under a hypothetical interruptible design, as the criterion requires."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 35-40",
+        "observation": "Proposes deterministic capacity and completion assertions, records delivery/start/finish/release and accepted identity, covers prefetched/blocked/retry/cleanup, cancellation at arrival time, altered costs, fabricated groups, and accepted recovery; clearly says unexecuted."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "changes=[]; unchanged baseline; case_compliant=false; answer lines 35-42",
+        "observation": "Leaves fixture unchanged, uses supplied capacities only, performs no worker/broker operations, and separates proposed checks from runtime evidence and unspecified provider claims."
+      }
+    }
+  ]
+}

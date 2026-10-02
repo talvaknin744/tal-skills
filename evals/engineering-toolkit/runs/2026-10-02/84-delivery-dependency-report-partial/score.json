@@ -1,0 +1,81 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-final-03",
+  "run_evidence_sha256": "181805a2c73ec9f1903979962ce828d5fff2c8a2ca1c4da62b504a94d3dc48e0",
+  "final_workspace_tree_sha256": "92743e5a4314fc32d7260de5251ebf4fa283130fe549d21141cfce91cfb126b8",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "442a9c09ac10ee16a248b123ce705e316d863ce75a847afa680c85bac5d99340",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control candidate package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. The candidate body read was observed. These host conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6, 12",
+        "observation": "Maps A1/A2 to stored authenticated Alpha despite g1/g2, derives the group and accounting key from trusted customer identity and job identity, and explicitly separates group identity from read authorization."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5",
+        "observation": "Correctly states the limits of fair delivery and that quiet-group dwell is not a deadline, but only refers generally to approximate fairness detection. The criterion requires considering both current in-flight share and recent processing-time share; neither detector input is identified in the response."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-8",
+        "observation": "Counts six Alpha permits held through time 8, with B1 unable to acquire before then and finishing at 9, six seconds beyond deadline 3. Correctly rejects eight simultaneous permits against physical capacity six."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 8, 12, 22",
+        "observation": "Rejects local release at time 1 because operations still hold permits until actual termination; keeps accounting charged through retry wait and settlement. Describes visibility as affecting redelivery, and calls for accepted-job recovery and duplicate-effect handling."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 12, 16",
+        "observation": "Gives a trusted fleet-wide weighted allocation and physical permit scope. The three resident worker-slot cap aggregates executing, blocked, retry-waiting, and settling jobs because the fixture says each retains its slot in those states; one locally deferred job is also capped. However, it does not specify a prefetch bound or a concrete finite durable-retry overflow disposition, and leaves safe storage/backlog and terminal overflow policy unresolved. SLO-safe reserve sizing is correctly left unresolved."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20-23",
+        "observation": "Proposes schedule replay, useful finish and deadline checks, customer resource-held time, worker and physical permit occupancy, deferred age, caller group fragmentation and changed permit cost, stop-before-termination, accepted-job recovery, duplicate delivery/effects, and eventual Alpha progress. These are proposed checks only; no supplied verifier is applicable. It does not define the required explicit active-permit <=6 oracle or compare fair receive against useful start and finish as separate observations."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "workspace-changes.json: changes=[]; run.json: case_compliant=false, capability_deviations, input_integrity.baseline_unchanged=true, allowed_changes_only=true; answer.md lines 5, 14",
+        "observation": "The raw fixture is unchanged, the trace records no external or delegation events, and the answer labels its calculations and allocation as based on the supplied contract and a proposed fixture schedule rather than a measured provider or production guarantee."
+      }
+    }
+  ]
+}

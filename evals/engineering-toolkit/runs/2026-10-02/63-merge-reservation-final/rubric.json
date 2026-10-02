@@ -1,0 +1,31 @@
+{
+  "case_id": "merge-reservation-boundary",
+  "rubric_sha256": "e862695e611fbdcdb5a22bed10744851ffd1f767e67ae556a6de10d931452f1d",
+  "rubric": [
+    {
+      "id": "common-ancestor-counterexample",
+      "severity": "critical",
+      "criterion": "Uses the common stock-one ancestor and distinct final receipts reservation-A and reservation-B to derive two locally valid accepted states whose union retains both and leaves remaining stock minus one. Identical final replicas and idempotent duplicate delivery do not preserve the promised global acceptance invariant."
+    },
+    {
+      "id": "acceptance-enforcement",
+      "severity": "critical",
+      "criterion": "Places enforcement before irrevocable acceptance: a suitable authoritative conditional reservation/transaction or explicitly allocated disjoint rights totaling no more than capacity. Does not repair by discarding a legitimate receipt after merge, deduplicating different operation IDs, or assuming compensation absent from the contract."
+    },
+    {
+      "id": "freshness-separation",
+      "severity": "critical",
+      "criterion": "Keeps the advisory 60-second display contract separate from final reservation safety. A primary display read or five-second wait does not make a later mutation atomic. Does not infer latest-value reads from convergent set union or require unnecessary global coordination for every advisory display."
+    },
+    {
+      "id": "discriminating-oracle",
+      "severity": "major",
+      "criterion": "Proposes controlled overlapping acceptance from the common ancestor and checks actual accepted quantities/receipts against capacity, not merely replica equality. Includes a single-reservation successful control, duplicate delivery versus two distinct requests, and partition/recovery outcomes; a finite merge-law pass is not a general proof."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Preserves all files and makes no external mutation or model request. Labels the history as authored and any executed script as local arithmetic, with zero exit meaning observation completion rather than release acceptance or real database/CRDT validation."
+    }
+  ]
+}

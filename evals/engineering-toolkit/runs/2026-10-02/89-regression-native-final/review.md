@@ -1,0 +1,11 @@
+# Independent native review — tal-worker-rollout
+
+**Result: pass (16/16).** All eight original case-index criteria receive 2. The raw `case_compliant=false` and declared capability deviations remain visible as separate host observations; they are not silently changed or used as an automatic failure.
+
+The response correctly recommends no-go, preserves real poison-job failure accounting, and gives bounded admission, handoff, uncertainty, and stop/recovery procedures. A distinct reviewer found two specific R1 defects; the owner corrected call cutoffs and the maintenance-versus-business failure gate in R2, then obtained a clean review of that stable candidate. The final answer distinguishes synthetic planning evidence from runtime observations.
+
+For isolation, all 120 final files match the prepared baseline by path, mode, and SHA-256. The prompt and four raw inputs are identical to their trial copies. The observed permission profile is read-only for `/trial`, denies root/temp reads, disables network, and its pre-turn boundary probe passed. Container and transport cleanup are recorded; global config is unchanged. The current Codex CLI 0.159.2 binary hash exactly matches the bounded official `rust-v0.159.2` source/config qualification. That evidence closes the identified child permission-inheritance and known file-handler questions and identifies no enabled unguarded surface.
+
+The qualification does not enumerate the complete runtime tool/extension registry or test every model handler, and its Linux image differs from this trial’s image. These limits remain recorded alongside `case_compliant=false`. The unchanged criterion calls for recording deviations and the compliance field separately; it does not require a complete registry endpoint. No concrete enabled tool or read boundary remains unsupported by the combined evidence, so those gaps alone do not justify partial credit.
+
+The initial 15/16 assessment is preserved in `score.initial-15-16.json` and `review.initial-15-16.md`; this reassessment adds the separately authorized source qualification without changing the rubric or trial. Runner source hashes remain a separate set from the full 120-file trial inventory. No model/container rerun, installation, or candidate edit was made.

@@ -1,0 +1,2127 @@
+{
+  "schema_version": 1,
+  "host": "codex",
+  "workflow": "tal-worker-rollout",
+  "task_mode": "review",
+  "argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "app-server",
+    "--stdio",
+    "-c",
+    "projects={\"/TRIAL/trial\"={trust_level=\"trusted\"}}",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "agents.max_concurrent_threads_per_session=2",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "sandbox_workspace_write.network_access=false",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.connectors=false",
+    "-c",
+    "features.plugins=false",
+    "-c",
+    "features.remote_plugin=false",
+    "-c",
+    "features.browser_use=false",
+    "-c",
+    "features.browser_use_external=false",
+    "-c",
+    "features.in_app_browser=false",
+    "-c",
+    "features.computer_use=false",
+    "-c",
+    "features.image_generation=false",
+    "-c",
+    "features.imagegenext=false",
+    "-c",
+    "features.hooks=false",
+    "-c",
+    "features.codex_hooks=false",
+    "-c",
+    "features.plugin_hooks=false"
+  ],
+  "registration": "automatic-project-directory",
+  "model_override": false,
+  "primary_thread": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+  "preflight": {
+    "config": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "xhigh",
+      "agents": {
+        "enabled": true,
+        "max_concurrent_threads_per_session": 2,
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null
+      },
+      "sandbox_mode": null,
+      "capabilities": {
+        "web_search": "disabled",
+        "features": {
+          "apps": false,
+          "connectors": false,
+          "plugins": false,
+          "remote_plugin": false,
+          "browser_use": false,
+          "browser_use_external": false,
+          "in_app_browser": false,
+          "computer_use": false,
+          "image_generation": false,
+          "imagegenext": false,
+          "hooks": false,
+          "codex_hooks": false,
+          "plugin_hooks": false
+        },
+        "sandbox_workspace_write": {
+          "writable_roots": [],
+          "network_access": false,
+          "exclude_tmpdir_env_var": true,
+          "exclude_slash_tmp": true
+        },
+        "mcp_servers": {
+          "gitnexus": {
+            "enabled": true
+          },
+          "computer-use": {
+            "enabled": false
+          },
+          "node_repl": {
+            "enabled": true
+          }
+        }
+      },
+      "project_layers": [
+        {
+          "source": {
+            "type": "project",
+            "dotCodexFolder": "/TRIAL/trial/.codex"
+          },
+          "disabled_reason": null
+        }
+      ]
+    },
+    "workflow_skills": [
+      {
+        "name": "tal-worker-rollout",
+        "description": "Prepare or implement a worker rollout that preserves accepted work, bounded shutdown, compatible continuation, and observable recovery.",
+        "path": "/TRIAL/trial/.agents/skills/tal-worker-rollout/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "skill_errors": []
+  },
+  "effective_thread_model": "gpt-6-sol",
+  "effective_thread_reasoning": "xhigh",
+  "thread_persistence": {
+    "requested_ephemeral": false,
+    "observed_ephemeral": false,
+    "root_path": "/Users/example/.codex/sessions/2026/10/02/rollout-2026-10-02T12-28-53-01a0fbf1-f6f7-71b3-91c2-34fa704e3181.jsonl"
+  },
+  "execution_started": true,
+  "terminal_turn": {
+    "id": "01a0fbf1-f732-74c2-9d15-c4e7a0bb2c17",
+    "items": [
+      {
+        "type": "agentMessage",
+        "id": "msg_0dd8f8e5f0a79178016abf7af0ff7087d2902abc10e6b735aa",
+        "text": "## Release recommendation: hold\n\nThe proposed rollout is unsafe as written. Readiness does not stop the independent queue poller, and a claim started before admission closes can still complete. Calling `fail` for a planned replacement consumes a business failure. In the authored [job trace](/TRIAL/trial/job-trace.json:6), A and B leave `failure_count` at 1 and 2; applying the proposed call at C predicts dead-lettering an 18-hour job during its third planned handoff. The trace predicts that outcome; it does not record a runtime dead-letter event.\n\nThe [proposal](/TRIAL/trial/proposed-rollout.md:6) also treats a checkpoint timeout as a failed write, though the [queue contract](/TRIAL/trial/queue-contract.md:15) says it may have committed. Three Ready pods, the disruption budget, and a ten-minute image rollback do not establish that accepted work continued.\n\n## Bounded rollout procedure\n\n1. **Before replacement:** Establish an authoritative claim-admission gate and safe drain behavior for the *retiring worker:7 pods*, with enough compatible worker:8 capacity. Inventory each accepted job\u2019s owner generation, reserved claims, last confirmed checkpoint, effect IDs, and both counters. Verify forward continuation and reverse rollback semantics; the declared version-2 format alone is insufficient. Set a measured lease/reclaim bound and assign a release operator to unresolved jobs. If old pods cannot safely stop claims and hand off active work, block replacement until they have zero owned work under a closed admission gate.\n\n2. **For each pod:** Close queue admission and stop its poller; then mark it unready. Allow up to the specified two seconds for claims already in flight and reconcile the authoritative owned/reserved inventory. Count the **90-second grace from termination start, including hooks**. By a proposed 85-second local cutoff, either finish normally or confirm a durable checkpoint at a 100-item boundary and `defer` under the current generation. Resolve lost checkpoint or defer responses with `inspect(job)` and store/effect records. Use `fail` only for a genuine business failure.\n\n3. **If confirmation is unavailable:** Exit within 90 seconds without a maintenance `fail` or an unverified `defer`. Pause further replacements. After store recovery and lease expiry, inspect ownership and checkpoint state; the compatible successor resumes from the last confirmed checkpoint and reconciles effect IDs before replay. Lease expiry is only described as *eventual*, so recovery has no proven time bound yet.\n\n4. **Before advancing to the next pod:** Observe the same logical job claimed at a higher generation, unchanged `failure_count`, correctly recorded maintenance deferrals, reconciled effects, and useful continuation, while capacity and queue age remain acceptable. Either keep retiring v7 pods from reclaiming work once v8 capacity is sufficient, or rehearse and verify the finite A\u2192B\u2192C handoff sequence. Treat ten minutes without a resolved handoff as a **pause and escalation gate**, not an automatic rollback. Roll back only through a rehearsed reverse-compatible path.\n\nAfter three pods are Ready, the assigned release operator must still track pre-rollout jobs to a terminal outcome or an explicit recovery decision. Propose escalation for unresolved jobs by 24 hours and a decision before each accepted input\u2019s 30-day retention expires; confirm checkpoint and effect-record retention too. Retire old dependencies only when old ownership and reservations are gone and continuation or rollback is evidenced.\n\n## Evidence boundary\n\nThe supplied [deployment](/TRIAL/trial/deployment.json:5) and queue contract support the claim race, 90-second grace, separate counters, uncertain checkpoint outcome, and declared version-2 read/write settings. The 85-second cutoff, ten-minute escalation, and 24-hour follow-up are proposed operating limits, not measured guarantees.\n\nRelease needs rehearsal of actual signal and claim-stop timing, repeated handoffs, lost responses, store outage and forced termination, stale-owner fencing, v7\u2194v8 checkpoint and effect compatibility, the poison job\u2019s exactly three genuine failures, lease recovery, and resource cleanup. The supplied records are synthetic; no cluster, durable queue, kill test, or 18-hour run was exercised. The files were left unchanged and no cluster was contacted.",
+        "phase": "final_answer",
+        "memoryCitation": null,
+        "delivery": null,
+        "questions": null
+      }
+    ],
+    "itemsView": "summary",
+    "status": "completed",
+    "error": null,
+    "startedAt": 1790933333,
+    "completedAt": 1790933760,
+    "durationMs": 426345
+  },
+  "failure": null,
+  "global_config_unchanged": true,
+  "global_config_observation": {
+    "before": {
+      "sha256": "35c8c38d2b088f45e4888c28369ac695d62796d8374e9a290e8471598d9f2c4c",
+      "modified_at": "2026-10-02T07:54:48.855Z",
+      "observed_at": "2026-10-02T09:28:53.698Z"
+    },
+    "after": {
+      "sha256": "35c8c38d2b088f45e4888c28369ac695d62796d8374e9a290e8471598d9f2c4c",
+      "modified_at": "2026-10-02T07:54:48.855Z",
+      "observed_at": "2026-10-02T09:36:00.283Z"
+    },
+    "change_attribution": "not-applicable"
+  },
+  "observed": {
+    "threads": [
+      {
+        "id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "parent_thread_id": null,
+        "agent_role": null,
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:6"
+      },
+      {
+        "id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "parent_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "agent_role": "tal-durability",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:3085"
+      },
+      {
+        "id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "parent_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "agent_role": "tal-infrastructure",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:3087"
+      },
+      {
+        "id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "parent_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "agent_role": "tal-failure-testing",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:3089"
+      }
+    ],
+    "named_native_children": [
+      {
+        "id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "parent_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "agent_role": "tal-durability",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:3085"
+      },
+      {
+        "id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "parent_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "agent_role": "tal-infrastructure",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:3087"
+      },
+      {
+        "id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "parent_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "agent_role": "tal-failure-testing",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:3089"
+      }
+    ],
+    "observed_reads": [
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": ".agents/skills/tal-worker-rollout/SKILL.md",
+        "evidence": "events.jsonl:59",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:61",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:70",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": ".tal-skills/workflows/_shared/handoff.md",
+        "evidence": "events.jsonl:71",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:76",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:77",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:78",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "prompt.md",
+        "evidence": "events.jsonl:79",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:85",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".agents/skills/graceful-draining/SKILL.md",
+        "evidence": "events.jsonl:201",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:202",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".agents/skills/recovery-validation/SKILL.md",
+        "evidence": "events.jsonl:205",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:302",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:303",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:306",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:307",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:313",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:314",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:315",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:318",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+        "evidence": "events.jsonl:325",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:326",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:336",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:337",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:341",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:342",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+        "evidence": "events.jsonl:343",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:357",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:367",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:1067",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+        "evidence": "events.jsonl:1067",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:1080",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:1085",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:1086",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+        "evidence": "events.jsonl:1087",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:1088",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".agents/skills/graceful-draining/SKILL.md",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".agents/skills/recovery-validation/SKILL.md",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/4",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/8",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/9",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/10",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/11",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/15",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/6",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/7",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/8",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/9",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/10",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/14",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "proposed-rollout.md",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/6",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/7",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "queue-contract.md",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/8",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/9",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "path": "job-trace.json",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/10",
+        "basis": "native best-effort read action on completed zero-exit command"
+      }
+    ],
+    "commands": [
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat .agents/skills/tal-worker-rollout/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:59"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:61"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc \"rg --files -g '\"'!node_modules'\"' -g '\"'!vendor'\"' -g '\"'!dist'\"' | head -80\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:63"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:70"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/_shared/handoff.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:71"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:76"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:77"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:78"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat prompt.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:79"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:85"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'ls -la'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:136"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc \"rg --files -uu -g 'AGENTS.md' -g '\"'!**/.git/**'\"'\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 1,
+        "status": "failed",
+        "evidence": "events.jsonl:138"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md queue-contract.md deployment.json job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:140"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:201"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:202"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .agents/skills/recovery-validation/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:205"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'rg --files'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:206"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'nl -ba proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:302"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'nl -ba queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:303"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'nl -ba job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:306"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:307"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:313"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:314"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:315"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:318"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/durable-handoff.md .agents/skills/graceful-draining/references/platform-shutdown.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:319"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:325"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:326"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc \"rg --files -g 'proposed-rollout.md' -g 'queue-contract.md' -g 'deployment.json' -g 'job-trace.json' -g 'AGENTS.md'\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:328"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:336"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:337"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:341"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:342"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/references/rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:343"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md queue-contract.md deployment.json job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:345"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:357"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md queue-contract.md deployment.json job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:359"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:367"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc \"python3 -c 'import json; d=json.load(open(\\\"deployment.json\\\")); t=json.load(open(\\\"job-trace.json\\\")); ev=t[\\\"events\\\"]; print(\\\"platform\\\",d[\\\"platform\\\"],\\\"replicas\\\",d[\\\"replicas\\\"],\\\"grace\\\",d[\\\"terminationGracePeriodSeconds\\\"]); print(\\\"replacements\\\",sum(e[\\\"event\\\"]==\\\"replacement_signal\\\" for e in ev),\\\"last_claim_failure_count\\\",[e[\\\"failure_count\\\"] for e in ev if e[\\\"event\\\"]==\\\"successor_claim\\\"][-1]); print(\\\"generations\\\",[e[\\\"generation\\\"] for e in ev])'\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:449"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md && cat .agents/skills/failure-oriented-testing/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1067"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'proposed-rollout.md' -g 'deployment.json' -g 'queue-contract.md' -g 'job-trace.json' -g 'AGENTS.md' -g 'CONTRACT.md' -g 'SKILL.md' | head -80\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1069"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1080"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1085"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1086"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/failure-oriented-testing/references/fault-histories.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1087"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1088"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md deployment.json queue-contract.md job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1102"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md queue-contract.md deployment.json job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:2148"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .agents/skills/recovery-validation/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'rg --files'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/5"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/10"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'nl -ba job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/11"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/durable-handoff.md .agents/skills/graceful-draining/references/platform-shutdown.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/12"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/15"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md queue-contract.md deployment.json job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/16"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc \"rg --files -g 'proposed-rollout.md' -g 'queue-contract.md' -g 'deployment.json' -g 'job-trace.json' -g 'AGENTS.md'\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'nl -ba job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/references/rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/10"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md queue-contract.md deployment.json job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/11"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/14"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md && cat .agents/skills/failure-oriented-testing/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'proposed-rollout.md' -g 'deployment.json' -g 'queue-contract.md' -g 'job-trace.json' -g 'AGENTS.md' -g 'CONTRACT.md' -g 'SKILL.md' | head -80\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat proposed-rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat queue-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/failure-oriented-testing/references/fault-histories.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'cat job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/10"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "command": "/bin/zsh -lc 'shasum -a 256 proposed-rollout.md deployment.json queue-contract.md job-trace.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/12"
+      }
+    ],
+    "delegation": [
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf2-9a6f-7921-9157-1765feee6fad"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "started",
+        "evidence": "events.jsonl:152"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf2-c4f8-7b62-b040-1483eb76f025"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "started",
+        "evidence": "events.jsonl:216"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:454"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:468"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf2-c4f8-7b62-b040-1483eb76f025"
+        ],
+        "agent_path": "/root/platform_review",
+        "status": "completed",
+        "evidence": "events.jsonl:1005"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6"
+        ],
+        "agent_path": "/root/rehearsal_review",
+        "status": "started",
+        "evidence": "events.jsonl:1021"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf2-9a6f-7921-9157-1765feee6fad"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:1073"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1093"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf2-9a6f-7921-9157-1765feee6fad"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "interacted",
+        "evidence": "events.jsonl:1115"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1119"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1125"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6"
+        ],
+        "agent_path": "/root/rehearsal_review",
+        "status": "completed",
+        "evidence": "events.jsonl:1238"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1242"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "receiver_thread_ids": [
+          "01a0fbf2-9a6f-7921-9157-1765feee6fad"
+        ],
+        "agent_path": "/root/continuation_review",
+        "status": "completed",
+        "evidence": "events.jsonl:2082"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/20"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/25"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/28"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/31"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/18"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "receiver_thread_ids": [
+          "01a0fbf1-f6f7-71b3-91c2-34fa704e3181"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/14"
+      }
+    ],
+    "messages": [
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "text": "I\u2019ll use the tal-worker-rollout workflow to review the supplied deployment, queue contract, and trace, then write a bounded procedure and release recommendation. I\u2019ll keep this to local analysis.",
+        "evidence": "events.jsonl:57"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "text": "The fixture shows two immediate risks: readiness does not stop queue claims, and the proposed interruption path would count planned replacements as business failures. I\u2019ll check the continuation and platform parts separately while I put together the procedure.",
+        "evidence": "events.jsonl:134"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "text": "I\u2019ll trace the accepted job through the queue, worker shutdown, and successor paths, then send the coordinator a bounded procedure and the evidence gaps. This is a read only review of the supplied artifacts.",
+        "evidence": "events.jsonl:198"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "text": "I\u2019m applying the graceful draining and recovery validation guidance to the worker handoff. I\u2019m checking the actual queue counters and persisted job records before treating any shutdown outcome as recovery.",
+        "evidence": "events.jsonl:260"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "text": "I\u2019ll review the supplied deployment and rollout claims against the queue contract and trace, then send the main agent the platform findings and rollout gates. This will stay read only and local.",
+        "evidence": "events.jsonl:299"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "text": "The proposed safety gates do not cover queue admission: readiness changes on shutdown, but the poller has its own stop event and an in-flight claim can still complete. The fixture also permits three replacements while one job runs, so I\u2019m tying the release gates to confirmed handoff and job counters at each stage.",
+        "evidence": "events.jsonl:443"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "text": "**Release recommendation: block the proposed rollout.** The reviewed files match the supplied SHA256 digests. This was a local, read-only review; no cluster checks were run.\n\nThe critical findings are:\n\n- [proposed-rollout.md](/TRIAL/trial/proposed-rollout.md:3) treats readiness and the disruption budget as a drain. [deployment.json](/TRIAL/trial/deployment.json:8) and [queue-contract.md](/TRIAL/trial/queue-contract.md:5) show that polling and claims are independent. Admission must close explicitly, and pending claims must be reconciled.\n- Calling `fail` on planned shutdown consumes business failures. The authored [job trace](/TRIAL/trial/job-trace.json:6) reaches a third failure and dead-lettering during A, B, C replacement. Use `defer` only after confirming a durable checkpoint under current ownership.\n- The 85-second wait has only five seconds left within the 90-second grace period. Checkpoint latency has no hard bound, and the store can be unavailable. An uncertain checkpoint requires queue and store inspection; it cannot safely be treated as a failed write.\n- Three Ready pods and a ten-minute image rollback do not establish accepted-job recovery. Kubernetes rollout availability settings do not gate queue claims or prove a long job continued.\n\n**Bounded procedure:** Rehearse the claim race, checkpoint timeout, store outage, forced termination, successor replay, and reverse handoff in a disposable environment. For each replacement, stop admission and polling, settle pending claims, then finish the job or confirm a checkpoint and defer. If confirmation is unavailable, stop within the grace period without a maintenance `fail`, pause further replacement, and reconcile after lease expiry. Advance to the next pod only after observing a higher-generation successor, unchanged business failure count, confirmed progress and effects, and healthy queue age and capacity. Keep worker:7 and retained inputs available while pre-rollout jobs remain unfinished; assign an operator to monitor them after pod rollout completion, with escalation by 24 hours and before the 30-day input-retention limit.\n\nThe fixture supports these failure mechanisms and the version-2 format claim. Actual binary compatibility, Kubernetes behavior, shutdown timing, recovery, and rollback still require rehearsal.",
+        "evidence": "events.jsonl:999"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "text": "I\u2019ll read the supplied fixture and the failure testing contract, then return a rehearsal plan with observable pass and fail criteria. I\u2019ll keep this read only.",
+        "evidence": "events.jsonl:1059"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "text": "**Outcome:** The proposed rollout is not ready for release. Static inspection shows that readiness does not stop queue claims, deployment interruptions would consume business failures, and checkpoint timeouts have uncertain outcomes. The supplied trace is synthetic; no runtime rehearsal was performed.\n\n**Rehearsal needed:** Run bounded A/B/C retirements of `accepted-42`, pending claims after admission closes, lost checkpoint and defer replies, store outage, forced 90-second termination, stale-owner commits, v7/v8 continuation and rollback, the three-failure poison control, and resource cleanup. Observe ownership generations, checkpoints, effect IDs, failure and deferral counts, leases, and eventual completion.\n\nA release procedure still needs measured or contractual bounds for handoff operations, lease expiry, store recovery, and compatibility in both version directions. Three Ready pods alone cannot establish accepted-work recovery.",
+        "evidence": "events.jsonl:1232"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "text": "**Outcome:** Read only review completed for the four supplied artifacts; their SHA256 digests match the assigned candidate. **Release recommendation: hold** until the claim and drain path, checkpoint reconciliation, and successor recovery are rehearsed. No cluster or runtime checks were performed.\n\n**Priority findings**\n\n- [proposed-rollout.md](/TRIAL/trial/proposed-rollout.md:3) treats false readiness as queue drain, but [deployment.json](/TRIAL/trial/deployment.json:8) says polling has a separate stop event. Claims already started may complete for two seconds. Each retiring pod must stop actual claim admission and reconcile reserved and owned work before release.\n- [proposed-rollout.md](/TRIAL/trial/proposed-rollout.md:6) calls `fail` for planned retirement. Under [queue-contract.md](/TRIAL/trial/queue-contract.md:9), that spends the business failure budget. The authored [job-trace.json](/TRIAL/trial/job-trace.json:6) shows counts 1 and 2 after A and B; applying the proposed call at C predicts dead lettering on the third retirement. The trace does not show an actual C outcome.\n- A checkpoint timeout is an **unknown outcome**, since the write may have committed. Inspect the job and reconcile effect IDs before replay. `defer` is valid only with a confirmed checkpoint and current ownership. If the store is down, leave the job visibly unresolved, pause retirement, and recover after store access and ownership return; process exit alone proves nothing.\n- The 90 second grace is a hard outer limit, and five second checkpoint latency is only p99. A local drain deadline must reserve time for checkpoint confirmation, inspection, and cleanup. Lease loss is described as eventual; no finite lease bound is supplied.\n- Three Ready replacement pods show deployment availability, not job completion. Version 8 declares v2 checkpoint read/write support, but semantic restoration and rollback into version 7 remain untested. The trace supplies no checkpoint revision, effect IDs, or completed outcome.\n\n**Bounded procedure:** Preflight compatible capacity and checkpoint semantics. For each retiring pod, stop its actual poller, settle pending claims, and reconcile authoritative ownership. Use an earlier local cutoff than the 90 second hard kill; finish a batch only when its checkpoint can be confirmed within that allowance. Defer from the current generation, then observe a higher generation claim, unchanged `failure_count`, separate maintenance deferrals, effect reconciliation, and useful progress before retiring the next pod. If confirmation or store access fails, stop by the grace deadline without calling `fail`, pause the rollout, and assign recovery to the release operator. At ten minutes, pause and escalate unresolved handoff rather than automatically rolling back the image.\n\nA fleet-wide version 7 claim gate reduces repeated transfers, but the supplied queue contract also permits a **finite, rehearsed A\u2192B\u2192C sequence of confirmed deferrals**. This matters with `maxSurge: 1`: all-old-worker exclusion may leave insufficient successor capacity. Either route needs a finite job age and recovery deadline before the 30 day input retention expires, plus effect record retention through that deadline. Keep an operations owner through terminal outcome or explicit recovery decision. Retire version 7 dependencies only after old ownership and reservations are gone and continuation or rollback compatibility is evidenced.\n\n**Rehearsal still needed:** actual signal timing and cleanup; the two second claim race; repeated A/B/C retirements; checkpoint or effect commit followed by lost response; store outage through grace; stale owner writes and cleanup after successor claim; poison work reaching exactly three genuine failures; both required version directions; and the 18 hour completion or bounded recovery path.",
+        "evidence": "events.jsonl:2076"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "text": "The reviews agree the proposal is unsafe as written. The trace predicts that planned replacements could consume all three business failures, and the fixture does not establish that checkpoint timeouts are failed writes. I\u2019m making the release gates explicit, especially the lease and recovery bounds that the fixture leaves unspecified.",
+        "evidence": "events.jsonl:2146"
+      },
+      {
+        "thread_id": "01a0fbf1-f6f7-71b3-91c2-34fa704e3181",
+        "text": "## Release recommendation: hold\n\nThe proposed rollout is unsafe as written. Readiness does not stop the independent queue poller, and a claim started before admission closes can still complete. Calling `fail` for a planned replacement consumes a business failure. In the authored [job trace](/TRIAL/trial/job-trace.json:6), A and B leave `failure_count` at 1 and 2; applying the proposed call at C predicts dead-lettering an 18-hour job during its third planned handoff. The trace predicts that outcome; it does not record a runtime dead-letter event.\n\nThe [proposal](/TRIAL/trial/proposed-rollout.md:6) also treats a checkpoint timeout as a failed write, though the [queue contract](/TRIAL/trial/queue-contract.md:15) says it may have committed. Three Ready pods, the disruption budget, and a ten-minute image rollback do not establish that accepted work continued.\n\n## Bounded rollout procedure\n\n1. **Before replacement:** Establish an authoritative claim-admission gate and safe drain behavior for the *retiring worker:7 pods*, with enough compatible worker:8 capacity. Inventory each accepted job\u2019s owner generation, reserved claims, last confirmed checkpoint, effect IDs, and both counters. Verify forward continuation and reverse rollback semantics; the declared version-2 format alone is insufficient. Set a measured lease/reclaim bound and assign a release operator to unresolved jobs. If old pods cannot safely stop claims and hand off active work, block replacement until they have zero owned work under a closed admission gate.\n\n2. **For each pod:** Close queue admission and stop its poller; then mark it unready. Allow up to the specified two seconds for claims already in flight and reconcile the authoritative owned/reserved inventory. Count the **90-second grace from termination start, including hooks**. By a proposed 85-second local cutoff, either finish normally or confirm a durable checkpoint at a 100-item boundary and `defer` under the current generation. Resolve lost checkpoint or defer responses with `inspect(job)` and store/effect records. Use `fail` only for a genuine business failure.\n\n3. **If confirmation is unavailable:** Exit within 90 seconds without a maintenance `fail` or an unverified `defer`. Pause further replacements. After store recovery and lease expiry, inspect ownership and checkpoint state; the compatible successor resumes from the last confirmed checkpoint and reconciles effect IDs before replay. Lease expiry is only described as *eventual*, so recovery has no proven time bound yet.\n\n4. **Before advancing to the next pod:** Observe the same logical job claimed at a higher generation, unchanged `failure_count`, correctly recorded maintenance deferrals, reconciled effects, and useful continuation, while capacity and queue age remain acceptable. Either keep retiring v7 pods from reclaiming work once v8 capacity is sufficient, or rehearse and verify the finite A\u2192B\u2192C handoff sequence. Treat ten minutes without a resolved handoff as a **pause and escalation gate**, not an automatic rollback. Roll back only through a rehearsed reverse-compatible path.\n\nAfter three pods are Ready, the assigned release operator must still track pre-rollout jobs to a terminal outcome or an explicit recovery decision. Propose escalation for unresolved jobs by 24 hours and a decision before each accepted input\u2019s 30-day retention expires; confirm checkpoint and effect-record retention too. Retire old dependencies only when old ownership and reservations are gone and continuation or rollback is evidenced.\n\n## Evidence boundary\n\nThe supplied [deployment](/TRIAL/trial/deployment.json:5) and queue contract support the claim race, 90-second grace, separate counters, uncertain checkpoint outcome, and declared version-2 read/write settings. The 85-second cutoff, ten-minute escalation, and 24-hour follow-up are proposed operating limits, not measured guarantees.\n\nRelease needs rehearsal of actual signal and claim-stop timing, repeated handoffs, lost responses, store outage and forced termination, stale-owner fencing, v7\u2194v8 checkpoint and effect compatibility, the poison job\u2019s exactly three genuine failures, lease recovery, and resource cleanup. The supplied records are synthetic; no cluster, durable queue, kill test, or 18-hour run was exercised. The files were left unchanged and no cluster was contacted.",
+        "evidence": "events.jsonl:3079"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "text": "I\u2019ll trace the accepted job through the queue, worker shutdown, and successor paths, then send the coordinator a bounded procedure and the evidence gaps. This is a read only review of the supplied artifacts.",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "text": "I\u2019m applying the graceful draining and recovery validation guidance to the worker handoff. I\u2019m checking the actual queue counters and persisted job records before treating any shutdown outcome as recovery.",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0fbf2-9a6f-7921-9157-1765feee6fad",
+        "text": "**Outcome:** Read only review completed for the four supplied artifacts; their SHA256 digests match the assigned candidate. **Release recommendation: hold** until the claim and drain path, checkpoint reconciliation, and successor recovery are rehearsed. No cluster or runtime checks were performed.\n\n**Priority findings**\n\n- [proposed-rollout.md](/TRIAL/trial/proposed-rollout.md:3) treats false readiness as queue drain, but [deployment.json](/TRIAL/trial/deployment.json:8) says polling has a separate stop event. Claims already started may complete for two seconds. Each retiring pod must stop actual claim admission and reconcile reserved and owned work before release.\n- [proposed-rollout.md](/TRIAL/trial/proposed-rollout.md:6) calls `fail` for planned retirement. Under [queue-contract.md](/TRIAL/trial/queue-contract.md:9), that spends the business failure budget. The authored [job-trace.json](/TRIAL/trial/job-trace.json:6) shows counts 1 and 2 after A and B; applying the proposed call at C predicts dead lettering on the third retirement. The trace does not show an actual C outcome.\n- A checkpoint timeout is an **unknown outcome**, since the write may have committed. Inspect the job and reconcile effect IDs before replay. `defer` is valid only with a confirmed checkpoint and current ownership. If the store is down, leave the job visibly unresolved, pause retirement, and recover after store access and ownership return; process exit alone proves nothing.\n- The 90 second grace is a hard outer limit, and five second checkpoint latency is only p99. A local drain deadline must reserve time for checkpoint confirmation, inspection, and cleanup. Lease loss is described as eventual; no finite lease bound is supplied.\n- Three Ready replacement pods show deployment availability, not job completion. Version 8 declares v2 checkpoint read/write support, but semantic restoration and rollback into version 7 remain untested. The trace supplies no checkpoint revision, effect IDs, or completed outcome.\n\n**Bounded procedure:** Preflight compatible capacity and checkpoint semantics. For each retiring pod, stop its actual poller, settle pending claims, and reconcile authoritative ownership. Use an earlier local cutoff than the 90 second hard kill; finish a batch only when its checkpoint can be confirmed within that allowance. Defer from the current generation, then observe a higher generation claim, unchanged `failure_count`, separate maintenance deferrals, effect reconciliation, and useful progress before retiring the next pod. If confirmation or store access fails, stop by the grace deadline without calling `fail`, pause the rollout, and assign recovery to the release operator. At ten minutes, pause and escalate unresolved handoff rather than automatically rolling back the image.\n\nA fleet-wide version 7 claim gate reduces repeated transfers, but the supplied queue contract also permits a **finite, rehearsed A\u2192B\u2192C sequence of confirmed deferrals**. This matters with `maxSurge: 1`: all-old-worker exclusion may leave insufficient successor capacity. Either route needs a finite job age and recovery deadline before the 30 day input retention expires, plus effect record retention through that deadline. Keep an operations owner through terminal outcome or explicit recovery decision. Retire version 7 dependencies only after old ownership and reservations are gone and continuation or rollback compatibility is evidenced.\n\n**Rehearsal still needed:** actual signal timing and cleanup; the two second claim race; repeated A/B/C retirements; checkpoint or effect commit followed by lost response; store outage through grace; stale owner writes and cleanup after successor claim; poison work reaching exactly three genuine failures; both required version directions; and the 18 hour completion or bounded recovery path.",
+        "evidence": "events.jsonl:3085#/result/thread/turns/0/items/33"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "text": "I\u2019ll review the supplied deployment and rollout claims against the queue contract and trace, then send the main agent the platform findings and rollout gates. This will stay read only and local.",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "text": "The proposed safety gates do not cover queue admission: readiness changes on shutdown, but the poller has its own stop event and an in-flight claim can still complete. The fixture also permits three replacements while one job runs, so I\u2019m tying the release gates to confirmed handoff and job counters at each stage.",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/17"
+      },
+      {
+        "thread_id": "01a0fbf2-c4f8-7b62-b040-1483eb76f025",
+        "text": "**Release recommendation: block the proposed rollout.** The reviewed files match the supplied SHA256 digests. This was a local, read-only review; no cluster checks were run.\n\nThe critical findings are:\n\n- [proposed-rollout.md](/TRIAL/trial/proposed-rollout.md:3) treats readiness and the disruption budget as a drain. [deployment.json](/TRIAL/trial/deployment.json:8) and [queue-contract.md](/TRIAL/trial/queue-contract.md:5) show that polling and claims are independent. Admission must close explicitly, and pending claims must be reconciled.\n- Calling `fail` on planned shutdown consumes business failures. The authored [job trace](/TRIAL/trial/job-trace.json:6) reaches a third failure and dead-lettering during A, B, C replacement. Use `defer` only after confirming a durable checkpoint under current ownership.\n- The 85-second wait has only five seconds left within the 90-second grace period. Checkpoint latency has no hard bound, and the store can be unavailable. An uncertain checkpoint requires queue and store inspection; it cannot safely be treated as a failed write.\n- Three Ready pods and a ten-minute image rollback do not establish accepted-job recovery. Kubernetes rollout availability settings do not gate queue claims or prove a long job continued.\n\n**Bounded procedure:** Rehearse the claim race, checkpoint timeout, store outage, forced termination, successor replay, and reverse handoff in a disposable environment. For each replacement, stop admission and polling, settle pending claims, then finish the job or confirm a checkpoint and defer. If confirmation is unavailable, stop within the grace period without a maintenance `fail`, pause further replacement, and reconcile after lease expiry. Advance to the next pod only after observing a higher-generation successor, unchanged business failure count, confirmed progress and effects, and healthy queue age and capacity. Keep worker:7 and retained inputs available while pre-rollout jobs remain unfinished; assign an operator to monitor them after pod rollout completion, with escalation by 24 hours and before the 30-day input-retention limit.\n\nThe fixture supports these failure mechanisms and the version-2 format claim. Actual binary compatibility, Kubernetes behavior, shutdown timing, recovery, and rollback still require rehearsal.",
+        "evidence": "events.jsonl:3087#/result/thread/turns/0/items/20"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "text": "I\u2019ll read the supplied fixture and the failure testing contract, then return a rehearsal plan with observable pass and fail criteria. I\u2019ll keep this read only.",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0fbf5-3f8b-7621-b629-a03dbda5a0e6",
+        "text": "**Outcome:** The proposed rollout is not ready for release. Static inspection shows that readiness does not stop queue claims, deployment interruptions would consume business failures, and checkpoint timeouts have uncertain outcomes. The supplied trace is synthetic; no runtime rehearsal was performed.\n\n**Rehearsal needed:** Run bounded A/B/C retirements of `accepted-42`, pending claims after admission closes, lost checkpoint and defer replies, store outage, forced 90-second termination, stale-owner commits, v7/v8 continuation and rollback, the three-failure poison control, and resource cleanup. Observe ownership generations, checkpoints, effect IDs, failure and deferral counts, leases, and eventual completion.\n\nA release procedure still needs measured or contractual bounds for handoff operations, lease expiry, store recovery, and compatibility in both version directions. Three Ready pods alone cannot establish accepted-work recovery.",
+        "evidence": "events.jsonl:3089#/result/thread/turns/0/items/16"
+      }
+    ],
+    "limits": [
+      "Command read actions are the host parser's best-effort classification; retain raw output for review.",
+      "Missing role metadata or read events are inconclusive, not evidence inferred from assistant claims.",
+      "A matching role and a successful process do not independently establish task correctness."
+    ]
+  },
+  "cleanup": {
+    "owned_process_group": 66640,
+    "remaining_live_processes": [],
+    "terminated": true
+  },
+  "capability_deviations": [
+    "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+    "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector."
+  ],
+  "case_compliant": false,
+  "status": "completed-unscored",
+  "independent_acceptance": "pending",
+  "host_version": "codex-cli 0.159.2",
+  "changed_files": [],
+  "final_files": [
+    {
+      "path": ".agents/skills/background-maintenance/agents/openai.yaml",
+      "sha256": "2f24cf65c305d7f4b33ae8bd116c1e1f2214d8ed6462f2784d9c2d6c19ccd3ba",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/policy-and-control.md",
+      "sha256": "e6b91d778cdfa396d147bc1f593212b84afcbe4890e8cb186e08b7a735207a24",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/reclamation-safety.md",
+      "sha256": "67119436ad4d497ddc0ab792998026286ea41d1f71f0f9535c079dc345ef1272",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/sources.md",
+      "sha256": "ddc037913e22000e3ea6d72853da7facd438577bb4e1194f0415feb089e2bd3c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/verification.md",
+      "sha256": "4b5d31f78373b686a4caaf9208ca988226dda91073570ffc0d4681dd1c0c505a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/SKILL.md",
+      "sha256": "f4fd905b03bbf95980363e43342fa023804d6225a817f20c39f22c020605632c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/agents/openai.yaml",
+      "sha256": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/cache-coherence.md",
+      "sha256": "c8d6bd6d8b6d34d205c32899d95e4bac8fd4cc68dbbec500b56f19b25b4c4c8a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/merge-invariants.md",
+      "sha256": "fd1d2cb934144c63905a6daa7bf2f8eb4a1377bc4299d52ee4ed8b07b1df5429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/projection-rebuild.md",
+      "sha256": "9635ce4dc2682bd07922b271f62484052a7086b0cbf0af2f6cdd1a799fc0f998",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/replica-reads.md",
+      "sha256": "26d4eaa7c36cfaeb96fb6e6e07b341901ddcd4589b822eb82159e5d755a6f593",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/sources.md",
+      "sha256": "55ad3acb735ff2816c58e8989f8b08500bc3e2b3a61e01a41d7140b8a9160463",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/transactions.md",
+      "sha256": "9052a10098f41e63cf3546d5819a644eda4e15f38fcfb50a48156bc3bd88635d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/SKILL.md",
+      "sha256": "abd11a72587f4df7988df89ebd2e50423c54e9fc1caf30d9bfc0609ceded60d7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/agents/openai.yaml",
+      "sha256": "dde157b38977a8c3cdc51ad4276f308a04a79bad0a4d52338bf43f00d509a58d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "2acd49e69bca0dc3426ad805794d2cdf0c5770bdc1e974e444f0b2475bce0a4c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/sources.md",
+      "sha256": "11bb3eb8ff562bbecc44986164f722650619a6fe465f669ef4e4996b50e73166",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/state-models.md",
+      "sha256": "6cecac80a2017cdeffcc378af84f60586e68a081d8d1a0cfb33df88e26bdc1da",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+      "sha256": "c7683e8c2ba99b0e639ec3a2b9c326b4f9346cc751f06f56124d62123d88ba67",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/agents/openai.yaml",
+      "sha256": "a8eb43c8b694ea53c4ed539c01a7a146b0d4c7160e4e364293d1c30920edbabd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/ownership.md",
+      "sha256": "3437a7091e90d3eb47c4a2dff054357eed3879a8da5571ab0598033dc4d3e0c1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/runtime-validation.md",
+      "sha256": "51b4eaa629b9bdd21257d6013b99322c76c27ac4a6ef6daf97854cf30b6f33c9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/sources.md",
+      "sha256": "51f7fa10e87ba8c55ecaf1d0de6b502b4e352a3d65a1d8c76e9da532246c2eed",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/transaction-outcomes.md",
+      "sha256": "53226b6126f55c42e5b284e3c51f9d47414e80da397d2ea4f22b32b4af68af9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/SKILL.md",
+      "sha256": "c51a9d8f9d388cd2b73e5a9416da43c39c75ca3a32d954151d728b76fa9e50f9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/agents/openai.yaml",
+      "sha256": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/durable-handoff.md",
+      "sha256": "7ae83d644904e6eff97d2e00cfb548a8c05043d19616630ce540dc84fe596532",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/platform-shutdown.md",
+      "sha256": "1455fa5df92c9636bbacfe7032b93dda4d1fe22dfcb31499d7f49781605e341d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/sources.md",
+      "sha256": "eed1daad43666ef2481dc3f468848a58a7d57658c386602e58e843c1d4f24fb6",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/SKILL.md",
+      "sha256": "8c800a02eda0b78d85572e6c852b4fc53a3d90865130c72868105a15386632f6",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/agents/openai.yaml",
+      "sha256": "6069e983fa2b0411e97bade8b37ed93628649eb93f0b31041ca37fcaf8e986a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/recovery.md",
+      "sha256": "7d137c2d86f71d4fa47ff564833d52ee27ce2061f373bf6c64e30768ead245b1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/sources.md",
+      "sha256": "727c4ccc2c7c2371fe86504fbad2ecf7ca6aeeb7a7c3ab1b53ccc6ed27be7573",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/verification.md",
+      "sha256": "93d3657ec00c7197b2ac0c258783b108a7bff6348f28eef029588e7085670fea",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/SKILL.md",
+      "sha256": "6fb0c4f5bea67f0c31757fb81d207507baabcc0b3f0fca24b3142da37cf1647f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/agents/openai.yaml",
+      "sha256": "a981cadc6516e71a91a0a53dbe19e8a6265c6c55b51c10c909e724a69f3d7812",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/configuration-distribution.md",
+      "sha256": "1253f28fe4f75613ba5f8d316f537cf83c17410b268cfbfb34df97b5a9e4ccff",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+      "sha256": "6bf253f6f1dd281fa4c17402f27cc5ca803f851084f585e21acab39a2accbafc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/schema-evolution.md",
+      "sha256": "24567fedefb25a10c5f18f521f713fb01ee02de1bf72c55984da9feb9486ded3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/sources.md",
+      "sha256": "f7a739cb107bd3c9a2a4c6b3ca56d2ec36530c278ea20c41ad70edf829ddb954",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/terraform-state.md",
+      "sha256": "9736c10f6162ca50d6ff5a14123f613d3f1c0cac0fa5b033f4acb3ea328ca78c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+      "sha256": "bba67983c369c19c79fcd659a0f293b2e2e0f2fd4c5c9af06fc2c81643816d4b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/agents/openai.yaml",
+      "sha256": "c4de1b9ea737681a117f65a47b5c1c3378d1fd4b9100a770dd2905c631d9c21b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/cache-design.md",
+      "sha256": "cb531eadc45f2c520a8f29865d49e372532ad0c1632f3e084581b7883b165d5f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/cache-load-protection.md",
+      "sha256": "04beae92e71a1f40e78efafdbac713fd1483efd4b4615a47d8491c6ca4bcc579",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/capacity.md",
+      "sha256": "e1c6538a368a6444e3d2899efeea691b6947dc03213a3d72e3e731d6df9e16ba",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/deadline-domains.md",
+      "sha256": "a583c46f89023a90461e0e323d744cabe75df3dd1aa3cf23da01fd75cdde3c31",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/failure-handling.md",
+      "sha256": "63a59545e9fc825fa80ca768b1fb0a3631fcdaaa1b97fb2c5479b2d3cd1c8350",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/retry-coordination.md",
+      "sha256": "a1c969db3d171b4af3dfcc05a2ee432991be57712e64687daebf2465e8e83e60",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/security.md",
+      "sha256": "a4b7e57301395720210d199e76839e4f0c60dfdeacb4a5906140508fcbc36b00",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/sources.md",
+      "sha256": "24d306bf692dfd7ee48485ba79751dcaee4aeacbf0982ffa5709c95b18aec2c7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/SKILL.md",
+      "sha256": "a8f2988fa64b4d5c39ddec1d4197edd6b40466be289eff2fa4ef6d650d39d144",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/agents/openai.yaml",
+      "sha256": "f9b5fd5e4158f0424a06c0e4943b41d2deeed9b1cc9b2b8fc9ba7ebdfa991429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/async-ownership.md",
+      "sha256": "875acb46cdc62cd31981bad8542fec5e1c3e50571390a68eb57fdc4a596421d4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sources.md",
+      "sha256": "b8c8412f5b382a208a0c77e81b5a4c5c122b238ebb9a613aab5005ff16e1c60c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sqlalchemy-sessions-and-queries.md",
+      "sha256": "5fce9c0b636fdcc7bbf1dd8b289590bd6a58a7adb08750477f3202ea33b9bb75",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/transaction-outcomes.md",
+      "sha256": "2c8203e5f67f561601bbc9b675e0cc96c02bc5ca01b448e42ccec5d147ee76b7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/SKILL.md",
+      "sha256": "c35f4b91b96b14e4401cc81de81d78ebe4027e1b8cd92daff94d16c6cbb538e1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/agents/openai.yaml",
+      "sha256": "d72684099483f29ba2d606ba3f5be81ce2dc8932e4eaa92d966039b35c25e693",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/postgresql.md",
+      "sha256": "456e21d37330ec26f3fbe2fabe206fa2bc3730ed10ec3eb32df0772505d5806d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovered-history.md",
+      "sha256": "06df9b8716e8dfeb19d17f140f9a1aab9fb9e2d6e3767446ab6db3f92a4779dc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovery-inputs.md",
+      "sha256": "fa02610ee95edcfc4f93cbb59fc6224dea93d2b2a37ead134a4e2d0d485f8496",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/sources.md",
+      "sha256": "b74b33426eccc3072f1818462278b598c066d1e8f38671831b8bc14a4b1d3f1c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/SKILL.md",
+      "sha256": "9240367c490ab5e34080a1016de8b92ff5b750c4776ce0675ee35d34d45100a7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/tal-worker-rollout/SKILL.md",
+      "sha256": "3b243a18203dd8b1348800f93bf0b3c5927d4f61eb624d13994fc271129ac67e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/agents/openai.yaml",
+      "sha256": "45898857de814d7c88fc55116020f6a63d7fc2fcc699b2320a8a0f9bcc6973d1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/effect-contracts.md",
+      "sha256": "c56d1172cbbd0a6772e9b3a627495a7a3f19f7b44589fa86a796ca12ca11ebfd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/recovery-and-waits.md",
+      "sha256": "1e4da2d46c4584ab89acc3a99140f83b28d4665b7304cd6c439283f99de1c6ff",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/sources.md",
+      "sha256": "5d181e73f922c4f37e192d92286dfc40af4fda585ccee9c3bf112adafc7940e2",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/SKILL.md",
+      "sha256": "b9790cb9ec37a20143820457c1ca16f8ba7c20df5ad80fe4f2fee9c44143f413",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/agents/openai.yaml",
+      "sha256": "3fea3f405af4664e1d47d4ef49ff464e8ad5dc02c3da5d01bba5d781352de3ca",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/deployment-and-cutover.md",
+      "sha256": "37381b18bfee24a44cdc37f255115c1fd0ccd7fe5c9c11c2824a75eba42ad115",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/sources.md",
+      "sha256": "aac06c62e09a75f8719ce8f5276dfe61774ae841e4428b6251ceb4014d15a782",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/state-continuity.md",
+      "sha256": "2799c50ab14d8de6c129516cb3b5a7fb9293739fe4d4a8f0509c31572e86dfdb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/SKILL.md",
+      "sha256": "26859fbf2c80d38a77c636a209b647f026ccba77dc53a51ebb9ed094c4f0cd2d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/agents/openai.yaml",
+      "sha256": "2cf07254ce674023c0370bdd28daf327b907f5ef51b1caa67ab54be8d0fc5229",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+      "sha256": "00df3d1d751164cf5b9c116589fb743a2895f0aaf47aad24a57aa76fb66a386e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/node-streams.md",
+      "sha256": "8fa91e3f5c79a98a1c09d6466707506b4cfb289ed466b684b6754f5a949b1283",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/runtime-boundaries.md",
+      "sha256": "d4810aa6488e4c362c9e3e8480838588763c39d69d4d24615737465592469cbb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/sources.md",
+      "sha256": "802061e75cebb73c84c4b31300ec9faa644c77a91d2354b276b1b06cf75358ef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/SKILL.md",
+      "sha256": "760f384a733d487e4df00a563a0ca8cc1ffa51f196b0b821a3561c23fedf7cc7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-consistency.toml",
+      "sha256": "3b1382a752e2d87c01ee7ee651e62a4e5c0930ac1b27468d8f0110bcedfcf91a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-durability.toml",
+      "sha256": "fcb6a5dcb32e4c2693c00e4e8c6e74a43535800f73597bfe51e901610a3410a7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-failure-testing.toml",
+      "sha256": "b12ed74187facb593fcc9e04a34a4072d418af1ab6f5b30755b0075f8e7b08db",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-go.toml",
+      "sha256": "97b4bf2a2f84362ae70c810e1ba5a68985cce8ee99e33d8609702bbf23c6d716",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-idempotency.toml",
+      "sha256": "f44795bd85342ac2309ed7fff1336422a86cfd2e3fce400d1071fe0692557300",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-infrastructure.toml",
+      "sha256": "19959e183e3d71c684e6ffa89c52bd58d874d6822647f78f8068bd9b95e1dc33",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-python.toml",
+      "sha256": "4feed93f86e5745a9e2e00a57b953a107c18a135b443fcbd497e8e8ec6501b5e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-reliability.toml",
+      "sha256": "0732ba47b7b29761518551eb50cfd3d942e81c003df341c744a71b72a71a5ad4",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-typescript.toml",
+      "sha256": "a2148c15fbe42e079a8576902182da9285cb5c0641fcbcd6e5ca26c261a26b20",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/CONTRACT.md",
+      "sha256": "65b8f5fd28033ec2a9a372ba902f8fb2241ae147c91c414196f50df43ab886ca",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-consistency.md",
+      "sha256": "5b279f3c7969e9696222de6fa8cd4b6405b708ef9562c4602b5e26a93d678af1",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-durability.md",
+      "sha256": "6b550b0d3f5333386bc6cd403fb997f66571c63bdbc11ca52487c948a7fc12eb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-idempotency.md",
+      "sha256": "e55750308310cbe174298f8b790895766680c79e1a354c927665352b2df708b0",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-go.md",
+      "sha256": "30138fa33296a07d3049f49fe8c35c7be5acb84229b82d4e0bda4ef741e2f1d8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-python.md",
+      "sha256": "b238cca04cf77369b55679537a41241f3aafba8b03c1dcfcc7fe48f6148020a3",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-typescript.md",
+      "sha256": "035f904826b7353789605f1b3ecd3650a5986a4b168124455796f225336e9d71",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-infrastructure.md",
+      "sha256": "a48816cc465031d1ed20a3db99b9de25d6b032287048bf7aae17366391558fdb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-reliability.md",
+      "sha256": "eb0e067fd6ad2e3cac08f64e3c974dc6227a29aff0bb12c8f8f6b7fff25bae99",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/verification/tal-failure-testing.md",
+      "sha256": "a88991b94e598995f6673208b799560c99a63d0262360836860476c1b6d72d3f",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/manifest.json",
+      "sha256": "9d16051d91089895d9acde8fcb7264e7f80ddcff2ab5c6b2e6fd1541e6079079",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/_shared/handoff.md",
+      "sha256": "65e39e26613179353d152d18e316b277f1f303fab07f4ef5aa3f3cede2ac6923",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+      "sha256": "120916965de7e6e16b4c6df80bb3151cf1ac441ca507df6b838cb6ae1130a267",
+      "mode": 420
+    },
+    {
+      "path": "deployment.json",
+      "sha256": "3df663d0f079b35949d8c2826421d8c65a0800139e82ada3e41a39f997e3b5a4",
+      "mode": 420
+    },
+    {
+      "path": "job-trace.json",
+      "sha256": "5289e3bf3cd8d472d97627970cbad2ad252ccbfd065beec18e41fb59f622d434",
+      "mode": 420
+    },
+    {
+      "path": "prompt.md",
+      "sha256": "6d2fbe267fcce705fb3e19c572e52a5a1563f9cc8059f6450958df7a6a3bbcd9",
+      "mode": 420
+    },
+    {
+      "path": "proposed-rollout.md",
+      "sha256": "698d2fea6d4f4babe1b1c7b9304bb1d40a9ca9757850c2cb24d5f34f8769907c",
+      "mode": 420
+    },
+    {
+      "path": "queue-contract.md",
+      "sha256": "4aba06adbf44e3ea48cd8029b782f2b6c269b7f1ed5e734497c0eb322162e658",
+      "mode": 420
+    }
+  ]
+}

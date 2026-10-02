@@ -1,0 +1,64 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "backfill-recreated-identity",
+      "skill": "infrastructure-change-safety",
+      "title": "A status backfill overlaps updates and key reuse",
+      "tags": ["correctness", "schema-evolution", "implementation"],
+      "prompt": "Repair migration.py so the supplied status backfill respects contract.md while foreground mutations continue. Keep the public function and checkpoint calls, edit only migration.py, and run python3 -B verify.py. Explain the result and the limits of this local exercise. Use no external services.",
+      "fixture_dir": "evals/worker-rollout-integration/schema/fixtures/backfill-recreated-identity",
+      "fixtures": ["contract.md", "migration.py", "model.py", "verify.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "implementation",
+      "execution_mode": "implementation",
+      "editable_files": ["migration.py"],
+      "verification_argv": ["python3", "-B", "verify.py"],
+      "rubric": [
+        {"id": "coherent-source-observation", "severity": "critical", "criterion": "Reads payload, incarnation and source revision from one source snapshot before the first checkpoint; does not relabel an old payload with a newer token assembled through separate reads."},
+        {"id": "incarnation-and-revision-guard", "severity": "critical", "criterion": "Publishes with the authority's atomic identity-and-revision predicate, rejecting both an intervening update and delete/recreate with a reused numeric revision; does not sort arbitrary incarnation strings or overwrite foreground mutations."},
+        {"id": "mapping-and-retry", "severity": "major", "criterion": "Maps all supported statuses, returns explicit rejection for stale observations and missing rows, and permits a fresh retry on the replacement/current row while preserving other fields."},
+        {"id": "scope-and-independent-evidence", "severity": "critical", "criterion": "Changes only migration.py, preserves both checkpoint calls, runs the protected verifier and reports observed outcomes without claiming database, distributed or production validation. Explains that the literal expected row sets are independent of the migration's mapping and include absence/extras, while real deployment requires the actual database primitives and writer-maintenance contract."}
+      ]
+    },
+    {
+      "id": "shard-publication-rollback-floor",
+      "skill": "infrastructure-change-safety",
+      "title": "Publishing a shared schema before all shards and writers are ready",
+      "tags": ["correctness", "schema-evolution", "review", "rollback"],
+      "prompt": "Review rollout.md against the supplied fleet, writer and row evidence. Give a bounded sequence for exposing the new representation, identify the rollback limits and specify acceptance checks. Keep every file unchanged and use no external services. Separate current evidence from checks that still need execution.",
+      "fixture_dir": "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor",
+      "fixtures": ["rollout.md", "fleet.csv", "versions.csv", "commits.csv", "derived.csv"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "all-shard-publication", "severity": "critical", "criterion": "Does not publish a shared schema cache or new-column reads from shard -40 readiness or completion-command submission; waits for observed schema/index readiness on all required shards and checks restart/cached-schema behavior and external SQL."},
+        {"id": "maintained-writer-floor", "severity": "critical", "criterion": "Keeps fallback while V0 may write, checks every writer atomically advances source revision, and establishes an enforced write/commit admission boundary or proven drain covering the long-lived V0 transaction, replay and jobs before new-only readers/predicates. Deployment percentage and process heartbeat alone are insufficient."},
+        {"id": "rollback-bridge-and-representability", "severity": "critical", "criterion": "Retains compatible bridge writes and old-readable values during the rollback window; before permitting old-only V0 writes restores fallback and stops new-only predicates or preserves the writer floor. Recognizes code 2 is outside V0's representation and retained tables/reverse streams alone do not restore post-switch writes; uses a compatible forward repair or explicit scoped restore/replay if needed."},
+        {"id": "independent-bidirectional-oracle", "severity": "critical", "criterion": "Derives expected live identity/status rows at commit 207 from the definitive commit ledger, independently maps supported statuses and compares complete expected/actual sets both directions. Finds missing order 43 and extra deleted order 99 despite equal counts; separates coverage, catch-up, index usability and exposure gates rather than treating cursor success or row counts as proof."},
+        {"id": "bounded-review", "severity": "major", "criterion": "Leaves fixtures unchanged, proposes concrete adverse schedules for partial shards, delayed old writers, delete/recreate and rollback writes, and makes no unexecuted engine/production or tool-guarantee claims."}
+      ]
+    },
+    {
+      "id": "migration-comment-only",
+      "skill": "infrastructure-change-safety",
+      "title": "Correct a migration comment without changing SQL",
+      "tags": ["nontrigger", "bounded-edit"],
+      "prompt": "The first comment in migration.sql says customer status but this table belongs to orders. Change only that comment to say order status. Preserve all SQL and other text, run python3 -B verify.py, and report the edit. No deployment or migration execution is requested.",
+      "fixture_dir": "evals/worker-rollout-integration/schema/fixtures/migration-comment-only",
+      "fixtures": ["migration.sql", "verify.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "execution_mode": "implementation",
+      "editable_files": ["migration.sql"],
+      "verification_argv": ["python3", "-B", "verify.py"],
+      "rubric": [
+        {"id": "narrow-comment-edit", "severity": "critical", "criterion": "Changes only the requested first comment from customer status to order status, preserving executable SQL and all other text."},
+        {"id": "nontrigger-scope", "severity": "critical", "criterion": "Completes the local comment correction and verifier without imposing a schema rollout, backfill, infrastructure apply, deployment permission flow or unrelated runtime change; does not claim any migration was executed."}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-repaired-07",
+  "run_evidence_sha256": "c8c1698e4b326f9d0a33ed83414310405e8be00ce5fbf2be383a03910cfa84c1",
+  "final_workspace_tree_sha256": "68bcaf1e6c62b4b93ba482389330aa87ae809266cbcf41500c7a8385a6d984a6",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "0ef96f527e32ad641e0b88ea70afb2f056e74c7af77b14de022d4262d4ba98c1",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_15 line32; evidence/checks.json:checks[0]; review.md:Protected reviewer execution",
+        "observation": "Actual final node verify.mjs exits0 with all5 original checks passing. Sealed independent-01 and reviewer protected original-input execution with final service.mjs overlay match, and adapters/verifier are unchanged. The final baseline3/5 claim conflicts with recorded item_11 baseline2/5; this discrepancy is recorded separately because this criterion specifically gates actual final five-check success."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "7\u201320; original-project/model.mjs:54\u201367; original-project/verify.mjs:16\u201351",
+        "observation": "Misses use shared atomic publishIfFresh and retry rejected fills; writes await monotonic advanceFloor after the authoritative write before return. Floors are shared and survive value eviction under the supplied adapter, and reordered notifications cannot lower them. All delayed-fill, eviction and older-notification checks pass. No process-local lock, sleep or evictable-only marker replaces the adapter contract."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0],forbidden_changes; final-project/service.mjs:1\u201322; original-project/verify.mjs:54\u201366",
+        "observation": "Only service.mjs changes. Constructor/read/write signatures and protected adapter/verifier/requirements hashes are unchanged. Hits still return cache values; original repeated-read and unrelated-key checks prove no always-database bypass. Retry uses only provided interfaces and adds no infrastructure or package."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1,7\u201312; evidence/trace.jsonl:item_10 line22,item_16 line33; original-project/requirements.md:8\u201311",
+        "observation": "The authored report explains floor-before-write-resolution and the post-floor acknowledgement boundary, but never explains that an already-overlapping read is permitted to return its earlier snapshot. Its earlier authored message instead proposes retrying rejected fills to avoid returning that snapshot to a later caller. The retrying implementation can satisfy the supplied finite contract and is not rejected merely for choosing a fresher result, but does not supply the missing explanation of permitted overlap. No impossible latest-at-response claim is explicit; therefore partial, not fail."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "7\u201312; evidence/trace.jsonl:item_16; original-project/requirements.md:24\u201334",
+        "observation": "Boundary rows confine evidence to supplied database snapshots/atomic cache operations, leave replica and production behavior unverified, exclude crashes and adapter failures between commit/floor update, and distinguish value eviction from untested floor expiry/restart. Actual topology is two instances sharing adapters in one process; separate processes/hosts are not tested. These semantically establish successful-local-model limits without asserting production atomicity or arbitrary marker lifetime."
+      }
+    }
+  ]
+}

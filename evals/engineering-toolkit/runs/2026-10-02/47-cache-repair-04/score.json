@@ -1,0 +1,69 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-repaired-05",
+  "run_evidence_sha256": "eaa61917ebaa2a29b7e831f159e27855a933d82217afd6c331de369fa4edfc10",
+  "final_workspace_tree_sha256": "114d4d4745ff9a155441e02e5a1ed775aefb8cba2898a8e81d83b04a493b4819",
+  "case_id": "cache-incarnation-snapshot",
+  "candidate_tree_sha256": "0ef96f527e32ad641e0b88ea70afb2f056e74c7af77b14de022d4262d4ba98c1",
+  "rubric_sha256": "7ef8e29166a61c034f58a91d15b11ca245eb5fca7e4f8f34a0568c07009ecdb7",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "incarnation-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "12\u201313; original-project/model.py:6\u20137,97\u2013104; original-project/verify.py:50\u201364,88\u2013104",
+        "observation": "Atomic publication uses the supplied authoritative (incarnation, revision) tuple. Protected literal recreation rejects41/7 after42/1 and accepts a new higher incarnation at revision1. No scalar revision, wall clock or arbitrary UUID order is introduced; all6 checks pass."
+      }
+    },
+    {
+      "id": "paired-source-snapshot",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "15\u201323; original-project/model.py:18\u201328; original-project/verify.py:67\u201385,148\u2013160",
+        "observation": "Each miss captures one indivisible payload/presence/token record through read_snapshot, invokes the hook after capture and returns captured fields. Hits return before any source capture. Protected mutation/counter checks confirm no relabeling, one miss capture, none on hit and no separate token read."
+      }
+    },
+    {
+      "id": "atomic-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "9\u201313,19\u201323; original-project/model.py:86\u2013104,110\u2013123; original-project/verify.py:88\u2013145",
+        "observation": "finish_fill uses atomic publish_if_current rather than a floor read/unchecked write. Protected competing-update, deletion, independent-key ordering, value-eviction floor preservation and JSON-restored empty/recreated literal states all pass without changing adapters."
+      }
+    },
+    {
+      "id": "independent-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "original-project/verify.py",
+        "locator": "16\u201319,50\u2013160; evidence/workspace-changes.json; evidence/checks/independent-01.stdout.txt:1",
+        "observation": "Unchanged protected verifier compares both key-set directions and full literal incarnation/revision/payload values, including deleted empty state and recreation. Only service.py changes. Hooks, exception propagation and cache-hit behavior are intact. Recorded, sealed independent and reviewer protected executions all pass6/6."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_13 line28,item_14 line29,item_18 line37,item_19 line38; evidence/checks.json:checks[0]; review.md:Protected reviewer execution",
+        "observation": "Actual supplied python3 -B verify.py returns2/6 before repair and6/6 exit0 after; both authored baseline and final reports match. Sealed independent-01 and a reviewer execution with only final service over original protected inputs also pass6/6, matching stdout SHA6ce2f9f7cde2286fbf9097380185c8262f6f2be6a82afb2931b49a75f49b22d0."
+      }
+    },
+    {
+      "id": "scope-and-limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1,5\u201310; evidence/workspace-changes.json; final-project/service.py:9\u201323",
+        "observation": "Only service.py changes with protected inputs/interfaces/hooks preserved. First paragraph expressly permits a captured overlapping value without stale cache replacement. Boundary rows confine source/token evidence to local snapshot, distinguish confirmed notifications from missing notifications outside contract, retained JSON floors from untested metadata destruction/crash durability, and one-process threads from untested processes/hosts. This meaningfully bounds the atomic version claim to local adapter/topology evidence rather than real Redis/database deployment atomicity; exact production-system names are not required to convey that scope. No unsupported loss-recovery or durability guarantee is claimed."
+      }
+    }
+  ]
+}

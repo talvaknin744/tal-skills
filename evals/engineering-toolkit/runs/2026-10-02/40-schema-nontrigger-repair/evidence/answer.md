@@ -1,0 +1,1 @@
+Changed the first comment in [migration.sql](../final-project/migration.sql) from “customer status” to “order status.” All SQL and other text are unchanged. `python3 -B verify.py` passed; no migration was executed.

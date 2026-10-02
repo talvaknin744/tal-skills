@@ -1,0 +1,66 @@
+{
+  "format_version": 1,
+  "scenario_id": "worker-rollout-repeated-retirements",
+  "withheld_from_candidate": true,
+  "physical_read_isolation": false,
+  "rubric_source": "case-index.json acceptance + named common_acceptance entries",
+  "invariants": {
+    "business_budget": {
+      "maintenance_sequence": {
+        "business_failures": 0,
+        "maintenance_deferrals": 3,
+        "eventual_business_outcome": "eligible to finish from durable progress"
+      },
+      "poison_sequence": {
+        "business_failures": 3,
+        "terminal": "dead_letter"
+      }
+    },
+    "admission": {
+      "resident_at_signal": [
+        "imp-885",
+        "imp-886",
+        "imp-887",
+        "imp-888"
+      ],
+      "pending_receive": "imp-889",
+      "required": "Every resident/pending delivery has an explicit start-or-return/recovery disposition; no new handler starts after authoritative drain gate"
+    },
+    "progress_effects": {
+      "confirmed_cursor_after_receipt": 500,
+      "replay_operation_id": "imp-885/batch/401-500",
+      "unique_logical_rows": 500,
+      "final_receipts_for_imp890": 1,
+      "stale_epoch": 41,
+      "successor_epoch": 42,
+      "no_cursor_regression_below": 600,
+      "required": "Current epoch protected transaction, not a pre-read or local stop"
+    },
+    "compatibility": {
+      "revision7_reads": [
+        2
+      ],
+      "revision8_reads": [
+        2,
+        3
+      ],
+      "revision8_default_writes": 3,
+      "required": "No format3 continuation on revision7; retained v2 dependencies for unfinished format2 work or demonstrated compatible migration/recovery"
+    },
+    "budget": {
+      "platform_seconds": 90,
+      "hook_seconds": 15,
+      "application_ceiling_seconds": 75,
+      "configured_join_seconds": 85,
+      "required": "Finite remaining deadline with explicit margin and hold/escalation"
+    }
+  },
+  "acceptance_evidence": {
+    "native_behavior": "Host events and child metadata, distinct from plan correctness and evaluator score",
+    "candidate": "Final allowed files digest and unchanged protected input/native closure hashes",
+    "artifact_observation": "Command stdout + exit + observer input/code digest; not real-runtime behavior",
+    "independent_review": "Candidate-specific assignment/findings and correction/review chain; separate from final independent evaluator grading"
+  },
+  "native_collector_limit": "prepare drops unique scenario id/acceptance; parent must bind scenario id and fixture index hash externally. It prepends $tal-worker-rollout on every turn.",
+  "status": "frozen authored invariants; raw local observation commands completed; no native/model execution"
+}

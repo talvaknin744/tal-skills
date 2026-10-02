@@ -1,0 +1,31 @@
+{
+  "case_id": "go-deadline-handoff",
+  "rubric_sha256": "0a9990f6a5cedbe86964b49b93b008359501b38fce0397163a7be0e55beeef56",
+  "rubric": [
+    {
+      "id": "representation-boundary",
+      "severity": "critical",
+      "criterion": "Identifies that JSON reconstruction removes Go monotonic data and the explicit reconstructed-time comparisons can depend on wall adjustments. Uses the supplied sample to distinguish 1.4 seconds of original elapsed budget from 7.4 seconds of reconstructed wall remaining time; does not assert that a context timer continually rereads wall time."
+    },
+    {
+      "id": "logical-budget",
+      "severity": "critical",
+      "criterion": "Preserves one two-second request lifetime across acquisition, dispatch, retries, and parent cancellation. Rejects context.Background plus a fresh two-second attempt budget as caller lifetime renewal; retains the original local deadline and honors an earlier parent deadline."
+    },
+    {
+      "id": "handoff-authority",
+      "severity": "critical",
+      "criterion": "Distinguishes process-local monotonic values from a cross-host epoch. Requires a supported transport remaining-time propagation contract or a declared custom epoch/skew or duration/handoff-delay policy, without claiming UTC formatting synchronizes hosts or transfers monotonic state."
+    },
+    {
+      "id": "completion-and-recovery",
+      "severity": "major",
+      "criterion": "Proposes controls for wall steps before/after serialization, earlier parent expiry, host skew, delayed handoff and late worker completion. Acceptance observes caller completion within the declared policy, no new dispatch after budget exhaustion, worker termination/resource release separately from cancellation, and useful subsequent requests resuming without leaked active work."
+    },
+    {
+      "id": "read-only-evidence",
+      "severity": "critical",
+      "criterion": "Leaves every fixture unchanged, executes no fixture or external operation, and treats the synthetic samples as supplied data and additional checks as proposed; reports no invented runtime, transport, or production pass."
+    }
+  ]
+}

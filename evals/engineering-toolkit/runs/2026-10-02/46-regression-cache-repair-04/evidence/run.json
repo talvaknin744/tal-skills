@@ -1,0 +1,207 @@
+{
+  "evaluation_suite": "worker-rollout-regression",
+  "format_version": 1,
+  "run_id": "tal-worker-rollout-oct02-regression-cache-repaired-07",
+  "case_id": "cache-fill-invalidation",
+  "skill": "concurrency-correctness",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "0ef96f527e32ad641e0b88ea70afb2f056e74c7af77b14de022d4262d4ba98c1",
+  "fixture_tree_sha256": "7526fc9d62a69fdbf5193229992a90c828be60ba20d174b21f02a82c6bc61b31",
+  "prompt_sha256": "4be22c17ef6872101f0735d03275acc72148c4307584d7a3f927f6ae78bcf680",
+  "case_prompt_sha256": "d31d1d9ae4a2fe509fa6a61d2f690a78227fb36003ad67123d16c747617962de",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "freeze_sha256": "b6dde6bf3eda6b743602476cc727c644645ac885d0f131ef6bfde39219a08ec7",
+  "runner_tree_sha256": "5228a920c35c3741c13798dd7be2f3fa00f31b135b51c997b8d7a0508ae89721",
+  "dependencies_tree_sha256": "5d004843331a70718f449e5f3ba8d2f7e7486c3fb266157ffa4a5f10e1fde359",
+  "task_mode": "implementation",
+  "execution_mode": "implementation",
+  "activation_expected": "activate",
+  "editable_files": [
+    "project/service.mjs"
+  ],
+  "verification_argv": [
+    "node",
+    "verify.mjs"
+  ],
+  "execution_control_derivation": "Original prompt and scope rubric authorize only service.mjs and require the supplied node verify.mjs; raw case and rubric remain unchanged.",
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "workspace-write",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "host_version": "codex-cli 0.159.2",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 125.141,
+  "token_usage": {
+    "input_tokens": 128140,
+    "cached_input_tokens": 103936,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2930,
+    "reasoning_output_tokens": 1628
+  },
+  "started_at": "2026-10-02T11:08:47.077Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "workspace-write",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/TRIAL/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nFix LabelService in service.mjs so it meets requirements.md under overlapping readers and writers. Keep the adapter implementations and verification script unchanged, preserve the public API, run the supplied verification, and explain the scope of the result."
+  ],
+  "effective_prompt_sha256": "4be22c17ef6872101f0735d03275acc72148c4307584d7a3f927f6ae78bcf680",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"workspace-write\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 54,
+    "candidate_entries": [
+      {
+        "name": "concurrency-correctness",
+        "description": "Diagnose, design, or fix race conditions across processes, including lost updates, write skew, stale cache fills, replica read-your-writes, and obsolete owners. Use when concurrent operations violate an invariant or freshness contract; exclude broad service decomposition and duplicate retries alone.",
+        "path": "/TRIAL/workspace/.agents/skills/concurrency-correctness/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-sol",
+    "reasoning_effort": "xhigh",
+    "requested_setting_observations": {
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-10-02T11:10:52.218Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 13,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "68bcaf1e6c62b4b93ba482389330aa87ae809266cbcf41500c7a8385a6d984a6",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "9331bdf109c625903a01a13e9ebf9074d4b5344eca89963828fb1e3c78eff544",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "a7cf37af146e2b154ce95d25fa39cf2072ee8427196eedee08f1dd87058fac4a",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "8c2f2f0627cc534770e5821d76dc057299c6a10e88d73072e96e8863c864ccb6",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "d379915b7a0bebae83869bca65d897b63742d14feaf0bc5f4ac22c4af8f10d4d",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "8382055387d9deac9518a27b39b53d5bab646ced6922878a8aba8c1cd1337640",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "d379915b7a0bebae83869bca65d897b63742d14feaf0bc5f4ac22c4af8f10d4d",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "789d1def2c914de7ef0f9ba2d8fdcf4abf02a52bc33af29252facc8a154ea48f",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "4a078cb5d0cd5ccbf30d010afa0d32be1678ba1ea16365083d90e3eb655cd46e",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "8bf5522a264d3e55da318414eddb6ce49b4944333d0cd237de3f1979f2a1905c",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "7d490b0b7e191c79469f11f0c2aed75e9f9437995700c002df5209477cfe0ed4",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "c8c1698e4b326f9d0a33ed83414310405e8be00ce5fbf2be383a03910cfa84c1"
+}

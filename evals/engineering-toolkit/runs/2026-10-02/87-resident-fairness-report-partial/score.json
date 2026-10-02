@@ -1,0 +1,81 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-report-integration-13",
+  "run_evidence_sha256": "2865d6708281e80db79a71dfaf6efa3a1522f7a5d18b0d0c7cbb9437540cb6a4",
+  "final_workspace_tree_sha256": "1c97fb4dfdb432f5653cd4c283461c75afc1129882b3dd5a682b3bcd68a49e01",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "442a9c09ac10ee16a248b123ce705e316d863ce75a847afa680c85bac5d99340",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control candidate package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. Candidate body read was observed. These host conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5-6, 24",
+        "observation": "Explains that a slot belongs to a job from receipt through release, explicitly including prefetch and cleanup; shows A1-A4 occupying all four slots at time 0 while A3/A4 are prefetched and only two handlers execute. Notes that idle CPU and active_A=2 do not mean slots are free."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5-7",
+        "observation": "Uses the supplied timeline: B1/C1 wait until 8 and finish at 9 against deadline 3, while A3/A4 execute 8-16. Shows the draft borrow-and-cancel path has the same missed deadline."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 9-11",
+        "observation": "Caps A residency at three of four slots, keeps one slot usable for B/C, leaves A4 at the durable broker, schedules B1 1-2 and C1 2-3, and preserves recoverable identity/payload. Explicitly notes zero slack and offers a two-slot alternative when any deadline/cleanup slack is needed."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6, 9, 11, 18",
+        "observation": "Shows borrowed A executions continue to hold slots until time 8 despite cancellation at 1, so B/C still finish at 9. Requires actual execution and cleanup release; only permits borrowing waiting A work with proven timely local-state release."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 9, 11, 17, 22, 24",
+        "observation": "Separates useful deadlines from occupancy and compares slot-time over the same horizon; acknowledges eventual A completion and deferring A to protect B/C. However, it does not explicitly discuss lost or repeated useful work under a hypothetical interruptible design, as this criterion requires."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13-20",
+        "observation": "Proposes deterministic schedule replay with total/A held-slot limits, deadline and eventual-A finish oracles, cancellation before stop, changed cost, and fabricated groups. The plan does not explicitly exercise prefetched/blocked/retry-wait transitions or accepted-job recovery after worker failure, both required by the criterion. The plan is proposed only; it claims no worker behavior was tested."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "workspace-changes.json: changes=[]; run.json: case_compliant=false, input_integrity.baseline_unchanged=true, allowed_changes_only=true; answer.md:13, 22",
+        "observation": "Leaves the fixture unchanged, uses the supplied four slots and timing contract, performs no worker/broker operation, labels checks proposed and unexecuted, and says broker behavior is not verified."
+      }
+    }
+  ]
+}

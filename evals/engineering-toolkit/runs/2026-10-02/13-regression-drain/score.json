@@ -1,0 +1,69 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-drain-01",
+  "run_evidence_sha256": "113ed81f5fbc1e79913d91d7f7a7e670cee580ddf7afe0d58061ddd78b390510",
+  "final_workspace_tree_sha256": "bc91051df7f635f4ec76043d73a9e64f43947aa6b37af1428b5f27481412b365",
+  "case_id": "rolling-worker-drain",
+  "candidate_tree_sha256": "050fc9d033b69bb1912dd76b37996e5e2819ed2d698ac4c3ce36a091d9ac00d3",
+  "rubric_sha256": "1ad9c4238abe05f1f52b6c7ff05d5622d036a6597837a658bea60bc9b4b6fdf4",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "failure-classification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 8-9, 15, 23",
+        "observation": "Traces TaskCancelled -> queue.fail on A, B and C until count 3 dead-letters imp-884, despite resumable pages; rejects the retry-limit increase. Uses defer only for verified planned, confirmed resumable drain, leaves the failure counter unchanged, and keeps malformed input on fail with the existing threshold of 3."
+      }
+    },
+    {
+      "id": "admission-and-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 13-16",
+        "observation": "Explains readiness does not stop the poll loop. Closes the authoritative claim gate for the retiring generation, or pauses all retiring consumers and settles pending takes, before any release; inventories running and reserved work from queue ownership. Keeps lease renewal/checkpoint dependencies until confirmed disposition, never defers while the old handler can still write, and surfaces unresolved delivery if the bound is missed."
+      }
+    },
+    {
+      "id": "durable-handoff",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 14-19",
+        "observation": "Resumes the same job_id from a confirmed completed-page cursor, allows replay from the previous valid cursor under the supplied replay contract, requires durable terminal completion before ack, and validates checkpoint meaning across successor versions. Protects cursor/cleanup with delivery token or ownership epoch and acknowledges C has no established recovery point. A checkpoint not confirmed by the internal deadline stays on the explicit unresolved path rather than being called successful recovery."
+      }
+    },
+    {
+      "id": "bounded-rollout",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9, 13-17",
+        "observation": "The 18-hour incident is handled by resumability on eligible replacements instead of promising completion in the 90-second shutdown. Gives first-signal fixed deadline, handler stop by 60s, confirmed valid cursor plus defer by 75s, cleanup by 80s and 10s margin; measurement is prerequisite. Repeated signals do not reset the allowance; retirement-generation exclusion prevents successive handoffs to workers about to retire, and unresolved bounds remain visible."
+      }
+    },
+    {
+      "id": "failure-checks",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13-16, 23-25",
+        "observation": "Proposes a supervisor-driven A->B->C schedule asserting admission closure, pending/reserved inventory, lease/deadline bounds, unchanged planned-maintenance failure counts, advancing cursors, eventual durable completion/ack, and third-failure malformed-input dead-letter. Includes blocked checkpoint, slow cancellation, lost lease, repeated SIGTERM and crash after page effect before cursor commit. The protocol supplies expected confirmed-checkpoint/defer versus bounded unresolved disposition for the blocked-checkpoint path; no clean-SIGTERM-only claim is made."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items 1-9 local reads; item_11 final answer; evidence/workspace-changes.json changes=[]",
+        "observation": "Recorded commands read/enumerate only local project/candidate files and perform no live operation. Original/final fixture bytes and hashes match, diff is empty and no forbidden changes are recorded. Final answer explicitly marks signal/admission/recovery guarantees unverified, frames rollout checks as proposed, and reports no edits or deployment."
+      }
+    }
+  ]
+}

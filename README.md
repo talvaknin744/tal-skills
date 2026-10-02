@@ -210,6 +210,7 @@ they do not establish guarantees for a different system.
 - [Performance research](docs/research/performance-capacity/README.md): measurement, capacity, overload, database work, and conditional Go/Python data-layout experiments.
 - [Temporal story review](docs/temporal/README.md): all 70 customer-index entries, with written-story and talk-summary scope distinguished.
 - [Runnable examples](examples/README.md): TypeScript, Python, and Go backend contracts plus messaging, cache races, worker handoffs, recovery, protocols, and retry coordination.
+- [Worker rollout integration](docs/research/worker-rollout-integration/2026-10-02/README.md): signal and ownership evidence plus focused cache, schema, fairness and deadline guidance, with runtime and agent results reported separately.
 - [Verification report](docs/research/engineering-toolkit/verification.md) and [evaluation guide](evals/README.md): deterministic checks, runtime observations, independently scored agent trials, and known host limitations.
 
 Repository checks validate packaging, references, generated adapters, installer

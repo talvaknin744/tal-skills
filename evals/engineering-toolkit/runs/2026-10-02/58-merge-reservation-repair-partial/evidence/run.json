@@ -1,0 +1,200 @@
+{
+  "evaluation_suite": "worker-rollout-integration",
+  "format_version": 1,
+  "run_id": "tal-worker-rollout-oct02-merge-final-02",
+  "case_id": "merge-reservation-boundary",
+  "skill": "concurrency-correctness",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "945cdaa4913a1a37fbffa1be4a4fcbe8ef44a41d6ef8c50e778979ab90e0994d",
+  "fixture_tree_sha256": "34bd3cb54538f874e036e115c682582063c638dd7f0761a1fe081429f73ecbc6",
+  "prompt_sha256": "9d8c589de5084f7f5025c45db9aaaa4f66405a824d2a2e976dc3f766c65db59c",
+  "case_prompt_sha256": "bd8419e0eaafbd2bfdb92620b39a2df030807dbf2bca57b6c4ad530bce8ec41a",
+  "rubric_sha256": "e862695e611fbdcdb5a22bed10744851ffd1f767e67ae556a6de10d931452f1d",
+  "freeze_sha256": "d1c209b51e5879111390999bbe14ec046db2bf5d17071bd5a39b85e8549c8688",
+  "runner_tree_sha256": "5228a920c35c3741c13798dd7be2f3fa00f31b135b51c997b8d7a0508ae89721",
+  "dependencies_tree_sha256": "5d004843331a70718f449e5f3ba8d2f7e7486c3fb266157ffa4a5f10e1fde359",
+  "task_mode": "review",
+  "execution_mode": "review",
+  "activation_expected": "activate",
+  "editable_files": [],
+  "verification_argv": null,
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "read-only",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "host_version": "codex-cli 0.159.2",
+  "activation_observation": {
+    "status": "body_read_observed",
+    "evidence_events": [
+      "item_1"
+    ],
+    "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 71.054,
+  "token_usage": {
+    "input_tokens": 75365,
+    "cached_input_tokens": 64512,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 1866,
+    "reasoning_output_tokens": 629
+  },
+  "started_at": "2026-10-02T12:28:07.944Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/TRIAL/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nReview proposal.md against contract.md and observations.json. Determine whether the acceptance path meets its promised rule, explain what the replica and display observations establish, and recommend the smallest supported decision-boundary repair with concrete validation. You may run python3 -B observe.py for local arithmetic. Keep every file unchanged, use no external services, and distinguish proposed checks from execution."
+  ],
+  "effective_prompt_sha256": "9d8c589de5084f7f5025c45db9aaaa4f66405a824d2a2e976dc3f766c65db59c",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"read-only\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 54,
+    "candidate_entries": [
+      {
+        "name": "concurrency-correctness",
+        "description": "Diagnose, design, or fix race conditions across processes, including lost updates, write skew, stale cache fills, replica read-your-writes, and obsolete owners. Use when concurrent operations violate an invariant or freshness contract; exclude broad service decomposition and duplicate retries alone.",
+        "path": "/TRIAL/workspace/.agents/skills/concurrency-correctness/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-sol",
+    "reasoning_effort": "xhigh",
+    "requested_setting_observations": {
+      "sandbox_mode": "read-only",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-10-02T12:29:18.998Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 10,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "b5359518b76d9a4d9b6fecbe1c10ff328ef5d4cbf091da6bf8a1d2e99b82005b",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "59ef565b2624e4a64cffea75868c2a62df4f197e8630853b9e6248a96ce19f14",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "36db97730d3659d8027cf45204df63a929469b0edc4291a3dbfb68cbc1a87d65",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "f50133be4208b3a3cbef8562b6952b1942b3016ab820fde4388e4b596040bb71",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "0aa308a545efbeb4a596900147783452fd60a64db10f2206ce5463c78b781b07",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "a38e90ba16887dfd0e19dc012011592baf7a13c6aebcd9c9eceaddec2d0f86c1",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "0aa308a545efbeb4a596900147783452fd60a64db10f2206ce5463c78b781b07",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "6c4b5423b362a0f98b5e6fc2120afa03741b6df312941b719d6b01d66c0043aa",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "da3d2af6fdcf6fc77eb698532a196ebf4e6de270624ccf39578d7f0edd1c3855",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "7c8d7da3ec901078248484e66ee7883dbe3f4835c64bc5aadebb500eed4de7ae",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "7fb8abddab5cd07063d4285bbbb134ef4f4babfa06cc4ac832e03c1fed168aa9"
+}

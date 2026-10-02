@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-review-02",
+  "run_evidence_sha256": "02d8f4b90e839560c1976f43db3b93476d1af09a654ae6c7853519599c32333a",
+  "final_workspace_tree_sha256": "4ffc28f50903ecd3d0dd7971ca545cda987c69e79468da200bbd542484a5bab9",
+  "case_id": "shard-publication-rollback-floor",
+  "candidate_tree_sha256": "25300ed6da72e8c684fdadedfe978d314a512dfa350975b11495cbadcdc76c43",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "reviewer": "/root/archive_quality",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "all-shard-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines3,20,30",
+        "observation": "Blocks incomplete40-80 shard and accepted COMPLETE command as completion; requires observed completion/column/index on every serving shard, shared-cache restart behavior and handwritten SQL before exposure."
+      }
+    },
+    {
+      "id": "maintained-writer-floor",
+      "score": 1,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines16,21-23,30; trace.jsonl:15 and20 (versions.csv read)",
+        "observation": "Explicitly reports V0 authoritative revision on every business mutation and keeps fallback/complete listing through old open transactions/replay; closes actual commit admission or proves drain before code-only reads. V1 same-row bridge is named, and all3 source contracts were read, but the answer does not explicitly establish atomic authoritative revision maintenance for V1/V2 alongside V0 as an all-writer prerequisite. The generic stated writer contracts sentence/read evidence does not substitute for that observable generation-by-generation check. This is a remaining review completeness gap, not a requirement to execute live mutations."
+      }
+    },
+    {
+      "id": "rollback-bridge-and-representability",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines23-24,28,30",
+        "observation": "Retains dual writes/old-compatible values; stops code-only predicates before admitting V0, followed by reconciliation. Code2 outside V0/V1 and closes simple rollback; reverse-stream lag/table retention insufficient for post-switch writes/deletes; compatible forward repair or validated lossless restore/replay required."
+      }
+    },
+    {
+      "id": "independent-bidirectional-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines5-14,20-24,30",
+        "observation": "Ledger at207 produces11/order-a pending rev1/code0,22/order-b paid rev2/code1,43/order-c paid rev1/code1 and deleted99. Common rows explicitly Match; finds missing43/extra99 despite equal count, rejected206 unchanged, paid listing22/99 differs22/43. Shows expected mapping/value/revision comparison in answer, with complete both-direction membership and separate catch-up/index/exposure gates. No live verifier required or claimed."
+      }
+    },
+    {
+      "id": "bounded-review",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines20-24,28,30-32; workspace-changes.json:changes/forbidden_changes",
+        "observation": "Proposes intervening update/delete-recreate/retry, partial-shard/cache restart, delayed open transaction/replayed V0 commit and post-write rollback/reverse catch-up checks. Files byte-identical and empty diff; no external/delegation events. Live database checks explicitly unexecuted."
+      }
+    }
+  ]
+}

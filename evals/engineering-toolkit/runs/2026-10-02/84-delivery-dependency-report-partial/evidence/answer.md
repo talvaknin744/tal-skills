@@ -1,0 +1,23 @@
+## Review of [queue.md](../final-project/queue.md)
+
+| Area | Finding |
+| --- | --- |
+| Broker contract — **supplied** | `MessageGroupId` identifies a fair-delivery group. The supplied SQS standard-queue contract gives no FIFO order, tenant rate limit, resource reservation, or completion deadline. Its approximate fairness detection changes future delivery opportunities. Standard delivery may duplicate; the trace happens to have no duplicate. No provider version or settings support a stronger claim. |
+| Grouping — **correction proposed** | A1 and A2 belong to authenticated customer Alpha, despite their client-chosen `g1` and `g2`. Derive the group ID and accounting key from stored `authenticated_customer` and job identity. Client-supplied groups let one customer split its load across fairness and quota groups. Group identity is not read authorization. |
+| Supplied outcome — **calculated** | A1 and A2 hold all **6 of 6** dependency permits on `[0,8)`. B1 is delivered at time 1 to a free worker, acquires a permit at 8, and finishes at **9**, six seconds after its deadline of 3. Low broker dwell therefore does not protect useful completion. |
+| Simultaneous promise — **infeasible** | Six permits for Alpha plus two for quiet work requires **8 physical permits**; only six exist. Extending visibility does not stop Alpha’s operations. Removing their permits from a local counter at time 1 would leave all six physically held until time 8. A cancellation signal has the same limitation under this fixture. |
+
+### Smallest supported correction — proposed, not executed
+
+For **this trace**, reserve **one worker slot and one dependency permit** for eligible quiet work, without lending them to Alpha. Across the entire worker fleet and every caller of the shared dependency, cap Alpha at **three resident worker slots and five physically held dependency permits**. Charge each Alpha admission for **one slot and three permits** before starting its parallel operations. Hold each charge through blocking, retry wait, settlement, and actual operation termination; count duplicates and retries by their real additional occupancy. A worker-local or per-received-message counter cannot enforce this fleet-wide budget.
+
+That gate admits A1 at time 0 and defers A2 **without occupying a worker slot or dependency permit**. Given the supplied B1 delivery at time 1, B1 uses the protected slot and permit on `[1,2)` and finishes at **2**. A2 can start when A1’s operations actually finish at 8 and finish at **16**. This is a feasible fixture schedule, **not** an established production deadline guarantee: the contract supplies no bound on delivery time, and there is no evidence that a one-slot, one-permit reserve is SLO-safe. If the draft’s *two*-permit quiet-work promise must be retained, Alpha’s simultaneous permit ceiling is at most **four**, not six.
+
+Use a finite deferral path: in this trace, allow at most **one locally deferred Alpha job** (A2), for at most **eight seconds** before yielding local ownership to a durable retry path if it still cannot run. Limit new outstanding Alpha intake before durable acceptance; reject excess intake there. An **already accepted** A2 must retain its payload, authenticated identity, job ID, and recoverable status and must not be acknowledged or discarded merely because local waiting expires. The supplied facts do not establish durable retention, a safe byte/backlog limit, or an approved terminal disposition after retry expiry; those remain **unresolved** for a production policy.
+
+### Checks — proposed, not executed
+
+- Replay the supplied schedule and compare **useful finish times**, deadline misses, per-customer resource-held time, worker occupancy, physical permits, deferred age, and downstream attempts. Expect B1 at 9 under the draft and at 2 under the proposed fixture gate; expect Alpha’s deferred work to finish eventually.
+- Change one Alpha job’s permit cost and repeat with A1/A2 labeled `g1`/`g2`. Expect both to charge Alpha’s trusted account, with admission based on actual permit cost rather than two received jobs.
+- Send a stop signal at time 1. Expect the signaled operations’ permits to remain charged until their actual stop at 8; verify that a fresh job cannot consume a falsely released permit.
+- Interrupt after A2 is accepted and around effect and acknowledgement boundaries; exercise duplicate delivery. Verify recovery from the durable record, no lost accepted job, bounded retry attempts, and no duplicate useful effect. After capacity returns, verify A2’s eventual progress and stable useful throughput over the same observation window used for Beta’s deadline check.

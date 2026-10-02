@@ -1,0 +1,2216 @@
+{
+  "schema_version": 1,
+  "host": "codex",
+  "workflow": "tal-worker-rollout",
+  "task_mode": "implementation",
+  "argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "app-server",
+    "--stdio",
+    "-c",
+    "projects={\"/TRIAL/trial\"={trust_level=\"trusted\"}}",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "agents.max_concurrent_threads_per_session=2",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "sandbox_workspace_write.network_access=false",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.connectors=false",
+    "-c",
+    "features.plugins=false",
+    "-c",
+    "features.remote_plugin=false",
+    "-c",
+    "features.browser_use=false",
+    "-c",
+    "features.browser_use_external=false",
+    "-c",
+    "features.in_app_browser=false",
+    "-c",
+    "features.computer_use=false",
+    "-c",
+    "features.image_generation=false",
+    "-c",
+    "features.imagegenext=false",
+    "-c",
+    "features.hooks=false",
+    "-c",
+    "features.codex_hooks=false",
+    "-c",
+    "features.plugin_hooks=false"
+  ],
+  "registration": "automatic-project-directory",
+  "model_override": false,
+  "primary_thread": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+  "preflight": {
+    "config": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "xhigh",
+      "agents": {
+        "enabled": true,
+        "max_concurrent_threads_per_session": 2,
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null
+      },
+      "sandbox_mode": null,
+      "capabilities": {
+        "web_search": "disabled",
+        "features": {
+          "apps": false,
+          "connectors": false,
+          "plugins": false,
+          "remote_plugin": false,
+          "browser_use": false,
+          "browser_use_external": false,
+          "in_app_browser": false,
+          "computer_use": false,
+          "image_generation": false,
+          "imagegenext": false,
+          "hooks": false,
+          "codex_hooks": false,
+          "plugin_hooks": false
+        },
+        "sandbox_workspace_write": {
+          "writable_roots": [],
+          "network_access": false,
+          "exclude_tmpdir_env_var": true,
+          "exclude_slash_tmp": true
+        },
+        "mcp_servers": {
+          "gitnexus": {
+            "enabled": true
+          },
+          "node_repl": {
+            "enabled": true
+          },
+          "computer-use": {
+            "enabled": false
+          }
+        }
+      },
+      "project_layers": [
+        {
+          "source": {
+            "type": "project",
+            "dotCodexFolder": "/TRIAL/trial/.codex"
+          },
+          "disabled_reason": null
+        }
+      ]
+    },
+    "workflow_skills": [
+      {
+        "name": "tal-worker-rollout",
+        "description": "Prepare or implement a worker rollout that preserves accepted work, bounded shutdown, compatible continuation, and observable recovery.",
+        "path": "/TRIAL/trial/.agents/skills/tal-worker-rollout/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "skill_errors": []
+  },
+  "effective_thread_model": "gpt-6-sol",
+  "effective_thread_reasoning": "xhigh",
+  "thread_persistence": {
+    "requested_ephemeral": false,
+    "observed_ephemeral": false,
+    "root_path": "/Users/example/.codex/sessions/2026/10/02/rollout-2026-10-02T11-16-56-01a0fbb0-1630-74b2-b17c-8f0a5231f0b9.jsonl"
+  },
+  "execution_started": true,
+  "terminal_turn": {
+    "id": "01a0fbb0-1674-7713-9637-98ca7c825ea4",
+    "items": [
+      {
+        "type": "agentMessage",
+        "id": "msg_0b79f0a0615bed39016abf6ae284f087d28ff467e3b4f5971d",
+        "text": "Replaced [rollout-plan.md](/TRIAL/trial/rollout-plan.md:1) with a bounded procedure and a **NO-GO decision** for the supplied revision 7\u21928 candidate. The plan requires safe revision-7 retirement, fenced checkpoints, a fresh capable successor before each retirement, format-2 continuation, and explicit stop and recovery gates. Independent review caught a capacity-sequencing gap in the draft; the revised procedure addresses it.\n\n`python3 observe.py` passed, but it only checks arithmetic in the synthetic evidence. A disposable-environment rehearsal is still needed for queue admission and shutdown timing, repeated handoffs, uncertain commits, stale ownership, lost ACKs, mixed-version continuation, and the proposed targeted retirement method.\n\nAll other supplied files remain unchanged. No worker, adapter, cluster, or external service was run or contacted.",
+        "phase": "final_answer",
+        "memoryCitation": null,
+        "delivery": null,
+        "questions": null
+      }
+    ],
+    "itemsView": "summary",
+    "status": "completed",
+    "error": null,
+    "startedAt": 1790929016,
+    "completedAt": 1790929638,
+    "durationMs": 621665
+  },
+  "failure": null,
+  "global_config_unchanged": true,
+  "global_config_observation": {
+    "before": {
+      "sha256": "35c8c38d2b088f45e4888c28369ac695d62796d8374e9a290e8471598d9f2c4c",
+      "modified_at": "2026-10-02T07:54:48.855Z",
+      "observed_at": "2026-10-02T08:16:56.296Z"
+    },
+    "after": {
+      "sha256": "35c8c38d2b088f45e4888c28369ac695d62796d8374e9a290e8471598d9f2c4c",
+      "modified_at": "2026-10-02T07:54:48.855Z",
+      "observed_at": "2026-10-02T08:27:18.205Z"
+    },
+    "change_attribution": "not-applicable"
+  },
+  "observed": {
+    "threads": [
+      {
+        "id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "parent_thread_id": null,
+        "agent_role": null,
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:6"
+      },
+      {
+        "id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "parent_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "agent_role": "tal-durability",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:1697"
+      },
+      {
+        "id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "parent_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "agent_role": "tal-infrastructure",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:1699"
+      }
+    ],
+    "named_native_children": [
+      {
+        "id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "parent_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "agent_role": "tal-durability",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:1697"
+      },
+      {
+        "id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "parent_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "agent_role": "tal-infrastructure",
+        "model": "gpt-6-sol",
+        "reasoning_effort": "xhigh",
+        "evidence": "events.jsonl:1699"
+      }
+    ],
+    "observed_reads": [
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+        "evidence": "events.jsonl:74",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:76",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "prompt.md",
+        "evidence": "events.jsonl:76",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:76",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "worker.py",
+        "evidence": "events.jsonl:83",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "observe.py",
+        "evidence": "events.jsonl:83",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": ".tal-skills/workflows/_shared/handoff.md",
+        "evidence": "events.jsonl:84",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:84",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:86",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "observations.json",
+        "evidence": "events.jsonl:86",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/graceful-draining/SKILL.md",
+        "evidence": "events.jsonl:149",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:150",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/recovery-validation/SKILL.md",
+        "evidence": "events.jsonl:153",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+        "evidence": "events.jsonl:202",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:203",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:209",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "worker.py",
+        "evidence": "events.jsonl:214",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "observe.py",
+        "evidence": "events.jsonl:215",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:216",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "observations.json",
+        "evidence": "events.jsonl:217",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/graceful-draining/references/durable-handoff.md",
+        "evidence": "events.jsonl:220",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/graceful-draining/references/platform-shutdown.md",
+        "evidence": "events.jsonl:221",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "worker.py",
+        "evidence": "events.jsonl:229",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:230",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:235",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "observe.py",
+        "evidence": "events.jsonl:236",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "observations.json",
+        "evidence": "events.jsonl:237",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+        "evidence": "events.jsonl:238",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "worker.py",
+        "evidence": "events.jsonl:258",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:259",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:260",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "observations.json",
+        "evidence": "events.jsonl:263",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:325",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:1066",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:1341",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:1403",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/graceful-draining/SKILL.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/recovery-validation/SKILL.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/4",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/7",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "worker.py",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/8",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "observe.py",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/9",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/10",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "observations.json",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/11",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/graceful-draining/references/durable-handoff.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/12",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": ".agents/skills/graceful-draining/references/platform-shutdown.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/13",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "worker.py",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/17",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/18",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/19",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "path": "observations.json",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/20",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": ".tal-skills/agents/CONTRACT.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/3",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "worker.py",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/6",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "service-contract.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/7",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "deployment.json",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/8",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "observe.py",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/9",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "observations.json",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/10",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/11",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/16",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/1/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "path": "rollout-plan.md",
+        "evidence": "events.jsonl:1699#/result/thread/turns/2/items/2",
+        "basis": "native best-effort read action on completed zero-exit command"
+      }
+    ],
+    "commands": [
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'rollout-plan.md' -g '*.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"' .agents .tal-skills . 2>/dev/null | head -200\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:68"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/tal-worker-rollout/WORKFLOW.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:74"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'cat service-contract.md; cat prompt.md; cat rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:76"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'cat worker.py; cat observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:83"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'cat .tal-skills/workflows/_shared/handoff.md; cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:84"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'cat deployment.json; cat observations.json; ls -la'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:86"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:149"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:150"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/recovery-validation/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:153"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'rg --files'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:154"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:202"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:203"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc \"rg --files -g 'service-contract.md' -g 'worker.py' -g 'deployment.json' -g 'observations.json' -g 'observe.py' -g 'AGENTS.md' -g 'rollout-plan.md'\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:205"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat service-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:209"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:214"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:215"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:216"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat observations.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:217"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/durable-handoff.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:220"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/platform-shutdown.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:221"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:229"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba service-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:230"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:235"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:236"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba observations.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:237"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba .agents/skills/infrastructure-change-safety/references/rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:238"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:258"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba service-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:259"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:260"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba observations.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:263"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'python3 observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:264"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:325"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:327"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'shasum -a 256 service-contract.md worker.py deployment.json observations.json observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:329"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc \"rg -n 'receive|claim|save_progress|commit_batch|finish|ack|business_fail|maintenance_defer|format|90|85|15|PDB|Ready|rollback|receipt|lease|RollingUpdate|failure limit' service-contract.md worker.py deployment.json observations.json rollout-plan.md\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:407"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'shasum -a 256 service-contract.md prompt.md deployment.json observations.json observe.py worker.py rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:409"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'python3 observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:411"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc \"wc -l rollout-plan.md; rg -n 'NO-GO|preStop|revision-7|format 3|business_fail|maintenance_defer|on-call|rehearse|Stop new' rollout-plan.md\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1016"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md service-contract.md prompt.md deployment.json observations.json observe.py worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1018"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1066"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1068"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1341"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1343"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc \"sed -n '84,138p' rollout-plan.md; wc -l rollout-plan.md\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1403"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md service-contract.md prompt.md deployment.json observations.json observe.py worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1405"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md service-contract.md prompt.md deployment.json observations.json observe.py worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1497"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/recovery-validation/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'rg --files'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/5"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat service-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/10"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat observations.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/11"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/durable-handoff.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/12"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/graceful-draining/references/platform-shutdown.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/13"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/17"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba service-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/18"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/19"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'nl -ba observations.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/20"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "command": "/bin/zsh -lc 'python3 observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/21"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/infrastructure-change-safety/SKILL.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/2"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'cat .tal-skills/agents/CONTRACT.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/3"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc \"rg --files -g 'service-contract.md' -g 'worker.py' -g 'deployment.json' -g 'observations.json' -g 'observe.py' -g 'AGENTS.md' -g 'rollout-plan.md'\"",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/4"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba worker.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/6"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba service-contract.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/7"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba deployment.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/8"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/9"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba observations.json'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/10"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba .agents/skills/infrastructure-change-safety/references/rollout.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/11"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/16"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/17"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'shasum -a 256 service-contract.md worker.py deployment.json observations.json observe.py'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/18"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/1/items/2"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/1/items/3"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'nl -ba rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/2/items/2"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "command": "/bin/zsh -lc 'shasum -a 256 rollout-plan.md'",
+        "cwd": "/TRIAL/trial",
+        "exit_code": 0,
+        "status": "completed",
+        "evidence": "events.jsonl:1699#/result/thread/turns/2/items/3"
+      }
+    ],
+    "delegation": [
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6"
+        ],
+        "agent_path": "/root/durability",
+        "status": "started",
+        "evidence": "events.jsonl:98"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6"
+        ],
+        "agent_path": "/root/infrastructure",
+        "status": "started",
+        "evidence": "events.jsonl:143"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:403"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:418"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:422"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6"
+        ],
+        "agent_path": "/root/durability",
+        "status": "completed",
+        "evidence": "events.jsonl:721"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:723"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6"
+        ],
+        "agent_path": "/root/infrastructure",
+        "status": "completed",
+        "evidence": "events.jsonl:929"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6"
+        ],
+        "agent_path": "/root/infrastructure",
+        "status": "interacted",
+        "evidence": "events.jsonl:1025"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1144"
+      },
+      {
+        "tool": "wait",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [],
+        "status": "completed",
+        "requested_model": null,
+        "requested_reasoning_effort": null,
+        "evidence": "events.jsonl:1145"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6"
+        ],
+        "agent_path": "/root/infrastructure",
+        "status": "completed",
+        "evidence": "events.jsonl:1279"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6"
+        ],
+        "agent_path": "/root/infrastructure",
+        "status": "interacted",
+        "evidence": "events.jsonl:1302"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1416"
+      },
+      {
+        "tool": "wait",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [],
+        "status": "completed",
+        "requested_model": null,
+        "requested_reasoning_effort": null,
+        "evidence": "events.jsonl:1417"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "receiver_thread_ids": [
+          "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6"
+        ],
+        "agent_path": "/root/infrastructure",
+        "status": "completed",
+        "evidence": "events.jsonl:1487"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/23"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/25"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/20"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/22"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1699#/result/thread/turns/1/items/7"
+      },
+      {
+        "tool": "native-subagent-activity",
+        "sender_thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "receiver_thread_ids": [
+          "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9"
+        ],
+        "agent_path": "/root",
+        "status": "interacted",
+        "evidence": "events.jsonl:1699#/result/thread/turns/2/items/6"
+      }
+    ],
+    "messages": [
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "text": "I\u2019m applying the tal-worker-rollout workflow and checking the repository\u2019s contract, source excerpt, and evidence bundle. I\u2019ll replace only `rollout-plan.md`, then report what the local evidence supports and what still needs a rehearsal.",
+        "evidence": "events.jsonl:66"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "text": "I\u2019ll trace the worker\u2019s durable state and revision compatibility from the local contract, code, and evidence bundle, then send the release constraints to the coordinator.",
+        "evidence": "events.jsonl:135"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "I\u2019ll check the worker, deployment settings, and local observations against the rollout contract, then send a bounded procedure and release criteria to the main session. This will use local files only.",
+        "evidence": "events.jsonl:199"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "The supplied configuration leaves 75 seconds after the preStop sleep, but the handler waits up to 85 seconds after SIGTERM. I also found that readiness changes do not stop queue admission, so the current drain path cannot safely hand off accepted exports.",
+        "evidence": "events.jsonl:323"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "text": "The local evidence already shows three release blockers: retirement is counted as a business failure, a checkpoint timeout can follow a committed batch, and revision 8\u2019s format-3 default prevents revision 7 from resuming that progress. I\u2019m turning those into explicit release gates and checking the platform timing and queue admission details.",
+        "evidence": "events.jsonl:401"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "text": "**Outcome: release blocked.** The local evidence is synthetic; `python3 observe.py` confirms only arithmetic in the supplied fixtures, not worker or platform behavior.\n\nThe required continuation path is durable 100-row commits under the current ownership epoch, with stable operation IDs, a final receipt before ACK, and maintenance deferral only after a confirmed compatible checkpoint. The current [worker.py](/TRIAL/trial/worker.py:15) uses an unfenced progress write and counts interruption as business failure. The supplied [observations.json](/TRIAL/trial/observations.json:4) shows three retirements dead-lettering an unfinished export.\n\nThe 90-second termination allowance leaves at most 75 seconds after `preStop`; the configured 85-second handler wait exceeds it. Shutdown must close queue admission, settle buffered and racing receives, and leave unresolved work visible if a checkpoint cannot be confirmed before the deadline.\n\nRevision 8\u2019s default format 3 cannot be read by revision 7. A format 3 job without a final receipt therefore needs retained revision 8 capacity or a proven migration before revision 7 rollback. Revision 8 resuming format 2 remains unrehearsed. These constraints and the missing runtime rehearsal make the proposed release and dependency removal unsafe.",
+        "evidence": "events.jsonl:715"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "**Outcome: no-go for the supplied revision 8 rollout.** The current worker cannot drain safely within the 90-second termination window, prevent new queue admissions, or preserve progress across an ownership change. Revision 8\u2019s format-3 writes also make revision 7 rollback unsafe once they occur.\n\nThe operator procedure should require a tested queue admission gate, fenced batch commits and receipt reconciliation, revision 8 continuation of format-2 jobs, and proven successor capacity before each retirement. Stop on any lost progress, rollout-caused business failure, missing capacity, or incompatible checkpoint. Keep version-2 inputs and layout until no unfinished or replayable job depends on them.\n\n`python3 observe.py` passed as **synthetic artifact arithmetic only**; it reported 75 seconds after preStop against an 85-second handler wait. Native adapter, termination, handoff, mixed-version, and recovery rehearsals remain outstanding. No files were changed and no cluster action was taken.",
+        "evidence": "events.jsonl:923"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "text": "The review found an additional cutover constraint: fixing revision 8 does not make the existing revision 7 pods safe to terminate. The procedure will require a proven way to stop revision 7 from taking new work and let its owned work finish or hand off safely before any pod is retired.",
+        "evidence": "events.jsonl:1002"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "I\u2019ll review the frozen plan against the service contract and deployment facts, focusing on whether each retirement and recovery step can be carried out as written.",
+        "evidence": "events.jsonl:1064"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "text": "The draft now makes the release decision explicit: no go on the supplied candidate. It includes a staged procedure, stop conditions, and a path for jobs that outlive pod replacement. I\u2019m checking the frozen draft for a feasible way to stage replacement capacity before the current Deployment can retire revision 7.",
+        "evidence": "events.jsonl:1138"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "**One finding** in the frozen plan: [rollout-plan.md](/TRIAL/trial/rollout-plan.md:112) permits the next revision-7 owner to retire when only three claim-capable pods remain. That could leave two pods after retirement, without a proven replacement. Require a newly staged, capable revision-8 pod before **each** retirement, and specify how the Deployment is held at each operator gate.\n\nThe deadline, incumbent drain, rollback, recovery, and dependency retirement sections have no further findings.",
+        "evidence": "events.jsonl:1273"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "I\u2019ll check the revised steps 2\u20134 for the per-pod capacity gate and any conflict with the rest of the plan.",
+        "evidence": "events.jsonl:1339"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "text": "The independent review caught a real sequencing gap: the draft allowed a second old pod to retire with no newly proven replacement. I\u2019ve corrected the procedure to require a fresh revision-8 successor before each retirement and an operator-controlled way to retire the specific drained pod.",
+        "evidence": "events.jsonl:1401"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "The capacity and controller finding is resolved in the revised plan. It now requires a new revision-8 successor before each targeted revision-7 retirement, four usable pods before and at least three after, and a stop if targeted retirement cannot be demonstrated. No new material contradiction found.",
+        "evidence": "events.jsonl:1481"
+      },
+      {
+        "thread_id": "01a0fbb0-1630-74b2-b17c-8f0a5231f0b9",
+        "text": "Replaced [rollout-plan.md](/TRIAL/trial/rollout-plan.md:1) with a bounded procedure and a **NO-GO decision** for the supplied revision 7\u21928 candidate. The plan requires safe revision-7 retirement, fenced checkpoints, a fresh capable successor before each retirement, format-2 continuation, and explicit stop and recovery gates. Independent review caught a capacity-sequencing gap in the draft; the revised procedure addresses it.\n\n`python3 observe.py` passed, but it only checks arithmetic in the synthetic evidence. A disposable-environment rehearsal is still needed for queue admission and shutdown timing, repeated handoffs, uncertain commits, stale ownership, lost ACKs, mixed-version continuation, and the proposed targeted retirement method.\n\nAll other supplied files remain unchanged. No worker, adapter, cluster, or external service was run or contacted.",
+        "evidence": "events.jsonl:1690"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "text": "I\u2019ll trace the worker\u2019s durable state and revision compatibility from the local contract, code, and evidence bundle, then send the release constraints to the coordinator.",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0fbb0-93ac-74d3-91a9-92e370ecd5f6",
+        "text": "**Outcome: release blocked.** The local evidence is synthetic; `python3 observe.py` confirms only arithmetic in the supplied fixtures, not worker or platform behavior.\n\nThe required continuation path is durable 100-row commits under the current ownership epoch, with stable operation IDs, a final receipt before ACK, and maintenance deferral only after a confirmed compatible checkpoint. The current [worker.py](/TRIAL/trial/worker.py:15) uses an unfenced progress write and counts interruption as business failure. The supplied [observations.json](/TRIAL/trial/observations.json:4) shows three retirements dead-lettering an unfinished export.\n\nThe 90-second termination allowance leaves at most 75 seconds after `preStop`; the configured 85-second handler wait exceeds it. Shutdown must close queue admission, settle buffered and racing receives, and leave unresolved work visible if a checkpoint cannot be confirmed before the deadline.\n\nRevision 8\u2019s default format 3 cannot be read by revision 7. A format 3 job without a final receipt therefore needs retained revision 8 capacity or a proven migration before revision 7 rollback. Revision 8 resuming format 2 remains unrehearsed. These constraints and the missing runtime rehearsal make the proposed release and dependency removal unsafe.",
+        "evidence": "events.jsonl:1697#/result/thread/turns/0/items/27"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "I\u2019ll check the worker, deployment settings, and local observations against the rollout contract, then send a bounded procedure and release criteria to the main session. This will use local files only.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/1"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "The supplied configuration leaves 75 seconds after the preStop sleep, but the handler waits up to 85 seconds after SIGTERM. I also found that readiness changes do not stop queue admission, so the current drain path cannot safely hand off accepted exports.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/15"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "**Outcome: no-go for the supplied revision 8 rollout.** The current worker cannot drain safely within the 90-second termination window, prevent new queue admissions, or preserve progress across an ownership change. Revision 8\u2019s format-3 writes also make revision 7 rollback unsafe once they occur.\n\nThe operator procedure should require a tested queue admission gate, fenced batch commits and receipt reconciliation, revision 8 continuation of format-2 jobs, and proven successor capacity before each retirement. Stop on any lost progress, rollout-caused business failure, missing capacity, or incompatible checkpoint. Keep version-2 inputs and layout until no unfinished or replayable job depends on them.\n\n`python3 observe.py` passed as **synthetic artifact arithmetic only**; it reported 75 seconds after preStop against an 85-second handler wait. Native adapter, termination, handoff, mixed-version, and recovery rehearsals remain outstanding. No files were changed and no cluster action was taken.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/0/items/24"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "I\u2019ll review the frozen plan against the service contract and deployment facts, focusing on whether each retirement and recovery step can be carried out as written.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/1/items/1"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "**One finding** in the frozen plan: [rollout-plan.md](/TRIAL/trial/rollout-plan.md:112) permits the next revision-7 owner to retire when only three claim-capable pods remain. That could leave two pods after retirement, without a proven replacement. Require a newly staged, capable revision-8 pod before **each** retirement, and specify how the Deployment is held at each operator gate.\n\nThe deadline, incumbent drain, rollback, recovery, and dependency retirement sections have no further findings.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/1/items/9"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "I\u2019ll check the revised steps 2\u20134 for the per-pod capacity gate and any conflict with the rest of the plan.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/2/items/1"
+      },
+      {
+        "thread_id": "01a0fbb0-a7d4-70d3-96b2-74f13c9e09f6",
+        "text": "The capacity and controller finding is resolved in the revised plan. It now requires a new revision-8 successor before each targeted revision-7 retirement, four usable pods before and at least three after, and a stop if targeted retirement cannot be demonstrated. No new material contradiction found.",
+        "evidence": "events.jsonl:1699#/result/thread/turns/2/items/7"
+      }
+    ],
+    "limits": [
+      "Command read actions are the host parser's best-effort classification; retain raw output for review.",
+      "Missing role metadata or read events are inconclusive, not evidence inferred from assistant claims.",
+      "A matching role and a successful process do not independently establish task correctness."
+    ]
+  },
+  "cleanup": {
+    "owned_process_group": 42777,
+    "remaining_live_processes": [],
+    "terminated": true
+  },
+  "capability_deviations": [
+    "Filesystem reads are not confined to the trial; evaluator artifacts are withheld but not OS read-isolated.",
+    "Per-file writes are checked after execution, not enforced by a per-file native permission rule.",
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+    "Independent verification uses the native :workspace profile, which allows system temporary-directory writes and broad filesystem reads."
+  ],
+  "case_compliant": false,
+  "status": "failed-verification",
+  "independent_acceptance": "pending",
+  "host_version": "codex-cli 0.159.2",
+  "changed_files": [
+    {
+      "path": "rollout-plan.md",
+      "allowed": true,
+      "change": "modified"
+    }
+  ],
+  "independent_verification": {
+    "argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "sandbox",
+      "-P",
+      ":workspace",
+      "--include-managed-config",
+      "--sandbox-state-disable-network",
+      "-C",
+      "/TRIAL/trial",
+      "--",
+      "python3",
+      "-B",
+      "observe.py"
+    ],
+    "kind": "behavior_observation",
+    "exit_code": 65,
+    "signal": null,
+    "error": null,
+    "timed_out": false,
+    "cleanup": {
+      "owned_process_group": 50185,
+      "remaining_live_processes": [],
+      "terminated": true
+    },
+    "isolation": "native :workspace sandbox, managed configuration included, network explicitly disabled, credential environment variables withheld",
+    "limits": [
+      "The native :workspace profile permits system temporary-directory writes and broad filesystem reads; it does not enforce the fixture per-file allowlist."
+    ]
+  },
+  "final_files": [
+    {
+      "path": ".agents/skills/background-maintenance/agents/openai.yaml",
+      "sha256": "2f24cf65c305d7f4b33ae8bd116c1e1f2214d8ed6462f2784d9c2d6c19ccd3ba",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/policy-and-control.md",
+      "sha256": "e6b91d778cdfa396d147bc1f593212b84afcbe4890e8cb186e08b7a735207a24",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/reclamation-safety.md",
+      "sha256": "67119436ad4d497ddc0ab792998026286ea41d1f71f0f9535c079dc345ef1272",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/sources.md",
+      "sha256": "ddc037913e22000e3ea6d72853da7facd438577bb4e1194f0415feb089e2bd3c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/references/verification.md",
+      "sha256": "4b5d31f78373b686a4caaf9208ca988226dda91073570ffc0d4681dd1c0c505a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/background-maintenance/SKILL.md",
+      "sha256": "f4fd905b03bbf95980363e43342fa023804d6225a817f20c39f22c020605632c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/agents/openai.yaml",
+      "sha256": "2988bb691ad161a2d5b47d4f3755d112a033de78cc61f6fba7ae5f3e367f9b23",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/cache-coherence.md",
+      "sha256": "c8d6bd6d8b6d34d205c32899d95e4bac8fd4cc68dbbec500b56f19b25b4c4c8a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/delayed-work.md",
+      "sha256": "6cc6b6e5d34b8b639b3587b3f341bbdbe9ab4d0dc42d2c17b60e122fc51f239b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/merge-invariants.md",
+      "sha256": "fd1d2cb934144c63905a6daa7bf2f8eb4a1377bc4299d52ee4ed8b07b1df5429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/projection-rebuild.md",
+      "sha256": "9635ce4dc2682bd07922b271f62484052a7086b0cbf0af2f6cdd1a799fc0f998",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/replica-reads.md",
+      "sha256": "26d4eaa7c36cfaeb96fb6e6e07b341901ddcd4589b822eb82159e5d755a6f593",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/sources.md",
+      "sha256": "55ad3acb735ff2816c58e8989f8b08500bc3e2b3a61e01a41d7140b8a9160463",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/references/transactions.md",
+      "sha256": "9052a10098f41e63cf3546d5819a644eda4e15f38fcfb50a48156bc3bd88635d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/concurrency-correctness/SKILL.md",
+      "sha256": "abd11a72587f4df7988df89ebd2e50423c54e9fc1caf30d9bfc0609ceded60d7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/agents/openai.yaml",
+      "sha256": "dde157b38977a8c3cdc51ad4276f308a04a79bad0a4d52338bf43f00d509a58d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/LICENSE",
+      "sha256": "9450e8a3d0389a739c32f39cd130dccb32f651a9f9439df0bfa75ad2b9eec6b8",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/fault-histories.md",
+      "sha256": "2acd49e69bca0dc3426ad805794d2cdf0c5770bdc1e974e444f0b2475bce0a4c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/generated-inputs.md",
+      "sha256": "b6b975947b0e0c401d63ac9ea5855ca8c17e4bc7c9684346f7cc3c9eba40d902",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/sources.md",
+      "sha256": "11bb3eb8ff562bbecc44986164f722650619a6fe465f669ef4e4996b50e73166",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/references/state-models.md",
+      "sha256": "6cecac80a2017cdeffcc378af84f60586e68a081d8d1a0cfb33df88e26bdc1da",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/failure-oriented-testing/SKILL.md",
+      "sha256": "c7683e8c2ba99b0e639ec3a2b9c326b4f9346cc751f06f56124d62123d88ba67",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/agents/openai.yaml",
+      "sha256": "a8eb43c8b694ea53c4ed539c01a7a146b0d4c7160e4e364293d1c30920edbabd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/ownership.md",
+      "sha256": "3437a7091e90d3eb47c4a2dff054357eed3879a8da5571ab0598033dc4d3e0c1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/runtime-validation.md",
+      "sha256": "51b4eaa629b9bdd21257d6013b99322c76c27ac4a6ef6daf97854cf30b6f33c9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/sources.md",
+      "sha256": "51f7fa10e87ba8c55ecaf1d0de6b502b4e352a3d65a1d8c76e9da532246c2eed",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/references/transaction-outcomes.md",
+      "sha256": "53226b6126f55c42e5b284e3c51f9d47414e80da397d2ea4f22b32b4af68af9a",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/go-backend/SKILL.md",
+      "sha256": "c51a9d8f9d388cd2b73e5a9416da43c39c75ca3a32d954151d728b76fa9e50f9",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/agents/openai.yaml",
+      "sha256": "b5250df8e7c2ef8dbf28a7777303a42f9a003a1949d84399d967140cdd5ab97e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/durable-handoff.md",
+      "sha256": "7ae83d644904e6eff97d2e00cfb548a8c05043d19616630ce540dc84fe596532",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/platform-shutdown.md",
+      "sha256": "1455fa5df92c9636bbacfe7032b93dda4d1fe22dfcb31499d7f49781605e341d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/references/sources.md",
+      "sha256": "eed1daad43666ef2481dc3f468848a58a7d57658c386602e58e843c1d4f24fb6",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/graceful-draining/SKILL.md",
+      "sha256": "8c800a02eda0b78d85572e6c852b4fc53a3d90865130c72868105a15386632f6",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/agents/openai.yaml",
+      "sha256": "6069e983fa2b0411e97bade8b37ed93628649eb93f0b31041ca37fcaf8e986a0",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/recovery.md",
+      "sha256": "7d137c2d86f71d4fa47ff564833d52ee27ce2061f373bf6c64e30768ead245b1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/request-contract.md",
+      "sha256": "192206655b1311889884bfd8b20668cc8725c58b5ce49b9a019f09aa21c672d3",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/sources.md",
+      "sha256": "727c4ccc2c7c2371fe86504fbad2ecf7ca6aeeb7a7c3ab1b53ccc6ed27be7573",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/references/verification.md",
+      "sha256": "93d3657ec00c7197b2ac0c258783b108a7bff6348f28eef029588e7085670fea",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/idempotency/SKILL.md",
+      "sha256": "6fb0c4f5bea67f0c31757fb81d207507baabcc0b3f0fca24b3142da37cf1647f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/agents/openai.yaml",
+      "sha256": "a981cadc6516e71a91a0a53dbe19e8a6265c6c55b51c10c909e724a69f3d7812",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/configuration-distribution.md",
+      "sha256": "1253f28fe4f75613ba5f8d316f537cf83c17410b268cfbfb34df97b5a9e4ccff",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/rollout.md",
+      "sha256": "6bf253f6f1dd281fa4c17402f27cc5ca803f851084f585e21acab39a2accbafc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/schema-evolution.md",
+      "sha256": "d591f38322588026a4901e77cda1f3c0ef86ec51cbf9dd45f3e5eb8f3598e1a1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/sources.md",
+      "sha256": "f7a739cb107bd3c9a2a4c6b3ca56d2ec36530c278ea20c41ad70edf829ddb954",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/references/terraform-state.md",
+      "sha256": "9736c10f6162ca50d6ff5a14123f613d3f1c0cac0fa5b033f4acb3ea328ca78c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/infrastructure-change-safety/SKILL.md",
+      "sha256": "bba67983c369c19c79fcd659a0f293b2e2e0f2fd4c5c9af06fc2c81643816d4b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/agents/openai.yaml",
+      "sha256": "c4de1b9ea737681a117f65a47b5c1c3378d1fd4b9100a770dd2905c631d9c21b",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/cache-design.md",
+      "sha256": "cb531eadc45f2c520a8f29865d49e372532ad0c1632f3e084581b7883b165d5f",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/cache-load-protection.md",
+      "sha256": "04beae92e71a1f40e78efafdbac713fd1483efd4b4615a47d8491c6ca4bcc579",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/capacity.md",
+      "sha256": "e1c6538a368a6444e3d2899efeea691b6947dc03213a3d72e3e731d6df9e16ba",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/deadline-domains.md",
+      "sha256": "a439f3b1d9f3a4eae337619e99b91599260fa14b63f03a5d2b5954da1bffc280",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/failure-handling.md",
+      "sha256": "63a59545e9fc825fa80ca768b1fb0a3631fcdaaa1b97fb2c5479b2d3cd1c8350",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/retry-coordination.md",
+      "sha256": "a1c969db3d171b4af3dfcc05a2ee432991be57712e64687daebf2465e8e83e60",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/security.md",
+      "sha256": "a4b7e57301395720210d199e76839e4f0c60dfdeacb4a5906140508fcbc36b00",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/references/sources.md",
+      "sha256": "24d306bf692dfd7ee48485ba79751dcaee4aeacbf0982ffa5709c95b18aec2c7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/microservice-operations/SKILL.md",
+      "sha256": "a8f2988fa64b4d5c39ddec1d4197edd6b40466be289eff2fa4ef6d650d39d144",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/agents/openai.yaml",
+      "sha256": "f9b5fd5e4158f0424a06c0e4943b41d2deeed9b1cc9b2b8fc9ba7ebdfa991429",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/async-ownership.md",
+      "sha256": "875acb46cdc62cd31981bad8542fec5e1c3e50571390a68eb57fdc4a596421d4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sources.md",
+      "sha256": "b8c8412f5b382a208a0c77e81b5a4c5c122b238ebb9a613aab5005ff16e1c60c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/sqlalchemy-sessions-and-queries.md",
+      "sha256": "5fce9c0b636fdcc7bbf1dd8b289590bd6a58a7adb08750477f3202ea33b9bb75",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/references/transaction-outcomes.md",
+      "sha256": "2c8203e5f67f561601bbc9b675e0cc96c02bc5ca01b448e42ccec5d147ee76b7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/python-backend/SKILL.md",
+      "sha256": "c35f4b91b96b14e4401cc81de81d78ebe4027e1b8cd92daff94d16c6cbb538e1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/agents/openai.yaml",
+      "sha256": "d72684099483f29ba2d606ba3f5be81ce2dc8932e4eaa92d966039b35c25e693",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/postgresql.md",
+      "sha256": "456e21d37330ec26f3fbe2fabe206fa2bc3730ed10ec3eb32df0772505d5806d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovered-history.md",
+      "sha256": "06df9b8716e8dfeb19d17f140f9a1aab9fb9e2d6e3767446ab6db3f92a4779dc",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/recovery-inputs.md",
+      "sha256": "fa02610ee95edcfc4f93cbb59fc6224dea93d2b2a37ead134a4e2d0d485f8496",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/references/sources.md",
+      "sha256": "b74b33426eccc3072f1818462278b598c066d1e8f38671831b8bc14a4b1d3f1c",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/recovery-validation/SKILL.md",
+      "sha256": "9240367c490ab5e34080a1016de8b92ff5b750c4776ce0675ee35d34d45100a7",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/tal-worker-rollout/SKILL.md",
+      "sha256": "3b243a18203dd8b1348800f93bf0b3c5927d4f61eb624d13994fc271129ac67e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/agents/openai.yaml",
+      "sha256": "45898857de814d7c88fc55116020f6a63d7fc2fcc699b2320a8a0f9bcc6973d1",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/effect-contracts.md",
+      "sha256": "c56d1172cbbd0a6772e9b3a627495a7a3f19f7b44589fa86a796ca12ca11ebfd",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/recovery-and-waits.md",
+      "sha256": "1e4da2d46c4584ab89acc3a99140f83b28d4665b7304cd6c439283f99de1c6ff",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/references/sources.md",
+      "sha256": "5d181e73f922c4f37e192d92286dfc40af4fda585ccee9c3bf112adafc7940e2",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-reliability/SKILL.md",
+      "sha256": "b9790cb9ec37a20143820457c1ca16f8ba7c20df5ad80fe4f2fee9c44143f413",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/agents/openai.yaml",
+      "sha256": "3fea3f405af4664e1d47d4ef49ff464e8ad5dc02c3da5d01bba5d781352de3ca",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/LICENSE",
+      "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/deployment-and-cutover.md",
+      "sha256": "37381b18bfee24a44cdc37f255115c1fd0ccd7fe5c9c11c2824a75eba42ad115",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/sources.md",
+      "sha256": "aac06c62e09a75f8719ce8f5276dfe61774ae841e4428b6251ceb4014d15a782",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/references/state-continuity.md",
+      "sha256": "2799c50ab14d8de6c129516cb3b5a7fb9293739fe4d4a8f0509c31572e86dfdb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/temporal-safe-deployments/SKILL.md",
+      "sha256": "26859fbf2c80d38a77c636a209b647f026ccba77dc53a51ebb9ed094c4f0cd2d",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/agents/openai.yaml",
+      "sha256": "2cf07254ce674023c0370bdd28daf327b907f5ef51b1caa67ab54be8d0fc5229",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/async-ownership.md",
+      "sha256": "00df3d1d751164cf5b9c116589fb743a2895f0aaf47aad24a57aa76fb66a386e",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/node-streams.md",
+      "sha256": "8fa91e3f5c79a98a1c09d6466707506b4cfb289ed466b684b6754f5a949b1283",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/runtime-boundaries.md",
+      "sha256": "d4810aa6488e4c362c9e3e8480838588763c39d69d4d24615737465592469cbb",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/references/sources.md",
+      "sha256": "802061e75cebb73c84c4b31300ec9faa644c77a91d2354b276b1b06cf75358ef",
+      "mode": 420
+    },
+    {
+      "path": ".agents/skills/typescript-backend/SKILL.md",
+      "sha256": "760f384a733d487e4df00a563a0ca8cc1ffa51f196b0b821a3561c23fedf7cc7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-consistency.toml",
+      "sha256": "3b1382a752e2d87c01ee7ee651e62a4e5c0930ac1b27468d8f0110bcedfcf91a",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-durability.toml",
+      "sha256": "fcb6a5dcb32e4c2693c00e4e8c6e74a43535800f73597bfe51e901610a3410a7",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-failure-testing.toml",
+      "sha256": "b12ed74187facb593fcc9e04a34a4072d418af1ab6f5b30755b0075f8e7b08db",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-go.toml",
+      "sha256": "97b4bf2a2f84362ae70c810e1ba5a68985cce8ee99e33d8609702bbf23c6d716",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-idempotency.toml",
+      "sha256": "f44795bd85342ac2309ed7fff1336422a86cfd2e3fce400d1071fe0692557300",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-infrastructure.toml",
+      "sha256": "19959e183e3d71c684e6ffa89c52bd58d874d6822647f78f8068bd9b95e1dc33",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-python.toml",
+      "sha256": "4feed93f86e5745a9e2e00a57b953a107c18a135b443fcbd497e8e8ec6501b5e",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-reliability.toml",
+      "sha256": "0732ba47b7b29761518551eb50cfd3d942e81c003df341c744a71b72a71a5ad4",
+      "mode": 420
+    },
+    {
+      "path": ".codex/agents/tal-typescript.toml",
+      "sha256": "a2148c15fbe42e079a8576902182da9285cb5c0641fcbcd6e5ca26c261a26b20",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/CONTRACT.md",
+      "sha256": "dfbaa9ca5fef6032cfb606c8c6e50e0dc5ddf6ffebf56d26a34755f3dbadfe60",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-consistency.md",
+      "sha256": "5b279f3c7969e9696222de6fa8cd4b6405b708ef9562c4602b5e26a93d678af1",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-durability.md",
+      "sha256": "6b550b0d3f5333386bc6cd403fb997f66571c63bdbc11ca52487c948a7fc12eb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/correctness/tal-idempotency.md",
+      "sha256": "e55750308310cbe174298f8b790895766680c79e1a354c927665352b2df708b0",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-go.md",
+      "sha256": "30138fa33296a07d3049f49fe8c35c7be5acb84229b82d4e0bda4ef741e2f1d8",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-python.md",
+      "sha256": "b238cca04cf77369b55679537a41241f3aafba8b03c1dcfcc7fe48f6148020a3",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/languages/tal-typescript.md",
+      "sha256": "035f904826b7353789605f1b3ecd3650a5986a4b168124455796f225336e9d71",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-infrastructure.md",
+      "sha256": "a48816cc465031d1ed20a3db99b9de25d6b032287048bf7aae17366391558fdb",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/platform/tal-reliability.md",
+      "sha256": "eb0e067fd6ad2e3cac08f64e3c974dc6227a29aff0bb12c8f8f6b7fff25bae99",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/agents/verification/tal-failure-testing.md",
+      "sha256": "a88991b94e598995f6673208b799560c99a63d0262360836860476c1b6d72d3f",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/manifest.json",
+      "sha256": "46b0540db8a76e8c8dc92252555ce8b7f632947e1aff629c5f962b1174484465",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/_shared/handoff.md",
+      "sha256": "65e39e26613179353d152d18e316b277f1f303fab07f4ef5aa3f3cede2ac6923",
+      "mode": 420
+    },
+    {
+      "path": ".tal-skills/workflows/tal-worker-rollout/WORKFLOW.md",
+      "sha256": "120916965de7e6e16b4c6df80bb3151cf1ac441ca507df6b838cb6ae1130a267",
+      "mode": 420
+    },
+    {
+      "path": "deployment.json",
+      "sha256": "1e414ae5012927f47ae869b2b71a53971cc587b329d9150937fbb8716d442b70",
+      "mode": 420
+    },
+    {
+      "path": "observations.json",
+      "sha256": "88c7ecc153d81c59cf956bca683f5c849ab679298d1704b04e3258f93a00494d",
+      "mode": 420
+    },
+    {
+      "path": "observe.py",
+      "sha256": "a257b0652d98fc2825d28b62908c24dd3631244811408342dfefcb101760aa31",
+      "mode": 420
+    },
+    {
+      "path": "prompt.md",
+      "sha256": "d3dbaebdb454444e64c4948bcd7357db7b72290d9561fc77de742250f7b96e99",
+      "mode": 420
+    },
+    {
+      "path": "rollout-plan.md",
+      "sha256": "8a100282488a00b6b62132e051f2f07015c36801cf2e983dae16d72e36e86695",
+      "mode": 420
+    },
+    {
+      "path": "service-contract.md",
+      "sha256": "fb66239d6b9af310d96877e7d569ef5435166ba9696e61c08747c20846c20933",
+      "mode": 420
+    },
+    {
+      "path": "worker.py",
+      "sha256": "5c65b1bddf0f3d6657b5a66c91dae772ca50f0759c2ea535f4166a759303e998",
+      "mode": 420
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+Updated [service.py](../final-project/service.py) to capture each cache miss as one authoritative record and publish fills through the cache’s atomic version check. This prevents a delayed fill from replacing a newer observed record, including after JSON cache restoration. An overlapping read still returns the value it captured.
+
+`python3 -B verify.py` passed all 6 checks; before the edit, 2 of 6 passed. The result covers the supplied local adapters and their stated ordering and restoration behavior. It does not establish production store/cache atomicity, crash durability, or behavior when notifications or metadata are lost.

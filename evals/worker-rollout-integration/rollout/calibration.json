@@ -1,0 +1,57 @@
+{
+  "format_version": 1,
+  "status": "completed_local_observation_only",
+  "recorded_at": "2026-10-02 08:16:23 UTC",
+  "model_trials": 0,
+  "native_workflow_trials": 0,
+  "commands": [
+    {
+      "scenario": "repeated-retirements",
+      "argv": [
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "cwd": "evals/worker-rollout-integration/rollout/repeated-retirements/tal-worker-rollout/rawfiles",
+      "exit_code": 0,
+      "stdout": "{\"buffered_at_signal\": 2, \"configured_handler_wait_seconds\": 85, \"confirmed_cursor_after_inspect\": 500, \"epoch_before_old_resume\": 42, \"kind\": \"synthetic_artifact_arithmetic_only\", \"poison_business_counts\": [1, 2, 3], \"receive_returned_after_signal\": \"imp-889\", \"redelivered_final_receipt\": \"result-890\", \"retirement_business_counts\": [1, 2, 3], \"retirement_maintenance_counts\": [0, 0, 0], \"revision7_read_formats\": [2], \"revision8_default_write_format\": 3, \"sigterm_application_budget_seconds\": 75}\n",
+      "limitations": [
+        "Read-only arithmetic over supplied JSON",
+        "No source excerpt, queue, clock API, cancellation API or platform executed",
+        "Output does not grade procedure acceptance"
+      ]
+    },
+    {
+      "scenario": "deadline-cancellation",
+      "argv": [
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "cwd": "evals/worker-rollout-integration/rollout/deadline-cancellation/tal-worker-rollout/rawfiles",
+      "exit_code": 0,
+      "stdout": "{\"application_budget_seconds\": 60, \"attempted_cursor\": 860, \"checkpoint_timeout_seconds\": 56, \"final_result_receipt\": null, \"kind\": \"synthetic_artifact_arithmetic_only\", \"last_confirmed_cursor\": 840, \"ledger_entry_written\": false, \"ledger_reachable\": true, \"new_epoch_before_native_return\": 13, \"release_timeout_if_alive_seconds\": 64, \"remaining_at_native_return_monotonic\": 12, \"remaining_at_native_return_wall_naive\": 52}\n",
+      "limitations": [
+        "Read-only arithmetic over supplied JSON",
+        "No source excerpt, queue, clock API, cancellation API or platform executed",
+        "Output does not grade procedure acceptance"
+      ]
+    },
+    {
+      "scenario": "local-script",
+      "argv": [
+        "python3",
+        "-B",
+        "summary.py",
+        "jobs.csv"
+      ],
+      "cwd": "evals/worker-rollout-integration/rollout/local-script/tal-worker-rollout/rawfiles",
+      "exit_code": 0,
+      "stdout": "Finished exports: 2\nFailed exports: 1\n",
+      "limitations": [
+        "Finite local script baseline; requested wording change not yet made",
+        "No model or workflow trial"
+      ]
+    }
+  ]
+}

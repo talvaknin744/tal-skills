@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-repaired-05",
+  "run_evidence_sha256": "9a1ee3d542137358c6eb6e6128c94f89cb630da1db55a1675ef46cd42c526184",
+  "final_workspace_tree_sha256": "db121d98f3b7ed91d3fb7c473d07bec851c3b3c5240f15fd220da416bc9e2dc5",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "5f89a6515064c2bbaa739b4916ae883787bcedac2eef014475efebe3cd6a58b7",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[0] independent-01 and checks/independent-01.stdout.txt lines 1\u20136; evidence/trace.jsonl completed item_13 at line 28",
+        "observation": "Model actually ran the supplied node verify.mjs after the patch, exit 0, all five checks passed. Sealed protected independent-01 also passed without file mutations. Reviewer protected rerun using original adapters/verifier/requirements plus only final service overlay exited 0, 5/5 and identical stdout SHA256 93b9712885d1934de7cf836eae979b7111078ebf46e91423001c92e5153f563b."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "read lines 8\u201314 and write lines 17\u201320; original-project/model.mjs lines 45\u201368; evidence/trace.jsonl completed item_15 at line 31",
+        "observation": "Writes await shared atomic advanceFloor before resolution; fills use shared atomic publishIfFresh and retry rejection. Original adapter floors are monotonic, separate from evictable values, and reject stale publication. Supplied eviction/late-notification checks and actual controlled stale-fill-retry plus delayed older write notification checks pass. No process-local lock or unchecked publication supplies the guarantee."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "sole changes[0]=project/service.mjs, forbidden_changes=[]; evidence/workspace.patch; evidence/manifest.json fixture_files",
+        "observation": "Only service.mjs changed. Original and final adapter/verifier/requirements byte hashes match the protected manifest. Public signatures and the cache-hit fast path remain intact; no infrastructure or requirements changes occurred. Run input_integrity reports baseline_unchanged=true and allowed_changes_only=true."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5; evidence/trace.jsonl final item_16 at line 32",
+        "observation": "Explicitly states a read started after an acknowledged write returns that revision or newer, while an already in-progress read may return its earlier snapshot. This distinguishes invocation ordering and permitted overlap; it does not claim latest-at-response semantics."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5; original-project/requirements.md lines 24\u201334",
+        "observation": "Explicitly relies on authoritative database reads, successful adapter calls, shared supplied adapters and revision floors surviving eviction/outstanding readers. Excludes crash recovery, adapter failures, floor expiry, replicas and production cross-store atomicity. Local checks are not promoted to production Redis/database, replica-freshness or arbitrary marker-lifetime guarantees."
+      }
+    }
+  ]
+}

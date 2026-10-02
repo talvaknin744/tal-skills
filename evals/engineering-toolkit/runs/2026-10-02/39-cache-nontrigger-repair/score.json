@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-nontrigger-repaired-03",
+  "run_evidence_sha256": "80168a19794f983d809b5fc5c82d235723fd7eca54bced196fc2b62ae99f7b8d",
+  "final_workspace_tree_sha256": "affcf99decfb1086823c0c88b7956c2e44cc6f5ba989dee6c0e0058c75133bb5",
+  "case_id": "immutable-label-format",
+  "candidate_tree_sha256": "5f89a6515064c2bbaa739b4916ae883787bcedac2eef014475efebe3cd6a58b7",
+  "rubric_sha256": "25408affa1c0d64874db1a1183067d62ff71355ee34513f2a5ad14fb05c4b756",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "entire trace; item_1,item_2,item_3,item_4,item_5,item_6; evidence/run.json:activation_observation",
+        "observation": "The full captured trace reads only labels.py and request.md, attempts git status, edits labels.py and runs the required verifier. No candidate body/reference read or distributed correctness workflow is recorded. Code adds no lock, lease, version authority or cache protocol. Native metadata discovery alone is not activation; no unrecorded loading is ruled out."
+      }
+    },
+    {
+      "id": "requested-format",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/labels.py",
+        "locator": "4\u20135; original-project/verify.py:10\u201320; evidence/checks/independent-01.stdout.txt:1",
+        "observation": "The original signature format_label(name, revision) is preserved and the function directly formats the supplied values as f\"{name} (v{revision})\". The three unchanged literal examples, including empty and non-ASCII names, pass in the trial, sealed independent check and reviewer protected rerun."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_5; item_6; evidence/answer.md:1; evidence/checks.json:checks[0]; review.md:Reviewer execution",
+        "observation": "The recorded python3 -B verify.py command exited 0 with checks3/passed3/failures[], and the final one-line report accurately says all3 checks passed. Sealed independent-01 and the reviewer separate-workspace rerun match. No concurrency or production validation is claimed."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0],forbidden_changes; evidence/workspace.patch; evidence/trace.jsonl:entire trace; evidence/answer.md:1",
+        "observation": "Only project/labels.py changes, replacing the return format string. Original request.md and verify.py hashes are preserved; the candidate files also remain unchanged. Captured commands use no package or external service and the answer briefly reports the requested local result without redesign. The preserved host case_compliant=false caveat limits isolation claims."
+      }
+    }
+  ]
+}

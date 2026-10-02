@@ -1,0 +1,29 @@
+{
+  "platform": "Kubernetes 1.35.0",
+  "replicas": 3,
+  "pods": [
+    "worker-a",
+    "worker-b",
+    "worker-c"
+  ],
+  "strategy": {
+    "type": "RollingUpdate",
+    "maxUnavailable": 1,
+    "maxSurge": 1
+  },
+  "terminationGracePeriodSeconds": 90,
+  "podDisruptionBudget": {
+    "minAvailable": 2
+  },
+  "readiness": "false when shutdown signal arrives",
+  "queue_polling": "poller keeps running until its independent stop event is set",
+  "pending_claim_max_seconds": 2,
+  "image_transition": {
+    "old": "worker:7",
+    "new": "worker:8",
+    "checkpoint_read_versions": [
+      2
+    ],
+    "checkpoint_write_version": 2
+  }
+}

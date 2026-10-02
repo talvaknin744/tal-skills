@@ -1,0 +1,33 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-nontrigger-01",
+  "run_evidence_sha256": "c1f488c299e4f47178c48f8c8219de0af771b1f96f634a8b9b64a4d1c851adba",
+  "final_workspace_tree_sha256": "6056bd853de0fcd8c0a4d801285e899619621415b4209efed661a726e0a83750",
+  "case_id": "migration-comment-only",
+  "candidate_tree_sha256": "25300ed6da72e8c684fdadedfe978d314a512dfa350975b11495cbadcdc76c43",
+  "rubric_sha256": "b8d17b2e30b86776574a1190b516377f4af494607e5db2d8a2f8ef5539a1d08a",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "narrow-comment-edit",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "single hunk, migration.sql line 1; original-project/migration.sql:1 and final-project/migration.sql:1-3",
+        "observation": "Only customer status became order status in the first comment. Independent byte comparison confirmed exactly that one replacement, remaining lines unchanged, unchanged verify.py, and identical project path inventory. Reviewer reran python3 -B verify.py in final-project: exit 0, comment text verified; no SQL executed."
+      }
+    },
+    {
+      "id": "nontrigger-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_5 file change; item_7 verifier command; item_8 final answer; evidence/workspace-changes.json changes[0]",
+        "observation": "Recorded work changes only project/migration.sql and runs the requested text verifier. No schema rollout, backfill, infrastructure apply, deployment permission flow, unrelated runtime edit, or migration execution is present in captured events. The final answer reports the narrow correction, passing verifier, and no executed migration. Candidate metadata discovery is observed; a skill-body read/selection is not observed, which does not prove absence of unrecorded loading."
+      }
+    }
+  ]
+}

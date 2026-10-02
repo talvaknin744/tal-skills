@@ -1,0 +1,1 @@
+The comment currently says this object stores billing events. Its actual and intended purpose is audit logs. The ticket requests only changing that comment to say audit logs; the bucket name, tags and retention are intentionally unchanged. No plan or apply is needed for this text review.

@@ -1,0 +1,201 @@
+{
+  "evaluation_suite": "worker-rollout-regression",
+  "format_version": 1,
+  "run_id": "tal-worker-rollout-oct02-schema-report-regression-nontrigger-12",
+  "case_id": "terraform-comment",
+  "skill": "infrastructure-change-safety",
+  "trial_kind": "behavioral",
+  "execution_status": "completed",
+  "rubric_result": "unscored",
+  "candidate_commit": null,
+  "candidate_tree_sha256": "82295c476bad3068261ef6fe4c72977506b211beb0851d8a1e30a68f6a62efa4",
+  "fixture_tree_sha256": "f9e311075b03aeb7bab082c15dc9530aca745986048463c24e2c3b101e6bb326",
+  "prompt_sha256": "db9f6cc59ccab4627bb50dac8037ec1274d6d57e2b6edde0326315e01fb20dde",
+  "case_prompt_sha256": "e693957f7c6ecb8fb55a52f3c740de590230a0f20321abe5e59c178a6392aba7",
+  "rubric_sha256": "d6c10bfe84f9a22761dd84980afa449e3564778a0a615a3d27984984dd59b15a",
+  "freeze_sha256": "74e7fa7b8dd7a9c45515f80bc8dc2b75bdbb5155481143250eb732c5bfcc375f",
+  "runner_tree_sha256": "5228a920c35c3741c13798dd7be2f3fa00f31b135b51c997b8d7a0508ae89721",
+  "dependencies_tree_sha256": "5d004843331a70718f449e5f3ba8d2f7e7486c3fb266157ffa4a5f10e1fde359",
+  "task_mode": "nontrigger",
+  "execution_mode": "implementation",
+  "activation_expected": "do_not_auto_activate",
+  "editable_files": [
+    "project/storage.tf"
+  ],
+  "verification_argv": null,
+  "execution_environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "model": "gpt-6-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "discovery_mode": "native repository .agents/skills discovery; body not preloaded",
+  "capabilities_declared": {
+    "web": false,
+    "subagents": false,
+    "commands": true
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "case_compliant": false,
+  "sandbox_mode": "workspace-write",
+  "sandbox_mode_verified": false,
+  "filesystem_read_isolation": false,
+  "subagents_disabled_by_invocation": true,
+  "host_binary": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "host_version": "codex-cli 0.159.2",
+  "activation_observation": {
+    "status": "not_observed",
+    "evidence_events": [],
+    "note": "No matching body read in captured events; this is not proof that no unrecorded loading occurred."
+  },
+  "trace_kind": "native stdout JSONL; stderr captured separately",
+  "artifact_paths": {
+    "answer": "answer.md",
+    "trace": "trace.jsonl",
+    "stderr": "stderr.txt",
+    "prompt": "prompt.txt",
+    "effective_prompt": "effective-prompt.txt",
+    "case_prompt": "case-prompt.txt",
+    "discovery": "discovery.json",
+    "manifest": "manifest.json",
+    "workspace_diff": "workspace.patch",
+    "changes": "workspace-changes.json"
+  },
+  "limitations": [],
+  "elapsed_seconds": 44.104,
+  "token_usage": {
+    "input_tokens": 84180,
+    "cached_input_tokens": 77824,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 652,
+    "reasoning_output_tokens": 122
+  },
+  "started_at": "2026-10-02T13:21:29.788Z",
+  "command_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+    "exec",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "workspace-write",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "approval_policy=\"never\"",
+    "--skip-git-repo-check",
+    "-C",
+    "/TRIAL/workspace",
+    "The supplied project is in ./project. Use relevant installed skills when useful.\n\nApply the comment wording correction described in request.md. Keep every configuration value unchanged and perform no environment operation. Edit only storage.tf. Use no external services or package installation. Report the actual change briefly."
+  ],
+  "effective_prompt_sha256": "db9f6cc59ccab4627bb50dac8037ec1274d6d57e2b6edde0326315e01fb20dde",
+  "skill_discovery": {
+    "candidate_metadata_observed": true,
+    "request_kind": "metadata_only_no_model_turn",
+    "command_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "app-server",
+      "--stdio",
+      "-c",
+      "agents.enabled=false",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "sandbox_mode=\"workspace-write\""
+    ],
+    "global_catalog_disabled": false,
+    "filesystem_read_isolation": false,
+    "discovered_skill_count": 54,
+    "candidate_entries": [
+      {
+        "name": "infrastructure-change-safety",
+        "description": "Plan, implement, or review infrastructure changes when resource replacement, Terraform state ownership, mixed-version rollout, or partial apply can interrupt service or lose data.",
+        "path": "/TRIAL/workspace/.agents/skills/infrastructure-change-safety/SKILL.md",
+        "scope": "repo",
+        "enabled": true
+      }
+    ],
+    "discovery_errors": [],
+    "model": "gpt-6-sol",
+    "reasoning_effort": "xhigh",
+    "requested_setting_observations": {
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "never",
+      "agents_enabled": false
+    }
+  },
+  "finished_at": "2026-10-02T13:22:13.892Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "owned_group_cleanup": "group_absent",
+  "descendant_limit": "A child that deliberately creates another process group is outside this group cleanup; no process-container isolation is claimed.",
+  "tool_calls": 7,
+  "jsonl_parse_error_lines": [],
+  "observed_external_or_delegation_events": [],
+  "final_workspace_tree_sha256": "345a319c6bd424e3e0f96a7cbf19b060e7dd3e873a47dd76fd5083a744c4a1cc",
+  "input_integrity": {
+    "baseline_unchanged": true,
+    "allowed_changes_only": true,
+    "forbidden_changes": []
+  },
+  "evidence_files": [
+    {
+      "path": "answer.md",
+      "sha256": "5525953b0234d9139bc6023096fbfab1d2d05ac223a38bee5495ca09175fb328",
+      "mode": 420
+    },
+    {
+      "path": "case-prompt.txt",
+      "sha256": "fa46b1096225e3fbe1342f5dd458a43b905e2d28ca5384b0ea8c0b65bdc1f006",
+      "mode": 420
+    },
+    {
+      "path": "discovery.json",
+      "sha256": "a5f69df23eefe32ee5aeea7e1b73f6a1192d82d5e0aeabb2ee7ad556a38e5f9e",
+      "mode": 420
+    },
+    {
+      "path": "effective-prompt.txt",
+      "sha256": "f621ac44ccfc237bf3054023f51d9db3073981b4b802be63cb6768f5366926f4",
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "47f91b7d014a4948f09995024bceb98d41ab0300938b54da1d506d675df24081",
+      "mode": 420
+    },
+    {
+      "path": "prompt.txt",
+      "sha256": "f621ac44ccfc237bf3054023f51d9db3073981b4b802be63cb6768f5366926f4",
+      "mode": 420
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "f4892d3d5cd3fae04848deb12770a91716be08e8c7f308a7d616591c02dbe5d7",
+      "mode": 420
+    },
+    {
+      "path": "trace.jsonl",
+      "sha256": "829764a828f91dfd05f594ba49b51ee0c493824eeb74e18b031fa4a1149323c7",
+      "mode": 420
+    },
+    {
+      "path": "workspace-changes.json",
+      "sha256": "0a9d11f82a93e7a91f474c0ad8a55e4ffeb631cba38b38ecbb7e3e5de37dc072",
+      "mode": 420
+    },
+    {
+      "path": "workspace.patch",
+      "sha256": "dd558d75ecb1bcaa3a812b5fcfc5012e5690f020eae27cf1b770e4b7c1b8b935",
+      "mode": 420
+    }
+  ],
+  "run_evidence_sha256": "153859dc88d2d53b102ab38d5b6c84c5ebea435304f5fb6dd1632033d6496a57"
+}

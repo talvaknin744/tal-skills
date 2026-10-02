@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-nontrigger-repaired-05",
+  "run_evidence_sha256": "01a037aec5fd85354aa05ed20a294318eb99382957cc32c76d9af2392a65cf27",
+  "final_workspace_tree_sha256": "fa35a752edda4b04ed329413d8991db48bc73260f3c10ae686d1b84b13e91c58",
+  "case_id": "sequential-file-transform",
+  "candidate_tree_sha256": "ed25ceeb04a420f2def672d500a0e19e743349ac36c7a3579d1b3b41ffc59f41",
+  "rubric_sha256": "70f30265fbcd5c96d242ae7fc13f26a96e0f2d695566980c3dd560edad69dc56",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "correct-result",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1\u20136; evidence/trace.jsonl:item_5",
+        "observation": "The final CSV contains exactly header id,name and rows2,Noah Cohen;17,Sofia Martin;30,Amara Patel in ascending numeric order. Independent reviewer literal equality against the required fenced CSV passes; header/spelling are unchanged."
+      }
+    },
+    {
+      "id": "no-unrelated-workflow",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "entire trace: item_0,item_1,item_2,item_3,item_4,item_5; evidence/answer.md:1\u20136",
+        "observation": "The recorded workflow only lists the project, lists local files, reads names.csv/request.md and returns sorted CSV. No candidate body/reference read, lock, consistency contract, deployment/provisioning or distributed architecture is recorded or introduced. Native metadata discovery is not a body activation observation; the absence of a captured read does not prove no unrecorded loading."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[],forbidden_changes[]; evidence/workspace.patch; evidence/manifest.json:fixture_files; evidence/trace.jsonl:entire trace",
+        "observation": "All saved workspace files remain unchanged, with empty diff/changes. Original and final names.csv match manifest SHAeea42e6c3bcee30d4e1952e554f59df18da2fdb5760c5427ac0a5eb4ebeccfa4; request.md also matches. Captured commands only inspect local files, with no external/delegation event. The answer makes no verification or absent-system claim; no verifier is specified or invented. Host filesystem/network isolation limitations remain preserved."
+      }
+    }
+  ]
+}

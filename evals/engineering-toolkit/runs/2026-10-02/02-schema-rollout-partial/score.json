@@ -1,0 +1,79 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-review-01",
+  "run_evidence_sha256": "83a2f572a16c1bf89292ebaec676b506d447cc013a4a37749dbe4eb5a01ddba8",
+  "final_workspace_tree_sha256": "094e4e96b729b002d7f1fc216d8a9e1a6ff1359a402a71bff1338e0472d069da",
+  "case_id": "shard-publication-rollback-floor",
+  "candidate_tree_sha256": "8b8d7bd50375850f71879055462242dbc2dc3498d25d4a6c3970d513aa423842",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "reviewer": "/root/archive_quality",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "all-shard-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5 and 12",
+        "observation": "Rejects publication from shard -40 while 40-80 lacks column/index despite accepted COMPLETE. Requires observed completed schema/index readiness on every shard, shared-cache validation, restart and handwritten SQL checks before exposure."
+      }
+    },
+    {
+      "id": "maintained-writer-floor",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 8, 13 and 15; original-project/versions.csv lines 2\u20134",
+        "observation": "Preserves fallback and its listing/predicate implications while V0 transactions/replayed jobs remain, and requires enforced commit/write admission or proven draining before V2. However step2 explicitly confirms atomic source_rev maintenance only for V1; the final sequence does not establish the all-writer prerequisite, especially V0 mutations during fallback overlap. The supplied version table states that fact, but eventual V0 exclusion does not replace identifying its necessity during overlap."
+      }
+    },
+    {
+      "id": "rollback-bridge-and-representability",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13, 15\u201316 and 20",
+        "observation": "Retains V1 bridge writes/current old text and fallback during rollback; restoring fallback before V0 writes reverses the new-only exposure gate. Explicitly rejects code2 for V0/V1 and a retained-table/reverse-lag rollback without catch-up and reconciliation, offering bounded forward repair or scoped restore/replay after representability is lost."
+      }
+    },
+    {
+      "id": "independent-bidirectional-oracle",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6, 14 and 24; evidence/trace.jsonl line40 item_19",
+        "observation": "Correctly derives live11/pending,22/paid,43/paid at commit207, ignores rejected206, and identifies missing43/extra deleted99 despite equal counts. The local inspection prints authoritative text/revision tuples and observed encoded tuples plus both identity-set differences. It does not specify an independent text-to-code mapping or compare all common-row incarnation/revision/mapped_rev/status values; full value-oracle comparison is proposed later, not completed in this review. This partial concerns substantive review completeness, not absence of a mandatory runtime/live check."
+      }
+    },
+    {
+      "id": "bounded-review",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 12\u201316, 20 and 24\u201326; evidence/workspace-changes.json /changes",
+        "observation": "Provides partial-shard/cache-restart, old-transaction across writer-floor, delete/recreate/revision reuse and rollback-after-new-writes schedules with no live-engine claim. Original/final supplied file bytes match and the trace contains inspection/arithmetic commands only; no project edit or external/delegation event is recorded."
+      }
+    }
+  ],
+  "critical_gates": {
+    "all-shard-publication": 2,
+    "maintained-writer-floor": 1,
+    "rollback-bridge-and-representability": 2,
+    "independent-bidirectional-oracle": 1,
+    "unresolved_critical_partial": [
+      "maintained-writer-floor",
+      "independent-bidirectional-oracle"
+    ],
+    "live_or_runtime_verifier_required": false,
+    "project_unchanged": true,
+    "case_compliant": false
+  },
+  "limits": [
+    "Read-only synthetic review; no live database, migration, cache restart or old-writer commit gate exercised.",
+    "No mandatory executed verifier for this review case; partials reflect omitted prerequisite/full value-oracle detail.",
+    "Candidate metadata, entrypoint and three relevant reference body reads observed separately from correctness; no native workflow/role trial.",
+    "Inherited guidance and broad filesystem/tool access persist; case_compliant false is retained."
+  ]
+}

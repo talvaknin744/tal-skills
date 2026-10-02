@@ -1,0 +1,63 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-report-regression-13",
+  "run_evidence_sha256": "5b9c1efd3d5a519374346299a8ec0206c67977d6d312582f77e532705152dcb3",
+  "final_workspace_tree_sha256": "29bf4d6577fcf367892d5e080105dc47418f3675aa5ffb89af26f3ee10264871",
+  "case_id": "tenant-fanout",
+  "candidate_tree_sha256": "442a9c09ac10ee16a248b123ce705e316d863ce75a847afa680c85bac5d99340",
+  "rubric_sha256": "2e45593ecf899eee040f39374a35b3598ae9b1dae324867f1c9b2bd08a377656",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control candidate package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. The candidate body read was observed. These host conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "budget-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7-15",
+        "observation": "Calculates 4 x 40 = 160 reports and 480 possible connections against 100; reserves three credits for three-query fanout; proposes a 90-connection fleet ceiling and explicitly states a per-pod cap cannot establish the database cap or fairness."
+      }
+    },
+    {
+      "id": "fairness",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 15-17, 34, 36",
+        "observation": "Uses verified tenant identity, cost-weighted occupancy, bounded queues with per-tenant share, and protects B metadata capacity. Proposed checks compare tenant resource-held time/useful completion and vary A's processing cost and fabricated groups."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 19, 23, 35-36",
+        "observation": "Persists and owns accepted exports through worker failure until effects complete; does not delete accepted work at a high-water mark. Caller disconnect does not release permits for issued queries; credits remain held until actual stop/settlement and cleanup."
+      }
+    },
+    {
+      "id": "feedback-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 25-27, 34-36",
+        "observation": "Replaces immediate retries with bounded jittered retries in safe pre-execution/acceptance cases, excludes 1 ms rejections from admitted-work latency, tracks offered/admitted/rejected/useful/late work, includes demand and queue-age signals for autoscaling, and proposes controlled overload/recovery checks."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "workspace-changes.json: changes=[]; run.json: input_integrity.baseline_unchanged=true, allowed_changes_only=true; answer.md:38",
+        "observation": "The fixture is unchanged, and the response explicitly labels the policy and checks as proposed and says no policy or recovery test was executed."
+      }
+    }
+  ]
+}

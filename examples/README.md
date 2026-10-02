@@ -12,6 +12,7 @@ the ordinary repository test suite does not start brokers or model sessions.
 | [Cache load protection](cache-load-protection/README.md) | Expiry timing, negative-cache creation races, Bloom readiness, lease fencing, SCAN, and shared-load cancellation | Python, SQLite and Docker/Redis; virtual-time cases labeled separately |
 | [Retry coordination](retry-coordination/README.md) | Nested retry amplification, ownership propagation, partial adoption and uncertain effects | Python standard library; loopback HTTP plus explicitly labeled models |
 | [Draining](draining/README.md) | Successive worker handoffs, fencing, effect/checkpoint interruption, retry accounting and deadlines | Python and Docker/PostgreSQL |
+| [Worker rollout](worker-rollout/README.md) | Real SIGTERM, reserved ownership, mixed-version continuation, receipt recovery, paused-owner fencing and cleanup | Python, POSIX subprocesses and Docker/PostgreSQL |
 | [Infrastructure](infrastructure/README.md) | Partial apply, recovery, stale saved plans, identity-preserving moves and retained removal | Python and pinned Terraform; no cloud provider |
 | [Recovery](recovery/README.md) | Application identity, semantic restore checks, interrupted imports and lost accepted work | Python and Docker/PostgreSQL |
 | [Quality](quality/README.md) | Behavior-preserving cleanup, independent oracles, seeded defects and replayable reduced histories | Python standard library |

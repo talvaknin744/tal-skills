@@ -1,0 +1,31 @@
+{
+  "case_id": "retry-amplification",
+  "rubric_sha256": "3a3f8318d020d66008f95e1816afc9b96057249756627cd8ce790c3f8a8d933d",
+  "rubric": [
+    {
+      "id": "amplification",
+      "severity": "critical",
+      "criterion": "Computes up to nine Inventory attempts per original request and a potential offered load of 1,800 Inventory attempts per second under the stated assumptions, while distinguishing the estimate from measured sustained throughput."
+    },
+    {
+      "id": "deadline-budget",
+      "severity": "critical",
+      "criterion": "Recommends an end-to-end deadline and controlled retry ownership or shared retry budget that fits the two-second user requirement, accounting for work that continues after callers time out."
+    },
+    {
+      "id": "capacity-protection",
+      "severity": "major",
+      "criterion": "Addresses concurrency or load shedding and bounded backoff with jitter or another justified overload-control mechanism, rather than only increasing timeouts or adding retries."
+    },
+    {
+      "id": "operational-proof",
+      "severity": "major",
+      "criterion": "Proposes slow-dependency or outage checks observing attempts, active work, response latency, and recovery, with stated bounds and no unsupported assertion that a circuit breaker guarantees recovery."
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "criterion": "Leaves every supplied fixture unchanged and clearly distinguishes findings or proposed validation from checks actually executed."
+    }
+  ]
+}

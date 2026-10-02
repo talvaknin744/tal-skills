@@ -1,0 +1,9 @@
+# Independent native local-script boundary review
+
+All three critical criteria pass for the finite local task and explicit invocation boundary. Overall native acceptance remains partial because managed sandbox verification failed before script startup (exit65/TIOCSTI). Original run.json/verification outputs remain unchanged; no managed end-to-end pass is asserted.
+
+Only one output label changed; original script replaced Finished exports with Completed exports matches final bytes exactly. Counts and CLI are intact. Candidate ran python3 summary.py jobs.csv with actual stdout Completed exports:2 / Failed exports:1 and exit0. Independent trusted local python3 -B summary.py jobs.csv reproduced output, separately recorded in observer-supplement.json. There is no verify.py in this fixture; the supplement executes actual declared verification_argv. All118 final hashes/modes match; only summary.py differs from baseline; raw/index/manifest/closure remain intact.
+
+The actual user message begins $tal-worker-rollout (events:14-15). Workflow entrypoint/body were read, but the candidate correctly deemed worker handoff irrelevant to a finite CSV label change. No named children, rollout/review ritual or new machinery appeared. This is explicit invocation boundary behavior, not proof of implicit nonactivation.
+
+Scorer authored fixture/rubric but not workflow instructions/response and performed no model run or trial modification. Root archival should retain prepared/run/events and original verifier outputs, frozen scenario/index/control/manifest, source digest, final script/CSV, score/review and supplement with byte hashes. Preserve case_compliant=false and broad-read/tool/post-run audit limitations. Native prepared omits unique scenario ID, so bind it externally as worker-rollout-local-script.

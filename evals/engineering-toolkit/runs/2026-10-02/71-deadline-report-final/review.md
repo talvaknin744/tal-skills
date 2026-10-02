@@ -1,0 +1,15 @@
+Independent review of python-cancellation-completion, run tal-worker-rollout-oct02-deadline-report-integration-10.
+
+Rubric result: pass, 10/10. All five critical criteria score 2/2. The actual answer identifies the loop/epoch mismatch, budget consumed by acquisition, pending/cancel versus child completion, unsafe release/reuse ordering and accepted effect reconciliation. It explicitly recognizes wait_for cancellation-wait overrun and missing finite cleanup/forced-stop guarantees. The supervised ownership/resource-cap proposal and unexecuted acceptance controls satisfy the review rubric without receiving runtime or protocol-causality credit. No actionable rubric gap found.
+
+Original/final fixture hashes match: adapter-contract.md 16588d3e5244e589829b94cbf85cad565422a926de48c9355bc1d561ab41c9ef; handler.py bd2c731ea6db7ae1f84f9db94874ac6414fc0107e5ef862a17e1c83ede5f433f; trace.jsonl d1c5a6133abc4adfb4544aef2249e61896f99693513a571030425510af1d7cd2. Empty diff/change arrays and seven completed reads corroborate unchanged inputs. Trace observations concern the supplied synthetic adapter timeline; acceptance checks remain proposed. Candidate body/reference retrieval is observed, not proof of exclusive causal guidance.
+
+Reviewer: /root/archive_storage. The complete 11-file microservice-operations candidate manifest was rechecked against my task/authorship history, including current/historical LICENSE, SKILL.md, agents/openai.yaml and every reference. I authored no OPS candidate/reference file, this case/fixture/rubric or response. My concurrency/infrastructure/checker work is outside the candidate/case. No prior grader score/review or hidden reasoning was read. Bound candidate tree is 23f7986b50ece9a6e444c38dd87627e9afe188f6573ed3a4eec9d77b091969c9.
+
+Read scope: exact supplied rubric/template and grader instructions, all original/final raw inputs, observable answer, run/manifest/workspace changes/diff and completed command evidence. verification_argv=null; no executable verifier applies. I ran no fixture, Python/adapter/transport operation, model or proposed acceptance scenario. Only assigned score/review outputs and authorized staged-instruction preservation were written.
+
+Host case_compliant=false, sandbox_mode_verified=false and filesystem_read_isolation=false are preserved. Inherited guidance/tools remain available, network restrictions are not fully enforced and withheld rubrics lack filesystem isolation. No external/delegation events were observed. Rubric acceptance and process completion establish neither a compliant isolated host trial nor production/runtime guarantees.
+
+Case-insensitive REVIEW.md/review.md collision detected; original grader instructions preserved byte-for-byte in grader-instructions.original.txt.
+
+Score binding validation: `node scripts/evals/cli.mjs check-score --score /SCORING/score.json --rubric /SCORING/rubric.json --trial /TRIAL` exited 0, returning rubric_result=pass, all 5 critical scores=2 and independent_verification.required=false. This validates bindings/shape and rubric acceptance, not executable behavior.

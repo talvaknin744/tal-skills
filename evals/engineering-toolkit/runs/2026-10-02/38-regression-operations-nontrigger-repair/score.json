@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-ops-nontrigger-repaired-04",
+  "run_evidence_sha256": "55e9f71d04b596b92c2caa07e313372623b6704dcdf173a0f5786f1c5180dd03",
+  "final_workspace_tree_sha256": "56ba60f3339ff306c126bf8aa7c76711e919063802e7ab67bd4da38b947eed3a",
+  "case_id": "stylesheet-review-nontrigger",
+  "candidate_tree_sha256": "fa2ade9d9a8f17467610fb05daa40ac41a04ccc3b0f1abc42fbd6bc4aea79b12",
+  "rubric_sha256": "eb5289e97fff7e51a19e6c15596f461cb29c7ee3a8bfe343c38595e08b46958a",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "line 5; evidence/answer.md line 1; evidence/run.json activation_observation",
+        "observation": "Only observed command reads padding/button context from project/style.md; no candidate body/reference load is observed. The answer adds no rollout, metrics, error-budget or failure-injection work."
+      }
+    },
+    {
+      "id": "padding",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Supplies padding: 8px 12px; and correctly explains first value as top/bottom and second as left/right, matching the raw input spacing requirement."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "One-sentence CSS answer remains within shorthand spacing and unchanged-file status; no visual/runtime validation or operational claim is made."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/workspace.patch; evidence/trace.jsonl line 5; evidence/answer.md line 1",
+        "observation": "Empty change arrays and patch, matching original/final style.md hash 22f06343b36a049f7c6a86bf0b584ca05400e91db019ec00c650a815f770d8cd and one read-only rg command corroborate no mutation. Answer accurately states file unchanged and claims no unexecuted checks."
+      }
+    }
+  ]
+}

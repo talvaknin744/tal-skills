@@ -27,6 +27,37 @@ Prefer narrow changes supported by observed behavior. Avoid adding universal
 rules for one exceptional case, mandatory tools for optional branches, empty
 resource folders, or duplicate copies of the same skill in several concerns.
 
+## Changing skills, agents or workflows
+
+Evaluate preservation and new behavior separately. Before editing, identify
+the existing behaviors, triggers and nontriggers affected by the change and the
+cases that cover them. After editing, run those existing cases against the
+frozen revised candidate. Shared routing, role-contract or orchestration changes
+also need representative dependent workflow/host cases; select coverage from
+the changed boundary rather than running an unrelated roster.
+
+Each new capability needs a realistic positive case, its failure-boundary checks
+and a nontrigger where applicable. Author the new case before claiming the
+capability works, keep raw inputs separate from its rubric, and execute it
+alongside existing regression cases. New skill packages should contain two
+relevant cases and a nontrigger, with at least one relevant case and the
+nontrigger executed. A new-feature pass cannot substitute for an old-behavior
+regression check.
+
+Keep established prompts, fixtures, verifiers and rubrics unchanged. If a
+contract intentionally changes, retain the original case/result and add a
+versioned replacement with the reason; do not silently relax an expectation or
+discard a failed attempt. Use independent scoring and critical gates from
+[the evaluation guide](evals/README.md). Record the old/new capability map,
+selected cases, exact candidate and environment identities, executed outcomes,
+and unexecuted or blocked coverage. Inherit model settings; use matching
+conditions for any baseline comparison and avoid causal improvement claims from
+a single before/after run.
+
+Finish with `npm run validate` plus the selected behavioral results. Preserve
+partial and blocked evidence and keep unmet critical acceptance visible; a
+successful process, structural check or unrelated case cannot close it.
+
 ## Agents, workflows and examples
 
 Keep detailed technical instructions in independently installable skills. A

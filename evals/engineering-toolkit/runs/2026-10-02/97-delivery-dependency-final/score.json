@@ -1,0 +1,81 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-final-04",
+  "run_evidence_sha256": "9618d82edbcd77cc5c92ff5c67a50209380d052b692605f957c7e3ea9302510f",
+  "final_workspace_tree_sha256": "c8d704aa1f286a9bd67e8c9442dfbf22e137ead3403f0531a99012f3948b9e52",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "1fbcff1cfc7ed2a331a7ce422a80c5ac72677f856200120b621702660a240e17",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. Candidate body read was observed. These conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 6",
+        "observation": "Derives MessageGroupId from authenticated_customer, maps g1/g2 to Alpha, and distinguishes group identity from job identity for duplicate handling."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5",
+        "observation": "Names both in-flight share and recent processing-time share as fairness inputs; denies FIFO ordering, per-tenant rate, execution slot, and deadline guarantees, and separates broker dwell from completion."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 6",
+        "observation": "Counts three permits per Alpha admission and six physical permits; calculates the original eight-permit simultaneous promise is infeasible and explains the B1 time-9 miss."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 7",
+        "observation": "States visibility changes only redelivery and keeps operations charged until actual termination and cleanup, despite cancellation at time 1."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 6",
+        "observation": "Uses costed trusted accounting, reserves one permit and worker slot in this trace, admits A1 while deferring A2, has no unreserved local prefetch/blocked/retry-wait slots, and provides finite retry/overflow dispositions plus recoverable paused accepted work. Explicitly leaves numeric backlog sizing unresolved."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 8",
+        "observation": "Proposes cost changes, caller-group fragmentation, cancellation timing, recovery, duplicates, held-time and receive/start/finish observations. It does not explicitly assert the required total actual-active-permit <=6 oracle or exercise a visibility-extension/redelivery schedule."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "changes=[]; unchanged baseline; case_compliant=false",
+        "observation": "Fixture unchanged, no external/delegation events or live service operation; answer identifies provider behavior and allocation as supplied/proposed, not tested."
+      }
+    }
+  ]
+}

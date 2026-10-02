@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-merge-regression-09",
+  "run_evidence_sha256": "716ecba5a0c73456e37dd09854f2793ff0df1c151adc3e00541cae383b0e01df",
+  "final_workspace_tree_sha256": "fddbd4a2c104152595ce4b54b8a1caa2a3ada7409f135f87df9c2208945c12f5",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "945cdaa4913a1a37fbffa1be4a4fcbe8ef44a41d6ef8c50e778979ab90e0994d",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[0] (independent-01); evidence/checks/independent-01.stdout.txt lines1-6; evidence/trace.jsonl line26 item_12",
+        "observation": "The sealed independent execution ran original node verify.mjs against final service with exit0, no timeout, and all5 named checks passing. I separately copied the original protected adapters/verifier/requirements into a temporary workspace, overlaid only final service.mjs and reran node verify.mjs: exit0,5/5, empty stderr, identical input hashes before/after; review.md records the execution."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "lines7-18; original-project/model.mjs lines45-67; original-project/requirements.md lines19-26",
+        "observation": "Read retains cache.get and publishes the detached database record with awaited shared cache.publishIfFresh; write awaits cache.advanceFloor(record.revision) before returning. The unchanged supplied atomic adapter takes max floors, rejects fills below floor/current cached revision and keeps floors separate from value eviction; no local lock, sleep, unconditional set or evictable marker replaces the contract. Original eviction and reordered-notification checks pass."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0]; forbidden_changes; evidence/run.json input_integrity",
+        "observation": "Only project/service.mjs changes, replacing unconditional cache.set with publishIfFresh and cache.delete with advanceFloor. Original and final model.mjs, verify.mjs and requirements.md hashes match; read/write signatures and cache hit fast path remain. Independent repeated-read and different-ID checks pass, so caching is not bypassed and no unavailable infrastructure is introduced."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line3",
+        "observation": "The observable final answer says a read invoked after write resolves returns that revision or newer, while a read already overlapping may return its earlier snapshot and cannot put it back into cache. This states the acknowledgement/invocation boundary and permitted captured snapshot without claiming latest-at-response freshness."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line5, with line3 supplied-adapter scope",
+        "observation": "The final answer scopes the result to two service instances sharing supplied database/cache and persistent floors in one process. It explicitly excludes replicas, adapter failures, floor loss, crashes between database/cache updates and production storage implementations. These semantic limits bound the5checks to successful modeled adapter calls/floor lifetime and do not claim production atomicity, crash recovery or arbitrary metadata durability."
+      }
+    }
+  ]
+}

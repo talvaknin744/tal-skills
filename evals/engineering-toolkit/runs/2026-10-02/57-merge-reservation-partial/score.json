@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-merge-final-01",
+  "run_evidence_sha256": "350e3ca74e8a1ba9880b0e492002050c0e1bfb8001ce31063ad3ffaf295b20b5",
+  "final_workspace_tree_sha256": "f5f13d2ce1c0d3fc88b3af6f8f7420f11b27af40c12f5e7634e82d3a584f97b0",
+  "case_id": "merge-reservation-boundary",
+  "candidate_tree_sha256": "477470e2c65567e814850c84f7d0dd913b4627e91380d7f3cc3882331c5b1644",
+  "rubric_sha256": "e862695e611fbdcdb5a22bed10744851ffd1f767e67ae556a6de10d931452f1d",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "common-ancestor-counterexample",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1\u20133",
+        "observation": "Derives both local acceptances from the common one-unit balance, retains distinct final receipts A/B, and calculates two accepted units against one and remaining \u22121. Separates identical replicas/idempotent replay from acceptance validity."
+      }
+    },
+    {
+      "id": "acceptance-enforcement",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5",
+        "observation": "Requires a shared durable atomic conditional reservation before accepted, including operation-ID deduplication; unreachable authority yields nonfinal pending/unavailable. Alternatively only one region can hold the one enforceable right. Does not retroactively discard either final receipt or assume compensation."
+      }
+    },
+    {
+      "id": "freshness-separation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9",
+        "observation": "Treats the 12-second display as within the separate 60-second advisory allowance; a primary display read/five-second wait cannot protect later acceptance. Checks display freshness separately without demanding universal coordinated advisory reads."
+      }
+    },
+    {
+      "id": "discriminating-oracle",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 9",
+        "observation": "Includes distinct-request overlap, final-acceptance and retry checks, failure/recovery and receipt reconciliation; rejects shipping from arithmetic alone. Omits the expressly required single-reservation successful control. At most one acceptance also passes a reject-all implementation."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7, 9; trace.jsonl line 28 item_13; workspace-changes.json",
+        "observation": "Labels authored history/local arithmetic and proposed datastore checks accurately. Recorded commands are local reads/arithmetic; workspace audit has no changes and sealed input integrity passes. Zero exit means arithmetic completion only. This score does not override case_compliant=false or the unjailed host limitations."
+      }
+    }
+  ]
+}

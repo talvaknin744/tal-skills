@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-repaired-v2-01",
+  "run_evidence_sha256": "4058fcd6982e1867ef8a55ddfe33dadf9f24ecca11ebdb043059276017d68f0d",
+  "final_workspace_tree_sha256": "b0b4a6f0ee104c9de0dca457fb9a724b12151293576be678ed39582deda996f8",
+  "case_id": "shard-publication-rollback-floor-v2",
+  "candidate_tree_sha256": "c67c326ddb1c2829a2d09225eb20333b88d577d600acd04470c4e35d3fc4178f",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "all-shard-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3,20,47",
+        "observation": "Blocks V2/cache publication from -40 readiness or accepted COMPLETE while 40-80 is missing column/index. Requires observed same-UUID completion, column presence and usable index on every shard, cache compatibility, restart and handwritten SQL checks; stop on mismatch."
+      }
+    },
+    {
+      "id": "maintained-writer-floor",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 16,22,24,26,47",
+        "observation": "Uses supplied revision-maintenance contract for V0/V1/V2 and inventories unknown maintenance/SQL writers. Retains V1 dual-writing/fallback and membership-safe paid listing while V0 may commit. Requires actual commit-boundary minimum-generation enforcement or proven drain of old transactions/jobs/replay before V2/new-only predicates, rejects deployment percent/heartbeat as proof, and guards mapping against incarnation/revision."
+      }
+    },
+    {
+      "id": "rollback-bridge-and-representability",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 22,28,37,41-43,47",
+        "observation": "Keeps compatible V1 fallback/dual writes and old-readable values during rollback; admitting V0 requires V2 code-only readers gone and current V0-compatible status_text. Code2 remains separately gated because V0/V1 cannot represent it. Retained table and five-minute-lagged reverse stream cannot establish post-switch-write recovery; requires verified compatible forward repair or scoped restore/replay after incompatible values and tests reverse ordering/catch-up."
+      }
+    },
+    {
+      "id": "independent-bidirectional-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_6 authoritative contract read; item_14 completed local oracle output; evidence/answer.md lines 5-14,20,24,26",
+        "observation": "Completed local calculation derives definitive live rows at 207 from committed ledger entries, excludes rejected 206, encodes via separate status-code-contract.json, compares full incarnation/source-revision/code/mapped-revision tuples both directions, and reports missing 43, extra 99 and no shared-tuple mismatch. Expected paid keys 22/43 differ from observed 22/99 despite total counts 3/3. Reviewer independently used last-committed-event selection per key plus authoritative mapping, reproducing all tuples/differences. Schema/index readiness, copy/catch-up, writer eligibility and exposure remain separate gates."
+      }
+    },
+    {
+      "id": "bounded-review",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items 1-7/9-10/12-14 local reads/calculation; item_15 answer; evidence/workspace-changes.json changes=[]; answer lines20-37,45-47",
+        "observation": "All six fixtures and seven candidate files remain unchanged with empty diff and matching hash/mode records. Proposes partial-shard/cache mismatch gates, late V0 commit and replay, intervening update/delete-recreate/rejected mutation, blocked/ambiguous switch and rollback after new writes. Numerical operating bounds explicitly require engine/control verification and are not observed guarantees. Local CSV comparison is distinguished from unexecuted live base/index/database/production rehearsals."
+      }
+    }
+  ]
+}

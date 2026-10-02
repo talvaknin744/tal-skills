@@ -1,0 +1,36 @@
+{
+  "case_id": "cache-incarnation-snapshot",
+  "rubric_sha256": "7ef8e29166a61c034f58a91d15b11ca245eb5fca7e4f8f34a0568c07009ecdb7",
+  "rubric": [
+    {
+      "id": "incarnation-domain",
+      "severity": "critical",
+      "criterion": "Rejects a fill captured at incarnation 41/revision 7 after the authority recreates the key at incarnation 42/revision 1. Accepts a valid newer incarnation even when its revision is numerically lower; comparison uses the supplied authoritative incarnation order rather than scalar revisions, wall clocks or invented UUID ordering."
+    },
+    {
+      "id": "paired-source-snapshot",
+      "severity": "critical",
+      "criterion": "Captures payload, presence and incarnation/revision together through the specified snapshot API. A mutation during the capture callback cannot relabel an old payload with a new token. Uses one authoritative capture per miss and no authoritative capture on a cache hit."
+    },
+    {
+      "id": "atomic-publication",
+      "severity": "critical",
+      "criterion": "Uses the shared atomic cache publication transition or an equivalent supported operation. A separate floor read followed by unchecked publication is insufficient; the old completion cannot undo a competing update or delete. Per-key ordering and retained floors survive value eviction and the specified JSON restoration."
+    },
+    {
+      "id": "independent-state-oracle",
+      "severity": "major",
+      "criterion": "The protected literal expected-state checks pass in both identity-set directions and compare incarnation/revision/payload values, including empty deleted state and newly recreated state. Does not weaken the verifier, substitute a success flag, suppress exceptions, or bypass a callback to obtain a pass."
+    },
+    {
+      "id": "executed-verification",
+      "severity": "critical",
+      "criterion": "Runs the supplied Python verifier against the final service and reports all six checks passing with actual command evidence. A passing implementation score also needs an independent matching verifier execution; a proposed repair or invented run is insufficient."
+    },
+    {
+      "id": "scope-and-limits",
+      "severity": "critical",
+      "criterion": "Changes only service.py and preserves public hooks/interfaces and protected inputs. Distinguishes specified in-process adapters and JSON state serialization from real Redis/database atomicity, missing-notification recovery, metadata-loss safety, multi-process execution or crash-safe durability. Allows a genuinely overlapping read's captured result without imposing latest-at-response semantics."
+    }
+  ]
+}

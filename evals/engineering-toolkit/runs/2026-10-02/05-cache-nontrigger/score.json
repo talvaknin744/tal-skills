@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-nontrigger-01",
+  "run_evidence_sha256": "1be3f6e93a11d84b552cce25b4defc1c99c4c3ec012710cde013b5562d974fde",
+  "final_workspace_tree_sha256": "0904f96a7de634ede9dd0449ad55528a01866f0440adf0f1c9de2be781b96b97",
+  "case_id": "immutable-label-format",
+  "candidate_tree_sha256": "f765ba1f99ccc414b74bfabd6e76205a19cf7950e2a7a361f94fdc33ddc5ebac",
+  "rubric_sha256": "25408affa1c0d64874db1a1183067d62ff71355ee34513f2a5ad14fb05c4b756",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 3-14, completed items item_1-item_6; evidence/run.json activation_observation; evidence/discovery.json candidate_entries",
+        "observation": "The trace reads only labels.py and request.md, attempts a local git status, edits labels.py and runs the requested finite verifier. No concurrency-correctness body/reference read, lock/lease/cache protocol or distributed workflow is recorded; the final answer remains a one-line formatting result. Native metadata discovery confirms the candidate was available, but no matching body read was observed; this is a pass for captured behavior, not proof of absent unrecorded loading or isolated causal attribution."
+      }
+    },
+    {
+      "id": "requested-format",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/labels.py",
+        "locator": "lines 4-5; evidence/workspace.patch hunk; evidence/checks/independent-01.stdout.txt line 1",
+        "observation": "The only changed expression is return f\"{name} (v{revision})\"; function name/signature and caller values are preserved. The unchanged protected verifier checks Ada/7, empty-name/0 and M\u00e1laga/12, and both recorded agent execution and independent protected execution report three checks passed, no failures. Reviewer rerun of python3 -B verify.py against final-project also returned {\"checks\": 3, \"failures\": [], \"passed\": 3}."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 12-14, started/completed item_5 and final item_6; evidence/answer.md line 1; evidence/checks.json checks[0]",
+        "observation": "Recorded item_5 runs exactly python3 -B verify.py against the edited fixture, exits 0 and prints three checks passed/no failures. The final answer accurately reports all three passed. The independent protected verifier is bound to this run/candidate and also passes with no workspace changes. No concurrency or production validation is claimed; this demonstrates only finite formatting."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0].path=project/labels.py, forbidden_changes=[]; evidence/workspace.patch; evidence/trace.jsonl lines 3-14; evidence/answer.md line 1",
+        "observation": "The manifest/final-project hash comparison confirms only labels.py changed; request.md and verify.py are byte-identical to originals and the only patch is the return-expression replacement. No external service, dependency installation or candidate read/edit is recorded. The one-line final answer reports the requested local result. git status at item_3 fails because the fixture is not a repository; that read-only failure causes no scope change and does not invalidate the subsequent observed verifier pass."
+      }
+    }
+  ]
+}

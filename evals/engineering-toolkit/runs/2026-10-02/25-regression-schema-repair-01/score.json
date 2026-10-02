@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-schema-repaired-02",
+  "run_evidence_sha256": "4714adafdecc423172df4477470ebdb718fafed96b016267b0f657ef2578c013",
+  "final_workspace_tree_sha256": "aad3d6f73889816ce58104d70a9bf271adc034602ec4bb3e451ca5e834189db5",
+  "case_id": "schema-cutover-window",
+  "candidate_tree_sha256": "9f7866a8648a95cc50abdbbf63335a3fd7ac3bed6c407a7d8db04429d592102a",
+  "rubric_sha256": "f5b2aaa9b8ae4c6c1ae0a6733c690c38215741aefd3c1b6c1343545b96da0142",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "lock-and-state",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6-11",
+        "observation": "Corrects the no-lock claim and recognizes backfill/replay gates, five-second lock-timeout stop/inspection, unknown-outcome reconciliation, operator/state-record prerequisites and preservation of the confirmed new serving table. Lines 8-9 ask for the supported recovery procedure and owner/state design instead of supplying a concrete owner-led bounded worker pause/resume/abort/recovery transition for backfill, blocked/failed cutover and successful cutover. The five-second limit bounds lock waiting, not the unresolved recovery disposition. A separate independent one-criterion reader agreed this material condition remains partial."
+      }
+    },
+    {
+      "id": "compatibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5, 8, 11",
+        "observation": "Blocks cutover while v1 writers remain eligible, including open transactions, queued jobs and retries; keeps full_name available and requires v2 overlap compatibility. Identifies old-table rename losing later new writes and old readers not representing v2-only name fields. Requires every post-cutover write preserved/represented through supported reverse-sync or forward repair and forbids automatic rename-back."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-8, 13",
+        "observation": "Defines a conflicting lock held by another session, attempted cutover, five-second timeout outcome, serving table/worker state, lock cleanup and controlled retry checks. Tests both generations at each stage including in-flight old transactions/delayed jobs, complete identities/name values with updates/deletes, and successful cutover plus new-write recovery proving visibility/usability. Treats lock/atomic rename as the cutover transition rather than lossless whole-migration rollback."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items 1/2/4/5/6/7/8 local read commands; item_9 final answer; evidence/workspace-changes.json changes=[]",
+        "observation": "All captured commands read/enumerate local candidate/project files. Before/after workspace records match for all seven candidate files and both fixtures, independently compared project bytes are unchanged, and saved diff is empty. No external operation or mutation is observed. Answer labels all validation proposed, states no migration/external service ran and makes no unexecuted runtime validation claim."
+      }
+    }
+  ]
+}

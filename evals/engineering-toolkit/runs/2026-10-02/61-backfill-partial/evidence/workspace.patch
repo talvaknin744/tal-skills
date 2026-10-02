@@ -1,0 +1,22 @@
+diff --git a/TRIAL/before/project/migration.py b/TRIAL/workspace/project/migration.py
+index 3dac537..697fe71 100644
+--- a/TRIAL/before/project/migration.py
++++ b/TRIAL/workspace/project/migration.py
+@@ -2,13 +2,10 @@
+ 
+ 
+ def backfill_one(store, key, checkpoint):
+-    status_text = store.read_status(key)
+-    if status_text is None:
++    snapshot = store.read_snapshot(key)
++    if snapshot is None:
+         return False
+     checkpoint("after_read")
+-    version = store.read_version(key)
+-    if version is None:
+-        return False
+     checkpoint("before_apply")
+-    code = {"pending": 0, "paid": 1}[status_text]
+-    return store.map_if_revision(key, version[1], code)
++    code = {"pending": 0, "paid": 1}[snapshot.status_text]
++    return store.map_if_current(key, snapshot.incarnation, snapshot.source_rev, code)

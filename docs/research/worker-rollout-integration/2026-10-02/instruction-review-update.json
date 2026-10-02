@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "review_kind": "independent_instruction_technical_review_update",
+  "reviewed_at_utc": "2026-10-02T08:46:22.472282+00:00",
+  "reviewer": "/root/architecture_skill_review",
+  "delegated_reviewer": "/root/architecture_skill_review/expert_lenses_audit",
+  "status": "no_unresolved_material_findings",
+  "scope": "Only two new observable schema gates and closure of the prior runner pre-dispatch binding observation. Original review artifacts remain immutable.",
+  "independence": {
+    "authored_reviewed_changes": false,
+    "read_or_scored_native_responses": false,
+    "changed_model_or_runtime_configuration": false
+  },
+  "original_review_records": [
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review.md",
+      "sha256": "f9779f02393a9121fd7a69f2275c1678990e124ba6c00d722cb2cbfc09eab667",
+      "preserved": true
+    },
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review.json",
+      "sha256": "28a3166760163b2d3d526fe15c59d6855fcbf8718a47a81a37835f4908cc64f0",
+      "preserved": true
+    }
+  ],
+  "archive": {
+    "path": "/tmp/tal-worker-rollout-oct02-schema-review-01/before/.agents/skills/infrastructure-change-safety/references/schema-evolution.md",
+    "schema_sha256": "d591f38322588026a4901e77cda1f3c0ef86ec51cbf9dd45f3e5eb8f3598e1a1",
+    "matched_original_review": true
+  },
+  "candidate": {
+    "freeze_path": "/tmp/tal-worker-rollout-oct02-freeze-02.json",
+    "freeze_file_sha256": "181ca759306258a77d50a574b32771a959ccacc4d763282d857421a83fa04a4c",
+    "freeze_sha256": "a2d2a541e6ce59bd86d0a592425de5426828cb75745ec519c8c286d4d1d5887d",
+    "evaluation_suite": "worker-rollout-integration",
+    "candidate_tree_sha256": "25300ed6da72e8c684fdadedfe978d314a512dfa350975b11495cbadcdc76c43",
+    "schema_sha256": "24567fedefb25a10c5f18f521f713fb01ee02de1bf72c55984da9feb9486ded3",
+    "only_changed_package_files": [
+      "references/schema-evolution.md"
+    ]
+  },
+  "reviewed_files": [
+    {
+      "path": "skills/infrastructure/infrastructure-change-safety/references/schema-evolution.md",
+      "sha256": "24567fedefb25a10c5f18f521f713fb01ee02de1bf72c55984da9feb9486ded3",
+      "scope": "two-paragraph schema delta and surrounding rules"
+    },
+    {
+      "path": "scripts/evals/cli.mjs",
+      "sha256": "7d58ac400540150fef613e265781388d1f5e2af7fb93da490a068e553b9684aa",
+      "scope": "runner suite-binding closure and focused regression test"
+    },
+    {
+      "path": "scripts/evals/lib.mjs",
+      "sha256": "be03568745fe5050d79f0d12c1b87d182e9dd69e32b98cb7f967cb901756ebc5",
+      "scope": "runner suite-binding closure and focused regression test"
+    },
+    {
+      "path": "tests/worker-rollout-integration/runner.test.mjs",
+      "sha256": "971ca5357fbbe648aacbbd7c49db564ba3e8d88d85c251247fcf57122427691c",
+      "scope": "runner suite-binding closure and focused regression test"
+    }
+  ],
+  "instruction_assessments": [
+    {
+      "id": "UPDATE-01",
+      "location": "skills/infrastructure/infrastructure-change-safety/references/schema-evolution.md:35-40",
+      "verdict": "technically_valid_and_observable",
+      "reason": "Per-generation evidence and write-eligibility reporting makes the existing all-writer atomic revision prerequisite checkable. It explicitly includes old-only writers during fallback, refuses unknown maintenance, and does not treat a later admission closure as repair for an already unsafe overlap. Existing identity/revision, snapshot, alternate-protocol, and rollback constraints remain intact."
+    },
+    {
+      "id": "UPDATE-02",
+      "location": "skills/infrastructure/infrastructure-change-safety/references/schema-evolution.md:79-82",
+      "verdict": "technically_valid_and_observable",
+      "reason": "The review must give the expected mapping and value/revision comparison at the supplied observation cut. Keys/counts or proposed future comparisons leave value correctness unresolved. This sharpens the existing independent commit ledger and complete bidirectional expected/actual comparison rather than introducing a new oracle or changing the permitted data contract."
+    }
+  ],
+  "runner_supplement": {
+    "prior_observation": "runTrial did not validate suite/control binding before native dispatch.",
+    "status": "closed",
+    "implementation_location": "scripts/evals/lib.mjs:308-310",
+    "enforcement_location": "scripts/evals/lib.mjs:392-404",
+    "test_location": "tests/worker-rollout-integration/runner.test.mjs:66-68",
+    "reason": "When either run or control carries a suite, runTrial calls loadControlledCase before runner verification, slot acquisition, or host launch. The missing-control-suite test takes execute:true but receives the binding error before the missing host could be dispatched.",
+    "executed_check": {
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern=staging keeps private rubric outside the raw project and binds controls",
+        "tests/worker-rollout-integration/runner.test.mjs"
+      ],
+      "cwd": "/SOURCE",
+      "exit_code": 0,
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "output_summary": "staging keeps private rubric outside the raw project and binds controls passed; one test, one pass, zero failures.",
+      "native_host_launched": false
+    }
+  },
+  "checks": [
+    {
+      "kind": "archived_candidate_identity",
+      "result": "pass",
+      "evidence": "Archived schema reference matches its SHA-256 in original instruction-review.json."
+    },
+    {
+      "kind": "freeze02_digest",
+      "result": "pass",
+      "evidence": "validateFreeze from scripts/evals/lib.mjs accepted the complete freeze02 manifest."
+    },
+    {
+      "kind": "package_scope",
+      "result": "pass",
+      "evidence": "Only references/schema-evolution.md differs between the archived package and freeze02 source package; source ledger and other files are byte-identical."
+    },
+    {
+      "kind": "corpus_identity",
+      "result": "pass",
+      "evidence": "freeze01.corpora equals freeze02.corpora, including case, prompt, rubric, and fixture identities."
+    },
+    {
+      "kind": "prior_instruction_scope",
+      "result": "pass",
+      "evidence": "The other 22 instruction/context files from the original review still match their recorded hashes."
+    },
+    {
+      "kind": "scoped_git_diff_check",
+      "result": "pass",
+      "evidence": "git diff --check completed with exit 0 for schema-evolution.md, scripts/evals/lib.mjs, and tests/worker-rollout-integration/runner.test.mjs."
+    }
+  ],
+  "unresolved_findings": [],
+  "limits": [
+    "This update is instruction/source review plus one local synthetic runner regression, not native model-response scoring or proof of improved model adherence.",
+    "No database migration, broker, cloud rollout, real signal, clock adjustment, deadline, cancellation-cleanup, or production experiment was performed.",
+    "No full runner security audit or broad test-suite rerun is claimed; the executed check covers the newly added pre-dispatch rejection path.",
+    "A complete value comparison still requires adequate independently supported fixture/runtime evidence; the instructions correctly leave unsupported value correctness unresolved.",
+    "Exact file hashes identify this reviewed candidate. Later changes require a new scoped check; original review hashes and conclusions remain preserved as historical evidence."
+  ]
+}

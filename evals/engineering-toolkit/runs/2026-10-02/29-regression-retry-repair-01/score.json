@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-ops-repaired-02",
+  "run_evidence_sha256": "b2c757aca0af05b100d30e1f4441018ab74ff48b49d6bb87afd2589570ad100b",
+  "final_workspace_tree_sha256": "ee3a12145e4a0a64d45603147d2ca75c942fde3250f15429c19e27db0d6c2118",
+  "case_id": "retry-amplification",
+  "candidate_tree_sha256": "29817f9d50407a2840b8506399ee1d1ef4ef6f23435f620c55784e329af3624e",
+  "rubric_sha256": "3a3f8318d020d66008f95e1816afc9b96057249756627cd8ce790c3f8a8d933d",
+  "reviewer": "/root/archive_storage \u2014 independent sealed OPS regression scorer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "amplification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Computes up to 9 Inventory attempts per original request and 1,800 offered attempts/second at 200 originals/second, distinguishing the timeout-assumption estimate and excluded client retries from measured sustained throughput or known latency/overlap."
+      }
+    },
+    {
+      "id": "deadline-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 5 and 7",
+        "observation": "Identifies continuing underlying work beyond caller timeout. Removes both layers' timeout retries, uses one end-to-end two-second Gateway deadline and remaining Checkout allowance, caps the Inventory attempt including acquisition, and retains a capacity slot through actual work completion or safe disposal."
+      }
+    },
+    {
+      "id": "capacity-protection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5",
+        "observation": "Justifies no timeout retries for this read-only availability failure mode, bounds concurrency from measured capacity and rejects immediately when full. This is a justified alternative overload mechanism; no retry backoff is needed for the removed retry path."
+      }
+    },
+    {
+      "id": "operational-proof",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 7",
+        "observation": "Proposes slow-Inventory tests at 200 client requests/second with at most 200 dispatches/second, two-second response target, configured active-work cap, non-growing queue, cancellation/release inspection and useful successful work after recovery without retry surge. No circuit-breaker recovery guarantee or executed outage is claimed."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/workspace.patch empty; evidence/trace.jsonl completed commands; evidence/answer.md line 7",
+        "observation": "Raw/final incident bytes match and no workspace modification is observed. Recorded commands inspect files/references only. The answer expressly marks checks proposed rather than observed and states the supplied project contains incident evidence only."
+      }
+    }
+  ]
+}

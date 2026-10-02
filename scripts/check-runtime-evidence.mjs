@@ -12,6 +12,7 @@ const reports = [
   ['examples/messaging/evidence/verification.json', 'source_sha256', 'examples/messaging'],
   ['examples/cache/report.json', 'candidate_sha256', 'examples/cache', 'verify.py'],
   ['examples/draining/verification.json', 'source_sha256', 'examples/draining'],
+  ['examples/worker-rollout/verification.json', 'source_sha256', 'examples/worker-rollout'],
   ['examples/infrastructure/verification.json', 'source_hashes', 'examples/infrastructure'],
   ['examples/recovery/report.json', 'verifier_sha256', 'examples/recovery', 'verify.py'],
   ['examples/quality/evidence.json', 'candidate_sha256', 'examples/quality'],

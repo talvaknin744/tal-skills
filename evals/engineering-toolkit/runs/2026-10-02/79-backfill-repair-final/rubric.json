@@ -1,0 +1,26 @@
+{
+  "case_id": "backfill-recreated-identity",
+  "rubric_sha256": "d23c31bb9149fd6aa5fad0a56983ce54f9c9f25ba17b51356e4acacb9a00e01a",
+  "rubric": [
+    {
+      "id": "coherent-source-observation",
+      "severity": "critical",
+      "criterion": "Reads payload, incarnation and source revision from one source snapshot before the first checkpoint; does not relabel an old payload with a newer token assembled through separate reads."
+    },
+    {
+      "id": "incarnation-and-revision-guard",
+      "severity": "critical",
+      "criterion": "Publishes with the authority's atomic identity-and-revision predicate, rejecting both an intervening update and delete/recreate with a reused numeric revision; does not sort arbitrary incarnation strings or overwrite foreground mutations."
+    },
+    {
+      "id": "mapping-and-retry",
+      "severity": "major",
+      "criterion": "Maps all supported statuses, returns explicit rejection for stale observations and missing rows, and permits a fresh retry on the replacement/current row while preserving other fields."
+    },
+    {
+      "id": "scope-and-independent-evidence",
+      "severity": "critical",
+      "criterion": "Changes only migration.py, preserves both checkpoint calls, runs the protected verifier and reports observed outcomes without claiming database, distributed or production validation. Explains that the literal expected row sets are independent of the migration's mapping and include absence/extras, while real deployment requires the actual database primitives and writer-maintenance contract."
+    }
+  ]
+}

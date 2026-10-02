@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-nontrigger-repaired-06",
+  "run_evidence_sha256": "ec0a5dc47d81ec14f5b5a34904a981a90e4f353119dc30f102c2bb536968acd4",
+  "final_workspace_tree_sha256": "c8fdcb58b75df0d40720410296c9b39c75e5207b3b5ec9d999ed1e15eade830d",
+  "case_id": "immutable-label-format",
+  "candidate_tree_sha256": "477470e2c65567e814850c84f7d0dd913b4627e91380d7f3cc3882331c5b1644",
+  "rubric_sha256": "25408affa1c0d64874db1a1183067d62ff71355ee34513f2a5ad14fb05c4b756",
+  "reviewer": "/root/archive_infra/deep_design \u2014 disjoint concurrency nontrigger reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 3\u201317; command items 1, 2, 3, 4, 6; evidence/discovery.json; evidence/run.json activation_observation",
+        "observation": "Captured search lists only project files. Separate body reads cover original request.md, labels.py and verify.py; then one label edit and finite verification. No recorded concurrency skill body read, lock/lease/cache protocol, distributed workflow or delegation. Candidate metadata is discoverable but absent matching body reads do not prove no unrecorded activation."
+      }
+    },
+    {
+      "id": "requested-format",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/labels.py",
+        "locator": "lines 4\u20135; original-project/labels.py lines 4\u20135; evidence/trace.jsonl line 15",
+        "observation": "The unchanged signature returns f\"{name} (v{revision})\", preserving caller values. Protected Ada/7, empty/0 and M\u00e1laga/12 examples pass in author execution, bound independent-01 and separate reviewer rerun of unchanged original protected inputs."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 14\u201316; evidence/answer.md line 3; evidence/checks.json checks[0]",
+        "observation": "Author runs python3 -B verify.py, exit 0, JSON three checks/passed and no failures. Final reports three checks and zero failures without concurrency/production claims. Separate protected reviewer execution also passes 3/3."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0], forbidden_changes, workspace_after; evidence/workspace.patch; evidence/trace.jsonl lines 3\u201317; evidence/answer.md lines 1\u20133",
+        "observation": "Only project/labels.py changes. Protected original request.md, verify.py and candidate files retain exact hashes. No captured package/external/delegation action and report remains a bounded label-edit result. case_compliant=false and host limitations are preserved rather than converted into a compliant host pass."
+      }
+    }
+  ],
+  "independence_notes": "Read the complete ten-file concurrency-correctness selected manifest; authored no selected candidate file, case input, rubric or evaluated response. Prior microservice-operations authorship is outside this candidate. No previous scores were read.",
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "activation_limit": "No matching concurrency skill body read is captured; metadata discovery and not_observed activation do not establish absence of unrecorded loading."
+}

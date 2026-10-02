@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-report-regression-15",
+  "run_evidence_sha256": "bf85d6254e9e3233c423089b8034bc40feae729930e28c5e2304b1cb20d0f396",
+  "final_workspace_tree_sha256": "902826c3d3b07cdeaebbef62589503724608e6cf74f8d7ad4b5fc13dd160bd35",
+  "case_id": "schema-cutover-window",
+  "candidate_tree_sha256": "a3e43540def7958af6fcce24be2499873588b74264c996af4a0c4c86b0ce13f3",
+  "rubric_sha256": "f5b2aaa9b8ae4c6c1ae0a6733c690c38215741aefd3c1b6c1343545b96da0142",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "lock-and-state",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10-20, 26-27",
+        "observation": "Corrects lock-free assertion using supplied five-second lock timeout; distinguishes copying, confirmed blocked/failed, unknown and confirmed success with proposed operator, pause/stop actions, observed authority/worker/lock prerequisites and 30-second stop/60-second unresolved escalation bounds."
+      }
+    },
+    {
+      "id": "compatibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 7-8, 17-22, 29",
+        "observation": "Stops destructive cutover while V1/delayed work remains eligible, gates old operations at boundary, retains compatible bridge/old representation and requires complete post-switch write recovery. Rollback disables every new-only reader/predicate before old-only writer admission; no blind retained-table rename."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 26-31",
+        "observation": "Defines selected-version stop/status checks, conflicting lock/five-second wait/release/retry test, old/bridge/new clients and delayed work, independent full-set value/update/delete oracle and rollback after accepted new writes. Atomic rename is explicitly only local table switch."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11, 26-31; evidence/workspace-changes.json; evidence/workspace.patch",
+        "observation": "Clearly marks proposed bounds, unexecuted disposable-target checks, unresolved mapping/ledger facts and no migration/external service operation. Both fixture files and candidate are unchanged with empty patch; observed trace consists of local source reads."
+      }
+    }
+  ]
+}
