@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-expiry-oracle-regression-17",
+  "run_evidence_sha256": "7bb29d6df25d99194f5b19082347857ce23608eb889ee8dbe6d3ecdbd708e097",
+  "final_workspace_tree_sha256": "00c7bc77f75d0a7e73855a2fefb69ec76d8b3f00ff766c1c8b84f9828bb7bf45",
+  "case_id": "tenant-fanout",
+  "candidate_tree_sha256": "e8a39d60520a59ef0ea3414aaa0c4949fbc60ab095e89abd69154c2be0d91e84",
+  "rubric_sha256": "2e45593ecf899eee040f39374a35b3598ae9b1dae324867f1c9b2bd08a377656",
+  "reviewer": "GPT-6 Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "budget-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Admission and budgets; first paragraph and provisional fleet budget table",
+        "observation": "Calculates 4\u00d740\u00d73 = 480 connection demand against 100, proposes a shared fleet ceiling of 90 with named 69/12/6/3 allocations, and explicitly says pod caps do not establish a fleet-wide cap. Provisional amounts are labelled initial review limits, not measured capacities."
+      }
+    },
+    {
+      "id": "fairness",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Admission and budgets; bounded queues and A metadata/export scheduling",
+        "observation": "Uses authenticated tenant and work class, bounded queues, and a protected B metadata allocation; distinguishes short metadata from long exports and describes fairness within A's allocation. Specifies observable admission/start/finish/deadline measurements. No universal isolation proof is claimed."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Ownership of accepted work",
+        "observation": "Keeps execution and all three connection permits until issued queries actually stop or settle and connections return/close, with exactly-once lifecycle ownership. Accepted durable exports remain retained; no deleting old jobs to shed load. It explicitly marks effect ledger, fencing, and DB visibility unresolved and does not claim safe replay is established."
+      }
+    },
+    {
+      "id": "feedback-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Feedback and recovery; Required checks before adopting the policy",
+        "observation": "Separates admitted-work latency from 1 ms rejection feedback, identifies misleading median behavior, considers offered/rejected demand for autoscaling while preserving a fleet ceiling, bounds retries, and gives controlled overload/recovery scenarios and measurements. The checks are explicitly proposed and unexecuted."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes arrays; corroborated by evidence/workspace.patch and evidence/run.json input_integrity",
+        "observation": "No workspace changes; fixture hash remains the baseline. Answer labels the policy proposed and each recovery check proposed/unexecuted; run evidence distinguishes planning output from runtime evidence."
+      }
+    }
+  ]
+}

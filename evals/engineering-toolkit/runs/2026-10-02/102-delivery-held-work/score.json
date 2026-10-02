@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-held-work-05",
+  "run_evidence_sha256": "6d7447496ca21988b471caa427fd9cc02c7267ca42801a53b69bb520d2d0190e",
+  "final_workspace_tree_sha256": "56d8f8ea7e247d694690aa1b1928852ebeb223adb75107e33586c59abebdf5b0",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "GPT-6 Luna (independent scorer)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Broker contract \u2014 supplied, opening paragraph",
+        "observation": "Maps A1/A2 to Alpha by server authenticated_customer regardless of g1/g2, recommends trusted identity for group and admission accounting, and states grouping does not authorize reads."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Broker contract \u2014 supplied; B1 outcome and simultaneous capacity \u2014 calculated",
+        "observation": "States standard fair grouping gives no FIFO ordering, per-tenant rate cap, reservation, interruption, or deadline. Separates approximate future delivery effects from useful completion, accounts for in-flight and processing-time signals, and rejects dwell as completion evidence."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "B1 outcome and simultaneous capacity \u2014 calculated",
+        "observation": "Calculates Alpha's 2\u00d73 permits held through t=8, B1's wait from t=1 to t=8 and finish at t=9 (6 seconds after deadline 3), and the 6+2=8 demand against physical six. Also rejects four worker slots and equal-job counting as solutions."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Actual release \u2014 supplied constraint",
+        "observation": "Says visibility extension/cancellation at t=1 frees zero actual permits, which remain held until t=8; explains local release would fictitiously overstate headroom and calls for keeping charges through termination and settlement with recoverable work and repeated-effect reconciliation."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Allocation and waiting \u2014 proposed, unexecuted",
+        "observation": "Gives a dependency-wide cost-weighted gate, 3-permit Alpha and 1-permit Beta charging, five-permit Alpha maximum, one quiet reservation, four resident slots with one quiet slot retained, bounded local deferred receives and eventual Alpha turns. Partial: expiry requires a verified durable pause/redelivery path, but ownership, lease timing, retention, and finite retry limit remain unresolved, so the finite disposition/recovery design is not complete; the proposed one-per-customer/16-second guard does not resolve those explicitly open items."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Discriminating checks \u2014 proposed, unexecuted table; Recovery row",
+        "observation": "Proposes checks for actual held permits, fair receive versus useful start/finish, B1 deadline, accepted-job recovery, eventual A2 progress, changed costs, fragmented groups, visibility/redelivery, and signal-before-stop; labels all unexecuted and distinguishes the counterfactual schedule. Partial: tenant resource-held time is not explicitly defined as a verification oracle."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch and evidence/workspace-changes.json",
+        "locator": "patch is empty; changes lists no changes/forbidden_changes",
+        "observation": "Fixture is unchanged. Answer uses the supplied contract and arithmetic, labels proposed policy/checks unexecuted, and makes no claim of live service experiments or measured provider guarantees. Run evidence reports no external/delegation events."
+      }
+    }
+  ]
+}

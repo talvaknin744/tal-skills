@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-resident-completion-record-18",
+  "run_evidence_sha256": "f4e9be851274cf6666a1929ac11c816c4e163679aae5f6005eee08b88ae09415",
+  "final_workspace_tree_sha256": "45ad7643fbf653b4ec79fa8e029e8f2f5ea7a5f4849667925cf59ece0f327bec",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "ea2607f606434a5481fda298c45338e02cdbad35cf0a5d333339b253e731eb8d",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "Independent reviewer: /root/luna_resident_completion_18 (not the candidate or response author)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 17-19; fixture project/worker.md lines 3-8, 23-27",
+        "observation": "Correctly states all four A jobs own the four slots from time 0 despite active_A=2 and idle CPU, charges prefetch/waiting/blocked/retry/settling through actual release, and requires admission before receipt."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7-9, 29",
+        "observation": "Computes current and draft B/C starts only at time 8, finishes at 9 after deadline 3, and A3/A4 execution [8,16) under current policy. Does not infer deadline protection from active_A or delivery fairness."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9-11, 17-21",
+        "observation": "Offers a feasible four-slot allocation with at most three A residents and one protected pooled B/C slot; B/C run sequentially [1,2), [2,3), while A4 remains recoverable at the broker then runs [3,11). Also explains the immutable A limit alternative and reserve slack caveat."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 18-19, 39, 43; project/worker.md lines 10-15",
+        "observation": "Recognizes cancellation at 1 does not reclaim nonpreemptible A3/A4 before 8, so B/C cannot finish before 9 under borrowing. Requires actual release and retained broker identity for rereceipt; does not count signal acknowledgement as reclaimed capacity."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-9, 18, 27-31, 43",
+        "observation": "Shows eventual A finishes and protected B/C outcomes, states the early utilization tradeoff, compares FIFO and reserve at matching horizons, separates useful execution from resident slot-time, and quantifies hypothetical lost/repeated work while labeling interruption unsupported."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 25-29, 33-41",
+        "observation": "Provides explicit held-slot and useful-finish assertions, per-tenant slot-time accounting, a protected arrival immediately after borrowing starts, resident/prefetched/blocked/retry/settling state checks, delayed cleanup, cancellation versus actual completion, capacity-gated recovery, and eventual A deadline checks. Clearly labels this plan unexecuted."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch; evidence/workspace-changes.json; evidence/answer.md; evidence/run.json",
+        "locator": "empty patch and changes=[]; answer lines 15, 19, 23, 29, 33; run.json execution_status/input_integrity/capability_deviations",
+        "observation": "No fixture changes or worker/broker operations appear in the recorded run. The analysis uses the supplied four-slot and job contract and marks bounds and verification as proposed/unexecuted, while explicitly leaving provider behavior and production guarantees unknown. Run metadata also records read isolation was absent/unverified and inherited network-capable tools existed; no deployed behavior is claimed."
+      }
+    }
+  ]
+}

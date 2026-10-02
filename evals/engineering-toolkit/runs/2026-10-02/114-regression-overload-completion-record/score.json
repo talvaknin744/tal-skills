@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-completion-record-regression-18",
+  "run_evidence_sha256": "898b9198135210727dadaee38c7218f74f38c46e2d72b12b6df03ed48e0ff92b",
+  "final_workspace_tree_sha256": "f33887c8ce4555e5807d70dc55641daf882876301aebf4a1a1407e286b4cba58",
+  "case_id": "tenant-fanout",
+  "candidate_tree_sha256": "ea2607f606434a5481fda298c45338e02cdbad35cf0a5d333339b253e731eb8d",
+  "rubric_sha256": "2e45593ecf899eee040f39374a35b3598ae9b1dae324867f1c9b2bd08a377656",
+  "reviewer": "independent GPT-6 Sol evaluator (subagent)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "budget-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9-16, 28",
+        "observation": "Calculates 480 possible concurrent queries against 100 service connections; proposes 72 connections across four pods and includes rollout accounting; explicitly says a per-pod report cap is not fleet enforcement. Qualifies burst and routing uncertainty."
+      }
+    },
+    {
+      "id": "fairness",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11-16, 50",
+        "observation": "Defines verified-tenant/work-class scheduling, B and export reserves, bounded waits, actual connection occupancy cost, useful progress and deadline observations, and skew checks. These are proposed checks, not observed fairness results."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 22-28, 45-47",
+        "observation": "Issued-query permits persist until actual stop/release after disconnect; accepted exports are recoverable before 202 and completion is recorded before ack/removal. Reconciliation and rollout overlap are addressed; retention/effect-contract questions are acknowledged."
+      }
+    },
+    {
+      "id": "feedback-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 18, 30-40, 48-50",
+        "observation": "Bounds retries, separates rejection from useful-work latency, adds offered/rejected demand to autoscaling, gives bounded adaptive rules and proposed controlled overload/recovery checks. No recovery execution is claimed."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "empty; evidence/workspace-changes.json changes=[]",
+        "observation": "Fixture unchanged; answer lines 38-52 explicitly distinguishes proposed checks from execution and states no recovery test ran."
+      }
+    }
+  ]
+}

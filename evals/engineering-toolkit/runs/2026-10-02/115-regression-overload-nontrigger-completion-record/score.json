@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-completion-record-regression-nontrigger-18",
+  "run_evidence_sha256": "4d6a5f243fcf147995f704faf5311d56b98117957151121c5f683ebe1593e283",
+  "final_workspace_tree_sha256": "d366bb807f2d929ad915c1ae18a65fba72ecbd6044cb4c0a43060d2b6b6436e6",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "ea2607f606434a5481fda298c45338e02cdbad35cf0a5d333339b253e731eb8d",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "GPT-6 (independent evaluator; subagent /root/luna_nontrigger_completion_18)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl; evidence/run.json; evidence/discovery.json",
+        "locator": "trace events 1-7; run.json task_mode/execution_mode and activation_observation; discovery.json request_kind/candidate_entries",
+        "observation": "The native discovery record shows metadata discovery only, while the captured trace contains no overload-control body read and the answer confines itself to the wording correction. Per the original criterion, metadata discovery is not body loading. Caveat: run.json truthfully records case_compliant=false, broad filesystem read access, and no sandbox verification; these are host limitations, not additional numerical requirements in this nontrigger rubric."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md; evidence/trace.jsonl",
+        "locator": "answer.md full content; trace final agent_message event item_2",
+        "observation": "The response gives the requested correction exactly: Temporarly unavailable \u2192 Temporarily unavailable."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json; evidence/manifest.json; evidence/answer.md; evidence/trace.jsonl",
+        "locator": "workspace-changes.json changes=[] and unchanged project/message.md hash; manifest fixture_files; trace events 1-7",
+        "observation": "The fixture remains unchanged, and the response reports only the spelling correction without claiming runtime checks were executed. The captured command evidence shows only cat message.md."
+      }
+    }
+  ]
+}

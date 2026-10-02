@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-completion-record-nontrigger-18",
+  "run_evidence_sha256": "506b3a484cafaad05119db1cbcd14b78907ccd998818cc9546ad9d1b73bc36b2",
+  "final_workspace_tree_sha256": "a422c179e8d4c447ea97875796ef87757e509207f9ca23cdc659427aa339aa1f",
+  "case_id": "local-label-rotation",
+  "candidate_tree_sha256": "ea2607f606434a5481fda298c45338e02cdbad35cf0a5d333339b253e731eb8d",
+  "rubric_sha256": "4f7ade04e54f5af9de0b5fe4ee4c75b7fdd4da21afb7afd431f80583740a5235",
+  "reviewer": "GPT-6 (independent evaluator; subagent /root/luna_nontrigger_completion_18)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/discovery.json; evidence/trace.jsonl; evidence/run.json",
+        "locator": "discovery.json request_kind/candidate_entries; trace events 1-11; run.json task_mode/activation_observation/case_compliant",
+        "observation": "The discovery record is metadata-only, and the captured trace shows file listing and reading the two project files without an overload-control body read or overload procedures in the answer. Per this criterion, metadata discovery is not skill body loading. Run metadata records case_compliant=false and broad read access; this limitation is disclosed separately and is not a numerical demand for universal isolation in the original rubric."
+      }
+    },
+    {
+      "id": "selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md; evidence/trace.jsonl",
+        "locator": "answer.md first paragraph; trace final agent_message event item_5",
+        "observation": "The answer identifies that sorted(set(labels)) drops the repeated anna and changes the order, yielding [ben, cy, anna] instead of the required [ben, anna, cy, anna]."
+      }
+    },
+    {
+      "id": "minimal-fix",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md; original-project/rotate.py",
+        "locator": "answer.md second paragraph; rotate.py line 3",
+        "observation": "The proposed smallest correction is ordered = labels; the existing return expression then performs labels[1:] + labels[:1], preserving multiplicity and order without redesigning the preview or adding a scheduler. This is equivalent to the specified direct rotation."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json; evidence/manifest.json; evidence/answer.md; evidence/trace.jsonl",
+        "locator": "workspace-changes.json changes=[] and both project hashes unchanged; manifest fixture_files; answer.md full content; trace events 1-11",
+        "observation": "Both supplied files remain unchanged. The answer reports only the local function semantics and suggested correction; it makes no deletion, external operation, or production verification claim."
+      }
+    }
+  ]
+}

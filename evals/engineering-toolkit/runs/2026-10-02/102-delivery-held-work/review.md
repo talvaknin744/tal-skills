@@ -1,0 +1,13 @@
+# Independent review
+
+**Verdict:** all critical criteria pass; both major criteria are partial. Scores: trusted-grouping 2, broker-boundary 2, resource-feasibility 2, actual-release 2, minimal-allocation 1, verification 1, scope 2. Total: 12/14.
+
+**Candidate and run identity.** Candidate `overload-control`, tree SHA-256 `a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5`, was discovered natively in the isolated trial workspace at `.agents/skills/overload-control/SKILL.md`. The recorded host completed run `tal-worker-rollout-oct02-delivery-held-work-05` on codex-cli 0.159.2. The subject model was inherited `gpt-6-sol` at `xhigh`; this review was independently scored by GPT-6 Luna. I authored neither candidate nor response and did not consult other scores, historical results, or prior reviews.
+
+The strongest evidence is in `evidence/answer.md`: the supplied fair-delivery contract is carefully separated from worker/dependency capacity, and the fixed trace arithmetic is correct. It rejects the impossible eight-permit promise and explains why extending visibility or locally decrementing permits cannot free still-running operations. The proposed pre-admission schedule is expressly counterfactual and unexecuted; its B1-at-t=2 and A2-at-t=16 results do not claim a provider experiment or prove a production SLO.
+
+The allocation proposal is useful but incomplete under the rubric. It bounds local deferred receives and worker residency, accounts by trusted customer and permit cost, and gives a finite 16-second local wait guard. However, after expiry it leaves the durable pause/redelivery mechanism, ownership, lease timing, retention, and finite retry limit unresolved. The verification plan covers the required schedule families and useful completion outcomes, but does not explicitly measure tenant resource-held time.
+
+The saved result is a response review, not a tested implementation: `evidence/run.json` records review mode and no verification command. It identifies native discovery and observed candidate body access, while noting body-read observation does not prove all references were read. The run is marked `case_compliant: false`: read isolation and sandbox verification were unavailable, and inherited tools included network-capable capabilities despite the instructed no-web boundary. The host was `/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex`, version 0.159.2. These caveats limit evaluation isolation; they do not change the content-based scores above. No live provider experiment is claimed.
+
+Criterion evidence and observations are recorded individually in `score.json`. The workspace patch is empty and the changes manifest records no changes, supporting the unchanged-fixture scope criterion.

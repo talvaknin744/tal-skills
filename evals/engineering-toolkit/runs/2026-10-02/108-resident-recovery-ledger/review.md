@@ -1,0 +1,13 @@
+# Independent score review: resident-reserve
+
+Reviewer: GPT-6 Luna. I authored neither the candidate nor the response. The subject model was inherited `gpt-6-sol` at `xhigh`, with no override; it is separate from this scorer.
+
+Candidate identity: `overload-control`, candidate tree SHA-256 `e8a39d60520a59ef0ea3414aaa0c4949fbc60ab095e89abd69154c2be0d91e84`. Raw answer SHA-256 `3a75d7dee87a6ac55f192d892eeb9fc37fd3ade7ebb2f7b5689fd8ae05532df8`. Fixture tree SHA-256 `3f76fa405122ce71db3b3b11ccc1473745a3cdd64b150da66de51e1be9331213`. Runner tree SHA-256 `5228a920c35c3741c13798dd7be2f3fa00f31b135b51c997b8d7a0508ae89721`; dependency tree SHA-256 `5d004843331a70718f449e5f3ba8d2f7e7486c3fb266157ffa4a5f10e1fde359`.
+
+The critical behavior criteria score 2/2: lines 3 and 5 correctly account for four resident A jobs and show both the original policy and the proposed two-slot loan miss the B/C deadline; lines 9–21 offer a trace-specific physical allocation with one protected slot, actual release, and recoverable A4; the answer does not claim that cancellation interrupts executing work. This meets the rubric's equivalent-allocation clause: three A-held slots plus the protected fourth slot, with B/C sequentially completing by 3. Its usefulness depends on the exact stated one-second jobs and zero-overhead timing, a qualification the answer states.
+
+The two major criteria are partial. The common-horizon busy-fraction calculation and distinct prefetch residency measure are correct, and A progress is addressed, but the response does not expressly count lost/repeated work in a hypothetical interruptible design. The verification plan supplies useful capacity, deadline, actual-release, lease, and recovery oracles, but does not make prefetch, blocked, and retry-wait residency each a concrete transition/test case.
+
+Raw-case compliance is **false**. `run.json` says the subject inherited user/system/plugin guidance, filesystem read isolation was false, and sandbox verification was false. These are host/evaluation assurance limits, separate from the answer's observed quality. The run completed and its integrity record shows unchanged inputs and no workspace changes. It was a design review only: no worker or broker behavior was experimentally verified. Candidate metadata discovery occurred and trace event `item_7` records a candidate reference-body read; this observation does not establish that every reference was read. No universal isolation claim is made.
+
+Scores: critical `resident-accounting` 2, `current-completion` 2, `reserve-policy` 2, `borrow-reclaim` 2, `scope-and-evidence` 2; major `progress-and-cost` 1 and `verification-oracle` 1. Overall rubric result: partial.

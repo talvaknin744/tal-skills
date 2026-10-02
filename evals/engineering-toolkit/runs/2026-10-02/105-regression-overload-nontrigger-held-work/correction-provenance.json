@@ -1,0 +1,31 @@
+{
+  "audit": "Correction after exact-rubric audit; no raw trial, source, input, or candidate files changed.",
+  "criterion_id": "nontrigger",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "preserved_initial_artifacts": {
+    "initial-score.json_sha256": "7da3f536dbe77504b6d3081813b241e0fc08f10b068e5060df9316ea29370030",
+    "initial-review.md_sha256": "8f1b1cdeff24a06c03d0198553b2d34312ac5e3860fb67cd3473c65de4d14b82"
+  },
+  "before": {
+    "score.json_sha256": "7da3f536dbe77504b6d3081813b241e0fc08f10b068e5060df9316ea29370030",
+    "review.md_sha256": "8f1b1cdeff24a06c03d0198553b2d34312ac5e3860fb67cd3473c65de4d14b82",
+    "nontrigger_score": 1
+  },
+  "after": {
+    "score.json_sha256": "6a51cd7d1d0d86b534acb826bf0c574ef1f16b600ad670a3abcb87e418870eb1",
+    "review.md_sha256": "a444a1881d36fe574d61e277faa61062072a0d88bebf0268b5e48a275851ced7",
+    "nontrigger_score": 2
+  },
+  "field_diff": {
+    "score.json.criteria[id=nontrigger].score": {
+      "from": 1,
+      "to": 2
+    },
+    "score.json.criteria[id=nontrigger].evidence.observation": {
+      "from": "Partial because absence of unrecorded loading could not be proven with filesystem_read_isolation=false.",
+      "to": "Captured trace shows no candidate-body read or overload/admission/retry redesign; no universal-absence claim."
+    },
+    "review.md": "Revised critical nontrigger result from partial to pass and separated raw environment limitations from the behavioral judgment."
+  },
+  "reason": "The original rubric requires that the agent not load overload-control or redesign admission/retry policies. Captured trace shows only a fixture read and scoped spelling correction; metadata discovery was explicitly metadata_only_no_model_turn and is not activation. Requiring universal proof of no unrecorded read added a stricter condition absent from the criterion. Preserve not_observed and filesystem isolation caveats without converting them into an unmet behavioral requirement."
+}

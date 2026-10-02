@@ -1,0 +1,15 @@
+# Over source18 static review
+
+No material finding in this narrow independent source17→18 completion refactor. Reviewer `/root/archive_quality` authored none of the selected package, cases or response. No response or grade was read.
+
+The eight rows separate the earlier broker, allocation/waiting, release and discriminating-check requirements. They retain verified provider semantics and trusted identity; feasible physical/aggregate shares; bounded resident and deferred work; durable expiry/recovery authority, owner, retention and capacity-gated re-admission; eventual arbitration; actual release/peak; interruption cost; and named-window held-unit-time/useful-completion oracles. The matrix retains changed-cost/group fragmentation, signal-before-stop, visibility-extension/expiry/redelivery and recovery outcomes, while explicitly covering implicated retained states and protected arrivals after borrowing. [The JSON clause map](static-review-18.json) identifies each previous requirement’s new rows.
+
+Conditional activation remains unchanged. N/A requires an absent branch; unknown facts remain unresolved. Concrete provisional bounds are separate from unknown production SLOs, and every row distinguishes supplied/executed/proposed/unresolved evidence. These gates retain the unverified-reclaim and proposed-versus-observed safeguards in condensed form. The unchanged references retain business-approved terminal-disposition and comparable observation-horizon details. No fixture identities, numerical answers, policy amounts or provider limits are introduced.
+
+First67 lines/frontmatter/public name/trigger/routes/five-step workflow and six other package files are unchanged. Source17 SHA256 `4b6014e05431c10c0cbd254e77e8a4f7494f9c82d74dc5724983b69cb705871d` becomes `20a78ef8dd4d2ee356e7291267b3e49ca9e67f3449cde6eec2fb27280cf89653`; current package tree is `ea2607f606434a5481fda298c45338e02cdbad35cf0a5d333339b253e731eb8d`.
+
+Seven package file/mode records match both freeze18 inventories, four links resolve locally and both seals recompute. All13 integration and20 regression case records and runner metadata equal source17;34/40 other candidate files preserve hashes/modes. Against original `ae30ed6`,270 protected files—including46 generated adapters, scripts, agents, workflows, selected raw evaluation files and shared contracts—are byte/mode unchanged. Only Over’s entrypoint differs among tracked skills/agents/workflows/adapters/scripts.
+
+[Exact diff](history/static-review-18/exact.diff) SHA256 `97630eab27644b2b58d92567047b76410e34d117ae0595bc1f02dd1051d0645b` reconstructs the change. History preserves exact before/after source and both raw freezes; the JSON binds original hashes, modes and aliased origins. Source17 artifacts remain unchanged.
+
+No source/case/rubric/runner/generated edit, commit, model dispatch or behavioral grade occurred. Static preservation does not imply behavior or production correctness passed. Historical partials and root’s selected evaluations, independent scores and final validation remain separate.

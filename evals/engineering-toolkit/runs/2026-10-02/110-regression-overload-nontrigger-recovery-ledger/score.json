@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-expiry-oracle-regression-nontrigger-17",
+  "run_evidence_sha256": "6dc9535a6e86bc1f428d57340bcd8d6cc1c98f09952ab7ed4f34186a59c12150",
+  "final_workspace_tree_sha256": "edc39d9a3b9b482ad2d90af5aba6077ad32c7becf310e38371aff3a06ff66849",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "e8a39d60520a59ef0ea3414aaa0c4949fbc60ab095e89abd69154c2be0d91e84",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "GPT-6 Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_0\u2013item_3; corroborated by evidence/run.json activation_observation and evidence/answer.md",
+        "observation": "The recorded answer only returns the requested spelling correction. Captured command events show a filename listing and read of message.md, with no overload-control body read or admission/retry redesign. Native metadata discovery in evidence/discovery.json is discovery only; activation is recorded not_observed, not proof against unrecorded loading."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "entire response",
+        "observation": "Provides the corrected wording exactly: Temporarly unavailable \u2192 Temporarily unavailable."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes arrays; corroborated by evidence/workspace.patch and evidence/run.json input_integrity",
+        "observation": "No workspace changes and fixture baseline is unchanged. The answer makes no proposed checks or runtime claims; it only supplies the wording correction."
+      }
+    }
+  ]
+}
