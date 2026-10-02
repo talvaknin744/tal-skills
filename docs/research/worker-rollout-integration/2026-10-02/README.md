@@ -59,7 +59,7 @@ checks pass.
 
 The [initial deterministic validation record](validation.json) preserves the
 earlier 460/460 test result with zero failures/skips and 46 generated adapters.
-It is historical evidence and is not rebound to later repairs. The final
+It is historical evidence and is not rebound to later repairs. The first checkpoint
 [publication validation](validation-publication-15.json) passed 521 tests with
 zero failures, skips or cancellations; all 46 generated adapters are current.
 Its source inventory and output hashes are separate from behavioral scores.
@@ -80,12 +80,24 @@ inventories against silent truncation; integrity checks do not grade responses.
 
 The current package observations pass all selected existing-behavior and
 nontrigger criteria. Schema/backfill, cache/merge and Python/Go deadline cases
-also pass their selected new criteria. The two latest substantive overload
-cases remain partial: delivery verification omits an explicit active-permit
-capacity oracle and visibility/redelivery check; resident-work guidance omits
-the discussion of lost or repeated useful work under interruption. All their
-critical safety criteria score 2. This requested publication checkpoint retains
-those limits as follow-up work and does not claim all new capabilities passed.
+also pass their selected new criteria. The overload follow-up now passes both
+selected substantive cases at 14/14, plus the unchanged tenant-fan-out case at
+10/10, wording nontrigger at 6/6 and new local-task nontrigger at 8/8. The final
+source routes broker and tenant reviews to one response scaffold covering fleet
+receipt limits, recovery, actual release, interruption costs and verification.
+Its coverage audit checks every applicable field before completion.
+Original cases and scoring criteria remain unchanged.
+
+The [first checkpoint](release-checkpoint-15.json) was committed and pushed as
+`ae30ed6` with successful CI while its two new overload cases remained partial.
+The later source16, source17 and source18 partials also remain in the trial
+index, including the corrected source18 critical partial. Their scores are not
+rebound to source19. The [source19 static review](static-review-19.md)
+and [fresh publication validation](validation-publication-19.json) are separate
+structural evidence. Fresh repository validation passed 521 tests with zero
+failures, skips or cancellations; all 46 generated adapters are current.
+Selected forward passes do not establish causal improvement,
+complete regression freedom or deployed broker/scheduler behavior.
 
 The latest independent native scores are 16/16 for the original workflow,
 22/22 for repeated retirements and 6/6 for the finite local task. They bind their
@@ -109,8 +121,10 @@ correctness, infrastructure, overload and operation skills. The
 [pre-repair record](installation-final-record.json) retain their historical
 dependency closures. The [checkpoint-08 installation](installation-final-08.md)
 and [checkpoint-11 installation](installation-final-11.md) remain historical.
-The [latest installation](installation-final-15.md) matches all five frozen
-package trees and verifies all 230 managed data files against source and adapter
+The [first published installation](installation-final-15.md) and subsequent
+[source16](installation-final-16.md) and [source17](installation-final-17.md)
+records remain historical. The [latest installation](installation-final-19.md)
+matches all five frozen package trees and verifies all 232 managed data files against source and adapter
 bytes and modes. Its repeated installation changed zero files. These are
 structural installer checks; they do not establish Claude or Codex execution.
 The hold recorded inside that immutable checkpoint describes its collection

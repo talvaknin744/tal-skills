@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "kind": "narrow-independent-static-source-review",
+  "date": "2026-10-02",
+  "reviewer": "/root/archive_quality",
+  "baseline_commit": "ae30ed697d4e76a25b1d13359c5d0d60e25aaf2c",
+  "independence": {
+    "authored_selected_candidate": false,
+    "authored_selected_cases": false,
+    "authored_response": false,
+    "secondary_metadata_only_audit": "/root/archive_quality/fairness_nontrigger_score",
+    "snapshot_copy_is_source_authorship": false
+  },
+  "scope": {
+    "version": 16,
+    "changed_source": "skills/performance/overload-control/SKILL.md",
+    "changed_lines": [
+      75,
+      76
+    ],
+    "reviewed": "Two returned-result table cells only; conditional activation, held-capacity and visibility/recovery oracles, genericity and old-contract preservation.",
+    "excluded": "Responses, grades, primary-provider rereading, behavioral execution, installed workflow scoring and publication acceptance."
+  },
+  "disposition": "no_material_findings_in_narrow_static_scope",
+  "findings": [],
+  "source": {
+    "before_sha256": "580fb4f6090b6f9fa7276845b5e75ecf414b03ce4162ed791781ef13040e68d5",
+    "after_sha256": "c8ad23a9fb9e50f691ea3889e3aeaf7b4fb01b1f631bc399a2574caced18b444",
+    "before_snapshot": "history/static-review-16/before.SKILL.md.snapshot.txt",
+    "after_snapshot": "history/static-review-16/after.SKILL.md.snapshot.txt",
+    "mode": 420,
+    "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+    "package_files": [
+      {
+        "path": "LICENSE",
+        "sha256": "ac8d9fdd4a38fc1dcce90d64a1ba0c3b16c3390b1aab352500ddbd46ba0f5ba4",
+        "mode": 420
+      },
+      {
+        "path": "SKILL.md",
+        "sha256": "c8ad23a9fb9e50f691ea3889e3aeaf7b4fb01b1f631bc399a2574caced18b444",
+        "mode": 420
+      },
+      {
+        "path": "agents/openai.yaml",
+        "sha256": "7fe527558dbd22fe04417c328d5248b275f831e6f10e131ba4ec2bfb3eb2b55e",
+        "mode": 420
+      },
+      {
+        "path": "references/admission.md",
+        "sha256": "64a4f98cd66468466a28647318a9b836ad723e3406d6499d600cf400883227ac",
+        "mode": 420
+      },
+      {
+        "path": "references/feedback-and-recovery.md",
+        "sha256": "4c0da9c6c42b7d32ae78b555b4ff126249bb1961e29c0e0ce80cc4bd25567442",
+        "mode": 420
+      },
+      {
+        "path": "references/queues-and-fairness.md",
+        "sha256": "f828d9515c55b68a8c2186775fa86e29404bb6d8e0be245c16dc9d5ef2071578",
+        "mode": 420
+      },
+      {
+        "path": "references/sources.md",
+        "sha256": "0086db3fcac055a4aea04b5d747b6756b5d1e492a1eafd55eccba9e66f02d838",
+        "mode": 420
+      }
+    ]
+  },
+  "diff": {
+    "path": "history/static-review-16/exact.diff",
+    "sha256": "034931edd49830ac710b8a9f99345f207e1bba13359a5a58c2ad44e75ceb63ec",
+    "origin_alias": "task-local-change/tal-overload-held-work-contract-20261002-01/exact.diff",
+    "recomputed_exactly_from_baseline_and_current": true
+  },
+  "freeze_bindings": [
+    {
+      "suite": "integration",
+      "origin_alias": "task-local-freeze/tal-worker-rollout-oct02-held-work-integration-freeze-16.json",
+      "path": "history/static-review-16/held-work-integration-freeze-16.json",
+      "file_sha256": "ea6949bb6361b12a9a62da69006ca2febbeb679d54f1f95d80f1eb20a110e7ba",
+      "freeze_sha256": "6a39a49df0646f44e727a98fc28ec57c6c7390d9737aaf70b139e158dd184f15",
+      "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+      "mode": 420
+    },
+    {
+      "suite": "regression",
+      "origin_alias": "task-local-freeze/tal-worker-rollout-oct02-held-work-regression-freeze-16.json",
+      "path": "history/static-review-16/held-work-regression-freeze-16.json",
+      "file_sha256": "d0d0ec008f85da0a7a938bafc576f39268f8d0d218259535da105cb134a742cb",
+      "freeze_sha256": "a9dc3a6d9e9ec60b0cca1b65e3834dfaca165402d56f83333b8077b2ab595620",
+      "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+      "mode": 420
+    }
+  ],
+  "checks": [
+    {
+      "id": "conditional",
+      "result": "pass",
+      "evidence": "SKILL.md:43,68 limits result rows to broker/tenant-fairness work. Row75 qualifies proposed or rejected interruption/reclaim, so it does not demand or authorize interruption. Row76 qualifies broker visibility/leases; unknown and unexecuted states remain explicit."
+    },
+    {
+      "id": "actual-capacity",
+      "result": "pass",
+      "evidence": "Row76 requires held dependency accounting through signal, continued execution, actual release and re-admission, with peak bounded by physical capacity. Row75 preserves acknowledgement-is-insufficient and owner/cleanup evidence. No capacity amount, assumed provider reclaim or cancellation-completion guarantee is added."
+    },
+    {
+      "id": "visibility-and-redelivery",
+      "result": "pass",
+      "evidence": "Row76 requires extension and expiry/redelivery schedules with ownership, resource and outcome evidence for original/redelivered attempts. It does not equate extension or lease expiry with actual execution termination. This agrees with unchanged queues-and-fairness.md:39\u201355 broker/version distinctions and admission.md:22\u201327 ownership/settlement."
+    },
+    {
+      "id": "lost-and-repeated-work",
+      "result": "pass",
+      "evidence": "Row75 asks recoverable progress, useful work lost/repeated and replay cost or explicit unknowns for proposed/rejected reclaim. This preserves the distinction between hypothetical recovery and an available termination/checkpoint contract; consistent with queues-and-fairness.md:29\u201337."
+    },
+    {
+      "id": "generic-no-hidden-answers",
+      "result": "pass",
+      "evidence": "No fixture customer/job/generation labels, resource counts, timing values, computed answers, selected algorithm, provider threshold or private rubric content. Instructions require evidence derived from the supplied target and explicit bounds/status."
+    },
+    {
+      "id": "preserved-contract",
+      "result": "pass",
+      "evidence": "Only79-line entrypoint rows75/76 differ. Row75 retains the entire prior sentence as a prefix; row76 expands the original physical-capacity invariant through each resource-held phase. All other original lines, public name/description, five-step workflow, conditional branches, broker/allocation rows and six other package files are unchanged."
+    }
+  ],
+  "actual_checks": {
+    "current_seven_file_inventory_matches_both_freeze16": true,
+    "four_local_links_resolve_inside_package": true,
+    "freeze16_seals_recomputed": 2,
+    "corpus_and_runner_metadata_equal_freeze15_both_suites": true,
+    "only_candidate_delta_15_to_16": [
+      [
+        "overload-control",
+        "SKILL.md"
+      ]
+    ],
+    "protected_tracked_files_byte_mode_compared_to_baseline": 221,
+    "protected_roots": [
+      "scripts",
+      "agents",
+      "workflows",
+      "evals/overload-control",
+      "evals/worker-rollout-integration",
+      "evals/distributed-correctness",
+      "evals/infrastructure-change-safety",
+      "evals/microservice-operations",
+      "package.json",
+      "package-lock.json"
+    ],
+    "protected_changed_files": [],
+    "protected_missing_files": [],
+    "core_preservation_is_static_only": true
+  },
+  "path_normalization": {
+    "policy": "Repository-first report; history copies preserve original bytes/modes, references are relative to this report directory. No previous report is rewritten.",
+    "aliases": {
+      "task-local-change": "Author task-local change directory named after this alias.",
+      "task-local-freeze": "Original task-local freeze filename named after this alias.",
+      "repository-workspace": "Logical repository source paths; absolute local host prefix omitted."
+    }
+  },
+  "limits": {
+    "models_dispatched": 0,
+    "responses_or_grades_read": 0,
+    "responses_scored": 0,
+    "source_case_rubric_runner_edits": 0,
+    "behavioral_acceptance_established": false,
+    "production_guarantee_established": false,
+    "note": "This static review does not close historical partials or substitute for root-selected existing/new behavioral cases, independent grading and final validation."
+  }
+}

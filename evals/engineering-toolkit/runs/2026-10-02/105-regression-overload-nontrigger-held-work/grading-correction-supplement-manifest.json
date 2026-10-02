@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "base_manifest_sha256": "5deb3c6190789d052529e104b6f692bf96e1af9673cfd9adc1d04aaeeda65a5c",
+  "purpose": "Preserve the grader-owned exact-rubric correction, original judgments and provenance without replacing trial inputs, rubric, candidate or host limitations. The exact four-field diff supplements the owner provenance summary without changing it.",
+  "initial_score_total": 5,
+  "corrected_score_total": 6,
+  "criterion_score_changes": [
+    {
+      "id": "nontrigger",
+      "initial_score": 1,
+      "corrected_score": 2
+    }
+  ],
+  "verified_actual_score_field_diff": [
+    {
+      "path": "/criteria/0/score",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "path": "/criteria/0/evidence/artifact",
+      "before": "evidence/trace.jsonl",
+      "after": "evidence/trace.jsonl; evidence/run.json; evidence/answer.md"
+    },
+    {
+      "path": "/criteria/0/evidence/locator",
+      "before": "items 0-2; evidence/run.json activation_observation",
+      "after": "Trace items 1-2 and terminal event; run.skill_discovery.request_kind / activation_observation; entire answer"
+    },
+    {
+      "path": "/criteria/0/evidence/observation",
+      "before": "Answer supplies only the requested spelling correction and no admission/retry redesign. Trace has no recorded body read, but metadata discovery found the candidate and activation status is explicitly not_observed (not proof of no unrecorded loading); filesystem read isolation is false, so criterion is only partial.",
+      "after": "The captured trace contains only a read of project/message.md and the requested spelling correction; it contains no candidate-body read or overload/admission/retry redesign. Discovery was metadata_only_no_model_turn. This satisfies the observable nontrigger criterion. The score does not claim universal proof: raw activation status is not_observed and filesystem_read_isolation=false, recorded separately as limits."
+    }
+  ],
+  "source_score_original_sha256": "6a51cd7d1d0d86b534acb826bf0c574ef1f16b600ad670a3abcb87e418870eb1",
+  "files": [
+    {
+      "path": "initial-score.json",
+      "original_sha256": "7da3f536dbe77504b6d3081813b241e0fc08f10b068e5060df9316ea29370030",
+      "published_sha256": "7da3f536dbe77504b6d3081813b241e0fc08f10b068e5060df9316ea29370030",
+      "transformed": false
+    },
+    {
+      "path": "initial-review.md",
+      "original_sha256": "8f1b1cdeff24a06c03d0198553b2d34312ac5e3860fb67cd3473c65de4d14b82",
+      "published_sha256": "8f1b1cdeff24a06c03d0198553b2d34312ac5e3860fb67cd3473c65de4d14b82",
+      "transformed": false
+    },
+    {
+      "path": "correction-provenance.json",
+      "original_sha256": "82d9993810cc7a0ff83c3253b6f2fca8c5c3d39fbe8d0cf6f904275b9a39f716",
+      "published_sha256": "82d9993810cc7a0ff83c3253b6f2fca8c5c3d39fbe8d0cf6f904275b9a39f716",
+      "transformed": false
+    },
+    {
+      "path": "grading-correction-note.md",
+      "original_sha256": "bed3f190c22dab66402eb96153f27e6366cec87210bae52ec3b9daffbb9f8e35",
+      "published_sha256": "bed3f190c22dab66402eb96153f27e6366cec87210bae52ec3b9daffbb9f8e35",
+      "transformed": false
+    }
+  ]
+}

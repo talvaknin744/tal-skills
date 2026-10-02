@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-completion-record-07",
+  "run_evidence_sha256": "fe7ad67db80a6e8548dcbd84a2329fd70564b7ac83a471f27eeb3b2895a1a08f",
+  "final_workspace_tree_sha256": "7bbb4ad0d130c16802ee89af32df2c3e61562b9191248195f8d0ff29c66aabc2",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "ea2607f606434a5481fda298c45338e02cdbad35cf0a5d333339b253e731eb8d",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "Luna (independent reviewer)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9",
+        "observation": "Identifies caller fragmentation across g1/g2 despite one authenticated Alpha, directs tenant admission accounting and producer MessageGroupId to authenticated_customer/job identity, and explicitly denies using group as data-read authorization."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3",
+        "observation": "States grouping affects future delivery only and supplies no FIFO ordering, rate cap, worker/permit reservation, or completion deadline; distinguishes low queue dwell from useful completion."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 13, 16",
+        "observation": "Counts six permits held on [0,8), B1 wait [1,8) and finish at 9 versus deadline 3, 48 Alpha and 1 Beta permit-seconds, and rejects 8 simultaneous guarantees against 6 physical permits. Acknowledges per-group equal-job accounting defect at line 3."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 13, 18, 23-24",
+        "observation": "Rejects local release/visibility extension as resource reclamation while operations continue, counts actual operation lifetime, and proposes durable identity, duplicate-effect protection, and recovery handling. Does not claim cancellation completion."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9-18",
+        "observation": "Offers a feasible 6-permit split (3 Alpha protected, 1 quiet, 2 shared), cost/fanout-aware reservation before Alpha fan-out, four local receipts including nonexecuting states, and one-slot quiet reserve with eventual Alpha progress. Partial: residency bound is explicitly local and deferred receipt has no fleet aggregate bound or demonstrated durable recovery contract; those provider settings are left unresolved."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 22-24",
+        "observation": "Proposed oracles cover permit cap, tenant resource-held time, delivery versus useful start/finish, B1 deadline, accepted-job recovery, eventual Alpha progress, changed cost, visibility/duplicate delivery, and that timeout/cancel acknowledgement cannot release capacity. Partial: no explicit caller-group-fragmentation schedule or signal-before-stop ordering schedule is specified; no checks are represented as executed."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json; evidence/workspace-changes.json",
+        "locator": "run.json input_integrity and workspace-changes.json changes",
+        "observation": "Run records no live service authorization and read-only review; changes list is empty, forbidden_changes empty, and unchanged fixture hash/tree evidence supports no mutation. Answer labels calculations and schedules as proposed, not measured provider guarantees or executed consumer tests."
+      }
+    }
+  ]
+}

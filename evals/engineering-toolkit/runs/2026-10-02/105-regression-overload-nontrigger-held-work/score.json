@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-held-work-regression-nontrigger-16",
+  "run_evidence_sha256": "a5cb1e92ef8195c12a541818fc532a3f6a9d98b566d86b28cc15be15f35e933b",
+  "final_workspace_tree_sha256": "c4160ec4a2a786a6ddeee1b4736e27eeb31f4ee5dc58f778358084509e7598dc",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "Luna (independent scorer; separate from inherited subject model gpt-6-sol, xhigh)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl; evidence/run.json; evidence/answer.md",
+        "locator": "Trace items 1-2 and terminal event; run.skill_discovery.request_kind / activation_observation; entire answer",
+        "observation": "The captured trace contains only a read of project/message.md and the requested spelling correction; it contains no candidate-body read or overload/admission/retry redesign. Discovery was metadata_only_no_model_turn. This satisfies the observable nontrigger criterion. The score does not claim universal proof: raw activation status is not_observed and filesystem_read_isolation=false, recorded separately as limits."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Entire response",
+        "observation": "Gives \u201cTemporarily unavailable\u201d as the corrected spelling."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[], forbidden_changes=[]; evidence/run.json input_integrity",
+        "observation": "Fixture remains unchanged. The response makes no claim that any runtime checks were executed or that proposed checks passed; no proposal/evidence conflation."
+      }
+    }
+  ]
+}

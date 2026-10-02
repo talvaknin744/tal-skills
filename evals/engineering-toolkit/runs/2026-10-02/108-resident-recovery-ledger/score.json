@@ -1,0 +1,82 @@
+{
+  "run_id": "tal-worker-rollout-oct02-resident-expiry-oracle-17",
+  "run_evidence_sha256": "5d956426b1a898d22f0b85d23f385c8a27b02fec2de83cdd2c7ee1ff4289d92a",
+  "final_workspace_tree_sha256": "0efbf939bd487331c7f59fc631cda225741785c826b3fceb2f19a6bc694175c4",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "e8a39d60520a59ef0ea3414aaa0c4949fbc60ab095e89abd69154c2be0d91e84",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "GPT-6 Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "rawcase_compliant": false,
+  "inherited_guidance_limitation": "The subject inherited user, system, and plugin instructions/tools; the candidate was not the sole available guidance.",
+  "read_isolation_limitation": "Filesystem reads were not confined to the trial directory; withheld rubrics were not protected by a filesystem jail. The configured read-only sandbox was not independently verified.",
+  "subject_model": "gpt-6-sol, xhigh; inherited with no override. This is separate from the GPT-6 Luna scorer.",
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 17",
+        "observation": "Correctly counts prefetched A3/A4 as holding all four slots despite active_A=2 and idle CPU, and includes dispatch, blocked, retry, execution, and cleanup residency through actual release."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3",
+        "observation": "States B1/C1 cannot start until 8 and finish at 9, missing deadline 3; does not treat fair delivery order or low active_A as protection."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9-21, 41",
+        "observation": "Presents a feasible trace-specific equivalent allocation with three A-held slots and one physically protected slot; B then C run [1,2) and [2,3), A4 remains at the durable broker until admitted, and A work remains recoverable and finishes by 11 (or 16 under continuing protected arrivals). It explicitly notes zero slack and the need for an arrival/service bound for continuing guarantees."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 21, 35",
+        "observation": "Says cancellation acknowledgement does not release borrowed A3/A4 slots before their finish at 8; counting them free would exceed four slots. Requires actual release or an unborrowed reserve and does not infer preemption."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13-19, 25-27",
+        "observation": "Preserves useful A completion, acknowledges delaying A4, distinguishes same-horizon execution busy fractions from prefetch residency, and rejects comparing different drain horizons. Partial because it does not explicitly account for lost or repeated work under a hypothetical interruptible design."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 21, 29-41",
+        "observation": "Gives deterministic capacity/completion oracles, actual-release accounting, cancellation acknowledgement versus completion, lease/recovery checks, and eventual A deadlines. Partial because prefetch, blocked, and retry-wait states are included in the accounting rule but are not each exercised as explicit verification transitions/cases."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json and evidence/workspace-changes.json",
+        "locator": "input_integrity and changes",
+        "observation": "Run records completed read-only review, no verification command or external/delegation event, unchanged fixture/workspace tree, and empty workspace changes. The answer labels its plan unexecuted and states no worker or broker experiment ran; proposed arithmetic is not represented as deployed behavior."
+      }
+    }
+  ]
+}

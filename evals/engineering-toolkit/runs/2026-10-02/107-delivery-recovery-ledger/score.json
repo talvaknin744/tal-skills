@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-expiry-oracle-06",
+  "run_evidence_sha256": "9a784b65fd9b83b65ecc2276553e5e7b4f690b74994da8c3e35ac3d060bfdca0",
+  "final_workspace_tree_sha256": "b029de5a3314ae2a78f158748899f21d8c7a9e6446f5b2237fef95e9eb7bc82d",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "e8a39d60520a59ef0ea3414aaa0c4949fbc60ab095e89abd69154c2be0d91e84",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "GPT-6 Luna; independent subagent reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5",
+        "observation": "Identifies A1/A2 as authenticated Alpha despite caller-supplied g1/g2; recommends deriving MessageGroupId from the server-recorded authenticated_customer and explicitly separates grouping from data-read authorization."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3",
+        "observation": "States fair delivery changes future delivery opportunities but supplies no execution slot, permit, FIFO ordering, or per-tenant rate guarantee; mentions approximate in-flight and recent processing-time shares and separates low dwell from useful completion."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9-12",
+        "observation": "Calculates B1's operation on [8,9), finish at 9 and six-second miss; records six active permits, 48 Alpha permit-seconds and the infeasibility of six Alpha plus two quiet permits against physical capacity six."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 26, 35-37",
+        "observation": "Says a time-1 signal releases zero permits and accounts for six permits through time 8 (42 additional permit-seconds); requires observed operation termination before releasing each permit and describes visibility extension/duplicate implications and redelivery while the original is active."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 16-22",
+        "observation": "Provides a feasible fleet-wide customer/job ledger, fan-out reservation before worker dispatch, a one-worker/one-permit quiet reserve, at most three Alpha permits, eventual Alpha rotation, finite local deferral/lease/attempt proposals and recovery ownership. Partial because the additional fleet-wide nonexecuting-receipt bound is mentioned but its finite count/byte/age limit is not specified; receive/prefetch and all resident-state bounds therefore are not fully quantified."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 28-39",
+        "observation": "Defines proposed checks for the supplied and changed-fan-out schedules, fabricated Alpha groups, signal-before-stop, visibility extension, and expiry with an overlapping original; calls them unexecuted, records permit/worker peak expectations, receive versus useful completion, tenant occupancy windows, accepted-job recovery and Alpha progress."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json; evidence/manifest.json; evidence/run.json",
+        "locator": "changes and forbidden_changes are empty; unchanged final workspace tree hash; input_integrity and observed_external_or_delegation_events",
+        "observation": "The fixture/workspace hashes are unchanged, workspace.patch is empty, changes and forbidden_changes are empty, and run evidence reports no observed external/delegation events. The response labels calculations as supplied/trace-level and checks proposed/unexecuted, without claiming a measured provider guarantee."
+      }
+    }
+  ]
+}

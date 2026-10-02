@@ -1,0 +1,56 @@
+{
+  "name": "tal-skills",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Composable engineering skills, native agents, and workflows for reliable backend and distributed systems.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "node scripts/check-skills.mjs && node scripts/check-toolkit.mjs && node scripts/check-docs.mjs && node scripts/check-runtime-evidence.mjs && node scripts/check-evaluation-evidence.mjs && node scripts/check-research-archive.mjs",
+    "generate": "node scripts/generate-adapters.mjs",
+    "check:generated": "node scripts/generate-adapters.mjs --check",
+    "install:toolkit": "node scripts/install-toolkit.mjs",
+    "test": "node --test",
+    "validate": "npm run check && npm test"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "bin": {
+    "tal-skills": "scripts/tal-skills.mjs"
+  },
+  "files": [
+    "scripts/tal-skills.mjs",
+    "scripts/toolkit/",
+    "scripts/lib/markdown-links.mjs",
+    "skills/",
+    "agents/",
+    "workflows/",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talvaknin744/tal-skills.git"
+  },
+  "homepage": "https://github.com/talvaknin744/tal-skills#readme",
+  "bugs": {
+    "url": "https://github.com/talvaknin744/tal-skills/issues"
+  },
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "claude-code",
+    "distributed-systems",
+    "backend",
+    "reliability"
+  ],
+  "dependencies": {
+    "@iarna/toml": "2.2.5",
+    "yaml": "2.9.1"
+  }
+}

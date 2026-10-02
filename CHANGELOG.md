@@ -2,6 +2,8 @@
 
 ## 2026-10-02
 
+- Closed the two selected overload evaluation gaps by routing broker and tenant reviews to one response scaffold with a final coverage audit for finite fleet waiting limits, recovery, actual release, interruption costs and verification records. Both substantive cases pass 14/14; unchanged regression and nontrigger cases also pass. Preserved intermediate partials and unchanged original rubrics.
+
 - Added a runnable worker-rollout example with real signals, reserved ownership, mixed-version continuation, receipt and terminal-state crash recovery, stale-owner fencing, deadlines and cleanup. Author and independent runs passed all eight local PostgreSQL/POSIX scenarios.
 - Strengthened existing cache/consistency, schema-change, overload and service-operation references with incarnation guards, merge invariants, writer-maintenance gates, complete result comparisons, resident-work fairness and deadline/cancellation boundaries.
 - Added separate integration evaluation cases and suite routing that binds candidate, case and runner identity while preserving historical corpus behavior.
@@ -9,7 +11,7 @@
 - Hardened published evaluation archives with complete source inventories and corruption/truncation checks; retained original byte hashes when normalizing public artifacts.
 - Retained the schema review's initial critical partials and the native managed-sandbox verifier failures, alongside independent review, actual observations and explicit limits.
 - Added a pinned Linux native-workflow collector with explicit coding tools, restricted write mounts, command boundary probes and owned-resource cleanup. Preserved host-invalid, interrupted and provider-capacity attempts alongside later independently reviewed runs.
-- Verified project-local installation for both host layouts against 230 managed source and adapter files; repeated installation changed zero files.
+- Verified project-local installation for both host layouts against 232 managed source and adapter files; repeated installation changed zero files.
 
 See the [integration evidence](docs/research/worker-rollout-integration/2026-10-02/README.md).
 

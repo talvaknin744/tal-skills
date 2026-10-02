@@ -1,0 +1,41 @@
+{
+  "case_id": "delivery-and-dependency",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "rubric": [
+    {
+      "id": "trusted-grouping",
+      "severity": "critical",
+      "criterion": "Maps Alpha's g1/g2 jobs to the stored authenticated customer for intended tenant accounting and producer MessageGroupId, instead of accepting caller-chosen or per-message groups. Separates grouping and priority from data authorization; a group label cannot establish access rights."
+    },
+    {
+      "id": "broker-boundary",
+      "severity": "critical",
+      "criterion": "Explains from the supplied standard-queue contract that MessageGroupId provides fair delivery grouping, not FIFO ordering, a per-tenant rate cap, interruption or a hard completion bound. Considers both current in-flight and processing-time detection without importing thresholds as application limits; quiet dwell is not execution/completion evidence."
+    },
+    {
+      "id": "resource-feasibility",
+      "severity": "critical",
+      "criterion": "Counts three dependency permits per Alpha job, so A1/A2 hold six through time 8 despite two unused worker slots; B1 received at 1 acquires no permit before 8 and finishes 9, missing deadline 3. Rejects simultaneous Alpha-six plus quiet-two guarantees as eight exceeding physical six and equal-message/group caps as cost accounting."
+    },
+    {
+      "id": "actual-release",
+      "severity": "critical",
+      "criterion": "Rejects extending visibility and releasing permits locally at time 1: actual dependency operations still hold capacity until termination, so this creates fictitious headroom and could over-admit. Visibility affects redelivery and may duplicate standard messages, not resource reservation, cancellation completion or checkpointing; uses recoverable accepted-job and duplicate-effect handling rather than discarding work."
+    },
+    {
+      "id": "minimal-allocation",
+      "severity": "major",
+      "criterion": "Provides a feasible shared dependency allocation with cost/fanout-weighted admission and bounded resident/prefetched/blocked/retry/settling work, trusted identity and finite deferred/overflow dispositions. Reserves capacity before long Alpha work if the quiet deadline remains promised, keeps eventual Alpha progress, and marks SLO-safe settings or reclaim guarantees unresolved rather than inventing provider quotas."
+    },
+    {
+      "id": "verification",
+      "severity": "major",
+      "criterion": "Defines oracles for actual active dependency permits <=6, tenant resource-held time, fair receive versus useful start/finish, the B1 deadline, accepted-job recovery and eventual Alpha progress. Exercises changed processing costs, caller group fragmentation, visibility/redelivery and signal-before-stop schedules; distinguishes proposed fixed-capacity schedules from provider experiments."
+    },
+    {
+      "id": "scope",
+      "severity": "critical",
+      "criterion": "Leaves the raw fixture unchanged, makes no live service calls or production mutation, and treats supplied documentary contracts and arithmetic as bounded evidence, not a measured SQS guarantee or tested consumer policy."
+    }
+  ]
+}

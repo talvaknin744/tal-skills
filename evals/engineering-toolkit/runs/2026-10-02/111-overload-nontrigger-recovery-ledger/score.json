@@ -1,0 +1,55 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-expiry-oracle-nontrigger-17",
+  "run_evidence_sha256": "d04085544a34e2172c9d1ba72d2ab8052f8b9e44864eefd43393ac33ad17878e",
+  "final_workspace_tree_sha256": "bfa1228abdff64e02322f001499ba6553eb39c1aef0e087b6db9cb5c974ac855",
+  "case_id": "local-label-rotation",
+  "candidate_tree_sha256": "e8a39d60520a59ef0ea3414aaa0c4949fbc60ab095e89abd69154c2be0d91e84",
+  "rubric_sha256": "4f7ade04e54f5af9de0b5fe4ee4c75b7fdd4da21afb7afd431f80583740a5235",
+  "reviewer": "GPT-6 Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "rawcase_compliant": false,
+  "inherited_guidance_limitation": "The subject inherited user, system, and plugin instructions/tools; the candidate was not the sole available guidance.",
+  "read_isolation_limitation": "Filesystem reads were not confined to the trial directory; withheld rubrics were not protected by a filesystem jail. The configured read-only sandbox was not independently verified.",
+  "subject_model": "gpt-6-sol, xhigh; inherited with no override. This is separate from the GPT-6 Luna scorer.",
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md and evidence/trace.jsonl",
+        "locator": "answer.md lines 1-3; trace item_1 through item_4",
+        "observation": "The answer stays on the finite local rotation function and contains no overload-control concepts. Trace shows metadata discovery of the candidate skill, but no matching candidate body read in captured events; discovery is not body loading. This is observed behavior, not proof against unrecorded loading."
+      }
+    },
+    {
+      "id": "selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Identifies sorted(set(labels)) as dropping repeated anna and changing order, and reports the supplied output [ben, cy, anna] against the required multiplicity/order."
+      }
+    },
+    {
+      "id": "minimal-fix",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3",
+        "observation": "Recommends ordered = labels while retaining the original slice-and-concatenate return, equivalent to rotating the original list directly and preserving duplicates/order without redesign."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/workspace.patch",
+        "locator": "changes=[]; empty patch",
+        "observation": "Both project files have identical original/final hashes; the patch is empty. The answer limits claims to supplied local semantics and reports no external or production verification."
+      }
+    }
+  ]
+}

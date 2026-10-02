@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-response-scaffold-08",
+  "run_evidence_sha256": "0b2e1243ec6a4139b0aadd4f134d72f8f35a30828137be20443fe31ea803e627",
+  "final_workspace_tree_sha256": "12c2348216d28f848fae4697a1e8b86741d0055d1a96a09354a8f8e09390f3ec",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "aee0b738d31945d1d61a77a3279515aa2b6a1bfc215f2adfca5a55a14c977407",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "Luna (independent sub-agent reviewer)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "3\u20135",
+        "observation": "Maps client groups g1/g2 to authenticated Alpha and explicitly uses that trusted identity for producer grouping and admission accounting; separately says group identity grants no data access."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "5, 9, 45",
+        "observation": "Names approximate in-flight and recent processing-time inputs and unspecified thresholds/windows; states no FIFO, per-tenant rate cap, worker/dependency reservation, interruption, or completion guarantee. Contrasts low dwell and fair receive with late useful completion; no quiet dwell treated as execution evidence."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "9\u201315",
+        "observation": "States A1/A2 hold six permits through time 8; B1 waits seven seconds and completes at 9, six seconds past deadline 3. Computes 6+2=8 > physical 6, recognizes three permits per Alpha job, and rejects equal-job/group caps as cost accounting."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "11, 31\u201339",
+        "observation": "Rejects local release at time 1: permit custody lasts to actual termination/cleanup; visibility affects redelivery only and may duplicate. Requires reconciliation before duplicate dispatch and preserves accepted work for recoverable progress; no unsupported cancellation reclaim claim."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "13, 19\u201327, 33",
+        "observation": "Proposes shared cost-weighted gate (Alpha bundle 3, B1 cost 1), bounded receipts/prefetch/payload/deferral and retry/lease policy, pooled quiet reserve, authenticated identity, and recoverable accepted-work handling. Preserves later Alpha progress and marks SLO-safe limits, intake/backlog, provider behavior and other consumers unresolved."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "43\u201361",
+        "observation": "Defines actual permit and slot occupancy, per-customer receive/start/finish/deadline outcomes, recovery/backlog observations and eventual Alpha completion. Matrix covers prefetch/deferred/blocked/retry/settling, protected arrival, changed cost, fragmented groups, signal-before-stop, visibility/redelivery, and recovery; labels proposed/unexecuted schedules and unresolved provider checks."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch; evidence/workspace-changes.json; evidence/run.json",
+        "locator": "patch empty; changes []; input_integrity.baseline_unchanged=true, allowed_changes_only=true, forbidden_changes=[]; run completed, no observed external/delegation events",
+        "observation": "Fixture and workspace remained unchanged; no live call or production mutation is evidenced. Answer frames calculations as supplied trace and proposed review bounds, with explicit unverified conditions rather than measured SQS guarantees or executed consumer policy."
+      }
+    }
+  ]
+}

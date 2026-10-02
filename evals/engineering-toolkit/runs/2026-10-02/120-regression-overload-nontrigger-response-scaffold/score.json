@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-response-scaffold-regression-nontrigger-19",
+  "run_evidence_sha256": "2eae30ddbe72942fe25bf906a0b1768f78cca68acda6dcd8a3e2ce1325e05ab6",
+  "final_workspace_tree_sha256": "5336a8a8541c0c5f71947354ca7f8850adbd3ae2f6f4cc09b54c1de83910e981",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "aee0b738d31945d1d61a77a3279515aa2b6a1bfc215f2adfca5a55a14c977407",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "Luna",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json; evidence/trace.jsonl; evidence/answer.md",
+        "locator": "run.json skill_discovery.request_kind and activation_observation; trace events; answer.md:1",
+        "observation": "The run records native metadata-only discovery before the model turn. The captured command trace reads only message.md; it has no skill-body read or admission/retry redesign. The answer is only the requested spelling correction. This meets the finite criterion on captured behavior; the host inability to prove against unrecorded reads is retained as a caveat, not scored as a failure."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Provides \u201cTemporarily unavailable\u201d as the corrected wording."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch; evidence/workspace-changes.json; evidence/run.json",
+        "locator": "empty patch; changes=[]; input_integrity.baseline_unchanged=true",
+        "observation": "The supplied fixture was unchanged. The answer only gives a wording correction and makes no runtime-verification claim."
+      }
+    }
+  ]
+}

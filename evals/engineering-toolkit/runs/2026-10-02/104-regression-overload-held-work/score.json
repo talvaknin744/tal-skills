@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-held-work-regression-16",
+  "run_evidence_sha256": "f0944f2fa804e2c0ebfbb7961f5d0f20efa1eb3e1e5d795738d4b9f3004ee28a",
+  "final_workspace_tree_sha256": "d28fc723eb20d6ae0cdf60833ab77cad23c9028b6e71783c09e669208aeeb434",
+  "case_id": "tenant-fanout",
+  "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+  "rubric_sha256": "2e45593ecf899eee040f39374a35b3598ae9b1dae324867f1c9b2bd08a377656",
+  "reviewer": "Luna (independent scorer; separate from inherited subject model gpt-6-sol, xhigh)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "budget-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Lines 1, 5-7",
+        "observation": "Calculates 4\u00d740\u00d73=480 against 100; proposes a fleet-wide 90-connection/30-bundle ceiling and explicitly says per-pod caps do not establish fleet enforcement."
+      }
+    },
+    {
+      "id": "fairness",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Lines 9-13; 49-51",
+        "observation": "Uses authenticated canonical tenant identity; reserves B capacity and accepted-export capacity, schedules shared capacity by held time with eventual turns, bounds waiters/count/bytes/age, and specifies tenant held-time/progress observations and discriminating split-label checks."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Lines 15-21; 53-55",
+        "observation": "Makes 202 contingent on durable persistence/admission, rejects only new intake at bounds, retains accepted work and recovery ownership, and holds permits until queries stop and connections release despite disconnect."
+      }
+    },
+    {
+      "id": "feedback-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "Lines 23-27; 53-55",
+        "observation": "Separates rejection from admitted useful-work latency, records workload dispositions, bounds jittered retries, includes offered/rejected demand in autoscaling while preserving fleet cap, and lays out controlled slowdown/failure/recovery checks."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[], forbidden_changes=[]; evidence/run.json input_integrity",
+        "observation": "Workspace fixture unchanged; response calls every check proposed or unresolved and states all checks unexecuted, accurately distinguishing design proposals from observed runtime evidence."
+      }
+    }
+  ]
+}

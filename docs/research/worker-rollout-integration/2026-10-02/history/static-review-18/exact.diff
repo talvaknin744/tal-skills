@@ -1,0 +1,32 @@
+--- source17/skills/performance/overload-control/SKILL.md
++++ source18/skills/performance/overload-control/SKILL.md
+@@ -65,15 +65,20 @@
+ resource bounds, or each gap has a next check. Report actual versus proposed
+ results and limits. [Sources](references/sources.md) records primary reading scope.
+ 
+-For broker delivery or tenant fairness, include all four rows in the returned
+-result. A direction to choose a bound or measure a metric leaves that row open.
++For broker delivery or tenant fairness, return each applicable row separately.
++Justify N/A only for an absent branch; unknown facts remain unresolved. Choose
++concrete provisional review-policy bounds with units/rationale, separate from
++unknown production SLOs. A direction to choose a bound is incomplete.
+ 
+-| Row | Required evidence |
++| Row | Required returned record |
+ | --- | --- |
+-| Broker contract | Name the verified provider/version, trusted group identity, actual fairness detector inputs, ordering and rate guarantees, duplicates and redelivery semantics. Identify the measured load inputs, including concurrent in-flight share versus recent processing-time share where documented; an approximate-fairness label does not identify them. Distinguish delivery opportunities from execution, residency and completion guarantees; label unsupported guarantees explicitly. |
+-| Allocation and waiting | Give resource-cost units and feasible limits, including receive/prefetch and aggregate resident, blocked, retry-wait and settling work. For expiry/overflow, return a chosen transition record: next state and durable authority/evidence; recovery owner; finite deferral, lease/extension and retry bounds; retained payload/progress and retention contract; recovery trigger and capacity-gated re-admission. Separate unaccepted rejection from accepted-work recovery; use a supported paused/redelivery path when loss is unauthorized. Give finite provisional review-policy bounds with units/rationale; keep unknown production SLOs and unverified reclaim guarantees explicit. State the arbitration rule that gives ready tenants eventual progress. |
+-| Actual release | State who retains each resource after a stop signal and what proves execution and cleanup ended. Include a signal-before-actual-stop control with the expected held/released resources; a cancellation acknowledgement is insufficient. For proposed or rejected interruption/reclaim, report recoverable progress and useful work lost/repeated, including replay cost or explicit unknowns. |
+-| Discriminating checks | Supply changed-cost and split/fabricated-group schedules with expected outcomes. Return accounting for actual held dependency permits through signal, continued execution, actual release and re-admission; report the peak and assert it fits physical capacity. For broker visibility/leases, give extension and expiry/redelivery schedules with expected ownership, held resources and outcomes for original and redelivered attempts. Return each check's expected outcome and supplied/observed result, or explicit unexecuted status. Measure fair receive separately from useful start and finish. For each tenant/resource, return one named window and the oracle `sum(held units × acquisition-to-actual-release time overlapping that window)`, including signaled operations. Compare with promised allocation, deadlines and eventual progress; label unavailable measurements explicitly. |
++| Broker contract | Verified provider/version, trusted group identity, actual detector and measured load inputs (concurrent in-flight versus recent processing-time share where documented); ordering/rate, duplicate/redelivery contract. Separate delivery opportunities from execution/residency/completion guarantees; label unsupported guarantees. |
++| Allocation | Resource-cost units, feasible physical and aggregate capacity bounds, guaranteed/borrowed shares and arbitration giving ready tenants eventual progress. |
++| Residency and waiting | Chosen finite local and fleet aggregate receipt/receive/prefetch bounds including all nonexecuting receipts, with scope and count/bytes/age units as relevant; account for deferred, executing, blocked, retry-wait and settling work. A local limit alone leaves the aggregate unresolved. |
++| Expiry and recovery | Chosen expiry/overflow transition: unaccepted rejection versus accepted paused/redelivery state and durable authority/evidence; recovery owner; finite deferral/lease-extension/retry bounds; retained data/progress and retention contract; recovery trigger and capacity-gated re-admission. Preserve accepted work when terminal loss is unauthorized. |
++| Actual release | Resource owner through signal, continued execution, release and re-admission; accounting for actual held dependency permits including original/redelivered operations, reported peak and physical capacity assertion; proof execution/cleanup ended. Cancellation acknowledgement does not release capacity. |
++| Interruption cost | Separately return recoverable progress, useful work lost/repeated and replay/cleanup cost under proposed, hypothetical or rejected interruption/reclaim; mark unknown quantities explicitly. |
++| Fair useful outcomes | Named window and per-tenant/resource oracle `sum(held units × acquisition-to-actual-release interval overlap with window)`, including signaled work; compare promised allocation, fair receive, useful start/finish, deadlines and eventual progress. Mark unavailable measurements. |
++| Verification matrix | Each implicated prefetch, deferred, blocked, retry-wait and settling state/transition; protected arrival after borrowing; changed cost/group fragmentation; signal before actual stop; visibility extension/expiry/redelivery; recovery. For each, return expected ownership/resource/useful-work oracles and supplied/observed outcome or unexecuted status. |
+ 
+-Label each row supplied, executed, proposed or unresolved. Report a specific
+-unresolved guarantee instead of treating a proposed check as established behavior.
++Label each row supplied, executed, proposed or unresolved; never invent evidence.

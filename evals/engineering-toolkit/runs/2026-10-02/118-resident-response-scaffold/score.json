@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-resident-response-scaffold-19",
+  "run_evidence_sha256": "d1aa705b66e8698b500401e6b8ccb0d73a31653466c7ab27826ace9774704626",
+  "final_workspace_tree_sha256": "1dbddccc7aa24732ba79e8fc6da781439765a7e812936ef02c5e375318a372ea",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "aee0b738d31945d1d61a77a3279515aa2b6a1bfc215f2adfca5a55a14c977407",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "Luna (independent grader)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 9, 23, 35",
+        "observation": "States the received A3/A4 jobs occupy remaining slots despite idle CPU; says four slots exist, defines slot cost through actual release, prohibits prefetched/local deferral in the proposed intake, charges executing/blocked/retry-waiting/settling work, and retains ownership through execution and cleanup. Together these cover the listed residency/ownership states and actual release."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 13-15",
+        "observation": "For the supplied schedule, A3/A4 hold slots until 8, B/C cannot start before then and finish at 9 past deadline 3; the answer explicitly rejects deadline protection from fair next delivery and separately gives A3/A4 execution through 16."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 15-19, 23, 62",
+        "observation": "Presents an explicit two-A-resident option: A1/A2 run 0-8, A3/A4 run 8-16, and B/C use unborrowed capacity; it also specifies two unborrowed slots for concurrent B/C on 1-2. The alternative leaves deferred work at the broker, and the stated trace ends all A work by 16. The separate one-slot minimum schedule allows three A execution slots and is clearly distinguished from this stronger two-slot option."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 17, 19, 35, 65",
+        "observation": "Says a cancellation signal does not release the four A slots before time 8, requires actual execution/cleanup end and effect settlement before readmission, and explicitly keeps a reserve unborrowed; it does not count signal acknowledgement as reclaimed capacity."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 39, 43-53",
+        "observation": "Accounts for potentially repeated interrupted A work, distinguishes useful settled completion from utilization, uses the common [0,16) horizon, separates held residency from execution busy fraction, and shows eventual A completion and the delay imposed by protected deadlines."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 43, 55-69",
+        "observation": "Defines held-slot-time and settled-deadline oracles and proposes deterministic transition checks for prefetch, protected arrival at time 1, blocked/retry/effect settlement, cancellation signal versus actual stop, capacity, redelivery/recovery and eventual A completion. Marks tests unexecuted and does not claim real worker behavior was tested."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json and evidence/answer.md",
+        "locator": "run.json input_integrity; answer.md lines 57, 71",
+        "observation": "Run evidence records baseline_unchanged=true, allowed_changes_only=true and no forbidden changes; the answer explicitly says no worker or broker experiment ran and distinguishes supplied trace support from analytical/unexecuted proposed schedules and checks."
+      }
+    }
+  ]
+}

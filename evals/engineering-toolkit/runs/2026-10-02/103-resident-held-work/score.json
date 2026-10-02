@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-resident-held-work-16",
+  "run_evidence_sha256": "40d813369deff9b483d93b1190734157b6194af376c72a2c31bdfbcef4cdb7d8",
+  "final_workspace_tree_sha256": "48cda58c22e1bb98c738b5450064a4046b68fc53be66172b7f1521d387da0fa4",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "Independent Luna scorer (GPT-6 Luna)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "3, 13, 30",
+        "observation": "Defines ownership from receipt through actual release, including prefetch, blocked, retry wait and cleanup; explains active_A <= 2 does not establish free capacity."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "7-9",
+        "observation": "Current and draft schedules finish B1/C1 at 9, late; the protected schedule finishes B/C at 2 and A3/A4 during 8-16."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "9, 13-17",
+        "observation": "Limits resident A to two, keeps A3/A4 at the durable broker, runs B/C at 1-2, then A3/A4 at 8-16, while retaining accepted-job identity and payload."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "8, 13, 15, 31",
+        "observation": "Cancellation acknowledgement at 1 does not release executing borrower slots before 8; actual execution, settlement and cleanup govern release."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "17, 19-21",
+        "observation": "Acknowledges A delay, eventual completion, and hypothetical interruption loss/repeated work; compares common horizons and separates execution slot-time from occupancy."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "25-32",
+        "observation": "Labels checks proposed/unexecuted; covers held ownership, A residency, actual release, cancellation acknowledgement versus completion, recovery, deadlines, eventual progress, time-1 arrivals, prefetch, blocked/retry and cleanup."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "25, 29, 34; evidence/workspace.patch",
+        "observation": "Says no worker/broker experiment or operation; fixture unchanged; distinguishes supplied arithmetic from proposed validation and production guarantees."
+      }
+    }
+  ]
+}

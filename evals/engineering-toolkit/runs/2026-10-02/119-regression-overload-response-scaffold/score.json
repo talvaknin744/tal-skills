@@ -1,0 +1,82 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-response-scaffold-regression-19",
+  "run_evidence_sha256": "8de13f90ebf050bb4b490902ebe90f246fe087152f327e2dd2de8bbb5c97aad1",
+  "final_workspace_tree_sha256": "fb6a316ab693f7327e2ce8893d1f5896ae79940d922483e5186710cdf4fe669d",
+  "case_id": "tenant-fanout",
+  "candidate_tree_sha256": "aee0b738d31945d1d61a77a3279515aa2b6a1bfc215f2adfca5a55a14c977407",
+  "rubric_sha256": "2e45593ecf899eee040f39374a35b3598ae9b1dae324867f1c9b2bd08a377656",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "relationship": "Separate evaluator; did not author the candidate or saved response. The source/response authors are not identified in the supplied run metadata."
+  },
+  "identity": {
+    "candidate": "overload-control skill candidate, tree aee0b738d31945d1d61a77a3279515aa2b6a1bfc215f2adfca5a55a14c977407",
+    "candidate_source": "/TRIAL/workspace/.agents/skills/overload-control; native repo-skill discovery recorded this candidate",
+    "model": "gpt-6-sol, reasoning effort xhigh (inherited; no override passed)",
+    "runner": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex exec; codex-cli 0.159.2"
+  },
+  "criteria": [
+    {
+      "id": "budget-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "raw:evidence/answer.md",
+        "locator": "Broker contract; Allocation; Actual release",
+        "observation": "States four pods, 40 local requests each, three concurrent queries per report, and shared 100-connection allocation; calculates the unsafe 480-query exposure. It explicitly says local caps do not prove a global cap, then proposes a four-admitting-pod bound and 4 \u00d7 7 \u00d7 3 = 84 connection budget, subject to the rollout limit."
+      }
+    },
+    {
+      "id": "fairness",
+      "score": 2,
+      "evidence": {
+        "artifact": "raw:evidence/answer.md",
+        "locator": "Allocation; Residency and waiting; Fair useful outcomes",
+        "observation": "Uses tenant identity from verified authentication, separates protected B metadata and shared work-class slots, specifies bounded per-pod waiters and durable-job limits, and uses tenant/work-class starts, useful completions, age, resource occupancy and B latency as observations. It explains why equal request tokens alone do not provide fairness across 5 ms and 500 ms work."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "raw:evidence/answer.md",
+        "locator": "Residency and waiting; Expiry and recovery; Actual release",
+        "observation": "Keeps accepted exports identifiable and retained until effects complete or authorized terminal disposition; blocks reassignment until the prior query/effects are proven stopped or fenced; explicitly retains execution permits after caller disconnect until all queries stop and cleanup completes. Unknown fencing and settlement guarantees remain identified as unresolved."
+      }
+    },
+    {
+      "id": "feedback-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "raw:evidence/answer.md",
+        "locator": "Allocation; Expiry and recovery; Fair useful outcomes; Verification matrix",
+        "observation": "Separates rejection from admitted-work latency; makes retries jittered and finite; includes demand, rejection, backlog age and ready capacity for autoscaling; bounds adaptive changes and requires healthy windows. Supplies a detailed overload, cancellation, worker-loss, dependency-recovery and scale-out matrix, while explicitly labeling all tests proposed and unexecuted."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "raw:evidence/workspace-changes.json; raw:evidence/manifest.json; raw:evidence/answer.md",
+        "locator": "changes/forbidden_changes; fixture_files; Verification matrix",
+        "observation": "Recorded workspace changes and forbidden changes are empty; the fixture hash matches the manifest input hash. The answer says no project files were changed and clearly marks the verification schedules unexecuted, avoiding any claim of runtime test evidence."
+      }
+    }
+  ],
+  "critical_results": {
+    "all_critical_criteria_pass": true,
+    "critical_criteria": [
+      "budget-scope",
+      "fairness",
+      "ownership",
+      "read-only"
+    ],
+    "critical_failures": []
+  },
+  "host_caveats": [
+    "The run completed on the recorded native Codex CLI host, but read isolation was not enforced or verified and the global skill catalog remained enabled.",
+    "No overload/recovery runtime checks were executed; the matrix is a proposal, not observed production evidence.",
+    "This score addresses the saved observable answer and run evidence only; it makes no claim about hidden reasoning or guarantees of a different host."
+  ]
+}

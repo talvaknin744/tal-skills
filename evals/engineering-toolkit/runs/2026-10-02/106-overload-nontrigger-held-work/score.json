@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-held-work-nontrigger-16",
+  "run_evidence_sha256": "79eb2910b04f69e4065c302f9f3e9a4c67e5419b87f847059fa2c407125d3dc3",
+  "final_workspace_tree_sha256": "3d4f19f5f26627877fd5f7e61e50791746f20cb8bb967e1ec4590f720fdb6c25",
+  "case_id": "local-label-rotation",
+  "candidate_tree_sha256": "a9289817511553e5102589836eebd046feb0387de37ae4726cd80f7ed0c034f5",
+  "rubric_sha256": "4f7ade04e54f5af9de0b5fe4ee4c75b7fdd4da21afb7afd431f80583740a5235",
+  "reviewer": "Independent Luna scorer (GPT-6 Luna)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1-5; evidence/trace.jsonl items 1-4",
+        "observation": "Answer stays with local rotation, without resource/worker concepts; captured trace only reads requirements/code and lists files. Candidate metadata was discovered, but activation status is not_observed; metadata discovery does not establish selection."
+      }
+    },
+    {
+      "id": "selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1-3; evidence/trace.jsonl items 1-4",
+        "observation": "Identifies sorted(set(labels)) result [ben, cy, anna], loss of duplicate and input order, and required [ben, anna, cy, anna]."
+      }
+    },
+    {
+      "id": "minimal-fix",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "4",
+        "observation": "Recommends using original labels with existing slice rotation, equivalent to labels[1:] + labels[:1], preserving order and multiplicity without redesign."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "5; evidence/workspace.patch; evidence/workspace-changes.json",
+        "observation": "Reports unchanged files; patch and change list are empty, input integrity is unchanged, and no external operation or production claim appears."
+      }
+    }
+  ]
+}

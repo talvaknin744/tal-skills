@@ -7,13 +7,26 @@ existing-behavior results are reported separately. See the
 [integration record](../../../../docs/research/worker-rollout-integration/2026-10-02/README.md)
 and [per-trial results](results.json).
 
-This publication checkpoint preserves passing existing-behavior checks and the
-remaining limitations in new-capability checks. The two latest substantive
-overload cases are partial: all their critical safety criteria pass, but the
-delivery case omits explicit capacity/redelivery verification and the resident
-case omits the discussion of lost or repeated useful work under interruption.
-Neither is represented as a complete new-capability pass. Earlier failed,
-partial and blocked attempts remain unchanged.
+The follow-up closes the two selected overload cases: delivery/dependency and
+resident fairness each score 14/14 against their unchanged original rubrics.
+The revised overload package also passes its existing tenant-fan-out case,
+existing wording nontrigger and new local-task nontrigger. Independent Luna
+scoring is separate from the inherited subject model.
+
+The [first published checkpoint](../../../../docs/research/worker-rollout-integration/2026-10-02/release-checkpoint-15.json)
+retains the original two major partials. Further source16, source17 and source18
+attempts are preserved, including passing and partial resident attempts at
+different source versions. A [source18 grading audit](112-delivery-completion-record/review.corrected-01.md)
+corrected an omitted broker-input criterion; the initial grade is also retained.
+The final correction uses an early branch pointer and a conditional response
+scaffold with a coverage audit. Original prompts, fixtures and rubrics remain
+unchanged. Earlier failed, partial and blocked attempts remain visible.
+
+The current nontrigger [wording audit](120-regression-overload-nontrigger-response-scaffold/grading-correction-note.md)
+and [local-task audit](121-overload-nontrigger-response-scaffold/grading-correction-note.md)
+retain initial grades and explain the correction of a universal-negative-proof
+requirement absent from the original criteria. Host limitations remain explicit.
+
 The original new schema case lacked an independent status-code contract. The
 independent
 [input audit](../../../../docs/research/worker-rollout-integration/2026-10-02/schema-oracle-input-audit.md)
@@ -23,9 +36,8 @@ the original case, rubric, fixtures and partial results stay unchanged.
 
 ## Current package observations
 
-These are the latest independently scored observations for the five package
-trees published in this checkpoint. Existing cases and their rubrics remain
-unchanged. Each new capability has its own executed case; a passing new case
+These independently scored observations bind the five selected package trees.
+Existing cases and their rubrics remain unchanged. Each new capability has its own executed case; a passing new case
 does not substitute for an existing-behavior check.
 
 | Package tree | Existing relevant case | Existing nontrigger | New relevant cases | New nontrigger |
@@ -33,14 +45,13 @@ does not substitute for an existing-behavior check.
 | Cache correctness (`3c664049…`) | [Pass](67-regression-cache-report-final/review.md) | [Pass](68-regression-cache-nontrigger-report-final/review.md) | [Cache pass](69-cache-report-final/review.md), [merge pass](63-merge-reservation-final/review.md) | [Pass](70-cache-nontrigger-report-final/review.md) |
 | Schema change safety (`a3e43540…`) | [Pass](94-regression-schema-report-final/review.md) | [Pass](95-regression-schema-nontrigger-report-final/review.md) | [Schema pass](92-schema-contract-v2-report-final/review.md), [backfill pass](93-backfill-report-final/review.md) | [Pass](96-schema-nontrigger-report-final/review.md) |
 | Service operations (`23f7986b…`) | [Pass](65-regression-operations-final/review.md) | [Pass](66-regression-operations-nontrigger-final/review.md) | [Python pass](71-deadline-report-final/review.md), [Go pass](64-go-deadline-final/review.md) | [Pass](72-deadline-nontrigger-report-final/review.md) |
-| Overload control (`1fbcff1c…`) | [Pass](98-regression-overload-report-final/review.md) | [Pass](99-regression-overload-nontrigger-report-final/review.md) | [Delivery partial](97-delivery-dependency-final/review.md), [resident partial](100-resident-fairness-report-final/review.md) | [Pass](101-overload-nontrigger-report-final/review.md) |
+| Overload control (`aee0b738…`) | [10/10](119-regression-overload-response-scaffold/review.md) | [6/6](120-regression-overload-nontrigger-response-scaffold/review.md) | [Delivery 14/14](117-delivery-response-scaffold/review.md), [resident 14/14](118-resident-response-scaffold/review.md) | [8/8](121-overload-nontrigger-response-scaffold/review.md) |
 | Graceful draining (`050fc9d0…`) | [Pass](13-regression-drain/review.md) | No existing corpus case | Native workflow observations below | Explicit native local-task boundary below |
 
-Every criterion in the linked existing-behavior and nontrigger observations
-scores 2. Every critical criterion in the latest linked new cases scores 2;
-the two overload major partials remain follow-up work. This closes the selected
-existing-behavior gates, not every possible regression. No live broker or
-production scheduler verification follows from a proposed schedule.
+Every criterion in the linked existing-behavior, new relevant and nontrigger
+observations scores 2. This closes the selected case gates, not every possible
+regression. No live broker or production scheduler verification follows from a
+proposed schedule.
 
 ## Latest native workflow observations
 

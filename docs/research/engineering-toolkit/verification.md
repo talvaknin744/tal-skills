@@ -29,10 +29,17 @@ run. The database owns progress, receipts and fenced effects. These short POSIX
 and PostgreSQL experiments do not establish Kubernetes, 12/24-hour endurance,
 external-provider or database failover behavior.
 
-The [fresh installation](../worker-rollout-integration/2026-10-02/installation-final-15.md)
-verified all 230 managed files for both host layouts against canonical source
+The [fresh installation](../worker-rollout-integration/2026-10-02/installation-final-19.md)
+verified all 232 managed files for both host layouts against canonical source
 and generated adapters. Repeated installation changed zero files. Claude
 behavior remains unavailable; installing its layout is a structural check.
+
+The overload follow-up passes its two selected substantive cases at **14/14**
+each, its unchanged relevant case at **10/10**, and nontriggers at **6/6** and
+**8/8**. Luna independently scored the sealed observations; source16/source17/source18
+partials and the first published checkpoint remain visible. Original evaluation
+inputs and rubrics were preserved. See the per-trial archive for the exact
+candidate identities, proposed-versus-executed boundaries and host limitations.
 
 ## October distributed-systems and performance expansion
 
