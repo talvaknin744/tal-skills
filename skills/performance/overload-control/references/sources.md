@@ -25,3 +25,24 @@ settings. No load or cluster experiment is claimed.
 - [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html), §§9.2.2, 10.2.3, 15.6.4,
   and [RFC 6585](https://www.rfc-editor.org/rfc/rfc6585.html), §§4, 7.2: HTTP retry,
   503 and 429 boundaries.
+
+## Resident fairness and reserve recovery
+
+Added 2026-10-02 after the independently reviewed scheduling research of
+2026-10-01. [Borg](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43438.pdf),
+2015, §§2.5, 3.2, 5.1, 6.2, supports placement/runtime separation and the cost of
+preemption without guaranteed advance notice; the research read main prose
+§§1–8.3 and inspected figures 5 and 12. This package's resident-state accounting,
+reserve/reclaim contract and verification schedules are original application
+requirements, not a provider guarantee or reproduced cluster result.
+
+Rechecked official [SQS fair queues](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fair-queues.html),
+[detection](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fair-queues-detailed.html)
+and [visibility](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html)
+on 2026-10-02: full guides' substantive sections. Fair delivery uses tenant group
+identity, with concurrency and recent processing-time detection; standard groups
+do not order messages or rate-limit tenants. Visibility can end while execution
+continues and does not prevent every duplicate. Dynamic approximate thresholds,
+in-flight quotas and visibility limits remain documentation for the adopted
+service, not portable fairness settings or completion promises. No broker or
+worker experiment was run.

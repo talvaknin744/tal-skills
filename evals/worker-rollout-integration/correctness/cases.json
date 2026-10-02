@@ -1,0 +1,67 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "cache-incarnation-snapshot",
+      "title": "A delayed fill crosses deletion, recreation and a split source read",
+      "skill": "concurrency-correctness",
+      "tags": ["cache", "incarnation", "snapshot", "implementation"],
+      "prompt": "Fix service.py to satisfy contract.md under overlapping reads and changes, including cache restoration. Preserve the public interfaces and all adapter/verifier/contract files. Edit only service.py. Use the supplied local adapters, no external services or package installation. Run python3 -B verify.py and explain the observed result and its limits.",
+      "fixture_dir": "evals/worker-rollout-integration/correctness/fixtures/cache-incarnation-snapshot",
+      "fixtures": ["contract.md", "model.py", "service.py", "verify.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "implementation",
+      "editable_files": ["service.py"],
+      "verification_argv": ["python3", "-B", "verify.py"],
+      "rubric": [
+        {"id": "incarnation-domain", "severity": "critical", "criterion": "Rejects a fill captured at incarnation 41/revision 7 after the authority recreates the key at incarnation 42/revision 1. Accepts a valid newer incarnation even when its revision is numerically lower; comparison uses the supplied authoritative incarnation order rather than scalar revisions, wall clocks or invented UUID ordering."},
+        {"id": "paired-source-snapshot", "severity": "critical", "criterion": "Captures payload, presence and incarnation/revision together through the specified snapshot API. A mutation during the capture callback cannot relabel an old payload with a new token. Uses one authoritative capture per miss and no authoritative capture on a cache hit."},
+        {"id": "atomic-publication", "severity": "critical", "criterion": "Uses the shared atomic cache publication transition or an equivalent supported operation. A separate floor read followed by unchecked publication is insufficient; the old completion cannot undo a competing update or delete. Per-key ordering and retained floors survive value eviction and the specified JSON restoration."},
+        {"id": "independent-state-oracle", "severity": "major", "criterion": "The protected literal expected-state checks pass in both identity-set directions and compare incarnation/revision/payload values, including empty deleted state and newly recreated state. Does not weaken the verifier, substitute a success flag, suppress exceptions, or bypass a callback to obtain a pass."},
+        {"id": "executed-verification", "severity": "critical", "criterion": "Runs the supplied Python verifier against the final service and reports all six checks passing with actual command evidence. A passing implementation score also needs an independent matching verifier execution; a proposed repair or invented run is insufficient."},
+        {"id": "scope-and-limits", "severity": "critical", "criterion": "Changes only service.py and preserves public hooks/interfaces and protected inputs. Distinguishes specified in-process adapters and JSON state serialization from real Redis/database atomicity, missing-notification recovery, metadata-loss safety, multi-process execution or crash-safe durability. Allows a genuinely overlapping read's captured result without imposing latest-at-response semantics."}
+      ]
+    },
+    {
+      "id": "merge-reservation-boundary",
+      "title": "Identical merged replicas can retain too many final reservations",
+      "skill": "concurrency-correctness",
+      "tags": ["merge", "business-invariant", "freshness", "review"],
+      "prompt": "Review proposal.md against contract.md and observations.json. Determine whether the acceptance path meets its promised rule, explain what the replica and display observations establish, and recommend the smallest supported decision-boundary repair with concrete validation. You may run python3 -B observe.py for local arithmetic. Keep every file unchanged, use no external services, and distinguish proposed checks from execution.",
+      "fixture_dir": "evals/worker-rollout-integration/correctness/fixtures/merge-reservation-boundary",
+      "fixtures": ["contract.md", "observations.json", "observe.py", "proposal.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "common-ancestor-counterexample", "severity": "critical", "criterion": "Uses the common stock-one ancestor and distinct final receipts reservation-A and reservation-B to derive two locally valid accepted states whose union retains both and leaves remaining stock minus one. Identical final replicas and idempotent duplicate delivery do not preserve the promised global acceptance invariant."},
+        {"id": "acceptance-enforcement", "severity": "critical", "criterion": "Places enforcement before irrevocable acceptance: a suitable authoritative conditional reservation/transaction or explicitly allocated disjoint rights totaling no more than capacity. Does not repair by discarding a legitimate receipt after merge, deduplicating different operation IDs, or assuming compensation absent from the contract."},
+        {"id": "freshness-separation", "severity": "critical", "criterion": "Keeps the advisory 60-second display contract separate from final reservation safety. A primary display read or five-second wait does not make a later mutation atomic. Does not infer latest-value reads from convergent set union or require unnecessary global coordination for every advisory display."},
+        {"id": "discriminating-oracle", "severity": "major", "criterion": "Proposes controlled overlapping acceptance from the common ancestor and checks actual accepted quantities/receipts against capacity, not merely replica equality. Includes a single-reservation successful control, duplicate delivery versus two distinct requests, and partition/recovery outcomes; a finite merge-law pass is not a general proof."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Preserves all files and makes no external mutation or model request. Labels the history as authored and any executed script as local arithmetic, with zero exit meaning observation completion rather than release acceptance or real database/CRDT validation."}
+      ]
+    },
+    {
+      "id": "immutable-label-format",
+      "title": "An immutable revision label needs only a local formatting edit",
+      "skill": "concurrency-correctness",
+      "tags": ["activation", "bounded-edit", "formatting"],
+      "prompt": "Make the small formatting change requested in request.md. Edit only labels.py, preserve the signature and input values, run python3 -B verify.py, and report the result briefly. Work only in this local fixture; no external services or package installation.",
+      "fixture_dir": "evals/worker-rollout-integration/correctness/fixtures/immutable-label-format",
+      "fixtures": ["labels.py", "request.md", "verify.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "execution_mode": "implementation",
+      "editable_files": ["labels.py"],
+      "verification_argv": ["python3", "-B", "verify.py"],
+      "rubric": [
+        {"id": "bounded-selection", "severity": "critical", "criterion": "Handles the immutable local label edit without automatically loading concurrency-correctness, introducing locks/leases/revision authorities/cache protocols, or dispatching a distributed correctness workflow. Activation is judged from recorded body-read/tool evidence, not merely final wording."},
+        {"id": "requested-format", "severity": "major", "criterion": "Uses the requested parenthesized v-prefixed revision format, preserves the function signature and caller values, and passes all three protected finite formatting examples, including empty and non-ASCII names."},
+        {"id": "executed-verification", "severity": "major", "criterion": "Runs python3 -B verify.py against the final labels.py and reports its observed result; does not claim concurrency or production validation from this finite string-format check."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Changes only labels.py, keeps request.md and verify.py unchanged, uses no package or external service, and gives a brief bounded result rather than a concurrency redesign."}
+      ]
+    }
+  ]
+}

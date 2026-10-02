@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-go-deadline-final-02",
+  "run_evidence_sha256": "0a900d15ff9cf811e1e922e0274723aede0b971cc5d7e5b4ddf0b2529dd216f1",
+  "final_workspace_tree_sha256": "4c4568d1bb9fc0928e07cc6b915ba76c50ba258ea39dfa406f64a8349121eadf",
+  "case_id": "go-deadline-handoff",
+  "candidate_tree_sha256": "23f7986b50ece9a6e444c38dd87627e9afe188f6573ed3a4eec9d77b091969c9",
+  "rubric_sha256": "0a9990f6a5cedbe86964b49b93b008359501b38fce0397163a7be0e55beeef56",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "representation-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7\u201314, 19",
+        "observation": "Explains JSON-decoded deadline loss of original Go local monotonic information. At the same supplied points compares 1.8/1.8 s at conversion, 1.4 s original versus 7.4 s decoded epoch before attempt 1, and expired original versus 5.4 s wall remaining later. Distinguishes hosts' monotonic domains and explicitly says the worker converts epoch to duration once; later wall adjustment does not prove its existing timer changes."
+      }
+    },
+    {
+      "id": "logical-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 18, 27\u201329",
+        "observation": "Rejects fresh Background-rooted attempt lifetime and missing caller cancellation. Proposes one request-receipt context/deadline capped by earlier parent, retaining original local monotonic deadline across acquisition, attempts, retries and caller cleanup waiting; attempts consume remaining time. Requires parent propagation, stops exhausted/cancelled work and retry only for classified retryable failure with budget and prior completion/safe termination."
+      }
+    },
+    {
+      "id": "handoff-authority",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 12\u201314, 19, 28, 36",
+        "observation": "Distinguishes process-local monotonic readings from epoch/skew/transit. Supplies a declared custom duration/handoff-age policy: remaining duration reduced by enforced maximum handoff age, local worker timer capped by it and parent, reject zero/too-old admission. Says duration alone renews budget by transit and absent enforced age/cancellation propagation permits only a bounded gateway claim; epoch remains diagnostic absent skew policy. No UTC synchronization or monotonic transfer guarantee."
+      }
+    },
+    {
+      "id": "completion-and-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 29, 33\u201338",
+        "observation": "Explicit proposed controls cover forward/backward wall steps before and after serialization, host skew independently from handoff delay, earlier parent expiry during acquisition/before dispatch/during Lookup, and late completion. Acceptance requires caller outcome by earlier deadline, no expired dispatch/retry, actual Lookup termination or verified disposal, exactly one release, bounded unresolved ownership/escalation and subsequent useful quote. Proposed 100 ms grace limits escalation, not termination/recovery."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/trace.jsonl lines 5, 7, 9, 13\u201315, 18\u201319, 21, 24; evidence/answer.md lines 5, 14, 21, 33, 40",
+        "observation": "All four raw/final hashes match, patch/change arrays are empty, and ten completed commands perform only reads. Answer labels snapshots supplied, checks proposed/no fixture executed, and unchanged files/inspection commands only; it does not infer worker still running from absent confirmation or claim runtime/transport/production acceptance."
+      }
+    }
+  ]
+}

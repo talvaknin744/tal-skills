@@ -30,3 +30,25 @@ Selected sections of the user-supplied [DDIA early-release second-edition draft,
 | [RFC 9562](https://www.rfc-editor.org/rfc/rfc9562.html#section-5.7) | UUIDv7 format and ordering limits | Time-sortable identifiers alone do not establish authoritative ownership order |
 
 The instruction structure follows [Matt Pocock's Writing for Agents](https://www.aihero.dev/skills-writing-for-agents): concrete branch pointers, short common steps, conditional references, and observable completion criteria. The referenced engineering sources support mechanisms and limits; choosing a repair for the user's invariant remains an explicit synthesis task.
+
+## Coordination and identity follow-up, 2026-10-02
+
+- Joseph M. Hellerstein and Peter Alvaro, **Keeping CALM: When Distributed
+  Consistency is Easy**, [arXiv v2, 2019-01-26](https://arxiv.org/pdf/1901.01930v2).
+  Repository research read complete extracted main text, §§1–6 and bibliography,
+  across the nine-page PDF on 2026-10-01; figures were not visually inspected.
+  Its confluence result uses the paper's execution model. It does not establish
+  storage freshness or arbitrary business-invariant preservation.
+- Peter Bailis, **When Does Consistency Require Coordination?**,
+  [2014-11-12 author explanation](https://www.bailis.org/blog/when-does-consistency-require-coordination/).
+  Complete substantive text including author notes read on 2026-10-01; comments
+  excluded. Used for checking whether locally valid branch states preserve a
+  constraint after merging. The linked invariant-confluence paper and thesis
+  were not read in this batch, and reported performance is not our benchmark.
+
+The stock counterexample, identity/revision comparison across delete/recreate,
+consistent observation and bidirectional oracle checks are original synthesis.
+They require the target authority's actual identity, conditional-write and
+snapshot semantics. Earlier finite research examples demonstrate their supplied
+models, not this package's correctness in a real cache/database. No model trial
+or production validation was run for these reference additions.

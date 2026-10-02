@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-schema-repaired-03",
+  "run_evidence_sha256": "53ef3c23d989148cd22185829ead9271b50c5a1a8772e1988890c20fcfd8f19d",
+  "final_workspace_tree_sha256": "2b6f85317f1f95d13006ac2d2af47cdc7cadfd6bcb241897f12b8c03bc1e6118",
+  "case_id": "schema-cutover-window",
+  "candidate_tree_sha256": "c67c326ddb1c2829a2d09225eb20333b88d577d600acd04470c4e35d3fc4178f",
+  "rubric_sha256": "f5b2aaa9b8ae4c6c1ae0a6733c690c38215741aefd3c1b6c1343545b96da0142",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "lock-and-state",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7-8, 12, 15, 19-26",
+        "observation": "Corrects the no-lock claim and distinguishes copying, confirmed failed, unknown and confirmed successful switch with serving authority and worker state. Assigns migration/service owners; copying stop and failed-switch worker stop are proposed within 60s, unknown outcome reconciles catalog/routing/status/commits and remains stopped/escalated after 5min, success verifies worker completion and preserves new writes before tested repair. Proposed bounds/controls must be verified and rehearsed, not assumed deployed guarantees."
+      }
+    },
+    {
+      "id": "compatibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5-6, 12-14, 25-26",
+        "observation": "Keeps full_name, inventories jobs/retries/open transactions, requires every eligible commit-time writer to maintain needed fields or be drained/blocked, and prohibits v1 reaching incompatible schema. Requires serving-table bridge/reverse recovery or complete replay/reconciliation of post-switch writes, identifies v2-only writes as insufficient, and rejects blind old-table rename. Unknown state admits only traffic proven compatible with either authority."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6-7, 19, 28-33",
+        "observation": "Defines separate-session conflicting-lock test with observed timeout/abort, serving table, worker disposition, lock cleanup and supported retry; v1/bridge/v2 tests at each stage including delayed job/open old transaction; complete identity/value comparisons with writes/deletes; lost reply and rollback after new writes proving retained values/client compatibility. Atomic rename is explicitly only a name switch rather than whole copy/deploy/rollback transaction."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items 1-8/10-12 local reads; item_13 final answer; evidence/workspace-changes.json changes=[]",
+        "observation": "Captured commands only read/enumerate local project/candidate files. All nine before/after hash/mode records match; both original/final fixture byte comparisons and ten copied sealed evidence hashes pass; saved diff empty. Answer labels proposed actions and bounds needing rehearsal, notes unsupplied engine/tool details, and explicitly states no migration/validation ran or files changed."
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadlines-repaired-03",
+  "run_evidence_sha256": "f2823454bf44ac65e0fc8d5e74dac75f05730064461597a2f3fc4e7a3ada491c",
+  "final_workspace_tree_sha256": "870161e69f5a32f0833ddf4b102cb2a2aee0a7aac6d1d6815d1194ef0e307900",
+  "case_id": "python-cancellation-completion",
+  "candidate_tree_sha256": "29817f9d50407a2840b8506399ee1d1ef4ef6f23435f620c55784e329af3624e",
+  "rubric_sha256": "7d50667757cf80f19e68874631a4817d7dd901bc4ee6dd4a8cf187fb78fac97c",
+  "reviewer": "/root/archive_storage \u2014 independent sealed OPS review scorer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "loop-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 6",
+        "observation": "Identifies time.time epoch versus owning-loop asyncio.timeout_at, excludes acquisition from the bad timeout and computes the supplied 602 ms response. Correction sets one loop.time deadline at admission, caps it by earlier upstream deadline and applies remaining budget to acquisition and response waiting."
+      }
+    },
+    {
+      "id": "cancel-is-not-join",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4 and 6; original-project/trace.jsonl lines 4\u20139",
+        "observation": "Explains pending work and Task.cancel do not establish cleanup completion. Cites connection release at 400.601 and reuse at 400.61 before cleanup at 400.95; transfers active task/connection into supervised ownership and holds it unavailable until observed actual task completion."
+      }
+    },
+    {
+      "id": "bounded-cleanup",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6 and 8",
+        "observation": "Separates caller response, cancellation request and supervised cleanup; caps retained connections with backpressure and says the contract cannot guarantee connection recovery time, including acquisition/release verification limits. The required wait_for cancellation-wait overrun caveat is absent: the answer never states that this timeout helper can exceed its allowance while awaiting cancellation. Reading a reference containing the caveat does not make it an observable response condition."
+      }
+    },
+    {
+      "id": "effect-and-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6 and 10",
+        "observation": "Keeps stable shipment_id and receipt lookup before any resend rather than treating cancellation as rollback. Proposed checks cover expiry during acquisition with no leaked connection, upstream deadline/cancellation during send, cancellation after carrier acceptance, no premature reuse with receipt reconciliation and a subsequent useful send after cleanup; supervised ownership releases only after actual task completion."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/trace.jsonl completed commands; evidence/answer.md lines 3 and 10",
+        "observation": "Original/final project hashes match and diff/change inventories are empty. All nine completed commands inspect files/references, with no observed external/delegation or fixture-execution event. Answer explicitly calls trace synthetic and checks proposed, denies fixture/services execution and reports files unchanged."
+      }
+    }
+  ]
+}

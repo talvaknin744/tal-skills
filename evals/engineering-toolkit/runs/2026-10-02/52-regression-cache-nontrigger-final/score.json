@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-nontrigger-repaired-07",
+  "run_evidence_sha256": "66484c6ee265ad03db2a4d0b685add8854e4c9ac35eceeb4fa6f1a14a2a0d0af",
+  "final_workspace_tree_sha256": "e0c6ed70a6ad76d7ea7489ffb547dcbaa77e9aa9daf31607e32b2964bb260c6e",
+  "case_id": "sequential-file-transform",
+  "candidate_tree_sha256": "477470e2c65567e814850c84f7d0dd913b4627e91380d7f3cc3882331c5b1644",
+  "rubric_sha256": "70f30265fbcd5c96d242ae7fc13f26a96e0f2d695566980c3dd560edad69dc56",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "correct-result",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1\u20136; evidence/trace.jsonl:item_5",
+        "observation": "Final CSV is exactly header id,name then2,Noah Cohen;17,Sofia Martin;30,Amara Patel in ascending numeric order. Whole-answer independent literal equality passes with unchanged spelling/header."
+      }
+    },
+    {
+      "id": "no-unrelated-workflow",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "entire trace: item_0 through item_5; evidence/run.json:activation_observation",
+        "observation": "Recorded workflow lists local files, reads names.csv/request.md and returns CSV directly. No candidate body/reference read, locks, consistency architecture, deployment/provisioning workflow is recorded. Native metadata discovery alone is not activation; unrecorded loading is not ruled out."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[],forbidden_changes[]; evidence/workspace.patch; evidence/manifest.json:fixture_files; evidence/trace.jsonl:entire trace",
+        "observation": "Saved workspace changes/diff are empty. Original/final source and request hashes exactly match the fixture manifest; no external/delegation event observed. No verifier is specified and none is claimed; final CSV invents no checks or absent systems. Host case_compliant=false limitations remain preserved."
+      }
+    }
+  ]
+}

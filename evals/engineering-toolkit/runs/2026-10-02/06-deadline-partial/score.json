@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadlines-01",
+  "run_evidence_sha256": "8ecb930976f51a3aa016b59694913d5cef77ba1c28fb4592af26906b39ce7e83",
+  "final_workspace_tree_sha256": "78f4bbf3afe440a6c26293715d4030a047fac45fa3febaa0239ec7a85cf5ad5b",
+  "case_id": "python-cancellation-completion",
+  "candidate_tree_sha256": "4d71d2b2719ddcf24aa874bcb87e2a39d255373da7cd9a3b9bdced35de76681e",
+  "rubric_sha256": "7d50667757cf80f19e68874631a4817d7dd901bc4ee6dd4a8cf187fb78fac97c",
+  "reviewer": "/root/archive_storage \u2014 independent deadline trial reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "loop-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 6",
+        "observation": "Identifies time.time epoch versus asyncio.timeout_at owning-loop time; identifies the fresh 500 ms wait after acquisition; proposes one loop.time deadline capped by earlier upstream remaining budget and applies it to acquisition and response wait, retaining elapsed acquisition time."
+      }
+    },
+    {
+      "id": "cancel-is-not-join",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4 and 6; original-project/trace.jsonl lines 4\u20139",
+        "observation": "Explains cancellation is a request, cites release with child_done false and reuse before cleanup, and retains the connection under supervised ownership until observed cleanup completion with exactly one release. The supplied trace shows release at 400.601, reuse at 400.61 and cleanup completion at 400.95."
+      }
+    },
+    {
+      "id": "bounded-cleanup",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6\u20138 and 10",
+        "observation": "Separates caller wait from cancellation and supervised cleanup, bounds held-connection exposure with backpressure, and explicitly says bounded recovery is unavailable without an adapter abort/replacement completion contract. However, the response never explains that wait_for can exceed its allowance while waiting for cancellation, an explicit frozen criterion condition. This is a material omission rather than evidence of an unsafe immediate-stop claim."
+      }
+    },
+    {
+      "id": "effect-and-recovery",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6 and 10",
+        "observation": "Preserves shipment_id and receipt reconciliation before resend; proposes cancel_requested/child_done/release ordering, no reuse before completion, capacity return and no duplicate shipment. But the acceptance checks do not explicitly cover expiry before pool acquisition, in-flight cancellation before remote acceptance, or successful useful work after cleanup. Slow acquisition/earlier-deadline measurement and post-acceptance timeout checks do not state those distinct boundary outcomes."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/trace.jsonl completed command events item_1\u2013item_8; evidence/answer.md line 10",
+        "observation": "Original/final fixture hashes match, workspace diff is empty and all eight observed commands are cat/pwd/ls/rg/nl inspection. No fixture or external operation is observed. Answer labels the trace synthetic and checks proposed, expressly denying execution or external contact. Host-level capability restrictions are not fully enforced; this score concerns saved observable behavior, not case-compliance certification."
+      }
+    }
+  ]
+}

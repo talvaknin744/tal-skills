@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-fairness-01",
+  "run_evidence_sha256": "e368fe80740fa3da5b16c3ad350669e40ecf74516db7ec941fb73f81e93b7afe",
+  "final_workspace_tree_sha256": "bf9515b93277015b829dc71e6578873278ea6927a75faedbcca3c78312e84c5b",
+  "case_id": "resident-reserve",
+  "candidate_tree_sha256": "103bd66c00675b3330f8a4772e0ab0d22ca3add28b8e02b99e4af1932f8ba712",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "reviewer": "/root/archive_quality",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "resident-accounting",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines1,16,18",
+        "observation": "A1-A4 own all4 resident slots from0 even though only2 execute; fair delivery cannot free capacity. Capacity oracle counts prefetch/waits/execution/cleanup through actual release, distinct from CPU and active_A."
+      }
+    },
+    {
+      "id": "current-completion",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines1,5-10",
+        "observation": "Current A1/A2 execute0-8,A3/A4 8-16,B/C8-9; B/Cfinish9 misses deadline3. Draft borrowing also finishes B/C9."
+      }
+    },
+    {
+      "id": "reserve-policy",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines9-14",
+        "observation": "Two-slot reserve caps initial A residency2, keeps A3/A4 outside receipt, B/C1-2 then A3/A4 8-16. Also gives valid closed-trace one-slot lower bound with A4 recoverable at broker and explicit zero-margin caveat; no incompatible simultaneous shares."
+      }
+    },
+    {
+      "id": "borrow-reclaim",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines3,12-16",
+        "observation": "Cancellation at1 does not release executing borrowed A3/A4 until8; B/Cfinish9. Reserve usable only after actual release; hypothetical prefetched borrowing requires bounded release/dispatch fitting deadline. Running noninterruptible borrowers cannot reclaim on acknowledgement."
+      }
+    },
+    {
+      "id": "progress-and-cost",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "lines3,7-14,18",
+        "observation": "Keeps eventual useful A completion by20; explains hypothetical discarded/repeated work harms A. Common-horizon16 comparison34/64=53.1% for all; horizon9 FIFO34/36,one-slot32/36,two-slot20/36 correct. Separates late useful work/residency from CPU."
+      }
+    },
+    {
+      "id": "verification-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/answer.md",
+        "locator": "line16",
+        "observation": "Unexecuted event model records arrival/receive/start/cancel/actualrelease/finish/ack; residency<=4, B/Cfinish/deadline/Aprogress; adverse immediate-after-borrow arrival and positive reclaim/dispatch delay, stable broker identity and settlement. Waits include supplied blocked/retry states; no real experiment claim."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "/SCORING/evidence/workspace-changes.json",
+        "locator": "changes,forbidden_changes,workspace_after",
+        "observation": "Changes=[] and forbidden=[]; original/final worker.md byte-identical. All observed commands are read-only source/reference reads; no external/delegation events. Answer explicitly labels proposed validation unexecuted and uses supplied capacities/cancellation contract."
+      }
+    }
+  ]
+}

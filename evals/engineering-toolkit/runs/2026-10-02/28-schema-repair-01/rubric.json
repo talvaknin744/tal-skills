@@ -1,0 +1,31 @@
+{
+  "case_id": "shard-publication-rollback-floor",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "rubric": [
+    {
+      "id": "all-shard-publication",
+      "severity": "critical",
+      "criterion": "Does not publish a shared schema cache or new-column reads from shard -40 readiness or completion-command submission; waits for observed schema/index readiness on all required shards and checks restart/cached-schema behavior and external SQL."
+    },
+    {
+      "id": "maintained-writer-floor",
+      "severity": "critical",
+      "criterion": "Keeps fallback while V0 may write, checks every writer atomically advances source revision, and establishes an enforced write/commit admission boundary or proven drain covering the long-lived V0 transaction, replay and jobs before new-only readers/predicates. Deployment percentage and process heartbeat alone are insufficient."
+    },
+    {
+      "id": "rollback-bridge-and-representability",
+      "severity": "critical",
+      "criterion": "Retains compatible bridge writes and old-readable values during the rollback window; before permitting old-only V0 writes restores fallback and stops new-only predicates or preserves the writer floor. Recognizes code 2 is outside V0's representation and retained tables/reverse streams alone do not restore post-switch writes; uses a compatible forward repair or explicit scoped restore/replay if needed."
+    },
+    {
+      "id": "independent-bidirectional-oracle",
+      "severity": "critical",
+      "criterion": "Derives expected live identity/status rows at commit 207 from the definitive commit ledger, independently maps supported statuses and compares complete expected/actual sets both directions. Finds missing order 43 and extra deleted order 99 despite equal counts; separates coverage, catch-up, index usability and exposure gates rather than treating cursor success or row counts as proof."
+    },
+    {
+      "id": "bounded-review",
+      "severity": "major",
+      "criterion": "Leaves fixtures unchanged, proposes concrete adverse schedules for partial shards, delayed old writers, delete/recreate and rollback writes, and makes no unexecuted engine/production or tool-guarantee claims."
+    }
+  ]
+}

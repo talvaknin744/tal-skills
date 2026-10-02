@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-02T11:53:47.690692+00:00",
+  "status": "implementation_frozen_pending_independent_review_no_native54_export",
+  "scope": "Read-only archive integrity compatibility for Linux-host final inventory; no candidate, grading, fixture, run metadata or acceptance changes.",
+  "files": [
+    {
+      "path": "scripts/check-evaluation-evidence.mjs",
+      "sha256": "f0d3edbfdf02fe735604a6a63e876b9ce18d862e373e4a558486e814f2a6039a"
+    },
+    {
+      "path": "tests/evaluation-evidence.test.mjs",
+      "sha256": "b89f5e6a3c0ab0fb57ada56528347f830ec910ffac3d1e8a90c979e5f6cc8e34"
+    }
+  ],
+  "inventory_selection": {
+    "preferred": "evidence/run.json.final_files when recorded and valid",
+    "fallback": "evidence/linux-host.json.final_files only when declared by the archive and its original artifact hash is validated by a run evidence or score binding",
+    "dual_records": "Both normalized path/sha256/mode sets must match exactly; array ordering may differ.",
+    "linux_validation": "Required modes; safe relative unique paths; lowercase 64-hex SHA256; integer permissions from 0 through 0777. Malformed JSON, missing or malformed inventories, unbound artifacts and conflicts fail.",
+    "completeness": "Existing complete_source_trees exact declared and on-disk path-set checks and original source hash bindings are unchanged, including project/dependency separation.",
+    "mode_limit": "Linux modes are validated and compared between dual inventory records; archived filesystem chmod equality is not a new guarantee. Existing publication permission semantics are retained."
+  },
+  "checks": [
+    {
+      "command": "node --test tests/evaluation-evidence.test.mjs tests/evaluation-export.test.mjs",
+      "exit_code": 0,
+      "tests": 41,
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node scripts/check-evaluation-evidence.mjs",
+      "exit_code": 0,
+      "manifests_checked": 120,
+      "published_artifacts_checked": 2947,
+      "source_bindings_checked": 4729
+    },
+    {
+      "command": "node --check scripts/check-evaluation-evidence.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check -- scripts/check-evaluation-evidence.mjs tests/evaluation-evidence.test.mjs",
+      "exit_code": 0
+    }
+  ],
+  "new_test_coverage": [
+    "Linux-only complete native acceptance without rewriting run.json; missing dependency still rejected",
+    "Equivalent dual inventories with reordered rows; source binding from score or run evidence list",
+    "Dual path/hash/mode/membership conflicts, including missing run mode",
+    "Missing/null/non-array/duplicate/unsafe/hash-invalid/mode-invalid Linux inventories and malformed JSON",
+    "Absent evidence, unbound host artifact, wrong host hash and identical hash bound only under a different artifact path",
+    "Published source substitution for trial and candidate-dependency trees"
+  ],
+  "preservation": {
+    "existing_tests_unchanged": true,
+    "test_fixtures": "New synthetic disposable tests; historical evaluation fixtures/results/run files were not edited.",
+    "run_json": "No final_files field invented or injected; fallback consumes the recorded Linux artifact.",
+    "archive_checker": "Read-only existing archive scan, not export, grading or experiment rerun."
+  },
+  "limits": [
+    "Independent review pending.",
+    "Native attempt 54 not exported by this change.",
+    "No host compliance, production behavior or candidate quality verdict follows from integrity acceptance.",
+    "No models or supplied runtime/verifier fixtures executed."
+  ]
+}

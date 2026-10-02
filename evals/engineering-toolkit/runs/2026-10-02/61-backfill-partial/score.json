@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-backfill-final-01",
+  "run_evidence_sha256": "f11c51b5e49c2b8e87bc02270cebfc00c015c6d1d1b2ce8379fb388c9dbed2f1",
+  "final_workspace_tree_sha256": "9c6265d61dbe20f5d4f098b76a2de7a385cee93a4d2eec267fb69acbd4ca9f8e",
+  "case_id": "backfill-recreated-identity",
+  "candidate_tree_sha256": "c67c326ddb1c2829a2d09225eb20333b88d577d600acd04470c4e35d3fc4178f",
+  "rubric_sha256": "d23c31bb9149fd6aa5fad0a56983ce54f9c9f25ba17b51356e4acacb9a00e01a",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "coherent-source-observation",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 4\u201311; model.py lines 7\u201314, 55\u201357",
+        "observation": "Reads one immutable Row snapshot containing status_text/incarnation/source_rev before after_read. Both tokens and payload remain from that snapshot through both checkpoints; no separate read can relabel an old payload."
+      }
+    },
+    {
+      "id": "incarnation-and-revision-guard",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "line 11; model.py lines 67\u201373; verify.py lines 50\u201368",
+        "observation": "Publishes via map_if_current with exact snapshot incarnation AND source_rev under the authority lock. Update/recreate schedules reject stale publication; reused numeric revision cannot defeat changed incarnation. No arbitrary string ordering or foreground overwrite."
+      }
+    },
+    {
+      "id": "mapping-and-retry",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 5\u201311; verify.py lines 42\u201376",
+        "observation": "Maps both supported pending=0/paid=1 statuses, returns False for missing/stale sources via read_snapshot/map_if_current, and fresh retries map updated/replacement rows. Literal full-row comparisons retain unrelated rows and source fields; all four protected schedules pass."
+      }
+    },
+    {
+      "id": "scope-and-independent-evidence",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1\u20135; trace.jsonl lines 27\u201337; workspace-changes.json; final-project/verify.py lines 10\u201316",
+        "observation": "Only migration.py changes, both checkpoint calls remain, and protected verifier pass is observed and independently reproduced. Honest in-memory limits are stated. However final text and visible commentary do not explain that expected full row sets are literal and independent of migration mapping with missing/extra checks, or state the actual database primitives and writer-maintenance contract needed for deployment. These explicit explanatory parts of the unchanged criterion remain unmet."
+      }
+    }
+  ]
+}

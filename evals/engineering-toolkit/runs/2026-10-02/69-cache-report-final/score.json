@@ -1,0 +1,69 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-report-integration-10",
+  "run_evidence_sha256": "badbccb58f646346eeb1b6a2599f48b3fa3e7f229df98902c87b10089556b8b6",
+  "final_workspace_tree_sha256": "9e8ce914951ac7c5da4513cb17d6f7c1fdcf4c6662ca155d825b528ac133e767",
+  "case_id": "cache-incarnation-snapshot",
+  "candidate_tree_sha256": "3c6640491bc773487d4fa0eba18decf154cd17609bc2be32c295710da7916c22",
+  "rubric_sha256": "7ef8e29166a61c034f58a91d15b11ca245eb5fca7e4f8f34a0568c07009ecdb7",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "incarnation-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "lines9-13; original-project/model.py lines6-7,86-104; original-project/verify.py lines50-64,88-104",
+        "observation": "Service delegates changes/publication to supplied shared transitions comparing authoritative (incarnation,revision), not scalar revision or invented UUID ordering. Protected41/7 ->42/1 recreation schedule rejects old fill/preserves new record, and restored12/6deleted ->13/1fresh record is accepted; both checks actually pass."
+      }
+    },
+    {
+      "id": "paired-source-snapshot",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "lines15-23; original-project/model.py lines18-28; original-project/verify.py lines67-85,148-160",
+        "observation": "Miss calls source.read_snapshot exactly once before before_fill; hit returns cached presence/value without an authority capture. Protected read_snapshot deepcopies payload/presence/token together before releasing lock and callback; mutations cannot relabel old payload. Hook remains invoked once outside a client lock; source counters and callback/paired-state tests pass."
+      }
+    },
+    {
+      "id": "atomic-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "lines9-13,19-22; original-project/model.py lines86-104,110-123; original-project/verify.py lines88-118,121-145",
+        "observation": "finish_fill directly invokes atomic publish_if_current, eliminating separate floor read/unchecked store; changed preserves observe_change. Protected per-key floors outlive value eviction and roundtrip through specified JSON state; deletion/recreation, reordered notification, competing publication and JSON restoration checks pass."
+      }
+    },
+    {
+      "id": "independent-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "original-project/verify.py",
+        "locator": "lines16-19,50-64,67-85,88-104,107-118,121-145,148-160; evidence/checks/independent-01.stdout.txt line1",
+        "observation": "Protected literal state comparisons check identity sets in both directions plus complete incarnation/revision/presence/payload dictionaries, including deleted empty view and fresh recreation. verify.py hash is preserved. Both evaluated command and matching independent execution report checks6,passed6,failures[]; callbacks execute and no exception suppression/test rewrite/success flag substitutes for assertions."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "line30 item_14; evidence/checks.json checks[0] independent-01; evidence/answer.md line3",
+        "observation": "The response actually runs python3 -B verify.py against finalservice and receives checks6,passed6,failures[], exit0; answer reports6/6. Exact-run/project-bound independent-01 also passes. This grader reran original protected verifier with only finalservice overlay in a separate temp directory, exit0,6/6,empty stderr,unchanged inputs."
+      }
+    },
+    {
+      "id": "scope-and-limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines1,5; evidence/workspace-changes.json changes[0]; final-project/service.py lines4-23",
+        "observation": "Only service.py changes, signatures changed/finish_fill/read and both diagnostic hooks remain supported; protected inputs match. Answer permits overlapping captured values, scopes guarantees to supplied local adapters and JSON floor restoration, and explicitly excludes missing notifications,lost metadata,crash-safe persistence,multiple processes and external stores. This distinguishes local in-process atomic adapters/serialization from production atomicity and recovery; no latest-at-response claim."
+      }
+    }
+  ]
+}

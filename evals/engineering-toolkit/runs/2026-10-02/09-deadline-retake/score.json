@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadlines-02",
+  "run_evidence_sha256": "20ac22798390d07aba38f323bd21ad5421c073d563393db98eacedae5a204819",
+  "final_workspace_tree_sha256": "d85bb534ece2f1f569d8108aa35f64303afe2c631094d8a4fe8ca413c01e7e0c",
+  "case_id": "python-cancellation-completion",
+  "candidate_tree_sha256": "a3fbcb874805c0705619b848a2a9be0f531046d11cf85f19b8ae01a30edfec6d",
+  "rubric_sha256": "7d50667757cf80f19e68874631a4817d7dd901bc4ee6dd4a8cf187fb78fac97c",
+  "reviewer": "/root/archive_storage \u2014 independent full-candidate deadline reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "loop-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 7",
+        "observation": "Identifies the epoch/event-loop mismatch and a fresh post-acquisition 500 ms wait, then proposes one owning-loop deadline from admission capped by the earlier parent deadline; applies remaining budget to acquisition and waiting."
+      }
+    },
+    {
+      "id": "cancel-is-not-join",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4, 7 and 11; original-project/trace.jsonl lines 4\u20139",
+        "observation": "Explains pending/cancellation does not finish the child and identifies the distinct upstream-cancellation path that never cancels the child. Uses the release/reuse/cleanup times to show concurrent connection ownership, and requires supervised ownership/accounting through observed cleanup completion before release."
+      }
+    },
+    {
+      "id": "bounded-cleanup",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 9 and 11",
+        "observation": "Separates caller wait from cleanup completion, caps owners/unavailable connections with backpressure, and says bounded reuse requires an adapter stop/discard contract. It does not state the frozen criterion's wait_for caveat: waiting for cancellation can exceed the requested allowance. This remains a critical material omission."
+      }
+    },
+    {
+      "id": "effect-and-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 7 and 11",
+        "observation": "Preserves shipment_id and reconciliation before resend. Compared with the earlier response, now proposes expiry during acquisition with no dispatch, upstream cancellation of active work, expiry after acceptance, completion/release/no-reuse ordering, no duplicate resend before receipt lookup, and a subsequent useful operation after recovery. One supervised owner retains accounting and performs release only after cleanup."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/trace.jsonl completed command events item_1\u2013item_8; evidence/answer.md line 11",
+        "observation": "Original/final project byte hashes match, no workspace change is recorded, and all eight completed commands inspect files. No fixture/external execution is observed. The answer explicitly identifies synthetic evidence and proposed checks, denies execution, and reports files unchanged; recorded host capability deviations remain limitations."
+      }
+    }
+  ]
+}

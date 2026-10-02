@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-02",
+  "reviewer": "/root/archive_quality",
+  "kind": "independent-narrow-instruction-static-review",
+  "scope": {
+    "diff": "history/output-contract-static-review/exact.diff",
+    "diff_sha256": "271cec188197e46a3060337726b3d60b90495ce5dab35b591b58d00bc6f8ef4d",
+    "sources": [
+      "skills/infrastructure/infrastructure-change-safety/SKILL.md",
+      "skills/performance/overload-control/SKILL.md"
+    ],
+    "source_edits": false,
+    "models_dispatched": 0,
+    "future_answers_graded": 0,
+    "candidate_authorship": false,
+    "disposition": "clean within narrow static scope; no material finding",
+    "behavioral_acceptance_established": false
+  },
+  "findings": [],
+  "sources": [
+    {
+      "path": "history/output-contract-static-review/after/skills/infrastructure/infrastructure-change-safety/SKILL.md.snapshot.txt",
+      "before_path": "history/output-contract-static-review/before/skills/infrastructure/infrastructure-change-safety/SKILL.md.snapshot.txt",
+      "before_sha256": "09f2386d880537d79478364e1fd63fb0307543460bb246c146cfceb8f5bad9b3",
+      "after_sha256": "945681e7d7e08864c2b7339289fa36bf40dfea136fa3af1edc948e04ef814868",
+      "new_paragraph_lines": [
+        17,
+        17
+      ],
+      "old_lines_preserved": true,
+      "frontmatter_description_unchanged": true
+    },
+    {
+      "path": "history/output-contract-static-review/after/skills/performance/overload-control/SKILL.md.snapshot.txt",
+      "before_path": "history/output-contract-static-review/before/skills/performance/overload-control/SKILL.md.snapshot.txt",
+      "before_sha256": "0a2b75327c0abdea6877c4a73ba71c842d6438567ccd6bba2fd13e3701a2f088",
+      "after_sha256": "03aca3961722c6956031891d3c699812c38105bfb4e62f77be38512d0f00fd5c",
+      "new_paragraph_lines": [
+        67,
+        74
+      ],
+      "old_lines_preserved": true,
+      "frontmatter_description_unchanged": true
+    }
+  ],
+  "freeze_bindings": [
+    {
+      "path": "../../../../evals/engineering-toolkit/runs/2026-10-02/runner-snapshot-08/report-controls-integration-freeze-11.json",
+      "file_sha256": "037760f96949fd1a5df0185c184febc44b4a1090b94a46f20ebfa1e87bc7010c",
+      "content_freeze_sha256": "91667a49a9a3d75afcc52d0e993df06cbf403302ebfd7f008e75fd679930f233",
+      "candidates": {
+        "infrastructure-change-safety": {
+          "source_path": "skills/infrastructure/infrastructure-change-safety",
+          "tree_sha256": "d90f92866993d60238a78995612fe3633bae9e946c959d5e2c7d1d26a258ee0a",
+          "all_file_hashes_modes_and_tree_recomputed": true
+        },
+        "overload-control": {
+          "source_path": "skills/performance/overload-control",
+          "tree_sha256": "8aa3a8f05ff22e7f8157d00287337c0048d1ae7cb33bca9ba4c2138a8cd63200",
+          "all_file_hashes_modes_and_tree_recomputed": true
+        }
+      }
+    },
+    {
+      "path": "../../../../evals/engineering-toolkit/runs/2026-10-02/runner-snapshot-08/report-controls-regression-freeze-11.json",
+      "file_sha256": "07a88c3b3682663809f9d531b917c0b6e968dac2aacc368045e0704aa087f4e1",
+      "content_freeze_sha256": "cf74a808a2e7c09a9b480255bb138a9627be50cce8355bc903801f9bf664cb0a",
+      "candidates": {
+        "infrastructure-change-safety": {
+          "source_path": "skills/infrastructure/infrastructure-change-safety",
+          "tree_sha256": "d90f92866993d60238a78995612fe3633bae9e946c959d5e2c7d1d26a258ee0a",
+          "all_file_hashes_modes_and_tree_recomputed": true
+        },
+        "overload-control": {
+          "source_path": "skills/performance/overload-control",
+          "tree_sha256": "8aa3a8f05ff22e7f8157d00287337c0048d1ae7cb33bca9ba4c2138a8cd63200",
+          "all_file_hashes_modes_and_tree_recomputed": true
+        }
+      }
+    }
+  ],
+  "actual_checks": [
+    {
+      "check": "Recompute difflib unified diff from preserved before snapshots and current after files",
+      "result": "byte-identical to exact.diff; zero removed/replaced old lines",
+      "exit_code": 0
+    },
+    {
+      "check": "Compare every file/hash/mode and recompute selected candidate tree digests in both freeze11 records",
+      "result": "all match",
+      "exit_code": 0
+    },
+    {
+      "check": "Resolve all local Markdown link targets in both SKILL.md files",
+      "result": "10 occurrences resolved: Infra6 / Over4",
+      "exit_code": 0
+    },
+    {
+      "check": "Read current entrypoints and targeted reference contracts",
+      "result": "no technical contradiction or core instruction loss found",
+      "reference_scope": {
+        "skills/infrastructure/infrastructure-change-safety/references/schema-evolution.md": "targeted revision/atomicity/eligible-writer/ledger/comparison paragraphs",
+        "skills/performance/overload-control/references/admission.md": "targeted resource ownership, signal/termination and release paragraphs",
+        "skills/performance/overload-control/references/queues-and-fairness.md": "targeted bounds/arbitration, receive-versus-completion, detector/ordering and verification paragraphs"
+      }
+    }
+  ],
+  "conditional_activation": {
+    "infrastructure": "Only online backfill or concurrent transformation requests invoke the new report. Existing routing, authorization and unknown-evidence rules remain; no demand to invent database atomicity or execute a comparison in review mode.",
+    "overload": "Only broker delivery or tenant fairness invokes the new report. Existing review/design unexecuted-procedure rule remains, and the addition distinguishes supplied/executed results from proposed checks. Description and step completion clauses are unchanged."
+  },
+  "technical_assessment": {
+    "infrastructure": "Requires actual guard/write transaction scope, maintenance evidence for every eligible writer, an observation cut, independent expectations, complete bidirectional set/value/revision comparison and explicit unknowns; these align with existing schema-evolution reference.",
+    "overload": "Separates detector/delivery/ordering from execution and completion; makes finite waiting outcomes, eventual scheduling and real resource release observable. It adds no provider threshold, resource cap, cancellation completion assumption or deadline guarantee."
+  },
+  "fixture_answer_leakage": {
+    "found": false,
+    "basis": "Added text contains generic mechanisms/report obligations only; no case IDs, customer/job/row names, status codes, expected values, capacity numbers, deadlines or concrete fixture outcomes. Alignment with general invariants does not supply a fixture answer."
+  },
+  "independence_for_later_overload_scores": "Static reviewer did not author any candidate source, case or response; source review does not create candidate authorship. Authorship/conflict must still be checked against each actual later selected closure.",
+  "limits": [
+    "No behavioral trial or future response grading performed.",
+    "Additive source preservation does not establish old behavior regression success.",
+    "Links checked as local file existence; reference semantics checked only for relevant contracts, not a new full primary-source audit.",
+    "No publication or deployment decision made."
+  ]
+}

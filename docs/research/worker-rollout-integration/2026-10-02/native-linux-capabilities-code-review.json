@@ -1,0 +1,562 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-02",
+  "reviewer": "/root/archive_quality",
+  "kind": "independent-native-capabilities-source-followup",
+  "independence": {
+    "authored_reviewed_runner": false,
+    "candidate_grade": false,
+    "fixture_authorship_declared": true,
+    "full_selected_candidate_closure_grade_excluded": true
+  },
+  "execution": {
+    "reviewer_model_turns": 0,
+    "reviewer_native_container_runs": 0,
+    "auth_contents_inspected": false,
+    "private_config_values_inspected": false,
+    "host_settings_changed": false
+  },
+  "scope": {
+    "files": [
+      "scripts/native-smoke.mjs",
+      "scripts/native-linux-smoke.mjs",
+      "tests/toolkit/native-smoke.test.mjs"
+    ],
+    "findings": [],
+    "disposition": "no actionable finding in frozen07 bounded source scope; does not establish behavioral case acceptance",
+    "excluded": [
+      "Python-enabled image support",
+      "complete native model-tool inventory and all-tool confinement",
+      "installed candidate scoring",
+      "actual model edit-handler runtime behavior"
+    ]
+  },
+  "source_sha256": {
+    "scripts/native-smoke.mjs": "649f13522e3d0cd18a96c4743739f97555527c8716c76f7f88b395563f775be4",
+    "scripts/native-linux-smoke.mjs": "8cfb3aa03d8d1eacd708219f6a1d3f38a118ea64f3828c6fdc6d7e2eaa256a64",
+    "tests/toolkit/native-smoke.test.mjs": "7497761f1eb8af795fc179f9e4376566834ba9381fc922715f4920c19a4baa30"
+  },
+  "previous_reviews": {
+    "sha256": {
+      "native-linux-code-review.md": "5d86020f63945609a2cf6b3a75d32db5c5b6a02b90219eb61996e9da48af924f",
+      "native-linux-code-review.json": "a28a86e2b8c4a0dc8a68a1ace2176068e8a9250aacae685550b6758aa28be3e2",
+      "native-linux-environment-code-review.md": "e6ea136406ab49b78b856a5100f160a6b8a5d1b52a0a8be4301d011405af18e0",
+      "native-linux-environment-code-review.json": "9e0e7789b58b7baa93fdf2d10c3ab1a6559b864cfecfc9371caba6d849b999bc"
+    },
+    "bytes_preserved": true
+  },
+  "independent_checks": [
+    {
+      "command": "node --test tests/toolkit/native-smoke.test.mjs",
+      "executed_by": "reviewer",
+      "exit_code": 0,
+      "passed": 44,
+      "failed": 0,
+      "skipped": 0,
+      "includes_real_owned_process_cleanup": true,
+      "model_execution": "synthetic hosts only; no model turn"
+    },
+    {
+      "command": "git diff --check -- scripts/native-smoke.mjs scripts/native-linux-smoke.mjs tests/toolkit/native-smoke.test.mjs",
+      "executed_by": "reviewer",
+      "exit_code": 0
+    },
+    {
+      "command": "reviewer Node readTree inventory comparison",
+      "executed_by": "reviewer",
+      "exit_code": 0,
+      "roots": [
+        "/tmp/tal-native-linux-worker-original-preflight-20261002-07",
+        "/tmp/tal-native-linux-worker-repeat-inplace-preflight-20261002-02",
+        "/tmp/tal-native-linux-worker-repeat-inplace-preflight-20261002-01",
+        "/tmp/tal-native-linux-worker-deadline-inplace-preflight-20261002-01",
+        "/tmp/tal-native-linux-worker-local-inplace-preflight-20261002-01"
+      ],
+      "compared": [
+        "original baseline",
+        "staged inventory",
+        "recorded final inventory",
+        "current file bytes and modes",
+        "copied runner bytes"
+      ]
+    },
+    {
+      "command": "reviewer original fixture copy comparison",
+      "executed_by": "reviewer",
+      "exit_code": 0,
+      "fixture_index_sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+      "raw_files_identical": 4,
+      "prompt_identical": true,
+      "raw_modes": 420
+    }
+  ],
+  "implementation_contract": {
+    "opt_in": "--existing-file-inplace",
+    "locators": [
+      "scripts/native-linux-smoke.mjs:29",
+      "scripts/native-linux-smoke.mjs:45",
+      "scripts/native-linux-smoke.mjs:71",
+      "scripts/native-linux-smoke.mjs:81",
+      "scripts/native-smoke.mjs:78",
+      "scripts/native-smoke.mjs:453"
+    ],
+    "physical_trial_readonly": true,
+    "native_trial_directory_write_grant_composed_with_exact_mounts": true,
+    "editable_existing_regular_files_required_after_staging": true,
+    "absent_declared_outputs": "only empty host-created placeholders; declared original baseline remains preserved and separately audited",
+    "declared_runtime_directories": "disjoint scoped writable mounts; raw fixture overlap rejected during prepare",
+    "blocked": [
+      "atomic save requirement",
+      "new undeclared sibling files",
+      "immutable supplied inputs and installed candidate files",
+      "symlink ancestors",
+      "overlapping editable/runtime mounts",
+      "missing verifier executable or recognized runtime startup failure",
+      "unverified physical mounts or composed edit controls"
+    ],
+    "probe_methods": [
+      "native command sandbox plus installed patch CLI Add File against an existing file",
+      "native command sandbox plus installed patch CLI Update File",
+      "declared runtime-directory write",
+      "immutable/new-file/temp/rename adverse controls",
+      "content restoration and inventory audit"
+    ],
+    "model_edit_handler_verified": false,
+    "generic_atomic_editor_supported": false
+  },
+  "phase_and_timeout_contract": {
+    "locators": [
+      "scripts/native-linux-smoke.mjs:221",
+      "scripts/native-linux-smoke.mjs:259",
+      "scripts/native-smoke.mjs:454",
+      "scripts/native-smoke.mjs:459",
+      "scripts/native-smoke.mjs:489"
+    ],
+    "linux_budget_integer_seconds": [
+      1,
+      1800
+    ],
+    "origin_recorded": [
+      "caller-override",
+      "fixture",
+      "runner-default"
+    ],
+    "preflight_passed_latched_before_model": true,
+    "failure_stage_after_successful_preflight": "execution-or-cleanup",
+    "outer_container_allowance": "selected model budget plus 120 seconds; RPC, command, traversal and cleanup have separate bounds",
+    "limits": [
+      "Model turn timeout is not a single total wall-clock deadline for metadata, probes, history and verification.",
+      "Outer cutoff can leave no inner report; outer lifecycle/audit failure is retained and cannot become a pass."
+    ]
+  },
+  "role_contract": {
+    "definition_locator": "scripts/native-smoke.mjs:52",
+    "expected_definition_gate": "scripts/native-smoke.mjs:447",
+    "prepared_expected_names_locator": "scripts/native-smoke.mjs:536",
+    "snapshot_locator": "scripts/native-smoke.mjs:194",
+    "metadata_observation_locator": "scripts/native-smoke.mjs:170",
+    "expected_source_definitions": 9,
+    "names_and_file_hashes_validated": true,
+    "resolved_role_registry_available": false,
+    "actual_dispatch_in_no_model_freeze": false,
+    "task_name_or_self_report_sufficient": false,
+    "active_history_is_terminal_completion": false,
+    "limits": [
+      "Expected names identify installed closure definitions, not roles that every task must invoke.",
+      "Feature flags and project-file discovery do not expose the complete resolved native role/tool registry.",
+      "A read can retrieve all current history while a child is still active."
+    ]
+  },
+  "original_readonly_regression": {
+    "record_index": 0,
+    "local_environment_ready": true,
+    "selected_cwd": "/trial",
+    "runtime_workspace_roots": [
+      "/trial"
+    ],
+    "shell_name": "bash",
+    "shell_path": "/usr/bin/bash",
+    "resolved_feature_count": 152,
+    "feature_pages": 2,
+    "required_features": {
+      "shell_tool": true,
+      "unified_exec": true,
+      "multi_agent": true
+    },
+    "multi_agent_v2": false,
+    "optional_runtime_granted": [],
+    "boundary_checks": "13/13; declared __pycache__ mkdir denied",
+    "runtime_verifier_required": false,
+    "model_and_effort": "gpt-6-sol/xhigh inherited without override",
+    "behavioral_completion_claimed": false
+  },
+  "evidence_records": [
+    {
+      "root": "/tmp/tal-native-linux-worker-original-preflight-20261002-07",
+      "artifact_sha256": {
+        "freeze.json": "474e4df6a5bf26ca4268d69fe7a91fd6ef7aa41ca3adbc244b4ee217072904e1",
+        "evidence/prepared.json": "4b6f4be843570759b55ff9645b7524c7ebb3c71da8bbeaece7457a2c6b80c7ea",
+        "evidence/linux-scope.json": "1e5411bb2208cc1e00bd07d3a0b55b58edeb7c62df9d00bc0468a32a6810d90e",
+        "evidence/run.json": "c7f4ee1a2d21c08cf50ee0b7c923b554577ae07d5168d7eecd2c324d7de13fcc",
+        "evidence/linux-host.json": "9501321cda436ce45cca6913b39b993abb87c54d00cb5afc1ed463a79d7430fa"
+      },
+      "matches_reviewed_runner": true,
+      "runner_sha256": {
+        "scripts/native-smoke.mjs": "649f13522e3d0cd18a96c4743739f97555527c8716c76f7f88b395563f775be4",
+        "scripts/native-linux-smoke.mjs": "8cfb3aa03d8d1eacd708219f6a1d3f38a118ea64f3828c6fdc6d7e2eaa256a64"
+      },
+      "produced_by": "author; reviewer inspected records and current trial inventories, did not rerun containers",
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "failure_stage": null,
+      "timeout_budget": {
+        "seconds": 1200,
+        "origin": "caller-override",
+        "fixture_or_default_seconds": 300
+      },
+      "boundary": {
+        "passed": true,
+        "check_count": 13,
+        "passed_count": 13,
+        "mounts_passed": null,
+        "writes_passed": null,
+        "write_check_count": 0,
+        "restored_hashes": null,
+        "verifier_available": true,
+        "verifier_required": false
+      },
+      "inventory": {
+        "baseline_count": 120,
+        "recorded_final_count": 120,
+        "current_equals_original_baseline_bytes_and_modes": true,
+        "current_equals_staged_bytes_and_modes": true,
+        "current_equals_recorded_final_bytes_and_modes": true,
+        "copied_runner_matches_record": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_unchanged": true,
+        "original_config_unchanged": true,
+        "container_absent": true,
+        "transport_terminated": true
+      }
+    },
+    {
+      "root": "/tmp/tal-native-linux-worker-repeat-inplace-preflight-20261002-02",
+      "artifact_sha256": {
+        "evidence/prepared.json": "cb337e31b49be5e3f515575817c86d6c3fb3f07343b4f46349b45fd12e2d8245",
+        "evidence/linux-scope.json": "39dedcd239c20d5573d591d5dc9b1f1cef5013b4358e3a6070210a8fa0fe0001",
+        "evidence/run.json": "afce11989b12e923a3921f4ca45456ac645dcfaebe569ac2e95505c1d508d89d",
+        "evidence/linux-host.json": "6bebb7030cab41436c44ac53fb3f6e36952634ce762c03f73b75ba3926931a40"
+      },
+      "matches_reviewed_runner": true,
+      "runner_sha256": {
+        "scripts/native-smoke.mjs": "649f13522e3d0cd18a96c4743739f97555527c8716c76f7f88b395563f775be4",
+        "scripts/native-linux-smoke.mjs": "8cfb3aa03d8d1eacd708219f6a1d3f38a118ea64f3828c6fdc6d7e2eaa256a64"
+      },
+      "produced_by": "author; reviewer inspected records and current trial inventories, did not rerun containers",
+      "execution_started": false,
+      "preflight_passed": false,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": "Native sandbox boundary probe failed: verifier-executable-available",
+      "failure_stage": "preflight",
+      "timeout_budget": {
+        "seconds": 1200,
+        "origin": "caller-override",
+        "fixture_or_default_seconds": 600
+      },
+      "boundary": {
+        "passed": false,
+        "check_count": 13,
+        "passed_count": 12,
+        "mounts_passed": true,
+        "writes_passed": true,
+        "write_check_count": 9,
+        "restored_hashes": [
+          {
+            "path": "rollout-plan.md",
+            "unchanged": true
+          }
+        ],
+        "verifier_available": false,
+        "verifier_required": true
+      },
+      "inventory": {
+        "baseline_count": 122,
+        "recorded_final_count": 122,
+        "current_equals_original_baseline_bytes_and_modes": true,
+        "current_equals_staged_bytes_and_modes": true,
+        "current_equals_recorded_final_bytes_and_modes": true,
+        "copied_runner_matches_record": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_unchanged": true,
+        "original_config_unchanged": true,
+        "container_absent": true,
+        "transport_terminated": true
+      }
+    },
+    {
+      "root": "/tmp/tal-native-linux-worker-repeat-inplace-preflight-20261002-01",
+      "artifact_sha256": {
+        "evidence/prepared.json": "112a1decdb67997f12e6e641ebecbc171fa974a3a0c0bc93dddd751f26e09918",
+        "evidence/linux-scope.json": "39dedcd239c20d5573d591d5dc9b1f1cef5013b4358e3a6070210a8fa0fe0001",
+        "evidence/run.json": "888605c4e01ff88461094718cec8deb55f06cdd493126705013e647ca88be169",
+        "evidence/linux-host.json": "b1bfb9ce0f890ccf7500a4f6a70c8fbd616c26312d137f3b8ea3064d6672eabf"
+      },
+      "matches_reviewed_runner": false,
+      "runner_sha256": {
+        "scripts/native-smoke.mjs": "b896577c2b9c7d8cb45d7d1208dfcf850aae021f06059d56a362d7ea6bfae35b",
+        "scripts/native-linux-smoke.mjs": "084f2850fb407a59a56ed4fb55c81b53a09c6854f57d14d73d72b4a4cd30b9cb"
+      },
+      "produced_by": "author; reviewer inspected records and current trial inventories, did not rerun containers",
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "failure_stage": null,
+      "timeout_budget": {
+        "seconds": 1200,
+        "origin": "caller-override",
+        "fixture_or_default_seconds": 600
+      },
+      "boundary": {
+        "passed": true,
+        "check_count": 12,
+        "passed_count": 12,
+        "mounts_passed": true,
+        "writes_passed": true,
+        "write_check_count": 9,
+        "restored_hashes": [
+          {
+            "path": "rollout-plan.md",
+            "unchanged": true
+          }
+        ],
+        "verifier_available": null,
+        "verifier_required": null
+      },
+      "inventory": {
+        "baseline_count": 122,
+        "recorded_final_count": 122,
+        "current_equals_original_baseline_bytes_and_modes": true,
+        "current_equals_staged_bytes_and_modes": true,
+        "current_equals_recorded_final_bytes_and_modes": true,
+        "copied_runner_matches_record": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_unchanged": true,
+        "original_config_unchanged": true,
+        "container_absent": true,
+        "transport_terminated": true
+      }
+    },
+    {
+      "root": "/tmp/tal-native-linux-worker-deadline-inplace-preflight-20261002-01",
+      "artifact_sha256": {
+        "evidence/prepared.json": "226c0faeedce267d76e24bd4dd2b187801a26d116e7abbb4d3373b81f4767068",
+        "evidence/linux-scope.json": "204c2066155d5fe86f8f7020a895627d69314581491bdcfc0110381965c5798e",
+        "evidence/run.json": "252a8bf93766612f718ee2dc318cc851d2f1c5e23448954900832d54ced8bc2b",
+        "evidence/linux-host.json": "74147e7a636537614fd916e1e0f2041a1927e3e599c975333f003949f6982943"
+      },
+      "matches_reviewed_runner": false,
+      "runner_sha256": {
+        "scripts/native-smoke.mjs": "b896577c2b9c7d8cb45d7d1208dfcf850aae021f06059d56a362d7ea6bfae35b",
+        "scripts/native-linux-smoke.mjs": "084f2850fb407a59a56ed4fb55c81b53a09c6854f57d14d73d72b4a4cd30b9cb"
+      },
+      "produced_by": "author; reviewer inspected records and current trial inventories, did not rerun containers",
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "failure_stage": null,
+      "timeout_budget": {
+        "seconds": 1200,
+        "origin": "caller-override",
+        "fixture_or_default_seconds": 600
+      },
+      "boundary": {
+        "passed": true,
+        "check_count": 12,
+        "passed_count": 12,
+        "mounts_passed": true,
+        "writes_passed": true,
+        "write_check_count": 9,
+        "restored_hashes": [
+          {
+            "path": "shutdown-plan.md",
+            "unchanged": true
+          }
+        ],
+        "verifier_available": null,
+        "verifier_required": null
+      },
+      "inventory": {
+        "baseline_count": 121,
+        "recorded_final_count": 121,
+        "current_equals_original_baseline_bytes_and_modes": true,
+        "current_equals_staged_bytes_and_modes": true,
+        "current_equals_recorded_final_bytes_and_modes": true,
+        "copied_runner_matches_record": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_unchanged": true,
+        "original_config_unchanged": true,
+        "container_absent": true,
+        "transport_terminated": true
+      }
+    },
+    {
+      "root": "/tmp/tal-native-linux-worker-local-inplace-preflight-20261002-01",
+      "artifact_sha256": {
+        "evidence/prepared.json": "fec8293868de913e34e15a81c821ca627527ed2bac05679c708c8abafcb85a9d",
+        "evidence/linux-scope.json": "da22f9ba731225bd7e9f39795fc231fa42a3cc6c1f14c88fb55abf5972996350",
+        "evidence/run.json": "8efcbb759353df6887d83130f507cc912b9549faa0bd4ad7f938db1ddcb81411",
+        "evidence/linux-host.json": "c96075b769e6d380fdaf0bd37c25735c31de18bea69051ab7d06c3e9a46f396d"
+      },
+      "matches_reviewed_runner": false,
+      "runner_sha256": {
+        "scripts/native-smoke.mjs": "b896577c2b9c7d8cb45d7d1208dfcf850aae021f06059d56a362d7ea6bfae35b",
+        "scripts/native-linux-smoke.mjs": "084f2850fb407a59a56ed4fb55c81b53a09c6854f57d14d73d72b4a4cd30b9cb"
+      },
+      "produced_by": "author; reviewer inspected records and current trial inventories, did not rerun containers",
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "failure_stage": null,
+      "timeout_budget": {
+        "seconds": 1200,
+        "origin": "caller-override",
+        "fixture_or_default_seconds": 300
+      },
+      "boundary": {
+        "passed": true,
+        "check_count": 12,
+        "passed_count": 12,
+        "mounts_passed": true,
+        "writes_passed": true,
+        "write_check_count": 6,
+        "restored_hashes": [
+          {
+            "path": "summary.py",
+            "unchanged": true
+          }
+        ],
+        "verifier_available": null,
+        "verifier_required": null
+      },
+      "inventory": {
+        "baseline_count": 118,
+        "recorded_final_count": 118,
+        "current_equals_original_baseline_bytes_and_modes": true,
+        "current_equals_staged_bytes_and_modes": true,
+        "current_equals_recorded_final_bytes_and_modes": true,
+        "copied_runner_matches_record": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_unchanged": true,
+        "original_config_unchanged": true,
+        "container_absent": true,
+        "transport_terminated": true
+      }
+    }
+  ],
+  "preserved_native02": {
+    "root": "/tmp/tal-native-linux-worker-original-model-20261002-02/evidence",
+    "artifact_sha256": {
+      "run.json": "b47b2482903b01212bb670006cbc088e083e4b522bc305b103499c18517d7cac",
+      "events.jsonl": "097eb03ade2077ba1210136557ebf0e8331bde22758b41262d1ad210bad6203a",
+      "linux-host.json": "c120c7cc2e459f56954d6dfea4080b1e52c443780dded2c11e0275bec0c5310f",
+      "prepared.json": "03e28f905199788aea0ac91f9685912fe6954d443f6593f3e6c3707cab30183a"
+    },
+    "runner_sha256": {
+      "scripts/native-smoke.mjs": "1522176a83043be0fde914de525b49cb3a6c950b144ac4bd9c1d5a238929b7d2",
+      "scripts/native-linux-smoke.mjs": "7585a5ecf677f90cd395471eea16dcde9213eb0d8b48561dd62852e0f7950e07"
+    },
+    "source_status": "blocked-or-failed",
+    "source_preflight_passed": false,
+    "source_aggregate_preflight_false_preserved": true,
+    "execution_started": true,
+    "failure": "Workflow timeout after 300s",
+    "case_compliant": false,
+    "observed_named_role": {
+      "name": "tal-durability",
+      "thread_id": "01a0fc6e-39a8-7640-885f-e37dd80bad79",
+      "locator": "events.jsonl:1455#/result/thread/source/subAgent/thread_spawn/agent_role",
+      "observed_status": "active",
+      "latest_turn_status": "inProgress"
+    },
+    "terminal_parent_status": "interrupted",
+    "child_findings_or_parent_final_established": false,
+    "candidate_graded_by_reviewer": false,
+    "disposition": "partial execution evidence and timeout; no accepted workflow result",
+    "owned_container_absent": true,
+    "owned_transport_terminated": true,
+    "changed_files": []
+  },
+  "primary_contract_read": {
+    "capture": "/tmp/tal-native-tool-registry-20261002-01/source",
+    "official_tag": "0.159.2",
+    "author_supplied_commit": "ff6aec96948b70d94983af2641a6b67c94faeff5",
+    "independently_refetched": false,
+    "files": [
+      {
+        "path": "codex-rs/agent-roles/src/loader.rs",
+        "sha256": "611e202c2bb4a2bad6c201bd93555d56b6c6c7021e96a294015556fd47b16b38",
+        "lines_read": [
+          [
+            1,
+            205
+          ]
+        ],
+        "supports": "role discovery across enabled config layers and role config folder/agents; registry is internal"
+      },
+      {
+        "path": "codex-rs/core/src/config/mod.rs",
+        "sha256": "df6d6871a35a9e365e36beb3d388c2c39cae59d95bd84834321c8501390ec397",
+        "lines_read": [
+          [
+            3788,
+            3803
+          ]
+        ],
+        "supports": "load_agent_roles called while effective config is assembled"
+      },
+      {
+        "path": "codex-rs/core/src/tools/spec_plan.rs",
+        "sha256": "849ef21d4e5c83febdc31eacd7609911d43e3f69a35168fe02ae899273b5ef3e",
+        "lines_read": [
+          [
+            775,
+            791
+          ]
+        ],
+        "supports": "spawn role description built from internal agent_roles"
+      }
+    ]
+  },
+  "final_limits": [
+    "No model turn, container rerun, installed candidate grading, host setting or permission change by reviewer.",
+    "The sole accepted image still lacks Python; current-source implementation preflight therefore remains blocked.",
+    "Historical composition probes establish the reported CLI controls only and use an earlier explicitly bound source revision.",
+    "A fresh authorized model trial and independent candidate/response scoring remain required for behavior acceptance.",
+    "Previous empty-environment host-invalid attempt and Native02 timeout are not converted into passing cases."
+  ]
+}

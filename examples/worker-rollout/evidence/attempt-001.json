@@ -1,0 +1,1224 @@
+{
+  "example": "worker-rollout",
+  "status": "passed",
+  "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+  "invocation": {
+    "timeout_seconds": 300
+  },
+  "checks": [
+    {
+      "name": "harmful_retry_budget_baseline",
+      "status": "passed",
+      "evidence": {
+        "operational_retirements": [
+          {
+            "worker_version": "v1",
+            "checkpoint": 1,
+            "inventory": [
+              {
+                "job": "harmful-main",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "active"
+              },
+              {
+                "job": "harmful-prefetch-A",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "prefetched"
+              }
+            ],
+            "readiness_before_after": [
+              200,
+              503
+            ],
+            "post_gate_rejection": "generation-excluded",
+            "shutdown": {
+              "event": "shutdown",
+              "reason": "current-slice-finished",
+              "dispositions": [
+                {
+                  "job": "harmful-main",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "active",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "business-failure"
+                  }
+                },
+                {
+                  "job": "harmful-prefetch-A",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "prefetched",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "business-failure"
+                  }
+                }
+              ],
+              "signal_count": 2,
+              "first_signal_monotonic": 1022787.630208958,
+              "drain_deadline_monotonic": 1022788.630208958,
+              "drain_elapsed_seconds": 0.37812691694125533,
+              "readiness_socket_closed": true,
+              "database_connection_closed": true
+            },
+            "process": {
+              "pid": 44636,
+              "exit_code": 0,
+              "listener_closed": true,
+              "control_streams_closed": true
+            }
+          },
+          {
+            "worker_version": "v1",
+            "checkpoint": 2,
+            "inventory": [
+              {
+                "job": "harmful-main",
+                "epoch": 2,
+                "checkpoint": 1,
+                "kind": "active"
+              },
+              {
+                "job": "harmful-prefetch-B",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "prefetched"
+              }
+            ],
+            "readiness_before_after": [
+              200,
+              503
+            ],
+            "post_gate_rejection": "generation-excluded",
+            "shutdown": {
+              "event": "shutdown",
+              "reason": "current-slice-finished",
+              "dispositions": [
+                {
+                  "job": "harmful-main",
+                  "epoch": 2,
+                  "checkpoint": 1,
+                  "kind": "active",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "business-failure"
+                  }
+                },
+                {
+                  "job": "harmful-prefetch-B",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "prefetched",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "business-failure"
+                  }
+                }
+              ],
+              "signal_count": 2,
+              "first_signal_monotonic": 1022788.364882083,
+              "drain_deadline_monotonic": 1022789.364882083,
+              "drain_elapsed_seconds": 0.39156449993606657,
+              "readiness_socket_closed": true,
+              "database_connection_closed": true
+            },
+            "process": {
+              "pid": 44638,
+              "exit_code": 0,
+              "listener_closed": true,
+              "control_streams_closed": true
+            }
+          },
+          {
+            "worker_version": "v1",
+            "checkpoint": 3,
+            "inventory": [
+              {
+                "job": "harmful-main",
+                "epoch": 3,
+                "checkpoint": 2,
+                "kind": "active"
+              },
+              {
+                "job": "harmful-prefetch-C",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "prefetched"
+              }
+            ],
+            "readiness_before_after": [
+              200,
+              503
+            ],
+            "post_gate_rejection": "generation-excluded",
+            "shutdown": {
+              "event": "shutdown",
+              "reason": "current-slice-finished",
+              "dispositions": [
+                {
+                  "job": "harmful-main",
+                  "epoch": 3,
+                  "checkpoint": 2,
+                  "kind": "active",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "business-failure"
+                  }
+                },
+                {
+                  "job": "harmful-prefetch-C",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "prefetched",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "business-failure"
+                  }
+                }
+              ],
+              "signal_count": 2,
+              "first_signal_monotonic": 1022789.116067875,
+              "drain_deadline_monotonic": 1022790.116067875,
+              "drain_elapsed_seconds": 0.3978063330287114,
+              "readiness_socket_closed": true,
+              "database_connection_closed": true
+            },
+            "process": {
+              "pid": 44640,
+              "exit_code": 0,
+              "listener_closed": true,
+              "control_streams_closed": true
+            }
+          }
+        ],
+        "useful_completion": false,
+        "successor_rejected": "business-failed",
+        "final": {
+          "id": "harmful-main",
+          "manifest": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 3,
+          "epoch": 3,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:22:56.650750+00:00",
+          "completed_at": null,
+          "claims": 3,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 3,
+          "business_budget": 3,
+          "status": "business-failed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 1,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 1,
+              "amount": 2,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 2,
+              "amount": 3,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            }
+          ],
+          "total": 6
+        }
+      }
+    },
+    {
+      "name": "protected_three_retirements",
+      "status": "passed",
+      "evidence": {
+        "operational_retirements": [
+          {
+            "worker_version": "v1",
+            "checkpoint": 1,
+            "inventory": [
+              {
+                "job": "protected-main",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "active"
+              },
+              {
+                "job": "protected-prefetch-A",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "prefetched"
+              }
+            ],
+            "readiness_before_after": [
+              200,
+              503
+            ],
+            "post_gate_rejection": "generation-excluded",
+            "shutdown": {
+              "event": "shutdown",
+              "reason": "current-slice-finished",
+              "dispositions": [
+                {
+                  "job": "protected-main",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "active",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "maintenance"
+                  }
+                },
+                {
+                  "job": "protected-prefetch-A",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "prefetched",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "maintenance"
+                  }
+                }
+              ],
+              "signal_count": 2,
+              "first_signal_monotonic": 1022790.036297041,
+              "drain_deadline_monotonic": 1022791.036297041,
+              "drain_elapsed_seconds": 0.3785540839890018,
+              "readiness_socket_closed": true,
+              "database_connection_closed": true
+            },
+            "process": {
+              "pid": 44643,
+              "exit_code": 0,
+              "listener_closed": true,
+              "control_streams_closed": true
+            }
+          },
+          {
+            "worker_version": "v1",
+            "checkpoint": 2,
+            "inventory": [
+              {
+                "job": "protected-main",
+                "epoch": 2,
+                "checkpoint": 1,
+                "kind": "active"
+              },
+              {
+                "job": "protected-prefetch-B",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "prefetched"
+              }
+            ],
+            "readiness_before_after": [
+              200,
+              503
+            ],
+            "post_gate_rejection": "generation-excluded",
+            "shutdown": {
+              "event": "shutdown",
+              "reason": "current-slice-finished",
+              "dispositions": [
+                {
+                  "job": "protected-main",
+                  "epoch": 2,
+                  "checkpoint": 1,
+                  "kind": "active",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "maintenance"
+                  }
+                },
+                {
+                  "job": "protected-prefetch-B",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "prefetched",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "maintenance"
+                  }
+                }
+              ],
+              "signal_count": 2,
+              "first_signal_monotonic": 1022790.744852916,
+              "drain_deadline_monotonic": 1022791.744852916,
+              "drain_elapsed_seconds": 0.38539758406113833,
+              "readiness_socket_closed": true,
+              "database_connection_closed": true
+            },
+            "process": {
+              "pid": 44646,
+              "exit_code": 0,
+              "listener_closed": true,
+              "control_streams_closed": true
+            }
+          },
+          {
+            "worker_version": "v1",
+            "checkpoint": 3,
+            "inventory": [
+              {
+                "job": "protected-main",
+                "epoch": 3,
+                "checkpoint": 2,
+                "kind": "active"
+              },
+              {
+                "job": "protected-prefetch-C",
+                "epoch": 1,
+                "checkpoint": 0,
+                "kind": "prefetched"
+              }
+            ],
+            "readiness_before_after": [
+              200,
+              503
+            ],
+            "post_gate_rejection": "generation-excluded",
+            "shutdown": {
+              "event": "shutdown",
+              "reason": "current-slice-finished",
+              "dispositions": [
+                {
+                  "job": "protected-main",
+                  "epoch": 3,
+                  "checkpoint": 2,
+                  "kind": "active",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "maintenance"
+                  }
+                },
+                {
+                  "job": "protected-prefetch-C",
+                  "epoch": 1,
+                  "checkpoint": 0,
+                  "kind": "prefetched",
+                  "disposition": "released",
+                  "result": {
+                    "accepted": true,
+                    "classification": "maintenance"
+                  }
+                }
+              ],
+              "signal_count": 2,
+              "first_signal_monotonic": 1022791.480981541,
+              "drain_deadline_monotonic": 1022792.480981541,
+              "drain_elapsed_seconds": 0.379662667051889,
+              "readiness_socket_closed": true,
+              "database_connection_closed": true
+            },
+            "process": {
+              "pid": 44648,
+              "exit_code": 0,
+              "listener_closed": true,
+              "control_streams_closed": true
+            }
+          }
+        ],
+        "useful_completion": true,
+        "successor_version": "v2",
+        "final": {
+          "id": "protected-main",
+          "manifest": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 6,
+          "epoch": 4,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:22:59.091721+00:00",
+          "completed_at": "2026-10-02T08:23:01.556569+00:00",
+          "claims": 4,
+          "maintenance_handoffs": 3,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 1,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 1,
+              "amount": 2,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 2,
+              "amount": 3,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 3,
+              "amount": 4,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 4,
+              "amount": 5,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 5,
+              "amount": 6,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            }
+          ],
+          "total": 21
+        },
+        "prefetched_jobs": [
+          {
+            "id": "protected-prefetch-A",
+            "manifest": [
+              7
+            ],
+            "input_hash": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb",
+            "input_schema": 1,
+            "checkpoint_schema": 1,
+            "semantics": "sum-v1",
+            "checkpoint": 1,
+            "epoch": 2,
+            "owner": null,
+            "generation": null,
+            "lease_until": null,
+            "deadline": "2026-10-03T08:22:59.097537+00:00",
+            "completed_at": "2026-10-02T08:23:01.594251+00:00",
+            "claims": 2,
+            "maintenance_handoffs": 1,
+            "infrastructure_interruptions": 0,
+            "business_failures": 0,
+            "business_budget": 3,
+            "status": "completed",
+            "receipts": [
+              {
+                "step": 0,
+                "amount": 7,
+                "input_hash": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb"
+              }
+            ],
+            "total": 7
+          },
+          {
+            "id": "protected-prefetch-B",
+            "manifest": [
+              7
+            ],
+            "input_hash": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb",
+            "input_schema": 1,
+            "checkpoint_schema": 1,
+            "semantics": "sum-v1",
+            "checkpoint": 1,
+            "epoch": 2,
+            "owner": null,
+            "generation": null,
+            "lease_until": null,
+            "deadline": "2026-10-03T08:22:59.804767+00:00",
+            "completed_at": "2026-10-02T08:23:01.631378+00:00",
+            "claims": 2,
+            "maintenance_handoffs": 1,
+            "infrastructure_interruptions": 0,
+            "business_failures": 0,
+            "business_budget": 3,
+            "status": "completed",
+            "receipts": [
+              {
+                "step": 0,
+                "amount": 7,
+                "input_hash": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb"
+              }
+            ],
+            "total": 7
+          },
+          {
+            "id": "protected-prefetch-C",
+            "manifest": [
+              7
+            ],
+            "input_hash": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb",
+            "input_schema": 1,
+            "checkpoint_schema": 1,
+            "semantics": "sum-v1",
+            "checkpoint": 1,
+            "epoch": 2,
+            "owner": null,
+            "generation": null,
+            "lease_until": null,
+            "deadline": "2026-10-03T08:23:00.542215+00:00",
+            "completed_at": "2026-10-02T08:23:01.670557+00:00",
+            "claims": 2,
+            "maintenance_handoffs": 1,
+            "infrastructure_interruptions": 0,
+            "business_failures": 0,
+            "business_budget": 3,
+            "status": "completed",
+            "receipts": [
+              {
+                "step": 0,
+                "amount": 7,
+                "input_hash": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb"
+              }
+            ],
+            "total": 7
+          }
+        ]
+      }
+    },
+    {
+      "name": "admission_publication_race",
+      "status": "passed",
+      "evidence": {
+        "committed_claim_reconciled": {
+          "event": "drain_started",
+          "inventory": [
+            {
+              "job": "admission-race",
+              "epoch": 1,
+              "checkpoint": 0,
+              "kind": "prefetched"
+            }
+          ],
+          "admission": false,
+          "reconciled_committed_claims": [
+            "admission-race"
+          ],
+          "first_signal_monotonic": 1022792.651243916,
+          "drain_deadline_monotonic": 1022795.651243916
+        },
+        "post_gate_rejection": "generation-excluded",
+        "shutdown": {
+          "event": "shutdown",
+          "reason": "idle-drain",
+          "dispositions": [
+            {
+              "job": "admission-race",
+              "epoch": 1,
+              "checkpoint": 0,
+              "kind": "prefetched",
+              "disposition": "released",
+              "result": {
+                "accepted": true,
+                "classification": "maintenance"
+              }
+            }
+          ],
+          "signal_count": 1,
+          "first_signal_monotonic": 1022792.651243916,
+          "drain_deadline_monotonic": 1022795.651243916,
+          "drain_elapsed_seconds": 0.18101495900191367,
+          "readiness_socket_closed": true,
+          "database_connection_closed": true
+        }
+      }
+    },
+    {
+      "name": "committed_effect_before_checkpoint",
+      "status": "passed",
+      "evidence": {
+        "selected_boundary": {
+          "id": "receipt-gap",
+          "manifest": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 0,
+          "epoch": 1,
+          "owner": "gap-old",
+          "generation": "gap-old",
+          "lease_until": "2026-10-02T08:23:04.404702+00:00",
+          "deadline": "2026-10-03T08:23:02.267866+00:00",
+          "completed_at": null,
+          "claims": 1,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "pending",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 1,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            }
+          ],
+          "total": 1
+        },
+        "killed_process": {
+          "pid": 44710,
+          "exit_code": -9,
+          "listener_closed": true,
+          "control_streams_closed": true
+        },
+        "v2_receipt_replays": [
+          0
+        ],
+        "final": {
+          "id": "receipt-gap",
+          "manifest": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 6,
+          "epoch": 2,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:23:02.267866+00:00",
+          "completed_at": "2026-10-02T08:23:02.762964+00:00",
+          "claims": 2,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 1,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 1,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 1,
+              "amount": 2,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 2,
+              "amount": 3,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 3,
+              "amount": 4,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 4,
+              "amount": 5,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            },
+            {
+              "step": 5,
+              "amount": 6,
+              "input_hash": "17ec0c346922df8a32b8fee47a41171e9d6fddd3b46b04f9c3a70d9eb7b14af7"
+            }
+          ],
+          "total": 21
+        }
+      }
+    },
+    {
+      "name": "paused_old_owner_after_takeover",
+      "status": "passed",
+      "evidence": {
+        "signals": [
+          "SIGSTOP",
+          "SIGCONT"
+        ],
+        "takeover_snapshot": {
+          "id": "stale-owner",
+          "manifest": [
+            2,
+            3
+          ],
+          "input_hash": "18b058689d010062a25cd7fb949b2abfea1757d2de45ca3abdda17db956e506b",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 0,
+          "epoch": 2,
+          "owner": "stale-new",
+          "generation": "stale-new",
+          "lease_until": "2026-10-02T08:23:05.074679+00:00",
+          "deadline": "2026-10-03T08:23:02.788641+00:00",
+          "completed_at": null,
+          "claims": 2,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "pending",
+          "receipts": [],
+          "total": 0
+        },
+        "rejected": {
+          "effect": {
+            "accepted": false,
+            "reason": "stale-owner-or-terminal"
+          },
+          "checkpoint": {
+            "accepted": false,
+            "reason": "stale-owner-or-terminal"
+          },
+          "release": {
+            "accepted": false,
+            "reason": "stale-owner-or-terminal"
+          }
+        },
+        "final": {
+          "id": "stale-owner",
+          "manifest": [
+            2,
+            3
+          ],
+          "input_hash": "18b058689d010062a25cd7fb949b2abfea1757d2de45ca3abdda17db956e506b",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 2,
+          "epoch": 2,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:23:02.788641+00:00",
+          "completed_at": "2026-10-02T08:23:03.189608+00:00",
+          "claims": 2,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 2,
+              "input_hash": "18b058689d010062a25cd7fb949b2abfea1757d2de45ca3abdda17db956e506b"
+            },
+            {
+              "step": 1,
+              "amount": 3,
+              "input_hash": "18b058689d010062a25cd7fb949b2abfea1757d2de45ca3abdda17db956e506b"
+            }
+          ],
+          "total": 5
+        }
+      }
+    },
+    {
+      "name": "old_new_compatibility",
+      "status": "passed",
+      "evidence": {
+        "old_version": {
+          "event": "ready",
+          "pid": 44714,
+          "version": "v1",
+          "generation": "compat-old",
+          "host": "127.0.0.1",
+          "port": 52093,
+          "supported": [
+            [
+              1,
+              1,
+              "sum-v1"
+            ]
+          ]
+        },
+        "new_version": {
+          "event": "ready",
+          "pid": 44718,
+          "version": "v2",
+          "generation": "compat-new",
+          "host": "127.0.0.1",
+          "port": 52099,
+          "supported": [
+            [
+              1,
+              1,
+              "sum-v1"
+            ],
+            [
+              2,
+              2,
+              "sum-v2"
+            ]
+          ]
+        },
+        "incompatible_rejection": "input-checkpoint-incompatible",
+        "incompatible_preserved": {
+          "id": "retained-v1",
+          "manifest": [
+            4,
+            6
+          ],
+          "input_hash": "bd0a0651ccfbeba3bf2507398e3d12f8b87c643984c65a8868d1a1797290dd25",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 1,
+          "epoch": 1,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:23:03.210089+00:00",
+          "completed_at": null,
+          "claims": 1,
+          "maintenance_handoffs": 1,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "pending",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 4,
+              "input_hash": "bd0a0651ccfbeba3bf2507398e3d12f8b87c643984c65a8868d1a1797290dd25"
+            }
+          ],
+          "total": 4
+        },
+        "immutable_fields_rejected": [
+          "manifest",
+          "checkpoint_schema",
+          "semantics"
+        ],
+        "retained_v1": {
+          "id": "retained-v1",
+          "manifest": [
+            4,
+            6
+          ],
+          "input_hash": "bd0a0651ccfbeba3bf2507398e3d12f8b87c643984c65a8868d1a1797290dd25",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 2,
+          "epoch": 2,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:23:03.210089+00:00",
+          "completed_at": "2026-10-02T08:23:04.072781+00:00",
+          "claims": 2,
+          "maintenance_handoffs": 1,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 4,
+              "input_hash": "bd0a0651ccfbeba3bf2507398e3d12f8b87c643984c65a8868d1a1797290dd25"
+            },
+            {
+              "step": 1,
+              "amount": 6,
+              "input_hash": "bd0a0651ccfbeba3bf2507398e3d12f8b87c643984c65a8868d1a1797290dd25"
+            }
+          ],
+          "total": 10
+        },
+        "new_v2": {
+          "id": "structured-v2",
+          "manifest": [
+            {
+              "amount": 5
+            },
+            {
+              "amount": 7
+            }
+          ],
+          "input_hash": "9db3d0007012950ea9a10ac1b474287962f9d33f03e5038dccfdd5c2f2ebbf79",
+          "input_schema": 2,
+          "checkpoint_schema": 2,
+          "semantics": "sum-v2",
+          "checkpoint": 2,
+          "epoch": 1,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:23:04.074678+00:00",
+          "completed_at": "2026-10-02T08:23:04.146215+00:00",
+          "claims": 1,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 5,
+              "input_hash": "9db3d0007012950ea9a10ac1b474287962f9d33f03e5038dccfdd5c2f2ebbf79"
+            },
+            {
+              "step": 1,
+              "amount": 7,
+              "input_hash": "9db3d0007012950ea9a10ac1b474287962f9d33f03e5038dccfdd5c2f2ebbf79"
+            }
+          ],
+          "total": 12
+        }
+      }
+    },
+    {
+      "name": "durable_deadlines_and_local_budget",
+      "status": "passed",
+      "evidence": {
+        "expired_before_claim": {
+          "id": "expired-before-claim",
+          "manifest": [
+            3
+          ],
+          "input_hash": "06d033ece6645de592db973644cf7357255f24536ff7b03c3b2ace10736f7636",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 0,
+          "epoch": 0,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-02T08:23:03.182347+00:00",
+          "completed_at": null,
+          "claims": 0,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "deadline-exceeded",
+          "receipts": [],
+          "total": 0
+        },
+        "expired_during_drain": {
+          "id": "expires-during-drain",
+          "manifest": [
+            4
+          ],
+          "input_hash": "46b1884167c4edd308bcf0c04163dd02d05c9742b35e86b57b5f7ed1b82f3850",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 0,
+          "epoch": 1,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-02T08:23:03.495435+00:00",
+          "completed_at": null,
+          "claims": 1,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "deadline-exceeded",
+          "receipts": [],
+          "total": 0
+        },
+        "expiry_shutdown": {
+          "event": "shutdown",
+          "reason": "current-slice-finished",
+          "dispositions": [
+            {
+              "job": "expires-during-drain",
+              "epoch": 1,
+              "checkpoint": 0,
+              "kind": "active",
+              "disposition": "deadline-exceeded"
+            }
+          ],
+          "signal_count": 1,
+          "first_signal_monotonic": 1022795.266147458,
+          "drain_deadline_monotonic": 1022797.266147458,
+          "drain_elapsed_seconds": 0.02325395797379315,
+          "readiness_socket_closed": true,
+          "database_connection_closed": true
+        },
+        "monotonic_budget_shutdown": {
+          "event": "shutdown",
+          "reason": "drain-budget-exhausted",
+          "dispositions": [
+            {
+              "job": "budget-recovery",
+              "epoch": 1,
+              "checkpoint": 0,
+              "kind": "active",
+              "disposition": "lease-recovery-required"
+            }
+          ],
+          "signal_count": 2,
+          "first_signal_monotonic": 1022795.484219625,
+          "drain_deadline_monotonic": 1022795.684219625,
+          "drain_elapsed_seconds": 0.21191058296244591,
+          "readiness_socket_closed": true,
+          "database_connection_closed": true
+        },
+        "pending_after_budget": {
+          "id": "budget-recovery",
+          "manifest": [
+            8,
+            9
+          ],
+          "input_hash": "02d6e7b63835ccb6bd8c452eba73b83100c5af80bb9c94fafe03f27e1892eb6c",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 0,
+          "epoch": 1,
+          "owner": "budget-old",
+          "generation": "budget-old",
+          "lease_until": "2026-10-02T08:23:06.693371+00:00",
+          "deadline": "2026-10-03T08:23:04.525993+00:00",
+          "completed_at": null,
+          "claims": 1,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "pending",
+          "receipts": [],
+          "total": 0
+        },
+        "natural_lease_rejections": 27,
+        "budget_recovery_completed": {
+          "id": "budget-recovery",
+          "manifest": [
+            8,
+            9
+          ],
+          "input_hash": "02d6e7b63835ccb6bd8c452eba73b83100c5af80bb9c94fafe03f27e1892eb6c",
+          "input_schema": 1,
+          "checkpoint_schema": 1,
+          "semantics": "sum-v1",
+          "checkpoint": 2,
+          "epoch": 2,
+          "owner": null,
+          "generation": null,
+          "lease_until": null,
+          "deadline": "2026-10-03T08:23:04.525993+00:00",
+          "completed_at": "2026-10-02T08:23:06.797090+00:00",
+          "claims": 2,
+          "maintenance_handoffs": 0,
+          "infrastructure_interruptions": 0,
+          "business_failures": 0,
+          "business_budget": 3,
+          "status": "completed",
+          "receipts": [
+            {
+              "step": 0,
+              "amount": 8,
+              "input_hash": "02d6e7b63835ccb6bd8c452eba73b83100c5af80bb9c94fafe03f27e1892eb6c"
+            },
+            {
+              "step": 1,
+              "amount": 9,
+              "input_hash": "02d6e7b63835ccb6bd8c452eba73b83100c5af80bb9c94fafe03f27e1892eb6c"
+            }
+          ],
+          "total": 17
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Bounded slices represent 12/24-hour jobs; no endurance, Kubernetes, scheduler, or orchestrator test.",
+    "Effects, receipts, checkpoints and epoch fencing share one PostgreSQL database; no external provider or broker guarantee.",
+    "v1/v2 are distinct entrypoints with differing input interpreters over a shared runtime/protocol, not independently released production binaries.",
+    "Ownership uses a two-second fixture lease without renewal; only the budget scenario waits for natural expiry. Other expiry schedules are fixture mutations.",
+    "The first-SIGTERM monotonic budget stops new slices and bounds cooperative waits. SQL has per-statement/lock bounds; this is not a strict cumulative transaction or commit deadline.",
+    "Persisted job deadlines reject decisions after database-time expiry; effects admitted before expiry can commit afterward.",
+    "Admission ordering covers committed-before-local-publication and post-gate-close rejection; no exhaustive concurrent admission stress test.",
+    "PostgreSQL tmpfs has fsync and synchronous_commit on, but no power-loss, restore, partition, database crash or failover evidence.",
+    "Prefetch is a leased local database reservation, not a broker delivery/redelivery budget. Control barriers run outside protected transactions."
+  ],
+  "source_sha256": {
+    "verify.py": "1664710af0cc52a4b7e04a0218165712b2d39ac293e381982c34916b409c0f89",
+    "runtime.py": "7aeb7fa3ee4801156aa2d7da8689af716375e06f3399044e82c0e1f0985c1161",
+    "protocol.py": "8c4ee5144e125d48a718c34d13675d19a0d807c427e5ddaa67b20f9f0f6c489b",
+    "worker_v1.py": "64e2e8f7dbd0cfdb8fa75c7d0e4cdf3637c80660d4d7b6e2a5f95031a67d697e",
+    "worker_v2.py": "bbff208579cccb1fe62d739838595a88331885dac921b96c53e21f848f5a628f",
+    "worker_incompatible.py": "30533da7c006b0a137b7716630c0f129b84b1a3803272feba11878912a669a4f",
+    "schema.sql": "b88ef04ec8c05f305c2c79a94acf62655a3e79ea3ec7dd8fd0586f5043fc916d",
+    "requirements.txt": "6d9f3ccc398c4a22a47e08bfd19b95ba54e9330006c87b7a36c6d5e0854abefb",
+    "README.md": "c654242f2064b9e2c3e93304fc1408048cc644651a1a221d44e287972ea7d5c5",
+    "sources.md": "f542941557a3e03a0837970563bda09639c15f2d592556ab530d9751919ae96d"
+  },
+  "versions": {
+    "postgres": "18.6",
+    "python": "3.14.3",
+    "psycopg": "3.3.6",
+    "fsync": "on",
+    "synchronous_commit": "on"
+  },
+  "fixture": {
+    "binding": "127.0.0.1",
+    "storage": "tmpfs",
+    "lease_seconds": 2,
+    "docker_server": "29.8.0",
+    "observed_image_digests": [
+      "postgres@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+    ]
+  },
+  "resources": {
+    "remaining_worker_database_sessions": 0,
+    "remaining_database_sessions": 0,
+    "database_session_probe_excludes_live_observer": true,
+    "worker_processes_started": 28,
+    "worker_processes_alive": 0,
+    "worker_listeners_open": 0,
+    "worker_control_streams_open": 0,
+    "container_removed": true,
+    "database_port_closed": true,
+    "owned_containers_remaining": 0,
+    "observer_database_connection_closed": true
+  },
+  "completed_at": "2026-10-02T08:23:07.105579+00:00"
+}

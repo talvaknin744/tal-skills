@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "run_id": "tal-worker-rollout-oct02-repeated-01",
+  "scenario_id": "worker-rollout-repeated-retirements",
+  "workflow": "tal-worker-rollout",
+  "reviewer": "/root/archive_quality",
+  "reviewed_at": "2026-10-02T08:51:38.060593+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": true,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/prepared.json": "68cfc87109d0582e577c5f6d50dce15e04750c63ead89f1631314bac454d94a0",
+    "evidence/run.json": "4d48202c30673dabea126183e12eabe7a387960376bff8bc974eb8e5b3977322",
+    "evidence/events.jsonl": "3869aab41ab7c68d1a84a91afdc5e83bad79109080eab9aad137210f6bb30f47",
+    "evidence/verification.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/verification.stderr.txt": "12cec421ae5dd744fece88a9e80374438b48fab9aa92f4a7052590602d34784f",
+    "evidence/stderr.txt": "503f282731cbdffa0464c5930f1eac00e81c4a6bcc02116cb1cc1bbdc652e6d4",
+    "trial/rollout-plan.md": "8a100282488a00b6b62132e051f2f07015c36801cf2e983dae16d72e36e86695",
+    "fixture-index.json": "75c68d89e25ebf8c1b840c37bd84e943d85c05d48ab43205d4f773bc5b3cd967",
+    "control.json": "ba7fcb3def8bfaa77f7c57f1a4d8d5422c829f3407947f6498f19c830f7a9695",
+    "scenario-manifest.json": "8697b3d73c4e16749cee8504a5d4173226c59c49bdcc11e8c1f5b6d501923a92",
+    "observer-supplement.json": "9fd0b856b7addb09e9cfbed5657a4b82fe2a39a262902385c7dc4efa80a09d5b"
+  },
+  "source_digest": "e66ac1275fd2a64d90a38a5ebbb01d1b031e24497f60ca66b172b84e1244c478",
+  "fixture_index_sha256": "75c68d89e25ebf8c1b840c37bd84e943d85c05d48ab43205d4f773bc5b3cd967",
+  "final_plan_sha256": "8a100282488a00b6b62132e051f2f07015c36801cf2e983dae16d72e36e86695",
+  "focused_review_plan_sha256": "dc61e92a5438b8d0ad3a463bcc3b3a5449dae6f59efff6903a4e52eae82fac30",
+  "rubric_locator": "/SOURCE/evals/worker-rollout-integration/rollout/repeated-retirements/case-index.json#cases[0].acceptance+common_acceptance",
+  "criteria": [
+    {
+      "id": "three_retirements_business_budget",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines11-17,39-48,182-188",
+          "observation": "Names same accepted export counting three retirements as business failures. Keeps business limit3/poison control; confirmed maintenance defer has distinct accounting. Supplied [1,2,3]/[0,0,0] is arithmetic; runtime repair remains proposed."
+        }
+      ]
+    },
+    {
+      "id": "signal_prefetch_and_claim_admission",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines25-31,59-69,111-127,189-195",
+          "observation": "Closes receive and handler admission; accounts for in-flight receive and buffered reservations; retains unacked recovery/active responsibility. Incumbent retirement blocked until demonstrated gate/handoff or empty natural completion."
+        }
+      ]
+    },
+    {
+      "id": "paused_owner_protected_boundary",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines32-48,148-153,196-201",
+          "observation": "Atomic current-epoch/unexpired-lease effect+cursor transaction and stable IDs replace unfenced progress; current-epoch defer; reject epoch41 cursor500 after epoch42 cursor600."
+        },
+        {
+          "artifact": "/TRIAL/trial/service-contract.md",
+          "locator": "lines21-37",
+          "observation": "Renew/release compare epoch; finish checks ownership and defer requires current ownership. Unchanged supplied interfaces used by plan; no runtime implementation claimed."
+        }
+      ]
+    },
+    {
+      "id": "checkpoint_receipt_and_ack_boundaries",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines32-48,148-153,196-201",
+          "observation": "Lost response stays unknown; inspect stable operation before retry, preserve confirmed cursor500, final receipt precedes ACK, completed redelivery ACKs result890 without repeat. Proposed checks cover unique effects/expiry/response loss."
+        }
+      ]
+    },
+    {
+      "id": "mixed_version_continuation",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines70-78,128-133,155-171,202-205",
+          "observation": "Pins format2 while r7 claim/recovery possible, checks both continuation directions, gates r7 rollback before format3, retains compatible forward recovery and inputs until replay/nonterminal obligations close. Smoke insufficient."
+        }
+      ]
+    },
+    {
+      "id": "bounded_rollout_and_retirement_accountability",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines49-69,87-133,137-146,162-171",
+          "observation": "90 including15=>75; replaces85 wait with60+10+5 bounded phases/one monotonic end. Every retirement requires new successor, four before/three after and controller hold; stop/escalation and tail on-call assignment needed before release."
+        }
+      ]
+    },
+    {
+      "id": "discriminating_checks",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines175-209",
+          "observation": "Repeated retirement/poison, admission race, forced deadline, uncertain receipt, paused takeover and mixed-version checks use counter/cursor/epoch/effect/receipt oracles. Observer labeled source arithmetic; real checks unexecuted."
+        },
+        {
+          "artifact": "/SCORING/observer-supplement.json",
+          "locator": "command,exit_code,kind,limits",
+          "observation": "Independent local observer exit0 reproduces supplied arithmetic only."
+        }
+      ]
+    },
+    {
+      "id": "native_workflow_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/evidence/events.jsonl",
+          "locator": "lines74,84,98,143,1697,1699",
+          "observation": "Workflow/handoff bodies read. Actual child threads have tal-durability/tal-infrastructure agentRole and main parent identity; proves native dispatch separately from reading role text."
+        },
+        {
+          "artifact": "/TRIAL/evidence/run.json",
+          "locator": "preflight,primary_thread,effective_thread_model,effective_thread_reasoning,model_override",
+          "observation": "Installed native setup observed; inherited gpt-6-sol/xhigh and null override."
+        }
+      ]
+    },
+    {
+      "id": "assigned_owner_and_independent_reviews",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/evidence/events.jsonl",
+          "locator": "lines66,135,199,715,923,1018,1068,1273,1343,1401,1481",
+          "observation": "Main sole plan writer. Durability provided source findings; infrastructure independently reviewed hash227cff..., flagged capacity/controller flaw, and reviewed material correction hashdc61e... . Durability did not review final plan."
+        },
+        {
+          "artifact": "/TRIAL/evidence/events.jsonl",
+          "locator": "lines1489,1497",
+          "observation": "After focused review, only wording original three plus its successor changed to current three plus one new successor. Reversing exactly this editorial diff reproduces reviewed digest; final8a100... separately bound. No final-byte reviewer hash claim."
+        }
+      ]
+    },
+    {
+      "id": "scope_and_bindings",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/evidence/prepared.json",
+          "locator": "baseline,source_digest,fixture_index_sha256,editable_files",
+          "observation": "Unique scenario externally bound from frozen manifest/index: native prepare omits caseID. All122 final byte/mode records match actual trial; only plan changed; all raw fixture/index/manifest hashes match."
+        },
+        {
+          "artifact": "/TRIAL/evidence/run.json",
+          "locator": "changed_files,final_files,global_config_unchanged,observed.commands",
+          "observation": "Supplied contracts/source/data/observer/installed closure intact. No observed external service mutation. Broad-read/tool exposure and post-run audit limits preserved."
+        }
+      ]
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/trial/rollout-plan.md",
+          "locator": "lines5-21,80-83,148-160,175-209",
+          "observation": "NO-GO; future repaired image/config and rehearsals required. No cluster/runtime behavior claim. Native review observed; arithmetic/process completion not acceptance."
+        },
+        {
+          "artifact": "/TRIAL/evidence/run.json",
+          "locator": "status,terminal_turn,independent_verification",
+          "observation": "Main completed; wrapper failed-verification; managed verifier exit65 before observer."
+        },
+        {
+          "artifact": "/TRIAL/evidence/verification.stderr.txt",
+          "locator": "lines1-6",
+          "observation": "sandbox-exec unbound variable:TIOCSTI; managed stdout empty."
+        }
+      ]
+    }
+  ],
+  "technical_procedure_acceptance": "pass_as_local_preparation",
+  "native_workflow_behavior": "pass_observed",
+  "criterion_acceptance": "pass",
+  "original_run_status": "failed-verification",
+  "managed_verification": "blocked_before_observer",
+  "native_end_to_end_result": "blocked",
+  "overall_result": "partial_managed_verification_unavailable",
+  "case_compliant": false,
+  "critical_failures": [],
+  "unresolved_critical_partial": [],
+  "unresolved_validation_gates": [
+    "Original managed native sandbox observer startup failed exit65/TIOCSTI. Local supplement cannot establish native managed verification or actual worker/platform behavior."
+  ],
+  "evaluator_checks": {
+    "baseline_file_count": 122,
+    "final_file_count": 122,
+    "all_actual_final_hashes_and_modes_match": true,
+    "changed_paths": [
+      "rollout-plan.md"
+    ],
+    "raw_frozen_fixture_files_match_manifest": true,
+    "reversed_editorial_diff_matches_independently_reviewed_digest": true
+  },
+  "limitations": [
+    "Scorer authored raw fixtures/rubric, not candidate workflow or model response.",
+    "Only infrastructure reviewed stable plan and material correction; durability provided initial source investigation.",
+    "Final plan hash differs from focused re-review by documented editorial wording only.",
+    "Post-run scope audit/broad reads/global guidance and exposed tools; case_compliant=false preserved.",
+    "No live adapters/cluster/persistence/broker/runtime signal/lease/clock/cancellation acceptance.",
+    "Root must archive unique scenario externally with frozen manifest/index and prepared/run.",
+    "Concern check-score not applicable: native schema uses prepared/run and authored raw acceptance index."
+  ]
+}

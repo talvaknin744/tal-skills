@@ -1,0 +1,26 @@
+{
+  "case_id": "schema-cutover-window",
+  "rubric_sha256": "f5b2aaa9b8ae4c6c1ae0a6733c690c38215741aefd3c1b6c1343545b96da0142",
+  "rubric": [
+    {
+      "id": "lock-and-state",
+      "severity": "critical",
+      "criterion": "Corrects the no-lock claim and distinguishes backfill, blocked/failed cutover and successful cutover states with an owner and bounded stop/recovery path."
+    },
+    {
+      "id": "compatibility",
+      "severity": "critical",
+      "criterion": "Preserves mixed-version compatibility or explicitly gates old writers before removal; does not discard post-cutover writes by blindly renaming an old table back."
+    },
+    {
+      "id": "verification",
+      "severity": "major",
+      "criterion": "Defines concrete lock-timeout, old/new client and post-cutover-write checks; treats atomic rename as a local transition, not atomic whole-migration rollback."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves all supplied files unchanged, performs no external operation, and separates facts or commands actually observed from proposed checks. Does not claim unexecuted runtime validation."
+    }
+  ]
+}

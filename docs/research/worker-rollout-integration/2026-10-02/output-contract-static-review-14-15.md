@@ -1,0 +1,15 @@
+# Narrow source14–15 review
+
+No material finding in the reviewed changes. This is an independent static review, with no model run or behavioral score. Reviewer `/root/archive_quality` authored none of the selected packages, cases or responses; copying evidence snapshots does not author the source.
+
+Infra’s conditional route and schema record identify point reads and new-only predicates separately, require maintenance evidence for every eligible writer, and make reader/writer admission ordering observable. A point fallback alone cannot relax the writer floor while incompatible new-only paths remain. The maintaining bridge alternative and engine-specific boundaries are retained. Both Infra changes are insertions: every previous line survives.
+
+Over’s three expanded result rows request documented detector load inputs, receive/prefetch and aggregate retained-state bounds, an owned recoverable paused/re-admission state when terminal loss is unauthorized, and actual held dependency-capacity and receive/start/finish oracles. The provider-specific inputs remain conditional on documentation. These agree with the unchanged admission and queue references. All text outside rows73,74,76—including the actual-release rule, five-step workflow and activation description—is unchanged; useful completion remains part of the start/finish and deadline evidence.
+
+The changes name mechanisms and report requirements without fixture identities, values, capacities, deadlines, computed answers or invented provider limits. Unsupported states and guarantees remain explicit unknowns or proposed checks.
+
+Current complete package trees are Infra `a3e43540def7958af6fcce24be2499873588b74264c996af4a0c4c86b0ce13f3` and Over `1fbcff1cfc7ed2a331a7ce422a80c5ac72677f856200120b621702660a240e17`. Both match integration and regression freeze15 exactly: 14 files, all modes0644. Twelve local links in the three changed files resolve inside their packages. All eight preserved freeze12–15 seals recompute using the runner’s exact sealed payload; the first reviewer check mistakenly included context fields and was corrected without source changes. Both suites change only the two Infra files13→14 and Over entrypoint14→15. Corpus and runner metadata are unchanged13→14→15.
+
+[The JSON record](output-contract-static-review-14-15.json) binds every file, package, freeze and check. [History](history/output-contract-static-review-14-15/snapshot-manifest.json) retains byte/mode-exact before/after snapshots and [the recomputed diff](history/output-contract-static-review-14-15/exact.diff). Versions12/13 refer to verified existing archive copies; versions14/15 are copied unchanged. Origin paths are explicitly aliased, and all evidence targets are relative. Earlier freeze11 reports and historical source metadata remain unchanged.
+
+Static preservation does not prove agent behavior. No response was read or graded for this review, no candidate/case/rubric was edited, and no model or production check was run. Existing partial results remain partial. Root’s selected behavioral checks and final `npm run validate` remain the publication requirements.

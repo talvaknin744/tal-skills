@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-report-integration-15",
+  "run_evidence_sha256": "d15dbf7b3d1cbf38f04e23d92c252a0e7501bf7e4ba6ec726c86a019bf13482b",
+  "final_workspace_tree_sha256": "454ef5740a8be1409c85aa099babcb12f36dfc3746521ed231541cb0d4d2b6f8",
+  "case_id": "shard-publication-rollback-floor-v2",
+  "candidate_tree_sha256": "a3e43540def7958af6fcce24be2499873588b74264c996af4a0c4c86b0ce13f3",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "all-shard-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 26-28, 55",
+        "observation": "Rejects one-shard cache publication and accepted COMPLETE as completion; requires complete migration, column and usable index on all three shards, all-shard cache validation/restarts, V0 compatibility and handwritten SQL/reporting checks."
+      }
+    },
+    {
+      "id": "maintained-writer-floor",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 21-22, 28-31, 35-36, 55-56",
+        "observation": "Retains same-row fallback and source-compatible predicates, inventories every writer/job/replay path and atomic revision advancement, and requires enforced commit floor or proven drain covering delayed V0 work before new-only reads/predicates. Heartbeat/deployment percentage are insufficient."
+      }
+    },
+    {
+      "id": "rollback-bridge-and-representability",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 31, 37-38, 42, 51",
+        "observation": "Explicit rollback row restores fallback and disables every code-only predicate across app/SQL; keeps V1 floor while any new-only path remains and admits V0 only after those paths are gone with code 2 absent or repaired. Retains bridge writes, identifies V0/V1 representability limit and insufficient old-table/reverse-stream post-switch coverage, and selects forward repair unless write-preserving rollback is proved."
+      }
+    },
+    {
+      "id": "independent-bidirectional-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "line 16 item_7; evidence/answer.md lines 7-22, 29, 31, 57",
+        "observation": "Actual local command reconstructs full expected identity/incarnation/revision/code/mapped-revision tuples from definitive committed ledger and independent status contract, compares missing/extra/different sets and ignores rejected 206. Answer identifies missing43/extra deleted99 despite equal counts and keeps copy/catch-up/index/exposure gates separate. Reviewer separate calculation agrees; expected paid22,43 versus actual22,99."
+      }
+    },
+    {
+      "id": "bounded-review",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 21-22, 44-60; evidence/workspace-changes.json; evidence/workspace.patch",
+        "observation": "Labels database conditional writes, writer coverage, lock/switch/recovery and acceptance schedules unresolved or proposed. Provides partial-shard/restart, delayed-old-work, update/delete/recreate and post-switch-write rollback tests. All six fixture files and installed candidate remain unchanged; patch is empty and observed completed commands are local/read-only."
+      }
+    }
+  ]
+}

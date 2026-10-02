@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-repaired-04",
+  "run_evidence_sha256": "09a37a7068e97ad07755c58a082affa49a7b0b92b3b902f55d84659b88b93854",
+  "final_workspace_tree_sha256": "5ae08c181b096a5e9628f2f3f359d1e8faad8e42489ac430cba1928bc794e22d",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "da126c5a3bada6df6fea357ccc252cf8a3efe1e70073f7a77a5f28802b8de4d2",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[0] independent-01; checks/independent-01.stdout.txt lines 1\u20136; evidence/trace.jsonl completed item_14 at line 30",
+        "observation": "The unchanged supplied verifier actually executed after the edit and passed all five checks, exit 0. The sealed protected independent-01 also passed 5/5 without check-workspace mutations. Reviewer copied original adapters/verifier/requirements into a separate protected workspace and overlaid only final service.mjs; node verify.mjs passed 5/5, exit 0, identical stdout SHA256 93b9712885d1934de7cf836eae979b7111078ebf46e91423001c92e5153f563b, no hash changes."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "read lines 8\u201314 and write lines 17\u201320; original-project/model.mjs lines 45\u201368; evidence/trace.jsonl completed item_15 at line 32",
+        "observation": "Writes await the provided shared atomic advanceFloor before resolving. Read misses use atomic publishIfFresh and retry rejected snapshots; populated cache reads retain their fast path. The adapter stores floors separately from evictable values and raises them monotonically. Supplied eviction/older-notification checks and an additional actual reordered write notification with eviction pass. No process-local lock, delay or unconditional fill supplies the ordering."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "sole changes[0]=project/service.mjs, forbidden_changes=[]; evidence/workspace.patch; evidence/manifest.json fixture_files",
+        "observation": "Only service.mjs changed. Original and final model.mjs, verify.mjs and requirements.md byte hashes equal their manifest entries; read/write signatures and cache hit path are preserved. No infrastructure or requirement alteration occurred. Run input_integrity has baseline_unchanged=true and allowed_changes_only=true."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; evidence/trace.jsonl agent messages item_10 at line 22 and item_16 at line 33",
+        "observation": "The response partly describes the acknowledgement mechanism: the write raises the shared floor before resolving, and rejected fills retry. It does not explain that an already overlapping read is allowed to return its captured snapshot, or explicitly state the subsequent read-invocation requirement after successful write acknowledgement. No impossible latest-at-response guarantee is claimed, but the two reader classes required by the explanation criterion are not stated. Read source/skill output is not counted as the model explaining that contract."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3, compared with original-project/requirements.md lines 24\u201334",
+        "observation": "The response explicitly limits the result to successful supplied shared-cache/authoritative-database calls and excludes crash recovery and production storage guarantees. It leaves replica freshness and the requirement that floor markers outlive outstanding readers unstated; value eviction is tested, but arbitrary marker lifetime is not. Thus several required model limits are stated, but the full limits criterion is incomplete."
+      }
+    }
+  ]
+}

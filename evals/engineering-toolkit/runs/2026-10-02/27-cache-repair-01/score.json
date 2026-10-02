@@ -1,0 +1,69 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-repaired-02",
+  "run_evidence_sha256": "a21dc906a2c7053f7cd88a6e1dcb881db3a8877c6d356edca9774bd909db54f4",
+  "final_workspace_tree_sha256": "5579a012047ba5924781f2389e49b065faf2c1b71bec4802b8d9056bf01fa8f1",
+  "case_id": "cache-incarnation-snapshot",
+  "candidate_tree_sha256": "da126c5a3bada6df6fea357ccc252cf8a3efe1e70073f7a77a5f28802b8de4d2",
+  "rubric_sha256": "7ef8e29166a61c034f58a91d15b11ca245eb5fca7e4f8f34a0568c07009ecdb7",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "incarnation-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "finish_fill lines 12\u201313; original-project/model.py token lines 6\u20137 and atomic publication lines 97\u2013104; original-project/verify.py lines 50\u201364 and 88\u2013104",
+        "observation": "Delegates publication to the supplied atomic transition comparing authoritative (incarnation, revision) tuples, rather than scalar revision or fabricated ordering. Protected checks reject captured 41/7 after recreation as 42/1, preserve the new state and accept a newer incarnation with lower revision; all six actually passed."
+      }
+    },
+    {
+      "id": "paired-source-snapshot",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "read lines 15\u201323; original-project/model.py lines 18\u201328; original-project/verify.py lines 67\u201385 and 148\u2013160",
+        "observation": "A miss calls read_snapshot once and retains the same detached record through before_fill and return. Presence, payload and incarnation/revision originate from one source capture. Cache hits avoid authoritative reads. Protected callback mutation and counters check one capture, zero separate token reads and no hit capture; they passed."
+      }
+    },
+    {
+      "id": "atomic-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "changed lines 9\u201310 and finish_fill lines 12\u201313; original-project/model.py lines 86\u2013104, 110\u2013123; original-project/verify.py lines 88\u2013118 and 121\u2013145",
+        "observation": "Uses shared publish_if_current rather than separate floor-read/unchecked put. The original adapter retains per-key floors through value eviction and JSON reconstruction; rejected older publication leaves values intact. Controlled delete/recreation, per-key/reordered notification, restoration and competing-update checks passed with the original adapter."
+      }
+    },
+    {
+      "id": "independent-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "original-project/verify.py",
+        "locator": "check_view lines 16\u201319; literal expectations lines 63,84,100,104,118,145,160; evidence/checks.json independent-01",
+        "observation": "Protected verifier compares identity sets in both directions and entire literal records, including empty deleted state and newly recreated state. No verifier or adapter change, exception suppression, success substitution or callback bypass occurs in the two service changes. Protected independent-01 and reviewer protected original-verifier rerun both report six passed, no failures."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed item_14 at line 30; evidence/answer.md line 3; evidence/checks.json checks[0] independent-01",
+        "observation": "Model actually executed python3 -B verify.py after the edit, exit 0, six passed and no failures, and reports that result. Sealed independently matching verifier executed the same argv and passed. Reviewer also reran the unchanged verifier with original adapters plus only the final service overlay, exit 0, identical stdout SHA256 6ce2f9f7cde2286fbf9097380185c8262f6f2be6a82afb2931b49a75f49b22d0 and no file changes."
+      }
+    },
+    {
+      "id": "scope-and-limits",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1\u20133; evidence/workspace-changes.json sole service.py change; final-project/service.py lines 19\u201323; original-project/contract.md lines 30\u201350",
+        "observation": "Only service.py changes; interfaces, callback execution, protected inputs and the genuinely overlapping read captured result are preserved, with no latest-at-response claim. The explanation limits evidence to supplied local adapters/ordering/restoration and excludes production cache/store atomicity and crash durability. It does not state the unresolved missing-notification recovery, cache metadata destruction or multi-process-execution boundaries requested by this critical criterion. The correct local implementation and broad limits do not complete those distinctions."
+      }
+    }
+  ]
+}

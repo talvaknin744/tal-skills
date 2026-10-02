@@ -1,0 +1,41 @@
+{
+  "case_id": "resident-reserve",
+  "rubric_sha256": "b35a901d00c74282619a4d0e4214bc14e2021585fd4624fd076481accfcca700",
+  "rubric": [
+    {
+      "id": "resident-accounting",
+      "severity": "critical",
+      "criterion": "Explains that A1-A4 own all four slots from time 0 despite active_A=2 and idle CPU, including prefetched, locally queued, blocked, retry-waiting, executing and cleanup ownership until actual release. An execution-only cap or fair next-delivery order does not create a free slot."
+    },
+    {
+      "id": "current-completion",
+      "severity": "critical",
+      "criterion": "Uses the supplied schedule: B1/C1 wait until 8 and finish at 9, missing deadline 3; A3/A4 execute 8-16. Does not infer deadline protection from low active_A or a next-delivery preference."
+    },
+    {
+      "id": "reserve-policy",
+      "severity": "critical",
+      "criterion": "Gives a feasible protected alternative: cap all A-owned resident work at two, keep two usable slots for B/C, leave A3/A4 recoverable outside worker receipt, run B/C 1-2 and eventually A3/A4 8-16. An equivalent allocation must show physical capacities and preserve accepted-job disposition, rather than promising incompatible shares."
+    },
+    {
+      "id": "borrow-reclaim",
+      "severity": "critical",
+      "criterion": "Shows that borrowed A3/A4 executing 0-8 cannot release their slots at cancellation time 1 under the stated nonpreemptible contract; B/C still finish no earlier than 9. Requires actual bounded residual work/cancellation/checkpoint/effect settlement/cleanup before reclaim, or keeps the reserve unborrowed or changes the promise. Does not invent interruption or free resources on signal acknowledgement."
+    },
+    {
+      "id": "progress-and-cost",
+      "severity": "major",
+      "criterion": "Separates useful completion from utilization and delivery; acknowledges delaying A to preserve quiet deadlines, eventual borrower progress, and lost/repeated work under any hypothetical interruptible design. Compares the policies over a common horizon and distinguishes execution slot-time from prefetch residency rather than treating different drain horizons as comparable utilization evidence."
+    },
+    {
+      "id": "verification-oracle",
+      "severity": "major",
+      "criterion": "Proposes deterministic arrivals and transitions recording all ownership states, actual release, per-tenant resource use, waiting, finish/deadline outcomes and eventual A progress. Includes arrivals immediately after borrowing starts, prefetch/blocked/retry waits, cancellation acknowledgement versus completion, and accepted-job recovery without claiming real worker behavior was tested."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves the fixture unchanged, uses only supplied capacities and contracts, performs no broker/worker mutation, and separates arithmetic or proposed validation from deployed fairness, preemption, cancellation and performance observations."
+    }
+  ]
+}

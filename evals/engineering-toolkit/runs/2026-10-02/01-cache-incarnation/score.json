@@ -1,0 +1,85 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-01",
+  "run_evidence_sha256": "be057d159f766390d00fd455ce4f6d7577fab8bdb4cfd50e2165eb126ab2e4e8",
+  "final_workspace_tree_sha256": "4ee51f3ce92a189f675300f64e4d8a21b33d2efc1711995cdec7bfbc391eae14",
+  "case_id": "cache-incarnation-snapshot",
+  "candidate_tree_sha256": "f765ba1f99ccc414b74bfabd6e76205a19cf7950e2a7a361f94fdc33ddc5ebac",
+  "rubric_sha256": "7ef8e29166a61c034f58a91d15b11ca245eb5fca7e4f8f34a0568c07009ecdb7",
+  "reviewer": "/root/archive_quality",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "incarnation-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "lines 12\u201313; supporting model.py lines 6\u20137, 97\u2013104 and verify.py lines 50\u201364, 88\u2013104",
+        "observation": "finish_fill delegates the full captured record to publish_if_current, whose supplied atomic comparator orders (incarnation, revision). The six-check pass includes delayed (41,7) losing to recreated (42,1), plus acceptance of (13,1) after deleted (12,7) through JSON restoration; no scalar-only, wall-clock or invented UUID ordering remains."
+      }
+    },
+    {
+      "id": "paired-source-snapshot",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "lines 15\u201323; supporting verify.py lines 67\u201385, 148\u2013160",
+        "observation": "Every miss uses one read_snapshot capture before invoking before_fill exactly once; cache hits return directly without an authority read or callback. Protected capture-interleaving and capture-counter checks pass. The immutable captured payload/presence/token cannot be relabeled by a callback mutation; the overlapping read may still return its original value."
+      }
+    },
+    {
+      "id": "atomic-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "lines 9\u201313; supporting model.py lines 86\u2013104, 110\u2013123 and verify.py lines 88\u2013146",
+        "observation": "Changed notifications and delayed fill publication use the supplied shared atomic transitions. The former separate floor-read/put_unchecked path is removed. Protected checks retain the floor through eviction/JSON construction, reject delayed deletion/recreation fills, preserve independent key order and prevent a compare-then-set race from regressing current state."
+      }
+    },
+    {
+      "id": "independent-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/verify.py",
+        "locator": "lines 16\u201319, 50\u2013104, 107\u2013146, 148\u2013178; evidence/checks/independent-01.stdout.txt line 1",
+        "observation": "The unchanged verifier compares exact identity sets and complete incarnation/revision/presence/payload records against literal expected records. It checks empty deleted state and recreated state, plus paired capture and concurrent publication schedules. Candidate has no test bypass, exception suppression or callback removal; all six literal-state checks passed in sealed independent evidence and my read-only rerun."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "line 31, item_14; supporting checks.json lines 5\u201329 and checks/independent-01.stdout.txt line 1",
+        "observation": "Candidate executed python3 -B verify.py against the final service, exit0 with checks6/passed6/failures[]. Baseline item_11 at line24 had only2 passing. The matching independent-01 check is executed/pass/exit0 with unchanged check workspace and bound run/candidate/input hashes. My separate read-only rerun of final-project also exited0 with all6 passing."
+      }
+    },
+    {
+      "id": "scope-and-limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0], forbidden_changes and workspace_after; supporting answer.md lines 1\u20133, contract.md lines 30\u201350 and verify.py lines 61\u201364",
+        "observation": "Only project/service.py changed; protected model.py/verify.py/contract.md are byte-identical between original and final projects, and public hooks remain. The final response limits claims to local adapters/interleavings and excludes production atomicity and behavior outside the contract (missing notifications/metadata loss/multiprocess/crash durability). The implementation and checks allow captured old-blue for a genuinely overlapping read while preserving newer cache state, rather than requiring latest-at-response."
+      }
+    }
+  ],
+  "critical_gates": {
+    "completed_native_trial": true,
+    "all_five_critical_criteria": 2,
+    "protected_inputs_unchanged": true,
+    "matching_independent_verifier_pass": true,
+    "candidate_author_or_response_author": false,
+    "case_compliant": false,
+    "case_compliance_note": "Host capability deviations remain; passing task criteria do not erase them."
+  },
+  "limits": [
+    "Specified in-process lock adapters and JSON state serialization only; no real Redis/database, multiprocess or crash-safe durability demonstrated.",
+    "Trusted well-formed input/version authority and delivered changed notifications are fixture assumptions.",
+    "Inherited global guidance/tools, broad reads and unverified per-file sandbox enforcement remain recorded in run.json; case_compliant stays false.",
+    "Native candidate metadata/body reading is observed separately; subagents were disabled, so this is not a workflow/role coordination trial.",
+    "Reviewer authored other rollout evaluation fixtures, not this candidate skill, cache fixture, verifier or response."
+  ]
+}

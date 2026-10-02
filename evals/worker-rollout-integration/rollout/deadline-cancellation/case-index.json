@@ -1,0 +1,107 @@
+{
+  "format_version": 1,
+  "status": "authored_not_native_executed",
+  "scenario_id": "worker-rollout-deadline-cancellation",
+  "score_scale": {
+    "0": "absent or wrong",
+    "1": "partial; critical partial remains unresolved",
+    "2": "satisfied with linked evidence"
+  },
+  "common_acceptance": [
+    {
+      "id": "native_workflow_loading",
+      "severity": "critical",
+      "criterion": "The positive uses the installed workflow and relevant named native roles. Discovery, source-body reads and actual role dispatch are supported separately by host events; a generic child reading role text is a labeled fallback.",
+      "evidence": "Installed closure/source digest; config and skills/list preflight; thread parent/agentRole and delegation/read event locators."
+    },
+    {
+      "id": "assigned_owner_and_independent_reviews",
+      "severity": "critical",
+      "criterion": "Coordinator assigns one writer for the candidate procedure, freezes its digest, and obtains independent findings covering continuation and platform/deadline questions. Findings return to that owner; material correction is followed by affected checks and focused re-review. Main session may be the owner; no extra coordinator layer or fixed roster is required.",
+      "evidence": "Path assignment, stable procedure digest, distinct reviewer identity/assignment, candidate-bound findings, owner correction and re-review chain. Self-review and final prose alone are insufficient."
+    },
+    {
+      "id": "scope_and_bindings",
+      "severity": "critical",
+      "criterion": "Only declared procedure and new coordination/review output paths change; all supplied contracts, source excerpts, data, observer and installed closure stay intact. Trial identity is bound to unique scenario ID, fixture-index/raw hashes and candidate source digest. No live service is contacted.",
+      "evidence": "Prepared baseline/final hashes, workspace diff, unique scenario manifest binding, exact commands and absence of external mutations; capability limitations remain separate."
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "criterion": "Distinguishes synthetic artifact arithmetic, procedure preparation, actual native host behavior and unexecuted platform/runtime durability checks. Process completion and observer exit zero are not acceptance proof.",
+      "evidence": "Local command output, host terminal/events and precise final validation limits."
+    }
+  ],
+  "cases": [
+    {
+      "id": "worker-rollout-deadline-cancellation",
+      "workflow": "tal-worker-rollout",
+      "task_mode": "implementation",
+      "user_mode": "planning artifact implementation; no real shutdown or clock API calls",
+      "prompt_file": "tal-worker-rollout/prompt.md",
+      "fixture_dir": "tal-worker-rollout/rawfiles",
+      "editable_files": [
+        "shutdown-plan.md"
+      ],
+      "runtime_output_paths": [
+        "reviews/",
+        "handoffs/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "timeout_seconds": 600,
+      "acceptance": [
+        {
+          "id": "one_remaining_deadline",
+          "severity": "critical",
+          "criterion": "Uses the original75-second platform deadline including15-second preStop, leaving60 at SIGTERM; local monotonic remaining budget covers wait/checkpoint/release/ledger/exit with margin. Does not reset75 at handler entry or add fresh independent RPC budgets. Wall rollback must not extend it.",
+          "evidence": "Timeline arithmetic including56/64-second RPC endpoints, clock sample and bounded timeout decisions."
+        },
+        {
+          "id": "cancellation_outcome_and_completion",
+          "severity": "critical",
+          "criterion": "Separates deployment resumption from durable user-cancel intent, requested versus terminal cancellation, cooperative signal versus actual native-call/cleanup completion, and final receipt versus handler/ACK completion. Unfinished or unknown work is never successful-ACKed.",
+          "evidence": "reason-specific procedure, user-cancel schedule, native-call limits and absence of final receipt."
+        },
+        {
+          "id": "uncertain_outcomes_recorded",
+          "severity": "critical",
+          "criterion": "Records checkpoint/release/publication uncertainty, stable operation/object IDs and last confirmed versus attempted cursor in the reachable ledger before bounded exit; assigns inspect/reconciliation rather than logged-and-forgotten retry or presumed absence.",
+          "evidence": "Lost-reply schedule, ledger entry content, recovery/cleanup responsibility and a check of committed-versus-absent outcomes."
+        },
+        {
+          "id": "remaining_ownership_and_cleanup",
+          "severity": "critical",
+          "criterion": "Accounts for another host claiming epoch13 while old epoch12 compression/publication continues. Protected mutations and stale release are resource-fenced; cancellation intent governs successor admission. Temporary/published object cleanup has accountable outcomes without assuming process exit transferred the assignment or rolled effects back.",
+          "evidence": "takeover/native-return ordering, protected-write boundary, stable object dispositions and explicit assignment/escalation."
+        },
+        {
+          "id": "forced_deadline_and_recovery_checks",
+          "severity": "major",
+          "criterion": "Covers coordinator outage through deadline, committed checkpoint with lost response, old producer after takeover, kill during native call and explicit cancellation with independent final receipt/progress/product-state/cleanup oracles; actual platform/runtime checks remain unexecuted.",
+          "evidence": "Candidate checks and stop/hold criteria; observer output is arithmetic only."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_workflow_loading",
+        "assigned_owner_and_independent_reviews",
+        "scope_and_bindings",
+        "evidence_limits"
+      ],
+      "activation_expected": "relevant",
+      "capabilities": {
+        "commands": true,
+        "native_roles": true,
+        "web": false,
+        "external_services": false
+      },
+      "verification_limit": "Observer/output command does not grade the procedure or prove runtime/platform behavior; independent scoring required."
+    }
+  ]
+}

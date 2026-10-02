@@ -18,6 +18,12 @@ that process. Recheck eligibility atomically with claims, or establish an
 equivalent engine guarantee. Explain how claims racing with the transition are
 either completed by retained owners or included in the drain inventory.
 
+Close the authoritative gate before taking the final ownership inventory. Settle
+receives and claims that started earlier, including reserved items that have not
+entered the executor. A local queue length or readiness response cannot prove
+that inventory is complete. Classify each owned item as retained execution,
+durable continuation, or unresolved recovery before releasing its dependencies.
+
 When the broker has no generation-aware claim primitive, use a rollout protocol
 that stops the retiring consumer set and settles in-flight receives before
 releasing deliveries. Prove that exclusion through the available consumer and
@@ -43,6 +49,14 @@ integrity, input identity, and resulting progress before relying on it for
 handoff. Check output/configuration revisions at publication where stale results
 must be rejected. A readable checkpoint format alone does not establish a valid
 recovery point.
+
+For mixed worker versions, exercise the actual reader and writer paths in both
+directions required by the rollout. Check input interpretation, completed-effect
+identity and the next step's meaning as well as decoding. A successor that can
+parse a cursor but uses different filtering or units can resume at the wrong
+boundary. Block an incompatible claim before it spends a delivery or business
+attempt where the runtime permits; otherwise document that counter's recovery
+policy. Retain the supported old decoder until its recovery horizon has closed.
 
 When one datastore owns work state and the business effect, commit their updates
 atomically. When a provider owns the effect, keep the same operation identity
@@ -106,8 +120,18 @@ interruptions do not create an endless retry loop.
 Measure a process-local drain budget with the runtime's monotonic elapsed-time
 clock, accounting for hook time already consumed. Persist business deadlines
 using a documented shared time authority; another host cannot restore a raw
-process-local monotonic timestamp. Test wall-clock jumps if deadline decisions
+local monotonic timestamp. Some runtimes share this clock across processes on
+one machine; that does not make its origin portable across hosts or reboots.
+Test wall-clock jumps if deadline decisions
 depend on them, and preserve the platform's own hard termination limit.
+
+Fix the local drain deadline at the first stop transition; another signal must
+not restart the allowance. Measure remaining time before persistence and cleanup,
+and reserve their bounded costs. Cancellation requested, a handler returning,
+and work releasing its resources are different observations. Keep the owned
+operation visible until it finishes or has a durable recovery record; do not
+return its execution permit while it can still mutate protected state. Exercise
+a slow cancellation and a blocked checkpoint with a finite recovery decision.
 
 For already failed jobs, reconcile external effects, locate the last valid
 checkpoint, establish current ownership, and verify a compatible successor

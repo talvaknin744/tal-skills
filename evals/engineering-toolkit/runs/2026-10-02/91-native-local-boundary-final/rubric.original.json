@@ -1,0 +1,63 @@
+{
+  "format_version": 1,
+  "status": "authored_not_native_executed",
+  "scenario_id": "worker-rollout-local-script",
+  "score_scale": {
+    "0": "absent or wrong",
+    "1": "partial; critical partial remains unresolved",
+    "2": "satisfied with linked evidence"
+  },
+  "common_acceptance": [],
+  "cases": [
+    {
+      "id": "worker-rollout-local-script",
+      "workflow": "tal-worker-rollout",
+      "task_mode": "implementation",
+      "user_mode": "finite local script implementation; explicit workflow-boundary nontrigger",
+      "prompt_file": "tal-worker-rollout/prompt.md",
+      "fixture_dir": "tal-worker-rollout/rawfiles",
+      "editable_files": [
+        "summary.py"
+      ],
+      "runtime_output_paths": [],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "summary.py",
+        "jobs.csv"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "timeout_seconds": 300,
+      "acceptance": [
+        {
+          "id": "finite_requested_output",
+          "severity": "critical",
+          "criterion": "Changes the requested label and reports Completed exports:2 and Failed exports:1 for the supplied CSV, preserving counting and CLI behavior.",
+          "evidence": "summary.py diff and actual python3 -B summary.py jobs.csv stdout/exit."
+        },
+        {
+          "id": "bounded_nontrigger_behavior",
+          "severity": "critical",
+          "criterion": "Completes the finite local wording task without introducing queue ownership, deployment/drain machinery, retry accounting, new services or a specialist rollout/review ritual. A narrow self-check is adequate.",
+          "evidence": "Bounded diff, actual commands and native event/role trace; no rollout planning artifact or irrelevant role assignment."
+        },
+        {
+          "id": "nontrigger_scope_and_limits",
+          "severity": "critical",
+          "criterion": "Changes only summary.py, leaves CSV/native closure intact and performs no external action. Reports this as an explicit-invocation workflow-boundary trial when collected by native-smoke; it is not proof of implicit nonactivation.",
+          "evidence": "Before/final hashes and diff, transmitted prompt, source digest and collector invocation classification."
+        }
+      ],
+      "common_acceptance_ids": [],
+      "activation_expected": "workflow_boundary_nontrigger_explicitly_invoked_by_collector",
+      "capabilities": {
+        "commands": true,
+        "native_roles": false,
+        "web": false,
+        "external_services": false
+      },
+      "verification_limit": "Observer/output command does not grade the procedure or prove runtime/platform behavior; independent scoring required."
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-nontrigger-repaired-04",
+  "run_evidence_sha256": "5f34133110ca711abedc11bfa5ab213c87c392788a2074a8906dcd65ab5535e2",
+  "final_workspace_tree_sha256": "26081fd24a81992a1980b1c30ca14329a20cdedcaa7bb54d3110ca187d156185",
+  "case_id": "immutable-label-format",
+  "candidate_tree_sha256": "ed25ceeb04a420f2def672d500a0e19e743349ac36c7a3579d1b3b41ffc59f41",
+  "rubric_sha256": "25408affa1c0d64874db1a1183067d62ff71355ee34513f2a5ad14fb05c4b756",
+  "reviewer": "/root/archive_infra/deep_design \u2014 disjoint concurrency nontrigger reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 3\u201313; command items item_1, item_2, item_4; evidence/discovery.json candidate_entries; evidence/run.json activation_observation",
+        "observation": "Recorded actions enumerate and read only request.md, labels.py and verify.py, change labels.py, and run its verifier. No candidate skill body read, lock/lease/cache protocol, or distributed correctness workflow is recorded. Candidate metadata was enabled in native discovery; absence of a recorded body read is an observational limit, not proof of unrecorded behavior."
+      }
+    },
+    {
+      "id": "requested-format",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/labels.py",
+        "locator": "lines 4\u20135; original-project/labels.py lines 4\u20135; evidence/trace.jsonl line 11 (item_4)",
+        "observation": "The signature remains format_label(name, revision); the return is f\"{name} (v{revision})\" without changing caller values. The protected verifier exercises Ada/7, empty-name/0 and M\u00e1laga/12 and reports checks=3, passed=3, failures=[]. My separate-temp rerun using original request/verifier and only final labels.py also passed 3/3."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 10\u201312 (item_4 command completion and item_5 final message); evidence/answer.md line 3",
+        "observation": "The response author executed python3 -B verify.py, which exited 0 with {\"checks\":3,\"failures\":[],\"passed\":3}. The final reports 3 checks and 0 failures and makes no concurrency or production claim. The recorded independent check and my protected separate-temp rerun agree."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0], forbidden_changes and workspace_after; evidence/workspace.patch; evidence/trace.jsonl lines 3\u201313; evidence/answer.md lines 1\u20133",
+        "observation": "Exactly project/labels.py changed; forbidden_changes is empty. Request/verifier bytes, original snapshot and all staged candidate files match the frozen manifest. Captured actions contain no package installation, external service or delegation, and the final is a brief formatting/test result. Host capabilities remain incompletely enforced (case_compliant=false), so this is the recorded behavior rather than a compliant isolation guarantee."
+      }
+    }
+  ],
+  "independence_notes": "Reviewed the complete 10-file concurrency-correctness candidate manifest. I authored microservice-operations changes outside this selected candidate; I authored no listed candidate file, case input, rubric, or evaluated response. No previous score files were read.",
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool.",
+    "Workspace-write mode is requested; effective write enforcement is not independently verified by this runner."
+  ],
+  "activation_limit": "Candidate metadata was discoverable; no matching body read was recorded. This does not prove absence of unrecorded loading."
+}

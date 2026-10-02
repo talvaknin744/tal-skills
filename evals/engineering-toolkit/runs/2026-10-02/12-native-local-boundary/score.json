@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "run_id": "tal-worker-rollout-oct02-local-script-01",
+  "scenario_id": "worker-rollout-local-script",
+  "workflow": "tal-worker-rollout",
+  "reviewer": "/root/archive_quality",
+  "reviewed_at": "2026-10-02T08:56:27.622211+00:00",
+  "independence": {
+    "authored_candidate": false,
+    "authored_workflow": false,
+    "authored_fixture": true,
+    "authored_response": false,
+    "model_runs_performed": false
+  },
+  "bindings": {
+    "evidence/prepared.json": "3032b19727e2b1af9c0c41c3e7db7115d3fa01f41c195a035d165adb58b64d5b",
+    "evidence/run.json": "91bc02bb77f8fa4e6fca49b23ed9556c93744b7b86f7ed521d5fd65b4246ad55",
+    "evidence/events.jsonl": "2e38c32c2a2fb2eea5e63eb0295d225aa1d8c664b24e3a99f08c5b873386b7da",
+    "evidence/verification.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/verification.stderr.txt": "12cec421ae5dd744fece88a9e80374438b48fab9aa92f4a7052590602d34784f",
+    "evidence/stderr.txt": "3c8dcce8f956d0ae081bf07ddaf45ffb161ab2a6baeb304dd1eefdf181d9a827",
+    "trial/summary.py": "17eed6f1d35fd23d456638b5c2d17f036f9dffb94e520cb67b4a06bda6269a91",
+    "trial/jobs.csv": "3ec284ac72bc9bbf7432369b1f2173e26bf061bf10d27d921f2e871d818fafed",
+    "fixture-index.json": "59f2299cd64161c1936054f8dfb1f36ebf6f0a788bec4a1f31045741f06767cb",
+    "control.json": "1e9fb04de88964b9cd3b9914bf153f6d61229c25b333fc10e55b6ef17a000402",
+    "scenario-manifest.json": "8697b3d73c4e16749cee8504a5d4173226c59c49bdcc11e8c1f5b6d501923a92",
+    "observer-supplement.json": "5e5e6e6696802fde954d2e7e2e8a7dcb613c7b39dfc006f0739b2564700e06aa"
+  },
+  "source_digest": "e66ac1275fd2a64d90a38a5ebbb01d1b031e24497f60ca66b172b84e1244c478",
+  "fixture_index_sha256": "59f2299cd64161c1936054f8dfb1f36ebf6f0a788bec4a1f31045741f06767cb",
+  "final_candidate_sha256": "17eed6f1d35fd23d456638b5c2d17f036f9dffb94e520cb67b4a06bda6269a91",
+  "rubric_locator": "/SOURCE/evals/worker-rollout-integration/rollout/local-script/case-index.json#cases[0].acceptance",
+  "criteria": [
+    {
+      "id": "finite_requested_output",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/evidence/events.jsonl",
+          "locator": "lines113,123,203",
+          "observation": "Single Finished->Completed output label diff; candidate command python3 summary.py jobs.csv exits0 with Completed2/Failed1; final report matches actual command."
+        },
+        {
+          "artifact": "/SCORING/observer-supplement.json",
+          "locator": "command,exit_code,stdout,input_hashes",
+          "observation": "Independent actual declared python3 -B command exits0 with same output; exact final script equals original except requested label, CLI/counts intact."
+        }
+      ]
+    },
+    {
+      "id": "bounded_nontrigger_behavior",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/evidence/events.jsonl",
+          "locator": "lines111,113,123,203",
+          "observation": "States finite CSV handoff checks do not apply; edits one string and performs a narrow local check. No rollout plan, service/retry/drain machinery or specialist review."
+        },
+        {
+          "artifact": "/TRIAL/evidence/run.json",
+          "locator": "observed.named_native_children,observed.delegation,changed_files",
+          "observation": "Zero named children; only summary.py modified."
+        }
+      ]
+    },
+    {
+      "id": "nontrigger_scope_and_limits",
+      "severity": "critical",
+      "score": 2,
+      "evidence": [
+        {
+          "artifact": "/TRIAL/evidence/events.jsonl",
+          "locator": "lines14-15,51-52",
+          "observation": "Actual transmitted prompt explicitly begins $tal-worker-rollout; workflow bodies read. This is explicit invocation boundary behavior, not implicit nonactivation."
+        },
+        {
+          "artifact": "/TRIAL/evidence/prepared.json",
+          "locator": "baseline,source_digest,fixture_index_sha256",
+          "observation": "118 final actual hashes/modes match recorded final; only summary.py changes. Frozen raw, CSV, prompt, installed closure intact; external unique scenario/index/manifest binding retained."
+        },
+        {
+          "artifact": "/TRIAL/evidence/run.json",
+          "locator": "case_compliant,capability_deviations,status,independent_verification",
+          "observation": "No observed external action. Case-compliance limitations preserved; original failed-verification and managed startup failure not promoted to native end-to-end pass."
+        }
+      ]
+    }
+  ],
+  "technical_task_acceptance": "pass_finite_local_output",
+  "native_workflow_behavior": "pass_explicit_invocation_boundary",
+  "criterion_acceptance": "pass",
+  "original_run_status": "failed-verification",
+  "managed_verification": "blocked_before_script",
+  "native_end_to_end_result": "blocked",
+  "overall_result": "partial_managed_verification_unavailable",
+  "case_compliant": false,
+  "critical_failures": [],
+  "unresolved_critical_partial": [],
+  "unresolved_validation_gates": [
+    "Managed native verifier startup failed exit65/TIOCSTI; direct evaluator supplement is separate."
+  ],
+  "evaluator_checks": {
+    "baseline_file_count": 118,
+    "final_file_count": 118,
+    "changed_paths": [
+      "summary.py"
+    ],
+    "all_actual_final_hashes_and_modes_match": true,
+    "raw_frozen_fixture_files_match_manifest": true,
+    "script_diff_exactly_requested_label": true
+  },
+  "limitations": [
+    "Scorer authored raw fixture/rubric, not workflow candidate or model response.",
+    "Collector explicitly invoked workflow; cannot establish implicit nonactivation.",
+    "Broad filesystem reads/global tools and post-run file audit; case_compliant=false preserved.",
+    "Concern check-score schema not applicable to native prepared/run records; criteria coverage and byte bindings checked locally."
+  ]
+}

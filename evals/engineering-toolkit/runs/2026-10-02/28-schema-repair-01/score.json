@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-schema-repaired-03",
+  "run_evidence_sha256": "a32371ca252bc8516df4febc282a708346b5b93a0259eef21da265ac62b0023a",
+  "final_workspace_tree_sha256": "0e72a927479edc4ee449c6dcf60b7bcfd62eaff2d24512fb60ad46c98f2cf6f8",
+  "case_id": "shard-publication-rollback-floor",
+  "candidate_tree_sha256": "9f7866a8648a95cc50abdbbf63335a3fd7ac3bed6c407a7d8db04429d592102a",
+  "rubric_sha256": "f91f59c3980cefea8567a4e3f6fac53204a3331e79aaf598681b198c6ba6c309",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "all-shard-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 21, 35",
+        "observation": "Blocks exposure because 40-80 is running, missing column and unusable index; distinguishes accepted completion command from completion. Requires observed completion of the same UUID and column/index readiness on every required shard before shared cache publication, then restart/cached-schema and handwritten SQL checks."
+      }
+    },
+    {
+      "id": "maintained-writer-floor",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 16, 20, 22, 35",
+        "observation": "Uses supplied atomic source-revision facts for V0/V1/V2, keeps V1 fallback and stale-row listing while old writers can commit, and identifies unknown maintenance-writer contract. Requires commit-boundary V1+ enforcement or proven drain/ineligibility of old transactions, jobs and replayable work before code-only reads; does not equate 100 percent deployment or heartbeat with the floor."
+      }
+    },
+    {
+      "id": "rollback-bridge-and-representability",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 22, 25, 29-31, 35",
+        "observation": "Keeps code2 disabled during bridge/rollback support, requires dual writes/status_text and old-readable values for rollback to V1, restores fallback and stops code-only predicates before V0 write re-admission. Explains code2 cannot be represented by V0/V1 and five-minute reverse-stream lag plus retained old table cannot establish post-switch-write recovery; chooses verified compatible forward repair or scoped restore/replay with complete coverage."
+      }
+    },
+    {
+      "id": "independent-bidirectional-oracle",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5-14, 23; original-project/commits.csv and derived.csv",
+        "observation": "Correctly derives live identities/statuses at definitive cut207, excludes rejected206, and reports missing43 plus extra deleted99 despite counts3=3. Separates schema/index readiness, backfill/catch-up and exposure gates. However line14 explicitly derives pending/code0 and paid/code1 from supplied transformed observations and defers application-contract confirmation; it does not establish an independent numeric value mapping. Supplied writer/status records lack an explicit independent 0/1 mapping contract. Identity/source-status comparison passes, but value-mapping correctness remains unresolved under the fixed critical criterion."
+      }
+    },
+    {
+      "id": "bounded-review",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "items 1-18 local reads; item_19 final answer; evidence/workspace-changes.json changes=[]; evidence/answer.md lines 20-25, 35-37",
+        "observation": "All five fixture files and seven candidate files remain unchanged with empty diff. Proposes all-shard/cached-schema checks, delayed V0 commit/replay boundary, intervening update/delete-recreate at reused revision, stale mapping guard, and rollback after new writes while reverse stream lags. Makes checks proposed and engine behavior to verify explicit, with no live migration/rehearsal/tool guarantee invented."
+      }
+    }
+  ]
+}

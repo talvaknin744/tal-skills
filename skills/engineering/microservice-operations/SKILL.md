@@ -46,4 +46,13 @@ In implementation mode, run relevant checks in an authorized environment, select
 
 Report findings or changed files, objective-level results, checks actually run, and remaining limits. For review or design, supply evidence locations and verification steps. Consult [sources.md](references/sources.md) when tracing the book basis.
 
-**Done:** each operating claim is supported by observed evidence or marked unverified with its next check; proposed production actions are distinguished from completed actions.
+For timeout or cancellation reviews, include a **completion record in the final answer**: current and proposed wait, cancellation, and join primitives; caller response allowance; cancellation/join and cleanup waiting limits or explicit missing bounds; and the event permitting safe resource reuse. For Python asyncio, state that `wait_for()` may exceed its nominal timeout while waiting for cancellation. Derive cleanup ownership, escalation and acceptance observations from [deadline-domains.md](references/deadline-domains.md#observe-completion-after-cancellation).
+
+For each changed clock or serialization boundary, include a budget comparison
+at the conversion/acquisition point and any later supplied check: original and
+reconstructed remaining allowances, governing clock and earlier caps. Keep
+unknown values explicit. Return separate proposed or executed controls for
+clock steps before and after serialization, host skew, handoff delay and parent
+expiry; a later-time calculation alone does not establish the initial allowance.
+
+**Done:** each operating claim is supported by observed evidence or marked unverified with its next check; timeout/cancellation review answers include the completion record; proposed production actions are distinguished from completed actions.

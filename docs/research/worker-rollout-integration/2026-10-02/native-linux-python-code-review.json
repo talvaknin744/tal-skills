@@ -1,0 +1,695 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-02",
+  "kind": "independent-native-linux-python-target-source-review",
+  "reviewer": "/root/archive_quality",
+  "secondary_reviewer": "/root/archive_quality/fairness_nontrigger_score",
+  "independence": {
+    "authored_reviewed_runner": false,
+    "authored_image": false,
+    "candidate_scoring": false,
+    "historical_fixture_authorship_declared": true,
+    "full_selected_closure_scoring_excluded": true
+  },
+  "execution": {
+    "reviewer_model_turns": 0,
+    "reviewer_container_runs": 0,
+    "auth_contents_inspected": false,
+    "private_config_values_inspected": false,
+    "host_settings_or_permissions_changed": false,
+    "source_files_edited": false
+  },
+  "freeze": {
+    "path": "/tmp/tal-native-linux-worker-original-preflight-20261002-08/freeze.json",
+    "sha256": "bdcb4f7e3b81adb7f4b7561871be81f4b2b3e4b5c42840f2dba4b24007988af2",
+    "source_sha256": {
+      "scripts/native-smoke.mjs": "649f13522e3d0cd18a96c4743739f97555527c8716c76f7f88b395563f775be4",
+      "scripts/native-linux-smoke.mjs": "d08f64859bf5e3bf4e6b052b0ea8e8368e80755f2dc9eff57cc17df3b9d71c74",
+      "tests/toolkit/native-smoke.test.mjs": "c073f639228dcd80a624f6ecf7ae6aba6d8932bb8847832cb8637a8bdd619927"
+    },
+    "core_collector_matches_frozen07": true
+  },
+  "previous_review_sha256": {
+    "docs/research/worker-rollout-integration/2026-10-02/native-linux-capabilities-code-review.json": "e2d248b604855d79abf3c7b238c27a794e7b81a2f71fbf23836b3ec60491ab3d",
+    "docs/research/worker-rollout-integration/2026-10-02/native-linux-capabilities-code-review.md": "9f9a739b7b85009ea44be820785097b37ab35ef38c6320ad85c1fb57f15717d8",
+    "docs/research/worker-rollout-integration/2026-10-02/native-linux-code-review.json": "a28a86e2b8c4a0dc8a68a1ace2176068e8a9250aacae685550b6758aa28be3e2",
+    "docs/research/worker-rollout-integration/2026-10-02/native-linux-code-review.md": "5d86020f63945609a2cf6b3a75d32db5c5b6a02b90219eb61996e9da48af924f",
+    "docs/research/worker-rollout-integration/2026-10-02/native-linux-environment-code-review.json": "9e0e7789b58b7baa93fdf2d10c3ab1a6559b864cfecfc9371caba6d849b999bc",
+    "docs/research/worker-rollout-integration/2026-10-02/native-linux-environment-code-review.md": "e6ea136406ab49b78b856a5100f160a6b8a5d1b52a0a8be4301d011405af18e0"
+  },
+  "previous_review_bytes_preserved": true,
+  "findings": [],
+  "disposition": "clean within bounded frozen08 source, target identity and saved no-model evidence scope; review gate closed for root-authorized fresh run, no model dispatched by reviewers",
+  "checks": [
+    {
+      "command": "node --test tests/toolkit/native-smoke.test.mjs",
+      "executed_by": "primary reviewer",
+      "exit_code": 0,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "git diff --check -- scripts/native-smoke.mjs scripts/native-linux-smoke.mjs tests/toolkit/native-smoke.test.mjs",
+      "executed_by": "primary reviewer",
+      "exit_code": 0
+    },
+    {
+      "command": "Node readTree hashes/modes and copied-runner comparison for all four frozen preflights",
+      "executed_by": "primary reviewer",
+      "exit_code": 0
+    },
+    {
+      "command": "sanitized image package/layer/freeze and no-auth verifier proof cross-check",
+      "executed_by": "secondary independent reviewer",
+      "model_or_container_run": false,
+      "blocking_findings": []
+    }
+  ],
+  "source_contract": {
+    "explicit_image_whitelist": [
+      "sha256:9076492a589ef293008a171ecf4a118d735f775f78fc4c04ccbc5cac5b252783",
+      "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652"
+    ],
+    "locators": {
+      "target_selection": "scripts/native-linux-smoke.mjs:21",
+      "runtime_assertions": "scripts/native-linux-smoke.mjs:27",
+      "container_pull_never_and_mounts": "scripts/native-linux-smoke.mjs:53",
+      "runtime_observation": "scripts/native-linux-smoke.mjs:196",
+      "assert_before_account_read": [
+        "scripts/native-linux-smoke.mjs:210",
+        "scripts/native-linux-smoke.mjs:219"
+      ],
+      "unknown_image_before_preparation": [
+        "scripts/native-linux-smoke.mjs:267",
+        "scripts/native-linux-smoke.mjs:268"
+      ],
+      "rejection_tests": "tests/toolkit/native-smoke.test.mjs:289",
+      "runtime_rejection_tests": "tests/toolkit/native-smoke.test.mjs:298"
+    },
+    "unknown_image_rejected_before_fixture_or_config_account_access": true,
+    "native_binary_sha256": "113aa5d5952a6fd3950a88323219747d0c91978ebee948509a540c8a460e59a3",
+    "native_version": "codex-cli 0.159.2",
+    "python": {
+      "executable": "/usr/bin/python3",
+      "realpath": "/usr/bin/python3.11",
+      "sha256": "304aa87a76ebb13fd22d253ac157f14980ff2cdb23e6274f3b045571405e07dc",
+      "version": "Python 3.11.2",
+      "required_for_derived_target_only": true
+    },
+    "runtime_validation_precedes_native_account_read": true,
+    "runtime_validation_precedes_readonly_credential_mount": false,
+    "runtime_guard_scope": "validation occurs inside the owned immutable container before native account/read; the readonly authentication bind already exists, so this is not a claim that validation precedes transport mounting",
+    "unchanged_controls": [
+      "no image pull or installation by wrapper",
+      "read-only original target policy",
+      "in-place exact-file and declared-directory composition only",
+      "atomic-save/new-undeclared-file rejection",
+      "native network-disabled profile",
+      "inherited model and reasoning settings",
+      "owned UUID container/process cleanup",
+      "case_compliant=false until separate evaluation"
+    ]
+  },
+  "image_provenance": {
+    "root": "/tmp/tal-native-python-image-20261002-01",
+    "sha256": {
+      "provenance.json": "bca41687e3dcbedfeabba10307b8f3dddfe33226e07447ea9397bdcbc3377f5a",
+      "freeze-manifest.json": "c722f5fadd06b448717ce18d47db1e30194345633e519cf247ba27cde9bc0b45"
+    },
+    "verified_by": "secondary independent reviewer; captured artifacts, no build reproduction or Docker run",
+    "layer_lineage": "seven original layers preserved plus one added layer",
+    "codex_package_files": 49,
+    "codex_package_tree_sha256": "2b90ab6b803bfbfdbb6c45d1dc1e47ec28e05daa5f874de22ba00286bae9dfee",
+    "codex_package_arrays_equal": true,
+    "python_executable_bytes": 6616896,
+    "freeze_tree_sha256_recomputed_from_records": "9191f015435b3a570f544c7abf86a8ce3869a164e276b5e7014a0f0656553664",
+    "actual_permitted_entry_byte_checks": 304,
+    "home_config_entries_excluded_from_content_inspection": 7,
+    "limits": [
+      "Saved provenance/package manifests were cross-checked; current daemon image state and rebuild reproducibility were not independently tested.",
+      "Image-level command probes used an earlier runner copy; fresh fixture preflights and verifier probes bind frozen08.",
+      "Excluded home/config entries were not inspected for private values."
+    ]
+  },
+  "preflights": [
+    {
+      "kind": "original-readonly",
+      "evidence": "/tmp/tal-native-linux-worker-original-preflight-20261002-08/evidence",
+      "artifact_sha256": {
+        "run.json": "9febe75d561624111f9c7ebd2702d15634bee404a91a0d802ed741a5d5cd1871",
+        "linux-host.json": "f98032576d30347aa2e602ba69db06918a4683c76e004bf8e873ec5e4257d9a3",
+        "prepared.json": "b6d8c53a07123dec7971e394c001bd865a8dc6f28755fda77d24360bd13aea01",
+        "linux-scope.json": "1e5411bb2208cc1e00bd07d3a0b55b58edeb7c62df9d00bc0468a32a6810d90e"
+      },
+      "copied_and_recorded_runner_match_freeze": true,
+      "target_runtime": {
+        "image": "sha256:9076492a589ef293008a171ecf4a118d735f775f78fc4c04ccbc5cac5b252783",
+        "kind": "original-review-target",
+        "python_required": false,
+        "native_binary_sha256": "113aa5d5952a6fd3950a88323219747d0c91978ebee948509a540c8a460e59a3",
+        "native_version": "codex-cli 0.159.2",
+        "python_runtime": null,
+        "validated_before_authentication": true
+      },
+      "source_digest": "7d3ff64c3188453a622581f61793d140989919c8d0ac5658fd9f5f17ca677e21",
+      "fixture_index_sha256": "d1ec170f77d69f940ceb30d25d156e64579d04cc02db7b0aa091d6d8c2e08276",
+      "model_and_effort": [
+        "gpt-6-sol",
+        "xhigh"
+      ],
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "checks": {
+        "base_passed": 13,
+        "base_total": 13,
+        "composed_passed": 0,
+        "composed_total": 0,
+        "verifier_available": true,
+        "verifier_required": false
+      },
+      "inventory": {
+        "original_count": 120,
+        "final_count": 120,
+        "original_bytes_modes_preserved": true,
+        "recorded_staged_and_final_equal_current_bytes_modes": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_fingerprint_unchanged": true,
+        "original_config_fingerprint_unchanged": true,
+        "owned_container_absent": true,
+        "owned_transport_terminated": true
+      }
+    },
+    {
+      "kind": "repeat",
+      "evidence": "/tmp/tal-native-linux-worker-repeat-python-preflight-20261002-01/evidence",
+      "artifact_sha256": {
+        "run.json": "6e8e65313b996497723e670d68ccbb5e2aab64c40c45c8b38ff8f7f4da960beb",
+        "linux-host.json": "b758cb98ab9d54ce23dbe518c856bea129127c7b48a71f9941405cb43c2a9f00",
+        "prepared.json": "034094cd8256fd265a0bb8baae1511960ecd50ed653ced74dafa63e5bce8f086",
+        "linux-scope.json": "39dedcd239c20d5573d591d5dc9b1f1cef5013b4358e3a6070210a8fa0fe0001"
+      },
+      "copied_and_recorded_runner_match_freeze": true,
+      "target_runtime": {
+        "image": "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652",
+        "kind": "derived-python-target",
+        "python_required": true,
+        "native_binary_sha256": "113aa5d5952a6fd3950a88323219747d0c91978ebee948509a540c8a460e59a3",
+        "native_version": "codex-cli 0.159.2",
+        "python_runtime": {
+          "executable": "/usr/bin/python3",
+          "realpath": "/usr/bin/python3.11",
+          "sha256": "304aa87a76ebb13fd22d253ac157f14980ff2cdb23e6274f3b045571405e07dc",
+          "version": "Python 3.11.2"
+        },
+        "validated_before_authentication": true
+      },
+      "source_digest": "7d3ff64c3188453a622581f61793d140989919c8d0ac5658fd9f5f17ca677e21",
+      "fixture_index_sha256": "75c68d89e25ebf8c1b840c37bd84e943d85c05d48ab43205d4f773bc5b3cd967",
+      "model_and_effort": [
+        "gpt-6-sol",
+        "xhigh"
+      ],
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "checks": {
+        "base_passed": 14,
+        "base_total": 14,
+        "composed_passed": 9,
+        "composed_total": 9,
+        "verifier_available": true,
+        "verifier_required": true
+      },
+      "inventory": {
+        "original_count": 122,
+        "final_count": 122,
+        "original_bytes_modes_preserved": true,
+        "recorded_staged_and_final_equal_current_bytes_modes": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_fingerprint_unchanged": true,
+        "original_config_fingerprint_unchanged": true,
+        "owned_container_absent": true,
+        "owned_transport_terminated": true
+      }
+    },
+    {
+      "kind": "deadline",
+      "evidence": "/tmp/tal-native-linux-worker-deadline-python-preflight-20261002-01/evidence",
+      "artifact_sha256": {
+        "run.json": "d8eab0be531506e5f6e2e5b49d3790bff54c61c6837f2b0535d03e8f296f9dca",
+        "linux-host.json": "a78a20d74d6479545d22d2faff8a27720efaf3721a3f479fd62e20d88f76117c",
+        "prepared.json": "39b9e849e9294e3e1ae5e6270ff2d638e500579caab0d8d66564c54a885ffb34",
+        "linux-scope.json": "204c2066155d5fe86f8f7020a895627d69314581491bdcfc0110381965c5798e"
+      },
+      "copied_and_recorded_runner_match_freeze": true,
+      "target_runtime": {
+        "image": "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652",
+        "kind": "derived-python-target",
+        "python_required": true,
+        "native_binary_sha256": "113aa5d5952a6fd3950a88323219747d0c91978ebee948509a540c8a460e59a3",
+        "native_version": "codex-cli 0.159.2",
+        "python_runtime": {
+          "executable": "/usr/bin/python3",
+          "realpath": "/usr/bin/python3.11",
+          "sha256": "304aa87a76ebb13fd22d253ac157f14980ff2cdb23e6274f3b045571405e07dc",
+          "version": "Python 3.11.2"
+        },
+        "validated_before_authentication": true
+      },
+      "source_digest": "7d3ff64c3188453a622581f61793d140989919c8d0ac5658fd9f5f17ca677e21",
+      "fixture_index_sha256": "1ad42e7bdbea11e91a8610c788b8b991cc0a9b0fc1a59cdc8eb3872c367e9b81",
+      "model_and_effort": [
+        "gpt-6-sol",
+        "xhigh"
+      ],
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "checks": {
+        "base_passed": 14,
+        "base_total": 14,
+        "composed_passed": 9,
+        "composed_total": 9,
+        "verifier_available": true,
+        "verifier_required": true
+      },
+      "inventory": {
+        "original_count": 121,
+        "final_count": 121,
+        "original_bytes_modes_preserved": true,
+        "recorded_staged_and_final_equal_current_bytes_modes": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_fingerprint_unchanged": true,
+        "original_config_fingerprint_unchanged": true,
+        "owned_container_absent": true,
+        "owned_transport_terminated": true
+      }
+    },
+    {
+      "kind": "local",
+      "evidence": "/tmp/tal-native-linux-worker-local-python-preflight-20261002-01/evidence",
+      "artifact_sha256": {
+        "run.json": "13df13fe742ff649e22be452bec747f9a99dd5c1feccf84a8615f2dcbfb4923a",
+        "linux-host.json": "d7e621e877b835e35bf017b1d3e936bdbc03119457d90d943dc34b242b02c060",
+        "prepared.json": "187b0ef10c0f8242d8a8029c94596db97aefecaa03da0af81429b3b67778530d",
+        "linux-scope.json": "da22f9ba731225bd7e9f39795fc231fa42a3cc6c1f14c88fb55abf5972996350"
+      },
+      "copied_and_recorded_runner_match_freeze": true,
+      "target_runtime": {
+        "image": "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652",
+        "kind": "derived-python-target",
+        "python_required": true,
+        "native_binary_sha256": "113aa5d5952a6fd3950a88323219747d0c91978ebee948509a540c8a460e59a3",
+        "native_version": "codex-cli 0.159.2",
+        "python_runtime": {
+          "executable": "/usr/bin/python3",
+          "realpath": "/usr/bin/python3.11",
+          "sha256": "304aa87a76ebb13fd22d253ac157f14980ff2cdb23e6274f3b045571405e07dc",
+          "version": "Python 3.11.2"
+        },
+        "validated_before_authentication": true
+      },
+      "source_digest": "7d3ff64c3188453a622581f61793d140989919c8d0ac5658fd9f5f17ca677e21",
+      "fixture_index_sha256": "59f2299cd64161c1936054f8dfb1f36ebf6f0a788bec4a1f31045741f06767cb",
+      "model_and_effort": [
+        "gpt-6-sol",
+        "xhigh"
+      ],
+      "execution_started": false,
+      "preflight_passed": true,
+      "status": "blocked-or-failed",
+      "case_compliant": false,
+      "failure": null,
+      "checks": {
+        "base_passed": 14,
+        "base_total": 14,
+        "composed_passed": 6,
+        "composed_total": 6,
+        "verifier_available": true,
+        "verifier_required": true
+      },
+      "inventory": {
+        "original_count": 118,
+        "final_count": 118,
+        "original_bytes_modes_preserved": true,
+        "recorded_staged_and_final_equal_current_bytes_modes": true
+      },
+      "audit": {
+        "changed_files": [],
+        "errors": [],
+        "original_auth_fingerprint_unchanged": true,
+        "original_config_fingerprint_unchanged": true,
+        "owned_container_absent": true,
+        "owned_transport_terminated": true
+      }
+    }
+  ],
+  "credential_free_fixture_verifiers": [
+    {
+      "kind": "repeat",
+      "report": "/tmp/tal-native-python-fixture-verifiers-20261002-01/repeat/evidence/report.json",
+      "host": "/tmp/tal-native-python-fixture-verifiers-20261002-01/repeat/host.json",
+      "sha256": {
+        "report": "eda1911030d4593a45516f53b457d9ff59940e0fb7c0610c2cce559cfe07e145",
+        "host": "5b96e7f43ed43e122caa84f6b10c5e4dc2267ba62b69ce634dbd9360f55f097d"
+      },
+      "matches_freeze": true,
+      "no_model": true,
+      "no_actual_credentials": true,
+      "image": "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652",
+      "supplied_argv": [
+        "/usr/local/bin/codex",
+        "sandbox",
+        "-P",
+        "tal-native-eval-9a5541219394",
+        "--include-managed-config",
+        "-c",
+        "permissions={\"tal-native-eval-9a5541219394\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"/trial\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+        "-c",
+        "default_permissions=\"tal-native-eval-9a5541219394\"",
+        "-C",
+        "/trial",
+        "--",
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "execution": {
+        "exit_code": 0,
+        "timed_out": false,
+        "error": null,
+        "cleanup": {
+          "owned_process_group": 34,
+          "remaining_live_processes": [],
+          "terminated": true
+        }
+      },
+      "protected_owned_canary": {
+        "argv": [
+          "/usr/local/bin/codex",
+          "sandbox",
+          "-P",
+          "tal-native-eval-9a5541219394",
+          "--include-managed-config",
+          "-c",
+          "permissions={\"tal-native-eval-9a5541219394\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"/trial\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+          "-c",
+          "default_permissions=\"tal-native-eval-9a5541219394\"",
+          "-C",
+          "/trial",
+          "--",
+          "/bin/cat",
+          "/home/node/.codex/withheld.txt"
+        ],
+        "exit_code": 1,
+        "signal": null,
+        "error": null,
+        "timed_out": false,
+        "cleanup": {
+          "owned_process_group": 57,
+          "remaining_live_processes": [],
+          "terminated": true
+        },
+        "stdout": "",
+        "stderr": "/bin/cat: /home/node/.codex/withheld.txt: No such file or directory\n"
+      },
+      "trial_unchanged": true,
+      "owned_cleanup": {
+        "container_absent": true,
+        "remaining_container_ids": [],
+        "states_before_removal": [
+          {
+            "id": "89437a44e4881719ed76d795bdbbfde410b67ad4ff5342e421829e2f1e5f81ee",
+            "running": false,
+            "exit_code": 0
+          }
+        ],
+        "errors": [],
+        "host_transport": {
+          "owned_process_group": 16136,
+          "remaining_live_processes": [],
+          "terminated": true
+        }
+      },
+      "limits": [
+        "The supplied read-only verifier executes; no model-produced output or candidate completion is graded.",
+        "Actual engine-native model edit handler is not exercised by this command probe."
+      ],
+      "scope_verification": {
+        "docker_network": "none",
+        "native_profile_network": false,
+        "explicit_environment_names": [
+          "HOME"
+        ],
+        "synthetic_home_config": "empty",
+        "synthetic_auth_file_present": false,
+        "before_and_after_inventory_match": true
+      }
+    },
+    {
+      "kind": "deadline",
+      "report": "/tmp/tal-native-python-fixture-verifiers-20261002-01/deadline/evidence/report.json",
+      "host": "/tmp/tal-native-python-fixture-verifiers-20261002-01/deadline/host.json",
+      "sha256": {
+        "report": "0b6ea4dda80bb13d697b41fcc3dab30dcce472ebbce386aab781c2230d640f95",
+        "host": "2a05866b4d305942680c8ae7355d9119c832e258a5185bf327829c9f9f00ba03"
+      },
+      "matches_freeze": true,
+      "no_model": true,
+      "no_actual_credentials": true,
+      "image": "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652",
+      "supplied_argv": [
+        "/usr/local/bin/codex",
+        "sandbox",
+        "-P",
+        "tal-native-eval-9a5541219394",
+        "--include-managed-config",
+        "-c",
+        "permissions={\"tal-native-eval-9a5541219394\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"/trial\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+        "-c",
+        "default_permissions=\"tal-native-eval-9a5541219394\"",
+        "-C",
+        "/trial",
+        "--",
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "execution": {
+        "exit_code": 0,
+        "timed_out": false,
+        "error": null,
+        "cleanup": {
+          "owned_process_group": 34,
+          "remaining_live_processes": [],
+          "terminated": true
+        }
+      },
+      "protected_owned_canary": {
+        "argv": [
+          "/usr/local/bin/codex",
+          "sandbox",
+          "-P",
+          "tal-native-eval-9a5541219394",
+          "--include-managed-config",
+          "-c",
+          "permissions={\"tal-native-eval-9a5541219394\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"/trial\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+          "-c",
+          "default_permissions=\"tal-native-eval-9a5541219394\"",
+          "-C",
+          "/trial",
+          "--",
+          "/bin/cat",
+          "/home/node/.codex/withheld.txt"
+        ],
+        "exit_code": 1,
+        "signal": null,
+        "error": null,
+        "timed_out": false,
+        "cleanup": {
+          "owned_process_group": 57,
+          "remaining_live_processes": [],
+          "terminated": true
+        },
+        "stdout": "",
+        "stderr": "/bin/cat: /home/node/.codex/withheld.txt: No such file or directory\n"
+      },
+      "trial_unchanged": true,
+      "owned_cleanup": {
+        "container_absent": true,
+        "remaining_container_ids": [],
+        "states_before_removal": [
+          {
+            "id": "17d124a1dbc49ed0d1d6c9c916108b19272685fad52e793ad83fb280d98f0d55",
+            "running": false,
+            "exit_code": 0
+          }
+        ],
+        "errors": [],
+        "host_transport": {
+          "owned_process_group": 16201,
+          "remaining_live_processes": [],
+          "terminated": true
+        }
+      },
+      "limits": [
+        "The supplied read-only verifier executes; no model-produced output or candidate completion is graded.",
+        "Actual engine-native model edit handler is not exercised by this command probe."
+      ],
+      "scope_verification": {
+        "docker_network": "none",
+        "native_profile_network": false,
+        "explicit_environment_names": [
+          "HOME"
+        ],
+        "synthetic_home_config": "empty",
+        "synthetic_auth_file_present": false,
+        "before_and_after_inventory_match": true
+      }
+    },
+    {
+      "kind": "local",
+      "report": "/tmp/tal-native-python-fixture-verifiers-20261002-01/local/evidence/report.json",
+      "host": "/tmp/tal-native-python-fixture-verifiers-20261002-01/local/host.json",
+      "sha256": {
+        "report": "2588f0d5d6369b9f4e5d37527e54d2061e40d2118cc4a19278f965aba81df3d5",
+        "host": "512843203365be2682e14fbfb92426795a3affe4b8988abeedb085abbbabc366"
+      },
+      "matches_freeze": true,
+      "no_model": true,
+      "no_actual_credentials": true,
+      "image": "sha256:0da57c19da961dfda2bf169edad81cbe4407d3c1d056f2c1edbcdc3ede6d9652",
+      "supplied_argv": [
+        "/usr/local/bin/codex",
+        "sandbox",
+        "-P",
+        "tal-native-eval-9a5541219394",
+        "--include-managed-config",
+        "-c",
+        "permissions={\"tal-native-eval-9a5541219394\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"/trial\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+        "-c",
+        "default_permissions=\"tal-native-eval-9a5541219394\"",
+        "-C",
+        "/trial",
+        "--",
+        "python3",
+        "-B",
+        "summary.py",
+        "jobs.csv"
+      ],
+      "execution": {
+        "exit_code": 0,
+        "timed_out": false,
+        "error": null,
+        "cleanup": {
+          "owned_process_group": 34,
+          "remaining_live_processes": [],
+          "terminated": true
+        }
+      },
+      "protected_owned_canary": {
+        "argv": [
+          "/usr/local/bin/codex",
+          "sandbox",
+          "-P",
+          "tal-native-eval-9a5541219394",
+          "--include-managed-config",
+          "-c",
+          "permissions={\"tal-native-eval-9a5541219394\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"/trial\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+          "-c",
+          "default_permissions=\"tal-native-eval-9a5541219394\"",
+          "-C",
+          "/trial",
+          "--",
+          "/bin/cat",
+          "/home/node/.codex/withheld.txt"
+        ],
+        "exit_code": 1,
+        "signal": null,
+        "error": null,
+        "timed_out": false,
+        "cleanup": {
+          "owned_process_group": 57,
+          "remaining_live_processes": [],
+          "terminated": true
+        },
+        "stdout": "",
+        "stderr": "/bin/cat: /home/node/.codex/withheld.txt: No such file or directory\n"
+      },
+      "trial_unchanged": true,
+      "owned_cleanup": {
+        "container_absent": true,
+        "remaining_container_ids": [],
+        "states_before_removal": [
+          {
+            "id": "a1be6f2f7a023bbd929ffebdb670828bbaa993f650c2d6f4eb7ff62de9498838",
+            "running": false,
+            "exit_code": 0
+          }
+        ],
+        "errors": [],
+        "host_transport": {
+          "owned_process_group": 16278,
+          "remaining_live_processes": [],
+          "terminated": true
+        }
+      },
+      "limits": [
+        "The supplied read-only verifier executes; no model-produced output or candidate completion is graded.",
+        "Actual engine-native model edit handler is not exercised by this command probe."
+      ],
+      "scope_verification": {
+        "docker_network": "none",
+        "native_profile_network": false,
+        "explicit_environment_names": [
+          "HOME"
+        ],
+        "synthetic_home_config": "empty",
+        "synthetic_auth_file_present": false,
+        "before_and_after_inventory_match": true
+      }
+    }
+  ],
+  "secondary_fixture_checks": {
+    "raw_files_unchanged": 13,
+    "raw_counts": {
+      "repeat": 6,
+      "deadline": 5,
+      "local": 2
+    },
+    "prompts_unchanged": 3,
+    "bytes_and_modes_preserved": true,
+    "complete_before_after_inventories_match": true
+  },
+  "historical_candidate_binding": {
+    "preflight_source_digest": "7d3ff64c3188453a622581f61793d140989919c8d0ac5658fd9f5f17ca677e21",
+    "current_reference09_candidate_not_covered": true,
+    "source_acceptance_does_not_upgrade_historical_candidate_coverage": true,
+    "model03": "root-reported sealed freeze07 copy; not inspected or changed in this review"
+  },
+  "final_limits": [
+    "No model or container rerun by either reviewer.",
+    "Preflight-only generic status remains blocked-or-failed with preflight_passed=true and execution_started=false; these are successful no-model controls, not completed cases.",
+    "Supplied verifier exit0 establishes availability/runtime and baseline arithmetic observation only; candidate correctness and completed native review chain are ungraded.",
+    "Actual model edit handler, complete tool/role registry and all-tool confinement remain unverified.",
+    "Latest candidate reference09 requires fresh preparation and independent behavioral evaluation.",
+    "Earlier host-invalid, timeout, missing-Python, partial and blocked records remain preserved."
+  ]
+}

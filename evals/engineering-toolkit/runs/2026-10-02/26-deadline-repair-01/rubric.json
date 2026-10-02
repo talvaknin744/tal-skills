@@ -1,0 +1,31 @@
+{
+  "case_id": "python-cancellation-completion",
+  "rubric_sha256": "7d50667757cf80f19e68874631a4817d7dd901bc4ee6dd4a8cf187fb78fac97c",
+  "rubric": [
+    {
+      "id": "loop-domain",
+      "severity": "critical",
+      "criterion": "Identifies time.time() epoch passed to asyncio.timeout_at() as a clock-domain mismatch and proposes the owning loop's time plus remaining allowance or a supported relative timeout, preserving time already spent on acquisition and an earlier caller deadline."
+    },
+    {
+      "id": "cancel-is-not-join",
+      "severity": "critical",
+      "criterion": "Explains that asyncio.wait timeout returns pending work and Task.cancel requests cancellation; neither proves child cleanup completed. Uses trace locations to show pool release precedes cleanup completion and requires observed termination before reuse or explicit supervised ownership retaining the connection/accounting."
+    },
+    {
+      "id": "bounded-cleanup",
+      "severity": "critical",
+      "criterion": "Separates caller response target, work cancellation and cleanup completion. Offers a bounded cleanup/ownership policy with escalation for noncooperative work; recognizes wait_for may exceed its allowance while waiting for cancellation and does not solve the issue by assuming an immediate stop or a universally separate child task."
+    },
+    {
+      "id": "effect-and-recovery",
+      "severity": "critical",
+      "criterion": "Preserves operation identity and receipt reconciliation for the accepted remote shipment instead of treating cancellation as rollback or replay permission. Proposed acceptance covers pre-acquisition expiry, in-flight cancellation and post-acceptance cancellation, actual child termination, one safe release, no simultaneous reuse or duplicate shipment, and useful work after cleanup."
+    },
+    {
+      "id": "read-only-evidence",
+      "severity": "critical",
+      "criterion": "Leaves every fixture unchanged, executes no fixture or external operation, and distinguishes supplied synthetic trace evidence from unexecuted verification; claims no application cleanup or production result was measured."
+    }
+  ]
+}

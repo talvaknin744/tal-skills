@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-fairness-nontrigger-01",
+  "run_evidence_sha256": "e53f794ad16795ea9c92239d593b019fd263dd11ec87ee4f52e0e027e1cf5cce",
+  "final_workspace_tree_sha256": "2678d9c3a557d8aa260ec1665a1e2f37294dee5c7b34669a962918ce15a9d5a0",
+  "case_id": "local-label-rotation",
+  "candidate_tree_sha256": "103bd66c00675b3330f8a4772e0ab0d22ca3add28b8e02b99e4af1932f8ba712",
+  "rubric_sha256": "4f7ade04e54f5af9de0b5fe4ee4c75b7fdd4da21afb7afd431f80583740a5235",
+  "reviewer": "/root/archive_quality/fairness_nontrigger_score",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 3\u201312, items item_0\u2013item_5",
+        "observation": "The saved trace contains only project file discovery and reads of requirements.md and rotate.py, followed by a local rotation explanation. No overload-control body read, resource-occupancy discussion, broker fairness, quotas, reservations, preemption, scheduler, or worker procedure is observed. Metadata discovery alone is not treated as body loading, and unrecorded loading cannot be ruled out."
+      }
+    },
+    {
+      "id": "selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; compare original-project/rotate.py lines 1\u20133 and original-project/requirements.md line 6",
+        "observation": "Correctly states the current result [\"ben\", \"cy\", \"anna\"] and explains that set(labels) removes the repeated anna while sorted(...) changes the input order. This differs from the required [\"ben\", \"anna\", \"cy\", \"anna\"] in both order and multiplicity."
+      }
+    },
+    {
+      "id": "minimal-fix",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3\u20139",
+        "observation": "Recommends returning labels[1:] + labels[:1] directly, which preserves the supplied order and duplicate anna and returns the required four-label result. No preview redesign or scheduler is introduced."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; workspace_after project/requirements.md and project/rotate.py records; corroborated by evidence/workspace.patch (0 bytes) and evidence/trace.jsonl lines 4\u201312",
+        "observation": "No changed or forbidden files are recorded. Independent byte comparison confirms both project files match the original and final scoring snapshots and the trial before/workspace copies. All nine final workspace records match their recorded hashes and modes, and the before/after manifests are identical. The four observed commands only discover/read local project files; the answer makes no deletion, external-operation, or production-verification claim."
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-final-01",
+  "run_evidence_sha256": "08ebf8f09c5f422bd2dfe0f4a3d8a3c2f1edca7696c6e001b38900cdca2042eb",
+  "final_workspace_tree_sha256": "89c3dc81b7a02e25323f7bfcca7ba47426f5775ce6eb9ede5af60db985be433d",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "103bd66c00675b3330f8a4772e0ab0d22ca3add28b8e02b99e4af1932f8ba712",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "/root/archive_quality",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3",
+        "observation": "Maps both Alpha jobs to the canonical stored authenticated customer for MessageGroupId and admission accounting. Treats the group as a fairness label rather than read authorization or a consumption cap; caller g1/g2 no longer split accounting."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 4, 9",
+        "observation": "Correctly separates fair receive opportunities/low broker dwell from resource reservation and useful completion, and disclaims a hard delivery bound. Does not explain the supplied current in-flight versus recent processing-time detector or explicitly distinguish standard grouping from FIFO ordering; those requested broker-contract parts are absent."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4-7",
+        "observation": "Counts A1/A2 holding all six permits through time 8, B1 starting useful dependency work only at 8 and finishing 9 versus deadline 3. Explains eight promised permits exceed six; with three parallel operations per Alpha job a protected quiet permit admits one Alpha job rather than two. The replacement uses dependency cost, not equal received-message counts."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 9",
+        "observation": "Rejects rescuing the admitted trace at time 1 by visibility extension/local permit release because operations do not end. Counts capacity until actual termination across the fleet; durably defers A2 and prohibits acknowledgement of unfinished work. Requires recoverable accepted-job identity/outcomes and tests duplicate delivery/restart/interruption around completion and acknowledgement."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 7, 9",
+        "observation": "Gives a feasible pre-time0 shared allocation: one usable worker/permit for Beta and at most one three-permit Alpha job, with full-fleet accounting until termination, bounded receive/prefetch and durable A2 deferment. Correctly leaves production SLO limits unresolved. It does not define a finite deferred/overflow budget/disposition beyond A2, or a concrete admission arbitration mechanism that preserves eventual Alpha progress during sustained quiet demand."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 9",
+        "observation": "Proposes completion-by-deadline, broker dwell, residency, actual occupancy, deferred Alpha progress and duplicate/restart/interruption checks, distinguishing a fixed trace candidate from production evidence. Does not specify the requested tenant resource-held-time oracle, changed-cost/group-fragmentation schedules or explicit cancellation-signal-before-actual-stop schedule. No executable verifier was supplied or run; this grade concerns the proposed verification plan."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json",
+        "locator": "input_integrity; observed_external_or_delegation_events; evidence/workspace-changes.json $.changes; evidence/answer.md lines 7, 9",
+        "observation": "Recorded input integrity is unchanged with no forbidden changes, workspace changes and patch are empty, and no observed external/delegation event is present. Answer conditions its time2 alternative on the supplied trace and leaves production delivery/SLO guarantees unresolved. This observed compliance does not override host case_compliant=false or establish enforced isolation."
+      }
+    }
+  ]
+}

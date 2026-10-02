@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-02",
+  "reviewer": "/root/archive_quality",
+  "kind": "independent-native-environment-source-followup",
+  "independence": {
+    "authored_reviewed_runner": false,
+    "candidate_grade": false,
+    "full_selected_closure_grade_excluded": true
+  },
+  "execution": {
+    "reviewer_model_turns": 0,
+    "reviewer_native_runs": 0,
+    "auth_contents_inspected": false,
+    "private_config_values_inspected": false,
+    "host_settings_changed": false
+  },
+  "previous_frozen_review": {
+    "md_sha256": "5d86020f63945609a2cf6b3a75d32db5c5b6a02b90219eb61996e9da48af924f",
+    "json_sha256": "a28a86e2b8c4a0dc8a68a1ace2176068e8a9250aacae685550b6758aa28be3e2",
+    "bytes_preserved": true,
+    "earlier_reviewer_unit_tests": 30,
+    "earlier_cli_boundary_checks": 13,
+    "claim_scope": "bounded separate CLI/source observations, not model execution environment availability",
+    "environment_selection_prerequisite_missed": true,
+    "tool_readiness_acceptance": false
+  },
+  "new_finding": {
+    "id": "empty-native-execution-environments",
+    "priority": 1,
+    "status": "closed-by-frozen-replacement",
+    "source_sha256": "42123d63cbe4c473bf42e2cdcfb6566481ede1ae5157b5b2fd164ab699a0ae9b",
+    "locators": [
+      "scripts/native-smoke.mjs:376",
+      "scripts/native-smoke.mjs:388"
+    ],
+    "mechanism": "Thread and turn explicitly select empty environments, disabling execution-environment access.",
+    "limits": "Environment selection alone does not establish model shell availability, collaboration eligibility, tool confinement or task correctness.",
+    "history": "open finding and host-invalid evidence preserved in this separate follow-up; previous review bytes unchanged"
+  },
+  "actual_invalid_host": {
+    "root": "/tmp/tal-native-linux-worker-original-model-20261002-01/evidence",
+    "source_record_status": "completed-unscored",
+    "external_disposition": "host-invalid-model-local-execution-unavailable",
+    "case_compliant": false,
+    "candidate_graded": false,
+    "preflight_passed": true,
+    "execution_started": true,
+    "artifact_sha256": {
+      "run.json": "4042044fca44b258e58129af74f5901aec81a7f0928310b70fe7c62b2c7a864d",
+      "events.jsonl": "645f23230b581f5bf7fcbe9d5806a364e31be5689e7f1dc329a1c1cbf50edeeb",
+      "linux-host.json": "05b0e486921b665cf03efc5567fea21039bd7413a890c170f8cd0fb40b50f8bd",
+      "prepared.json": "2bfceeaef519eca9decbac24794f97f4622ab5c89b3ad644639a40abcfde373e"
+    },
+    "installed_runner_sha256": {
+      "scripts/native-smoke.mjs": "42123d63cbe4c473bf42e2cdcfb6566481ede1ae5157b5b2fd164ab699a0ae9b",
+      "scripts/native-linux-smoke.mjs": "7585a5ecf677f90cd395471eea16dcde9213eb0d8b48561dd62852e0f7950e07"
+    },
+    "observation": {
+      "commands": 0,
+      "read_actions": 0,
+      "named_children": 0,
+      "unique_native_items": {
+        "userMessage": 1,
+        "agentMessage": 4,
+        "sleep": 4
+      },
+      "dedupe_key": [
+        "thread_id",
+        "turn_id",
+        "item_id"
+      ],
+      "complete_history_pages": 1,
+      "locators": {
+        "selected_environments_empty": "events.jsonl:11#/result/thread/environments",
+        "turn_request": "events.jsonl:15",
+        "missing_file_tool_message": "events.jsonl:72",
+        "final_missing_material_message": "events.jsonl:278",
+        "sleep_items": [
+          "events.jsonl:78",
+          "events.jsonl:84",
+          "events.jsonl:138",
+          "events.jsonl:144"
+        ]
+      }
+    },
+    "cleanup": {
+      "owned_container_absent": true,
+      "owned_transport_terminated": true,
+      "scope_change_count": 0
+    }
+  },
+  "contracts_read": [
+    {
+      "path": "/tmp/tal-native-hardening-cE5egY/schema/v2/ThreadStartParams.json",
+      "sha256": "80a40a7fac15b4bf70efb7f893fb353acc0a0d30c68f54aee4f01923deca85de",
+      "sections": [
+        "properties.environments",
+        "definitions.TurnEnvironmentParams"
+      ]
+    },
+    {
+      "path": "/tmp/tal-native-hardening-cE5egY/schema/v2/TurnStartParams.json",
+      "sha256": "07771223642e1b61bd9aac0069fc0f98143a1c047724ca02c7ceb13653442738",
+      "sections": [
+        "properties.environments",
+        "definitions.TurnEnvironmentParams"
+      ]
+    },
+    {
+      "path": "/tmp/tal-native-hardening-cE5egY/schema/v2/ThreadStartResponse.json",
+      "sha256": "92f5ddc37717b922de1dc0b0405e9a6d463f370554e2091610c6e595bc2616d4",
+      "sections": [
+        "definitions.Thread.properties.environments",
+        "definitions.ThreadEnvironment"
+      ]
+    },
+    {
+      "path": "/tmp/tal-native-tool-registry-20261002-01/source/codex-rs/core/src/tools/spec_plan.rs",
+      "sha256": "849ef21d4e5c83febdc31eacd7609911d43e3f69a35168fe02ae899273b5ef3e",
+      "lines_read": [
+        [
+          660,
+          715
+        ],
+        [
+          1070,
+          1118
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/tal-native-tool-registry-20261002-01/source/codex-rs/features/src/lib.rs",
+      "sha256": "4c702a9479fdbf955b0640f8d52e327dff5cc273c0e9587f29f62e5cbbcd59aa",
+      "lines_read": [
+        [
+          1325,
+          1370
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/tal-native-tool-registry-20261002-01/source/codex-rs/core/src/config/mod.rs",
+      "sha256": "df6d6871a35a9e365e36beb3d388c2c39cae59d95bd84834321c8501390ec397",
+      "lines_read": [
+        [
+          3858,
+          3876
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/tal-native-tool-registry-20261002-01/source/codex-rs/exec-server/src/environment.rs",
+      "sha256": "da4c5ac295eeb9f55d94f7a39aa8c476560f07ccb745762a7989b6f81b7c2bec",
+      "lines_read": [
+        [
+          100,
+          111
+        ]
+      ]
+    }
+  ],
+  "source_capture_origin": {
+    "author_supplied_official_tag": "0.159.2",
+    "author_supplied_commit": "ff6aec96948b70d94983af2641a6b67c94faeff5",
+    "independently_refetched": false
+  },
+  "official_docs": [
+    {
+      "url": "https://learn.chatgpt.com/docs/app-server",
+      "accessed": "2026-10-02",
+      "sections": [
+        "experimental feature listing",
+        "environment inspection",
+        "thread creation"
+      ],
+      "markdown_endpoint_access": "error",
+      "html_sections_access": "success"
+    }
+  ],
+  "replacement_freeze": {
+    "root": "/tmp/tal-native-linux-worker-original-preflight-20261002-06",
+    "source_sha256": {
+      "scripts/native-smoke.mjs": "1522176a83043be0fde914de525b49cb3a6c950b144ac4bd9c1d5a238929b7d2",
+      "scripts/native-linux-smoke.mjs": "7585a5ecf677f90cd395471eea16dcde9213eb0d8b48561dd62852e0f7950e07",
+      "tests/toolkit/native-smoke.test.mjs": "281a1808763ce8c9f45621b8fc4b8bb510cdc220334fc8b46794e8e172959ad2"
+    },
+    "copied_runner_matches": true,
+    "checks": [
+      {
+        "command": "node --test tests/toolkit/native-smoke.test.mjs",
+        "executed_by": "reviewer",
+        "exit_code": 0,
+        "passed": 34,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "command": "git diff --check -- scripts/native-smoke.mjs scripts/native-linux-smoke.mjs tests/toolkit/native-smoke.test.mjs",
+        "executed_by": "reviewer",
+        "exit_code": 0
+      }
+    ],
+    "source_resolution": {
+      "thread_request": "scripts/native-smoke.mjs:409",
+      "turn_request": "scripts/native-smoke.mjs:427",
+      "selection_guard": "scripts/native-smoke.mjs:25",
+      "feature_guard": "scripts/native-smoke.mjs:416",
+      "explicit_selection_assertions": [
+        "tests/toolkit/native-smoke.test.mjs:325",
+        "tests/toolkit/native-smoke.test.mjs:326"
+      ],
+      "feature_overrides": false,
+      "permission_profile_changed": false,
+      "linux_wrapper_changed": false
+    },
+    "artifact_sha256": {
+      "freeze.json": "26a625434c0bc3d5b1440d261a43b746c219ceb1af239d8de7f09a4d69c2d104",
+      "evidence/run.json": "29616a95aebd34725f1cd3b20436a8ca05b32134e6da508cfe7a7862dea26e1f",
+      "evidence/linux-host.json": "1e80d842fe3b9459e554a77a8c8880f032a560011df1db76f89e879f8e7eedea",
+      "evidence/prepared.json": "0dbc21d792b96adf075a67800f1aaad2e2bad4c2bf109f42adbb158245590937"
+    },
+    "generated_contract_schemas_match_fresh_linux": true,
+    "local_environment": {
+      "id": "local",
+      "requested_cwd": "/trial",
+      "selected_cwd": "/trial",
+      "runtime_workspace_roots": [
+        "/trial"
+      ],
+      "status": "ready",
+      "shell_name": "bash",
+      "shell_path": "/usr/bin/bash",
+      "info_cwd": "file:///trial",
+      "selection_verified": true
+    },
+    "resolved_features": {
+      "count": 152,
+      "pages": 2,
+      "required": {
+        "shell_tool": true,
+        "unified_exec": true,
+        "multi_agent": true
+      },
+      "multi_agent_v2": false,
+      "all_disabled_capabilities_false": true,
+      "basis": "thread-scoped experimentalFeature/list; not a complete tool registry"
+    },
+    "collaboration_configuration": {
+      "agents_enabled_configured": null,
+      "agents_enabled_default": true,
+      "default_basis": "exact official-tag source inspected",
+      "tool_dispatch_verified": false
+    },
+    "separate_default_metadata": {
+      "root": "/tmp/tal-native-environment-metadata-20261002-01",
+      "artifact_sha256": {
+        "evidence/mac.json": "6bf2d9d1c9351ffe909daa867469a8ded37582a16e614c21aeb7e0ce49ba92e5",
+        "evidence/linux.json": "bfcb34f01affacd20ea5aaa9c43f7b8f33f2bc80adc05394eeee9000ee118cdb"
+      },
+      "both_required_defaults_enabled": true,
+      "model_turns": 0
+    },
+    "native_preflight": {
+      "produced_by": "author",
+      "execution_started": false,
+      "preflight_passed": true,
+      "case_compliant": false,
+      "boundary_checks_passed": 13,
+      "boundary_checks_total": 13,
+      "owned_container_absent": true,
+      "owned_transport_terminated": true,
+      "audit_errors": [],
+      "auth_fingerprint_unchanged": true,
+      "config_fingerprint_unchanged": true,
+      "model_and_effort_match_inherited": true
+    },
+    "reviewer_inventory": {
+      "baseline_count": 120,
+      "recorded_final_count": 120,
+      "current_count": 120,
+      "bytes_and_modes_match_recorded": true,
+      "bytes_and_modes_match_current": true,
+      "optional_cache_directory_absent": true
+    },
+    "prior_review_and_invalid01_artifacts_rechecked_unchanged": true,
+    "limits": [
+      "No replacement model turn or candidate grading by reviewer.",
+      "Feature and environment metadata are prerequisites, not full tool availability or enforcement.",
+      "Model shell type and collaboration model/version/depth gates remain runtime context.",
+      "Named-role loading, command/body reads and task correctness require a fresh independent model observation.",
+      "Mac TIOCSTI and generic implementation remain excluded."
+    ]
+  },
+  "final_disposition": "empty-environment-source-bug-closed-within-bounded-review-scope"
+}

@@ -1,0 +1,62 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "resident-reserve",
+      "title": "Prefetch and nonpreemptible borrowing consume the protected reserve",
+      "tags": ["residency", "prefetch", "reserve", "reclaim", "useful-completion"],
+      "prompt": "Review worker.md. Do the current execution-only limit and proposed borrowing protect the stated B/C deadline while preserving useful A progress? Give concrete timelines, the smallest feasible residency/reserve/reclaim policy, and a verification plan with explicit capacity and completion oracles. Explain the utilization comparison. Keep the file unchanged; no worker or broker operations are authorized.",
+      "fixture_dir": "evals/worker-rollout-integration/fairness/fixtures/resident-reserve",
+      "fixtures": ["worker.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "resident-accounting", "severity": "critical", "criterion": "Explains that A1-A4 own all four slots from time 0 despite active_A=2 and idle CPU, including prefetched, locally queued, blocked, retry-waiting, executing and cleanup ownership until actual release. An execution-only cap or fair next-delivery order does not create a free slot."},
+        {"id": "current-completion", "severity": "critical", "criterion": "Uses the supplied schedule: B1/C1 wait until 8 and finish at 9, missing deadline 3; A3/A4 execute 8-16. Does not infer deadline protection from low active_A or a next-delivery preference."},
+        {"id": "reserve-policy", "severity": "critical", "criterion": "Gives a feasible protected alternative: cap all A-owned resident work at two, keep two usable slots for B/C, leave A3/A4 recoverable outside worker receipt, run B/C 1-2 and eventually A3/A4 8-16. An equivalent allocation must show physical capacities and preserve accepted-job disposition, rather than promising incompatible shares."},
+        {"id": "borrow-reclaim", "severity": "critical", "criterion": "Shows that borrowed A3/A4 executing 0-8 cannot release their slots at cancellation time 1 under the stated nonpreemptible contract; B/C still finish no earlier than 9. Requires actual bounded residual work/cancellation/checkpoint/effect settlement/cleanup before reclaim, or keeps the reserve unborrowed or changes the promise. Does not invent interruption or free resources on signal acknowledgement."},
+        {"id": "progress-and-cost", "severity": "major", "criterion": "Separates useful completion from utilization and delivery; acknowledges delaying A to preserve quiet deadlines, eventual borrower progress, and lost/repeated work under any hypothetical interruptible design. Compares the policies over a common horizon and distinguishes execution slot-time from prefetch residency rather than treating different drain horizons as comparable utilization evidence."},
+        {"id": "verification-oracle", "severity": "major", "criterion": "Proposes deterministic arrivals and transitions recording all ownership states, actual release, per-tenant resource use, waiting, finish/deadline outcomes and eventual A progress. Includes arrivals immediately after borrowing starts, prefetch/blocked/retry waits, cancellation acknowledgement versus completion, and accepted-job recovery without claiming real worker behavior was tested."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Leaves the fixture unchanged, uses only supplied capacities and contracts, performs no broker/worker mutation, and separates arithmetic or proposed validation from deployed fairness, preemption, cancellation and performance observations."}
+      ]
+    },
+    {
+      "id": "delivery-and-dependency",
+      "title": "Fair broker delivery does not supply dependency capacity or trusted grouping",
+      "tags": ["broker-fairness", "identity", "fanout", "dependency-budget", "visibility"],
+      "prompt": "Review queue.md. Assess the grouping and delivery-based deadline claim, calculate the supplied B1 outcome and simultaneous resource guarantees, and recommend the smallest supported admission/accounting correction with useful-completion and recovery checks. Keep the file unchanged. Use the supplied provider contract; no live service call, deployment or extra provider guarantee is available.",
+      "fixture_dir": "evals/worker-rollout-integration/fairness/fixtures/delivery-and-dependency",
+      "fixtures": ["queue.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "trusted-grouping", "severity": "critical", "criterion": "Maps Alpha's g1/g2 jobs to the stored authenticated customer for intended tenant accounting and producer MessageGroupId, instead of accepting caller-chosen or per-message groups. Separates grouping and priority from data authorization; a group label cannot establish access rights."},
+        {"id": "broker-boundary", "severity": "critical", "criterion": "Explains from the supplied standard-queue contract that MessageGroupId provides fair delivery grouping, not FIFO ordering, a per-tenant rate cap, interruption or a hard completion bound. Considers both current in-flight and processing-time detection without importing thresholds as application limits; quiet dwell is not execution/completion evidence."},
+        {"id": "resource-feasibility", "severity": "critical", "criterion": "Counts three dependency permits per Alpha job, so A1/A2 hold six through time 8 despite two unused worker slots; B1 received at 1 acquires no permit before 8 and finishes 9, missing deadline 3. Rejects simultaneous Alpha-six plus quiet-two guarantees as eight exceeding physical six and equal-message/group caps as cost accounting."},
+        {"id": "actual-release", "severity": "critical", "criterion": "Rejects extending visibility and releasing permits locally at time 1: actual dependency operations still hold capacity until termination, so this creates fictitious headroom and could over-admit. Visibility affects redelivery and may duplicate standard messages, not resource reservation, cancellation completion or checkpointing; uses recoverable accepted-job and duplicate-effect handling rather than discarding work."},
+        {"id": "minimal-allocation", "severity": "major", "criterion": "Provides a feasible shared dependency allocation with cost/fanout-weighted admission and bounded resident/prefetched/blocked/retry/settling work, trusted identity and finite deferred/overflow dispositions. Reserves capacity before long Alpha work if the quiet deadline remains promised, keeps eventual Alpha progress, and marks SLO-safe settings or reclaim guarantees unresolved rather than inventing provider quotas."},
+        {"id": "verification", "severity": "major", "criterion": "Defines oracles for actual active dependency permits <=6, tenant resource-held time, fair receive versus useful start/finish, the B1 deadline, accepted-job recovery and eventual Alpha progress. Exercises changed processing costs, caller group fragmentation, visibility/redelivery and signal-before-stop schedules; distinguishes proposed fixed-capacity schedules from provider experiments."},
+        {"id": "scope", "severity": "critical", "criterion": "Leaves the raw fixture unchanged, makes no live service calls or production mutation, and treats supplied documentary contracts and arithmetic as bounded evidence, not a measured SQS guarantee or tested consumer policy."}
+      ]
+    },
+    {
+      "id": "local-label-rotation",
+      "title": "Finite UI rotation is not resource fairness",
+      "tags": ["activation", "nontrigger", "local-formatting"],
+      "prompt": "Review rotate.py against requirements.md. What does it return for the supplied labels, and what is the smallest correction that preserves the specified order and repeated labels? Keep both files unchanged and limit the answer to this local preview function.",
+      "fixture_dir": "evals/worker-rollout-integration/fairness/fixtures/local-label-rotation",
+      "fixtures": ["requirements.md", "rotate.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Handles the finite local formatting question without automatically loading overload-control or introducing resource occupancy, broker fairness, quotas, reservations, preemption or worker procedures."},
+        {"id": "selection", "severity": "major", "criterion": "Identifies that the current sorted(set(labels)) drops the repeated anna and returns [ben, cy, anna], violating the required [ben, anna, cy, anna] order and multiplicity."},
+        {"id": "minimal-fix", "severity": "major", "criterion": "Recommends rotating the original labels directly with labels[1:] + labels[:1] or equivalent, preserving duplicates and order, without redesigning the preview or adding a scheduler."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves both files unchanged and reports only supplied local semantics; no deletion, external operation or unsupported production verification claim."}
+      ]
+    }
+  ]
+}

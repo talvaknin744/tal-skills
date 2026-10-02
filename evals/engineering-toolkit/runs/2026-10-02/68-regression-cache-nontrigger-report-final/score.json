@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-report-regression-nontrigger-10",
+  "run_evidence_sha256": "80e8c22b94063fbdfa97fd9f1f52b4c5bd5f8e114f0465514150ee4cc8e25eb2",
+  "final_workspace_tree_sha256": "c6e54625cb0696511200897a9956cc07c25f0b8529e8f3b2c0052b4b8c21bcd7",
+  "case_id": "sequential-file-transform",
+  "candidate_tree_sha256": "3c6640491bc773487d4fa0eba18decf154cd17609bc2be32c295710da7916c22",
+  "rubric_sha256": "70f30265fbcd5c96d242ae7fc13f26a96e0f2d695566980c3dd560edad69dc56",
+  "reviewer": "/root/archive_infra/deep_design \u2014 disjoint Con3c nontrigger reviewer",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "correct-result",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 2\u20135; evidence/trace.jsonl line 12; original-project/names.csv lines 1\u20134",
+        "observation": "Returned CSV content is exactly header id,name followed by 2,Noah Cohen; 17,Sofia Martin; 30,Amara Patel in ascending numeric order, with spelling preserved."
+      }
+    },
+    {
+      "id": "no-unrelated-workflow",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 3\u201313; command items 1\u20134; evidence/answer.md lines 1\u20136",
+        "observation": "Recorded operations list/read the local project request and static CSV, then return only the CSV. No architecture/lock/consistency/deployment/provisioning workflow or concurrency skill body read is captured. Metadata discovery does not establish selection."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes, forbidden_changes, workspace_after; evidence/workspace.patch; original-project/names.csv; final-project/names.csv; evidence/trace.jsonl lines 3\u201313",
+        "observation": "No workspace changes and empty patch; original/final source hashes match. Captured commands are local listings and reads, with no network action. Final CSV makes no claim of checks or absent system inspection. No supplied verifier exists; none was invented. case_compliant=false and read-isolation/tool-inventory caveats remain explicit."
+      }
+    }
+  ],
+  "independence_notes": "Reviewed the complete selected ten-file concurrency-correctness manifest. Authored neither selected candidate, selected case/fixture/rubric nor evaluated response. Prior microservice-operations/deadline-case authorship is outside this corpus. No other grades or hidden reasoning were read.",
+  "authored_case": false,
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "activation_limit": "Discoverable metadata is recorded; no matching concurrency body read is captured. not_observed does not prove absence of unrecorded loading."
+}

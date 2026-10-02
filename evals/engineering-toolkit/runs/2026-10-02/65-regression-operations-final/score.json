@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-operations-report-regression-10",
+  "run_evidence_sha256": "724219c6327b8c20af116e8e2131b28d3eb6319e58f4671ff28c3fe4b42bf1ad",
+  "final_workspace_tree_sha256": "baa7e48207911d4f74d5a9f1d952ad03f3df9c7862aee08ab42e82a94d96c7c3",
+  "case_id": "retry-amplification",
+  "candidate_tree_sha256": "23f7986b50ece9a6e444c38dd87627e9afe188f6573ed3a4eec9d77b091969c9",
+  "rubric_sha256": "3a3f8318d020d66008f95e1816afc9b96057249756627cd8ce790c3f8a8d933d",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "amplification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1\u20133",
+        "observation": "Computes 3 \u00d7 3 = 9 Inventory calls per original request and up to 1,800 calls/s at 200 requests/s; labels worst-case/potential active load, qualifies capacity/overlap and excludes further client retries from the estimate. Does not report measured sustained throughput."
+      }
+    },
+    {
+      "id": "deadline-budget",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 9",
+        "observation": "Disables timeout retries at both layers for the read-only check; proposes a 1.8-second ingress deadline with remaining allowance propagated, 100 ms acquisition and one-second Inventory call. Keeps unfinished connections/permits accounted until completion/safe disposal, bounds caller cleanup wait by remaining deadline and marks actual cancellation/join/transport contracts unresolved."
+      }
+    },
+    {
+      "id": "capacity-protection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5",
+        "observation": "Uses retry elimination as a justified overload-control alternative, caps Inventory concurrency from measured capacity, keeps queue finite and rejects excess work promptly. No retry path requires added backoff/jitter, and no larger timeout/additional retries substitute for admission control."
+      }
+    },
+    {
+      "id": "operational-proof",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 7, 9",
+        "observation": "Proposes controlled 200-request/s slow dependency test with at most one Inventory dispatch per logical request, responses within two seconds, bounded configured active work/queue and no abandoned-work growth. Restores dependency and observes useful recovery without a retry surge; no circuit-breaker recovery guarantee. Cancellation/join and handoff checks are explicitly proposed, not measured."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/trace.jsonl lines 5, 7, 11\u201313, 15, 18; evidence/answer.md lines 7, 9",
+        "observation": "No changes/forbidden changes, empty patch and matching raw/final incident hash. Seven completed commands only inspect files. Answer distinguishes proposed validation and says no production behavior was changed/tested; no fixture execution observed."
+      }
+    }
+  ]
+}

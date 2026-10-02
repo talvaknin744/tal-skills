@@ -44,6 +44,13 @@ and relevant output. Distinguish a proposed check, a command that started, and a
 completed passing check. Label static inspection, modeled behavior, native-host
 execution, and real-adapter behavior separately.
 
+When the assignment changes skill, agent or workflow instructions, protect
+established behavior with relevant existing evaluations and add a focused
+evaluation for new behavior. Include nontriggers and affected boundaries;
+new-feature checks alone are insufficient. Keep old fixtures and rubrics intact,
+and report independent results and remaining coverage or host gaps. Follow the
+target repository's evaluation procedure and the coordinator's case selection.
+
 A review names its candidate and gives each actionable finding a file or
 artifact locator, consequence, and supporting observation. After a relevant
 edit, earlier checks remain historical until the affected checks are rerun.

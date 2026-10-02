@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadlines-repaired-04",
+  "run_evidence_sha256": "8645446005791ef5514f31d6a507961556343001dae815c6295d2669003ad692",
+  "final_workspace_tree_sha256": "d694085778be12e13ed8ddd0ee39b120bd68b34feade5c14c0dc017b89f03c5c",
+  "case_id": "python-cancellation-completion",
+  "candidate_tree_sha256": "fa2ade9d9a8f17467610fb05daa40ac41a04ccc3b0f1abc42fbd6bc4aea79b12",
+  "rubric_sha256": "7d50667757cf80f19e68874631a4817d7dd901bc4ee6dd4a8cf187fb78fac97c",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "loop-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 6, 8",
+        "observation": "Identifies wall-clock epoch passed to event-loop-clock timeout_at, excludes unbounded acquisition from a fresh send allowance, and observes 102 ms target overrun in the synthetic trace. Proposes one loop.time()+0.5 admission deadline capped by earlier upstream deadline, with acquisition and send consuming only remaining time."
+      }
+    },
+    {
+      "id": "cancel-is-not-join",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4, 6, 8",
+        "observation": "States asyncio.wait leaves pending child running and child.cancel requests cancellation without joining cleanup. Cites release at 400.601, reuse at 400.610 and cleanup completion at 400.950; requires exclusive supervised connection ownership until actual send termination/cleanup and only then pool.release, including upstream cancellation and late acquisition."
+      }
+    },
+    {
+      "id": "bounded-cleanup",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6, 8",
+        "observation": "Explicit current/proposed completion record separates 500 ms caller waiting, cancellation request, supervised completion/join and safe reuse. Says wait_for may overrun its nominal timeout while waiting for cancellation. Recognizes no documented finite cleanup/recovery bound or forced stop; caps outstanding supervised work/connections, backpressures admission and alerts on cleanup age while retaining ownership. Separate task supervision is scoped to this task-based handler/acquisition proposal, not asserted universally."
+      }
+    },
+    {
+      "id": "effect-and-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6, 8, 10",
+        "observation": "Preserves shipment_id and receipt lookup before any resend for possible remote acceptance. Proposes checks for expiry before acquisition, cancellation before dispatch, cancellation after possible acceptance and normal completion; observes actual child completion and release/reuse, prohibits send after expiry and reuse while child active, and tests a useful dispatch after cleanup. The supervised exclusive owner performs the safe release only after send termination/cleanup; cancellation is not treated as rollback or replay permission."
+      }
+    },
+    {
+      "id": "read-only-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/trace.jsonl command completions at lines 6\u20137, 9, 14\u201316, 18, 20, 24\u201325; evidence/answer.md lines 1, 10",
+        "observation": "Change arrays and patch are empty; all three original/final fixture hashes match. Ten completed commands are only pwd/cat/rg/nl reads, with no fixture/external execution. Answer labels the source/synthetic trace review and all acceptance checks proposed, and claims no measured application cleanup or production outcome."
+      }
+    }
+  ]
+}

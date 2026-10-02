@@ -1,0 +1,78 @@
+{
+  "run_id": "tal-worker-rollout-oct02-delivery-final-02",
+  "run_evidence_sha256": "e5ba41eb9b85a26799658022f7cab1153b52aa3dd09eeccf95fc9f9eaa298a38",
+  "final_workspace_tree_sha256": "7d50bc55738b983da84a965a0f3196121fe5cf4c94071876199bbbee9597afdd",
+  "case_id": "delivery-and-dependency",
+  "candidate_tree_sha256": "8aa3a8f05ff22e7f8157d00287337c0048d1ae7cb33bca9ba4c2138a8cd63200",
+  "rubric_sha256": "ceb8cb9234ef4a2c871309ee9f95c92b2cfe75a8e143ae6402caa2c15f6a0270",
+  "reviewer": "/root/archive_quality",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "trusted-grouping",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3",
+        "observation": "Maps Alpha split client groups to server-authenticated customer for producer grouping and admission accounting, including queued jobs, and states group ID grants no data access. This uses stored customer identity, not caller labels; compare original-project/queue.md lines 13\u201317."
+      }
+    },
+    {
+      "id": "broker-boundary",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 5, 11; complete response lines 1\u201315",
+        "observation": "Separates receive opportunities from rate and completion guarantees, correctly denies visibility-based physical release, and qualifies the fixed B1 calculation on delivery. Omits the supplied no-FIFO guarantee and current in-flight share/recent processing-time share detector inputs (original-project/queue.md lines 4\u20138); those distinctions are absent throughout the response."
+      }
+    },
+    {
+      "id": "resource-feasibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 9, 11",
+        "observation": "Correctly counts three permits per Alpha job, six held until t=8, B1 receive t=1/acquire t=8/finish t=9/deadline t=3 with lateness six. Rejects eight promised permits against physical six, spare worker capacity as a cure, and equal job counts as resource cost; whole Alpha fanouts are reserved before dispatch."
+      }
+    },
+    {
+      "id": "actual-release",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 9, 13, 15",
+        "observation": "Rejects local permit release or visibility extension as stopping operations, retains permits until actual termination across retries/duplicates, and keeps accepted deferred jobs recoverable with completion/explicit terminal acknowledgement and job-identity duplicate-effect reconciliation. Proposes signal-before-termination and restart/duplicate checks without claiming executed cancellation or visibility as a durable completion boundary."
+      }
+    },
+    {
+      "id": "minimal-allocation",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9, 11, 13",
+        "observation": "Defines physical worker/per-operation accounting, fanout reservation, a feasible pre-existing quiet reserve with at most one Alpha job, resident-state charging, and unresolved SLO-safe limits. However, line 13 instructs to specify overflow/expiry dispositions without providing them; eligibility for eventual arbitration alone does not define a rule that ensures eventual Alpha progress. Finite deferred/overflow handling remains incomplete."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 15; supporting lines 5, 11, 13",
+        "observation": "Proposes same-window dwell versus on-time completions, occupancy, deferred age/eventual Alpha progress, split groups, signal-before-stop, duplicate delivery and acceptance/restart recovery; distinguishes fixed arithmetic from provider evidence. Omits an explicit tenant resource-held-time oracle and changed-processing-cost schedule, and does not define the requested actual-active-permit <=6 bound as a verification oracle. Current costly Alpha/Beta comparison is not a changed-cost experiment."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "lines 2\u20133, 40\u201343; evidence/run.json observed_external_or_delegation_events/case_compliant",
+        "observation": "Raw queue.md and all selected package/workspace files remain byte/mode unchanged; workspace.patch is empty. Six observed commands are local reads/listing, external/delegation events are empty, and answer lines 11/15 qualify arithmetic and lack of live provider results. This observed scope pass does not override host case_compliant=false, unconfined read access, inherited guidance, or unverified sandbox enforcement."
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadlines-nontrigger-repaired-03",
+  "run_evidence_sha256": "72717bf555a340ee7f3df1cc6cc66776a9bc5b608c22093691667ae650b4463e",
+  "final_workspace_tree_sha256": "3968ee1a5bfd042859ef184a0cec459955b15bcec29c4441ebcef8202ea0c26e",
+  "case_id": "duration-format-nontrigger",
+  "candidate_tree_sha256": "fa2ade9d9a8f17467610fb05daa40ac41a04ccc3b0f1abc42fbd6bc4aea79b12",
+  "rubric_sha256": "725a4f98d412f385061b9e901cdebabb2669fa690e27f03368b4c8b3b3332e77",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "line 5; evidence/answer.md line 1; evidence/run.json activation_observation",
+        "observation": "Only observed command reads project/label.json. No candidate body/reference read is observed and the answer adds no clock authority, timeout, rollout, cancellation or lifecycle work."
+      }
+    },
+    {
+      "id": "correct-label",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "One sentence gives 02:05 for the supplied 125-second duration in mm:ss format."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/workspace.patch; evidence/trace.jsonl line 5; evidence/answer.md line 1",
+        "observation": "Change arrays/patch are empty and original/final label.json SHA256 matches 49eeeab99e445e59e32cd927cdfcf8bb820e2aff15b7d009b5f172c239021522. Sole completed command is a read-only cat; answer makes no visual/runtime/fixture verification claim."
+      }
+    }
+  ]
+}

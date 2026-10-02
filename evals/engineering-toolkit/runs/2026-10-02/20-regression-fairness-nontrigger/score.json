@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-fairness-nontrigger-02",
+  "run_evidence_sha256": "fbf4ce3c8adb49db95f9c027746b1d2ad3096077f2e4dd988ca9b0d873455a12",
+  "final_workspace_tree_sha256": "d73f8017f338e81069f8a1ac89dd333b4eafcd2b4e89083462afde7bea5ed01c",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "103bd66c00675b3330f8a4772e0ab0d22ca3add28b8e02b99e4af1932f8ba712",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "/root/archive_storage \u2014 independent full-candidate old nontrigger reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed command item_1 line 5; evidence/run.json activation_observation; evidence/answer.md line 1",
+        "observation": "The sole recorded command reads message.md; no overload-control body read is observed. The answer gives only the spelling correction and adds no admission/retry redesign. Absence of a captured body read is not proof about unrecorded loading."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; original-project/message.md",
+        "observation": "Supplies exactly Temporarily unavailable as the corrected wording for Temporarly unavailable."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/workspace.patch empty; evidence/answer.md line 1",
+        "observation": "Original/final message.md byte hashes match and no workspace modification is recorded. The answer claims no runtime/visual verification and stays within the requested text correction."
+      }
+    }
+  ]
+}

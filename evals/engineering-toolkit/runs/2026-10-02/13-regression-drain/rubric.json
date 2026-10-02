@@ -1,0 +1,36 @@
+{
+  "case_id": "rolling-worker-drain",
+  "rubric_sha256": "1ad9c4238abe05f1f52b6c7ff05d5622d036a6597837a658bea60bc9b4b6fdf4",
+  "rubric": [
+    {
+      "id": "failure-classification",
+      "severity": "critical",
+      "criterion": "Identifies deployment TaskCancelled consuming the ordinary failure budget on A, B, and C; uses the supplied defer contract for controlled resumable maintenance rather than merely increasing the count or making all failures free."
+    },
+    {
+      "id": "admission-and-ownership",
+      "severity": "critical",
+      "criterion": "Stops queue acquisition and handles an acquisition already in flight before quiescing work; readiness alone does not stop this poll loop. Keeps ownership valid while work/checkpointing is active and relinquishes only after safe durable progress or an explicit unresolved failure path."
+    },
+    {
+      "id": "durable-handoff",
+      "severity": "critical",
+      "criterion": "Preserves stable job identity, confirmed durable cursor and replay safety across replacement processes. Does not claim cancelling the handler completes the job or that a local checkpoint guarantees recovery when its commit is uncertain."
+    },
+    {
+      "id": "bounded-rollout",
+      "severity": "major",
+      "criterion": "Fits cooperative stopping and confirmed checkpoint/release within the actual 90-second deadline with margin, or explicitly changes the rollout/drain design. Explains why 12\u201324-hour jobs and twice-daily replacement require resumability or retained draining workers rather than a guaranteed full finish during shutdown."
+    },
+    {
+      "id": "failure-checks",
+      "severity": "major",
+      "criterion": "Specifies the repeated A-to-B-to-C maintenance schedule and asserts eventual completion without consuming the malformed-input failure budget; also checks admission races, crash/kill, and a failed or ambiguous checkpoint rather than testing only a clean SIGTERM."
+    },
+    {
+      "id": "scope-and-evidence",
+      "severity": "critical",
+      "criterion": "Leaves supplied files unchanged, performs no live operation, and distinguishes recommendations or unrun checks from observations actually present in the fixture or local commands."
+    }
+  ]
+}

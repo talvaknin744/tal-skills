@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-repaired-06",
+  "run_evidence_sha256": "7ac6ed1d3243aa4f682f86a60bfd1337f9176a5349d777257fd0f2c7589c030b",
+  "final_workspace_tree_sha256": "c166481628fe93c5bd128e240ff0c6317036b65541863cd4877cc4e47fec3e1c",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "ed25ceeb04a420f2def672d500a0e19e743349ac36c7a3579d1b3b41ffc59f41",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_14 line30; evidence/checks.json:checks[0]; evidence/checks/independent-01.stdout.txt:1\u20136; review.md:Reviewer execution",
+        "observation": "The supplied node verify.mjs executes against the final service, exits0, and passes all five original checks. Original verifier/adapter hashes are unchanged. Sealed independent-01 and a reviewer protected-workspace execution of original inputs with only final service overlaid match all5 results; this is actual execution, not a claimed or rewritten check."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "7\u201318; original-project/model.mjs:54\u201367; original-project/verify.mjs:16\u201351; evidence/trace.jsonl:item_16",
+        "observation": "A cache miss invokes shared atomic publishIfFresh, and write awaits advanceFloor after the authoritative write before returning. Supplied adapter transitions never lower per-key floors, preserve them through eviction, and reject publication older than floor or current cache value. The original delayed fill/eviction/out-of-order checks pass. A separate recorded controlled check delays revision2 completion after revision3 and confirms floor/value3 remain; no local lock or delay is used as the correction."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0],forbidden_changes; evidence/workspace.patch; final-project/service.mjs:1\u201320",
+        "observation": "Only service.mjs changed: unconditional cache.set becomes publishIfFresh and cache.delete becomes advanceFloor. Public constructor/read/write signatures and all protected adapter/verifier/requirements contents remain unchanged. Cache hits still return from cache; supplied hit and unrelated-ID checks preserve database-read count. No unavailable infrastructure or packages are introduced."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1,5; final-project/service.mjs:10\u201318; evidence/trace.jsonl:item_17",
+        "observation": "The report connects writes raising the shared floor before resolution with publishing misses only if fresh, establishing the boundary for reads begun after the acknowledged write under the supplied contract. It separately says an already-in-progress read may return its earlier snapshot. The code returns captured database records and rejects stale publication, so neither report nor implementation demands latest-at-response. The explanation is assessed semantically, not by a required exact phrase."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "5; evidence/trace.jsonl:item_17; original-project/requirements.md:24\u201334",
+        "observation": "The final report confines the result to supplied successful adapter calls and explicitly leaves crashes, adapter failures, floor expiry, replica reads and production database/cache atomicity outside it. These correspond to the deterministic fixture's exclusions and do not claim arbitrary marker lifetime, crash recovery or production transaction guarantees from passing five checks."
+      }
+    }
+  ]
+}

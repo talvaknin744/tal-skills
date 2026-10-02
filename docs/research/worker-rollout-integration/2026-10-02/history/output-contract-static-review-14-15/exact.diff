@@ -1,0 +1,50 @@
+--- skills/infrastructure/infrastructure-change-safety/SKILL.md@freeze13
++++ skills/infrastructure/infrastructure-change-safety/SKILL.md@freeze15
+@@ -14,6 +14,8 @@
+ 
+ Return the changed behavior, affected identities, executed evidence, and remaining limits. For a schema authority switch, return the completed outcome rows required by [schema evolution](references/schema-evolution.md), distinguishing supplied/observed facts, explicit unknowns and proposed bounded actions. A successful plan, process exit or restored state file alone does not establish service recovery. Keep actual applies within the user's authorized target and scope; an uncertain target or ownership conflict stops mutation until resolved.
+ 
++When exposing new-only reads or relaxing a schema writer floor, also return the reader/writer transition record in [schema evolution](references/schema-evolution.md). Reader fallback and writer eligibility must agree at each stage, including rollback.
++
+ For an online backfill or concurrent transformation, include all three completion rows in the returned result. Passing a local verifier leaves production claims open.
+ 
+ | Row | Required evidence |
+--- skills/infrastructure/infrastructure-change-safety/references/schema-evolution.md@freeze13
++++ skills/infrastructure/infrastructure-change-safety/references/schema-evolution.md@freeze15
+@@ -90,6 +90,20 @@
+ post-switch writes or discarded values. Verify the deployed engine's revert
+ strategy, retained artifacts, catch-up and representability limits.
+ 
++Return a reader/writer transition record for initial exposure and each rollback
++or writer-floor relaxation. Fill these fields from the supplied state; label
++unknowns and proposed actions explicitly:
++
++| Transition | Active reader paths and fallback evidence | Eligible writers and maintenance proof | Ordered eligibility decision |
++| --- | --- | --- | --- |
++| Exposure or rollback stage | Include point reads and predicates/index queries separately; name which new-only paths remain enabled. | State the required representation/revision contract for every eligible generation. | State which reader or writer admission changes happen first and what proves them effective at the actual operation boundary. |
++
++A restored point-read fallback alone cannot authorize old-only writers while
++any new-only read or predicate remains enabled. Keep the maintaining writer
++floor until all such paths are disabled and the restored fallback is complete,
++or retain an enforceable bridge that maintains their representation. Returning
++to an older application release does not itself establish those conditions.
++
+ ## Verify the expected state
+ 
+ Force an intervening update, delete/recreate with a reused numeric revision,
+--- skills/performance/overload-control/SKILL.md@freeze13
++++ skills/performance/overload-control/SKILL.md@freeze15
+@@ -70,10 +70,10 @@
+ 
+ | Row | Required evidence |
+ | --- | --- |
+-| Broker contract | Name the verified provider/version, trusted group identity, actual fairness detector inputs, ordering and rate guarantees, duplicates and redelivery semantics. Distinguish delivery opportunities from execution, residency and completion guarantees; label unsupported guarantees explicitly. |
+-| Allocation and waiting | Give resource-cost units and feasible limits. Choose finite deferral bounds and concrete overflow/expiry dispositions, distinguishing intake before acceptance from already accepted durable work. State the arbitration rule that gives ready tenants eventual progress. |
++| Broker contract | Name the verified provider/version, trusted group identity, actual fairness detector inputs, ordering and rate guarantees, duplicates and redelivery semantics. Identify the measured load inputs, including concurrent in-flight share versus recent processing-time share where documented; an approximate-fairness label does not identify them. Distinguish delivery opportunities from execution, residency and completion guarantees; label unsupported guarantees explicitly. |
++| Allocation and waiting | Give resource-cost units and feasible limits, including receive/prefetch and aggregate resident, blocked, retry-wait and settling work. Choose finite deferral/retry bounds and concrete overflow/expiry dispositions, distinguishing intake before acceptance from already accepted durable work. When terminal loss is not authorized, specify a recoverable paused state, recovery owner and re-admission rule after the bound. State the arbitration rule that gives ready tenants eventual progress. |
+ | Actual release | State who retains each resource after a stop signal and what proves execution and cleanup ended. Include a signal-before-actual-stop control with the expected held/released resources; a cancellation acknowledgement is insufficient. |
+-| Discriminating checks | Supply changed-cost and split/fabricated-group schedules with expected outcomes. Over the same observation window, check tenant resource-held time, useful completion, deadlines and eventual progress against the promised allocation. |
++| Discriminating checks | Supply changed-cost and split/fabricated-group schedules with expected outcomes. Assert total actual held dependency permits stay within physical capacity, including signaled operations. Measure fair receive separately from useful start and finish. Over the same observation window, check tenant resource-held time, deadlines and eventual progress against the promised allocation. |
+ 
+ Label each row supplied, executed, proposed or unresolved. Report a specific
+ unresolved guarantee instead of treating a proposed check as established behavior.

@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-schema-01",
+  "run_evidence_sha256": "2d9daeb6ba6cf18e689ef8e7e8c0071d0a260ef4eff6fd54f514cbb84674f899",
+  "final_workspace_tree_sha256": "bd983386e53d9f3d948cd3e6a7845267f808f71972a8d1066f6ca0927a4abd2e",
+  "case_id": "schema-cutover-window",
+  "candidate_tree_sha256": "25300ed6da72e8c684fdadedfe978d314a512dfa350975b11495cbadcdc76c43",
+  "rubric_sha256": "f5b2aaa9b8ae4c6c1ae0a6733c690c38215741aefd3c1b6c1343545b96da0142",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "lock-and-state",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4, 10-13",
+        "observation": "Corrects the lock-free claim, demands a named owner and pause/abort path, names a five-second stop, blocks retry until inspection, and distinguishes pre-cutover gates from post-write recovery. It does not specify surviving authoritative table/worker state for blocked/failed cutover versus successful cutover, or a concrete bounded recovery/decision path for those outcomes. Naming missing owner and thresholds as prerequisites does not complete that state contract."
+      }
+    },
+    {
+      "id": "compatibility",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3-6, 11, 13",
+        "observation": "Identifies both v1 removed-field failure and v2-only writes failing to maintain the old representation. Proposes an intermediate client maintaining both representations, retains old readers, closes v1 write admission and drains in-flight/replayable work before removal, and keeps retirement beyond rollback/dependent clients. Explicitly forbids rename-back after new writes and requires compatible rollback or reconciliation/replay of all post-cutover writes."
+      }
+    },
+    {
+      "id": "verification",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4, 12, 15",
+        "observation": "Proposes supported-client tests for every schema stage and recovery after v2 writes, with identity/value mapping and independent commit evidence; correctly distinguishes atomic switch from lossless rollback. The five-second lock timeout is a stop rule, but there is no concrete held-lock/timeout rehearsal, expected bounded failure, or asserted no-switch/authority/worker outcome. This leaves the required lock-timeout check underspecified."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_1 candidate read; item_2/item_3/item_4/item_5/item_6 local reads; item_7 final answer; evidence/workspace-changes.json changes=[]",
+        "observation": "Captured commands read only supplied project/skill files and enumerate paths; no external operation or mutation is observed. Original and final project bytes match frozen fixture hashes; workspace diff is empty and forbidden changes are empty. Answer labels validation as future work and explicitly says no migration, file edits or external services occurred, without claiming runtime validation."
+      }
+    }
+  ]
+}

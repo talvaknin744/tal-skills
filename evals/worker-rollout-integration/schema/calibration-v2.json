@@ -1,0 +1,167 @@
+{
+  "format_version": 1,
+  "recorded_at": "2026-10-02 10:31:57 UTC",
+  "kind": "versioned input oracle and preservation calibration",
+  "case_id": "shard-publication-rollback-floor-v2",
+  "authored_status": "Authored corrected raw input and private evaluator oracle; local checks executed.",
+  "model_runs": 0,
+  "candidate_grades": 0,
+  "candidate_instruction_changes": false,
+  "original_calibration": "calibration.json preserved unchanged",
+  "expected_derivation": "Definitive committed business ledger through207 plus new authoritative encoding contract; never derived.csv or migration output.",
+  "local_oracle_run": {
+    "argv": [
+      "python3",
+      "-B",
+      "evals/worker-rollout-integration/schema/calibrate-v2.py"
+    ],
+    "cwd": "/Users/idanvaknin/Documents/ChatGPT/skills",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout_json": {
+      "case_id": "shard-publication-rollback-floor-v2",
+      "comparison": {
+        "actual_count": 3,
+        "actual_minus_expected_rows": [
+          [
+            "99",
+            "order-d",
+            1,
+            1,
+            1
+          ]
+        ],
+        "common_value_differences": [],
+        "expected_count": 3,
+        "expected_minus_actual_rows": [
+          [
+            "43",
+            "order-c",
+            1,
+            1,
+            1
+          ]
+        ],
+        "extra_identities": [
+          [
+            "99",
+            "order-d"
+          ]
+        ],
+        "missing_identities": [
+          [
+            "43",
+            "order-c"
+          ]
+        ],
+        "same_counts": true
+      },
+      "cut": 207,
+      "expected_authorities": [
+        "commits.csv definitive commits/rejections",
+        "status-code-contract.json"
+      ],
+      "expected_paid_identities": [
+        [
+          "22",
+          "order-b"
+        ],
+        [
+          "43",
+          "order-c"
+        ]
+      ],
+      "expected_rows": [
+        {
+          "incarnation": "order-a",
+          "key": "11",
+          "mapped_rev": 1,
+          "source_rev": 1,
+          "status_code": 0
+        },
+        {
+          "incarnation": "order-b",
+          "key": "22",
+          "mapped_rev": 2,
+          "source_rev": 2,
+          "status_code": 1
+        },
+        {
+          "incarnation": "order-c",
+          "key": "43",
+          "mapped_rev": 1,
+          "source_rev": 1,
+          "status_code": 1
+        }
+      ],
+      "kind": "local_evaluator_input_oracle_calibration",
+      "limits": [
+        "Synthetic supplied ledger and complete observation only; no engine, database or migration executed.",
+        "Input-oracle calibration is not a candidate/model trial or a grade."
+      ],
+      "observed_paid_identities": [
+        [
+          "22",
+          "order-b"
+        ],
+        [
+          "99",
+          "order-d"
+        ]
+      ],
+      "same_count_adverse_controls": [
+        {
+          "changed_field": "status_code",
+          "detected": true,
+          "same_counts": true
+        },
+        {
+          "changed_field": "source_rev",
+          "detected": true,
+          "same_counts": true
+        },
+        {
+          "changed_field": "mapped_rev",
+          "detected": true,
+          "same_counts": true
+        },
+        {
+          "changed_field": "incarnation",
+          "detected": true,
+          "same_counts": true
+        }
+      ]
+    },
+    "command_note": "Recorded from actual local command output; exact execution start timestamp not retained."
+  },
+  "checks": {
+    "argv": [
+      "node",
+      "--test",
+      "tests/worker-rollout-integration/schema-correction.test.mjs",
+      "tests/worker-rollout-integration/runner.test.mjs"
+    ],
+    "exit_code": 0,
+    "tests": 16,
+    "pass": 16,
+    "fail": 0,
+    "stdout": "✔ suite selection is explicit and unknown suites fail closed (1.070334ms)\n✔ legacy regression routing preserves shared-corpus skill ownership (47.592667ms)\n✔ legacy execution controls preserve raw case identity and protect the verifier (77.775541ms)\n✔ a frozen suite binds its selection and refuses a replaced or deleted identity (34.866667ms)\n✔ cross-concern fixture paths are rejected even when files are declared (34.589875ms)\n✔ staging keeps private rubric outside the raw project and binds controls (42.815334ms)\n✔ suite corpus changes after freeze prevent staging (35.759708ms)\n✔ concurrency-correctness: integration cases have complete raw fixtures and bounded modes (2.314833ms)\n✔ infrastructure-change-safety: integration cases have complete raw fixtures and bounded modes (4.556083ms)\n✔ overload-control: integration cases have complete raw fixtures and bounded modes (1.610792ms)\n✔ microservice-operations: integration cases have complete raw fixtures and bounded modes (1.705958ms)\n✔ schema v2 preserves original case bytes, rubric objects, raw fixtures and calibration (7.803375ms)\n✔ schema corrected input adds only an authoritative encoding contract and retains exact rubric (12.211958ms)\n✔ schema v2 oracle derives full expected rows independently and catches same-count value defects (43.945542ms)\n✔ schema expected mapping remains available without any derived observation (29.480834ms)\n✔ schema v2 staging exposes only six raw inputs and keeps correction answers private (89.673ms)\nℹ tests 16\nℹ suites 0\nℹ pass 16\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 380.431125\n"
+  },
+  "preservation_proof": {
+    "all_original_fixture_bytes_modes_preserved": true,
+    "cases_sha256": "5f2776b2ff8d24c91deade82ce0e2ca73fc1634cbc6a2d63b3c91181774a39c4",
+    "copied_raw_files_match": true,
+    "helper_sha256": "027d361adfea324bc6af3f4ae809912b0af8fe945c80a2a29829f499a85ac6f6",
+    "original_calibration_preserved": true,
+    "original_cases_sha256": "c99f23d9abe072ce5f06d3ece979845134ff1b71cc20e9cddeed9add04a2641b",
+    "original_objects_preserved": true,
+    "original_prefix_preserved": true,
+    "original_rubric_preserved": true,
+    "tests_sha256": "e23333c6feb911599d1860ec4daa47f8decd01d8590edd04505b2c2e845fd37f"
+  },
+  "limits": [
+    "Supplied synthetic ledger/row comparison and local staging only; no live engine, database, migration, candidate/model trial or grade.",
+    "Historical mapping ambiguity and original partial attempts remain recorded; this new input version does not repair their raw input retroactively.",
+    "Private calibration, expected rows and history are excluded from the staged candidate project."
+  ]
+}

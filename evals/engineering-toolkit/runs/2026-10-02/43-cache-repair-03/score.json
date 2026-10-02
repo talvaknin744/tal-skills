@@ -1,0 +1,69 @@
+{
+  "run_id": "tal-worker-rollout-oct02-cache-repaired-04",
+  "run_evidence_sha256": "fca23abb3deeced67cc7da820bc4fc94b8252c68e34e2739086260118dd9335a",
+  "final_workspace_tree_sha256": "38b5b0b88f18252deca0ef4132f26ea25bc371a864dbf6efff275bc64833450f",
+  "case_id": "cache-incarnation-snapshot",
+  "candidate_tree_sha256": "ed25ceeb04a420f2def672d500a0e19e743349ac36c7a3579d1b3b41ffc59f41",
+  "rubric_sha256": "7ef8e29166a61c034f58a91d15b11ca245eb5fca7e4f8f34a0568c07009ecdb7",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "incarnation-domain",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "12\u201313; original-project/model.py:6\u20137,97\u2013104; original-project/verify.py:50\u201364,88\u2013104",
+        "observation": "finish_fill delegates to the protected atomic publication transition, which compares the supplied authoritative (incarnation, revision) tuple. Unchanged literal recreation checks reject delayed41/7 after42/1 and accept a newer incarnation with revision1; all six checks pass. No scalar, clock or arbitrary UUID ordering is introduced."
+      }
+    },
+    {
+      "id": "paired-source-snapshot",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "15\u201323; original-project/model.py:18\u201328; original-project/verify.py:67\u201385,148\u2013160",
+        "observation": "The miss path captures one record via read_snapshot, preserving payload, presence and token together. It invokes before_fill after capture and before publication, while the hit path returns before a source read. Protected capture-callback mutation and counters verify no relabeling, one miss capture, no hit capture and no separate token read."
+      }
+    },
+    {
+      "id": "atomic-publication",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.py",
+        "locator": "9\u201313,19\u201323; original-project/model.py:86\u2013104,110\u2013123; original-project/verify.py:88\u2013145",
+        "observation": "The service uses the shared atomic publish_if_current transition and removes the separate floor read/unchecked write. Protected tests verify competing change safety, per-key ordering, retained floors after value eviction, empty deleted state and new recreation after JSON restoration. All protected expected states pass with unchanged adapters."
+      }
+    },
+    {
+      "id": "independent-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "original-project/verify.py",
+        "locator": "16\u201319,50\u2013160; evidence/workspace-changes.json; evidence/checks/independent-01.stdout.txt:1",
+        "observation": "The unchanged verifier checks both identity-set directions and full incarnation/revision/payload record equality against literal states, including empty deletion and recreation. Only service.py changed; callback/interfaces remain intact, no exceptions are suppressed, and matching sealed/reviewer protected executions pass six checks."
+      }
+    },
+    {
+      "id": "executed-verification",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_10 line22; item_13 line28; item_14 line29; evidence/checks.json:checks[0]; review.md:Reviewer execution",
+        "observation": "The model executes python3 -B verify.py before the edit (2/6, exit1) and after it (6/6, exit0), accurately reporting those observed results. Sealed independent-01 and this reviewer separate protected-workspace rerun also pass6/6 with matching stdout SHA-2566ce2f9f7cde2286fbf9097380185c8262f6f2be6a82afb2931b49a75f49b22d0."
+      }
+    },
+    {
+      "id": "scope-and-limits",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "1\u20133; evidence/trace.jsonl:item_0,item_9,item_14; final-project/service.py:15\u201323; original-project/contract.md:30\u201334,44\u201350",
+        "observation": "Only service.py changed and public hooks/protected inputs are preserved. The code permits captured overlapping results without latest-at-response behavior. The authored report meaningfully distinguishes one-process threads/JSON restoration from multiple processes, adapter failures and production atomicity. However, neither final nor earlier authored messages addresses absent-notification recovery, destruction of ordering metadata, or crash-safe durability. JSON restoration retains metadata; excluding adapter-call failures/production atomicity does not by itself distinguish these separate recovery/lifecycle guarantees. This is a semantic limits gap, not missing exact vocabulary or a failed scoped implementation, so the critical combined criterion is partial."
+      }
+    }
+  ]
+}

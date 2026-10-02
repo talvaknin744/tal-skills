@@ -1,0 +1,170 @@
+{
+  "format_version": 1,
+  "observed_on": "2026-10-02",
+  "kind": "independent evaluation-input audit",
+  "reviewer": "/root/architecture_skill_review",
+  "case_id": "shard-publication-rollback-floor",
+  "disposition": "input-underdetermined-for-independent-numeric-status-oracle",
+  "scope": {
+    "raw_fixture_files": 5,
+    "private_rubric": true,
+    "calibration": true,
+    "readme": true,
+    "model_responses_read": false,
+    "scores_read": false,
+    "models_run": 0,
+    "agents_spawned": 0,
+    "source_files_modified": false,
+    "original_results_regraded": false
+  },
+  "finding": {
+    "id": "missing-authoritative-status-encoding",
+    "severity": "blocks independent satisfaction of the numeric-mapping portion of one critical criterion",
+    "criterion": {
+      "id": "independent-bidirectional-oracle",
+      "severity": "critical",
+      "criterion": "Derives expected live identity/status rows at commit 207 from the definitive commit ledger, independently maps supported statuses and compares complete expected/actual sets both directions. Finds missing order 43 and extra deleted order 99 despite equal counts; separates coverage, catch-up, index usability and exposure gates rather than treating cursor success or row counts as proof."
+    },
+    "references": [
+      {
+        "path": "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/rollout.md",
+        "lines": [
+          19,
+          25,
+          26,
+          27,
+          28
+        ]
+      },
+      {
+        "path": "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/versions.csv",
+        "lines": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "path": "evals/worker-rollout-integration/schema/history/cases-v1-before-status-contract-v2.json",
+        "lines": [
+          40
+        ]
+      },
+      {
+        "path": "evals/worker-rollout-integration/schema/calibration.json",
+        "lines": [
+          7,
+          44
+        ]
+      },
+      {
+        "path": "evals/worker-rollout-integration/schema/README.md",
+        "lines": [
+          13,
+          15
+        ]
+      }
+    ],
+    "summary": "No independent supplied source defines pending -> 0 or paid -> 1. Deriving it from transformed rows is circular."
+  },
+  "independently_supported": {
+    "cut": 207,
+    "live_rows": [
+      {
+        "key": 11,
+        "incarnation": "order-a",
+        "source_rev": 1,
+        "status_text": "pending"
+      },
+      {
+        "key": 22,
+        "incarnation": "order-b",
+        "source_rev": 2,
+        "status_text": "paid"
+      },
+      {
+        "key": 43,
+        "incarnation": "order-c",
+        "source_rev": 1,
+        "status_text": "paid"
+      }
+    ],
+    "rejected_commit_ignored": 206,
+    "deleted_identity": {
+      "key": 99,
+      "incarnation": "order-d",
+      "commit": 207
+    },
+    "missing_identity": {
+      "key": 43,
+      "incarnation": "order-c"
+    },
+    "extra_identity": {
+      "key": 99,
+      "incarnation": "order-d"
+    }
+  },
+  "counterexample_contracts": [
+    {
+      "pending": 0,
+      "paid": 1,
+      "refund_pending": 2
+    },
+    {
+      "pending": 1,
+      "paid": 0,
+      "refund_pending": 2
+    }
+  ],
+  "calibration_conclusion": "Inspected calibration contains only editable implementation/nontrigger controls; no review-case map or oracle. It does not substantiate a claim that the map is specified only in evaluator-hidden calibration.",
+  "proposed_versioned_correction": {
+    "case_id": "shard-publication-rollback-floor-v2",
+    "visible_contract": "The authoritative status encoding is pending <-> 0, paid <-> 1, refund_pending <-> 2, stable across writer/reader generations that support that status.",
+    "rubric_change": "none",
+    "preserve": "Original case, raw fixtures, rubric, calibration, freezes, attempts, results and scores.",
+    "calibration": "Derive oracle solely from ledger and visible contract; scratch matched-live-row numeric-value mutation negative control.",
+    "status": "proposal in this audit; no v2 content or outcomes reviewed"
+  },
+  "checks": [
+    {
+      "kind": "read-only local ledger reconstruction",
+      "result": "passed",
+      "detail": "Live 11/22/43; missing 43; extra 99; rejected 206 ignored."
+    },
+    {
+      "kind": "source preservation",
+      "result": "passed",
+      "detail": "Original five raw fixtures and calibration unchanged; original full cases bytes retained in history snapshot; current selected original case object unchanged."
+    }
+  ],
+  "originally_inspected_source_sha256": {
+    "evals/worker-rollout-integration/schema/cases.json": "c99f23d9abe072ce5f06d3ece979845134ff1b71cc20e9cddeed9add04a2641b",
+    "evals/worker-rollout-integration/schema/calibration.json": "e8cd1d28a32d82dbc6c1a511921df504500fe2e886d584cebbe0a99d7b446709",
+    "evals/worker-rollout-integration/schema/README.md": "658f8ddf72f373e8df482341d5660e1bb606da0307aede801a6a058fea396ea6",
+    "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/rollout.md": "e78d79f5014e38c5ec3344918354ea425ca841ad66d19fb8d521e91162da36e1",
+    "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/fleet.csv": "1bef598948d3f744c368d1737079355d8fe87b3b886d5cd2a0552a033e8d65f8",
+    "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/versions.csv": "e9bc1dd9a2349d9abcb122c045c7394b04aa692d3191c09dc0344bbbfeed0aa0",
+    "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/commits.csv": "8f1299c040431bb105af053aebbcd407815c93822aa476428d0a9df12de8e713",
+    "evals/worker-rollout-integration/schema/fixtures/shard-publication-rollback-floor/derived.csv": "54edbc74ac4a0e7dc472c684da1d9a099f030fcd25690972b4e47578ac8a2645"
+  },
+  "concurrent_versioning": {
+    "description": "Another author appended a versioned case during this audit; guard caught current full cases change before any audit file write.",
+    "original_cases_snapshot": {
+      "path": "evals/worker-rollout-integration/schema/history/cases-v1-before-status-contract-v2.json",
+      "sha256": "c99f23d9abe072ce5f06d3ece979845134ff1b71cc20e9cddeed9add04a2641b"
+    },
+    "preservation_manifest": {
+      "path": "evals/worker-rollout-integration/schema/history/schema-v1-inputs-manifest.json",
+      "sha256": "bb5c6dad2a8f67dfd02e6044d659dd9ebfa36e8548b614acd60b14a1705fc2bc"
+    },
+    "current_cases_sha256_at_binding": "5f2776b2ff8d24c91deade82ce0e2ca73fc1634cbc6a2d63b3c91181774a39c4",
+    "original_selected_case_json_stringify_sha256": "d55a890e61ac918ab70724dd665fb3d437b0bd63a6eb313dbae54b83e605abdd",
+    "current_selected_case_equal": true
+  },
+  "limits": [
+    "No response scoring or candidate correctness judgment.",
+    "Other independently supportable rubric portions remain supportable.",
+    "No database, runtime, model, production migration, or host-isolation guarantees tested."
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-operations-report-regression-nontrigger-10",
+  "run_evidence_sha256": "9acfb10e47574f0d80e8e9c63d1bd70c5764db993edb10b39483125306ecca0a",
+  "final_workspace_tree_sha256": "bc48f2696a406c1f7eb2bc075bb46e4ee4c1ec6a1e15d3a9efb60fcd8ca97026",
+  "case_id": "stylesheet-review-nontrigger",
+  "candidate_tree_sha256": "23f7986b50ece9a6e444c38dd87627e9afe188f6573ed3a4eec9d77b091969c9",
+  "rubric_sha256": "eb5289e97fff7e51a19e6c15596f461cb29c7ee3a8bfe343c38595e08b46958a",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 5, 7; evidence/answer.md line 1; evidence/run.json activation_observation",
+        "observation": "Two completed commands discover/read style.md only. No candidate body/reference read is observed and no rollout, metrics, error-budget or failure-injection work is added."
+      }
+    },
+    {
+      "id": "padding",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Gives padding: 8px 12px; correctly assigns first value to top/bottom and second to left/right, satisfying the supplied spacing request."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Keeps the answer to shorthand spacing and unchanged-file status, with no unsupported visual/runtime verification claim."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/workspace.patch; evidence/trace.jsonl lines 5, 7; evidence/answer.md line 1",
+        "observation": "Empty patch/change arrays and matching raw/final style.md hash establish no mutation. Only read-only rg/cat commands were recorded and file-unchanged status is accurate; no checks are falsely claimed."
+      }
+    }
+  ]
+}

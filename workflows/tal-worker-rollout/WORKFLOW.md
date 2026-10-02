@@ -58,12 +58,26 @@ not by itself authorize execution in a live environment.
    claims already in flight, uncertain checkpoint/effect, stale owner, and forced
    deadline paths. Keep maintenance and business-failure expectations tied to
    the actual queue contract; label simulations and real-platform checks.
+   For shutdown-code changes, observe signal delivery, reserved/active ownership
+   after the gate closes, and cleanup after cancellation. Test the required
+   old/new readers and writers against the same checkpoint semantics; successful
+   decoding or a healthy replacement alone does not close that question.
 4. **Review before acceptance or execution.** Freeze the code/configuration and
    procedure for independent durability or infrastructure review. Return
    findings to the owner and rerun affected checks. A plan is complete when
    compatibility, observation, stop, and feasible recovery conditions are
    reviewable. An authorized execution additionally needs observed work outcomes
    and the environment's actual stop conditions to remain satisfied.
+   For a review-only assignment, first assemble the complete recommendation,
+   publish it as a visible draft message with a revision label, and pass that
+   identical full text and source/evidence identities to an independent reviewer.
+   The review must identify that draft and assess its release decision,
+   procedure, stop/recovery rules and evidence limits. Reviewing only the input
+   files does not review the owner's conclusion. Keep the draft and review
+   observable in the conversation when file changes are forbidden. The reviewer
+   returns the draft identity and findings in a visible message. Return material
+   corrections for re-review; publish only the reviewed conclusion. If the host
+   cannot expose this chain, keep final-review evidence unresolved.
 
 A narrow shutdown fix takes one owner and focused review. Stop dependent rollout
 when durable continuation is unproven, successor capacity/compatibility is
@@ -74,6 +88,13 @@ surface exercised. When work outlives rollout completion, also return the
 operational retirement assignment, deadline/escalation, and release evidence or
 remaining gaps. A readiness setting or process exit alone does not establish
 that accepted work survived.
+
+For an implementation, acceptance evidence should identify the initial and final
+logical job, completed effects, checkpoint progress, ownership epochs, and each
+counter/deadline layer. Show the harmful schedule fails without the repair and
+the intended schedule completes or reaches its specified recovery decision.
+Report surviving owned processes, sockets and datastore sessions after cleanup.
+For planning, return these as proposed checks with their remaining evidence gaps.
 
 ## Native invocation
 

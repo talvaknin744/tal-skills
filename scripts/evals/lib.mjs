@@ -26,6 +26,39 @@ export const SKILLS = {
   'background-maintenance': 'skills/engineering/background-maintenance',
   'stream-processing-design': 'skills/messaging/stream-processing-design',
 };
+export const EVALUATION_SUITES = {
+  'worker-rollout-regression': {
+    'graceful-draining': ['skills/engineering/graceful-draining', 'evals/distributed-correctness'],
+    'concurrency-correctness': ['skills/engineering/concurrency-correctness', 'evals/distributed-correctness'],
+    'infrastructure-change-safety': ['skills/infrastructure/infrastructure-change-safety', 'evals/infrastructure-change-safety'],
+    'overload-control': ['skills/performance/overload-control', 'evals/overload-control'],
+    'microservice-operations': ['skills/engineering/microservice-operations', 'evals/microservice-operations'],
+  },
+  'worker-rollout-integration': {
+    'concurrency-correctness': ['skills/engineering/concurrency-correctness', 'evals/worker-rollout-integration/correctness'],
+    'infrastructure-change-safety': ['skills/infrastructure/infrastructure-change-safety', 'evals/worker-rollout-integration/schema'],
+    'overload-control': ['skills/performance/overload-control', 'evals/worker-rollout-integration/fairness'],
+    'microservice-operations': ['skills/engineering/microservice-operations', 'evals/worker-rollout-integration/deadlines'],
+  },
+};
+export function evaluationSuite(name = 'engineering-toolkit') {
+  if (name === 'engineering-toolkit') return Object.fromEntries(Object.entries(SKILLS).map(([skill, source]) => [skill, [source, `evals/${skill}`]]));
+  if (!Object.hasOwn(EVALUATION_SUITES, name)) throw new Error(`Unknown evaluation suite: ${name}`);
+  return EVALUATION_SUITES[name];
+}
+// Add execution metadata absent from this legacy case without rewriting its
+// original prompt, rubric or fixture. The selected controls enter the freeze.
+function legacyExecutionControls(suite, skill, item) {
+  if (suite !== 'worker-rollout-regression' || skill !== 'concurrency-correctness'
+      || item.id !== 'cache-fill-invalidation') return undefined;
+  if (item.editable_files !== undefined || item.verification_argv !== undefined) {
+    throw new Error('Legacy execution adapter conflicts with declared case controls');
+  }
+  return {
+    editable_files: ['service.mjs'], verification_argv: ['node', 'verify.mjs'],
+    derivation: 'Original prompt and scope rubric authorize only service.mjs and require the supplied node verify.mjs; raw case and rubric remain unchanged.',
+  };
+}
 export const sha256 = value => createHash('sha256').update(value).digest('hex');
 export const canonical = value => JSON.stringify(value);
 export const treeDigest = records => sha256(canonical([...records].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))));
@@ -67,14 +100,17 @@ export async function copySnapshot(source, destination, records) {
   const copied = await inventory(destination);
   if (treeDigest(copied) !== treeDigest(records)) throw new Error('Snapshot changed while copying');
 }
-export async function loadCase(repo, skill, id) {
-  if (!Object.hasOwn(SKILLS, skill)) throw new Error(`Unknown skill: ${skill}`);
-  const corpusPath = path.join(repo, 'evals', skill, 'cases.json');
+export async function loadCase(repo, skill, id, suite = 'engineering-toolkit') {
+  const registry = evaluationSuite(suite);
+  if (!Object.hasOwn(registry, skill)) throw new Error(`Unknown skill: ${skill}`);
+  const corpusRoot = registry[skill][1];
+  const corpusPath = path.join(repo, corpusRoot, 'cases.json');
   const corpus = JSON.parse(await readFile(corpusPath, 'utf8'));
   const item = corpus.cases.find(entry => entry.id === id);
   if (!item) throw new Error(`Unknown case: ${skill}/${id}`);
+  if (item.skill !== undefined && item.skill !== skill) throw new Error('Case belongs to a different skill');
   safeRelative(item.fixture_dir);
-  if (!item.fixture_dir.startsWith(`evals/${skill}/fixtures/`)) throw new Error('Fixture outside its skill corpus');
+  if (!item.fixture_dir.startsWith(`${corpusRoot}/fixtures/`)) throw new Error('Fixture outside its skill corpus');
   const files = await inventory(path.join(repo, item.fixture_dir));
   if (canonical(files.map(entry => entry.path).sort()) !== canonical([...item.fixtures].sort())) throw new Error('Fixture declaration differs from actual files');
   return { item, files, corpusPath };
@@ -89,10 +125,11 @@ export async function runnerInputs(repo) {
   }
   return { runner, dependencies, runner_tree_sha256: treeDigest(runner), dependencies_tree_sha256: treeDigest(dependencies) };
 }
-export async function freezeCandidates(repo = REPO) {
+export async function freezeCandidates(repo = REPO, suite = 'engineering-toolkit') {
+  const registry = evaluationSuite(suite);
   const runner_inputs = await runnerInputs(repo);
   const candidates = {};
-  for (const [name, relative] of Object.entries(SKILLS)) {
+  for (const [name, [relative]] of Object.entries(registry)) {
     const records = await inventory(path.join(repo, relative));
     const entrypoint = await readFile(path.join(repo, relative, 'SKILL.md'), 'utf8');
     const frontmatter = entrypoint.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
@@ -101,31 +138,38 @@ export async function freezeCandidates(repo = REPO) {
     candidates[name] = { source_path: relative, description: meta.description, files: records, tree_sha256: treeDigest(records) };
   }
   const corpora = {};
-  for (const name of Object.keys(SKILLS)) {
-    const corpus = JSON.parse(await readFile(path.join(repo, 'evals', name, 'cases.json'), 'utf8'));
+  for (const [name, [, corpusRoot]] of Object.entries(registry)) {
+    const corpus = JSON.parse(await readFile(path.join(repo, corpusRoot, 'cases.json'), 'utf8'));
     corpora[name] = {};
-    for (const item of corpus.cases) {
-      const { files } = await loadCase(repo, name, item.id);
+    for (const item of corpus.cases.filter(entry => entry.skill === undefined || entry.skill === name)) {
+      if (Object.hasOwn(corpora[name], item.id)) throw new Error(`Duplicate case: ${name}/${item.id}`);
+      const { files } = await loadCase(repo, name, item.id, suite);
+      const executionControls = legacyExecutionControls(suite, name, item);
       corpora[name][item.id] = {
         case_sha256: sha256(canonical(item)), prompt_sha256: sha256(item.prompt),
         rubric_sha256: sha256(canonical(item.rubric)), fixture_tree_sha256: treeDigest(files),
+        ...(executionControls === undefined ? {} : { execution_controls: executionControls }),
       };
     }
   }
   let sourceGitHead = null;
   try { sourceGitHead = (await execFileAsync('git', ['rev-parse', 'HEAD'], { cwd: repo })).stdout.trim(); } catch { /* Content hashes remain authoritative. */ }
+  const suiteIdentity = suite === 'engineering-toolkit' ? {} : { evaluation_suite: suite };
   return {
+    ...suiteIdentity,
     format_version: 1, frozen_at: new Date().toISOString(), source_git_head: sourceGitHead,
     candidate_commit: null,
     identity_note: 'The exact file snapshot is authoritative; source_git_head is context, not an assertion that uncommitted candidate content belongs to that commit.',
     tree_serialization: 'JSON.stringify of records sorted by relative path in JavaScript UTF-16 code-unit order, each with path, sha256 and mode in that key order; SHA-256 of UTF-8 bytes.',
     candidates, corpora, runner_inputs,
-    freeze_sha256: sha256(canonical({ candidates, corpora, runner_inputs })),
+    freeze_sha256: sha256(canonical({ ...suiteIdentity, candidates, corpora, runner_inputs })),
   };
 }
 export function validateFreeze(freeze) {
   if (freeze.format_version !== 1 || !freeze.frozen_at || !freeze.candidates || !freeze.corpora) throw new Error('Invalid candidate freeze');
-  if (freeze.freeze_sha256 !== sha256(canonical({ candidates: freeze.candidates, corpora: freeze.corpora, runner_inputs: freeze.runner_inputs }))) throw new Error('Freeze manifest digest mismatch');
+  evaluationSuite(freeze.evaluation_suite);
+  const suiteIdentity = freeze.evaluation_suite === undefined ? {} : { evaluation_suite: freeze.evaluation_suite };
+  if (freeze.freeze_sha256 !== sha256(canonical({ ...suiteIdentity, candidates: freeze.candidates, corpora: freeze.corpora, runner_inputs: freeze.runner_inputs }))) throw new Error('Freeze manifest digest mismatch');
 }
 export async function prepareTrial({ repo = REPO, freezePath, skill, caseId, destination }) {
   const freeze = JSON.parse(await readFile(freezePath, 'utf8'));
@@ -134,7 +178,7 @@ export async function prepareTrial({ repo = REPO, freezePath, skill, caseId, des
   const candidate = freeze.candidates[skill];
   const frozenCase = freeze.corpora[skill]?.[caseId];
   if (!candidate || !frozenCase) throw new Error('Candidate/case missing from freeze');
-  const { item, files } = await loadCase(repo, skill, caseId);
+  const { item, files } = await loadCase(repo, skill, caseId, freeze.evaluation_suite);
   const actualFiles = await inventory(path.join(repo, candidate.source_path));
   if (treeDigest(actualFiles) !== candidate.tree_sha256) throw new Error('Candidate changed after freeze');
   if (treeDigest(files) !== frozenCase.fixture_tree_sha256 || sha256(canonical(item)) !== frozenCase.case_sha256) throw new Error('Case or fixture changed after freeze');
@@ -151,7 +195,9 @@ export async function prepareTrial({ repo = REPO, freezePath, skill, caseId, des
     await copySnapshot(path.join(repo, candidate.source_path), path.join(target, '.agents', 'skills', skill), actualFiles);
   }
   const initial = await inventory(workspace);
+  const executionControls = frozenCase.execution_controls ?? item;
   const run = {
+    ...(freeze.evaluation_suite === undefined ? {} : { evaluation_suite: freeze.evaluation_suite }),
     format_version: 1, run_id: path.basename(trial), case_id: caseId, skill,
     trial_kind: 'behavioral', execution_status: 'prepared', rubric_result: 'unscored',
     candidate_commit: freeze.candidate_commit, candidate_tree_sha256: candidate.tree_sha256,
@@ -159,8 +205,9 @@ export async function prepareTrial({ repo = REPO, freezePath, skill, caseId, des
     rubric_sha256: frozenCase.rubric_sha256, freeze_sha256: freeze.freeze_sha256,
     runner_tree_sha256: freeze.runner_inputs.runner_tree_sha256, dependencies_tree_sha256: freeze.runner_inputs.dependencies_tree_sha256,
     task_mode: item.task_mode, execution_mode: item.execution_mode ?? item.task_mode, activation_expected: item.activation,
-    editable_files: (item.editable_files ?? []).map(filename => `project/${safeRelative(filename)}`),
-    verification_argv: item.verification_argv ?? null,
+    editable_files: (executionControls.editable_files ?? []).map(filename => `project/${safeRelative(filename)}`),
+    verification_argv: executionControls.verification_argv ?? null,
+    ...(frozenCase.execution_controls === undefined ? {} : { execution_control_derivation: executionControls.derivation }),
     execution_environment_overrides: { PYTHONDONTWRITEBYTECODE: '1' },
     model: null, model_settings: null, model_selection: 'Inherited; no model or reasoning override passed.',
     discovery_mode: 'native repository .agents/skills discovery; body not preloaded',
@@ -191,7 +238,7 @@ export async function prepareTrial({ repo = REPO, freezePath, skill, caseId, des
   await writeFile(path.join(evidence, 'prompt.txt'), composePrompt(item.prompt) + '\n');
   await writeFile(path.join(evidence, 'case-prompt.txt'), item.prompt + '\n');
   // Private control data stays outside workspace; no rubric/answer is copied there.
-  await writeFile(path.join(trial, 'control.json'), JSON.stringify({ repo: source, skill, case_id: caseId, frozen_case: frozenCase, freeze_path: path.resolve(freezePath) }, null, 2) + '\n');
+  await writeFile(path.join(trial, 'control.json'), JSON.stringify({ ...(freeze.evaluation_suite === undefined ? {} : { evaluation_suite: freeze.evaluation_suite }), repo: source, skill, case_id: caseId, frozen_case: frozenCase, freeze_path: path.resolve(freezePath) }, null, 2) + '\n');
   return { trial, workspace, run, manifest };
 }
 export const composePrompt = prompt => `The supplied project is in ./project. Use relevant installed skills when useful.\n\n${prompt}`;
@@ -284,6 +331,7 @@ export async function runTrial({ trial, binary = DEFAULT_CODEX, execute = false,
   if (run.execution_status !== 'prepared') throw new Error('A trial may execute only once; prepare a fresh run for retries');
   const workspace = path.join(trial, 'workspace');
   const control = JSON.parse(await readFile(path.join(trial, 'control.json'), 'utf8'));
+  if (run.evaluation_suite !== undefined || control.evaluation_suite !== undefined) await loadControlledCase(trial, control);
   if (canonical(await runnerInputs(control.repo)) !== canonical(manifest.runner_inputs)) throw new Error('Runner or dependencies changed after freeze');
   const initial = await inventory(workspace);
   if (treeDigest(initial) !== manifest.workspace_before_sha256) throw new Error('Staged inputs changed before execution');
@@ -366,9 +414,30 @@ export async function runTrial({ trial, binary = DEFAULT_CODEX, execute = false,
     finally { await release(); }
   }
 }
+export async function loadControlledCase(trial, control) {
+  const run = JSON.parse(await readFile(path.join(trial, 'evidence', 'run.json'), 'utf8'));
+  if (run.evaluation_suite !== control.evaluation_suite) throw new Error('Trial suite binding mismatch');
+  if (control.evaluation_suite !== undefined) {
+    const freeze = JSON.parse(await readFile(control.freeze_path, 'utf8'));
+    validateFreeze(freeze);
+    if (freeze.evaluation_suite !== control.evaluation_suite || freeze.freeze_sha256 !== run.freeze_sha256
+        || run.skill !== control.skill || run.case_id !== control.case_id
+        || canonical(freeze.corpora[control.skill]?.[control.case_id]) !== canonical(control.frozen_case)) {
+      throw new Error('Trial control differs from its frozen suite');
+    }
+    const executionControls = control.frozen_case.execution_controls;
+    if (executionControls !== undefined
+        && (canonical(run.editable_files) !== canonical(executionControls.editable_files.map(filename => `project/${safeRelative(filename)}`))
+            || canonical(run.verification_argv) !== canonical(executionControls.verification_argv)
+            || run.execution_control_derivation !== executionControls.derivation)) {
+      throw new Error('Run execution controls differ from its frozen case');
+    }
+  }
+  return loadCase(control.repo, control.skill, control.case_id, control.evaluation_suite);
+}
 export async function scoringInputs({ trial, destination }) {
   const control = JSON.parse(await readFile(path.join(trial, 'control.json'), 'utf8'));
-  const { item } = await loadCase(control.repo, control.skill, control.case_id);
+  const { item } = await loadControlledCase(trial, control);
   if (sha256(canonical(item.rubric)) !== control.frozen_case.rubric_sha256) throw new Error('Rubric changed after freeze');
   const run = JSON.parse(await readFile(path.join(trial, 'evidence', 'run.json'), 'utf8'));
   await assertSealedEvidence(trial, run);
@@ -466,9 +535,10 @@ export async function preflightSkills(binary, workspace, skill, sandboxMode, tim
 export async function verifyTrial({ trial, checkId, timeoutMs = 60000 }) {
   if (!/^[a-z0-9][a-z0-9-]+$/.test(checkId)) throw new Error('Use a simple unique verification ID');
   const control = JSON.parse(await readFile(path.join(trial, 'control.json'), 'utf8'));
-  const { item } = await loadCase(control.repo, control.skill, control.case_id);
+  const { item } = await loadControlledCase(trial, control);
   if (sha256(canonical(item)) !== control.frozen_case.case_sha256) throw new Error('Case changed after freeze');
-  if (!item.verification_argv) return { execution_status: 'not_required', reason: 'This case has no executable verifier; score its answer/diff directly.' };
+  const verificationArgv = control.frozen_case.execution_controls?.verification_argv ?? item.verification_argv;
+  if (!verificationArgv) return { execution_status: 'not_required', reason: 'This case has no executable verifier; score its answer/diff directly.' };
   const run = JSON.parse(await readFile(path.join(trial, 'evidence/run.json'), 'utf8'));
   if (run.execution_status !== 'completed') throw new Error('Trial must complete before independent verification');
   await assertSealedEvidence(trial, run);
@@ -487,7 +557,7 @@ export async function verifyTrial({ trial, checkId, timeoutMs = 60000 }) {
     await mkdir(work); // A check ID is never overwritten.
     await copySnapshot(path.join(trial, 'workspace/project'), work, await inventory(path.join(trial, 'workspace/project')));
     const before = await inventory(work);
-    const command = item.verification_argv;
+    const command = verificationArgv;
     const started = Date.now();
     const outcome = await captureProcess(command[0], command.slice(1), { cwd: work, timeoutMs, env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' } });
     const result = {

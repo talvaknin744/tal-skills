@@ -1,0 +1,433 @@
+{
+  "format_version": 1,
+  "status": "authored_not_native_executed",
+  "score_scale": {
+    "0": "absent or wrong",
+    "1": "partial; critical partial remains unresolved",
+    "2": "satisfied with linked evidence"
+  },
+  "planned_hosts": {
+    "codex": "planned",
+    "claude": "blocked_authentication_pending_rerun"
+  },
+  "common_acceptance": [
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "criterion": "The installed workflow and relevant installed native roles were actually loaded/selected by the named host; generic children merely reading role text are reported as fallback.",
+      "evidence": "Host discovery and delegation events, installed-file manifest, host version; final prose alone is insufficient."
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "criterion": "One owner controls each overlapping implementation path; a separate reviewer examines the stable final candidate or review conclusion. Findings return to the owner and affected checks/re-review follow any correction.",
+      "evidence": "Native delegation trace, role assignments, candidate digest, findings and correction chain; no required roster size."
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "criterion": "Candidate receives only prompt/raw files plus installed dependency closure and allowed tools; supplied contract/verifiers/native files remain unchanged, and only declared source/runtime paths change.",
+      "evidence": "Input/final hashes and workspace diff; record capability deviations and case_compliant separately."
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "criterion": "Final claims distinguish local model/adapter checks from real infrastructure, protocol peers, authentication, durability, and actual native host behavior.",
+      "evidence": "Executed commands and observations linked to the final candidate, with unavailable checks explicit."
+    }
+  ],
+  "cases": [
+    {
+      "id": "tal-backend-delivery",
+      "workflow": "tal-backend-delivery",
+      "task_mode": "implement",
+      "prompt_file": "tal-backend-delivery/prompt.md",
+      "fixture_dir": "tal-backend-delivery/rawfiles",
+      "editable_files": [
+        "inventory.py",
+        "test_inventory.py"
+      ],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "verification_kind": "acceptance",
+      "baseline_expected_exit": 1,
+      "acceptance": [
+        {
+          "id": "completed_feature",
+          "severity": "critical",
+          "criterion": "Implements the complete reservation contract against actual SQLite; all seven public checks pass against final protected verifier.",
+          "evidence": "Verifier exit/output and final inventory.py; feature cannot end at a plan or unsupported success claim."
+        },
+        {
+          "id": "trusted_scope",
+          "severity": "critical",
+          "criterion": "Trusted tenant controls stock and operation-key namespace; body tenant cannot redirect effects.",
+          "evidence": "tenant_authority_and_scope check and actual authority path."
+        },
+        {
+          "id": "effect_identity",
+          "severity": "critical",
+          "criterion": "Same tenant/key/intent replays original durable receipt; changed SKU or quantity conflicts; unknown/insufficient operations do not consume identity.",
+          "evidence": "replay_after_lost_response, changed_intent, rejection_does_not_reserve_key assertions."
+        },
+        {
+          "id": "sqlite_atomicity",
+          "severity": "critical",
+          "criterion": "Overlapping duplicate calls create one durable reservation and one decrement; input rejection is side-effect free.",
+          "evidence": "overlapping_duplicates and malformed_input checks; source transaction/effect boundary review."
+        },
+        {
+          "id": "delivery_workflow",
+          "severity": "major",
+          "criterion": "Language owner and focused independent review are observed; other roles answer distinct required questions, and any material findings are corrected or honestly block completion.",
+          "evidence": "Native trace and candidate/review chain."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-cleanup-review",
+      "workflow": "tal-cleanup-review",
+      "task_mode": "implement",
+      "prompt_file": "tal-cleanup-review/prompt.md",
+      "fixture_dir": "tal-cleanup-review/rawfiles",
+      "editable_files": [
+        "README.md"
+      ],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "cli.py",
+        "--mode",
+        "legacy"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "acceptance": [
+        {
+          "id": "bounded_edit",
+          "severity": "critical",
+          "criterion": "Consolidates the duplicate setup command within README only; preserves prerequisite, starting directory, success output, and version-1 compatibility reason.",
+          "evidence": "README diff; supplied cli.py hash unchanged."
+        },
+        {
+          "id": "short_path",
+          "severity": "major",
+          "criterion": "Takes direct bounded edit and focused review; does not dispatch an unrelated architecture, durability, or fault-injection pipeline.",
+          "evidence": "Actual native dispatch/question trace, without prescribing a rigid headcount."
+        },
+        {
+          "id": "reader_command",
+          "severity": "major",
+          "criterion": "Runs the documented command and reports ready (legacy) with exit zero.",
+          "evidence": "Command output, final command spelling, retained compatibility note."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-consistency-diagnosis",
+      "workflow": "tal-consistency-diagnosis",
+      "task_mode": "implement",
+      "prompt_file": "tal-consistency-diagnosis/prompt.md",
+      "fixture_dir": "tal-consistency-diagnosis/rawfiles",
+      "editable_files": [
+        "counter.py"
+      ],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "verification_kind": "acceptance",
+      "baseline_expected_exit": 1,
+      "acceptance": [
+        {
+          "id": "semantic_history",
+          "severity": "critical",
+          "criterion": "Explains how two individually protected reads/writes can lose one completed increment and identifies the full invariant enforcement boundary.",
+          "evidence": "Concrete two-read history and counter.py diff."
+        },
+        {
+          "id": "actual_concurrency",
+          "severity": "critical",
+          "criterion": "Final protected verifier observes both snapshots zero, both threads joined, and final counter two while preserving hook contract.",
+          "evidence": "Runtime verifier output; no sleeps, weakened assertions, bypassed hook, or unbounded waits."
+        },
+        {
+          "id": "before_after_evidence",
+          "severity": "major",
+          "criterion": "Records original forbidden result and final passing repair, with local threading scope explicit.",
+          "evidence": "Baseline output and final candidate check; a stress pass alone is insufficient."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-messaging-evolution",
+      "workflow": "tal-messaging-evolution",
+      "task_mode": "implement",
+      "prompt_file": "tal-messaging-evolution/prompt.md",
+      "fixture_dir": "tal-messaging-evolution/rawfiles",
+      "editable_files": [
+        "consumer.py"
+      ],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "verification_kind": "acceptance",
+      "baseline_expected_exit": 1,
+      "acceptance": [
+        {
+          "id": "snapshot_order",
+          "severity": "critical",
+          "criterion": "Revision 12 then duplicate 12 then 11 cannot regress account a or duplicate its effect; account b advances independently.",
+          "evidence": "Protected verifier ordered outcomes and literal final state/effect assertions."
+        },
+        {
+          "id": "identity_conflicts",
+          "severity": "critical",
+          "criterion": "Message identity and account revision are separate; conflicting current revisions or reused message content are rejected without effects.",
+          "evidence": "Verifier conflict cases and source handling."
+        },
+        {
+          "id": "poison_and_limits",
+          "severity": "major",
+          "criterion": "Malformed input is rejected before effects and local checks are not described as broker ack, persistence, concurrent-consumer, or exactly-once proof.",
+          "evidence": "ValueError/no-state-change assertions and final integration gap."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-worker-rollout",
+      "workflow": "tal-worker-rollout",
+      "task_mode": "review",
+      "prompt_file": "tal-worker-rollout/prompt.md",
+      "fixture_dir": "tal-worker-rollout/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [],
+      "verification_kind": "none",
+      "baseline_expected_exit": null,
+      "acceptance": [
+        {
+          "id": "three_replacements",
+          "severity": "critical",
+          "criterion": "Derives that existing fail-on-deployment plan can exhaust three failures during one 18-hour job; uses actual maintenance deferral contract while preserving poison-job exhaustion.",
+          "evidence": "Trace arithmetic, queue-contract citations, replacement procedure and poison control."
+        },
+        {
+          "id": "admission_ownership",
+          "severity": "critical",
+          "criterion": "Procedure handles poller admission and in-flight claims, durable checkpoint confirmation, ownership generation, successor compatibility, and bounded 90-second deadline.",
+          "evidence": "Procedure tied to supplied APIs/facts; readiness/PDB alone is not drain evidence."
+        },
+        {
+          "id": "uncertainty_and_stops",
+          "severity": "critical",
+          "criterion": "Checkpoint/defer response uncertainty is reconciled; stale owners and forced termination have a bounded recovery path; observable stop conditions cover unavailable store/capacity.",
+          "evidence": "Concrete observations, stop/recovery rules and required rehearsal cases."
+        },
+        {
+          "id": "no_fabricated_execution",
+          "severity": "major",
+          "criterion": "Reports planning/review only, with no claim that cluster drain, forced kill, or 18-hour work ran.",
+          "evidence": "Final wording and absence of external mutations."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-recovery-validation",
+      "workflow": "tal-recovery-validation",
+      "task_mode": "review",
+      "prompt_file": "tal-recovery-validation/prompt.md",
+      "fixture_dir": "tal-recovery-validation/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [
+        "scratch/",
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "restore.py",
+        "backup.json",
+        "scratch/runner-check"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "acceptance": [
+        {
+          "id": "isolated_rehearsal",
+          "severity": "critical",
+          "criterion": "Runs restore into new scratch target and preserves all source artifacts.",
+          "evidence": "Command output, scratch ledger, source hash comparison."
+        },
+        {
+          "id": "semantic_disagreement",
+          "severity": "critical",
+          "criterion": "Detects missing order-2, unexpected order-3, order-1 payload version/amount mismatch, misleading completed progress, and duplicate charge-1 receipts.",
+          "evidence": "Manifest/backup/effect comparison with named records."
+        },
+        {
+          "id": "effect_reconciliation",
+          "severity": "critical",
+          "criterion": "Does not blindly replay order-2 because its charge-2 already exists; does not recommend reopening writes with unresolved mismatches.",
+          "evidence": "Recovery recommendation and effect identity accounting."
+        },
+        {
+          "id": "objective_measurement",
+          "severity": "major",
+          "criterion": "Reports actual local elapsed time separately from successful recovery RTO, acknowledges zero-loss objective failure, and avoids treating a one-minute snapshot age as the full accepted-work loss measure.",
+          "evidence": "Measured command timestamps/duration plus integrity-dependent RPO/RTO conclusion."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-mcp-integration",
+      "workflow": "tal-mcp-integration",
+      "task_mode": "review",
+      "prompt_file": "tal-mcp-integration/prompt.md",
+      "fixture_dir": "tal-mcp-integration/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "probe.py"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "acceptance": [
+        {
+          "id": "principal_boundary",
+          "severity": "critical",
+          "criterion": "Finds private handle cache lookup before owner check and forged claimedPrincipal authority; distinguishes each from verified request identity.",
+          "evidence": "gateway.py locations and owner/next-caller/argument-principal probe observations."
+        },
+        {
+          "id": "envelope_contract",
+          "severity": "critical",
+          "criterion": "Finds header/body mismatch reaching dispatch and keeps current per-request 2026-07-28 contract rather than prescribing a legacy initialize session.",
+          "evidence": "Method disagreement vector, dispatch count, pins.json and contract."
+        },
+        {
+          "id": "pin_and_scope",
+          "severity": "major",
+          "criterion": "Names MCP revision/SDK pin and states that local app adapter observations do not establish SDK HTTP interoperability or real token validation.",
+          "evidence": "Compatibility assessment and concrete missing real-peer/authentication checks."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    },
+    {
+      "id": "tal-a2a-integration",
+      "workflow": "tal-a2a-integration",
+      "task_mode": "review",
+      "prompt_file": "tal-a2a-integration/prompt.md",
+      "fixture_dir": "tal-a2a-integration/rawfiles",
+      "editable_files": [],
+      "runtime_output_paths": [
+        "__pycache__/"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "probe.py"
+      ],
+      "verification_kind": "behavior_observation",
+      "baseline_expected_exit": 0,
+      "acceptance": [
+        {
+          "id": "observer_lifecycle",
+          "severity": "critical",
+          "criterion": "Finds observer disconnect canceling shared work and starving the other observer; recommends task-state reconciliation without promising replay not in contract.",
+          "evidence": "adapter.py disconnect/complete and one_observer_left observation."
+        },
+        {
+          "id": "task_authority",
+          "severity": "critical",
+          "criterion": "Finds foreign get and missing owner checks; explicit context must agree with task authority rather than mutate it.",
+          "evidence": "foreign_get/different_context observations and adapter locations."
+        },
+        {
+          "id": "terminal_effect",
+          "severity": "critical",
+          "criterion": "Finds terminal continuation restarting work and a second effect; distinguishes message/task/context identity and application effect protection.",
+          "evidence": "terminal_continuation effects=2 and state transition review."
+        },
+        {
+          "id": "wire_and_storage",
+          "severity": "major",
+          "criterion": "Uses spec 1.0.1 versus wire 1.0 accurately and states in-memory/local adapter limits; no SDK conformance or durable execution claim.",
+          "evidence": "Pins, final compatibility statement, required peer/restart checks."
+        }
+      ],
+      "common_acceptance_ids": [
+        "native_loading",
+        "ownership_and_review",
+        "isolation_and_scope",
+        "evidence_limits"
+      ]
+    }
+  ]
+}

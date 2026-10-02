@@ -56,6 +56,8 @@ again. Prepare sufficient eligible successor capacity before this transition.
 Quiesce applicable HTTP admission, queue pulls, prefetch, timers, and child-task
 creation. Track reserved as well as executing work. Keep dependencies needed for
 checkpointing, acknowledgments, and lease or broker heartbeats alive during drain.
+Reconcile that inventory against the authoritative ownership records after the
+admission transition; an empty local task set can miss a receive still completing.
 
 Publish resumable progress and ownership transitions durably. Use conditional
 updates for the current ownership epoch; enforce fencing at protected resources
@@ -73,6 +75,8 @@ Use deterministic schedules around the changed boundaries. Include successive
 retirements of A, B, and C; interruption after an effect but before its checkpoint;
 an expired owner resuming; and failure to persist progress before the deadline.
 Cover checkpoint compatibility and each independent retry limit that applies.
+Exercise real signal delivery and resource cleanup when changing shutdown code;
+include a repeated stop signal and cancellation that returns before its work ends.
 
 For implementation, run relevant local regressions and the authorized platform
 checks available. For review or design, provide concrete evidence locations and

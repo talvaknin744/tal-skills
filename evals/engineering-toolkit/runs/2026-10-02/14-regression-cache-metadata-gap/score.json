@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-01",
+  "run_evidence_sha256": "ba2442d0d463f996f4af234802884d0f68d97b218542d489917e626989c3eb0c",
+  "final_workspace_tree_sha256": "656b491890f01795d5cfbb0654f14ca6c5dcd054f70f6a34978bed92624ded0d",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "f765ba1f99ccc414b74bfabd6e76205a19cf7950e2a7a361f94fdc33ddc5ebac",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "observer-supplement.json",
+        "locator": "command_argv, exit_code=0, checks_passed=5, checks[]; evidence/trace.jsonl completed item_15 line 32",
+        "observation": "The unchanged original node verify.mjs, with original model.mjs and requirements.md protected and only final service.mjs overlaid, actually exits 0 and passes all five named checks. Protected inputs match before/after SHA-256. The agent also records a baseline 2/5 failure and post-edit 5/5 pass. This is executed deterministic evidence, not a rewritten or merely claimed test."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "lines 7-18; original-project/model.mjs lines 56-67; original-project/requirements.md lines 19-26; observer-supplement.json checks[]",
+        "observation": "Cache misses publish using the supplied shared atomic publishIfFresh, and writes await database commit then shared monotonic advanceFloor before resolving. The adapter compares record revision against both non-evictable floor and cached revision; floors survive eviction and never regress on older notifications. The service retains normal cache hits and per-ID behavior. Protected delayed-fill, eviction and out-of-order-floor schedules pass; no process-local lock/delay or unconditional fill substitutes for the shared interface."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace.patch",
+        "locator": "two substitutions in service.mjs; observer-supplement.json original_inputs/protected_inputs/overlay/structured_metadata_gap; original-project/requirements.md line 28",
+        "observation": "Actual prompt scope is satisfied: only service.mjs differs, its public read/write signatures remain unchanged, and model.mjs/verify.mjs/requirements.md are byte-identical to original bound fixture hashes. It continues using populated cache rather than always reading the database, adds no infrastructure and weakens no test. Separately, sealed input_integrity.allowed_changes_only remains false because the frozen legacy case lacks editable_files and the runner audited an empty list; this observer score does not alter or pass that structured runner gate."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1-3; evidence/trace.jsonl item_10 line 22; final-project/service.mjs lines 10-12",
+        "observation": "Partial: the code returns an already captured database record after a rejected stale cache fill, which is allowed for an overlapping read, and the explanation correctly says older fills must not affect later reads. However, neither the final answer nor recorded commentary explicitly explains the permitted earlier-snapshot return versus a read invoked after write acknowledgement. No impossible latest-at-response promise is made, but the rubric requested that boundary explanation."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3; original-project/requirements.md lines 24-26 and 30-34",
+        "observation": "Partial: explicitly confines the pass to successful calls in the supplied overlap model and disclaims crash recovery and a real database/cache transaction. It does not separately state the supplied floor-outliving-readers assumption, arbitrary marker-expiry gap, replica-read gap or need to verify production cache atomicity. Those limits are not claimed solved, but the complete requested scope explanation is missing."
+      }
+    }
+  ]
+}

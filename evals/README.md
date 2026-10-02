@@ -4,6 +4,13 @@ These cases are authored evaluation inputs, **not evidence that the skill has pa
 
 Each `<skill-name>/cases.json` keeps prompts, available capabilities, and observable scoring criteria separate from the project fixtures. Give the agent only the selected prompt, its fixture directory, the candidate skill, and the stated capabilities. Do not include the rubric, other cases, or this evaluator guide in its context. Each fixture directory is a separate project.
 
+For an instruction change, select existing relevant and nontrigger cases to
+protect old behavior, and add a focused case for each new capability or changed
+boundary. Run both groups against the revised candidate and report them
+separately. Preserve the existing case inputs and rubrics; if a contract changes,
+keep the original and explain a versioned replacement. See the
+[change evaluation contract](../CONTRIBUTING.md#changing-skills-agents-or-workflows).
+
 ## Run a case
 
 1. Copy the selected fixture directory into a fresh temporary workspace. Record the candidate skill's commit, model, settings, available tools, and case ID.

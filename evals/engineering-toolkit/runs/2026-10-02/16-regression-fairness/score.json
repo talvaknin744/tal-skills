@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-fairness-01",
+  "run_evidence_sha256": "0a0b8d64db7e33a6e97b842799c74bf65d9361914ea472cbe18a4968d5763d65",
+  "final_workspace_tree_sha256": "ccef469fafe6fd34235a3cd6be1264ff297cb6766c438cbebb0030f1d6591ff6",
+  "case_id": "tenant-fanout",
+  "candidate_tree_sha256": "103bd66c00675b3330f8a4772e0ab0d22ca3add28b8e02b99e4af1932f8ba712",
+  "rubric_sha256": "2e45593ecf899eee040f39374a35b3598ae9b1dae324867f1c9b2bd08a377656",
+  "reviewer": "/root/archive_storage \u2014 independent full-candidate overload regression reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "budget-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 5",
+        "observation": "Accounts for four pods times 40 admitted requests times three concurrent queries = 480 potential connections against 100 fleet allocation. Requires fleet-wide three-connection permits for both reports and export dispatch, keeps the physical pool as final cap and explicitly denies that per-pod caps imply fleet enforcement. Its illustrative admitted budget is 90 (6 B + 6 export + 78 shared) with 10 remaining as headroom; values require occupancy measurement."
+      }
+    },
+    {
+      "id": "fairness",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5, 7 and 13",
+        "observation": "Uses verified tenant identity, reserves an end-to-end B lane and schedules other work by measured connection time/cost class rather than equal request tokens. Bounds transient queues by count/bytes/wait, preserves routing/worker/pool availability, and proposes mixed-cost/uneven-routing tests of the defined B success objective. Does not guarantee the objective without its burst/percentile/tail specification."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 9",
+        "observation": "Holds synchronous execution permits until issued queries actually finish or cancellation releases their connections; caller disconnect only detaches the caller. Returns 202 only after durable persistence and backlog/drain admission, transfers obligation to the persisted job, takes worker permits at dispatch and records completion/effects before ack. Explicitly forbids deleting accepted exports due to age or overload."
+      }
+    },
+    {
+      "id": "feedback-recovery",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11 and 13",
+        "observation": "Separates offered/admitted/rejected/timely/late/failed work, excludes fast rejections from admitted latency, limits adaptive capacity below the fleet budget, replaces immediate retries with bounded jitter respecting deadlines, and includes offered/rejected autoscaling demand. Recovery tests cover offered loads, slowdown, disconnects, accepted-worker interruption, backlog conservation/drain and no surge/controller oscillation."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/trace.jsonl inspection command events; evidence/answer.md line 13",
+        "observation": "Original/final service.md hashes match, workspace changes/diff are empty and recorded commands inspect supplied files/references. The answer explicitly calls recovery checks proposed and denies observed results; no runtime, verifier, external or model validation is claimed."
+      }
+    }
+  ]
+}

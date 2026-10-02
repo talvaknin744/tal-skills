@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadline-report-integration-nontrigger-10",
+  "run_evidence_sha256": "dc9b10cece9ddaa87459459d1da0438f1c4099c158de324c8f63ec60a74cd31f",
+  "final_workspace_tree_sha256": "03215f472a0b6c72f27ede5dbbf1d679b7654458e8d8fef7a21e0fe0342bf4c4",
+  "case_id": "duration-format-nontrigger",
+  "candidate_tree_sha256": "23f7986b50ece9a6e444c38dd87627e9afe188f6573ed3a4eec9d77b091969c9",
+  "rubric_sha256": "725a4f98d412f385061b9e901cdebabb2669fa690e27f03368b4c8b3b3332e77",
+  "reviewer": "archive_storage (independent OPS reviewer, /root/archive_storage)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "lines 5, 7; evidence/answer.md line 1; evidence/run.json activation_observation",
+        "observation": "Recorded commands only discover/read label.json; no OPS body/reference load is observed. Answer adds no clock authority, timeout, rollout, cancellation or resource-lifecycle work."
+      }
+    },
+    {
+      "id": "correct-label",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Exactly one sentence gives 02:05 for 125 seconds in mm:ss format."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes and forbidden_changes; evidence/workspace.patch; evidence/trace.jsonl lines 5, 7; evidence/answer.md line 1",
+        "observation": "Original/final label.json hash matches, patch/change arrays are empty and both commands are read-only. Answer makes no unsupported fixture/visual/runtime verification claim."
+      }
+    }
+  ]
+}

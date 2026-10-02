@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-backfill-final-03",
+  "run_evidence_sha256": "db01f929a3e10afda7eae1eb669db9ae3bfdab7f474e03b0c213e7162e069877",
+  "final_workspace_tree_sha256": "0e4d5cd0c7997ebf16192a5c8745b29b48d0dfc34015ff94d9d57bd41206ce15",
+  "case_id": "backfill-recreated-identity",
+  "candidate_tree_sha256": "82295c476bad3068261ef6fe4c72977506b211beb0851d8a1e30a68f6a62efa4",
+  "rubric_sha256": "d23c31bb9149fd6aa5fad0a56983ce54f9c9f25ba17b51356e4acacb9a00e01a",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "coherent-source-observation",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 4\u201311; model.py lines 7\u201314,55\u201357",
+        "observation": "Reads a single immutable source snapshot before after_read; text, incarnation and source_rev all come from that observation through both checkpoints, preventing mixed-token relabeling."
+      }
+    },
+    {
+      "id": "incarnation-and-revision-guard",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "line 11; model.py lines 67\u201373; verify.py lines 50\u201368",
+        "observation": "Publishes using the authority atomic equality predicate on incarnation AND source_rev. Intervening update and delete/recreate with reused numeric revision reject stale publication; no string ordering or foreground overwrite."
+      }
+    },
+    {
+      "id": "mapping-and-retry",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 5\u201311; verify.py lines 42\u201376",
+        "observation": "Maps both supported pending=0/paid=1; missing/stale source yields False, fresh updated/replacement retries succeed, and complete protected row comparisons preserve source/unrelated fields. Independent disposable execution passes all four schedules."
+      }
+    },
+    {
+      "id": "scope-and-independent-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1\u201311; trace.jsonl line31 item_15; workspace-changes.json; final-project/verify.py lines10\u201316,45\u201376",
+        "observation": "Only migration.py changes, both checkpoints remain, and the protected verifier passes. The final evidence table labels independent literal expected rows, complete actual sets and missing/extras; names local map_if_current lock atomicity and explicitly unverified DB transaction semantics; states supplied old-writer revision/representation maintenance and unknown other generations/admission. Production/isolation/replication/process proof is explicitly excluded, not asserted."
+      }
+    }
+  ]
+}

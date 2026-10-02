@@ -11,13 +11,13 @@ for (let i = 0; i < args.length; i++) {
   if (key === '--execute') options.execute = true;
   else { if (!args[i + 1] || args[i + 1].startsWith('--')) throw new Error(`Missing value: ${key}`); options[key.slice(2)] = args[++i]; }
 }
-const allowed = { freeze: ['repo','out'], prepare: ['repo','freeze','skill','case','out'], run: ['trial','binary','execute','timeout-ms'], verify: ['trial','check-id'], 'score-inputs': ['trial','out'], 'check-score': ['score','rubric','trial'] };
+const allowed = { freeze: ['repo','out','suite'], prepare: ['repo','freeze','skill','case','out'], run: ['trial','binary','execute','timeout-ms'], verify: ['trial','check-id'], 'score-inputs': ['trial','out'], 'check-score': ['score','rubric','trial'] };
 for (const key of Object.keys(options)) if (!allowed[command]?.includes(key)) throw new Error(`Unknown option for ${command}: --${key}`);
 const requireOption = name => { if (!options[name]) throw new Error(`--${name} is required`); return options[name]; };
 let result;
 if (command === 'freeze') {
   const output = path.resolve(requireOption('out'));
-  result = await freezeCandidates(path.resolve(options.repo ?? REPO));
+  result = await freezeCandidates(path.resolve(options.repo ?? REPO), options.suite);
   await mkdir(path.dirname(output), { recursive: true });
   await writeFile(output, JSON.stringify(result, null, 2) + '\n', { flag: 'wx' });
   result = { freeze: output, freeze_sha256: result.freeze_sha256, candidates: Object.keys(result.candidates).length };

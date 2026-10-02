@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-repaired-08",
+  "run_evidence_sha256": "75e4fac6d7fe7a4c0b92c5f9d706ffa505024822a267decfc040fc85b891898b",
+  "final_workspace_tree_sha256": "fdbc927bb01588ae6d62efed9de1f34bae2caefb49a18765e1849773879f64ee",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "477470e2c65567e814850c84f7d0dd913b4627e91380d7f3cc3882331c5b1644",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra \u2014 independent full-candidate reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "item_14 line30; evidence/checks.json:checks[0]; review.md:Protected reviewer execution",
+        "observation": "Actual supplied node verify.mjs executes final service and exits0 with all5 unchanged checks passing. Sealed independent-01 and reviewer original-protected-input execution with final service overlaid match. No tests or adapters were rewritten to obtain success."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "7\u201318; original-project/model.mjs:54\u201367; original-project/verify.mjs:16\u201351; evidence/trace.jsonl:item_16 line33",
+        "observation": "Both reads and writes await shared atomic publishIfFresh. That operation rejects below floor/current cached revision and raises the shared floor on acceptance; a rejected older writer already observes a higher floor. Original eviction and reordered-notification checks pass; recorded extra controlled writer-publication delay also confirms monotonic floor/value after eviction. No local lock or evictable-only marker is used."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0],forbidden_changes; evidence/workspace.patch; final-project/service.mjs:1\u201320; original-project/verify.mjs:54\u201366",
+        "observation": "Only service.mjs changes two adapter calls, preserving constructor/read/write signatures and all protected inputs. Cache-hit path stays intact; repeated reads and unrelated-key tests preserve authority-read count. No package, new infrastructure, always-database bypass or weakened requirement is introduced."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "5; evidence/trace.jsonl:item_17 line34",
+        "observation": "The final report explicitly distinguishes reads invoked after a successful write, which return that revision or newer, from reads already overlapping, which may return their captured older snapshot. It states the shared-floor/authoritative-capture assumptions rather than latest-at-response semantics. Code returns captured records while preventing stale publication."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "5; evidence/trace.jsonl:item_17; original-project/requirements.md:24\u201334",
+        "observation": "The result is conditional on supplied adapters, authoritative invocation-time captures and surviving shared floors, and expressly excludes crash recovery, replica freshness and production multi-process behavior. This bounds the atomic revision evidence to the successful supplied model rather than real production Redis/database transactions; the explicit floor-retention dependency does not promise arbitrary marker lifetime. Exact production-system words are unnecessary for this semantic scope distinction."
+      }
+    }
+  ]
+}

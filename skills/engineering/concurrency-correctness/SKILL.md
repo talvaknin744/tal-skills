@@ -14,7 +14,7 @@ Name the operation and what must remain true after successful completion. Separa
 
 Specify whether the reader needs an acknowledged write, a consistent snapshot, a bounded age, or the latest value under the datastore's documented semantics. Identify permitted intermediate states and behavior when freshness cannot be established. Ask only when an unresolved business rule changes correctness; continue gathering evidence meanwhile.
 
-**Done:** every scoped claim has an observable success or forbidden outcome; assumptions that affect the contract are explicit.
+**Done:** every scoped claim has an observable success or forbidden outcome. A freshness claim identifies the invocation/acknowledgement boundary, permitted overlapping reads, and source/adapter assumptions.
 
 ## 2. Reconstruct the history
 
@@ -31,6 +31,7 @@ Locate the atomic decision or ordering rule that excludes the bad history. A fre
 Load the branch that matches the history:
 
 - For read-check-write, conflicting edits, or cross-row invariants, read [transactions.md](references/transactions.md).
+- For independently accepted updates later combined by a merge, read [merge-invariants.md](references/merge-invariants.md).
 - For delayed cache fills, invalidation, expiry, or eviction, read [cache-coherence.md](references/cache-coherence.md).
 - For replica lag or a dependent service missing an acknowledged write, read [replica-reads.md](references/replica-reads.md).
 - For reordered messages, timeouts, or a previous owner returning, read [delayed-work.md](references/delayed-work.md).
@@ -51,4 +52,9 @@ Use real datastore integration checks when correctness depends on isolation, loc
 
 Present the invariant, failing history, enforcement point, changed files or evidence-backed finding, and checks performed. For operational diagnosis, identify useful version/conflict/lag signals and the contract they measure; cache hit rate alone is not a consistency metric. Include material capacity costs when a fix adds authoritative reads or serialization. Attribution and version-sensitive boundaries are in [sources.md](references/sources.md).
 
-**Done:** the user can assess exactly which execution is prevented, what remains possible, and what evidence supports the result.
+**Done:** the final report states prevented and permitted executions with evidence. For freshness work, include an ordering/contract row naming the relevant successful acknowledgement, read invocation boundary, guaranteed results and permitted overlap, including whether an overlapping read may return its captured snapshot; distinguish the required contract from any stronger chosen implementation policy. For cache work, return four compact boundary rows: source/replica and adapter; notification/recovery; ordering-metadata lifecycle/durability; actual thread/process/host topology. Each row states actual supplied or exercised evidence, result, unsupported boundary and applicable next check. Fill every row with the result or specific unknown, including excluded scope; distinguish multiple service objects sharing one process from independently running processes. Propose unexecuted next checks within the task's scope.
+
+For independently accepted decisions that merge, return separate validation
+controls for one uncontended successful request, competing distinct requests,
+duplicate replay, and authority loss/recovery. State each expected caller result
+and business state, and whether its check ran or remains proposed.

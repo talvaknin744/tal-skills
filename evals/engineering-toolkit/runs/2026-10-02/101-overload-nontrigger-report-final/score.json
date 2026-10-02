@@ -1,0 +1,54 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-report-integration-nontrigger-15",
+  "run_evidence_sha256": "22cf0072156524bbfaf297800392be484ee2aed42b9c24f3cf96a4b6427952a8",
+  "final_workspace_tree_sha256": "8a87feb7b6a8801e6364f89c56b6aa159cce5da60a5dbc15dc5ffd8e38302cef",
+  "case_id": "local-label-rotation",
+  "candidate_tree_sha256": "1fbcff1cfc7ed2a331a7ce422a80c5ac72677f856200120b621702660a240e17",
+  "rubric_sha256": "4f7ade04e54f5af9de0b5fe4ee4c75b7fdd4da21afb7afd431f80583740a5235",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. Candidate metadata was observed but candidate body read was not observed; this is not proof against unrecorded loading. These conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md and evidence/run.json",
+        "locator": "answer lines 1-3; activation_observation.status=not_observed",
+        "observation": "Answers only the local rotate question without overload-control concepts. Metadata was discovered, but no body read was observed; this does not prove there was no unrecorded loading."
+      }
+    },
+    {
+      "id": "selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1-3",
+        "observation": "Correctly identifies that set removes the repeated anna and sorted changes order, yielding [ben, cy, anna]."
+      }
+    },
+    {
+      "id": "minimal-fix",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3",
+        "observation": "Recommends ordered = labels and retains the existing rotation to preserve multiplicity/order; no redesign."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "changes=[]; unchanged baseline; answer line 3",
+        "observation": "Both files remain unchanged and the response makes only supplied local semantic claims."
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ function markdownFiles(directory) {
     return entry.isDirectory() ? markdownFiles(filename) : entry.name.endsWith('.md') ? [filename] : [];
   });
 }
-const files = ['README.md', 'CONTRIBUTING.md'].map(name => path.join(root, name));
+const files = ['README.md', 'CONTRIBUTING.md', 'AGENTS.md'].map(name => path.join(root, name));
 for (const directory of ['docs', 'examples', 'agents', 'workflows']) files.push(...markdownFiles(path.join(root, directory)));
 const failures = [];
 let links = 0;

@@ -1,0 +1,49 @@
+{
+  "format_version": 1,
+  "scenario_id": "worker-rollout-deadline-cancellation",
+  "withheld_from_candidate": true,
+  "physical_read_isolation": false,
+  "rubric_source": "case-index.json acceptance + named common_acceptance entries",
+  "invariants": {
+    "budget": {
+      "platform_seconds": 75,
+      "hook_seconds": 15,
+      "application_ceiling_seconds": 60,
+      "remaining_at_native_return": 12,
+      "exit_margin": 4,
+      "naive_wall_remaining_after_rollback": 52,
+      "release8_seconds_after_checkpoint_timeout": 64,
+      "required": "No operation gets a reset budget; full8-second release starting at56 cannot finish before60"
+    },
+    "job_outcome": {
+      "final_receipt": null,
+      "last_confirmed_cursor": 840,
+      "attempted_cursor": 860,
+      "required": "Unknown attempted checkpoint remains unknown until inspect; no success ACK or fabricated terminal cancellation"
+    },
+    "ownership": {
+      "old_epoch": 12,
+      "new_epoch": 13,
+      "takeover_at_seconds": 32,
+      "old_native_return_at_seconds": 48,
+      "required": "Resource-side protection and conditional release; ledger reconciler honors user cancel intent"
+    },
+    "cleanup": {
+      "required_ids": [
+        "archive-531/tmp/compress-840",
+        "archive-532/tmp/compress-500",
+        "archive-532/result/chunk-400",
+        "archive-533/tmp/compress-100"
+      ],
+      "required": "Explicit accountable temporary/published object disposition, retirement deadline/escalation and proof producers stopped/fenced before terminal cancel"
+    }
+  },
+  "acceptance_evidence": {
+    "native_behavior": "Host events and child metadata, distinct from plan correctness and evaluator score",
+    "candidate": "Final allowed files digest and unchanged protected input/native closure hashes",
+    "artifact_observation": "Command stdout + exit + observer input/code digest; not real-runtime behavior",
+    "independent_review": "Candidate-specific assignment/findings and correction/review chain; separate from final independent evaluator grading"
+  },
+  "native_collector_limit": "prepare drops unique scenario id/acceptance; parent must bind scenario id and fixture index hash externally. It prepends $tal-worker-rollout on every turn.",
+  "status": "frozen authored invariants; raw local observation commands completed; no native/model execution"
+}

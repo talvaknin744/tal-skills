@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-ops-nontrigger-02",
+  "run_evidence_sha256": "ecfe19141aa074e79304cc4610d97a4e7db01b4ffc973e533f951dc260320c2a",
+  "final_workspace_tree_sha256": "583142a758d599920e35dbec1d1391eb1ad395dd5c43f6fbd04c7bf043fc7921",
+  "case_id": "stylesheet-review-nontrigger",
+  "candidate_tree_sha256": "a3fbcb874805c0705619b848a2a9be0f531046d11cf85f19b8ae01a30edfec6d",
+  "rubric_sha256": "eb5289e97fff7e51a19e6c15596f461cb29c7ee3a8bfe343c38595e08b46958a",
+  "reviewer": "/root/archive_storage \u2014 independent full-candidate old nontrigger reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed commands item_1 line 5 and item_2 line 7; evidence/run.json activation_observation; evidence/answer.md line 1",
+        "observation": "Recorded commands only locate/read style.md and optional local instruction filenames. No microservice-operations body read is observed. The answer introduces no rollout, metrics, error-budget or failure-injection work."
+      }
+    },
+    {
+      "id": "padding",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; original-project/style.md",
+        "observation": "Supplies padding: 8px 12px and correctly explains first value as top/bottom, second as left/right under the supplied ordinary CSS contract."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Keeps the response to the requested padding and its shorthand interpretation, plus a supported unchanged-file statement. Claims no visual or runtime verification."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/workspace.patch empty; evidence/answer.md line 1",
+        "observation": "Original/final style.md byte hashes match and no workspace change is recorded. Only inspection commands are observed; the unchanged-file statement is supported and no executable/visual test is claimed."
+      }
+    }
+  ]
+}

@@ -4,6 +4,9 @@ Use this reference when changing behavior around an unreliable dependency or sha
 
 Start with the caller's useful lifetime. Allocate the end-to-end deadline across queue or pool acquisition, connection establishment, response waiting, and any retries. Propagate remaining budget where supported. Check what cancellation actually stops: abandoning a response may leave server work or a committed write behind. A timeout after dispatch can leave the result unknown. A first attempt proven to time out before dispatch has no effect; a later attempt's pool timeout cannot erase an earlier attempt's uncertain outcome.
 
+For serialized deadlines, clock-domain conversion, or cancellation completion,
+read [deadline-domains.md](deadline-domains.md).
+
 Retry only failures for which another attempt can be useful and the operation can safely repeat or reconcile. Identify every retrying layer, including SDKs, proxies, brokers, and callers. Bound attempts and cumulative elapsed time; use delay and jitter appropriate to the workload to avoid synchronized load. Stop when the deadline or retry budget is exhausted. Preserve a logical operation identity for duplicate-sensitive effects and define how an uncertain outcome is resolved.
 
 For retries at multiple service, SDK, or proxy layers, failure-ownership suppression, or missing retry context, read [retry-coordination.md](retry-coordination.md).

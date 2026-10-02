@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-regression-cache-03",
+  "run_evidence_sha256": "44c1f65b499c9b74eedf51745f622a5bb5141740eb445fd6f4039f1133c141df",
+  "final_workspace_tree_sha256": "7e34b0c32ea350c41360cbb457afa0db281ecd33a93d5d8093175c75caf34b7e",
+  "case_id": "cache-fill-invalidation",
+  "candidate_tree_sha256": "f765ba1f99ccc414b74bfabd6e76205a19cf7950e2a7a361f94fdc33ddc5ebac",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "reviewer": "/root/archive_infra",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "observable-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/checks.json",
+        "locator": "checks[0] independent-01; evidence/checks/independent-01.stdout.txt lines 1\u20136; evidence/trace.jsonl completed item_9 at line 20",
+        "observation": "The protected independent supplied node verify.mjs actually executed with exit 0 and five PASS checks; the model also ran the unchanged verifier after the patch. Reviewer reran node verify.mjs in final-project: exit 0, 5/5, identical stdout SHA256 93b9712885d1934de7cf836eae979b7111078ebf46e91423001c92e5153f563b, no project-file mutations."
+      }
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/service.mjs",
+        "locator": "read lines 8\u201312 and write lines 15\u201318; original-project/model.mjs lines 45\u201368; evidence/trace.jsonl completed item_11 at line 23",
+        "observation": "Both cache fills and write publication await the provided shared atomic publishIfFresh operation. The supplied adapter rejects revisions below either durable floor or cached revision, preserves floors on value eviction, and cannot lower them on delayed older publication. The actual supplied checks and extra controlled earlier-write notification after newer-write/eviction passed. The mechanism uses the modeled shared atomic contract, not a local lock or read-compare-SET."
+      }
+    },
+    {
+      "id": "scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes[0], forbidden_changes=[]; evidence/workspace.patch; evidence/manifest.json fixture_files; final-project/service.mjs lines 7\u201318",
+        "observation": "The sole persisted change is project/service.mjs replacing unconditional fill/deletion with atomic publication. Original and final model.mjs, verify.mjs and requirements.md hashes match the manifest. Public read/write signatures and cache hit fast path remain intact; no infrastructure or requirements changes are introduced. Run input_integrity reports baseline_unchanged=true and allowed_changes_only=true."
+      }
+    },
+    {
+      "id": "overlap-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5; line 1; evidence/trace.jsonl agent messages item_6 at line 14 and item_13 at line 26",
+        "observation": "The response explicitly allows reads already overlapping a write to return an earlier snapshot and does not demand latest-at-response semantics. It explains preventing stale cache replacement, but never states the complementary invocation boundary: a read invoked after write acknowledgement must return the acknowledged revision or newer. That behavior is implemented and checked, but the explanation required by this criterion remains incomplete."
+      }
+    },
+    {
+      "id": "limits",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5, compared with original-project/requirements.md lines 24\u201334",
+        "observation": "The response correctly limits evidence to successful modeled adapter calls with shared persistent floors, excludes commit/publication crashes and real distributed storage behavior, and does not claim production correctness from five checks. It leaves replica freshness and arbitrary marker/floor lifetime outside that explicitly stated scope only by implication; neither exclusion is expressly identified. The rubric asks for those model boundaries as well as crash/production atomicity limits, so this is partial rather than complete."
+      }
+    }
+  ]
+}

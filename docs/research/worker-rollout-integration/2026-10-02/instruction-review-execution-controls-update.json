@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "review_kind": "independent_execution_controls_review_and_separate_archive_implementation_record",
+  "reviewed_at_utc": "2026-10-02T09:30:42.027932+00:00",
+  "reviewer": "/root/architecture_skill_review",
+  "status": "no_unresolved_findings_in_execution_controls_review",
+  "scope": "Root-authored legacy execution-controls adapter and its corrected binding. A separate section records the archive checker implemented by this reviewer; it is not represented as self-independent review.",
+  "independence": {
+    "authored_execution_controls_changes": false,
+    "execution_controls_independent_reviewer": "/root/architecture_skill_review/execution_controls_review",
+    "authored_archive_checker_changes": true,
+    "archive_checker_independent_reviewer": "/root/architecture_skill_review/expert_lenses_audit",
+    "ran_models": false,
+    "read_or_scored_native_responses": false
+  },
+  "preserved_review_records": [
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review.md",
+      "sha256": "f9779f02393a9121fd7a69f2275c1678990e124ba6c00d722cb2cbfc09eab667"
+    },
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review.json",
+      "sha256": "28a3166760163b2d3d526fe15c59d6855fcbf8718a47a81a37835f4908cc64f0"
+    },
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review-update.md",
+      "sha256": "2c40aecd0c354b862f625347454358d7becbcf3a10eabbc43312a838e75a23cc"
+    },
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review-update.json",
+      "sha256": "5795220e61c7fc6a32bd631c10551e7556d3cb1ec24fe07be4ed78be86d4c7ea"
+    },
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review-regression-update.md",
+      "sha256": "717bfd7db64d69bd5c9c5eda99558b188582bcb8299d6c83892d53a95158185c"
+    },
+    {
+      "path": "docs/research/worker-rollout-integration/2026-10-02/instruction-review-regression-update.json",
+      "sha256": "7da310676e9b964c71be5c0962e8822f9fe4c199b9d32ac8f3237507ec563b4f"
+    }
+  ],
+  "reviewed_execution_controls_files": [
+    {
+      "path": "scripts/evals/lib.mjs",
+      "sha256": "dab7d89dc3b782e7b5313c58e0c7a09afb173b1b0bb13ab6b33691238848c63e"
+    },
+    {
+      "path": "tests/worker-rollout-integration/runner.test.mjs",
+      "sha256": "6dc1238f98e136126eae1567566991f629fe625492f3c5264d8ce2166b39411f"
+    }
+  ],
+  "execution_controls_assessment": {
+    "locations": [
+      "scripts/evals/lib.mjs:51-60",
+      "scripts/evals/lib.mjs:147-151",
+      "scripts/evals/lib.mjs:198-210",
+      "scripts/evals/lib.mjs:428-434",
+      "scripts/evals/lib.mjs:540-541",
+      "tests/worker-rollout-integration/runner.test.mjs:51-81"
+    ],
+    "conclusion": "Only worker-rollout-regression/concurrency-correctness/cache-fill-invalidation receives the frozen adapter. It derives service.mjs-only editing and node verify.mjs from the unchanged original case requirements, preserves raw case/prompt/rubric/fixture identity, and applies no retrospective controls to older freezes. The run-derived edit list, verifier argv, and derivation now must equal the frozen controls."
+  },
+  "closed_findings": [
+    {
+      "id": "EXEC-01",
+      "priority": "P2",
+      "status": "closed",
+      "original_location": "scripts/evals/lib.mjs:423-427",
+      "reproduction": "Prepare the cache regression, append project/verify.mjs to run.json editable_files and set verification_argv to null, leaving control and freeze untouched. Before the fix loadControlledCase returned the case and runTrial(execute:false) returned dry_run. The mutable verifier field could also skip independent verification.",
+      "resolution_location": "scripts/evals/lib.mjs:428-434",
+      "resolution": "Compare all three run-derived execution fields to the exact frozen execution controls before dispatch, scoring input preparation, and verification. Tests independently alter each field and reject through loadControlledCase and dry dispatch.",
+      "independent_recheck": "Child reviewer also replayed each mutation through loading, dry dispatch and verifyTrial; all reject. Valid metadata is accepted, and old-style freezes preserve empty editable files, null verifier, and not_required verification.",
+      "pre_fix_library_sha256": "859a2b3023d922c71742406143b25d06ccfac2b7c32266f92a88d9f71e3dd607"
+    }
+  ],
+  "freeze": {
+    "path": "/tmp/tal-worker-rollout-oct02-regression-freeze-03.json",
+    "file_sha256": "97b6bb71ca6855163d83075d181f9520bc290a6ebdf1baa7d2a57f5ada2463c7",
+    "freeze_sha256": "8cc8647832b190ceb36ef38da5b0404400c2955b1ae468707397c8267fd8e438",
+    "validated": true,
+    "candidates_unchanged_from_regression02": true,
+    "corpora_unchanged_from_regression02": true,
+    "legacy_case_sha256": "1107c6993d88934af1f3f7a55fc84ab98be5858c0c57a79d4300252122f4d2da",
+    "legacy_raw_case_and_fixture_diff_from_HEAD": "empty"
+  },
+  "archive_checker_implementation": {
+    "authored_by": "/root/architecture_skill_review",
+    "files": [
+      {
+        "path": "scripts/check-evaluation-evidence.mjs",
+        "sha256": "2d419d4ddffb1ee652b4a117fd0daa9337e1d5e8260b84022fe51ee67d45add7"
+      },
+      {
+        "path": "tests/evaluation-evidence.test.mjs",
+        "sha256": "626573388de4db40c3aa1e57136668180772ee3b1cf8715ca1eb5a9f1e79000a"
+      }
+    ],
+    "declaration": "Base archive-manifest.json may declare complete_source_trees as a unique array drawn from candidate, original-project, final-project, trial, candidate-dependencies. Supplements may provide expected files but may not declare completeness.",
+    "behavior": "Every available source inventory binds published original hashes. Declared-complete trees require exact path sets in the validated manifest union and on disk. Single-skill candidate, fixture, before and after inventories bind aggregate digests and corresponding workspace subsets. Native originals bind prepared.baseline; final project/dependencies bind run.final_files. Only .agents/, .codex/, and .tal-skills/ count as installed native dependencies. Undeclared old archives may remain partial.",
+    "independent_review_issue": "An initial leading-dot partition would misclassify project dotfiles and reject old partial original-project/.gitignore. Corrected to explicit installed-directory prefixes and full baseline lookup for undeclared originals; complete and partial dot-project cases are tested.",
+    "acceptance_separation": "A dependency mutation honestly recorded in final inventory and published bytes remains archivable; archive integrity does not grade behavioral success.",
+    "independent_review_closure": {
+      "status": "closed_no_other_actionable_issue",
+      "reviewer": "/root/architecture_skill_review/expert_lenses_audit",
+      "locations": [
+        "scripts/check-evaluation-evidence.mjs:162-174",
+        "tests/evaluation-evidence.test.mjs:245",
+        "tests/evaluation-evidence.test.mjs:295"
+      ],
+      "method": "Read-only final source inspection; separate from author-run tests."
+    }
+  },
+  "executed_checks": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "tests/worker-rollout-integration/runner.test.mjs",
+        "tests/engineering-toolkit/runner.test.mjs",
+        "tests/evaluation-evidence.test.mjs"
+      ],
+      "environment": "Node v25.9.0, Darwin arm64",
+      "exit_code": 0,
+      "tests": 51,
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0,
+      "duration_ms": 3901.271333,
+      "scope": "Local synthetic runner, archive, filesystem and verifier tests; no models."
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-evaluation-evidence.mjs"
+      ],
+      "exit_code": 0,
+      "manifests_checked": 78,
+      "published_artifacts_checked": 1637,
+      "source_bindings_checked": 2519,
+      "scope": "Published evidence integrity only; experiments not rerun or graded."
+    },
+    {
+      "kind": "freeze03_validation_and_identity_comparison",
+      "result": "pass",
+      "detail": "validateFreeze accepted regression03; candidate and corpus dictionaries match regression02 exactly."
+    },
+    {
+      "kind": "legacy_case_preservation",
+      "result": "pass",
+      "detail": "git diff --exit-code HEAD is empty for distributed-correctness/cases.json and cache-fill-invalidation fixtures."
+    },
+    {
+      "kind": "scoped_whitespace_and_prior_review_identity",
+      "result": "pass",
+      "detail": "git diff --check passes for the four scoped code/test files; all six prior review artifacts retain exact hashes."
+    }
+  ],
+  "unresolved_findings": [],
+  "limits": [
+    "Native skill behavior, model adherence, actual cache correctness, and production runtime behavior were not evaluated by these checks.",
+    "The archive checker verifies declared evidence consistency and source completeness; it does not grade responses, authenticate an external trusted signer, or infer that a failed attempt passed.",
+    "Undeclared older archives intentionally retain partial-publication semantics. Complete declarations must be supplied by the archive exporter.",
+    "Earlier candidate reviews remain historical records; this supplement identifies current runner/checker bytes and does not rewrite earlier results."
+  ]
+}

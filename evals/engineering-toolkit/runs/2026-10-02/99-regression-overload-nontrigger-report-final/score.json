@@ -1,0 +1,45 @@
+{
+  "run_id": "tal-worker-rollout-oct02-overload-report-regression-nontrigger-15",
+  "run_evidence_sha256": "88f684d5d480437bd70717ed3990f5406b610c648289f79b05dfd5d88ac33588",
+  "final_workspace_tree_sha256": "357f7dadc469cb53175b19c84731f5630f2e343aab73c0cf1d43e9db0225f9bf",
+  "case_id": "status-copy",
+  "candidate_tree_sha256": "1fbcff1cfc7ed2a331a7ce422a80c5ac72677f856200120b621702660a240e17",
+  "rubric_sha256": "8994cdf492d08e004b71d64bf7e47c66764d3557c1b90019716a71b85e5f67d5",
+  "reviewer": "Luna (independent evaluator)",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "disclosure": "I authored none of the selected seven-file overload-control package, this case corpus, or this response. I did not inspect prior score files or archived reviews."
+  },
+  "host_case_compliant": false,
+  "inherited_guidance_and_read_isolation_limits": "The run inherited user, system, and plugin guidance; filesystem reads were not confined to the trial directory; the no-web restriction was instructed but network-capable inherited tools were not all disabled. Requested read-only sandbox mode was not independently verified. Candidate metadata was observed but candidate body read was not observed; this is not proof against unrecorded loading. These conditions do not establish isolated skill-only behavior.",
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md and evidence/run.json",
+        "locator": "answer line 1; activation_observation.status=not_observed",
+        "observation": "Gives only \u201cTemporarily unavailable\u201d; no overload guidance. Candidate metadata was discovered but no body read was observed; this is not proof against unrecorded loading."
+      }
+    },
+    {
+      "id": "wording",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "Provides the exact requested replacement wording."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json and evidence/run.json",
+        "locator": "changes=[]; baseline_unchanged=true",
+        "observation": "Fixture unchanged and no runtime checks or external actions are claimed."
+      }
+    }
+  ]
+}

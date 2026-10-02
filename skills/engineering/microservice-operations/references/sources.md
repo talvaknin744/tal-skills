@@ -97,3 +97,21 @@ The conditional static-stability branch in [capacity.md](capacity.md) draws on B
 ## Resource-specific admission
 
 Sumeer Bhola, Cockroach Labs, [Here’s how CockroachDB keeps your database from collapsing under load](https://www.cockroachlabs.com/blog/admission-control-in-cockroachdb/), 2022-06-06: full body read 2026-10-01, including resource lifetimes, slots/tokens, grant chaining, tenancy and epoch-LIFO. [Current admission-control documentation](https://docs.cockroachlabs.com/docs/stable/admission-control) was checked for node-local scope, queue/starvation and SQL connection limitations. Historical queue discipline, settings and graphs are not defaults. Application queue/deadline policies, useful-completion acceptance and proposed resource cleanup checks in [capacity.md](capacity.md) are original synthesis; no scheduler or database load test was executed.
+
+## Deadline clock and completion contracts
+
+Checked 2026-10-02 for the conditional [deadline reference](deadline-domains.md).
+These primary contracts were rechecked after the reviewed clock research;
+no paper proof or numeric clock bound is transferred into request handling.
+
+| Source | Actual read scope and limit |
+| --- | --- |
+| [Go time](https://pkg.go.dev/time#hdr-Monotonic_Clocks), displayed go1.27.1 (2026-09-01) | Monotonic-clock overview, preservation/stripping, comparisons and serialization. No target platform suspend or clock behavior measured. |
+| [Go context](https://pkg.go.dev/context), displayed go1.27.1; [tagged deadline implementation](https://github.com/golang/go/blob/go1.27.1/src/context/context.go#L637-L655) | Deadline/timeout and cancellation contracts; selected duration-to-timer construction read by a delegated source checker. This does not claim continual wall-clock rechecking or completion after cancellation. |
+| [Python asyncio tasks](https://docs.python.org/3/library/asyncio-task.html) and [event-loop clock](https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.loop.time), displayed 3.14.8 | Timeout/timeout_at, wait_for/wait, task cancellation, call_at and loop.time sections checked by a delegated source checker. The wait_for cancellation-wait overrun and version-dependent coroutine wrapping contracts were rechecked directly for the completion-report revision on 2026-10-02; no scheduler or cleanup execution claimed. |
+| gRPC [deadlines](https://grpc.io/docs/guides/deadlines/) and [cancellation](https://grpc.io/docs/guides/cancellation/) | Complete substantive guides rechecked for remaining-time propagation, language enablement and cooperative server cleanup. These unversioned guides are not a deployed client/server contract or proof of remote rollback. |
+
+Conversion policies, supervised cleanup ownership, and the proposed verification
+boundaries are original application requirements. Source checking executed no
+clock adjustment, suspend, RPC integration, or runtime deadline/cancellation
+check. Behavioral evaluations are recorded separately for their frozen candidates.

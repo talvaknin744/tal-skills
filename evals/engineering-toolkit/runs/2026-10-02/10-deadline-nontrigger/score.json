@@ -1,0 +1,42 @@
+{
+  "run_id": "tal-worker-rollout-oct02-deadlines-nontrigger-01",
+  "run_evidence_sha256": "961045c6082eb793d23dae1fc7138fb55c4058c93c98ad800810d90298286b15",
+  "final_workspace_tree_sha256": "5a97c1c73531266f5f418e1336e067bc808f279a2345b9c333f751485b5a4d2f",
+  "case_id": "duration-format-nontrigger",
+  "candidate_tree_sha256": "a3fbcb874805c0705619b848a2a9be0f531046d11cf85f19b8ae01a30edfec6d",
+  "rubric_sha256": "725a4f98d412f385061b9e901cdebabb2669fa690e27f03368b4c8b3b3332e77",
+  "reviewer": "/root/archive_storage \u2014 independent full-candidate deadline reviewer, 2026-10-02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed commands item_1 line 5 and item_2 line 7; evidence/run.json activation_observation; evidence/answer.md line 1",
+        "observation": "Recorded commands only locate and read label.json. No microservice-operations body read is observed, and the one-sentence answer introduces no clock, timeout, rollout, cancellation or resource-lifecycle work. Absence of an observed read does not prove absence of unrecorded loading."
+      }
+    },
+    {
+      "id": "correct-label",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; original-project/label.json",
+        "observation": "The answer gives 02:05 for duration_seconds 125 in exactly one sentence, matching 2 minutes and 5 seconds."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/workspace-changes.json",
+        "locator": "changes=[] and forbidden_changes=[]; evidence/workspace.patch empty; evidence/answer.md line 1",
+        "observation": "Original/final label.json byte hashes match and no workspace change is recorded. The answer makes no execution or verification claim; the recorded commands inspect the supplied label only."
+      }
+    }
+  ]
+}

@@ -14,6 +14,26 @@ Runtime examples, agent behavior and repository validation are separate forms
 of evidence below. A successful fixture can mean an unsafe control was
 reproduced; it does not turn that control into a recommended implementation.
 
+## October 2 integration and regression checks
+
+The [worker-rollout integration record](../worker-rollout-integration/2026-10-02/README.md)
+and [per-trial archive](../../../evals/engineering-toolkit/runs/2026-10-02/README.md)
+record later instruction repairs, unchanged existing-case checks, new cases,
+nontriggers and native workflow observations. Earlier partial, interrupted and
+host-blocked attempts remain visible. Each result binds the candidate version
+actually examined; passing selected cases does not establish regression freedom.
+
+The [worker runtime](../../../examples/worker-rollout/README.md) passed eight
+scenarios in both author and independent local runs, with 30 real processes per
+run. The database owns progress, receipts and fenced effects. These short POSIX
+and PostgreSQL experiments do not establish Kubernetes, 12/24-hour endurance,
+external-provider or database failover behavior.
+
+The [fresh installation](../worker-rollout-integration/2026-10-02/installation-final-15.md)
+verified all 230 managed files for both host layouts against canonical source
+and generated adapters. Repeated installation changed zero files. Claude
+behavior remains unavailable; installing its layout is a structural check.
+
 ## October distributed-systems and performance expansion
 
 The repository now contains **49 skill packages, 15 agents, and eight workflows**.

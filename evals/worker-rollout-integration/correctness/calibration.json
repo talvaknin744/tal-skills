@@ -1,0 +1,283 @@
+{
+  "kind": "author_fixture_calibration_not_model_evaluation",
+  "recorded_at": "2026-10-02T08:16:04.458132+00:00",
+  "runtime": "Python 3.14.3",
+  "cache_cases": {
+    "positive_cache": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "checks": 6,
+        "failures": [],
+        "passed": 6,
+        "scope": "local specified adapters"
+      },
+      "stderr": "",
+      "scratch_service_sha256": "0a2fc29e5790f5e1597c2725994390eb38d0de8e586a297bb45c8fa8f3200cd0",
+      "protected_inputs_match": true,
+      "protected_input_sha256": {
+        "contract.md": "464fc507d426c3c6624691b9abca6175a0c52d23751b9c1aa1ec3e393e919a81",
+        "model.py": "07489ac78f0f5813eeb9826d71904b26b35065247fb481a7835b175f64936c92",
+        "verify.py": "7c75a0ad15282adf6d92a4ff0834b43cfd4e8b6efdd1a3e355fa0ef27ec43336"
+      }
+    },
+    "paired_capture_only": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": {
+        "checks": 6,
+        "failures": [
+          {
+            "check": "recreate_during_delayed_fill",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 41, 'revision': 7, 'present': True, 'value': 'old-blue'}}, {'item': {'incarnation': 42, 'revision': 1, 'present': True, 'value': 'new-red'}}))"
+          },
+          {
+            "check": "atomic_publication_not_compare_then_set",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 22, 'revision': 3, 'present': True, 'value': 'past'}}, {'item': {'incarnation': 22, 'revision': 4, 'present': True, 'value': 'current'}}))"
+          }
+        ],
+        "passed": 4,
+        "scope": "local specified adapters"
+      },
+      "stderr": "",
+      "scratch_service_sha256": "0f13b5c5d4d5f1f57a67c19356cfac21fe406adfaa4abeebcd0e09f3e1d423ec",
+      "protected_inputs_match": true,
+      "protected_input_sha256": {
+        "contract.md": "464fc507d426c3c6624691b9abca6175a0c52d23751b9c1aa1ec3e393e919a81",
+        "model.py": "07489ac78f0f5813eeb9826d71904b26b35065247fb481a7835b175f64936c92",
+        "verify.py": "7c75a0ad15282adf6d92a4ff0834b43cfd4e8b6efdd1a3e355fa0ef27ec43336"
+      }
+    },
+    "atomic_publication_only": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": {
+        "checks": 6,
+        "failures": [
+          {
+            "check": "payload_and_token_capture",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 8, 'revision': 2, 'present': True, 'value': 'before'}}, {'item': {'incarnation': 8, 'revision': 2, 'present': True, 'value': 'after'}}))"
+          },
+          {
+            "check": "cache_hit_and_one_miss_capture",
+            "error": "AssertionError('payload and token were read separately')"
+          }
+        ],
+        "passed": 4,
+        "scope": "local specified adapters"
+      },
+      "stderr": "",
+      "scratch_service_sha256": "1ec4f9bce245ee7d8a8d528f607b0c367361f9e25acb4600b5fcf68fa7dff689",
+      "protected_inputs_match": true,
+      "protected_input_sha256": {
+        "contract.md": "464fc507d426c3c6624691b9abca6175a0c52d23751b9c1aa1ec3e393e919a81",
+        "model.py": "07489ac78f0f5813eeb9826d71904b26b35065247fb481a7835b175f64936c92",
+        "verify.py": "7c75a0ad15282adf6d92a4ff0834b43cfd4e8b6efdd1a3e355fa0ef27ec43336"
+      }
+    },
+    "paired_capture_then_nonatomic_tuple_compare": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": {
+        "checks": 6,
+        "failures": [
+          {
+            "check": "atomic_publication_not_compare_then_set",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 22, 'revision': 3, 'present': True, 'value': 'past'}}, {'item': {'incarnation': 22, 'revision': 4, 'present': True, 'value': 'current'}}))"
+          }
+        ],
+        "passed": 5,
+        "scope": "local specified adapters"
+      },
+      "stderr": "",
+      "scratch_service_sha256": "ac2156e9bfceeb41f92ebb57e30fda3098932fa6bf95c081a5835e3a601fd113",
+      "protected_inputs_match": true,
+      "protected_input_sha256": {
+        "contract.md": "464fc507d426c3c6624691b9abca6175a0c52d23751b9c1aa1ec3e393e919a81",
+        "model.py": "07489ac78f0f5813eeb9826d71904b26b35065247fb481a7835b175f64936c92",
+        "verify.py": "7c75a0ad15282adf6d92a4ff0834b43cfd4e8b6efdd1a3e355fa0ef27ec43336"
+      }
+    }
+  },
+  "format_case": {
+    "exit_code": 0,
+    "stdout": {
+      "checks": 3,
+      "failures": [],
+      "passed": 3
+    },
+    "stderr": "",
+    "scratch_labels_sha256": "e542b716e56eb5ac9124b0c2a402d59e9e61823906f9bbb58256755bad2d664c",
+    "protected_inputs_match": true,
+    "command_argv": [
+      "python3",
+      "-B",
+      "verify.py"
+    ],
+    "protected_input_sha256": {
+      "request.md": "6db71d5d6375883ac60a09c68c1e7008c0b67d2a2031fad3b959b8955de7f0f9",
+      "verify.py": "464f500a1f8cd1311460269153005107610b85b2bc53dedbdfdcff0945a9ce79"
+    }
+  },
+  "fixture_files": [
+    {
+      "path": "fixtures/cache-incarnation-snapshot/contract.md",
+      "sha256": "464fc507d426c3c6624691b9abca6175a0c52d23751b9c1aa1ec3e393e919a81"
+    },
+    {
+      "path": "fixtures/cache-incarnation-snapshot/model.py",
+      "sha256": "07489ac78f0f5813eeb9826d71904b26b35065247fb481a7835b175f64936c92"
+    },
+    {
+      "path": "fixtures/cache-incarnation-snapshot/service.py",
+      "sha256": "566b04b4b68c1cbf0d38fcb33b8aab030fe464b681997d04b9e5cafa1afc4f64"
+    },
+    {
+      "path": "fixtures/cache-incarnation-snapshot/verify.py",
+      "sha256": "7c75a0ad15282adf6d92a4ff0834b43cfd4e8b6efdd1a3e355fa0ef27ec43336"
+    },
+    {
+      "path": "fixtures/immutable-label-format/labels.py",
+      "sha256": "84f0c6045f610a86f3b6204f9cc83920f54b3909b98408242f47f32bcf6ac881"
+    },
+    {
+      "path": "fixtures/immutable-label-format/request.md",
+      "sha256": "6db71d5d6375883ac60a09c68c1e7008c0b67d2a2031fad3b959b8955de7f0f9"
+    },
+    {
+      "path": "fixtures/immutable-label-format/verify.py",
+      "sha256": "464f500a1f8cd1311460269153005107610b85b2bc53dedbdfdcff0945a9ce79"
+    },
+    {
+      "path": "fixtures/merge-reservation-boundary/contract.md",
+      "sha256": "2d3edb976b647980e24bea80f7ed8e88ff05b8a5ed04f3166e421db0a7c65652"
+    },
+    {
+      "path": "fixtures/merge-reservation-boundary/observations.json",
+      "sha256": "23e76310e2c566be777c2fb8115dfc1f3f8fe971472b45c75319b712297861c2"
+    },
+    {
+      "path": "fixtures/merge-reservation-boundary/observe.py",
+      "sha256": "2bee32babd9a7d01f6d3c1ce9115075de98479954b94a50bd2fdc978b6d6219a"
+    },
+    {
+      "path": "fixtures/merge-reservation-boundary/proposal.md",
+      "sha256": "7b69aa609f559d1aa6569c748c9b99cf86fbdb5469df477c9c7dc8c405f05cd2"
+    }
+  ],
+  "baseline_observations": {
+    "cache-incarnation-snapshot": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": {
+        "checks": 6,
+        "failures": [
+          {
+            "check": "recreate_during_delayed_fill",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 41, 'revision': 7, 'present': True, 'value': 'old-blue'}}, {'item': {'incarnation': 42, 'revision': 1, 'present': True, 'value': 'new-red'}}))"
+          },
+          {
+            "check": "payload_and_token_capture",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 8, 'revision': 2, 'present': True, 'value': 'before'}}, {'item': {'incarnation': 8, 'revision': 2, 'present': True, 'value': 'after'}}))"
+          },
+          {
+            "check": "atomic_publication_not_compare_then_set",
+            "error": "AssertionError(('record values differ', {'item': {'incarnation': 22, 'revision': 3, 'present': True, 'value': 'past'}}, {'item': {'incarnation': 22, 'revision': 4, 'present': True, 'value': 'current'}}))"
+          },
+          {
+            "check": "cache_hit_and_one_miss_capture",
+            "error": "AssertionError('payload and token were read separately')"
+          }
+        ],
+        "passed": 2,
+        "scope": "local specified adapters"
+      },
+      "stderr": "",
+      "meaning": "authored baseline failure"
+    },
+    "immutable-label-format": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "exit_code": 1,
+      "stdout": {
+        "checks": 3,
+        "failures": [
+          {
+            "actual": "Ada [rev 7]",
+            "name": "Ada",
+            "required_format": "Ada (v7)",
+            "revision": 7
+          },
+          {
+            "actual": " [rev 0]",
+            "name": "",
+            "required_format": " (v0)",
+            "revision": 0
+          },
+          {
+            "actual": "Málaga [rev 12]",
+            "name": "Málaga",
+            "required_format": "Málaga (v12)",
+            "revision": 12
+          }
+        ],
+        "passed": 0
+      },
+      "stderr": "",
+      "meaning": "authored baseline failure"
+    },
+    "merge-reservation-boundary": {
+      "command_argv": [
+        "python3",
+        "-B",
+        "observe.py"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "left_ids": [
+          "reservation-A",
+          "reservation-B"
+        ],
+        "remaining_units": -1,
+        "right_ids": [
+          "reservation-A",
+          "reservation-B"
+        ],
+        "same_ids": true,
+        "scope": "finite authored set arithmetic, not a release verifier"
+      },
+      "stderr": "",
+      "meaning": "observation only; zero is not acceptance"
+    }
+  },
+  "limitations": [
+    "No model/native workflow trial or independent candidate scoring was run.",
+    "Positive and partial controls were temporary repairs outside the repository; protected inputs matched the fixture.",
+    "Cache checks use specified successful in-process adapters; JSON restoration is not disk crash durability.",
+    "Merge script is finite arithmetic; format checks are finite local strings.",
+    "No production database/cache, network, multi-process or missing-notification guarantee is validated."
+  ]
+}

@@ -7,7 +7,7 @@ Use this branch when valid concurrent operations can together violate a rule. Id
 | Invariant | Candidate repair | Boundary to verify |
 | --- | --- | --- |
 | A quantity never falls below zero | Conditional mutation of the authoritative row | Predicate and mutation are one atomic operation; inspect affected-row/result semantics |
-| An edit applies only to the version the caller saw | Compare expected revision and advance revision in the same write | Every relevant mutation advances the revision; a conflict has an explicit response |
+| An edit applies only to the entity/version the caller saw | Compare expected identity/revision and advance revision in the same write | Every relevant mutation advances the revision; [recreation cannot reuse the comparison identity](cache-coherence.md#scope-versions-to-the-entity); conflicts have an explicit response |
 | A logical identity is unique | Database uniqueness constraint | Tenant/key scope, null semantics, and migration of existing duplicates |
 | A rule spans several records or a predicate | Suitable constraints, a shared lock target, or serializable transaction | The whole decision and all relevant state changes are protected, including missing rows |
 

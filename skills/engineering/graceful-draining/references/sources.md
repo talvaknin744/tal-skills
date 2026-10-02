@@ -1,6 +1,6 @@
 # Sources and scope
 
-Reviewed 2026-09-29. These instructions are an original synthesis for job-preserving
+Reviewed 2026-09-29; shutdown timing contracts rechecked 2026-10-02. These instructions are an original synthesis for job-preserving
 shutdown. Platform facts come from primary documentation; the common protocol
 and verification scenarios are design recommendations, not vendor guarantees.
 
@@ -52,6 +52,16 @@ take precedence over historical or draft examples.
 - Matt Pocock's [Writing for Agents](https://www.aihero.dev/skills-writing-for-agents)
   informs the concise entrypoint, conditional references, and observable
   completion criteria.
+
+The 2026-10-02 additions turn existing ownership and checkpoint rules into
+observable tests: inventory after authoritative admission closes, actual mixed
+reader/writer semantics, and a first-stop drain deadline that repeated signals
+cannot extend. Python's [signal delivery contract](https://docs.python.org/3/library/signal.html#execution-of-python-signal-handlers)
+does not guarantee immediate handling during a long C operation; bounded local
+database calls and a separate supervisor limit are still needed. Kubernetes'
+[termination sequence](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination-flow)
+starts the grace countdown before `preStop`. These contracts motivate the tests;
+they do not promise that arbitrary worker code finishes within grace.
 
 Local deterministic tests can demonstrate the chosen state machine's behavior.
 They do not validate a production orchestrator's signal propagation, broker

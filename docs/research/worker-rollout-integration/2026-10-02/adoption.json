@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-02",
+  "research_basis": "docs/research/distributed-systems-followup/2026-10-01",
+  "practices": [
+    {
+      "id": "worker-rollout",
+      "trigger": "A rollout interrupts accepted long-running jobs or exhausts a retry budget.",
+      "failure_mode": "Retiring generations repeatedly reclaim work; an effect is replayed or an old owner overwrites its successor.",
+      "mechanism": "Close authoritative generation admission, reconcile owned/reserved work, persist compatible continuation and receipts, fence mutation and cleanup, keep distinct maintenance and business counters.",
+      "applicability_limits": "Requires enforceable admission, durable progress, compatible capacity and a protected-effect contract. Local process/PostgreSQL checks do not prove Kubernetes, broker or external effect behavior.",
+      "counterexample": "An empty local task set omits a receive in flight; readiness alone does not stop queue admission.",
+      "verification": "Force A/B/C retirement, real signals, effect-before-checkpoint death, paused-owner resumption, mixed readers/writers, bounded expiry and owned resource cleanup.",
+      "adopted_in": [
+        "skills/engineering/graceful-draining",
+        "workflows/tal-worker-rollout"
+      ],
+      "source_records": [
+        "skills/engineering/graceful-draining/references/sources.md"
+      ]
+    },
+    {
+      "id": "entity-incarnation",
+      "trigger": "A delayed cache fill or backfill overlaps update or delete/recreate.",
+      "failure_mode": "A replacement reuses the numeric revision, or old payload is relabeled with a new token from a different snapshot.",
+      "mechanism": "Read payload/incarnation/revision coherently and publish through an atomic guard on non-reused incarnation plus revision.",
+      "applicability_limits": "The authority must expose/enforce these semantics; numeric counters without durable identity do not prevent ABA.",
+      "counterexample": "revision=1 identifies both a deleted row and its replacement.",
+      "verification": "Pause between capture/publication, mutate or recreate, assert the full final identity/value set independently and retry on the new snapshot.",
+      "adopted_in": [
+        "skills/engineering/concurrency-correctness"
+      ],
+      "source_records": [
+        "docs/research/distributed-systems-followup/2026-10-01/schema-evolution.json"
+      ]
+    },
+    {
+      "id": "merge-invariant",
+      "trigger": "Concurrent replicas make business decisions before reconciling.",
+      "failure_mode": "Converged state violates an invariant or repeats an irreversible effect.",
+      "mechanism": "Test merging locally valid states against the invariant; coordinate or allocate enforceable rights at the actual decision/effect boundary where necessary.",
+      "applicability_limits": "Merge algebra alone supplies neither freshness nor crash-safe external effects.",
+      "counterexample": "Two unique sales converge as a set while exceeding stock of one.",
+      "verification": "Force both local decisions, both merge orders and duplicate delivery; check stock/effect counts with an independent oracle.",
+      "adopted_in": [
+        "skills/engineering/concurrency-correctness"
+      ],
+      "source_records": [
+        "docs/research/distributed-systems-followup/2026-10-01/coordination-design.json"
+      ]
+    },
+    {
+      "id": "schema-writer-floor",
+      "trigger": "A schema or derived representation evolves during mixed writer generations and backfill.",
+      "failure_mode": "Old-only writes invalidate new-only reads; one shard publishes early; rollback cannot represent post-switch writes.",
+      "mechanism": "Require all-writer atomic revision maintenance or another enforceable protocol, gate all required shards/coverage/catch-up/exposure separately, retain a compatible bridge or restore fallback before old-only admission.",
+      "applicability_limits": "F1 maintenance phases are historical engine-specific protocols; actual engines have distinct publication/revert contracts. Cross-store writes need their own partial-success repair.",
+      "counterexample": "Equal source/derived row counts hide one missing identity and one resurrected row.",
+      "verification": "Compare complete expected and actual sets both directions; force a delayed old commit, partial shard completion and rollback after new writes.",
+      "adopted_in": [
+        "skills/infrastructure/infrastructure-change-safety"
+      ],
+      "source_records": [
+        "docs/research/distributed-systems-followup/2026-10-01/schema-evolution.json"
+      ]
+    },
+    {
+      "id": "resident-fairness",
+      "trigger": "Long jobs, prefetch or dependency fanout starve other tenants.",
+      "failure_mode": "Fair next-delivery ordering and active-only limits leave no physical capacity for quiet work.",
+      "mechanism": "Account for all resident ownership and protected dependency budgets; reserve capacity and permit borrowing only with a feasible bounded reclaim/settlement contract.",
+      "applicability_limits": "Nonpreemptible work cannot release capacity merely on cancellation request; placement/admission/delivery/runtime fairness differ.",
+      "counterexample": "Idle CPU coexists with four owned connection/worker slots, so quiet work misses its deadline.",
+      "verification": "Record fixed arrivals, all ownership states, actual release and per-tenant completion/deadline outcomes over a common horizon.",
+      "adopted_in": [
+        "skills/performance/overload-control"
+      ],
+      "source_records": [
+        "docs/research/distributed-systems-followup/2026-10-01/scheduling-and-isolation.json"
+      ]
+    },
+    {
+      "id": "deadline-domain",
+      "trigger": "Budgets cross hosts/serialization or cancellation affects resource cleanup.",
+      "failure_mode": "A fresh hop timeout renews caller lifetime; a wall-clock deadline is used in an event-loop domain; a cancelled child still owns a released connection.",
+      "mechanism": "Preserve remaining operation budget with an explicit transport/time authority and separate cancellation request, caller completion, work termination and owned resource release.",
+      "applicability_limits": "Some local processes share a monotonic clock; its origin is not host/reboot portable. Runtime suspend and cancellation contracts must be checked.",
+      "counterexample": "Task.cancel returns before cleanup, then another task reuses the same active connection.",
+      "verification": "Force representation/wall/skew boundaries, earlier parent expiry, delayed handoff and slow cancellation; observe actual resource release and useful subsequent work.",
+      "adopted_in": [
+        "skills/engineering/microservice-operations",
+        "skills/engineering/graceful-draining"
+      ],
+      "source_records": [
+        "docs/research/distributed-systems-followup/2026-10-01/time-and-clocks.json"
+      ]
+    }
+  ]
+}

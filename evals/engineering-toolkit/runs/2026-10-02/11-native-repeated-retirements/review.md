@@ -1,0 +1,11 @@
+# Independent native rollout review
+
+All eleven authored criteria satisfy local preparation and observed workflow behavior. Overall native acceptance remains partial: the original managed verifier is blocked before observer startup. `run.json` remains `failed-verification`, exit65, with `sandbox-exec: unbound variable: TIOCSTI`; no managed end-to-end pass is claimed.
+
+Main was sole plan owner. Actual child metadata proves named tal-durability and tal-infrastructure roles. Durability supplied source investigation; infrastructure reviewed a frozen plan, found a capacity/controller flaw, and reviewed the material correction. Focused re-review bound dc61e92a5438b8d0ad3a463bcc3b3a5449dae6f59efff6903a4e52eae82fac30. Final 8a100282488a00b6b62132e051f2f07015c36801cf2e983dae16d72e36e86695 differs only by the observed editorial clarification “current three plus one new successor”; reversal reproduces reviewed digest. No final-byte reviewer hash is inferred.
+
+The plan preserves three genuine business failures, closes receive/prefetched admission, specifies epoch/effect/progress interfaces, treats lost durable replies as unknown, pins mixed-version writes, budgets75 seconds after preStop, and requires a fresh capable successor for every retirement. Release remains NO-GO until actual rehearsals and operational tail owner assignment.
+
+Independent local python3 -B observe.py returned exit0 and supplied artifact arithmetic, verbatim in observer-supplement.json. Only stdlib JSON projection ran: no worker adapters, persistence, broker, platform, clocks or cancellation. It does not replace the unavailable managed verifier. All122 final hashes/modes match; only rollout-plan.md changed. Raw/index/manifest hashes and external scenario binding match. Scorer authored fixtures/rubric but not instructions or response.
+
+Root archival must retain unchanged prepared/run/events and original verifier outputs, frozen source install identity, scenario-manifest/index/control bindings, final plan, score/review and supplement. Bind the unique scenario externally because prepared.json omits it. Record score/supplement byte hashes at archive time and keep managed verification unavailable. Broad-read/tool exposure and post-run scope enforcement limits remain; case_compliant=false preserved.

@@ -1,0 +1,51 @@
+{
+  "run_id": "tal-worker-rollout-oct02-backfill-final-04",
+  "run_evidence_sha256": "db2587ed10e9c97a1fa703d9716bcc82c1d609480535eb1e700d56bfab7cb2a9",
+  "final_workspace_tree_sha256": "54e7ad0231ce2a2dd97e63e3f9485e89d380264966c002496ae8a91b21a85ab8",
+  "case_id": "backfill-recreated-identity",
+  "candidate_tree_sha256": "a3e43540def7958af6fcce24be2499873588b74264c996af4a0c4c86b0ce13f3",
+  "rubric_sha256": "d23c31bb9149fd6aa5fad0a56983ce54f9c9f25ba17b51356e4acacb9a00e01a",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "coherent-source-observation",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 4-9; final-project/model.py lines 7-14, 55-57",
+        "observation": "Obtains one immutable Row snapshot containing payload, incarnation and source revision before after_read, then uses that same observation after both preserved checkpoints; missing source returns False. No separate newer token read or relabeling."
+      }
+    },
+    {
+      "id": "incarnation-and-revision-guard",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 10-11; final-project/model.py lines 67-73; final-project/verify.py lines 50-76",
+        "observation": "Maps observed payload and uses authority map_if_current with exact incarnation/revision equality, atomically checked/replaced under one RLock. Protected schedules reject intervening update and delete/recreate with reused numeric revision; no incarnation sorting or foreground overwrite."
+      }
+    },
+    {
+      "id": "mapping-and-retry",
+      "score": 2,
+      "evidence": {
+        "artifact": "final-project/migration.py",
+        "locator": "lines 5-11; final-project/verify.py lines 42-76; evidence/checks.json independent-01",
+        "observation": "Maps pending0 and paid1, explicitly rejects absent/stale rows, permits current/replacement fresh retry, and preserves all source/unrelated fields. Protected independent verifier and reviewer disposable copy pass all four deterministic checks."
+      }
+    },
+    {
+      "id": "scope-and-independent-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1-11; evidence/trace.jsonl lines 36, 38 items 17-18; evidence/workspace.patch",
+        "observation": "Only migration.py changes; public interface and both checkpoints remain. Answer reports protected 4/4 result and literal expected full row sets independent of migration mapping, with no missing/extras and unrelated row preserved. It distinguishes local RLock conditional publication and foreground revision/incarnation contract from unexercised database primitives and unverified deployment-wide writer coverage; makes no production claim."
+      }
+    }
+  ]
+}

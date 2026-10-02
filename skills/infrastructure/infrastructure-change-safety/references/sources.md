@@ -28,3 +28,40 @@ Reviewed 2026-09-29. Guidance is original synthesis. The runtime example was obs
 | [Apache Kafka 4.3 Design](https://kafka.apache.org/43/design/design/) | Message Delivery Semantics and Log Compaction guarantees checked 2026-10-01: external destinations require output/offset cooperation; deletion-marker retention bounds state reconstruction. Installed Kafka/client versions and the application's snapshot/replay protocol still require inspection. |
 
 Verify the target project's actual CLI/provider versions and current product contract before using API details. Source availability is not proof of a successful production deployment.
+
+## Schema evolution follow-up, 2026-10-02
+
+- Ian Rae, Eric Rollins, Jeff Shute, Sukhdeep Sodhi and Radek Vingralek,
+  **Online, Asynchronous Schema Change in F1**, PVLDB 6(11), August 2013,
+  pp. 1045–1056. [Official full text](https://research.google.com/pubs/archive/41376.pdf).
+  Complete extracted text across all 12 pages read on 2026-10-01: abstract,
+  §§1–9, proofs and references, plus extracted figure labels/captions and table
+  text. Rendered figure/table pixels were not independently inspected. Used for
+  adjacent engine-schema compatibility, intermediate index permissions and
+  eligibility enforced at storage commit. This historical implementation does
+  not establish current Spanner internals or application rollout leases.
+- Shlomi Noach, **gh-ost: GitHub’s online schema migration tool for MySQL**,
+  [2016-08-01 account](https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/).
+  Entire substantive article text through acknowledgements read on 2026-10-01;
+  navigation/related posts excluded, diagrams not independently inspected.
+  Supports separating copy/catch-up, workload control and cutover. Its historical
+  MySQL limitations are not a current engine capability matrix.
+- Hammad Khalid and co-authors, **Horizontally scaling the Rails backend of Shop
+  app with Vitess**, [2024-01-17 account](https://shopify.engineering/horizontally-scaling-the-rails-backend-of-shop-app-with-vitess).
+  Entire substantive article text, all migration phases, schema-cache and cleanup
+  sections read on 2026-10-01; images not independently inspected. Supports
+  observing all-shard readiness and checking reverse-stream ordering before
+  promising a rollback route. Its timings/results are not our measurements.
+
+Selected live contracts rechecked on 2026-10-02:
+
+| Source | Read scope and limit |
+| --- | --- |
+| Vitess 24.0 [postponed migrations](https://vitess.io/docs/24.0/user-guides/schema-changes/postponed-migrations/), [reversion](https://vitess.io/docs/24.0/user-guides/schema-changes/revertible-migrations/), [strategy flags](https://vitess.io/docs/24.0/user-guides/schema-changes/ddl-strategy-flags/) | Completion command versus observed completion; complete revert limitations/implementation; retention and instant-path flags. Supported ALTER reversion catches up from recorded cutover GTID and can fail when new data does not fit the old schema. The revert page's 24h statement and newer retention overrides require checking actual deployed configuration; no universal window is prescribed. |
+| PostgreSQL 18 [CREATE INDEX](https://www.postgresql.org/docs/18/sql-createindex.html) | Concurrent-build section and related parameter notes: validity, transaction/snapshot waits and failed unique-index enforcement. Index publication is engine-specific; online creation does not establish application compatibility. |
+| Active Record [ModelSchema API](https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html#method-i-ignored_columns-3D) | `ignored_columns` getter/setter and cached-schema rationale. Model-generated SQL exclusions do not constrain handwritten SQL or other writers. Verify the target Rails version. |
+
+Incarnation/revision guards, consistent row observations, rollback writer floors
+and bidirectional expected-state checks are original application synthesis.
+They are conditional on the authority's actual primitives; no database migration,
+model trial or production validation was executed for these additions.

@@ -1,0 +1,31 @@
+{
+  "case_id": "cache-fill-invalidation",
+  "rubric_sha256": "89c0954461770d4cedf7a010faf4bd2659d3b1dc247fa2d94dcc9fd15a08ff1b",
+  "rubric": [
+    {
+      "id": "observable-contract",
+      "severity": "critical",
+      "criterion": "The supplied node verify.mjs command exits successfully with all five checks passing against the modified service; success is established by actual execution rather than a claimed or rewritten test."
+    },
+    {
+      "id": "atomic-shared-ordering",
+      "severity": "critical",
+      "criterion": "Uses the provided shared atomic revision-floor/publication contract or an equally sound implementation within the supplied interface. Preserves monotonic floors through eviction and out-of-order notifications; a process-local lock, delay, unconditional fill, or evictable-only marker is insufficient."
+    },
+    {
+      "id": "scope",
+      "severity": "critical",
+      "criterion": "Changes only service.mjs, preserving adapter and test contents and the read/write signatures; does not bypass caching by always reading the database, add unavailable infrastructure, or weaken the requirements."
+    },
+    {
+      "id": "overlap-contract",
+      "severity": "major",
+      "criterion": "Explains that an already overlapping read may return its captured snapshot, while subsequently invoked reads must honor the acknowledged revision. Avoids imposing or claiming impossible latest-at-response semantics."
+    },
+    {
+      "id": "limits",
+      "severity": "major",
+      "criterion": "States that this deterministic model validates adapter use under successful calls, not production Redis/database atomicity, crash recovery, replica freshness, or arbitrary marker lifetime; does not claim these failure modes are solved by passing five local checks."
+    }
+  ]
+}

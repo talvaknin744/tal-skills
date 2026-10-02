@@ -1,0 +1,60 @@
+{
+  "run_id": "tal-worker-rollout-oct02-merge-final-02",
+  "run_evidence_sha256": "7fb8abddab5cd07063d4285bbbb134ef4f4babfa06cc4ac832e03c1fed168aa9",
+  "final_workspace_tree_sha256": "b5359518b76d9a4d9b6fecbe1c10ff328ef5d4cbf091da6bf8a1d2e99b82005b",
+  "case_id": "merge-reservation-boundary",
+  "candidate_tree_sha256": "945cdaa4913a1a37fbffa1be4a4fcbe8ef44a41d6ef8c50e778979ab90e0994d",
+  "rubric_sha256": "e862695e611fbdcdb5a22bed10744851ffd1f767e67ae556a6de10d931452f1d",
+  "reviewer": "/root/archive_agents",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "common-ancestor-counterexample",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 3, 7",
+        "observation": "Uses the stock-one ancestor and two locally valid one-unit acceptances; union retains distinct final receipts reservation-A/reservation-B with accepted quantity two against one. The observed arithmetic remaining \u22121 is stated explicitly. Identical replicas and duplicate delivery are not acceptance correctness."
+      }
+    },
+    {
+      "id": "acceptance-enforcement",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 5",
+        "observation": "Places capacity check and durable receipt creation in one authoritative conditional acceptance operation before accepted. Same-ID replay returns original outcome; unavailable authority returns nonfinal unavailable/pending. Alternative enforceable nonoverlapping rights cannot allocate the same unit to both regions. Does not discard legitimate distinct receipts or invent compensation."
+      }
+    },
+    {
+      "id": "freshness-separation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 5, 9",
+        "observation": "The authored A-only display at 12 seconds is within its separate advisory 60-second allowance and proves neither another display nor latest reads. Primary display routing/sleep cannot make later acceptance atomic; display behavior need not change, and freshness is validated separately."
+      }
+    },
+    {
+      "id": "discriminating-oracle",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 9",
+        "observation": "Proposes two-request overlap with exactly one final acceptance/one conflict, accepted quantity at most one, same-ID replay, authority unavailability, ambiguous timeout, recovery against durable receipts and bidirectional replica reconciliation. However the unchanged criterion explicitly requires a separate single-reservation successful control; no uncontended one-request test is stated. Contended exactly-one success is not that control."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7, 9; trace.jsonl line 24 item_11; workspace-changes.json",
+        "observation": "Labels history authored, script result local set arithmetic, and transaction/failure checks proposed and unexecuted. Zero exit means arithmetic completion only. Captured commands are local reads/arithmetic and workspace audit shows no edits. Sealed input integrity passes; case_compliant=false and host isolation/network limits remain preserved."
+      }
+    }
+  ]
+}
