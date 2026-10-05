@@ -1,6 +1,6 @@
 ---
 name: failure-oriented-testing
-description: Design tests for injected faults, adversarial schedules, generated inputs or recovery. Use when a suspected failure needs an independent oracle and reproducible evidence; exclude settled low-risk edits with meaningful tests.
+description: Implement or review deterministic regressions for injected faults, adversarial schedules, generated inputs, or recovery. Use when a suspected failure needs an independent oracle; settled low-risk edits follow ordinary testing.
 license: MIT
 ---
 

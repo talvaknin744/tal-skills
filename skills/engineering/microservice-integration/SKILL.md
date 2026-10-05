@@ -30,7 +30,7 @@ Evaluate latency, availability during downstream outages, volume, ordering needs
 
 Define the public fields and their meaning, errors, and successful completion. Keep storage models and domain decisions inside the owning service. Inspect shared models and SDKs for changes that force unrelated consumers to upgrade; useful transport helpers can coexist with independently versioned consumers.
 
-For broker delivery, duplicate handling, or replay guarantees, Call the Skill tool with "messaging-reliability". For events or asynchronous replies, read [messaging.md](references/messaging.md) to settle payload, correlation, and failure handling. For a user interface aggregating several services, read [ui-composition.md](references/ui-composition.md) to choose where presentation-specific work belongs.
+For broker delivery, duplicate handling, or replay guarantees, Hand off to the `messaging-reliability` skill. For events or asynchronous replies, read [messaging.md](references/messaging.md) to settle payload, correlation, and failure handling. For a user interface aggregating several services, read [ui-composition.md](references/ui-composition.md) to choose where presentation-specific work belongs.
 
 
 **Example:** A response contract can expose delivery status without exposing the provider's storage model.
@@ -46,7 +46,7 @@ For an existing interface change, read [compatibility.md](references/compatibili
 
 ## 5. Verify the interaction
 
-When evidence must establish consumer/provider compatibility across releases, Call the Skill tool with "microservice-testing".
+When evidence must establish consumer/provider compatibility across releases, Hand off to the `microservice-testing` skill.
 
 Exercise representative consumers against the proposed provider behavior. For implementation, use the existing test framework to check the changed contract and relevant interruption path. Include delayed replies, unavailable dependencies, or duplicate/out-of-order messages only where the interaction admits them. Use local substitutes or an authorized sandbox for effects; a design records these scenarios without executing production changes.
 

@@ -14,4 +14,4 @@ Validation means checking untrusted values at runtime before relying on their st
 
 Use the project's existing runtime and libraries. Consult [sources](references/sources.md) when verifying a driver-specific claim or selecting a version; the PostgreSQL example's pins are evidence, not a requirement for every service.
 
-When a business effect needs duplicate-safe retries or shared-state invariants, if available, Call the Skill tool with "idempotency". If shared-state invariants are also in scope and that skill is available, Call the Skill tool with "concurrency-correctness". Otherwise state the unavailable dependency and continue within this skill and the requested scope.
+When a business effect needs duplicate-safe retries, Hand off to the `idempotency` skill. When shared-state invariants are in scope, Hand off to the `concurrency-correctness` skill.

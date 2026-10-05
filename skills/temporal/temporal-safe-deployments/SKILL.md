@@ -1,6 +1,6 @@
 ---
 name: temporal-safe-deployments
-description: Evolve Temporal code, Workers, payloads, and workload migrations while existing executions remain active or recover from bad deployments. Use for replay compatibility and safe cutover.
+description: Assess Temporal releases, Worker retirement, replay compatibility, payload changes, and migrations with active executions. Use for command-history compatibility, version routing, safe cutover, and recovery from bad deployments.
 ---
 
 # Temporal safe deployments

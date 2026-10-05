@@ -6,7 +6,7 @@ Defines the meaning and changing behavior of continuously maintained stream resu
 
 ## When to reach for it
 
-Use it for event-time windows, late data, corrections, temporal joins, finality, or retained state; exclude broker acknowledgement repair and bounded in-process edits.
+Use it for continuously maintained event-time windows, late data, corrections, temporal joins, finality, or retained state. Broker acknowledgement repair belongs to messaging-reliability; bounded in-memory transformations belong in ordinary application code.
 
 ## It's working if
 

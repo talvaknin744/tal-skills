@@ -10,10 +10,10 @@ Use when selecting or reviewing serving, partitioning, ownership, movement or ba
 
 ## It's working if
 
-- Identify the limiting constraint from the actual request or job path, data placement, deployment shape and measurements.
-- State required completeness, freshness, ordering, ownership and recovery behavior where they affect the choice.
-- Define component roles, interfaces, coordination and failure behavior; pattern names alone are not reliability evidence.
-- Compare relevant alternatives with operational and resource costs, then state observations that validate or overturn the choice.
+- The plan identifies the limiting constraint from the actual request or job path, data placement, deployment shape and measurements.
+- The selected pattern's completeness, freshness, ordering, ownership and recovery requirements are explicit.
+- The design defines component roles, interfaces, coordination and failure behavior, supported by evidence beyond pattern names.
+- The decision compares relevant alternatives with operational and resource costs, then state observations that validate or overturn the choice.
 
 ## Where it fits
 

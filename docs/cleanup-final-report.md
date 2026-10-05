@@ -1,5 +1,9 @@
 # Cleanup completion record
 
+This records Phase 5 as merged at `9443eac`. Subsequent corrections and the paired
+discovery evaluation are recorded in the [cleanup follow-up](cleanup-followup.md).
+The measurements and limitations below describe that historical candidate.
+
 The five cleanup phases are implemented. Existing outcomes, cases, fixtures, verifiers, rubrics, manifests and freezes govern numerical estimates; 967 original protected records were checked through exact publication receipts. The initial retention estimate was too small, and later docs and evaluation records increase the retained count further.
 
 The final candidate contains 35 promoted packages, six miscellaneous packages and eight vendored Temporal packages. All public package names and invocation choices are preserved. Promoted descriptions average 26.1 words with a maximum of 30; 21 skills include sibling Skill-tool routing. README is 8,187 bytes, and all 35 promoted packages have docs and host metadata.

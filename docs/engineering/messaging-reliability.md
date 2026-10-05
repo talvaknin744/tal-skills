@@ -6,7 +6,7 @@ Makes broker messages reach a recoverable disposition without losing required ef
 
 ## When to reach for it
 
-Use it for broker consumers, acknowledgements, retries, quarantine/dead-letter paths, event replay, schema evolution, duplicate or out-of-order delivery, poison messages, and unsafe checkpoints. It excludes in-process collection transformations. For API/event contract choice and consumer coupling, pair with `microservice-integration`.
+Use it for broker consumers, acknowledgements, retries, quarantine/dead-letter paths, event replay, schema evolution, duplicate or out-of-order delivery, poison messages, and unsafe checkpoints. Local synchronous callbacks and in-process collection transformations belong in ordinary application code. For API/event contract choice and consumer coupling, pair with `microservice-integration`.
 
 ## It's working if
 

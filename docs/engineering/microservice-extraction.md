@@ -14,7 +14,7 @@ Use it to plan, review, or implement an incremental service extraction, includin
 - Each migration stage declares caller routing, authority for every mutable record, a transition condition, and a recovery path.
 - Coexistence covers old/new consumers, schema, jobs, in-flight work, and shadow execution without duplicate customer effects.
 - Before and after ownership transfer, authoritative state and recovery action are explicit; irreversible effects have treatment.
-- The stage is verified or its evidence gap is explicit; completion retires obsolete routes/writers after the recovery window and checks the original goal.
+- The stage is verified or its evidence gap is explicit; completion retires obsolete routes/writers after the recovery window and confirms the original goal.
 
 ## Where it fits
 

@@ -1,6 +1,6 @@
 ---
 name: load-testing
-description: Build or assess load tests for demand, saturation, overload, and recovery. Use workload models, generator ceilings, misleading throughput or percentile claims, or capacity experiments; ordinary unit assertions follow their route.
+description: Assess capacity claims or build load tests for demand, saturation, overload, and recovery. Use for workload models, generator ceilings, throughput and percentile evidence; ordinary unit assertions follow their route.
 license: MIT
 ---
 

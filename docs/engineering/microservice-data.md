@@ -6,7 +6,7 @@ Makes service data ownership, cross-service consistency, workflow recovery, and 
 
 ## When to reach for it
 
-Reach for it when splitting shared tables, replacing cross-service transactions or joins, modeling sagas, or publishing reporting/query projections over service-owned data. It excludes single-database tuning and single-operation retry deduplication. For service boundary choice, use `microservice-boundaries`; for message delivery mechanics, use `messaging-reliability`.
+Reach for it when splitting shared tables, replacing cross-service transactions or joins, modeling sagas, or publishing reporting/query projections over service-owned data. Single-database tuning belongs to `database-performance`; single-operation retry deduplication belongs to `idempotency`. For service boundary choice, use `microservice-boundaries`; for message delivery mechanics, use `messaging-reliability`.
 
 ## It's working if
 

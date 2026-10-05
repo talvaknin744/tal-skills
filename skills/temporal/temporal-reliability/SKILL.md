@@ -5,7 +5,7 @@ description: Design, review, or fix Temporal business failure paths involving du
 
 # Temporal reliability
 
-Business-effect safety means an explicit outcome at every interruption boundary. Temporal preserves orchestration progress; the application owns external-effect safety.
+A business outcome is the required durable application state and external effects at each interruption boundary. Temporal preserves orchestration progress; the application owns external-effect safety.
 
 ## 1. Bound the operation
 
@@ -39,10 +39,12 @@ Ask: If provider lookup cannot establish whether the charge committed, who owns 
 
 ## 4. Verify the failure boundary
 
-For an implementation, use the repository's existing harness to reproduce the relevant interruption and verify the fix. Select cases that exercise the changed contract: lost completion after an effect, concurrent retry, stale attempt resuming, permanent rejection, deadline expiry, duplicate callback, or compensation failure. Assert the business state and number of external effects, not just the Workflow's terminal status.
+For an implementation, use the repository's existing harness to reproduce the relevant interruption and verify the fix. Select cases that exercise the changed contract: lost completion after an effect, concurrent retry, stale attempt resuming, permanent rejection, deadline expiry, duplicate callback, or compensation failure. Assert the required business outcome and number of external effects, not just the Workflow's terminal status.
 
 Use deterministic barriers for race tests and SDK time-skipping for durable timers when available. Recorded-history replay checks compatibility; provider or database integration checks validate effect enforcement. A mocked provider verifies only the assumed contract. In a review, give a concrete failure schedule and expected assertions without changing files.
 
 Report the outcome or findings, relevant checks actually run, and remaining guarantee limits. For attribution or an uncertain SDK/provider rule, consult only the relevant [sources](references/sources.md); customer results motivate the checks rather than establish platform guarantees.
 
 Example: Commit at the provider, drop the response, retry concurrently, and assert one charge and a reconciled result.
+
+When asked for source support, read the named [source index](references/sources.md) before citing it. Distinguish an installed index pointer from an actually retrieved source, and mark any factual claim that still needs external verification.

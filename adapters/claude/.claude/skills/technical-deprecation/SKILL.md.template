@@ -1,0 +1,76 @@
+---
+name: technical-deprecation
+description: Retire supported libraries, APIs, configuration, or internal tools when consumers must migrate. Use for replacement readiness and removal gates; exclude private helper cleanup, worker draining, and product shutdown.
+license: MIT
+---
+
+# Technical deprecation
+
+Compatibility means the behavior existing consumers rely on under the supported
+policy. Retire a technical contract through evidenced consumer transitions. Keep
+the requested scope: review returns findings; planning supplies the next stage;
+implementation performs the authorized migration slice. A warning, deadline,
+or replacement launch does not establish that removal is safe.
+
+## 1. Define the retirement decision
+
+Name the contract, intended benefit, supported users and versions, governing
+compatibility policy, and replacement or explicitly approved withdrawal. Distinguish
+discouraging new use from committing to removal. Existing support obligations
+continue until the applicable policy changes; age alone supplies no reason to retire.
+
+Identify who owns migration progress and who can accept unresolved consumer risk.
+Use actual assignments; if absent, propose the required role and leave its decision
+pending while continuing independent inspection. Scale the record to the change.
+
+**Done:** the target, permitted behavior changes, accountable role, and requested
+stage are explicit; missing decisions cannot silently become removal approval.
+
+## 2. Establish consumers and replacement readiness
+
+Trace callers and the behavior they rely on. For dependencies outside a closed
+local call graph, dynamic use, or quiet usage reports, read
+[consumer evidence](references/consumer-evidence.md). Record what each evidence
+source covers and which consumers remain unknown.
+
+Compare the replacement against affected consumer contracts: inputs, outputs,
+errors, effects, and persisted formats where relevant. Exercise a representative
+consumer before bulk migration. Classify each behavior as preserved, deliberately
+changed, or unresolved; a renamed method or passing provider test proves little
+about a caller's needs.
+
+**Done:** each known consumer has a transition or an explicit unresolved gap,
+and required replacement behavior has checks rather than a feature-parity claim.
+
+## 3. Prepare and execute the next migration stage
+
+For warnings, preventing new dependencies, coexistence, or physical removal, read
+[migration gates](references/migration-gates.md). Assign the next bounded batch,
+its verification, and recovery action. Preserve functioning consumers during the
+agreed transition and prevent new usage through a check whose scope is explicit.
+
+Draft any required notices with the affected interface, replacement, supported
+transition, owner, and applicable dates; send them only when communication is
+authorized. Keep live disabling and external changes within existing task
+authorization. Prefer isolated compatibility checks when preparing a retirement.
+
+**Done:** the requested stage is implemented and checked, or its plan names the
+owner, acceptance evidence, and stop/recovery condition. Later stages remain plans.
+
+## 4. Verify removal and report the actual state
+
+Reconcile the consumer inventory with migrated behavior and remaining dependency
+evidence. A newly discovered caller or unmet replacement requirement stops the
+dependent retirement step. Rehearse removal at the affected boundary in an
+isolated target; retain a legacy-use control that demonstrates the check's sensitivity.
+
+Report completed migrations, remaining users and visibility gaps, checks actually
+run, and the next release/removal gate. Separate ready-to-remove from removed.
+If the task ends before retirement, retain an actionable owner and next step rather
+than declaring the deprecation complete. Read [sources](references/sources.md)
+when checking attribution or applying a platform's policy.
+
+**Done:** each completion claim names its stage and evidence; unresolved consumer,
+policy, or recovery conditions remain visible.
+
+For service interaction design, Call the Skill tool with "microservice-integration". For consumer/provider verification, Call the Skill tool with "microservice-testing". For worker lifecycle during rollout, Call the Skill tool with "graceful-draining".

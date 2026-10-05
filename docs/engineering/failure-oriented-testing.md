@@ -10,10 +10,10 @@ Use when a suspected failure, generated input or adverse ordering needs a reprod
 
 ## It's working if
 
-- Write a falsifiable claim with trigger, protected invariant, required observation and independent oracle.
-- Choose a controlled fault, input or schedule that distinguishes correct behavior from the suspected failure.
-- Retain a minimized counterexample with environment, command, expected and observed outcomes; preserve flaky failures.
-- Replay against the candidate and report explored cases and remaining integration gaps without treating coverage as proof.
+- The test claim states a falsifiable claim with trigger, protected invariant, required observation and independent oracle.
+- The recommendation selects a controlled fault, input or schedule that distinguishes correct behavior from the suspected failure.
+- The test retains a minimized counterexample with environment, command, expected and observed outcomes, including flaky failures.
+- The report records replay against the candidate and report explored cases and remaining integration gaps without treating coverage as proof.
 
 ## Where it fits
 

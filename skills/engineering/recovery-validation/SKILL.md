@@ -6,7 +6,7 @@ license: MIT
 
 # Recovery validation
 
-Build recovery proof for which service can resume from which recovered history. A valid archive, successful restore command, and accepting database socket are intermediate observations; acceptance belongs to the application.
+Validate which service can resume from which recovered history. A valid archive, successful restore command, and accepting database socket are intermediate observations; acceptance belongs to the application.
 
 ## 1. Define the recovery contract
 
@@ -49,7 +49,7 @@ and the application can access it under its real authorization boundary.
 
 ## 3. Validate usable history
 
-For broader dependency containment and service readiness beyond the restore claim, Call the Skill tool with "microservice-operations".
+For broader dependency containment and service readiness beyond the restore claim, Hand off to the `microservice-operations` skill.
 
 Compare recovered state with evidence outside the restored snapshot: expected
 identity, schema compatibility, committed-operation records, representative
@@ -73,7 +73,7 @@ state each have evidence; failed gates remain failed despite a zero restore exit
 
 ## 4. Demonstrate rejection and repeatability
 
-For testing how unsafe states and failure signals are rejected, Call the Skill tool with "failure-oriented-testing". Choose faults around the changed recovery boundary: missing identity or key,
+For testing how unsafe states and failure signals are rejected, Hand off to the `failure-oriented-testing` skill. Choose faults around the changed recovery boundary: missing identity or key,
 semantically invalid data, interrupted restoration, wrong environment, or a
 snapshot older than accepted writes. Require the verifier to reject the unsafe
 state. After a partial restore, retry into a fresh isolated target or use an

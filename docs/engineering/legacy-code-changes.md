@@ -6,14 +6,14 @@ Make a requested change testable in untested legacy code while preserving neighb
 
 ## When to reach for it
 
-Use when missing coverage makes a requested change risky or constructors, globals or hidden collaborators obstruct testing. Excludes greenfield work and changes already covered by focused tests.
+Use when missing coverage makes a requested change risky or constructors, globals or hidden collaborators obstruct testing. Greenfield work follows its implementation workflow; changes already covered by focused tests can use the ordinary change workflow.
 
 ## It's working if
 
-- Bound the requested difference, affected entrypoint and behavior to preserve; record executable baseline when possible.
-- Characterize reachable behavior through the smallest interface and distinguish observation from correctness.
-- If construction or hidden collaborators block testing, make the smallest isolation seam while retaining real decision logic.
-- Demonstrate the intended difference with a focused regression and run relevant checks; report what substitutes cannot validate.
+- The requested difference, affected entrypoint and behavior to preserve are bounded, with an executable baseline where possible.
+- The characterization records reachable behavior through the smallest interface and distinguish observation from correctness.
+- When construction or hidden collaborators block testing, the change creates the smallest isolation seam while retaining real decision logic.
+- A focused regression demonstrates the intended difference and relevant checks are run; limits of substitute evidence are reported.
 
 ## Where it fits
 

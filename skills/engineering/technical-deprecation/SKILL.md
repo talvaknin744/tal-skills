@@ -73,4 +73,4 @@ when checking attribution or applying a platform's policy.
 **Done:** each completion claim names its stage and evidence; unresolved consumer,
 policy, or recovery conditions remain visible.
 
-For service interaction design, if available, Call the Skill tool with "microservice-integration". For consumer/provider verification, if available, Call the Skill tool with "microservice-testing". For worker lifecycle during rollout, if available, Call the Skill tool with "graceful-draining". This retirement skill remains self-contained when those tools are unavailable.
+For service interaction design, Hand off to the `microservice-integration` skill. For consumer/provider verification, Hand off to the `microservice-testing` skill. For worker lifecycle during rollout, Hand off to the `graceful-draining` skill.

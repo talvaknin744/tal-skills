@@ -14,7 +14,7 @@ Design service-to-service calls, APIs, events, or BFF aggregation. Use for contr
 - The communication style has a use-case reason; required waiting or delayed completion is explicit.
 - A representative request/response or event defines meaningful fields and errors without exposing provider internals.
 - Affected consumer versions, compatibility, rollout stages, and incompatibility owners are identified.
-- Relevant consumers exercise provider behavior or gaps are explicitly unverified; checks actually run are reported.
+- Relevant consumers exercise provider behavior, or the gaps are explicitly marked unverified; executed checks are reported.
 
 ## Where it fits
 

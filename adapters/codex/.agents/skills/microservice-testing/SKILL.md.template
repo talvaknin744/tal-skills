@@ -1,0 +1,61 @@
+---
+name: microservice-testing
+description: Design or review tests across independently deployed services. Use for consumer contracts, service isolation, or release-coupling end-to-end suites; exclude ordinary unit tests within one application.
+license: MIT
+---
+
+# Microservice testing
+
+Build consumer evidence that a service can change without breaking its users. Choose test boundaries by the failure they expose and the feedback they provide. Make each test boundary explicit.
+
+## 1. Bound the claim
+
+Read the changed behavior, service interfaces, consumers, persistence adapters, existing tests, and relevant delivery stages. Identify the user-visible outcome and the release decision these tests must support. Record which services, dependency versions, environments, and failure cases are in scope.
+
+Honor the task mode: a strategy supplies a test plan; a review remains read-only; implementation changes the requested tests and necessary seams. Reuse existing runners and fixtures.
+
+
+**Example:** A changed pricing response can name the consumer-visible incorrect total as its risk.
+**Done:** each in-scope risk names an observable incorrect outcome, its affected consumer or user, and the evidence needed to detect it.
+
+## 2. Assign the smallest credible scope
+
+Map each risk to a test boundary. Use unit tests for local decisions; component or service tests for behavior through one service's public interface with external services controlled; focused integration tests for a real database, broker, serialization, or transport interaction; and end-to-end tests for essential journeys whose risk spans the assembled system. State which processes and resources are real for every ambiguous “integration” label.
+
+Prefer assertions on externally observable results. Verify call counts or ordering only when those interactions are part of correctness. A fake database cannot establish the real database's transaction behavior; a passing stub cannot establish the provider's current behavior.
+
+
+**Example:** A component test can call one service while controlling the payment provider.
+**Done:** every risk has a credible test scope, and every proposed broad test explains what narrower tests cannot establish.
+
+## 3. Establish consumer compatibility
+
+When the underlying interaction or public contract itself needs design, Use $microservice-integration.
+
+For API or event changes, consumer-driven contracts, or dependency doubles, read [contracts.md](references/contracts.md). Check both message structure and behavior consumers rely on, including relevant errors. Tie verification to identifiable consumer and provider versions, including versions still deployed during the rollout.
+
+Run provider verification independently where possible. Identify third-party providers that cannot participate and the remaining gap. Coordinate expectations through concrete contract artifacts; generating a schema alone does not prove semantic compatibility.
+
+
+**Example:** A provider can verify a contract against versions still deployed during rollout.
+**Done:** each affected consumer has verified expectations, or an explicit compatibility gap with an owner and next check; local stubs are not presented as provider evidence.
+
+## 4. Keep feedback usable
+
+For broader fault-scenario methods or failure injection, Use $failure-oriented-testing. Read [broader-tests.md](references/broader-tests.md) when changing shared environments, end-to-end coverage, performance tests, failure injection, or production checks. Give each test deterministic data ownership and bounded waits. Preserve evidence from intermittent failures before rerunning; repair the cause or track quarantine with replacement coverage and an owner.
+
+Check whether a service's release requires unrelated teams' builds, shared mutable test data, or a coordinated set of service versions. Propose the smallest change that removes the unnecessary dependency while preserving the needed coverage.
+
+
+**Example:** A shared end-to-end environment can assign each run isolated customer data.
+**Done:** required stages have a known trigger, owner, failure signal, and environment; any remaining release coupling is explained.
+
+## 5. Verify the claim
+
+In implementation mode, run the relevant scoped checks and demonstrate that the added regression detects its intended failure when practical. Compare observed coverage with the risk map. Separate passed checks, failed checks, and checks not run; a skipped provider or environment test remains an evidence gap.
+
+Deliver the supported compatibility or behavior claim, concrete findings or changed files, commands and outcomes, and material gaps. For strategy work, give executable scenarios and acceptance conditions instead of claiming results.
+
+
+**Example:** A contract check can be reported as unrun when the provider environment is unavailable.
+**Done:** every original risk is linked to observed evidence or a specific unverified check. Consult [sources.md](references/sources.md) for the book basis and the distinction between source concepts and this workflow.

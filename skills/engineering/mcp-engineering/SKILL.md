@@ -25,6 +25,6 @@ Make the integration's advertised contract match its actual behavior. Keep the p
 
 In review mode, return actionable findings tied to a request and observable consequence. In implement mode, return the patch and the checks run on that patch. In both modes, distinguish the protocol guarantee, the SDK behavior and the application policy. A successful tool exchange is not proof of durable effects or full protocol conformance.
 
-For authoritative pins and reading limits, consult [sources](references/sources.md). When available and relevant, Call the Skill tool with "idempotency" for business effect equivalence, "concurrency-correctness" for competing state changes, or "graceful-draining" for worker handoff. If a requested skill is unavailable, state that dependency and continue the MCP scope.
+For authoritative pins and reading limits, consult [sources](references/sources.md). For duplicate-safe business effects, Hand off to the `idempotency` skill. For competing state changes, Hand off to the `concurrency-correctness` skill. For worker handoff during shutdown, Hand off to the `graceful-draining` skill.
 
 **Example:** Send one malformed argument to a deterministic peer, then record its response, whether an effect occurred, and cleanup.

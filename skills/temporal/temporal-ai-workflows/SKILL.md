@@ -1,6 +1,6 @@
 ---
 name: temporal-ai-workflows
-description: Design, implement, or review Temporal AI and agent workflows with durable model/tool boundaries, bounded reasoning, shared state, approvals, and recovery. Excludes generic prompt tuning and AI without Temporal.
+description: Review or build Temporal AI workflows with durable model/tool boundaries, bounded reasoning and spending, shared state, approvals, and recovery. Use for incident analysis; generic prompt tuning and AI without Temporal need no such skill.
 ---
 
 # Temporal AI workflows

@@ -1,0 +1,923 @@
+[
+  {
+    "label": "A",
+    "case_key": "python-backend--cancelled-export",
+    "candidate": "revised-r3",
+    "criteria": [
+      {
+        "id": "cancel-ownership",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "return await remote.send_batches(conn, batches)",
+          "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership"
+        ],
+        "reason": "The final fixture diff removes the shielded child task and awaits send_batches directly inside the connection scope. In the supplied verifier, canceled sends propagate CancelledError, the connection releases once, and the remote is inactive at release."
+      },
+      {
+        "id": "effect-uncertainty",
+        "severity": "critical",
+        "score": 1,
+        "evidence_quotes": [
+          "Already committed batches must not be sent as a new business operation.",
+          "assert remote.effects == ([\"batch-17\"] if after_commit else [])"
+        ],
+        "reason": "The fixture checks that cancellation after commit leaves one recorded effect, and the implementation does not retry. But it has no reconciliation path for an uncertain committed batch; a later retry could duplicate the effect."
+      },
+      {
+        "id": "forced-checks",
+        "severity": "major",
+        "score": 1,
+        "evidence_quotes": [
+          "await remote.started.wait()",
+          "if after_commit:\n        remote.before_commit.set()\n        await remote.committed.wait()",
+          "assert pool.releases == 1"
+        ],
+        "reason": "The fixture gates cancellation during send and after commit and checks one release and the effect state. It does not exercise cancellation before acquisition completes, nor explicitly check child termination as a separate observation."
+      },
+      {
+        "id": "scope-and-evidence",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "\"deleted\": []",
+          " M exporter.py",
+          "\"independent_rerun\": true"
+        ],
+        "reason": "Scope metadata reports only exporter.py changed, with no deletions; the diff contains only the requested implementation change. The supplied check was run and independently rerun successfully. The evidence establishes fixture behavior only, not production validation."
+      },
+      {
+        "id": "executed-verification",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n",
+          "\"exit_code\": 0",
+          "\"independent_rerun\": true"
+        ],
+        "reason": "Actual command output and independent verification metadata show python3 -B verify.py succeeded with exit code 0. This verifies the supplied fixture, not production behavior."
+      }
+    ],
+    "reviewer": "score-002",
+    "requested_grader_model": "gpt-6-luna",
+    "critical_results": [
+      {
+        "id": "cancel-ownership",
+        "score": 2
+      },
+      {
+        "id": "effect-uncertainty",
+        "score": 1
+      },
+      {
+        "id": "scope-and-evidence",
+        "score": 2
+      },
+      {
+        "id": "executed-verification",
+        "score": 2
+      }
+    ],
+    "coverage_gaps": [],
+    "technical_uncertainties": [],
+    "major_weighted": {
+      "earned": 2,
+      "maximum": 4
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": true,
+    "quote_audit": [
+      {
+        "id": "cancel-ownership",
+        "quotes": [
+          {
+            "raw_grader_quote": "return await remote.send_batches(conn, batches)",
+            "content_quote": "return await remote.send_batches(conn, batches)",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "dcff8a10fc7bf72730d5dae925ecdc760d7817e93eec728787f828544d9ebc80"
+          },
+          {
+            "raw_grader_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership",
+            "content_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "f0ec15062c44f51f54359f4a8e2ca46a8cd425c58f7461a6fe9a05f4a48d0c95"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "effect-uncertainty",
+        "quotes": [
+          {
+            "raw_grader_quote": "Already committed batches must not be sent as a new business operation.",
+            "content_quote": "Already committed batches must not be sent as a new business operation.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "abc615bdba8ef7f4e291551d1c3bcf805c598e9709ce9f93bc5bc0d0c386d6d2"
+          },
+          {
+            "raw_grader_quote": "assert remote.effects == ([\"batch-17\"] if after_commit else [])",
+            "content_quote": "assert remote.effects == ([\"batch-17\"] if after_commit else [])",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "9685586a8f9b29edea7d4155157720279a0dcc34f7ce6354d14839a24f319d0f"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "forced-checks",
+        "quotes": [
+          {
+            "raw_grader_quote": "await remote.started.wait()",
+            "content_quote": "await remote.started.wait()",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "44833f45dd5d83e56669b2a1f1a04edbf480e20c87f65e748c7a8f84029c4ec3"
+          },
+          {
+            "raw_grader_quote": "if after_commit:\n        remote.before_commit.set()\n        await remote.committed.wait()",
+            "content_quote": "if after_commit:\n        remote.before_commit.set()\n        await remote.committed.wait()",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "18f745bab411a46298ac5b38c2a40999bb1200c68e8c2c973a8a21b00544ef71"
+          },
+          {
+            "raw_grader_quote": "assert pool.releases == 1",
+            "content_quote": "assert pool.releases == 1",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "c28f6525c2091f03e29c6613475920177f45eadde1a924be2caa0d0b515204c9"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "scope-and-evidence",
+        "quotes": [
+          {
+            "raw_grader_quote": "\"deleted\": []",
+            "content_quote": "\"deleted\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "07d6580a70063c3e835e66ad2e28648c64587e64f1707fecebb809b7195fd98c"
+          },
+          {
+            "raw_grader_quote": " M exporter.py",
+            "content_quote": " M exporter.py",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "005e9c01f530d65ea1a91f10eed6567779ca1602b63b49ec67b153233049d5ba"
+          },
+          {
+            "raw_grader_quote": "\"independent_rerun\": true",
+            "content_quote": "\"independent_rerun\": true",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "8f5d6cbf074346775b4b87d2e53a248b345402d6edb05234f34f2e6f94262d56"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "executed-verification",
+        "quotes": [
+          {
+            "raw_grader_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n",
+            "content_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "74550b5782d19dd7cde8680f3a7d6035ac7dfe27d6fafeebfbbf94899c2b429c"
+          },
+          {
+            "raw_grader_quote": "\"exit_code\": 0",
+            "content_quote": "\"exit_code\": 0",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "1527b638af1abc1145b47ebfe3e0cabbe63b41e31ebac2ec8344551fd92631ee"
+          },
+          {
+            "raw_grader_quote": "\"independent_rerun\": true",
+            "content_quote": "\"independent_rerun\": true",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "8f5d6cbf074346775b4b87d2e53a248b345402d6edb05234f34f2e6f94262d56"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "latest_evidence_artifact": "finish-graders/score-002/project/evidence.json",
+    "latest_score_artifact": "finish-graders/score-002/validated-scores.json"
+  },
+  {
+    "label": "A",
+    "case_key": "temporal-reliability--payment-response-loss",
+    "candidate": "revised-r3",
+    "criteria": [
+      {
+        "id": "uncertain-charge",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "The connection closing after PayGate accepted the first charge left the Activity without its receipt; retrying under a new key allowed a second charge.",
+          "Activity retries alone do not deduplicate effects when each retry uses a different key."
+        ],
+        "reason": "The answer explains the accepted-charge/lost-response ambiguity and why retries using changing keys can repeat the external effect. This matches the incident and adapter fixture; no durable execution guarantee is claimed."
+      },
+      {
+        "id": "business-identity",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "The smallest safe correction is to derive the key from the stable charge obligation: **tenant ID plus invoice ID**.",
+          "Those values remain the same across Activity retries and Workflow restarts, while a later invoice with the same amount has a different key.",
+          "Verify the key is scoped to the correct merchant account, as PayGate’s contract scopes idempotency by account and key."
+        ],
+        "reason": "The answer recommends tenant and immutable invoice identity scoped by merchant account, retained through retries and Workflow restarts. It excludes changing Run ID and attempt number by identifying them as the current defect."
+      },
+      {
+        "id": "payload-and-horizon",
+        "severity": "major",
+        "score": 2,
+        "evidence_quotes": [
+          "Keep the amount in the charge request: PayGate rejects a changed amount for a reused key.",
+          "within that deadline the system can retry or look up the stable key to resolve an ambiguous result.",
+          "After key expiry, a retry can create a new charge; payment operations must first be reconciled"
+        ],
+        "reason": "The answer preserves charge intent, uses the supplied same-key replay and lookup behavior within the seven-day retention window, and requires reconciliation after expiry before replacement."
+      },
+      {
+        "id": "failure-checks",
+        "severity": "major",
+        "score": 2,
+        "evidence_quotes": [
+          "After a simulated accepted charge with a lost response, retry using the same tenant/invoice key; PayGate should return the original receipt and there should be one charge.",
+          "Restart the Workflow and repeat; it should still return that receipt.",
+          "Charge a different invoice for the same amount; it should use a different key and create a separate charge."
+        ],
+        "reason": "The answer specifies the lost-response retry, a new Workflow run, and equal-amount distinct invoice checks, including the expected single effect for the same obligation and separate effect for another."
+      },
+      {
+        "id": "read-only",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "No event history or tests were supplied, so the incident’s exact duplicate count and whether any subsequent recovery succeeded cannot be established from these files.",
+          "Keep this project unchanged.",
+          "{\"changed_or_new\":[],\"deleted\":[]}",
+          "\"workspace_diff\":\"\""
+        ],
+        "reason": "The answer distinguishes proposed checks from tests or production observations and makes no unsupported claim about incident history. Supplied scope metadata records no changed or new files, no deletions, and an empty workspace diff."
+      }
+    ],
+    "reviewer": "score-008",
+    "requested_grader_model": "gpt-6-luna",
+    "critical_results": [
+      {
+        "id": "uncertain-charge",
+        "score": 2
+      },
+      {
+        "id": "business-identity",
+        "score": 2
+      },
+      {
+        "id": "read-only",
+        "score": 2
+      }
+    ],
+    "coverage_gaps": [
+      "No test execution or production event history was supplied; the proposed checks were not run.",
+      "Host metadata reports that complete per-turn tool schemas and an OS read-isolation boundary are unavailable. These limitations do not affect the supplied fixture evidence."
+    ],
+    "technical_uncertainties": [],
+    "major_weighted": {
+      "earned": 8,
+      "maximum": 8
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "quote_audit": [
+      {
+        "id": "uncertain-charge",
+        "quotes": [
+          {
+            "raw_grader_quote": "The connection closing after PayGate accepted the first charge left the Activity without its receipt; retrying under a new key allowed a second charge.",
+            "content_quote": "The connection closing after PayGate accepted the first charge left the Activity without its receipt; retrying under a new key allowed a second charge.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "eb3fb964398d173d110fd7443085a9f464be40ff8579400d342cafc0017665fe"
+          },
+          {
+            "raw_grader_quote": "Activity retries alone do not deduplicate effects when each retry uses a different key.",
+            "content_quote": "Activity retries alone do not deduplicate effects when each retry uses a different key.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "9987351dfa77ffe9c597cb8197ccd3e2482d2ab1c336e4e6d0ec7ca2493eb4c1"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "business-identity",
+        "quotes": [
+          {
+            "raw_grader_quote": "The smallest safe correction is to derive the key from the stable charge obligation: **tenant ID plus invoice ID**.",
+            "content_quote": "The smallest safe correction is to derive the key from the stable charge obligation: **tenant ID plus invoice ID**.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "2d2fa260c31ef2245b4d0d0f02a626b6fb9cdb3cee632cc3a0df8319a2c7f608"
+          },
+          {
+            "raw_grader_quote": "Those values remain the same across Activity retries and Workflow restarts, while a later invoice with the same amount has a different key.",
+            "content_quote": "Those values remain the same across Activity retries and Workflow restarts, while a later invoice with the same amount has a different key.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "da6f1ef44d2b60fbcc7133d97a0263480c74c6c975e10af5a651943d4c172ff5"
+          },
+          {
+            "raw_grader_quote": "Verify the key is scoped to the correct merchant account, as PayGate’s contract scopes idempotency by account and key.",
+            "content_quote": "Verify the key is scoped to the correct merchant account, as PayGate’s contract scopes idempotency by account and key.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "aa24aafbf3cd7958b392b341ab5610df1786470b4adf7b3830903d012d482bb4"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "payload-and-horizon",
+        "quotes": [
+          {
+            "raw_grader_quote": "Keep the amount in the charge request: PayGate rejects a changed amount for a reused key.",
+            "content_quote": "Keep the amount in the charge request: PayGate rejects a changed amount for a reused key.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "261d0957c02705988c6a3faab30bb5ab44878e21d30e91cbba98c6520c322d55"
+          },
+          {
+            "raw_grader_quote": "within that deadline the system can retry or look up the stable key to resolve an ambiguous result.",
+            "content_quote": "within that deadline the system can retry or look up the stable key to resolve an ambiguous result.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "41f43da3928fbde0eb4dc105dae87e79dfe5c57ace7bff9c65c3845fd861718a"
+          },
+          {
+            "raw_grader_quote": "After key expiry, a retry can create a new charge; payment operations must first be reconciled",
+            "content_quote": "After key expiry, a retry can create a new charge; payment operations must first be reconciled",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "17c9f609c7504ff67b9d7b7057b925b1da7b7717c9c15bbff66ce8f9061bbb25"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "failure-checks",
+        "quotes": [
+          {
+            "raw_grader_quote": "After a simulated accepted charge with a lost response, retry using the same tenant/invoice key; PayGate should return the original receipt and there should be one charge.",
+            "content_quote": "After a simulated accepted charge with a lost response, retry using the same tenant/invoice key; PayGate should return the original receipt and there should be one charge.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "4e4766063290aab8578a66bd6c64f6f59e98091451b0fbdf9d547fa3471935de"
+          },
+          {
+            "raw_grader_quote": "Restart the Workflow and repeat; it should still return that receipt.",
+            "content_quote": "Restart the Workflow and repeat; it should still return that receipt.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "39462fde009e70705246e4cc795271d6cc1e4bf482cfeb0fba01990af8c4f73a"
+          },
+          {
+            "raw_grader_quote": "Charge a different invoice for the same amount; it should use a different key and create a separate charge.",
+            "content_quote": "Charge a different invoice for the same amount; it should use a different key and create a separate charge.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "bca7cbd053739cd15b026da1290e1b0ecd7de452f1b25b01d9fa62e7a281e5e6"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "read-only",
+        "quotes": [
+          {
+            "raw_grader_quote": "No event history or tests were supplied, so the incident’s exact duplicate count and whether any subsequent recovery succeeded cannot be established from these files.",
+            "content_quote": "No event history or tests were supplied, so the incident’s exact duplicate count and whether any subsequent recovery succeeded cannot be established from these files.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "931213522f578972116a70ac2ed5c36a43af87b1e44d7f795e9a58b40cf90534"
+          },
+          {
+            "raw_grader_quote": "Keep this project unchanged.",
+            "content_quote": "Keep this project unchanged.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "9d79b97d5fa01c06a7d5e80acf54d4fb2cbabdbad432ca110157aac403ba3bac"
+          },
+          {
+            "raw_grader_quote": "{\"changed_or_new\":[],\"deleted\":[]}",
+            "content_quote": "{\"changed_or_new\":[],\"deleted\":[]}",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [
+              [
+                "changed_or_new",
+                "[]"
+              ],
+              [
+                "deleted",
+                "[]"
+              ]
+            ],
+            "exact_content_match": true,
+            "content_sha256": "b8221e815f701bd6c637d63c7bb13f33746abaf197aa491a0abf561bc86b6e05"
+          },
+          {
+            "raw_grader_quote": "\"workspace_diff\":\"\"",
+            "content_quote": "workspace_diff\":\"",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [
+              [
+                "workspace_diff",
+                "\"\""
+              ]
+            ],
+            "exact_content_match": true,
+            "content_sha256": "f87cd8e319c789babb86852f8a419c9f2c43ddcd5c9773219e26b97c77611b68"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "latest_evidence_artifact": "finish-graders/score-008/project/evidence.json",
+    "latest_score_artifact": "finish-graders/score-008/validated-scores.json"
+  },
+  {
+    "label": "A",
+    "case_key": "followup-v3--python-missing-provider-contract-v3",
+    "candidate": "revised-r3",
+    "criteria": [
+      {
+        "id": "owned-stop-before-release",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "async with pool.connection() as conn:\n        return await remote.send_batches(conn, batches)",
+          "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership"
+        ],
+        "reason": "The supplied diff changes only exporter.py, replacing the detached shielded task and swallowed cancellation with a direct await inside the connection scope. The supplied verifier passes cancellation and resource ownership checks. The unchanged signature and batches argument are visible in the diff."
+      },
+      {
+        "id": "unknown-effect-and-identity",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "If cancellation arrives after the remote commit but before its response, the caller cannot infer whether the batch committed from cancellation alone.",
+          "Retrying with a fresh `batch_id` is not safe: it may create a second business operation.",
+          "A safe retry needs a provider contract that deduplicates by the same stable `batch_id` and either returns the prior result for that identity or provides authoritative reconciliation of its outcome."
+        ],
+        "reason": "The answer explicitly describes the uncertain post-commit outcome, rejects a fresh identity, and requires same-identity deduplication or reconciliation. These are answer excerpts."
+      },
+      {
+        "id": "missing-provider-contract",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "A safe retry needs a provider contract that deduplicates by the same stable `batch_id` and either returns the prior result for that identity or provides authoritative reconciliation of its outcome. That contract is not supplied here."
+        ],
+        "reason": "The supplied request and fixture Remote expose send_batches, with no stated idempotency or lookup/reconciliation guarantee. The answer identifies that missing contract and states the safe-retry requirement without claiming it exists."
+      },
+      {
+        "id": "scope-and-verification",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "\"path\": \"exporter.py\"",
+          "\"deleted\": []",
+          "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n"
+        ],
+        "reason": "The scope metadata records exporter.py as the only changed or new path and no deletions; the diff also shows only exporter.py changed. The actual verifier command and independent rerun both report exit code 0 with the quoted PASS output. The answer correctly says the verifier is an in-memory mock and does not prove real provider behavior."
+      }
+    ],
+    "reviewer": "score-017",
+    "requested_grader_model": "gpt-6-luna",
+    "critical_results": [
+      {
+        "id": "owned-stop-before-release",
+        "score": 2
+      },
+      {
+        "id": "unknown-effect-and-identity",
+        "score": 2
+      },
+      {
+        "id": "missing-provider-contract",
+        "score": 2
+      },
+      {
+        "id": "scope-and-verification",
+        "score": 2
+      }
+    ],
+    "coverage_gaps": [],
+    "technical_uncertainties": [],
+    "major_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "quote_audit": [
+      {
+        "id": "owned-stop-before-release",
+        "quotes": [
+          {
+            "raw_grader_quote": "async with pool.connection() as conn:\n        return await remote.send_batches(conn, batches)",
+            "content_quote": "async with pool.connection() as conn:\n        return await remote.send_batches(conn, batches)",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "ea9e566581ded070f5e0da96bb4dc012c96d1c650b805f7c845c7033733ac159"
+          },
+          {
+            "raw_grader_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership",
+            "content_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "f0ec15062c44f51f54359f4a8e2ca46a8cd425c58f7461a6fe9a05f4a48d0c95"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "unknown-effect-and-identity",
+        "quotes": [
+          {
+            "raw_grader_quote": "If cancellation arrives after the remote commit but before its response, the caller cannot infer whether the batch committed from cancellation alone.",
+            "content_quote": "If cancellation arrives after the remote commit but before its response, the caller cannot infer whether the batch committed from cancellation alone.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "71b2c57971123a2d4c1d2e73e4d5ef77979caaff40484a420444cac35940b12f"
+          },
+          {
+            "raw_grader_quote": "Retrying with a fresh `batch_id` is not safe: it may create a second business operation.",
+            "content_quote": "Retrying with a fresh `batch_id` is not safe: it may create a second business operation.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "3d6253f9751e1d2164c5302318adacfaa41fd8520cd21a6e382b2c3c741adb7e"
+          },
+          {
+            "raw_grader_quote": "A safe retry needs a provider contract that deduplicates by the same stable `batch_id` and either returns the prior result for that identity or provides authoritative reconciliation of its outcome.",
+            "content_quote": "A safe retry needs a provider contract that deduplicates by the same stable `batch_id` and either returns the prior result for that identity or provides authoritative reconciliation of its outcome.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "2509c92980a860c06755dc45c69887e723c8e5bc433fe054ae44ceb8e336e9ed"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "missing-provider-contract",
+        "quotes": [
+          {
+            "raw_grader_quote": "A safe retry needs a provider contract that deduplicates by the same stable `batch_id` and either returns the prior result for that identity or provides authoritative reconciliation of its outcome. That contract is not supplied here.",
+            "content_quote": "A safe retry needs a provider contract that deduplicates by the same stable `batch_id` and either returns the prior result for that identity or provides authoritative reconciliation of its outcome. That contract is not supplied here.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "fda86cacb3b808e1362b3f60ddf8152a3834447269091fbc20df7767e0d4abaf"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "scope-and-verification",
+        "quotes": [
+          {
+            "raw_grader_quote": "\"path\": \"exporter.py\"",
+            "content_quote": "path\": \"exporter.py",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "fde727b3e6d902acff5b704c367bcefac8f642edc4ea8c229c8d6155aab98b3f"
+          },
+          {
+            "raw_grader_quote": "\"deleted\": []",
+            "content_quote": "\"deleted\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "07d6580a70063c3e835e66ad2e28648c64587e64f1707fecebb809b7195fd98c"
+          },
+          {
+            "raw_grader_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n",
+            "content_quote": "PASS success, pre-commit cancellation, post-commit cancellation and resource ownership\n",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "74550b5782d19dd7cde8680f3a7d6035ac7dfe27d6fafeebfbbf94899c2b429c"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "latest_evidence_artifact": "finish-graders/score-017/project/evidence.json",
+    "latest_score_artifact": "finish-graders/score-017/validated-scores.json"
+  },
+  {
+    "label": "A",
+    "case_key": "followup-v2--standalone-temporal-source-index-v2",
+    "candidate": "revised-r3",
+    "criteria": [
+      {
+        "id": "ambiguous-effect",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "That leaves the provider outcome **unknown to the Activity**; no response does not establish that the charge failed, that it was rolled back, or that another attempt is safe.",
+          "The tenant/invoice pair is identified as the stable charge obligation, including across Workflow restarts; the Run ID is not.",
+          "use the original tenant/invoice obligation to query PayGate’s key lookup for the first attempt’s key, and establish whether that charge committed before any further dispatch.",
+          "activityContext.attempt,"
+        ],
+        "reason": "The answer describes the ambiguous provider-accepted/response-lost path, connects retries to the attempt-specific key shown in the supplied charge.ts command output, and proposes key lookup plus a stable tenant/invoice obligation identity before redispatch. The incident supplies PayGate's key lookup and retention terms."
+      },
+      {
+        "id": "installed-actionable-source",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "The installed skill’s [source index](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/followup-v2--standalone-temporal-source-index-v2/project/.agents/skills/temporal-reliability/references/sources.md) points to the official [Temporal Activity definition documentation](https://docs.temporal.io/activity-definition)",
+          "- [Activity definition](https://docs.temporal.io/activity-definition): repeated execution, recorded completion, and provider-enforced idempotency."
+        ],
+        "reason": "The answer identifies an actionable documentation URL, and command item_6 actually reads the package-local sources.md index containing that URL. The source index's actual retrieved content is supplied independently of the answer's path rendering."
+      },
+      {
+        "id": "source-limits",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "This is an **index lookup only**: the project contains the pointer, but the documentation itself was not retrieved or verified.",
+          "No files were changed."
+        ],
+        "reason": "The answer explicitly limits its claim to finding a reference in installed resources and disclaims external retrieval or verification. It makes no claim of production proof or an executed successful test."
+      },
+      {
+        "id": "standalone-scope",
+        "severity": "major",
+        "score": 2,
+        "evidence_quotes": [
+          "There is no installed SDK package or other local package resource in the supplied project to inspect for version-specific semantics.",
+          "No files were changed.",
+          "\"workspace_diff\": \"\", \"untracked_files\": []"
+        ],
+        "reason": "The answer provides bounded analysis from the supplied project and installed standalone package without requiring another package or host tool. The supplied evidence records an empty workspace diff and no untracked files; it also attributes the actionable reference to the installed source index."
+      }
+    ],
+    "reviewer": "score-033",
+    "requested_grader_model": "gpt-6-luna",
+    "critical_results": [
+      {
+        "id": "ambiguous-effect",
+        "score": 2
+      },
+      {
+        "id": "installed-actionable-source",
+        "score": 2
+      },
+      {
+        "id": "source-limits",
+        "score": 2
+      }
+    ],
+    "coverage_gaps": [],
+    "technical_uncertainties": [],
+    "major_weighted": {
+      "earned": 4,
+      "maximum": 4
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "quote_audit": [
+      {
+        "id": "ambiguous-effect",
+        "quotes": [
+          {
+            "raw_grader_quote": "That leaves the provider outcome **unknown to the Activity**; no response does not establish that the charge failed, that it was rolled back, or that another attempt is safe.",
+            "content_quote": "That leaves the provider outcome **unknown to the Activity**; no response does not establish that the charge failed, that it was rolled back, or that another attempt is safe.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "13cf4982a630b0681740c15329c9ef3048cdf597c342424fed5f3e98de1bb751"
+          },
+          {
+            "raw_grader_quote": "The tenant/invoice pair is identified as the stable charge obligation, including across Workflow restarts; the Run ID is not.",
+            "content_quote": "The tenant/invoice pair is identified as the stable charge obligation, including across Workflow restarts; the Run ID is not.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "5cf4762073231bac80eefadc1d0ce5fe676f6759b8e0d1fccf73df10593b8e40"
+          },
+          {
+            "raw_grader_quote": "use the original tenant/invoice obligation to query PayGate’s key lookup for the first attempt’s key, and establish whether that charge committed before any further dispatch.",
+            "content_quote": "use the original tenant/invoice obligation to query PayGate’s key lookup for the first attempt’s key, and establish whether that charge committed before any further dispatch.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "17fe77db05865fe0a845eccd03e8921a342c18d9a76aadca618f08f3760fed24"
+          },
+          {
+            "raw_grader_quote": "activityContext.attempt,",
+            "content_quote": "activityContext.attempt,",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "746a87660369d55cbc95ea92ce294c6f9d69433a2d31a35a8a889ccdc7bece48"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "installed-actionable-source",
+        "quotes": [
+          {
+            "raw_grader_quote": "The installed skill’s [source index](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/followup-v2--standalone-temporal-source-index-v2/project/.agents/skills/temporal-reliability/references/sources.md) points to the official [Temporal Activity definition documentation](https://docs.temporal.io/activity-definition)",
+            "content_quote": "The installed skill’s [source index](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/followup-v2--standalone-temporal-source-index-v2/project/.agents/skills/temporal-reliability/references/sources.md) points to the official [Temporal Activity definition documentation](https://docs.temporal.io/activity-definition)",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "de827e6afde9b539c4a05b3d11cfaaff1e0fd0bba1b4824815ab3894b48e9075"
+          },
+          {
+            "raw_grader_quote": "- [Activity definition](https://docs.temporal.io/activity-definition): repeated execution, recorded completion, and provider-enforced idempotency.",
+            "content_quote": "- [Activity definition](https://docs.temporal.io/activity-definition): repeated execution, recorded completion, and provider-enforced idempotency.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "3200a37b8e87725159066a5477c38808bee96b33bdfb6be87c2e03aca716f6cd"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "source-limits",
+        "quotes": [
+          {
+            "raw_grader_quote": "This is an **index lookup only**: the project contains the pointer, but the documentation itself was not retrieved or verified.",
+            "content_quote": "This is an **index lookup only**: the project contains the pointer, but the documentation itself was not retrieved or verified.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "780f18bec8d29078bccb7a1bf4447d79be19433ced3781e83364eb1fba5b9c45"
+          },
+          {
+            "raw_grader_quote": "No files were changed.",
+            "content_quote": "No files were changed.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "8c054ff0e69c1d025ce425c98b2ea92cec26ba9e1be92c96208c19fe84786254"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "standalone-scope",
+        "quotes": [
+          {
+            "raw_grader_quote": "There is no installed SDK package or other local package resource in the supplied project to inspect for version-specific semantics.",
+            "content_quote": "There is no installed SDK package or other local package resource in the supplied project to inspect for version-specific semantics.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "3b3c15df9faa6f160c04f89833be8636af1fd09fb591874a71061af9d26d834e"
+          },
+          {
+            "raw_grader_quote": "No files were changed.",
+            "content_quote": "No files were changed.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "8c054ff0e69c1d025ce425c98b2ea92cec26ba9e1be92c96208c19fe84786254"
+          },
+          {
+            "raw_grader_quote": "\"workspace_diff\": \"\", \"untracked_files\": []",
+            "content_quote": "\"workspace_diff\": \"\", \"untracked_files\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "8ead09c45215d045497ff4b431acab49afb63a8bbb791e6ea2c3eb800fee500a"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "latest_evidence_artifact": "finish-graders/score-033/project/evidence.json",
+    "latest_score_artifact": "finish-graders/score-033/validated-scores.json"
+  }
+]

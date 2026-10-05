@@ -122,6 +122,14 @@ the ownership manifest live in `.tal-skills/`. Installed packages have no runtim
 dependency on this checkout. Models remain inherited; existing host settings and
 project instructions are preserved.
 
+Canonical skill instructions name sibling handoffs in portable language. The
+toolkit renders those entrypoints as `Use $skill-name` for Codex and
+`Call the Skill tool with "skill-name"` for Claude. References, licenses and
+metadata remain in the complete installed package. A sibling is optional unless
+the selected agent or workflow declares it; use available guidance and report a
+missing package when its specialist help is needed. Standalone skills CLI copies
+retain the portable handoff wording.
+
 An unowned name or file collision stops installation even when its bytes match.
 An edited owned file also stops replacement. Repeated installation preserves
 unchanged files; removed selections remove only unchanged owned artifacts.

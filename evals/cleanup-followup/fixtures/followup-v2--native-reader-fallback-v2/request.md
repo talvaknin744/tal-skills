@@ -1,0 +1,1 @@
+Two goroutines each call Increment once. The starting value is zero and both return successfully, but the observed value can be one. The current test calls Increment sequentially. go test -race reports no race in the supplied controlled run. The operation contract counts every accepted increment; no network or database is involved.

@@ -1,6 +1,6 @@
 ---
 name: concurrency-correctness
-description: Diagnose, design, or fix races involving lost updates, write skew, stale cache fills, or obsolete owners; use for violated contracts, with failure-oriented-testing for schedule design.
+description: Fix or review overlapping reads and writes, lost updates, write skew, stale cache fills, or obsolete owners. Use for violated concurrency contracts; failure-oriented-testing covers adversarial schedule design.
 license: MIT
 ---
 
@@ -12,9 +12,9 @@ Use the forbidden history to make the bad execution concrete, then enforce the s
 
 ## 1. State the observable contract
 
-Example: two reservations race for one item; state that at most one may succeed.
-
 Name the operation and what must remain true after successful completion. Separate the mutation invariant from the reader's freshness requirement: reserving the last item must prevent over-reservation; displaying inventory may permit lag. Two services reading at different times may legitimately see different values.
+
+Example: two reservations race for one item; state that at most one may succeed.
 
 Specify whether the reader needs an acknowledged write, a consistent snapshot, a bounded age, or the latest value under the datastore's documented semantics. Identify permitted intermediate states and behavior when freshness cannot be established. Ask only when an unresolved business rule changes correctness; continue gathering evidence meanwhile.
 
@@ -22,9 +22,9 @@ Specify whether the reader needs an acknowledged write, a consistent snapshot, a
 
 ## 2. Reconstruct the history
 
-Example: A reads revision 7, B commits 8, then A publishes; mark the commit and acknowledgement edges separately.
-
 Trace participating handlers, database statements, transaction boundaries, cache fills and invalidations, replica routing, and relevant message or ownership transitions. Identify the authority for each mutation and copies serving reads. Inspect the actual datastore, client version, isolation level, and deployment topology instead of inferring guarantees from an API name.
+
+Example: A reads revision 7, B commits 8, then A publishes; mark the commit and acknowledgement edges separately.
 
 Write a short actor-by-actor execution: A reads revision 7; B commits revision 8; A later publishes its result. Mark invocation, response, commit, and acknowledgement separately. Correlate operation IDs, entity revisions, and ownership generations. Cross-host wall-clock timestamps alone cannot prove the ordering; distinguish observed edges from a plausible schedule.
 
@@ -32,9 +32,9 @@ Write a short actor-by-actor execution: A reads revision 7; B commits revision 8
 
 ## 3. Choose the enforcement boundary
 
-Example: a fresh read followed by an unconditional write still permits a lost update; locate the atomic decision.
-
 Locate the atomic decision or ordering rule that excludes the bad history. A fresh primary read does not make a later write atomic. A process-local mutex coordinates only its own participants. Name the linearization point for an indivisible operation, or the durable transition and convergence condition for an asynchronous one.
+
+Example: a fresh read followed by an unconditional write still permits a lost update; locate the atomic decision.
 
 Load the branch that matches the history:
 
@@ -50,9 +50,9 @@ Compare the smallest adequate repair with the current design. State which writer
 
 ## 4. Force the dangerous interleaving
 
-Example: hold A at the cache fill, commit B, then release A and check the forbidden stale publication.
-
 Use barriers, deferred responses, controlled transaction sessions, or fake clocks to pause at the relevant boundary and release actors in the failing order. For implementation, demonstrate the forbidden outcome before the correction when practical, then run the same schedule against the repair and relevant existing checks. Include the interruption path the repair introduces, such as retry exhaustion or unavailable freshness metadata.
+
+Example: hold A at the cache fill, commit B, then release A and check the forbidden stale publication.
 
 Use real datastore integration checks when correctness depends on isolation, locking, or conditional-write semantics. A fake demonstrates application behavior under modeled guarantees; a stress-test pass does not prove every schedule safe. Keep externally visible effects in local substitutes or an already authorized sandbox.
 
@@ -60,13 +60,13 @@ Use real datastore integration checks when correctness depends on isolation, loc
 
 ## 5. Report the supported guarantee
 
-Example: report the enforced history, permitted overlap, and any topology or datastore guarantee left unverified.
-
 Present the invariant, failing history, enforcement point, changed files or evidence-backed finding, and checks performed. For operational diagnosis, identify useful version/conflict/lag signals and the contract they measure; cache hit rate alone is not a consistency metric. Include material capacity costs when a fix adds authoritative reads or serialization. Attribution and version-sensitive boundaries are in [sources.md](references/sources.md).
+
+Example: report the enforced history, permitted overlap, and any topology or datastore guarantee left unverified.
 
 **Done:** the final report states prevented and permitted executions with evidence. For freshness work, include an ordering/contract row naming the relevant successful acknowledgement, read invocation boundary, guaranteed results and permitted overlap, including whether an overlapping read may return its captured snapshot; distinguish the required contract from any stronger chosen implementation policy. For cache work, return four compact boundary rows: source/replica and adapter; notification/recovery; ordering-metadata lifecycle/durability; actual thread/process/host topology. Each row states actual supplied or exercised evidence, result, unsupported boundary and applicable next check. Fill every row with the result or specific unknown, including excluded scope; distinguish multiple service objects sharing one process from independently running processes. Propose unexecuted next checks within the task's scope.
 
-When the installed Skill tool exposes it, Call the Skill tool with "failure-oriented-testing" to design failure-oriented schedules and checks. If unavailable, keep the validation plan in this package and disclose the gap.
+When validation requires adversarial schedules or fault injection, Hand off to the `failure-oriented-testing` skill.
 
 For independently accepted decisions that merge, return separate validation
 controls for one uncontended successful request, competing distinct requests,

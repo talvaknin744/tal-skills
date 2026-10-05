@@ -1,0 +1,54 @@
+---
+name: capacity-planning
+description: Model backend or infrastructure capacity for growth, backlog recovery, rollout headroom, fleet or pool sizing, autoscaling, downstream limits, and cost per useful operation; exclude inventory without sizing decisions.
+license: MIT
+---
+
+# Capacity planning
+
+Headroom is usable capacity remaining after promised demand and failure scenarios are accounted for. Produce a capacity envelope tied to useful work, resource demand and the operating scenarios the service promises to support.
+
+## 1. Establish demand and objectives
+
+Read workload measurements, latency/completion targets, topology, effective
+resource limits, dependency quotas and cost inputs. Separate admitted and offered
+demand, workload classes, growth, peaks, skew and background work. Inventory ready,
+routable capacity and the observation window; label forecasts and unknowns.
+
+**Done:** workload, objectives, scenario scope and measured-versus-assumed inputs
+are explicit, with units and timing boundaries.
+
+## 2. Build the constrained model
+
+Read [resource and queue models](references/models.md) for demand, concurrency,
+backlog and cost calculations. Locate the binding resource at each relevant stage.
+Include fan-out, retries and fleet-wide connection/worker budgets. Treat replica
+multiplication and load distribution as hypotheses to validate.
+
+**Done:** each estimate has units, assumptions and a corresponding measurement;
+the model identifies downstream ceilings and uncertainty rather than only a
+replica count.
+
+## 3. Challenge usable capacity
+
+Read [failure and scaling scenarios](references/scenarios.md) for rollout,
+capacity loss, cold replacements and autoscaling control. Compare the chosen
+scenarios against demand, deadlines and accepted-work recovery requirements.
+Explain the cheapest viable intervention and the condition that would change it.
+
+**Done:** the scenario table states usable capacity, binding constraints,
+shortfall/headroom, observation/startup delays and feasible overload behavior.
+
+## 4. Validate and recommend
+
+Use representative measured workload results or propose a targeted experiment
+for each material unproven claim. Execute only the requested scoped checks. Show
+where useful throughput and latency violate objectives, not merely where process
+CPU rises. Include correctness and backlog/resource recovery as relevant.
+
+**Done:** return the capacity envelope, calculations, scaling triggers/bounds,
+cost basis, evidence and remaining limits. State the evidence needed before a
+forecast or linear estimate becomes demonstrated capacity.
+Consult [sources](references/sources.md) for primary reading scope.
+
+When measured workload evidence is needed to validate material assumptions, Call the Skill tool with "load-testing".

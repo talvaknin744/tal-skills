@@ -1,0 +1,49 @@
+---
+name: idempotency
+description: Make API, webhook and worker retries duplicate-safe. Use for idempotency keys, concurrent duplicates and uncertain business effects. For retry timing, use overload-control.
+license: MIT
+---
+
+# Idempotency
+
+Make retries preserve the intended business outcome within an explicit boundary and lifetime. *Owner election* is the atomic decision that gives one attempt the right to cause the business effect. Reuse the project's storage, transaction, and API conventions; choose a mechanism proportionate to the harm of duplication.
+
+## 1. Identify the operation
+
+Read the relevant handler, writes, downstream calls, and retrying clients or workers. Name the effect that must not repeat, the logical operation identity, and the place where success becomes durable. Include indirect effects only when they matter to the request. Example: two deliberate identical purchases are distinct operations; two attempts to complete one purchase share its identity.
+
+Honor the task mode: a review produces evidence and recommendations; an implementation request authorizes the scoped code changes and relevant tests. Ask only for policy decisions that block correctness. A natural uniqueness rule or a resource update may be sufficient; a new middleware framework is not a default requirement.
+
+## 2. Specify equivalence and ownership
+
+Record the caller/tenant and operation scope, what makes two commands equivalent, which results may be returned on retry, and the guarantee's retention window. Authorize access before exposing an existing operation's result. A client token identifies one logical operation across its attempts; it does not grant access to that operation.
+
+Example: the same key with a changed transfer amount needs an explicit changed-intent response.
+
+For API keys, payload comparison, response replay, or retention changes, read [request-contract.md](references/request-contract.md). Resolve ambiguous policies explicitly instead of silently treating changed intent as a retry.
+
+Locate owner election before a harmful effect can run. Check the actual datastore's uniqueness, conditional-update, and transaction guarantees across all participating workers. Separate checking for a record from acquiring the right to execute; a process-local cache cannot coordinate independent instances.
+
+When one datastore owns the effect, commit the business change and durable retry outcome in the same transaction or equivalent atomic primitive. A rollback must leave neither committed; a committed change must remain identifiable on retry.
+
+## 3. Cover interruptions
+
+For each durable boundary, reason about interruption immediately before and after it. Identify what a retry can prove from stored evidence and what it cannot know. A timeout describes the caller's observation, not the downstream effect's outcome.
+
+Example: a provider may accept a payout before its reply is lost; retain that unknown outcome under the same operation identity.
+
+When the path includes an external provider, messaging, leases, or multiple regions, read [recovery.md](references/recovery.md). Preserve the operation identity during recovery and explain the remaining guarantee when the remote system cannot deduplicate or reconcile.
+
+Do not describe a pending or uncertain operation as safely retryable merely because its worker disappeared. Distinguish final results, active work, proven failures before effects, and outcomes requiring investigation. State how each becomes observable and who or what advances it.
+
+## 4. Verify the requested change
+
+Use [verification.md](references/verification.md) to select tests for the actual failure boundaries. When implementing, add meaningful regressions in the existing test framework and run the relevant checks. Use local fakes or an authorized sandbox for destructive or externally visible effects. Review-only work stays read-only unless the user already requested execution.
+
+Example: force concurrent first attempts, then interrupt after the business commit and before the reply; check one effect and a recoverable outcome.
+
+Verify provider-specific behavior against the installed SDK/API version and current primary documentation when needed. If access is unavailable, identify the unresolved dependency and continue with local evidence; never claim a provider guarantee from the presence of a header alone. Reference locations are collected in [sources.md](references/sources.md).
+
+When retry timing or admission budgets also need a contract, Call the Skill tool with "overload-control".
+
+Finish with the supported guarantee, remaining limits, changed files or concrete findings, and checks actually run. For a design, include the ownership and recovery rules. For a narrow fix, keep unrelated redesign as a separate observation. Completion means the scoped repeat/interruption scenarios are demonstrated or explicitly unverified, with a next validation step for any material gap.
