@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "description": "Focused Claude Code cases for the installed tal-skills plugin. Existing evaluation corpora remain unchanged. Behavioral runs are separately archived; blocked attempts and host limits remain visible.",
+  "cases": [
+    {
+      "key": "claude-code--python-idempotency-handoff-v4",
+      "case_id": "python-idempotency-explicit-handoff-v4",
+      "group": "claude-code-focused-v4",
+      "existing_case": false,
+      "candidate_variant": "plugin-canonical-and-project-generated",
+      "prompt": "Use the python-backend skill to review cancellation ownership and resource cleanup in exporter.py against request.md. The remote service may commit send_batches before the client receives its response, and the provider contract given here has no documented idempotency, status lookup, or reconciliation guarantee. Use idempotency skill guidance for the distinct duplicate-effect and retry-identity question, then integrate both analyses. Explain what cancellation can and cannot establish, whether a fresh batch identity is safe, and what additional provider contract would permit a safe retry. Preserve every supplied file. You may run local checks already present in the project; report any checks actually run and their limits. Use no external services or package installation.",
+      "prompt_sha256": "f1397e3398a0e700475baf3fcc3aaf5a466292e025aff8b70123b916f55f1a3b",
+      "criteria": [
+        {
+          "id": "actual-python-skill",
+          "severity": "critical",
+          "criterion": "Observable transcript shows a successful actual Claude Skill tool invocation and result for python-backend, with the installed skill body available to this run. A catalog listing, file mention, command, or final-answer marker alone is insufficient."
+        },
+        {
+          "id": "actual-idempotency-handoff",
+          "severity": "critical",
+          "criterion": "Observable transcript shows a successful actual Claude Skill tool invocation and result for idempotency, with the installed skill body available to this run. The answer substantively integrates its distinct duplicate-effect or retry-identity guidance for the supplied ambiguous remote effect; a name or slash-command marker alone is insufficient. No fixed narration order is required."
+        },
+        {
+          "id": "owned-cancellation",
+          "severity": "critical",
+          "criterion": "Explains that the owned send task must not outlive its connection; cancellation should be propagated after stopping and joining the task before connection release, rather than swallowed or returned as an empty success list."
+        },
+        {
+          "id": "uncertain-effect-contract",
+          "severity": "critical",
+          "criterion": "Explains cancellation is not rollback and a remote commit may have occurred before response loss. Does not call a fresh batch identity safe; states the supplied provider contract lacks deduplication, status, or reconciliation guarantees and identifies a contract or reconciliation gate without inventing APIs or guarantees."
+        },
+        {
+          "id": "evidence-and-scope",
+          "severity": "critical",
+          "criterion": "Uses the unchanged supplied files as evidence, makes no file changes or external/package calls, accurately reports any local checks actually run and their limits, distinguishes stated provider assumptions from guarantees, and makes no production claim."
+        }
+      ],
+      "criteria_sha256": "97a932bf0857881865acb8b998aa788242ab1230ba4967eab313112945a408e5",
+      "fixture_source": "evals/python-backend/fixtures/cancelled-export",
+      "fixture": {
+        "source_digest": "141f7c227a7a8419febdf776cab256704ade29e620f65825b0613d0a39ce4eea",
+        "files": [
+          {
+            "path": "exporter.py",
+            "sha256": "ce210aee8a396bf20182d11e631b5907cd4bad441026656557b22e9930668c59",
+            "bytes": 290
+          },
+          {
+            "path": "request.md",
+            "sha256": "7675c7c354a32666be2a02aed37a3052018c96cab5f625bceea06d56ffafc561",
+            "bytes": 589
+          },
+          {
+            "path": "verify.py",
+            "sha256": "425d4097d94403b748fddd94ba0a045d62ad657574ef9eaec6dda2e6421cdbed",
+            "bytes": 2334
+          }
+        ]
+      },
+      "fixture_dir": "evals/cleanup-followup/fixtures/claude-code-python-idempotency-v4",
+      "contract_reason": "New v4 focused Claude host case for actual Python-to-Idempotency Skill tool handoff. It preserves the existing cancelled-export source fixture, tests provider-contract limits without inventing APIs, and is separate from retained v3 Address and host-gap cases.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "actual_skill_tool": true,
+        "normal_skill_discovery": true,
+        "local_verifier": true
+      },
+      "installation_forms": [
+        "README-installed tal-skills plugin with canonical skills",
+        "project-local generated Claude skill packages with plugin disabled"
+      ],
+      "fixture_files": [
+        {
+          "path": "exporter.py",
+          "sha256": "ce210aee8a396bf20182d11e631b5907cd4bad441026656557b22e9930668c59",
+          "bytes": 290
+        },
+        {
+          "path": "request.md",
+          "sha256": "7675c7c354a32666be2a02aed37a3052018c96cab5f625bceea06d56ffafc561",
+          "bytes": 589
+        },
+        {
+          "path": "verify.py",
+          "sha256": "425d4097d94403b748fddd94ba0a045d62ad657574ef9eaec6dda2e6421cdbed",
+          "bytes": 2334
+        }
+      ]
+    },
+    {
+      "key": "claude-code--architecture-plugin-unqualified-v1",
+      "case_id": "architecture-plugin-unqualified-v1",
+      "group": "claude-code-host-syntax-v1",
+      "existing_case": false,
+      "candidate_variant": "prescribed-unqualified-plugin-form",
+      "prompt": "Use /architecture to give this small export system a proportionate architecture review. Are its module boundaries and single-job deployment reasonable, and which reliability concerns deserve attention first? Keep the result concise and read-only. Use no external services.",
+      "prompt_sha256": "400ddbc032444a781f271d3b4d0d20db7dc32371b76ba4dfbfc001711c906b7a",
+      "criteria": [
+        {
+          "id": "actual-architecture-skill",
+          "severity": "critical",
+          "criterion": "Observable transcript shows a successful actual Claude Skill tool invocation and result for the installed architecture skill. Catalog presence, a file mention, command text, or final-answer marker alone is insufficient."
+        },
+        {
+          "id": "explicit-form-resolution",
+          "severity": "critical",
+          "criterion": "The requested explicit invocation form resolves to the architecture skill body for this installation form; report the actual invocation/tool evidence without claiming an unsupported alias."
+        },
+        {
+          "id": "proportionate-review",
+          "severity": "major",
+          "criterion": "Gives a concise, read-only review grounded in the supplied small export system, including module responsibility, single-job deployment assumption, and its material reliability concerns."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves fixture and installed packages unchanged, uses no external services, and does not invent production incidents or checks."
+        }
+      ],
+      "criteria_sha256": "12e8ff6b5a0c5f06974f4eae67197d6f46748a253bd52acdac0b1d8b7e9e037b",
+      "fixture_source": "evals/architecture/fixtures/multilingual-worker",
+      "fixture": {
+        "source_digest": "246c09d41217ba8716600dcb470d16dd112fd9d8ad8f1ebb20f2137dfc09d759",
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+            "bytes": 489
+          },
+          {
+            "path": "export.py",
+            "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+            "bytes": 280
+          },
+          {
+            "path": "status.js",
+            "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+            "bytes": 145
+          },
+          {
+            "path": "upload.sh",
+            "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+            "bytes": 150
+          }
+        ]
+      },
+      "fixture_dir": "evals/cleanup-followup/fixtures/claude-code-architecture-command-v1",
+      "contract_reason": "Versioned host-syntax pair: preserve the prescribed unqualified `/architecture` attempt first; use the documented `tal-skills` plugin namespace as the supported-form comparison with unchanged request semantics.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "actual_skill_tool": true,
+        "normal_skill_discovery": true
+      },
+      "installation_form": "README-installed tal-skills plugin",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+          "bytes": 489
+        },
+        {
+          "path": "export.py",
+          "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+          "bytes": 280
+        },
+        {
+          "path": "status.js",
+          "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+          "bytes": 145
+        },
+        {
+          "path": "upload.sh",
+          "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+          "bytes": 150
+        }
+      ]
+    },
+    {
+      "key": "claude-code--architecture-plugin-namespaced-v1",
+      "case_id": "architecture-plugin-namespaced-v1",
+      "group": "claude-code-host-syntax-v1",
+      "existing_case": false,
+      "candidate_variant": "documented-plugin-namespace-form",
+      "prompt": "Use /tal-skills:architecture to give this small export system a proportionate architecture review. Are its module boundaries and single-job deployment reasonable, and which reliability concerns deserve attention first? Keep the result concise and read-only. Use no external services.",
+      "prompt_sha256": "0da8d887fd4e126829adf5a1bd27d77e8cd1ee46e37fe17438a5e1458cac2894",
+      "criteria": [
+        {
+          "id": "actual-architecture-skill",
+          "severity": "critical",
+          "criterion": "Observable transcript shows a successful actual Claude Skill tool invocation and result for the installed architecture skill. Catalog presence, a file mention, command text, or final-answer marker alone is insufficient."
+        },
+        {
+          "id": "explicit-form-resolution",
+          "severity": "critical",
+          "criterion": "The requested explicit invocation form resolves to the architecture skill body for this installation form; report the actual invocation/tool evidence without claiming an unsupported alias."
+        },
+        {
+          "id": "proportionate-review",
+          "severity": "major",
+          "criterion": "Gives a concise, read-only review grounded in the supplied small export system, including module responsibility, single-job deployment assumption, and its material reliability concerns."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves fixture and installed packages unchanged, uses no external services, and does not invent production incidents or checks."
+        }
+      ],
+      "criteria_sha256": "12e8ff6b5a0c5f06974f4eae67197d6f46748a253bd52acdac0b1d8b7e9e037b",
+      "fixture_source": "evals/architecture/fixtures/multilingual-worker",
+      "fixture": {
+        "source_digest": "246c09d41217ba8716600dcb470d16dd112fd9d8ad8f1ebb20f2137dfc09d759",
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+            "bytes": 489
+          },
+          {
+            "path": "export.py",
+            "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+            "bytes": 280
+          },
+          {
+            "path": "status.js",
+            "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+            "bytes": 145
+          },
+          {
+            "path": "upload.sh",
+            "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+            "bytes": 150
+          }
+        ]
+      },
+      "fixture_dir": "evals/cleanup-followup/fixtures/claude-code-architecture-command-v1",
+      "contract_reason": "Versioned host-syntax pair: preserve the prescribed unqualified `/architecture` attempt first; use the documented `tal-skills` plugin namespace as the supported-form comparison with unchanged request semantics.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "actual_skill_tool": true,
+        "normal_skill_discovery": true
+      },
+      "installation_form": "README-installed tal-skills plugin",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+          "bytes": 489
+        },
+        {
+          "path": "export.py",
+          "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+          "bytes": 280
+        },
+        {
+          "path": "status.js",
+          "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+          "bytes": 145
+        },
+        {
+          "path": "upload.sh",
+          "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+          "bytes": 150
+        }
+      ]
+    }
+  ]
+}
