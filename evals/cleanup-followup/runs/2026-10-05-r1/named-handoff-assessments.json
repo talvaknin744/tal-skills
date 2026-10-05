@@ -1,0 +1,220 @@
+{
+  "case_key": "followup-v3--explicit-native-sibling-handoff-v3",
+  "candidate": "r1-handoff-fallback",
+  "assessments": [
+    {
+      "label": "initial/revised-source-attempt",
+      "source": "r1/graders/harness-regrade-explicit-sibling/final.json",
+      "sha256": "c98ced1d03cc1b6d6659e1ef46525e1fa22bdac61411d186370c9e45ad7e59f1",
+      "score_packet": {
+        "rows": [
+          {
+            "label": "A",
+            "technical_uncertainties": [
+              "The packet proves successful reads of both named sibling bodies, but does not supply their prose; the answer\u2019s integration of specific sibling guidance is therefore only partly verifiable."
+            ],
+            "criteria": [
+              {
+                "id": "primary-body-exposure",
+                "score": 2,
+                "evidence_quotes": [
+                  "cat .agents/skills/microservice-extraction/SKILL.md",
+                  "\"command_index\": 0",
+                  "\"command_exit_code\": 0"
+                ],
+                "reason": "The trace records a successful native read of the primary SKILL.md body after the request.",
+                "severity": "critical"
+              },
+              {
+                "id": "actual-sibling-handoff",
+                "score": 1,
+                "evidence_quotes": [
+                  "cat .agents/skills/technical-deprecation/SKILL.md",
+                  "cat .agents/skills/infrastructure-change-safety/SKILL.md",
+                  "\"name\": \"infrastructure-change-safety\"",
+                  "\"name\": \"technical-deprecation\"",
+                  "I used the installed `graceful-draining` guidance to independently assess old-worker retirement and the installed infrastructure rollout guidance to assess mixed-version cutover and recovery."
+                ],
+                "reason": "A named applicable sibling body was successfully read, and the answer describes applying rollout and recovery guidance. The omitted body text prevents confirming which relevant evidence it supplied.",
+                "severity": "critical"
+              },
+              {
+                "id": "ownership-and-recovery",
+                "score": 2,
+                "evidence_quotes": [
+                  "Those writes can be absent from Address after cutover.",
+                  "Restoring the monolith\u2019s 01:00 snapshot would discard Address changes",
+                  "routing back to the monolith requires a proven reconciliation path that preserves new addresses, corrections, and deletions.",
+                  "fenced from further `main_db` writes."
+                ],
+                "reason": "Explains the old-writer authority risk, the loss of accepted corrections on rollback, and recommends fencing plus a recovery gate that preserves writes.",
+                "severity": "critical"
+              },
+              {
+                "id": "bounded-host-and-scope",
+                "score": 2,
+                "evidence_quotes": [
+                  "This is a bounded, read-only review of [rollout.md](/workspace/rollout.md).",
+                  "These are required checks, not checks performed in this review.",
+                  "\"changed_or_new\": []",
+                  "\"deleted\": []",
+                  "\"workspace_diff\": \"\"",
+                  "\"literal_skill_tool_calls_observed\": false"
+                ],
+                "reason": "The review stays scoped to the rollout, marks proposed checks as unperformed, makes no literal Skill-tool claim, and the packet records no file changes. No explicit-only architecture body read is evidenced.",
+                "severity": "major"
+              }
+            ],
+            "quote_audit": [
+              {
+                "id": "primary-body-exposure",
+                "quotes": [
+                  {
+                    "quote": "cat .agents/skills/microservice-extraction/SKILL.md",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"command_index\": 0",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"command_exit_code\": 0",
+                    "exact_match": true
+                  }
+                ],
+                "all_quotes_exact": true
+              },
+              {
+                "id": "actual-sibling-handoff",
+                "quotes": [
+                  {
+                    "quote": "cat .agents/skills/technical-deprecation/SKILL.md",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "cat .agents/skills/infrastructure-change-safety/SKILL.md",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"name\": \"infrastructure-change-safety\"",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"name\": \"technical-deprecation\"",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "I used the installed `graceful-draining` guidance to independently assess old-worker retirement and the installed infrastructure rollout guidance to assess mixed-version cutover and recovery.",
+                    "exact_match": true
+                  }
+                ],
+                "all_quotes_exact": true
+              },
+              {
+                "id": "ownership-and-recovery",
+                "quotes": [
+                  {
+                    "quote": "Those writes can be absent from Address after cutover.",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "Restoring the monolith\u2019s 01:00 snapshot would discard Address changes",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "routing back to the monolith requires a proven reconciliation path that preserves new addresses, corrections, and deletions.",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "fenced from further `main_db` writes.",
+                    "exact_match": true
+                  }
+                ],
+                "all_quotes_exact": true
+              },
+              {
+                "id": "bounded-host-and-scope",
+                "quotes": [
+                  {
+                    "quote": "This is a bounded, read-only review of [rollout.md](/workspace/rollout.md).",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "These are required checks, not checks performed in this review.",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"changed_or_new\": []",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"deleted\": []",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"workspace_diff\": \"\"",
+                    "exact_match": true
+                  },
+                  {
+                    "quote": "\"literal_skill_tool_calls_observed\": false",
+                    "exact_match": true
+                  }
+                ],
+                "all_quotes_exact": true
+              }
+            ],
+            "quote_audit_passed": true,
+            "critical_results": [
+              {
+                "id": "primary-body-exposure",
+                "score": 2
+              },
+              {
+                "id": "actual-sibling-handoff",
+                "score": 1
+              },
+              {
+                "id": "ownership-and-recovery",
+                "score": 2
+              }
+            ],
+            "major_weighted": {
+              "earned": 4,
+              "maximum": 4
+            },
+            "minor_weighted": {
+              "earned": 0,
+              "maximum": 0
+            },
+            "unsuccessful_due_to_critical_failure": false,
+            "critical_partial": true,
+            "case_key": "followup-v3--explicit-native-sibling-handoff-v3",
+            "reviewer": "harness-regrade-explicit-sibling",
+            "requested_grader_model": "gpt-6-luna",
+            "coverage_gaps": [
+              "The sibling SKILL.md bodies are omitted, so their specific guidance cannot be independently compared with the answer."
+            ]
+          }
+        ],
+        "candidate": "codex-r1",
+        "evidence_packet_sha256": "81f4641b8caaf4a484e68b700bf5efbf7acbecd5e1f6610abb7d4eeff51ddf05",
+        "completed_utc": "2026-10-05T17:23:44.233993+00:00",
+        "fresh_harness_regrade": true,
+        "one_quote_correction_maximum": true
+      }
+    },
+    {
+      "label": "complete-source-regrade",
+      "source": "r1/graders/harness-regrade-explicit-sibling-complete-sources/final.json",
+      "sha256": "66d7eea232084cdd6c745ad3a908296d886c8b5ebdea6728a47df75713ee807f",
+      "published_excerpt_score_packet": "complete-source-handoff-score-published-excerpt.json",
+      "criteria_scores": {
+        "primary-body-exposure": 2,
+        "actual-sibling-handoff": 2,
+        "ownership-and-recovery": 2,
+        "bounded-host-and-scope": 2
+      },
+      "quote_audit_passed": true
+    }
+  ]
+}

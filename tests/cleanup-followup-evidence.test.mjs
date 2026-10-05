@@ -166,6 +166,43 @@ test('score records cover all criterion IDs and weighted totals, including retai
   const originalCapacityFailure = report.cases.flatMap(item => item.runs.map(run => ({ case_key: item.case_key, ...run })))
     .find(run => run.case_key === capacity.case_key && run.candidate === 'revised-r2' && run.execution_status !== 'executed');
   assert.ok(originalCapacityFailure, 'the original capacity failure remains alongside the retry');
+  const r1Root = 'evals/cleanup-followup/runs/2026-10-05-r1/';
+  const r1 = readJson(`${r1Root}report.json`);
+  const r1Scores = r1.grading.full_scores.flatMap(filename => readJson(r1Root + filename));
+  assert.equal(r1.total_attempts, 39);
+  assert.equal(r1.grading.scored_runs, 39);
+  assert.equal(r1Scores.length, 39);
+  assert.equal(new Set(r1Scores.map(row => row.case_key)).size, 39);
+  const r1Matrix = readJson(`${r1Root}matrix.json`);
+  assert.deepEqual(r1Scores.map(row => row.case_key).sort(),
+    [...r1Matrix.existing_cases, ...r1Matrix.focused_cases].map(row => row.key).sort());
+  for (const row of r1Scores) {
+    const expected = readJson('evals/cleanup-followup/handoff-fallback-cases.json').cases.find(item => item.key === row.case_key)?.criteria
+      ?? corpusCriteria(row.case_key);
+    assert.deepEqual(row.criteria.map(item => [item.id, item.severity]).sort(), expected.map(item => [item.id, item.severity]).sort(), row.case_key);
+    assert.ok(row.criteria.every(item => [0, 1, 2].includes(item.score)), row.case_key);
+    assert.equal(row.unsuccessful_due_to_critical_failure, row.criteria.some(item => item.severity === 'critical' && item.score === 0));
+    assert.equal(row.critical_partial, row.criteria.some(item => item.severity === 'critical' && item.score === 1));
+    for (const severity of ['major', 'minor']) {
+      const criteria = row.criteria.filter(item => item.severity === severity);
+      const weight = severity === 'major' ? 2 : 1;
+      assert.deepEqual(row[`${severity}_weighted`], { earned: criteria.reduce((sum, item) => sum + item.score * weight, 0), maximum: criteria.length * 2 * weight });
+    }
+  }
+  assert.equal(r1.critical_failures, r1Scores.filter(row => row.unsuccessful_due_to_critical_failure).length);
+  assert.equal(r1.critical_partials, r1Scores.filter(row => row.critical_partial).length);
+  assert.deepEqual(r1.grading.numerical_regrade_changes.map(row => [row.case_key, row.criterion, row.initial_score, row.regrade_score]).sort(), [
+    ['failure-oriented-testing--race-clean-lost-update', 'retain-and-limit', 2, 1],
+    ['microservice-data--saga-interleaving', 'read-only', 1, 2],
+  ].sort());
+  const absent = r1Scores.find(row => row.case_key === 'followup-v3--standalone-absent-idempotency-sibling-v3');
+  assert.equal(absent.critical_partial, true, 'the missing-sibling partial remains visible');
+  const archive = readJson(`${r1Root}archive-manifest.json`);
+  assert.equal(archive.release_status, 'prepared-not-uploaded');
+  assert.equal(archive.inventory_verified, true);
+  for (const [filename, digest] of Object.entries(archive.retained_files)) {
+    assert.equal(sha256(fs.readFileSync(path.join(root, filename))), digest, filename);
+  }
 });
 
 function corpusCriteria(caseKey) {
