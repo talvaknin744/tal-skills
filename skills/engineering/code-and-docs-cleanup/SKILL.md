@@ -1,16 +1,20 @@
 ---
 name: code-and-docs-cleanup
-description: Use for explicit code or documentation cleanup, refactoring, unused-code removal, or stale-instruction repair, or an evidenced maintenance obstacle requiring behavior-preserving restructuring. Exclude routine feature implementation, bug fixes, spelling, and formatting without a separate cleanup task.
+description: Clean up code or documentation through refactoring, unused-code removal, or stale-instruction repair; use for evidenced preservation, with failure-oriented-testing for adverse schedules.
 license: MIT
 ---
 
 # Code and documentation cleanup
+
+A preservation claim names observable behavior that the cleanup must retain.
 
 Improve a concrete maintenance task with a bounded, behavior-preserving change.
 Fewer lines alone is not an improvement criterion. A review returns actionable
 findings; an implementation edits the authorized slice.
 
 ## 1. Establish the cleanup contract
+
+Example: an exported command appears unused; trace dynamic entrypoints and consumers before removal.
 
 Identify the reader or next change being obstructed, the affected files and
 consumers, and the observable behavior to preserve. Include relevant errors,
@@ -27,6 +31,8 @@ preservation claim, with unresolved consumer questions visible.
 
 ## 2. Establish proportionate feedback
 
+Example: legacy and candidate agree, but both may share a bug; add an independent expectation for the risky outcome.
+
 Use existing behavior checks when they cover the changed boundary. Where missing
 feedback makes preservation uncertain, characterize the current public behavior
 before restructuring. Explicitly distinguish observed legacy behavior from the
@@ -41,6 +47,8 @@ write a concrete counterexample, expected outcome, and bounded reproduction.
 the proposed cleanup are recorded without silently redefining correctness.
 
 ## 3. Make the smallest useful change
+
+Example: repeated setup instructions conflict; update the canonical explanation and preserve distinct rationale.
 
 For code removal, extraction, or deduplication, read
 [preservation.md](references/preservation.md). For stale or repeated documentation,
@@ -57,6 +65,8 @@ contract intact; a behavior change remains separately reviewable.
 
 ## 4. Verify the resulting boundary
 
+Example: verify the edited reader path from its entrypoint and label an unavailable integration check as unrun.
+
 Run relevant checks against the final candidate. For documentation, exercise the
 affected reader path from its stated starting point and verify prerequisites,
 links, and commands. Report any environment-dependent steps not executed.
@@ -68,3 +78,7 @@ checks actually run, and remaining evidence gaps. Consult
 
 **Done:** the maintenance benefit and preservation claim are supported by the
 final diff and recorded observations; proposed checks are labeled unexecuted.
+
+## Optional companion routing
+
+When the installed Skill tool exposes it, Call the Skill tool with "failure-oriented-testing" for failure, generated-input, or adverse-ordering uncertainty. If unavailable, use the concrete counterexample, expected outcome, and bounded reproduction described here.

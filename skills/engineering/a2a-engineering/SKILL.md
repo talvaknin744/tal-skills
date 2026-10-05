@@ -1,16 +1,20 @@
 ---
 name: a2a-engineering
-description: Build or review Agent2Agent (A2A) clients and servers, including discovery, task continuation, streaming, cancellation, caller isolation, and duplicate delivery. Use for A2A protocol integrations; ordinary local coding-agent delegation does not require A2A.
+description: Build or review Agent2Agent clients and servers for discovery, continuation, streaming, or cancellation; use for protocol work, with graceful-draining for deployment handoff.
 license: MIT
 ---
 
 # A2A engineering
+
+An A2A peer contract states which protocol and SDK combinations must interoperate.
 
 Preserve the requested mode: implement scoped changes, review evidence-backed
 findings, or design a compatibility contract. Keep task identity, caller authority,
 and the business operation distinct.
 
 ## Establish the peer contract
+
+Example: two peers advertise different protocol revisions; record the required pair and mark the unsupported combination before implementation.
 
 Inspect the installed SDKs, selected Agent Card interface, transport, protocol
 revision, capabilities, and expected effect. State which peer combinations must
@@ -24,6 +28,8 @@ and unverified combinations explicitly.
 
 ## Bind requests before dispatch
 
+Example: reject a continuation whose explicit context conflicts with the caller-authorized task.
+
 Authenticate the caller and authorize each task operation against that identity.
 Validate message semantics before starting work. On continuation, resolve the
 caller-authorized task, infer an omitted context, and reject a conflicting
@@ -35,6 +41,8 @@ For request validation, discovery trust, or tenancy, read
 continuations still work. Tests observe the effect boundary, not just an error.
 
 ## Separate task state from effect ownership
+
+Example: a worker loses its lease after committing a payment; reconcile the operation key before redispatch.
 
 Trace acceptance → execution → effect → receipt → artifact → terminal state.
 Identify which records survive restart and which worker can act after lease loss,
@@ -53,6 +61,8 @@ and recovery separately. A saved Task object alone does not recover execution.
 
 ## Verify the actual boundary
 
+Example: pause a stream after effect commit, drop the connection, then verify the receipt and terminal task state.
+
 Run deterministic peers using the selected transport and SDKs. Cover changed
 success paths plus malformed input, caller isolation, duplicate delivery, stream
 loss, and cancellation on each relevant side of effect commit. Use gates for
@@ -63,3 +73,7 @@ compatibility, and remaining limits. Separate structural checks, simulated effec
 and interoperability from full conformance or production recovery. The
 [source record](references/sources.md) identifies the observed SDK gaps and scope
 of the repository's local probes.
+
+## Optional companion routing
+
+When the installed Skill tool exposes these companions, Call the Skill tool with "idempotency", "concurrency-correctness", or "graceful-draining" for the corresponding branch. If unavailable, continue with this package’s A2A requirements and state the capability gap.

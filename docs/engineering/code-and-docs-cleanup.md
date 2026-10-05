@@ -6,7 +6,7 @@ Make a bounded, behavior-preserving cleanup that removes an evidenced maintenanc
 
 ## When to reach for it
 
-Use for explicit cleanup, refactoring, unused-code removal or stale-instruction repair. Excludes routine features, bug fixes and formatting-only changes.
+Use for explicit cleanup, refactoring, unused-code removal or stale-instruction repair. Routine features, bug fixes and formatting alone stay outside this boundary.
 
 ## It's working if
 

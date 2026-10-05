@@ -6,7 +6,7 @@ Produce an evidence-grounded decision about system design, migration or an exist
 
 ## When to reach for it
 
-Use for architecture decisions, migrations and architecture reviews, rather than routine implementation, debugging or ordinary PR review. Invoke explicitly with Claude /architecture or Codex $architecture; automatic model invocation is disabled.
+Use for architecture decisions, migrations, technology choices and architecture reviews. Routine implementation and debugging stay outside this boundary. Invoke explicitly with Claude /architecture or Codex $architecture; automatic model invocation is disabled.
 
 ## It's working if
 
