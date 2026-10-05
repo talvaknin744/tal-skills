@@ -1,4 +1,4 @@
-// Hash-bound, explicitly recorded redactions preserve historical source identity.
+// Exact receipts retain original identities through redaction and link-only moves.
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -6,23 +6,39 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-export function originalPublishedDigest(bytes, relative, repository = root) {
+const hashPattern = /^[a-f0-9]{64}$/;
+const safePath = value => typeof value === 'string' && !path.posix.isAbsolute(value)
+  && !/[\\\x00-\x1f]/.test(value) && value.split('/').every(part => part && part !== '.' && part !== '..');
+export function originalPublishedDigest(bytes, relative, repository = root, expectedDigest) {
   const files = [];
-  for (const name of ['path-redactions.json', 'archive-link-transforms.json']) {
+  for (const name of ['path-redactions.json', 'archive-link-transforms.json', 'package-relocations.json', 'research-relocations.json']) {
     const manifest = path.join(repository, 'docs', name);
     if (!fs.existsSync(manifest)) continue;
     const receipt = JSON.parse(fs.readFileSync(manifest, 'utf8'));
     if (receipt.schema_version !== 1 || !Array.isArray(receipt.files)) throw new Error('Invalid publication transformation receipt');
-    files.push(...receipt.files);
+    for (const entry of receipt.files) {
+      if (!['personal-home-path-redaction', 'archive-member-link', 'package-relocation-link', 'research-relocation', 'research-member-link'].includes(entry.transformation)) throw new Error(`Unknown publication transformation: ${name}`);
+      const originalPath = entry.original_path ?? entry.path;
+      const publishedPath = entry.published_path ?? entry.path;
+      if (!safePath(originalPath) || !safePath(publishedPath) || !hashPattern.test(entry.original_sha256)
+        || !hashPattern.test(entry.published_sha256)) throw new Error(`Invalid publication binding: ${name}`);
+      if (entry.original_sha256 === entry.published_sha256 && originalPath === publishedPath) throw new Error(`Empty publication binding: ${name}`);
+      files.push({ originalPath, publishedPath, originalHash: entry.original_sha256, publishedHash: entry.published_sha256 });
+    }
   }
-  const matches = files.filter(entry => entry.path === relative);
-  if (matches.length > 1) throw new Error(`Duplicate path-redaction receipt: ${relative}`);
-  if (!matches.length) return sha256(bytes);
-  const entry = matches[0];
-  if (!['personal-home-path-redaction', 'archive-member-link'].includes(entry.transformation) || !/^[a-f0-9]{64}$/.test(entry.original_sha256)
-      || !/^[a-f0-9]{64}$/.test(entry.published_sha256) || entry.original_sha256 === entry.published_sha256) {
-    throw new Error(`Invalid path-redaction binding: ${relative}`);
+  // Callers of historical inventories may still supply the archived path.
+  let currentPath = relative;
+  const relocations = files.filter(entry => entry.originalPath !== entry.publishedPath);
+  for (const entry of relocations) if (entry.originalPath === currentPath) currentPath = entry.publishedPath;
+  let digest = sha256(bytes);
+  const consumed = new Set();
+  while (true) {
+    if (expectedDigest !== undefined && digest === expectedDigest) return digest;
+    const candidates = files.filter(entry => entry.publishedPath === currentPath && !consumed.has(entry));
+    if (!candidates.length) return digest;
+    const matching = candidates.filter(entry => entry.publishedHash === digest);
+    if (matching.length !== 1) throw new Error(`Redacted publication changed or ambiguous binding: ${currentPath}`);
+    const entry = matching[0]; consumed.add(entry);
+    digest = entry.originalHash; currentPath = entry.originalPath;
   }
-  if (sha256(bytes) !== entry.published_sha256) throw new Error(`Redacted publication changed: ${relative}`);
-  return entry.original_sha256;
 }

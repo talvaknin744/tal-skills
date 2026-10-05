@@ -22,7 +22,8 @@ for (const name of names) {
   // release asset. The run-level results outside those trees stay in source.
   if (name.startsWith('evals/engineering-toolkit/runs/') && parts.slice(3, -1).some(part => sourceTrees.has(part))) continue;
   if (name.startsWith('evals/performance/runs/') && parts.slice(3, -1).includes('candidate')) continue;
-  const filename = path.join(root, name);
+  const currentName = name.startsWith('docs/research/') ? name.slice(5) : name;
+  const filename = path.join(root, currentName);
   if (!fs.existsSync(filename)) throw new Error(`Protected retained file deleted: ${name}`);
   const original = git(['show', `${baseline}:${name}`]);
   const actual = originalPublishedDigest(fs.readFileSync(filename), name, root);

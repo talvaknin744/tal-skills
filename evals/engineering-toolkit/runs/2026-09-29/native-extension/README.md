@@ -21,7 +21,7 @@ no prohibited scope change was observed. Exit zero alone was never the score.
 
 The first [worker attempt](tal-extension-native-worker-rollout-20260929-01/independent-score.json)
 remains a partial task result: it omitted explicit operational responsibility for
-the post-deployment drain. The [correction record](../../../../../docs/research/engineering-toolkit/extensions/workflow-review-correction.md)
+the post-deployment drain. The [correction record](../../../../../research/engineering-toolkit/extensions/workflow-review-correction.md)
 shows the narrowly revised workflow and independent source review. The rerun used
 the same protected fixture and rubric in a fresh session; the earlier score was
 not overwritten. This is an observed improvement in one repeated case, not a

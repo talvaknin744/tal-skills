@@ -1,0 +1,22 @@
+# distributed-system-patterns
+
+## What it does
+
+Choose and specify a distributed topology from the constraint it must satisfy.
+
+## When to reach for it
+
+Use when selecting or reviewing serving, partitioning, ownership, movement or batch-stage patterns. Start from a concrete constraint, not a pattern catalog.
+
+## It's working if
+
+- Identify the limiting constraint from the actual request or job path, data placement, deployment shape and measurements.
+- State required completeness, freshness, ordering, ownership and recovery behavior where they affect the choice.
+- Define component roles, interfaces, coordination and failure behavior; pattern names alone are not reliability evidence.
+- Compare relevant alternatives with operational and resource costs, then state observations that validate or overturn the choice.
+
+## Where it fits
+
+Compose with architecture for a broader system decision, concurrency-correctness for invariants across actors, or background-maintenance for shared resources.
+
+Canonical skill: [skills/engineering/distributed-system-patterns/SKILL.md](../../skills/engineering/distributed-system-patterns/SKILL.md).

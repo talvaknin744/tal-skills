@@ -4,7 +4,7 @@ These forward trials evaluate the revised existing packages. They do not
 establish that the collection is regression-free. Original prompts, raw
 fixtures, rubrics and historical results remain unchanged; new-capability and
 existing-behavior results are reported separately. See the
-[integration record](../../../../docs/research/worker-rollout-integration/2026-10-02/README.md)
+[integration record](../../../../research/worker-rollout-integration/2026-10-02/README.md)
 and [per-trial results](results.json).
 
 The follow-up closes the two selected overload cases: delivery/dependency and
@@ -13,7 +13,7 @@ The revised overload package also passes its existing tenant-fan-out case,
 existing wording nontrigger and new local-task nontrigger. Independent Luna
 scoring is separate from the inherited subject model.
 
-The [first published checkpoint](../../../../docs/research/worker-rollout-integration/2026-10-02/release-checkpoint-15.json)
+The [first published checkpoint](../../../../research/worker-rollout-integration/2026-10-02/release-checkpoint-15.json)
 retains the original two major partials. Further source16, source17 and source18
 attempts are preserved, including passing and partial resident attempts at
 different source versions. A [source18 grading audit](112-delivery-completion-record/review.corrected-01.md)
@@ -29,7 +29,7 @@ requirement absent from the original criteria. Host limitations remain explicit.
 
 The original new schema case lacked an independent status-code contract. The
 independent
-[input audit](../../../../docs/research/worker-rollout-integration/2026-10-02/schema-oracle-input-audit.md)
+[input audit](../../../../research/worker-rollout-integration/2026-10-02/schema-oracle-input-audit.md)
 documents that omission. The passing [versioned case](37-schema-contract-v2/review.md)
 supplies the contract;
 the original case, rubric, fixtures and partial results stay unchanged.
@@ -70,7 +70,7 @@ not establish implicit nonactivation.
 
 The Linux collector used a pinned Codex binary and image, physically restricted
 write mounts, pre-turn command probes and scoped cleanup. The independent
-[source qualification](../../../../docs/research/worker-rollout-integration/2026-10-02/native-linux-isolation-source-qualification.md)
+[source qualification](../../../../research/worker-rollout-integration/2026-10-02/native-linux-isolation-source-qualification.md)
 supports the enabled coding surfaces; a complete resolved tool-registry capture
 was unavailable. Raw `case_compliant=false` and capability deviations remain
 visible separately from the original rubric outcomes. These observations do not
@@ -174,7 +174,7 @@ completed transport. The [second](55-regression-native-interrupted/review.md)
 reads the workflow and selects the configured durability role, but its
 300-second limit interrupts the reviewer and owner before final acceptance.
 Their frozen grades remain blocked and incomplete respectively. The revised
-collector's [independent source review](../../../../docs/research/worker-rollout-integration/2026-10-02/native-linux-capabilities-code-review.md)
+collector's [independent source review](../../../../research/worker-rollout-integration/2026-10-02/native-linux-capabilities-code-review.md)
 verifies environment selection, execution-phase accounting, scoped write gates
 and bounded timeout selection; it does not turn either observation into a pass.
 The [later original-case observation](56-regression-native-reviewed/review.md)
@@ -214,7 +214,7 @@ unrelated account/remote-control notifications. Complete-source declarations
 require the full candidate/fixture/final inventories. Integrity checks verify
 these bindings and detect truncation; they never execute or grade a model.
 
-The [exporter](../../../../docs/research/worker-rollout-integration/2026-10-02/archive-evaluations.py)
+The [exporter](../../../../research/worker-rollout-integration/2026-10-02/archive-evaluations.py)
 refuses missing required source directories. Use a fresh destination for every
 export. Original trial and score bytes remain distinct from their transformed
 public copies.
