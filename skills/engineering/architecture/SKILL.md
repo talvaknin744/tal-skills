@@ -7,7 +7,7 @@ license: MIT
 
 # Architecture
 
-A decision boundary names the system, constraints, and evidence that could change the recommendation. State the decision boundary in a substantive sentence connecting the current system, constraints, recommended design and evidence that could change the recommendation.
+A decision boundary names the system, constraints, and evidence that could change the recommendation.
 
 Produce a decision the user can act on, grounded in the system's evidence and constraints. Scale the analysis to the decision's consequences.
 
@@ -56,7 +56,7 @@ Example: report an unverified production claim as unresolved and name the observ
 
 For a failed specialist response, invalid structured record, or unverifiable attribution, allow one targeted correction attempt. Then mark the item unresolved or omit the unsupported claim with its reason. Follow any smaller user budget. Do not restart a failed stage under a new role or keep searching merely to satisfy a quota.
 
-Lead with the verdict or recommended design, then relevant strengths, prioritized risks, actions, and tradeoffs. Include assumptions and missing validation where they affect the decision. Respect the user's questions and requested format. Keep detailed panel and source traces in an appendix only when useful or requested; internal records need not appear in chat.
+In the final answer, state the decision boundary in a substantive sentence joining the supplied system and constraints, the recommendation and evidence that would change it. Lead with the verdict or recommended design, then relevant strengths, prioritized risks, actions, and tradeoffs. Include assumptions and missing validation where they affect the decision. Respect the user's questions and requested format. Keep detailed panel and source traces in an appendix only when useful or requested; internal records need not appear in chat.
 
 Finish when every user question is answered or explicitly unresolved, each reported finding has evidence and consequence, and each major recommendation states its tradeoff and remaining proof when relevant. Distinguish checks actually run from proposed checks. If a required condition remains unmet, say which one and what would resolve it.
 
