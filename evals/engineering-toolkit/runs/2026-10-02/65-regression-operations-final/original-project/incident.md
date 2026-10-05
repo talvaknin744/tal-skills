@@ -1,5 +1,0 @@
-# Inventory outage
-
-A client calls Gateway, which calls Checkout, which calls Inventory. Gateway may issue three Checkout attempts per client request, including the first. Checkout may issue three Inventory attempts per Gateway attempt, including the first. Both layers retry immediately on a timeout. Inventory attempts each time out after one second. Gateway has no overall request deadline, Checkout has no propagated deadline, and neither layer cancels work after its caller gives up.
-
-At 200 client requests per second, Inventory becomes slow. No retries occur below Checkout, and assume every attempt times out for this estimate. The product would prefer a clear temporary unavailability response within two seconds over a long wait. Clients may also retry, but those additional requests are outside the stated 200 requests per second. Inventory calls are read-only availability checks; duplicate mutation handling is outside this incident. Queue depth, active requests, and per-dependency latency are available metrics.

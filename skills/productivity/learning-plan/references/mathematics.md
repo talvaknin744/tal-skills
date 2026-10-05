@@ -2,7 +2,7 @@
 
 Use the student's current syllabus and assessment instructions as scope authority. Verify theorem hypotheses, domains, quantifiers, boundary cases and required proof depth. A visual map supports comparison; exact statements and sequential proofs remain necessary.
 
-For Open University Infi 2 course 20475, the prior research used these seven areas: definite integrals; integration methods; improper integrals; Taylor/Maclaurin; numerical series; sequences and series of functions; differential calculus in two variables. Confirm the current course guide before treating this as complete assessment scope. Historical course numbers can differ.
+For proof-heavy mathematics courses (real analysis, linear algebra), confirm the current course guide before selecting topics. An analysis syllabus might cover definite integrals, integration methods, improper integrals, Taylor/Maclaurin, numerical series, sequences and series of functions, or differential calculus in two variables. These examples do not establish the scope of another course.
 
 ## Protection and calibration
 
@@ -20,6 +20,6 @@ Useful probes, selected for the course:
 
 ## Personal context is conditional
 
-The original Infi research assumed a 6 October 2026 exam and 48 total hours beginning 12 September; neither established actual completion. If those artifacts are supplied, reconcile the current date, completed work and remaining capacity before reusing them. The papers labelled 2023א א1 and 2023א א2 were reserved in that plan. Apply that protection when continuing that plan; other learners choose their own protected sources.
+An earlier plan's exam date and total study hours do not establish actual completion. When continuing a supplied plan, reconcile the current date, completed work and remaining capacity before reusing it. Keep the learner's reserved papers protected until explicit release after their simulation; other learners choose their own protected sources.
 
 Hebrew planning prompt: **מה נדרש ממני לבצע לבד במבחן, מה כבר בדקתי בפועל, ומהו הפער החשוב ביותר שאפשר לתקן בזמן שנותר?**

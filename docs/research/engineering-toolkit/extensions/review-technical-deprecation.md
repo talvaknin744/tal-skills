@@ -31,7 +31,7 @@ The versioned warnings page identifies Python 3.14.7. Regular-build filters norm
 Executed from the repository root using Node **v25.9.0** and the existing Python **3.14.3** validation environment:
 
 ```text
-/tmp/tal-python-backend-impl/bin/python /Users/idanvaknin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/engineering/technical-deprecation
+/tmp/tal-python-backend-impl/bin/python $HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/engineering/technical-deprecation
 node scripts/check-skills.mjs
 ```
 

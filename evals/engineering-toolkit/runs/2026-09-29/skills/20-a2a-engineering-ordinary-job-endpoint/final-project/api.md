@@ -1,1 +1,0 @@
-The ordinary HTTP API owns job j2 for user u1. An authorized GET /jobs/j2 should return 200 and {"id":"j2","state":"running"}. Keep the current JSON shape and authorization rule. This request only documents that example response; it does not ask for Agent Cards, task conversion or agent-team orchestration.

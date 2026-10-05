@@ -17,7 +17,7 @@ Turn the goal into observable performance and a feasible next session. Preserve 
 
 ## Conditional references
 
-- For Infi 2 or proof-heavy mathematics, read [mathematics planning](references/mathematics.md) before selecting practice or reserved papers.
+- For proof-heavy mathematics courses (real analysis, linear algebra), read [mathematics planning](references/mathematics.md) before selecting practice or reserved papers.
 - For a timetable example, short-session fallback or lifelong-learning project, read [session patterns](references/session-patterns.md). These are adjustable templates.
 - When explaining why a method was selected, read [evidence boundaries](references/evidence.md). Attribute coaching advice separately from research findings and local design decisions.
 

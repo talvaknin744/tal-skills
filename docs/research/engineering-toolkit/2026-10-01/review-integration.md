@@ -51,7 +51,7 @@ Executed read-only checks:
 
 ## Exact snapshots
 
-Paths are relative to `/Users/idanvaknin/Documents/ChatGPT/skills`. SHA256 covers whole file bytes, including context outside the scoped verdict. The validator finding and VM outcomes apply to the specified original validator hash; later root fixes require a separate closing check.
+Paths are relative to `$HOME/Documents/ChatGPT/skills`. SHA256 covers whole file bytes, including context outside the scoped verdict. The validator finding and VM outcomes apply to the specified original validator hash; later root fixes require a separate closing check.
 
 | File | SHA256 |
 | --- | --- |

@@ -75,4 +75,5 @@ binds 438 passing Ubuntu tests to `fe36680`; a
 [fresh public GitHub installation](../../engineering-toolkit/2026-10-01/public-installation.json)
 passed selection and repeated with zero changes. Those are repository and
 filesystem observations, not native model or production-service acceptance.
-The [LinkedIn and Medium drafts](../../../publication/README.md) remain drafts.
+The LinkedIn and Medium drafts are preserved on the repository's
+[marketing branch](https://github.com/talvaknin744/tal-skills/tree/marketing/docs/publication).

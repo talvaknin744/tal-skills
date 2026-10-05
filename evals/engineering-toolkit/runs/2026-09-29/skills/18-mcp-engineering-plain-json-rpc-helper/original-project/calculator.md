@@ -1,1 +1,0 @@
-The local JSON-RPC method add receives params {"a":2,"b":5} and request id 9. The successful response must carry jsonrpc="2.0", result=7, and id=9. Give that response object. No tools, resources, capabilities, agent integration or transport migration is requested.

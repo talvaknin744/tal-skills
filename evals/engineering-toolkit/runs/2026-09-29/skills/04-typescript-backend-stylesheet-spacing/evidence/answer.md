@@ -1,1 +1,0 @@
-Changed only [button.css](/tmp/tal-skill-trials-20260929/04-typescript-backend-stylesheet-spacing/workspace/project/button.css:2): `padding: 8px 16px` → `padding: 8px 12px`. Vertical padding, focus styling, and all other declarations are unchanged.

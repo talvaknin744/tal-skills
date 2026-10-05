@@ -1,10 +1,10 @@
 # Quality publisher archive research
 
-Frozen on 2026-10-01. The [metadata index](index.json) contains **13,099 distinct
+Frozen on 2026-10-01. The archived [metadata index](../../../MANIFEST.md#archived-files) contains **13,099 distinct
 publisher-declared URLs**, **2,232 exact metadata titles**, and **4,957 known
 publication dates**. Unknown titles and dates are null. Sitemap modification times
 remain separate. The URL field does not imply that every HTML canonical or
-redirect was checked. The [coverage ledger](coverage.json) records endpoint
+redirect was checked. The [coverage ledger](../../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) records endpoint
 counts, scope, terminal evidence, exclusions, failures, and acquisition hashes.
 
 Eight selected sitemap scopes were exhausted. JetBrains and Discord retain

@@ -4,7 +4,7 @@ Result: **pass**. All six criteria score 2, including all five critical gates.
 Reviewer: `/root/archive_quality`; authored neither the candidate skill nor the
 response/cache fixture. The reviewer authored separate rollout fixtures.
 
-The final [service.py](final-project/service.py)
+The final [service.py](../../ARCHIVE.md)
 uses the supplied atomic publication transition and one paired source snapshot.
 It preserves the miss callback and cache-hit path. Protected literal-state checks
 cover incarnation recreation, payload/token pairing, retained floors after JSON
@@ -13,7 +13,7 @@ overlapping read retains its captured result while its delayed fill leaves newer
 cache state intact.
 
 Candidate command `item_14` at `evidence/trace.jsonl:31` exits 0 with six passing
-checks. The sealed [independent check](evidence/checks.json) binds the same
+checks. The sealed [independent check](../../ARCHIVE.md) binds the same
 run/candidate/final project and exits 0 without check-workspace changes. I also
 ran `python3 -B verify.py` read-only from the scoring package's `final-project`:
 `{"checks":6,"failures":[],"passed":6,"scope":"local specified adapters"}`.

@@ -1,3 +1,0 @@
-Fixed [service.py](../final-project/service.py). Cache misses now capture the value and ordering token in one source snapshot. Fills use the cache’s atomic `publish_if_current` transition, so a delayed read cannot restore an older record after a change or JSON cache restoration.
-
-`python3 -B verify.py` passed all 6 checks (exit code 0); before the fix, 2 passed. The result covers the supplied local adapters, including overlapping threads in one process and JSON restoration. It does not establish behavior for multiple processes, adapter failures, or production cache and source atomicity, which the contract excludes.

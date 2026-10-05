@@ -1,1 +1,0 @@
-The dashboard display label is currently "Nightly copy" and the product wording should be "Nightly backup". This ticket changes only the visible label; identifiers, schedules, storage and restore procedures are outside this edit. Return the new label and no operational plan.
