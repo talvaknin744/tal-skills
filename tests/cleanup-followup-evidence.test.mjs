@@ -99,6 +99,28 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
   assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[1].id, 'actual-idempotency-handoff');
 });
 
+test('Claude Code R4 report retains blocked counts and a verifiable external archive receipt', () => {
+  const report = fs.readFileSync(path.join(root, 'evals/cleanup-followup/claude-code-report.md'), 'utf8');
+  const review = fs.readFileSync(path.join(root, 'evals/claude-code/runs/2026-10-05/review.md'), 'utf8');
+  const manifest = readJson('evals/claude-code/runs/2026-10-05/archive-manifest.json');
+  assert.match(report, /\.\.\/claude-code\/runs\/2026-10-05\/review\.md/);
+  assert.match(report, /\.\.\/claude-code\/runs\/2026-10-05\/archive-manifest\.json/);
+  assert.match(review, /\*\*Status: blocked\.\*\*/);
+  assert.equal(manifest.status, 'blocked');
+  assert.equal(manifest.execution.completed_runs, 0);
+  assert.equal(manifest.execution.graded_runs, 0);
+  assert.equal(manifest.execution.auth_blocked_model_attempts, 2);
+  assert.equal(manifest.execution.canonical_plugin_cases_started, 0);
+  assert.equal(manifest.execution.architecture_syntax_cases_started, 0);
+  assert.equal(manifest.execution.generated_v4_skill_catalog_observed, true);
+  assert.equal(manifest.installation.declared_skill_paths, 35);
+  assert.equal(manifest.installation.all_35_skill_trees_match_marketplace, true);
+  assert.match(manifest.external_archive.filename, /^remaining-claude-code-r4-2026-10-05\.tar\.zst$/);
+  assert.match(manifest.external_archive.sha256, /^[a-f0-9]{64}$/);
+  assert.equal(manifest.external_archive.zstd_test, 'passed');
+  for (const hash of Object.values(manifest.receipt_hashes_sha256)) assert.match(hash, /^[a-f0-9]{64}$/);
+});
+
 test('retained source prompts and rubrics still match their original case files', () => {
   const matrix = readRun('matrix.json');
   for (const row of matrix.existing_cases) {

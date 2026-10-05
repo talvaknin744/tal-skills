@@ -176,14 +176,10 @@ Inspect admission, retained input, checkpoint ownership, and the queue's retry
 accounting. Force successive maintenance handoffs and a genuine failure control.
 ```
 
-The command above assumes the project-local toolkit install. When the same
-entrypoint comes from the `tal-skills` plugin, use its plugin-qualified name:
-
-```text
-/tal-skills:tal-worker-rollout Review our three-pod rolling deployment for 18-hour jobs.
-Inspect admission, retained input, checkpoint ownership, and the queue's retry
-accounting. Force successive maintenance handoffs and a genuine failure control.
-```
+This workflow example assumes the project-local toolkit install. The plugin
+exposes its promoted skills under the plugin namespace, for example
+`/tal-skills:architecture`; a manually installed project-local architecture
+skill remains `/architecture`.
 
 For a single role, ask the main session to use `tal-python`, `tal-consistency`,
 or another installed name for a bounded assignment. Roles are named subagents;
