@@ -1,0 +1,533 @@
+[
+  {
+    "label": "A",
+    "technical_uncertainties": [
+      "The candidate instruction body was read using the native filesystem reader, but its omitted content prevents assessing what it said. No literal Skill tool call was observed."
+    ],
+    "criteria": [
+      {
+        "id": "rollback-after-writes",
+        "score": 2,
+        "evidence_quotes": [
+          "Address may have accepted new addresses or corrections during that hour.",
+          "No reverse replication or reconciliation procedure exists.",
+          "Routing requests back alone does not recover data."
+        ],
+        "reason": "Explicitly distinguishes traffic rollback from restoring data and identifies the missing propagation/reconciliation path and stale-copy risk.",
+        "severity": "critical",
+        "original_independent_evidence_quotes": [
+          "“Routing requests back alone does not recover data.”",
+          "“No reverse replication or reconciliation procedure exists.”",
+          "“The 01:00 snapshot and change stream prepare the copy, but stopping the stream at 03:00 leaves no path for later Address changes to reach the monolith.”"
+        ],
+        "quote_reviewer_reason": "The answer explicitly separates routing traffic back from recovering Address writes and identifies the missing reconciliation path. These quotes are from the answer and supplied rollout fixture."
+      },
+      {
+        "id": "bounded-handoff",
+        "score": 1,
+        "evidence_quotes": [
+          "The monolith currently owns customer addresses in main_db. The new Address service will own address_db.",
+          "Exact full file output"
+        ],
+        "reason": "The answer addresses the distinct ownership and recovery questions, and the observed instruction read uses the native reader. But the omitted instruction body prevents judging whether that read was relevant to the handoff; no literal Skill tool call can be claimed.",
+        "severity": "major",
+        "original_independent_evidence_quotes": [
+          "“/bin/zsh -lc 'cat rollout.md'”",
+          "“/bin/zsh -lc 'cat .agents/skills/microservice-extraction/SKILL.md'”",
+          "“read_form”: “native filesystem reader”, “literal_skill_tool_invocation”: false"
+        ],
+        "quote_reviewer_reason": "The answer addresses the ownership and recovery questions, and the observed body read used the native filesystem reader. But the omitted instruction body prevents verifying that this read was relevant to the handoff; no literal Skill tool call is recorded. Quotes are from the supplied rollout command output and the native-read metadata."
+      },
+      {
+        "id": "explicit-only-architecture",
+        "score": 2,
+        "evidence_quotes": [
+          "[Candidate instruction read output omitted for blind review. Read command, exit status and raw digest retained.",
+          "The supplied proposal is for an **Address service**, not invoice extraction."
+        ],
+        "reason": "The observed body read is for microservice extraction, not architecture, and the answer stays on the supplied migration. No architecture body load or orchestration is observed.",
+        "severity": "critical",
+        "original_independent_evidence_quotes": [
+          "“/bin/zsh -lc 'cat .agents/skills/microservice-extraction/SKILL.md'”",
+          "“The supplied proposal is for an **Address service**, not invoice extraction.”"
+        ],
+        "quote_reviewer_reason": "The recorded read was for microservice-extraction, not architecture, and no architecture body load or orchestration is observed. The answer directly addresses the supplied migration. Quotes are from command output and the answer."
+      },
+      {
+        "id": "sequence-and-assumption",
+        "score": 2,
+        "evidence_quotes": [
+          "The earliest change needed for a safe cutover is to define and implement a recovery path before switching authority.",
+          "The plan also needs to stop or fence old monolith writers before the switch.",
+          "if rollback is guaranteed to happen before Address accepts any new addresses or corrections"
+        ],
+        "reason": "Gives concrete pre-cutover recovery and writer-fencing steps and states a material assumption grounded in the fixture.",
+        "severity": "major",
+        "original_independent_evidence_quotes": [
+          "“define and implement a recovery path before switching authority”",
+          "“stop or fence old monolith writers before the switch”",
+          "“if rollback is guaranteed to happen before Address accepts any new addresses or corrections”"
+        ],
+        "quote_reviewer_reason": "The answer gives concrete pre-cutover recovery and writer-fencing steps and states a material assumption grounded in the fixture. Quotes are from the answer; the fixture says Address may accept changes and old workers can still write."
+      },
+      {
+        "id": "read-only-and-evidence",
+        "score": 2,
+        "evidence_quotes": [
+          "",
+          "rollout.md"
+        ],
+        "reason": "Grounds the recommendation in the supplied proposal, makes no claim that tests or production checks ran, and the recorded fixture has no changes.",
+        "severity": "critical",
+        "original_independent_evidence_quotes": [
+          "“The project contains only `rollout.md`”",
+          "“Routing requests back alone does not recover data.”",
+          "“workspace_diff”: “”, “untracked_files”: []"
+        ],
+        "quote_reviewer_reason": "The supplied metadata reports an empty workspace diff and no untracked files; the command output lists rollout.md. The answer makes no claim that validation or production checks ran. These quotes are exact metadata and command output; the empty diff quote reflects absence only and does not alone establish that installed packages were unchanged."
+      }
+    ],
+    "quote_audit": [
+      {
+        "id": "rollback-after-writes",
+        "quotes": [
+          {
+            "raw_grader_quote": "Address may have accepted new addresses or corrections during that hour.",
+            "content_quote": "Address may have accepted new addresses or corrections during that hour.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "0b11f79100f44d894e0798d986201de5287f8a5be1baa86e2c43ebab40a327ee"
+          },
+          {
+            "raw_grader_quote": "No reverse replication or reconciliation procedure exists.",
+            "content_quote": "No reverse replication or reconciliation procedure exists.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "cb82698ae2d6f6298779189eb866c726d7b605221bb578db74c14beab26dea2c"
+          },
+          {
+            "raw_grader_quote": "Routing requests back alone does not recover data.",
+            "content_quote": "Routing requests back alone does not recover data.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "75f967062f60884d759db4dde3e03111d5a6db681ba1bda77153111901f7dee6"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "bounded-handoff",
+        "quotes": [
+          {
+            "raw_grader_quote": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db.",
+            "content_quote": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "93afceb67f58e0540fc5bdc18a540ea34b2b6f1269721c4563ae9a13c69aef68"
+          },
+          {
+            "raw_grader_quote": "Exact full file output",
+            "content_quote": "Exact full file output",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "ce3d35f7981444b31404c4f9bd45c7fcd932137b34bc273833a1ea525dc34010"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "explicit-only-architecture",
+        "quotes": [
+          {
+            "raw_grader_quote": "[Candidate instruction read output omitted for blind review. Read command, exit status and raw digest retained.",
+            "content_quote": "[Candidate instruction read output omitted for blind review. Read command, exit status and raw digest retained.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "0365c2d971ec99908e9810b2b0ac5b41d078c4bb91aede615db3718875d38932"
+          },
+          {
+            "raw_grader_quote": "The supplied proposal is for an **Address service**, not invoice extraction.",
+            "content_quote": "The supplied proposal is for an **Address service**, not invoice extraction.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "ebd9469df4c66cfc065c80cf2157860d591961c6f176decbcb513b68c5cce8f4"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "sequence-and-assumption",
+        "quotes": [
+          {
+            "raw_grader_quote": "The earliest change needed for a safe cutover is to define and implement a recovery path before switching authority.",
+            "content_quote": "The earliest change needed for a safe cutover is to define and implement a recovery path before switching authority.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "7f4f59a433bf38820b437d10cade6894f9227378a601c63ce6a3f6aa2631a7d2"
+          },
+          {
+            "raw_grader_quote": "The plan also needs to stop or fence old monolith writers before the switch.",
+            "content_quote": "The plan also needs to stop or fence old monolith writers before the switch.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "c52f35437cdb049c26a50a38beb966d286b10bffb78fbe1b312fd50014b96d9f"
+          },
+          {
+            "raw_grader_quote": "if rollback is guaranteed to happen before Address accepts any new addresses or corrections",
+            "content_quote": "if rollback is guaranteed to happen before Address accepts any new addresses or corrections",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "69fc90464ad60c6f7624ecb0d8203e19f2283b7a7e8cdaba90aca9c7b3ab7e91"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "read-only-and-evidence",
+        "quotes": [
+          {
+            "raw_grader_quote": "",
+            "content_quote": "",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "raw_grader_quote": "rollout.md",
+            "content_quote": "rollout.md",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "640db44c97c1328b384a78ecca66c3d3a2599cc05a54cbc2934c97bf7ba54e0c"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "critical_results": [
+      {
+        "id": "rollback-after-writes",
+        "score": 2
+      },
+      {
+        "id": "explicit-only-architecture",
+        "score": 2
+      },
+      {
+        "id": "read-only-and-evidence",
+        "score": 2
+      }
+    ],
+    "major_weighted": {
+      "earned": 6,
+      "maximum": 8
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "case_key": "followup-v2--canonical-neutral-extraction-v2",
+    "reviewer": "single-case-042",
+    "requested_grader_model": "gpt-6-luna",
+    "coverage_gaps": [
+      "No independent verification is supplied. Host traces do not emit complete per-turn tool schemas, and read access is not an OS read-isolation boundary. The full candidate instruction body read by Run B is intentionally omitted."
+    ],
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "candidate": "canonical-r2",
+    "original_grader_artifact": "graders/single-case-042/attempt-01/answer.md",
+    "quote_reviewer": "quote-003",
+    "original_anonymous_label": "B",
+    "score_support_disputes": [
+      {
+        "id": "bounded-handoff",
+        "reason": "The answer addresses the ownership and recovery questions, and the observed body read used the native filesystem reader. But the omitted instruction body prevents verifying that this read was relevant to the handoff; no literal Skill tool call is recorded. Quotes are from the supplied rollout command output and the native-read metadata."
+      }
+    ],
+    "latest_evidence_artifact": "finish-graders/quote-003/project/evidence.json",
+    "latest_score_artifact": "finish-graders/quote-003/validated-scores.json"
+  },
+  {
+    "label": "A",
+    "technical_uncertainties": [
+      "The instruction bodies are omitted, so their exact sibling-applicability guidance cannot be independently checked; the trace confirms successful native reads."
+    ],
+    "criteria": [
+      {
+        "id": "primary-body-exposure",
+        "score": 2,
+        "evidence_quotes": [
+          "\"name\": \"microservice-extraction\"",
+          "\"command_exit_code\": 0",
+          "\"read_form\": \"native filesystem reader\""
+        ],
+        "reason": "The trace records a successful native read of the package SKILL.md after the request.",
+        "severity": "critical"
+      },
+      {
+        "id": "actual-sibling-handoff",
+        "score": 2,
+        "evidence_quotes": [
+          "\"name\": \"technical-deprecation\"",
+          "\"name\": \"graceful-draining\"",
+          "\"command_exit_code\": 0",
+          "\"The sibling **graceful-draining** guidance independently supports this finding\"",
+          "\"The sibling **technical-deprecation** guidance likewise requires evidence that consumers have transitioned\""
+        ],
+        "reason": "The trace records successful body reads of both siblings, and the answer applies their guidance to old-writer retirement and handoff without claiming a literal Skill tool call.",
+        "severity": "critical"
+      },
+      {
+        "id": "ownership-and-recovery",
+        "score": 2,
+        "evidence_quotes": [
+          "\"Those writes will not reach `address_db`, so the stores can diverge\"",
+          "\"restoring its 01:00 snapshot would discard addresses and corrections accepted by Address during the first hour\"",
+          "\"build and rehearse reverse reconciliation that preserves Address’s accepted writes before reopening monolith writes, or keep Address authoritative and use forward repair\""
+        ],
+        "reason": "Identifies the old-writer conflict and loss of successful corrections on rollback, then gives recovery paths that retain accepted writes and a handoff gate that verifies old writers are stopped.",
+        "severity": "critical"
+      },
+      {
+        "id": "bounded-host-and-scope",
+        "score": 2,
+        "evidence_quotes": [
+          "\"This is a read-only review\"",
+          "\"No rehearsal or production observation was performed.\"",
+          "\"changed_or_new\": []",
+          "\"deleted\": []",
+          "\"literal_skill_tool_calls_observed\": false"
+        ],
+        "reason": "The answer is bounded, reports rehearsals and production observations as unperformed, and the scope diff shows no changes. The trace shows no literal Skill tool call claimed or observed.",
+        "severity": "major"
+      }
+    ],
+    "quote_audit": [
+      {
+        "id": "primary-body-exposure",
+        "quotes": [
+          {
+            "raw_grader_quote": "\"name\": \"microservice-extraction\"",
+            "content_quote": "name\": \"microservice-extraction",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "a13eb8c2d394c27f3d7ca45d6fd6e9a249546c2a0fc7097a6ad61db99b0bed8f"
+          },
+          {
+            "raw_grader_quote": "\"command_exit_code\": 0",
+            "content_quote": "\"command_exit_code\": 0",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "e9ca4cf32b8d9d4b498d0f020c797803884e4b61905839e784c1e6c8c875c79d"
+          },
+          {
+            "raw_grader_quote": "\"read_form\": \"native filesystem reader\"",
+            "content_quote": "read_form\": \"native filesystem reader",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "7f349e5107875d2aa16831096c212f71125174ef7a051f95ea6edac1f81748c6"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "actual-sibling-handoff",
+        "quotes": [
+          {
+            "raw_grader_quote": "\"name\": \"technical-deprecation\"",
+            "content_quote": "name\": \"technical-deprecation",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "b618f2e55260fbec2b2b87f44760377b642fed8239c2efa14e5fc0e76f377953"
+          },
+          {
+            "raw_grader_quote": "\"name\": \"graceful-draining\"",
+            "content_quote": "name\": \"graceful-draining",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "370abccee4aabaaee04ebf92bf40ea8686f51b11fc8626ddc8b7af3f8718ffd4"
+          },
+          {
+            "raw_grader_quote": "\"command_exit_code\": 0",
+            "content_quote": "\"command_exit_code\": 0",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "e9ca4cf32b8d9d4b498d0f020c797803884e4b61905839e784c1e6c8c875c79d"
+          },
+          {
+            "raw_grader_quote": "\"The sibling **graceful-draining** guidance independently supports this finding\"",
+            "content_quote": "The sibling **graceful-draining** guidance independently supports this finding",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "f7190858c6f352013e08a4d53f1909c5e6d2ae364e304a1811d524d6cb7f9b37"
+          },
+          {
+            "raw_grader_quote": "\"The sibling **technical-deprecation** guidance likewise requires evidence that consumers have transitioned\"",
+            "content_quote": "The sibling **technical-deprecation** guidance likewise requires evidence that consumers have transitioned",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "f24eb6e576546e47a527400be7495c725f6874380204ecde26c8c2cc196feed4"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "ownership-and-recovery",
+        "quotes": [
+          {
+            "raw_grader_quote": "\"Those writes will not reach `address_db`, so the stores can diverge\"",
+            "content_quote": "Those writes will not reach `address_db`, so the stores can diverge",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "49e50d8b4626dbc1115122f2bb78652be3e582a2e16fdd108f8a10f6f046b877"
+          },
+          {
+            "raw_grader_quote": "\"restoring its 01:00 snapshot would discard addresses and corrections accepted by Address during the first hour\"",
+            "content_quote": "restoring its 01:00 snapshot would discard addresses and corrections accepted by Address during the first hour",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "049f27df011b98082b38eef8ef902033edd655c44f896048c19fcb677e63bb37"
+          },
+          {
+            "raw_grader_quote": "\"build and rehearse reverse reconciliation that preserves Address’s accepted writes before reopening monolith writes, or keep Address authoritative and use forward repair\"",
+            "content_quote": "build and rehearse reverse reconciliation that preserves Address’s accepted writes before reopening monolith writes, or keep Address authoritative and use forward repair",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "17d232cb01644ce99e13972f2418ecc7bdcf9a81cb25f2102dfb2e230f304c59"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "bounded-host-and-scope",
+        "quotes": [
+          {
+            "raw_grader_quote": "\"This is a read-only review\"",
+            "content_quote": "This is a read-only review",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "7bc6111eefbcc8ff5558114730e08de28cdc7a26e9aa6f70fe624d1718196153"
+          },
+          {
+            "raw_grader_quote": "\"No rehearsal or production observation was performed.\"",
+            "content_quote": "No rehearsal or production observation was performed.",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "76e786e8bd604eb3fa9826df745aadfe44612a49d5d28f67c8cfd6aa49bbfde0"
+          },
+          {
+            "raw_grader_quote": "\"changed_or_new\": []",
+            "content_quote": "\"changed_or_new\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "45695c3f4f21fabe20de3124511793fbd7e0f26c1eb2bea8cadf8bdc03f608e6"
+          },
+          {
+            "raw_grader_quote": "\"deleted\": []",
+            "content_quote": "\"deleted\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "07d6580a70063c3e835e66ad2e28648c64587e64f1707fecebb809b7195fd98c"
+          },
+          {
+            "raw_grader_quote": "\"literal_skill_tool_calls_observed\": false",
+            "content_quote": "\"literal_skill_tool_calls_observed\": false",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "3f0c20b1524bd8107e338f39e40c5651114ddec57a8265d290a8f7b94e1b5451"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "critical_results": [
+      {
+        "id": "primary-body-exposure",
+        "score": 2
+      },
+      {
+        "id": "actual-sibling-handoff",
+        "score": 2
+      },
+      {
+        "id": "ownership-and-recovery",
+        "score": 2
+      }
+    ],
+    "major_weighted": {
+      "earned": 4,
+      "maximum": 4
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "case_key": "followup-v3--explicit-native-sibling-handoff-v3",
+    "reviewer": "single-case-045",
+    "requested_grader_model": "gpt-6-luna",
+    "coverage_gaps": [],
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "candidate": "canonical-r2",
+    "original_grader_artifact": "graders/single-case-045/attempt-01/answer.md"
+  }
+]

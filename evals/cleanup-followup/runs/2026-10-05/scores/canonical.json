@@ -1,0 +1,398 @@
+[
+  {
+    "label": "B",
+    "technical_uncertainties": [],
+    "criteria": [
+      {
+        "id": "rollback-after-writes",
+        "score": 2,
+        "evidence_quotes": [
+          "Address may have accepted new addresses or corrections during that hour.",
+          "No reverse replication or reconciliation procedure exists.",
+          "restoring the 01:00 snapshot can lose corrections customers expect to persist."
+        ],
+        "reason": "Identifies the stale-snapshot loss risk after Address accepts writes, and notes the missing reverse replication or reconciliation path.",
+        "severity": "critical",
+        "original_independent_evidence_quotes": [
+          "“No reverse replication or reconciliation procedure exists.”",
+          "“restore its 01:00 snapshot”",
+          "“Otherwise, restoring the 01:00 snapshot can lose corrections customers expect to persist.”"
+        ],
+        "quote_reviewer_reason": "The answer identifies the stale-snapshot loss risk after Address accepts writes and the missing reverse replication or reconciliation path. Quotes are from the supplied rollout command output and the answer."
+      },
+      {
+        "id": "bounded-handoff",
+        "score": 1,
+        "evidence_quotes": [
+          "The monolith currently owns customer addresses in main_db. The new Address service will own address_db.",
+          "\"observed_native_body_reads\": [],"
+        ],
+        "reason": "Reads the relevant proposal and assesses its ownership and rollback questions. No observable native read of an extraction or data-analysis instruction body is present, so the instruction-read portion is unsupported.",
+        "severity": "major",
+        "original_independent_evidence_quotes": [
+          "“The supplied file covers an address service extraction, not invoice extraction”",
+          "“/bin/zsh -lc 'cat rollout.md'"
+        ],
+        "quote_reviewer_reason": "The answer assesses the supplied proposal's ownership and rollback questions, but the record contains no observed native read of an extraction or data-analysis instruction body. The answer’s proposal claims are grounded in the supplied rollout output; the metadata records an empty body-read list."
+      },
+      {
+        "id": "explicit-only-architecture",
+        "score": 2,
+        "evidence_quotes": [
+          "The monolith currently owns customer addresses in main_db. The new Address service will own address_db. The migration copies a snapshot at 01:00, streams main_db changes to address_db until 03:00, stops that stream, and switches writes and reads to Address. Requests include address_id and a monotonic version. The monolith and Address use the same fields today.",
+          "The rollback plan says: if error rate rises in the first hour, route requests back to the monolith and restore its 01:00 snapshot. Address may have accepted new addresses or corrections during that hour. No reverse replication or reconciliation procedure exists. A support team can see which changes Address accepted, but has no automated import path. Old workers can still write main_db until restarted. Customers expect a successful address correction to be retained, including when placing an order later that day.\n",
+          "The supplied file covers an **address service extraction**, not invoice extraction, so I can only assess the proposal and rollback path described there.",
+          "- **Data ownership boundary:** `main_db` is the current system of record; after cutover, `address_db` is intended to own addresses. But the boundary is not enforced while old workers can still write to `main_db`, and the proposal does not say how accepted Address changes are preserved if traffic returns to the monolith.\n- **Earliest change needed for safe cutover:** Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address—such as reverse replication or a reconciliation/import procedure—and ensure old workers can no longer write to `main_db`. Otherwise, restoring the 01:00 snapshot can lose corrections customers expect to persist.\n- **Assumption that would change my recommendation:** If Address cannot accept writes until rollback is no longer possible, the risk of losing Address-only changes is different. The proposal says Address may accept them during the first hour, so absent that restriction, rollback needs a way to preserve them.",
+          "/bin/zsh -lc 'cat rollout.md'",
+          "\"observed_native_body_reads\": []",
+          "\"literal_skill_tool_calls_observed\": false",
+          "\"actual_retrieved_package_source_indices\": []"
+        ],
+        "reason": "The observed commands enumerate project files and read rollout.md; no architecture instruction body read or orchestration is observed. The answer directly addresses the supplied address migration.",
+        "severity": "critical",
+        "original_independent_evidence_quotes": [
+          "“/bin/zsh -lc 'cat rollout.md'”",
+          "“/bin/zsh -lc \"rg --files -g '!*node_modules*' -g '!*.lock'\""
+        ],
+        "quote_reviewer_reason": "Recorded commands enumerate project files and read rollout.md; there is no architecture instruction body read or orchestration in the evidence. The answer directly addresses the migration. Quotes are from the answer and supplied metadata.",
+        "previous_raw_quotes": [
+          "The supplied file covers an **address service extraction**, not invoice extraction.",
+          "\"observed_native_body_reads\": [],"
+        ],
+        "exact_quote_bindings": [
+          {
+            "id": "E3",
+            "source": "/initial_fixture/rollout.md",
+            "exact_text": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db. The migration copies a snapshot at 01:00, streams main_db changes to address_db until 03:00, stops that stream, and switches writes and reads to Address. Requests include address_id and a monotonic version. The monolith and Address use the same fields today.",
+            "sha256": "4dc806f2a5afb623e70b9cc5a61299b0d1b1a01ee3d52c2d55acf85b2f835b44"
+          },
+          {
+            "id": "E4",
+            "source": "/initial_fixture/rollout.md",
+            "exact_text": "The rollback plan says: if error rate rises in the first hour, route requests back to the monolith and restore its 01:00 snapshot. Address may have accepted new addresses or corrections during that hour. No reverse replication or reconciliation procedure exists. A support team can see which changes Address accepted, but has no automated import path. Old workers can still write main_db until restarted. Customers expect a successful address correction to be retained, including when placing an order later that day.\n",
+            "sha256": "1063aa31f8835bcc9caf98ac0685ffe94d4cace8d240a7918cc0623b75c5b28b"
+          },
+          {
+            "id": "E6",
+            "source": "/answer",
+            "exact_text": "The supplied file covers an **address service extraction**, not invoice extraction, so I can only assess the proposal and rollback path described there.",
+            "sha256": "581436afa64299a1752bcc03678a18b1926b9420d067ae15115b871d0cf5ee53"
+          },
+          {
+            "id": "E7",
+            "source": "/answer",
+            "exact_text": "- **Data ownership boundary:** `main_db` is the current system of record; after cutover, `address_db` is intended to own addresses. But the boundary is not enforced while old workers can still write to `main_db`, and the proposal does not say how accepted Address changes are preserved if traffic returns to the monolith.\n- **Earliest change needed for safe cutover:** Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address—such as reverse replication or a reconciliation/import procedure—and ensure old workers can no longer write to `main_db`. Otherwise, restoring the 01:00 snapshot can lose corrections customers expect to persist.\n- **Assumption that would change my recommendation:** If Address cannot accept writes until rollback is no longer possible, the risk of losing Address-only changes is different. The proposal says Address may accept them during the first hour, so absent that restriction, rollback needs a way to preserve them.",
+            "sha256": "18ba8c67e4be2ecfb69c25a1425be6db1824a19ddf242aea5327bc3ed547a4ae"
+          },
+          {
+            "id": "E18",
+            "source": "/actual_command_output/1/command",
+            "exact_text": "/bin/zsh -lc 'cat rollout.md'",
+            "sha256": "2ba3da8ddf9ff8dd6fcebfcad618ca5ef174ab067e95f5fd5fee4a3742cbded8"
+          },
+          {
+            "id": "E39",
+            "source": "/serialized",
+            "exact_text": "\"observed_native_body_reads\": []",
+            "sha256": "7c2de2dd6971bbcadf131dc5a8f27a9ce82b93814d20f873cae9a395e0327b57"
+          },
+          {
+            "id": "E40",
+            "source": "/serialized",
+            "exact_text": "\"literal_skill_tool_calls_observed\": false",
+            "sha256": "3f0c20b1524bd8107e338f39e40c5651114ddec57a8265d290a8f7b94e1b5451"
+          },
+          {
+            "id": "E41",
+            "source": "/serialized",
+            "exact_text": "\"actual_retrieved_package_source_indices\": []",
+            "sha256": "1afcd8c257cf80dc89d2eb8d00f57f3cd342bff8ffccb3eb2d1f4f8c3c4e66e7"
+          }
+        ],
+        "quote_id_reviewer_reason": "The answer identifies that the request says invoice while the supplied fixture is an address migration (E6), then analyzes the fixture’s ownership and rollback details (E3, E4, E7). Provenance: the recorded command reads rollout.md (E18); native body reads and retrieved package source indices are empty, and no literal skill tool call is recorded (E39–E41). The observed commands and source-index metadata support the reason’s claim that no architecture body read or orchestration was observed. There is a request/fixture mismatch, but the answer explicitly flags it and addresses the supplied concrete migration as the criterion requires. No evidence contradicts the existing score or reason."
+      },
+      {
+        "id": "sequence-and-assumption",
+        "score": 2,
+        "evidence_quotes": [
+          "Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address",
+          "ensure old workers can no longer write to `main_db`.",
+          "If Address cannot accept writes until rollback is no longer possible"
+        ],
+        "reason": "Provides a pre-cutover recovery step, writer fencing, and a fixture-grounded assumption about whether Address accepts writes before rollback ends.",
+        "severity": "major",
+        "original_independent_evidence_quotes": [
+          "“Before switching reads and writes at 03:00, establish a safe rollback path”",
+          "“ensure old workers can no longer write to `main_db`”",
+          "“If Address cannot accept writes until rollback is no longer possible”"
+        ],
+        "quote_reviewer_reason": "The answer gives a pre-cutover recovery step, writer fencing, and a fixture-grounded assumption about when Address can accept writes. Quotes are from the answer; the fixture states old workers can still write and Address may accept changes during the rollback window."
+      },
+      {
+        "id": "read-only-and-evidence",
+        "score": 2,
+        "evidence_quotes": [
+          "",
+          "\"workspace_diff\": \"\",",
+          "\"untracked_files\": [],"
+        ],
+        "reason": "The answer cites the actual proposal and does not claim validation was executed. The fixture and installed packages are reported unchanged.",
+        "severity": "critical",
+        "original_independent_evidence_quotes": [
+          "“The supplied file covers an **address service extraction**”",
+          "“/bin/zsh -lc 'cat rollout.md'”",
+          "“workspace_diff”: “”, “untracked_files”: []"
+        ],
+        "quote_reviewer_reason": "The supplied metadata reports an empty workspace diff and no untracked files; the answer cites the actual rollout and does not claim executed validation. These are exact metadata fragments. The empty diff and untracked-file record alone do not establish whether installed packages changed."
+      }
+    ],
+    "quote_audit": [
+      {
+        "id": "rollback-after-writes",
+        "quotes": [
+          {
+            "raw_grader_quote": "Address may have accepted new addresses or corrections during that hour.",
+            "content_quote": "Address may have accepted new addresses or corrections during that hour.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "0b11f79100f44d894e0798d986201de5287f8a5be1baa86e2c43ebab40a327ee"
+          },
+          {
+            "raw_grader_quote": "No reverse replication or reconciliation procedure exists.",
+            "content_quote": "No reverse replication or reconciliation procedure exists.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "cb82698ae2d6f6298779189eb866c726d7b605221bb578db74c14beab26dea2c"
+          },
+          {
+            "raw_grader_quote": "restoring the 01:00 snapshot can lose corrections customers expect to persist.",
+            "content_quote": "restoring the 01:00 snapshot can lose corrections customers expect to persist.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "4a6d7d6be23d0c424965d232a109fba20398e763b9f94524d09d07febe38e124"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "bounded-handoff",
+        "quotes": [
+          {
+            "raw_grader_quote": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db.",
+            "content_quote": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "93afceb67f58e0540fc5bdc18a540ea34b2b6f1269721c4563ae9a13c69aef68"
+          },
+          {
+            "raw_grader_quote": "\"observed_native_body_reads\": [],",
+            "content_quote": "\"observed_native_body_reads\": [],",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "db7a32d1aa25e09305c7e978ed8357846c9401548a4ecb5a26749aa637660793"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "explicit-only-architecture",
+        "quotes": [
+          {
+            "raw_grader_quote": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db. The migration copies a snapshot at 01:00, streams main_db changes to address_db until 03:00, stops that stream, and switches writes and reads to Address. Requests include address_id and a monotonic version. The monolith and Address use the same fields today.",
+            "content_quote": "The monolith currently owns customer addresses in main_db. The new Address service will own address_db. The migration copies a snapshot at 01:00, streams main_db changes to address_db until 03:00, stops that stream, and switches writes and reads to Address. Requests include address_id and a monotonic version. The monolith and Address use the same fields today.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "4dc806f2a5afb623e70b9cc5a61299b0d1b1a01ee3d52c2d55acf85b2f835b44"
+          },
+          {
+            "raw_grader_quote": "The rollback plan says: if error rate rises in the first hour, route requests back to the monolith and restore its 01:00 snapshot. Address may have accepted new addresses or corrections during that hour. No reverse replication or reconciliation procedure exists. A support team can see which changes Address accepted, but has no automated import path. Old workers can still write main_db until restarted. Customers expect a successful address correction to be retained, including when placing an order later that day.\n",
+            "content_quote": "The rollback plan says: if error rate rises in the first hour, route requests back to the monolith and restore its 01:00 snapshot. Address may have accepted new addresses or corrections during that hour. No reverse replication or reconciliation procedure exists. A support team can see which changes Address accepted, but has no automated import path. Old workers can still write main_db until restarted. Customers expect a successful address correction to be retained, including when placing an order later that day.\n",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "1063aa31f8835bcc9caf98ac0685ffe94d4cace8d240a7918cc0623b75c5b28b"
+          },
+          {
+            "raw_grader_quote": "The supplied file covers an **address service extraction**, not invoice extraction, so I can only assess the proposal and rollback path described there.",
+            "content_quote": "The supplied file covers an **address service extraction**, not invoice extraction, so I can only assess the proposal and rollback path described there.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "581436afa64299a1752bcc03678a18b1926b9420d067ae15115b871d0cf5ee53"
+          },
+          {
+            "raw_grader_quote": "- **Data ownership boundary:** `main_db` is the current system of record; after cutover, `address_db` is intended to own addresses. But the boundary is not enforced while old workers can still write to `main_db`, and the proposal does not say how accepted Address changes are preserved if traffic returns to the monolith.\n- **Earliest change needed for safe cutover:** Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address—such as reverse replication or a reconciliation/import procedure—and ensure old workers can no longer write to `main_db`. Otherwise, restoring the 01:00 snapshot can lose corrections customers expect to persist.\n- **Assumption that would change my recommendation:** If Address cannot accept writes until rollback is no longer possible, the risk of losing Address-only changes is different. The proposal says Address may accept them during the first hour, so absent that restriction, rollback needs a way to preserve them.",
+            "content_quote": "- **Data ownership boundary:** `main_db` is the current system of record; after cutover, `address_db` is intended to own addresses. But the boundary is not enforced while old workers can still write to `main_db`, and the proposal does not say how accepted Address changes are preserved if traffic returns to the monolith.\n- **Earliest change needed for safe cutover:** Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address—such as reverse replication or a reconciliation/import procedure—and ensure old workers can no longer write to `main_db`. Otherwise, restoring the 01:00 snapshot can lose corrections customers expect to persist.\n- **Assumption that would change my recommendation:** If Address cannot accept writes until rollback is no longer possible, the risk of losing Address-only changes is different. The proposal says Address may accept them during the first hour, so absent that restriction, rollback needs a way to preserve them.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "18ba8c67e4be2ecfb69c25a1425be6db1824a19ddf242aea5327bc3ed547a4ae"
+          },
+          {
+            "raw_grader_quote": "/bin/zsh -lc 'cat rollout.md'",
+            "content_quote": "/bin/zsh -lc 'cat rollout.md'",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "2ba3da8ddf9ff8dd6fcebfcad618ca5ef174ab067e95f5fd5fee4a3742cbded8"
+          },
+          {
+            "raw_grader_quote": "\"observed_native_body_reads\": []",
+            "content_quote": "\"observed_native_body_reads\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "7c2de2dd6971bbcadf131dc5a8f27a9ce82b93814d20f873cae9a395e0327b57"
+          },
+          {
+            "raw_grader_quote": "\"literal_skill_tool_calls_observed\": false",
+            "content_quote": "\"literal_skill_tool_calls_observed\": false",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "3f0c20b1524bd8107e338f39e40c5651114ddec57a8265d290a8f7b94e1b5451"
+          },
+          {
+            "raw_grader_quote": "\"actual_retrieved_package_source_indices\": []",
+            "content_quote": "\"actual_retrieved_package_source_indices\": []",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "1afcd8c257cf80dc89d2eb8d00f57f3cd342bff8ffccb3eb2d1f4f8c3c4e66e7"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "sequence-and-assumption",
+        "quotes": [
+          {
+            "raw_grader_quote": "Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address",
+            "content_quote": "Before switching reads and writes at 03:00, establish a safe rollback path for changes accepted by Address",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "69558f93afd1e51efe8c7c87c14833b563b1569c4b82a536d7f81f935d0f8df0"
+          },
+          {
+            "raw_grader_quote": "ensure old workers can no longer write to `main_db`.",
+            "content_quote": "ensure old workers can no longer write to `main_db`.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "a68293486a69ff33bab1d7b90e0522b12a8fb4ce4c5001be0db50da3f01f36f6"
+          },
+          {
+            "raw_grader_quote": "If Address cannot accept writes until rollback is no longer possible",
+            "content_quote": "If Address cannot accept writes until rollback is no longer possible",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "61c41c89e74203fad18eddf423a6a883fe0c2a9e12b43ab3026e7052ebe25898"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "read-only-and-evidence",
+        "quotes": [
+          {
+            "raw_grader_quote": "",
+            "content_quote": "",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "raw_grader_quote": "\"workspace_diff\": \"\",",
+            "content_quote": "\"workspace_diff\": \"\",",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "2c862d8e0eb2b2f568d3838b4eb3cfe48a38458fd3ac09031bfb6f3f737101e4"
+          },
+          {
+            "raw_grader_quote": "\"untracked_files\": [],",
+            "content_quote": "\"untracked_files\": [],",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "5d598e1de74166efff7ce3002353626a6e0f1656e89d12676de9574802045710"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "critical_results": [
+      {
+        "id": "rollback-after-writes",
+        "score": 2
+      },
+      {
+        "id": "explicit-only-architecture",
+        "score": 2
+      },
+      {
+        "id": "read-only-and-evidence",
+        "score": 2
+      }
+    ],
+    "major_weighted": {
+      "earned": 6,
+      "maximum": 8
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "case_key": "followup-v2--canonical-neutral-extraction-v2",
+    "reviewer": "single-case-042",
+    "requested_grader_model": "gpt-6-luna",
+    "coverage_gaps": [
+      "No independent verification is supplied. Host traces do not emit complete per-turn tool schemas, and read access is not an OS read-isolation boundary. The full candidate instruction body read by Run B is intentionally omitted."
+    ],
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "candidate": "canonical",
+    "original_grader_artifact": "graders/single-case-042/attempt-01/answer.md",
+    "quote_reviewer": "quote-003",
+    "original_anonymous_label": "A",
+    "score_support_disputes": [
+      {
+        "id": "bounded-handoff",
+        "reason": "The answer assesses the supplied proposal's ownership and rollback questions, but the record contains no observed native read of an extraction or data-analysis instruction body. The answer’s proposal claims are grounded in the supplied rollout output; the metadata records an empty body-read list."
+      }
+    ],
+    "latest_evidence_artifact": "finish-graders/quote-003/project/evidence.json",
+    "exact_quote_id_reviewer": "case-020",
+    "latest_score_artifact": "quote-id-graders/case-020/validated-scores.json"
+  }
+]

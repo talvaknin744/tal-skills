@@ -1,0 +1,141 @@
+[
+  {
+    "label": "A",
+    "case_key": "concurrency-correctness--sequential-file-transform",
+    "candidate": "revised-r2-capacity-retry",
+    "criteria": [
+      {
+        "id": "correct-result",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "id,name\n2,Noah Cohen\n17,Sofia Martin\n30,Amara Patel"
+        ],
+        "reason": "The answer contains exactly the required header and rows in ascending numeric id order, with the requested spelling."
+      },
+      {
+        "id": "no-unrelated-workflow",
+        "severity": "major",
+        "score": 2,
+        "evidence_quotes": [
+          "Return the resulting CSV text. There are no running services, parallel writers,\ndeployments, databases, caches, queues, or network calls involved in this task.",
+          "```csv\nid,name\n2,Noah Cohen\n17,Sofia Martin\n30,Amara Patel\n```"
+        ],
+        "reason": "The supplied project notes define this as a local file transformation. The answer returns only the CSV; the recorded commands read the notes and source file, with no unrelated architecture, provisioning request, or workflow."
+      },
+      {
+        "id": "scope",
+        "severity": "critical",
+        "score": 2,
+        "evidence_quotes": [
+          "id,name\n30,Amara Patel\n2,Noah Cohen\n17,Sofia Martin\n",
+          "\"workspace_diff\": \"\"",
+          "\"observed_tool_item_types\": [\"command_execution\"]"
+        ],
+        "reason": "The initial and final fixture contents for names.csv are identical, and the workspace diff is empty, supporting that the source remained unchanged. The recorded tool items are command executions, with no network access shown. The answer makes no claim that checks were run or absent systems inspected."
+      }
+    ],
+    "reviewer": "score-021",
+    "requested_grader_model": "gpt-6-luna",
+    "critical_results": [
+      {
+        "id": "correct-result",
+        "score": 2
+      },
+      {
+        "id": "scope",
+        "score": 2
+      }
+    ],
+    "coverage_gaps": [],
+    "technical_uncertainties": [],
+    "major_weighted": {
+      "earned": 4,
+      "maximum": 4
+    },
+    "minor_weighted": {
+      "earned": 0,
+      "maximum": 0
+    },
+    "unsuccessful_due_to_critical_failure": false,
+    "critical_partial": false,
+    "quote_audit": [
+      {
+        "id": "correct-result",
+        "quotes": [
+          {
+            "raw_grader_quote": "id,name\n2,Noah Cohen\n17,Sofia Martin\n30,Amara Patel",
+            "content_quote": "id,name\n2,Noah Cohen\n17,Sofia Martin\n30,Amara Patel",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "94dd3018c24522948398394079f8bd1a23db5041f986daacf8e8c193d2f3818c"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "no-unrelated-workflow",
+        "quotes": [
+          {
+            "raw_grader_quote": "Return the resulting CSV text. There are no running services, parallel writers,\ndeployments, databases, caches, queues, or network calls involved in this task.",
+            "content_quote": "Return the resulting CSV text. There are no running services, parallel writers,\ndeployments, databases, caches, queues, or network calls involved in this task.",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "46cb38aed8fda702fa1417e564fb15dcacdf27c3e99aac227942dfdcac142fc3"
+          },
+          {
+            "raw_grader_quote": "```csv\nid,name\n2,Noah Cohen\n17,Sofia Martin\n30,Amara Patel\n```",
+            "content_quote": "``csv\nid,name\n2,Noah Cohen\n17,Sofia Martin\n30,Amara Patel\n``",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "b0df6004a4b6e0df4d63bc497dcb118b087df47272a672127136da3c48d48056"
+          }
+        ],
+        "all_quotes_exact": true
+      },
+      {
+        "id": "scope",
+        "quotes": [
+          {
+            "raw_grader_quote": "id,name\n30,Amara Patel\n2,Noah Cohen\n17,Sofia Martin\n",
+            "content_quote": "id,name\n30,Amara Patel\n2,Noah Cohen\n17,Sofia Martin\n",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "eea42e6c3bcee30d4e1952e554f59df18da2fdb5760c5427ac0a5eb4ebeccfa4"
+          },
+          {
+            "raw_grader_quote": "\"workspace_diff\": \"\"",
+            "content_quote": "workspace_diff\": \"",
+            "quotation_framing_removed": true,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "1f3740737a72c29a9a13d9e2c414e1abda1b4404b198ebe15142b2d8bd380065"
+          },
+          {
+            "raw_grader_quote": "\"observed_tool_item_types\": [\"command_execution\"]",
+            "content_quote": "\"observed_tool_item_types\": [\"command_execution\"]",
+            "quotation_framing_removed": false,
+            "embedded_exact_excerpts": [],
+            "structured_field_citations": [],
+            "exact_content_match": true,
+            "content_sha256": "faf1705cff53c68c5be3d30fd3ac09eb9775056a8fc5f969c5d67c261c59fe70"
+          }
+        ],
+        "all_quotes_exact": true
+      }
+    ],
+    "quote_audit_passed": true,
+    "quote_audit_method": "Exact matching to original blind packet strings and JSON evidence. Quotation framing and explicitly quoted embedded excerpts are parsed without changing their contents. Structured JSON field citations are separately checked against actual packet values and identified as field citations, not claimed as verbatim narrative quotes. Raw quotes and scores retained.",
+    "latest_evidence_artifact": "finish-graders/score-021/project/evidence.json",
+    "latest_score_artifact": "finish-graders/score-021/validated-scores.json"
+  }
+]
