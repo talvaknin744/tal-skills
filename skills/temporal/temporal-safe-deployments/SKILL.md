@@ -1,11 +1,11 @@
 ---
 name: temporal-safe-deployments
-description: Evolve Temporal applications safely across Workflow code changes, Worker rollouts, payload schemas, Continue-As-New boundaries, and workload migrations. Use when existing executions must survive a change or recover from a bad deployment.
+description: Evolve Temporal code, Workers, payloads, and workload migrations while existing executions remain active or recover from bad deployments. Use for replay compatibility and safe cutover.
 ---
 
 # Temporal safe deployments
 
-Preserve the business process while changing the code that reconstructs it.
+Execution compatibility preserves the business process while code that reconstructs it changes.
 
 ## 1. Establish the compatibility boundary
 
@@ -22,6 +22,8 @@ Record the business invariant being protected and every changed boundary:
 command sequence, serialized data, routing, or ownership. This step is complete
 when each affected execution class has a known compatibility requirement;
 mark inaccessible histories or configuration as evidence gaps.
+
+Example: A sleeping run pinned to build A requires build A until it advances.
 
 ## 2. Choose how existing executions progress
 
@@ -42,6 +44,8 @@ Complete this step with one justified strategy per affected execution class,
 the artifacts or Workers it must retain, and a recovery path if it cannot advance.
 Keep an existing viable strategy when a smaller compatible change suffices.
 
+Example: Retain the old Worker for pinned runs and replay auto-upgraded histories against the candidate.
+
 ## 3. Verify compatibility and business effects separately
 
 Replay representative open and closed histories against the exact candidate
@@ -61,6 +65,8 @@ For review or planning, identify the exact checks, inputs, and observable
 outcomes required; run read-only checks when possible. Completion means each
 identified compatibility risk has evidence or an explicit unresolved test gap.
 
+Example: Replay a history paused before the changed command and one already past it.
+
 ## 4. Deliver a bounded rollout or assessment
 
 Tie each rollout increment to concrete measures: advancing old runs, expected
@@ -75,3 +81,5 @@ remaining evidence gaps, and the retirement condition for old code, schemas,
 and Workers. Distinguish a tested local change from a completed production
 rollout. Consult [sources](references/sources.md) when validating a capability or
 attributing a customer lesson; customer outcomes are motivation, not guarantees.
+
+Example: Stop the ramp when Workflow Task failures exceed the workload-derived threshold.

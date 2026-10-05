@@ -12,13 +12,6 @@ const errors = [];
 const checked = [];
 const seenNames = new Set();
 const promotedBuckets = new Set(['engineering', 'performance', 'languages', 'temporal']);
-// Temporary, exact-content compatibility exceptions. Phase 5 must remove these
-// by shortening the descriptions; do not broaden this registry by name alone.
-const longDescriptionSha256UntilPhase5 = new Map([
-  ['legacy-code-changes', '7babfa1775aa6318bbf321124292fccdbec32780ed7fdfe3884ca030ec921006'],
-  ['recovery-validation', '06da98bd3cb507999caaf58df8b8440ec55c6f74fd894143891b96d75f374f23'],
-  ['data-layout-performance', 'b1f50ec1740923a45bfd6ef373c60730bb102a2341315c61a6ffc04ec6c30d0c'],
-]);
 const promoted = [];
 
 function requireCondition(condition, message) {
@@ -92,14 +85,8 @@ for (const { entry, directory, concern } of skillDirectories) {
           `${entry.name}: disable-model-invocation must be boolean`);
       }
       const words = metadata?.description?.trim().split(/\s+/).filter(Boolean).length ?? 0;
-      if (words > 40) {
-        const expectedHash = longDescriptionSha256UntilPhase5.get(entry.name);
-        const actualHash = crypto.createHash('sha256').update(metadata.description).digest('hex');
-        requireCondition(Boolean(expectedHash) && expectedHash === actualHash,
-          `${entry.name}: description must be 15–40 words (unregistered or changed grandfathered description; sha256=${actualHash})`);
-      } else {
-        requireCondition(words >= 15, `${entry.name}: description must be 15–40 words (found ${words})`);
-      }
+      requireCondition(words >= 15 && words <= 40,
+        `${entry.name}: description must be 15–40 words (found ${words})`);
     }
     requireCondition(text.slice(frontmatter[0].length).trim().length > 0, `${entry.name}: empty instructions`);
   } catch (error) {
@@ -175,6 +162,23 @@ if (!fs.existsSync(pluginPath)) {
   } catch (error) {
     errors.push(`.claude-plugin/plugin.json: invalid JSON: ${error.message}`);
   }
+}
+
+// Preserve exact retained records; any changed or new prose must obey the style rule.
+const styleExceptions = new Map(JSON.parse(fs.readFileSync(
+  path.join(scriptRoot, 'scripts/prose-style-exceptions.json'), 'utf8')).files
+  .map(entry => [entry.path, entry.sha256]));
+const proseFiles = ['skills', 'docs'].filter(directory => fs.existsSync(path.join(root, directory)))
+  .flatMap(directory => filesUnder(path.join(root, directory)))
+  .filter(filename => filename.endsWith('.md'))
+  .concat(['README.md', 'CHANGELOG.md', 'AGENTS.md'].map(filename => path.join(root, filename)))
+  .filter(filename => fs.existsSync(filename));
+for (const filename of proseFiles) {
+  const contents = fs.readFileSync(filename);
+  if (!contents.toString('utf8').includes('\u2014')) continue;
+  const relative = path.relative(root, filename);
+  requireCondition(styleExceptions.get(relative) === crypto.createHash('sha256').update(contents).digest('hex'),
+    `${relative}: replace em-dashes in current prose (retained exceptions require exact original bytes)`);
 }
 
 requireCondition(checked.length > 0, 'No skills found');
