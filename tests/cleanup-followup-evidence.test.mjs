@@ -139,6 +139,49 @@ test('Claude Code R4 report retains blocked counts and a verifiable external arc
   assert.match(manifest.external_archive.sha256, /^[a-f0-9]{64}$/);
   assert.equal(manifest.external_archive.zstd_test, 'passed');
   for (const hash of Object.values(manifest.receipt_hashes_sha256)) assert.match(hash, /^[a-f0-9]{64}$/);
+  const publication = readJson('evals/claude-code/runs/2026-10-05/publication-receipt.json');
+  assert.equal(publication.format_version, 1);
+  assert.equal(publication.original_archive.sha256, manifest.external_archive.sha256);
+  assert.equal(publication.original_archive.filename, manifest.external_archive.filename);
+  assert.deepEqual(publication.archive_sha256_binding, {
+    original_sha256: publication.original_archive.sha256,
+    public_sha256: publication.public_archive.sha256,
+  });
+  assert.equal(publication.public_archive.filename, 'tal-skills-claude-code-2026-10-05.tar.zst');
+  assert.match(publication.public_archive.sha256, /^[a-f0-9]{64}$/);
+  const inventory = publication.inventory;
+  assert.equal(inventory.total_members, manifest.external_archive.tar_member_count);
+  assert.equal(inventory.members.length, inventory.total_members);
+  assert.equal(inventory.regular_file_mappings.length, inventory.regular_files);
+  assert.equal(inventory.regular_files + inventory.directories + inventory.other_members, inventory.total_members);
+  assert.equal(inventory.same_paths_and_types_as_original, true);
+  assert.equal(new Set(inventory.members.map(row => row.path)).size, inventory.total_members);
+  const mappings = new Map(inventory.regular_file_mappings.map(row => [row.path, row]));
+  assert.equal(mappings.size, inventory.regular_files);
+  for (const member of inventory.members) {
+    assert.ok(!member.path.startsWith('/') && !member.path.split(/[\\/]/).includes('..'), member.path);
+    if (member.type === 'regular') {
+      const mapping = mappings.get(member.path);
+      assert.ok(mapping, member.path);
+      assert.equal(mapping.original_sha256, member.original_sha256, member.path);
+      assert.equal(mapping.public_sha256, member.public_sha256, member.path);
+      for (const hash of [mapping.original_sha256, mapping.public_sha256]) assert.match(hash, /^[a-f0-9]{64}$/);
+      assert.equal(mapping.redacted, mapping.original_sha256 !== mapping.public_sha256, member.path);
+    }
+  }
+  assert.equal(inventory.regular_file_mappings.filter(row => row.redacted).length, publication.redaction.regular_files_changed);
+  assert.equal(publication.redaction.binary_files_modified, false);
+  assert.equal(publication.redaction.text_files_only, true);
+  assert.deepEqual(Object.values(publication.content_scan_counts_only), [0, 0, 0, 0]);
+  assert.equal(Object.keys(publication.receipt_hashes_sha256).length, Object.keys(manifest.receipt_hashes_sha256).length);
+  for (const [filename, hash] of Object.entries(manifest.receipt_hashes_sha256)) {
+    const memberPath = `remaining-claude-code/${filename}`;
+    const receipt = publication.receipt_hashes_sha256[memberPath];
+    assert.ok(receipt, filename);
+    assert.equal(receipt.original_sha256, hash, filename);
+    assert.equal(receipt.public_member_present, true, filename);
+    assert.equal(receipt.public_sha256, mappings.get(memberPath).public_sha256, filename);
+  }
 });
 
 test('retained source prompts and rubrics still match their original case files', () => {
