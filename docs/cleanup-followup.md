@@ -90,9 +90,11 @@ were below the retained source even before this follow-up. Phase 5 had 3,008
 tracked files and 1,699 eval files, approximately 25.9 decimal MB.
 
 At this follow-up checkpoint, the measured source floor and revised targets are
-3,086 tracked files, 1,731 files under evals/, and 29,136,395 actual bytes
-(27.79 MiB). The file-count ceilings equal these retained measurements.
-No protected record is removed to meet a number. The ordinary-clone pack ceiling
-is checked after publication and its exact measurement recorded in the PR body;
+3,093 tracked files, 1,738 files under evals/, and 29,495,273 actual bytes
+(28.13 MiB). The file-count ceilings equal these retained measurements.
+No protected record is removed to meet a number. The revised ordinary-clone
+pack ceiling is 6,500,000 bytes, including its index. The earlier 6,000,000-byte
+estimate is already exceeded by the 6,251,207-byte ordinary clone before the
+identity metadata fix. The final measurement is recorded in the PR body;
 local Git object storage is not that measurement. Raw runtime copies remain in
 the verified release archive, outside cloneable source.

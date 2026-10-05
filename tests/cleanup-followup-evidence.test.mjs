@@ -72,7 +72,7 @@ test('retained source prompts and rubrics still match their original case files'
 
 test('final revised-r3 package is the generated Codex package represented by its frozen identity', () => {
   const identity = readRun('candidate-identity-r3.json');
-  const manifest = readRun('candidates/revised-r3.json');
+  const manifest = readRun('identities/revised-r3.json');
   const generated = generateBundle(loadCatalog(root), { host: 'codex', skills: identity.skills });
   const currentFiles = [...generated.files]
     .filter(([filename]) => filename.startsWith('.agents/skills/'))
