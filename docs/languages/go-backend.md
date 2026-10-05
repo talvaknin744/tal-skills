@@ -8,6 +8,8 @@ Guides Go service changes where cancellation, goroutine ownership, cleanup, runt
 
 Use [go-backend](../../skills/languages/go-backend/SKILL.md) for Go services when resource lifetime, concurrent work, external input, or transaction outcomes are part of the change. Keep sequential work sequential unless the requested behavior calls for concurrency.
 
+Invocation: automatic
+
 ## It's working if
 
 - The request boundary, accepted input, effect, outcome, and resource owners are identified.

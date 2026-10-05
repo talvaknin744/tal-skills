@@ -8,6 +8,8 @@ Finds the constraint on useful backend work and checks whether a scoped interven
 
 Use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) for unexplained backend slowness, throughput plateaus, resource saturation, profiling, pool waits, container throttling, or distributed critical paths. Formatting-only requests use the normal formatting workflow. Capacity forecasts and workload construction have separate workflows; use [capacity-planning](../../skills/performance/capacity-planning/SKILL.md) or [load-testing](../../skills/performance/load-testing/SKILL.md) when those are the task.
 
+Invocation: automatic
+
 ## It's working if
 
 - The symptom, baseline window, workload, target, and missing evidence are explicit.

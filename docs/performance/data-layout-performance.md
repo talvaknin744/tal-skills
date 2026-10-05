@@ -8,6 +8,8 @@ Assesses or optimizes measured Go and Python hot paths where data layout, CPU-ca
 
 Use [data-layout-performance](../../skills/performance/data-layout-performance/SKILL.md) for evidence-backed AoS/SoA, hot/cold splitting, false sharing, or bounded ring/cache proposals. Formatting-only requests use the normal formatting workflow. Use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) to establish the bottleneck and [database-performance](../../skills/performance/database-performance/SKILL.md) for database work or waits.
 
+Invocation: automatic
+
 ## It's working if
 
 - Profiles or an explicit experiment establish that the path matters to CPU, allocation, retention, contention, or a latency cohort.

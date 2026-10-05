@@ -8,6 +8,8 @@ Chooses business capability boundaries that let useful changes ship independentl
 
 Use it to choose or review service boundaries, assess a proposed split, or diagnose a distributed monolith's coupling. It covers capability decomposition and ownership; routine module refactoring and general architecture reviews are outside its trigger. When a boundary is selected and extraction work begins, move to `microservice-extraction`.
 
+Invocation: automatic
+
 ## It's working if
 
 - The decision states a concrete goal, evidence or assumption, and measurable condition for improvement.

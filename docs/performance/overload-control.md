@@ -8,6 +8,8 @@ Designs and reviews admission, shedding, bounded queues, tenant fairness, and re
 
 Use [overload-control](../../skills/performance/overload-control/SKILL.md) when a resource or dependency is running out of usable capacity and the task is to contain demand or recover safely. It is not the workflow for replica forecasting or duplicate-effect correctness; see [capacity-planning](../../skills/performance/capacity-planning/SKILL.md) or [messaging-reliability](../../skills/engineering/messaging-reliability/SKILL.md) for those jobs.
 
+Invocation: automatic
+
 ## It's working if
 
 - The protected resource, useful outcome, acceptance boundary, and evidence gaps are stated.

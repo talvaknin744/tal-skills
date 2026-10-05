@@ -8,6 +8,8 @@ Connects application impact to database work and waiting, then validates the sma
 
 Use [database-performance](../../skills/performance/database-performance/SKILL.md) for expensive queries, plan regressions, contention, pool pressure, or database saturation. Duplicate-effect or isolation correctness alone belongs on its existing route; use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) when the bottleneck is not yet known and [python-backend](../../skills/languages/python-backend/SKILL.md) for broader session and query ownership questions.
 
+Invocation: automatic
+
 ## It's working if
 
 - The affected workload, baseline interval, timing boundary, invariant, and evidence gaps are explicit.

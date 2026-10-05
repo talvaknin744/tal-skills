@@ -8,6 +8,8 @@ Builds or assesses backend load tests so delivered demand, workload shape, and o
 
 Use [load-testing](../../skills/performance/load-testing/SKILL.md) for representative workload design, saturation, overload, recovery, generator limits, or misleading throughput and percentile claims. Ordinary unit-test assertions stay on their existing route; use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) to locate an unexplained bottleneck and [capacity-planning](../../skills/performance/capacity-planning/SKILL.md) to model a capacity envelope.
 
+Invocation: automatic
+
 ## It's working if
 
 - The experiment states its claim, useful operation, latency boundary, objective, workload classes, baseline, and execution limits.

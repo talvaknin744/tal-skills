@@ -8,6 +8,8 @@ Validates backup and disaster-recovery claims by rehearsing restores, measuring 
 
 Validate restore and disaster-recovery claims with rehearsals, measured data loss, time to application usability, and business invariants. Use for drills, failed restores, and RPO/RTO evidence; exclude backup scheduling alone. Use `microservice-operations` for broader service readiness and operations.
 
+Invocation: automatic
+
 ## It's working if
 
 - The recovery point, dependency inventory, acceptance invariants, loss budget, timing boundary, and isolated target are explicit.

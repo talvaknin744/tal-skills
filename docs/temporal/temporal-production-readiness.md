@@ -8,6 +8,8 @@ Turns workload, capacity, isolation, data-lifetime, and recovery assumptions int
 
 Use [temporal-production-readiness](../../skills/temporal/temporal-production-readiness/SKILL.md) when schedules, fan-out, history growth, tenant isolation, or recovery evidence affect a readiness decision. Customer stories motivate failure questions; they do not supply sizing defaults or platform guarantees.
 
+Invocation: automatic
+
 ## It's working if
 
 - The assessed workload, environment, business owner, arrival pattern, deadline, and unknown requirements are recorded.

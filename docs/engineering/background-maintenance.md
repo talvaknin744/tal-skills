@@ -8,6 +8,8 @@ Design or assess maintenance work that reduces storage or index debt while prese
 
 Use when compaction, reclamation, rebalancing, backfills or index maintenance compete with serving resources. A finite local filename-filter pass belongs in ordinary application cleanup.
 
+Invocation: automatic
+
 ## It's working if
 
 - The report names the debt, its arrival rate, completion or freshness horizon, and the foreground objective.

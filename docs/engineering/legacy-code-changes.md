@@ -8,6 +8,8 @@ Make a requested change testable in untested legacy code while preserving neighb
 
 Use when missing coverage makes a requested change risky or constructors, globals or hidden collaborators obstruct testing. Greenfield work follows its implementation workflow; changes already covered by focused tests can use the ordinary change workflow.
 
+Invocation: automatic
+
 ## It's working if
 
 - The requested difference, affected entrypoint and behavior to preserve are bounded, with an executable baseline where possible.

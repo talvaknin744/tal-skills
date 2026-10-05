@@ -8,6 +8,8 @@ Choose and specify a distributed topology from the constraint it must satisfy.
 
 Use when selecting or reviewing serving, partitioning, ownership, movement or batch-stage patterns against a measured constraint. Isolated retry or duplicate-effect changes belong with their operation-level contract.
 
+Invocation: automatic
+
 ## It's working if
 
 - The plan identifies the limiting constraint from the actual request or job path, data placement, deployment shape and measurements.

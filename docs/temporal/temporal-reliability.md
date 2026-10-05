@@ -8,6 +8,8 @@ Guides Temporal failure paths involving duplicate Activity effects, ambiguous ti
 
 Use [temporal-reliability](../../skills/temporal/temporal-reliability/SKILL.md) for business mutations such as payments or provisioning when interruption can leave an effect partial or uncertain. Generic SDK setup and Worker tuning belong to the official Temporal catalog.
 
+Invocation: automatic
+
 ## It's working if
 
 - The logical operation, required outcome, irreversible effects, and source of truth are named.

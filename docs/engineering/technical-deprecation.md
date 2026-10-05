@@ -8,6 +8,8 @@ Retires a supported technical contract through evidenced consumer transitions. I
 
 Use it for retiring a supported library, API, configuration option, or internal tool when consumers must migrate, replacement readiness, stalled deprecations, or removal gates. It excludes private unused-helper cleanup, worker draining, and public product shutdown policy. Use `microservice-integration` for contract design and `microservice-testing` for consumer/provider verification.
 
+Invocation: automatic
+
 ## It's working if
 
 - The target contract, permitted behavior changes, accountable role, support policy, and requested stage are explicit.

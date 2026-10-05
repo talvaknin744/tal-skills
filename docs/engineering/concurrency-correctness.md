@@ -8,6 +8,8 @@ Diagnose and prevent concurrent histories that violate a mutation invariant or f
 
 Use for lost updates, write skew, stale cache fills, replica freshness and obsolete owners. Broad decomposition and duplicate retries alone stay outside this boundary.
 
+Invocation: automatic
+
 ## It's working if
 
 - The specification states the operation, forbidden outcome and permitted intermediate states, with reader freshness separate from mutation correctness.

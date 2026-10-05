@@ -8,6 +8,8 @@ Makes broker messages reach a recoverable disposition without losing required ef
 
 Use it for broker consumers, acknowledgements, retries, quarantine/dead-letter paths, event replay, schema evolution, duplicate or out-of-order delivery, poison messages, and unsafe checkpoints. Local synchronous callbacks and in-process collection transformations belong in ordinary application code. For API/event contract choice and consumer coupling, pair with `microservice-integration`.
 
+Invocation: automatic
+
 ## It's working if
 
 - The path from publish through durable effect to acknowledgement/checkpoint names each owner and atomicity boundary.

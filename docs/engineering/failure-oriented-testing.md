@@ -8,6 +8,8 @@ Make a specific failure observable and reproducible at the smallest boundary tha
 
 Use when a suspected failure, generated input or adverse ordering needs a reproducible check with an independent oracle. Settled low-risk edits already covered by meaningful tests do not need this workflow.
 
+Invocation: automatic
+
 ## It's working if
 
 - The test claim states a falsifiable claim with trigger, protected invariant, required observation and independent oracle.

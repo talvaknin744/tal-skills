@@ -8,6 +8,8 @@ Models a capacity envelope tied to useful work, resource demand, and promised op
 
 Use [capacity-planning](../../skills/performance/capacity-planning/SKILL.md) for fleet or pool sizing, autoscaling plans, downstream ceilings, growth, or recovery decisions. A deployment inventory alone does not need sizing analysis; use [load-testing](../../skills/performance/load-testing/SKILL.md) to establish experimental evidence or [overload-control](../../skills/performance/overload-control/SKILL.md) to design immediate demand containment.
 
+Invocation: automatic
+
 ## It's working if
 
 - Demand, objectives, scenario scope, units, timing boundaries, and measured versus assumed inputs are explicit.

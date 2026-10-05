@@ -11,7 +11,7 @@ const safePath = value => typeof value === 'string' && !path.posix.isAbsolute(va
   && !/[\\\x00-\x1f]/.test(value) && value.split('/').every(part => part && part !== '.' && part !== '..');
 export function originalPublishedDigest(bytes, relative, repository = root, expectedDigest) {
   const files = [];
-  for (const name of ['path-redactions.json', 'archive-link-transforms.json', 'package-relocations.json', 'research-relocations.json', 'release-publication.json', 'advanced-toolkit-relocations.json', 'cleanup-followup-publication.json']) {
+  for (const name of ['path-redactions.json', 'archive-link-transforms.json', 'package-relocations.json', 'research-relocations.json', 'release-publication.json', 'advanced-toolkit-relocations.json', 'cleanup-followup-publication.json', 'cleanup-leftovers-publication.json']) {
     const manifest = path.join(repository, 'docs', name);
     if (!fs.existsSync(manifest)) continue;
     const receipt = JSON.parse(fs.readFileSync(manifest, 'utf8'));

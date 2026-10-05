@@ -8,6 +8,8 @@ Makes service behavior observable, recoverable, and independently operable acros
 
 Assess or improve cross-service reliability, observability, deployment, recovery, capacity, or trust boundaries. Use for cascading failures and service readiness; exclude generic CI and single-process troubleshooting. Use `recovery-validation` when the claim specifically concerns restored data/history.
 
+Invocation: automatic
+
 ## It's working if
 
 - Scope, user outcome, objectives, dependencies, and evidence for current behavior are explicit.

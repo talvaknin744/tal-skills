@@ -8,6 +8,8 @@ Designs tests that show a service can change without breaking consumers. It sele
 
 Design or review tests across independently deployed services. Use for consumer contracts, service isolation, or release-coupling end-to-end suites; exclude ordinary unit tests within one application. Use `failure-oriented-testing` for broader failure-testing methods and `microservice-integration` to design the interaction itself.
 
+Invocation: automatic
+
 ## It's working if
 
 - Each in-scope risk names an observable incorrect outcome, affected user/consumer, and evidence needed.

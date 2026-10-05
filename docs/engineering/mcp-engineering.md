@@ -8,6 +8,8 @@ Builds or reviews MCP clients and servers where protocol version, tool contracts
 
 Reach for it when implementing or reviewing an MCP integration, including private resources, tool input/output validation, authorization, cancellation, or uncertain effects after a lost response. Calling an available tool belongs to the task's normal execution workflow. For business idempotency or concurrency, continue to the optional `idempotency` or `concurrency-correctness` skills when available.
 
+Invocation: automatic
+
 ## It's working if
 
 - The installed SDK, transport, negotiated revision, and peer capabilities are recorded in a client/server/version matrix.
