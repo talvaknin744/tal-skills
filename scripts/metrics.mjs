@@ -25,7 +25,8 @@ const buckets = fs.readdirSync(path.join(root, 'skills'), { withFileTypes: true 
 const pack = git('count-objects', '-vH').split('\n').find(line => line.startsWith('size-pack:'))?.slice(10).trim() ?? 'unavailable';
 const homeHits = files.flatMap(name => personalPathHits(text(name)).map(hit => ({ name, ...hit })));
 const rows = [
-  ['Working tree source size (MB, excluding ignored local environments)', (bytes / 1_048_576).toFixed(1)],
+  ['Working tree source size (MiB, excluding ignored local environments)', (bytes / 1_048_576).toFixed(1)],
+  ['Working tree source bytes', bytes],
   ['Git pack size', pack],
   ['Files tracked', git('ls-files', '-z').split('\0').filter(Boolean).length],
   ['Files over 1 MB (source)', files.filter(name => fs.statSync(path.join(root, name)).size > 1_048_576).length],

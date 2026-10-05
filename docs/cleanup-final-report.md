@@ -10,11 +10,14 @@ Static validation passed 545 tests, including the final publication integrity ch
 
 The global zero-em-dash estimate remains unmet because retained historical outcomes, research attribution and unchanged miscellaneous/vendor material govern. Current promoted skill prose and current human docs obey the style guard; four exact historical/miscellaneous file identities are preserved as exceptions. New text cannot extend those exceptions. New leading terms remain confined to entrypoints, pending confirmation before any propagation into supporting references.
 
+The final source exceeds the 25,000,000-byte estimate because retained evidence governs. Earlier metric rows labeled MB used a binary denominator; the corrected table reports MiB and exact source bytes separately. Existing positive cases were explicitly selected through runtime context, so automatic positive selection remains unverified.
+
 ## Measured final source
 
 | Metric | Value |
 | --- | --- |
-| Working tree source size (MB, excluding ignored local environments) | 24.7 |
+| Working tree source size (MiB, excluding ignored local environments) | 24.7 |
+| Working tree source bytes | 25897180 |
 | Git pack size | 6.54 MiB |
 | Files tracked | 3008 |
 | Files over 1 MB (source) | 0 |
