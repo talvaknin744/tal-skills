@@ -14,6 +14,9 @@ const pythonJson = value => Array.isArray(value) ? `[${value.map(pythonJson).joi
   : value && typeof value === 'object' ? `{${Object.keys(value).sort().map(key => `${pythonJson(key)}: ${pythonJson(value[key])}`).join(', ')}}`
     : JSON.stringify(value).replace(/[\u007f-\uffff]/g, char => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`);
 const comparePath = (a, b) => a < b ? -1 : a > b ? 1 : 0;
+const compactPythonJson = value => Array.isArray(value) ? `[${value.map(compactPythonJson).join(',')}]`
+  : value && typeof value === 'object' ? `{${Object.keys(value).sort().map(key => `${compactPythonJson(key)}:${compactPythonJson(value[key])}`).join(',')}}`
+    : pythonJson(value);
 const digestRows = rows => sha256(rows.map(row => `${row.path}\0${row.sha256}\n`).join(''));
 
 test('cleanup follow-up archive preserves every retained file by its recorded digest', () => {
@@ -46,6 +49,23 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
     for (const fixture of row.fixture_files) {
       assert.equal(sha256(fs.readFileSync(path.join(fixtureDir, fixture.path))), fixture.sha256, `${row.key}/${fixture.path}`);
     }
+  }
+  const activation = readJson('evals/cleanup-followup/activation-cases.json');
+  assert.equal(activation.cases.length, 1);
+  const marker = activation.cases[0];
+  const originalExplicit = corpus.cases.find(row => row.key === marker.source_explicit_case_key);
+  assert.equal(marker.prompt, originalExplicit.prompt);
+  assert.equal(sha256(marker.prompt), marker.prompt_sha256);
+  assert.deepEqual(marker.content_criteria, originalExplicit.criteria);
+  for (const kind of ['content', 'marker']) {
+    const compact = compactPythonJson(marker[`${kind}_criteria`]);
+    assert.equal(sha256(compact), marker[`${kind}_criteria_sha256`]);
+  }
+  assert.deepEqual(marker.marker_criteria.map(row => row.id), ['decision-boundary-semantic-marker', 'semantic-completion-conditions']);
+  for (const fixture of marker.fixture_files) {
+    const bytes = fs.readFileSync(path.join(root, 'evals/cleanup-followup', marker.fixture_dir, fixture.path));
+    assert.equal(sha256(bytes), fixture.sha256);
+    assert.deepEqual(bytes, fs.readFileSync(path.join(root, marker.fixture_source, fixture.path)));
   }
   const handoff = readJson('evals/cleanup-followup/handoff-fallback-cases.json');
   assert.equal(handoff.schema_version, 1);

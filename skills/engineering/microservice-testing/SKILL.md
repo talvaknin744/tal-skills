@@ -1,6 +1,6 @@
 ---
 name: microservice-testing
-description: Design or review tests across independently deployed services. Use for consumer contracts, service isolation, or release-coupling end-to-end suites; exclude ordinary unit tests within one application.
+description: Review release evidence and tests across independently deployed services. Use for consumer contracts, service isolation, release-coupling end-to-end suites, or unknown API consumers; exclude ordinary unit tests within one application.
 license: MIT
 ---
 

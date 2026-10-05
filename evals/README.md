@@ -37,6 +37,7 @@ An evaluation record should contain:
   "capability_deviations": [],
   "artifact_paths": {"answer": "...", "trace": "...", "workspace_diff": "..."},
   "criteria": [{"id": "...", "score": 0, "evidence": "..."}],
+  "activation_rate": {"body_reads": 0, "normal_discovery_attempts": 3, "skills_read_instead": [], "explicit_invocation_evidence": null},
   "elapsed_seconds": 0,
   "tool_calls": 0,
   "token_usage": null,
@@ -45,6 +46,8 @@ An evaluation record should contain:
 ```
 
 The zeros and placeholders above describe the record format; they are not measured results. Keep run artifacts outside the fixtures. Publish results only after actually executing the cases and checking their evidence.
+
+Report activation alongside critical scores: automatic positives need at least two observed body reads in three fresh normal-discovery attempts. Keep all attempts, timeouts and skills read instead. After a description change, repeat that skill's positives three times and its complete existing nontrigger set once. For explicit-only skills, report observable invocation evidence separately; response markers establish only the tested output contract, and do not prove hidden body injection.
 
 ## Automated checks
 

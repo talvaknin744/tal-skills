@@ -1,6 +1,6 @@
 ---
 name: failure-oriented-testing
-description: Implement or review deterministic regressions for injected faults, adversarial schedules, generated inputs, or recovery. Use when a suspected failure needs an independent oracle; settled low-risk edits follow ordinary testing.
+description: Create failure-oriented regression tests. Use whenever implementing a deterministic regression, reviewing a database fake and incident trace, or checking fault recovery with an independent oracle; settled low-risk edits follow ordinary testing.
 license: MIT
 ---
 
