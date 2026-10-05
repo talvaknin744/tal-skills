@@ -26,7 +26,7 @@ test('every promoted skill has a matching public docs page linked to its canonic
     const invocation = content.match(/^Invocation: .*$/gm) ?? [];
     if (/^disable-model-invocation:\s*true\s*$/m.test(skill.split('---', 2)[1] ?? '')) {
       assert.deepEqual(invocation, [
-        'Invocation: user-invoked. Claude Code: /architecture. Codex: $architecture. Automatic invocation is disabled.',
+        'Invocation: user-invoked. Claude Code project skill: /architecture. Claude Code plugin skill: /tal-skills:architecture. Codex: $architecture. Automatic invocation is disabled.',
       ], `${name}: explicit invocation must match canonical metadata`);
     } else {
       assert.deepEqual(invocation, ['Invocation: automatic'], `${name}: docs must expose automatic invocation`);

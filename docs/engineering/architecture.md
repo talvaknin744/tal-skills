@@ -6,9 +6,9 @@ Produce an evidence-grounded decision about system design, migration or an exist
 
 ## When to reach for it
 
-Use for architecture decisions, migrations, technology choices and architecture reviews. Routine implementation and debugging stay outside this boundary. Invoke explicitly with Claude /architecture or Codex $architecture; automatic model invocation is disabled.
+Use for architecture decisions, migrations, technology choices and architecture reviews. Routine implementation and debugging stay outside this boundary. Invoke explicitly in Claude Code as `/architecture` for a project skill or `/tal-skills:architecture` for this plugin, or use Codex `$architecture`; automatic model invocation is disabled.
 
-Invocation: user-invoked. Claude Code: /architecture. Codex: $architecture. Automatic invocation is disabled.
+Invocation: user-invoked. Claude Code project skill: /architecture. Claude Code plugin skill: /tal-skills:architecture. Codex: $architecture. Automatic invocation is disabled.
 
 ## It's working if
 

@@ -17,7 +17,7 @@ for (const directory of ['docs', 'examples', 'agents', 'workflows', 'integration
 const failures = [];
 let links = 0;
 const automaticInvocation = 'Invocation: automatic';
-const architectureInvocation = 'Invocation: user-invoked. Claude Code: /architecture. Codex: $architecture. Automatic invocation is disabled.';
+const architectureInvocation = 'Invocation: user-invoked. Claude Code project skill: /architecture. Claude Code plugin skill: /tal-skills:architecture. Codex: $architecture. Automatic invocation is disabled.';
 for (const filename of files.sort()) {
   const contents = fs.readFileSync(filename, 'utf8');
   const relativeFilename = path.relative(root, filename);

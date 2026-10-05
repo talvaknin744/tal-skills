@@ -130,6 +130,11 @@ the selected agent or workflow declares it; use available guidance and report a
 missing package when its specialist help is needed. Standalone skills CLI copies
 retain the portable handoff wording.
 
+These handoff instructions describe agent-to-agent skill use. For a Claude user
+invoking a project-local skill installed under `.claude/skills/<name>/`, use
+`/<name>`. A plugin skill is namespaced by its plugin manifest name: this
+repository's `tal-skills` plugin exposes `/tal-skills:<name>`.
+
 An unowned name or file collision stops installation even when its bytes match.
 An edited owned file also stops replacement. Repeated installation preserves
 unchanged files; removed selections remove only unchanged owned artifacts.
@@ -171,6 +176,15 @@ Inspect admission, retained input, checkpoint ownership, and the queue's retry
 accounting. Force successive maintenance handoffs and a genuine failure control.
 ```
 
+The command above assumes the project-local toolkit install. When the same
+entrypoint comes from the `tal-skills` plugin, use its plugin-qualified name:
+
+```text
+/tal-skills:tal-worker-rollout Review our three-pod rolling deployment for 18-hour jobs.
+Inspect admission, retained input, checkpoint ownership, and the queue's retry
+accounting. Force successive maintenance handoffs and a genuine failure control.
+```
+
 For a single role, ask the main session to use `tal-python`, `tal-consistency`,
 or another installed name for a bounded assignment. Roles are named subagents;
 workflow entrypoints are skills. The hosts decide whether native delegation is
@@ -200,6 +214,12 @@ Host compatibility and observed limitations are recorded in the
 environment the desktop-bundled Codex was newer than the CLI on `PATH`, and Claude
 model execution required refreshed authentication. Use the recorded version and
 evidence for a claim; configuration parsing alone is not a successful workflow.
+Claude Code 2.1.150 installed the README marketplace package as tal-skills 1.0.0
+in an isolated `CLAUDE_CONFIG_DIR`; the installed 35 skill paths matched the
+marketplace checkout at commit `74d141db54dddaec5b594fcf1f0d6d047a6a51b4`. This
+was an isolated install profile on an existing machine, not a clean physical
+machine. The focused Claude behavior attempts remain authentication-blocked; see
+the [Claude Code evidence report](../evals/cleanup-followup/claude-code-report.md).
 
 ## Standalone skill setup
 
