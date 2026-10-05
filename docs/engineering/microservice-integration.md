@@ -6,7 +6,7 @@ Designs service-to-service interactions and contracts so participating services 
 
 ## When to reach for it
 
-Use it for service communication, API/event contract evolution, consumer coupling, chatty calls, request-response versus messaging, and BFF aggregation. It excludes generic architecture reviews and single-operation retry deduplication. Use `messaging-reliability` for broker delivery/replay guarantees and `technical-deprecation` for retiring a supported contract.
+Design service-to-service calls, APIs, events, or BFF aggregation. Use for contract evolution, consumer coupling, or chatty calls; exclude generic architecture reviews and retry deduplication. Use `messaging-reliability` for broker delivery/replay guarantees and `technical-deprecation` for retiring a supported contract.
 
 ## It's working if
 

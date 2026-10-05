@@ -6,7 +6,7 @@ Validates backup and disaster-recovery claims by rehearsing restores, measuring 
 
 ## When to reach for it
 
-Use it for restore runbooks, recovery drills, failed restores, and RPO/RTO evidence. Ordinary backup scheduling alone does not require a drill. Use `microservice-operations` for broader service readiness and operations.
+Validate restore and disaster-recovery claims with rehearsals, measured data loss, time to application usability, and business invariants. Use for drills, failed restores, and RPO/RTO evidence; exclude backup scheduling alone. Use `microservice-operations` for broader service readiness and operations.
 
 ## It's working if
 

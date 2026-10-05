@@ -6,7 +6,7 @@ Designs tests that show a service can change without breaking consumers. It sele
 
 ## When to reach for it
 
-Use it for consumer-driven contracts, service isolation, cross-service coverage, or end-to-end suites that couple releases. It excludes ordinary unit testing inside one application. Use `failure-oriented-testing` for broader failure-testing methods and `microservice-integration` to design the interaction itself.
+Design or review tests across independently deployed services. Use for consumer contracts, service isolation, or release-coupling end-to-end suites; exclude ordinary unit tests within one application. Use `failure-oriented-testing` for broader failure-testing methods and `microservice-integration` to design the interaction itself.
 
 ## It's working if
 
