@@ -6,7 +6,7 @@ Makes service behavior observable, recoverable, and independently operable acros
 
 ## When to reach for it
 
-Reach for it for cascading failures, cross-service observability, independent deployment/recovery, service-specific capacity, or trust boundaries. It excludes generic CI setup and single-process troubleshooting. Use `recovery-validation` when the claim specifically concerns restored data/history.
+Assess or improve cross-service reliability, observability, deployment, recovery, capacity, or trust boundaries. Use for cascading failures and service readiness; exclude generic CI and single-process troubleshooting. Use `recovery-validation` when the claim specifically concerns restored data/history.
 
 ## It's working if
 

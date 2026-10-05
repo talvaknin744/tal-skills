@@ -6,7 +6,7 @@ Defines the meaning and changing behavior of continuously maintained stream resu
 
 ## When to reach for it
 
-Use it for event-time windows, late data, duplicate/correction rules, temporal joins, finality, and retained state. It excludes broker acknowledgement repair and bounded in-process collection edits. Use `messaging-reliability` for publish/acknowledgement and replay delivery guarantees.
+Use it for event-time windows, late data, corrections, temporal joins, finality, or retained state; exclude broker acknowledgement repair and bounded in-process edits.
 
 ## It's working if
 

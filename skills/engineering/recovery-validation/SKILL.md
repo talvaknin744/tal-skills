@@ -1,14 +1,12 @@
 ---
 name: recovery-validation
-description: Validate backup recovery or disaster-recovery claims by rehearsing restores, measuring recoverable data loss and time to application usability, and checking restored state against business invariants. Use for restore runbooks, recovery drills, failed restores, or RPO/RTO evidence; ordinary backup scheduling alone does not require a recovery drill.
+description: Validate restore and disaster-recovery claims with rehearsals, measured data loss, time to application usability, and business invariants. Use for drills, failed restores, and RPO/RTO evidence; exclude backup scheduling alone.
 license: MIT
 ---
 
 # Recovery validation
 
-Prove which service can resume from which recovered history. A valid archive,
-successful restore command, and accepting database socket are intermediate
-observations; acceptance belongs to the application.
+Build recovery proof for which service can resume from which recovered history. A valid archive, successful restore command, and accepting database socket are intermediate observations; acceptance belongs to the application.
 
 ## 1. Define the recovery contract
 
@@ -24,6 +22,8 @@ event and stop condition before measuring. Record excluded provisioning,
 detection, transfer, and cutover stages. A requirement that has no supplied
 target remains an observed measurement, not a passed objective.
 
+
+**Example:** A restore rehearsal can target the last independently observed committed operation.
 **Done:** a named recovery point, dependency inventory, acceptance invariants,
 loss budget, timing boundary, and authorized isolated target are explicit.
 
@@ -42,10 +42,14 @@ work, read [recovery inputs and capacity](references/recovery-inputs.md).
 Read [sources](references/sources.md) when selecting or updating the underlying
 contracts; it records versions, reading scope, and evidence limits.
 
+
+**Example:** An isolated restore can authenticate with the application identity and its actual read/write privileges.
 **Done:** the restored service uses the intended history and dependency versions,
 and the application can access it under its real authorization boundary.
 
 ## 3. Validate usable history
+
+For broader dependency containment and service readiness beyond the restore claim, Call the Skill tool with "microservice-operations".
 
 Compare recovered state with evidence outside the restored snapshot: expected
 identity, schema compatibility, committed-operation records, representative
@@ -62,17 +66,21 @@ Exercise an application operation through the intended admission path when that
 path is in scope. Stop the recovery timer only at the declared acceptance gate.
 Reconcile surviving consumers and uncertain effects before enabling them.
 
+
+**Example:** A recovered ledger can be checked for balanced accounts against an external commit record.
 **Done:** usable data, lost acknowledgments, elapsed time, and unresolved external
 state each have evidence; failed gates remain failed despite a zero restore exit.
 
 ## 4. Demonstrate rejection and repeatability
 
-Choose faults around the changed recovery boundary: missing identity or key,
+For testing how unsafe states and failure signals are rejected, Call the Skill tool with "failure-oriented-testing". Choose faults around the changed recovery boundary: missing identity or key,
 semantically invalid data, interrupted restoration, wrong environment, or a
 snapshot older than accepted writes. Require the verifier to reject the unsafe
 state. After a partial restore, retry into a fresh isolated target or use an
 explicitly justified resumable procedure.
 
+
+**Example:** An acknowledged operation missing from the restored history counts against the stated loss boundary.
 **Done:** report backup identity, tool versions, executed commands/checks,
 positive and negative outcomes, RPO/RTO definitions and observations, and cleanup.
 Distinguish logical restoration from physical recovery, PITR, failover, and
