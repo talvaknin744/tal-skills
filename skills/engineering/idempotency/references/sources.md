@@ -1,7 +1,5 @@
 # Sources and applicability
 
-The starting reference is Dochia's [Idempotency Is Easy Until the Second Request Is Different](https://blog.dochia.dev/blog/idempotency/) (7 May 2026). This skill is independently written operational guidance; it does not bundle the article or its sample implementation.
-
 Read primary material when a task depends on its specific contract. These links are reference entry points, not requirements to research every source on every run. The skill uses no particular provider by default.
 
 | Source | Use when |

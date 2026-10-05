@@ -21,3 +21,7 @@ Use for duplicate-safe APIs, webhooks and queue workers, including concurrent ex
 Compose with concurrency-correctness for ownership races, graceful-draining for worker loss, or a2a-engineering for A2A duplicate delivery.
 
 Canonical skill: [skills/engineering/idempotency/SKILL.md](../../skills/engineering/idempotency/SKILL.md).
+
+## Sources
+
+The starting reference is Dochia's [Idempotency Is Easy Until the Second Request Is Different](https://blog.dochia.dev/blog/idempotency/) (7 May 2026). This skill is independently written operational guidance; it does not bundle the article or its sample implementation.
