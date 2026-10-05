@@ -93,5 +93,5 @@ It does not alter a broker's independently enforced redelivery budget.
 
 Use the existing `graceful-draining` skill and the long-running-worker deployment
 workflow to apply these checks to a real service. The corresponding
-[research report](../../docs/research/engineering-toolkit/draining-feasibility.md)
+[research report](../../research/engineering-toolkit/draining-feasibility.md)
 separates the earlier feasibility run from this runnable example.

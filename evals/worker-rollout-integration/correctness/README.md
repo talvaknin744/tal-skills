@@ -26,10 +26,10 @@ The merge observation is finite set arithmetic. The nontrigger is an immutable
 local formatter despite the word revision in its input.
 
 Source attribution uses the reviewed
-[schema-evolution example](../../../docs/research/distributed-systems-followup/2026-10-01/schema-evolution.md)
+[schema-evolution example](../../../research/distributed-systems-followup/2026-10-01/schema-evolution.md)
 for the independently authored incarnation/revision, consistent-read and
 bidirectional-oracle obligations, and
-[coordination findings](../../../docs/research/distributed-systems-followup/2026-10-01/coordination-design.md)
+[coordination findings](../../../research/distributed-systems-followup/2026-10-01/coordination-design.md)
 for separating merge convergence, invariant preservation and freshness.
 The former includes a full 12-page F1 reading; F1's engine schema leases are not
 the cache adapter's protocol. The latter records complete extracted CALM v2 main

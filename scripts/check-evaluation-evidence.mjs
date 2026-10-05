@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { originalPublishedDigest } from './lib/published-file.mjs';
 
 const DEFAULT_ROOT = fileURLToPath(new URL('../evals/engineering-toolkit/runs/', import.meta.url));
 const isManifest = name => name === 'archive-manifest.json' || name.endsWith('-supplement-manifest.json');
@@ -295,7 +296,8 @@ export function checkRetainedEvaluationEvidence(root) {
     digest(entry.original_sha256, `${name}/original`);
     digest(entry.sha256, `${name}/retained`);
     const bytes = readFile(root, name);
-    equal(hash(bytes), entry.sha256, `retained bytes/${name}`);
+    const retainedDigest = originalPublishedDigest(bytes, `evals/engineering-toolkit/runs/${name}`, path.resolve(root, '../../..'), entry.sha256);
+    equal(retainedDigest, entry.sha256, `retained bytes/${name}`);
     if (entry.original_sha256 !== entry.sha256 && !['personal-home-path-redaction', 'archive-member-link'].includes(entry.transformation)) {
       throw new Error(`Unexplained retained transformation: ${name}`);
     }

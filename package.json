@@ -9,15 +9,19 @@
     "node": ">=22"
   },
   "scripts": {
-    "check": "node scripts/check-skills.mjs && node scripts/check-toolkit.mjs && node scripts/check-docs.mjs && node scripts/check-runtime-evidence.mjs && node scripts/check-evaluation-evidence.mjs && node scripts/check-research-archive.mjs && node scripts/check-paths.mjs",
+    "check": "node scripts/check-skills.mjs && node scripts/sync-plugin-version.mjs --check && npm run check:generated && node scripts/check-toolkit.mjs && node scripts/check-docs.mjs && node scripts/check-runtime-evidence.mjs && node scripts/check-evaluation-evidence.mjs && node scripts/check-research-archive.mjs && node scripts/check-paths.mjs",
     "metrics": "node scripts/metrics.mjs",
     "generate": "node scripts/generate-adapters.mjs",
     "check:generated": "node scripts/generate-adapters.mjs --check",
+    "sync:plugin-version": "node scripts/sync-plugin-version.mjs",
+    "check:plugin-version": "node scripts/sync-plugin-version.mjs --check",
     "install:toolkit": "node scripts/install-toolkit.mjs",
     "test": "node --test",
-    "validate": "npm run check && npm test"
+    "validate": "npm run check && npm test",
+    "check-plugin-version": "node scripts/sync-plugin-version.mjs --check"
   },
   "devDependencies": {
+    "@changesets/cli": "3.0.3",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1"
   },

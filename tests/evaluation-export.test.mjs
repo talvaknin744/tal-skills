@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const helper = fileURLToPath(new URL('../docs/research/worker-rollout-integration/2026-10-02/archive-evaluations.py', import.meta.url));
+const helper = fileURLToPath(new URL('../research/worker-rollout-integration/2026-10-02/archive-evaluations.py', import.meta.url));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => `${JSON.stringify(value, null, 2)}\n`;
 const python = `import importlib.util,sys

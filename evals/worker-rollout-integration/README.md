@@ -60,6 +60,6 @@ when changing shared roles or workflow instructions. Record old and new results
 separately under the [change evaluation contract](../../CONTRIBUTING.md#changing-skills-agents-or-workflows).
 
 Observed results and independent reviews belong in the
-[integration evidence](../../docs/research/worker-rollout-integration/2026-10-02/README.md).
+[integration evidence](../../research/worker-rollout-integration/2026-10-02/README.md).
 Keep failed, blocked and partial attempts, and label model arithmetic, local
 fixture checks, native behavior and real runtime evidence separately.

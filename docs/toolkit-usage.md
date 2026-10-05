@@ -188,7 +188,7 @@ patches. Repository structure checks, runtime tests and agent trials provide
 different evidence.
 
 Host compatibility and observed limitations are recorded in the
-[native research](research/engineering-toolkit/native-compatibility.md). In this
+[native research](../research/engineering-toolkit/native-compatibility.md). In this
 environment the desktop-bundled Codex was newer than the CLI on `PATH`, and Claude
 model execution required refreshed authentication. Use the recorded version and
 evidence for a claim; configuration parsing alone is not a successful workflow.

@@ -1,5 +1,6 @@
 # tal-skills
 
+[![skills.sh](https://skills.sh/b/talvaknin744/tal-skills)](https://skills.sh/talvaknin744/tal-skills)
 [![Validate skills](https://github.com/talvaknin744/tal-skills/actions/workflows/validate.yml/badge.svg)](https://github.com/talvaknin744/tal-skills/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -217,13 +218,13 @@ Advice carries a trigger, failure mechanism, applicability limits, counterexampl
 and verification method. Historical company accounts inform a design question;
 they do not establish guarantees for a different system.
 
-- [Research ledger](docs/research/engineering-toolkit/README.md): the 60-publisher survey, book access, selected readings, and adoption decisions.
-- [October archive review](docs/research/engineering-toolkit/2026-10-01/README.md): 58,178 metadata URLs, 29 selected article-body readings, terminal collection evidence, and explicit historical/access gaps. Metadata enumeration is separate from article reading.
-- [Performance research](docs/research/performance-capacity/README.md): measurement, capacity, overload, database work, and conditional Go/Python data-layout experiments.
+- [Research ledger](research/engineering-toolkit/README.md): the 60-publisher survey, book access, selected readings, and adoption decisions.
+- [October archive review](research/engineering-toolkit/2026-10-01/README.md): 58,178 metadata URLs, 29 selected article-body readings, terminal collection evidence, and explicit historical/access gaps. Metadata enumeration is separate from article reading.
+- [Performance research](research/performance-capacity/README.md): measurement, capacity, overload, database work, and conditional Go/Python data-layout experiments.
 - [Temporal story review](docs/temporal/README.md): all 70 customer-index entries, with written-story and talk-summary scope distinguished.
 - [Runnable examples](examples/README.md): TypeScript, Python, and Go backend contracts plus messaging, cache races, worker handoffs, recovery, protocols, and retry coordination.
-- [Worker rollout integration](docs/research/worker-rollout-integration/2026-10-02/README.md): signal and ownership evidence plus focused cache, schema, fairness and deadline guidance, with runtime and agent results reported separately.
-- [Verification report](docs/research/engineering-toolkit/verification.md) and [evaluation guide](evals/README.md): deterministic checks, runtime observations, independently scored agent trials, and known host limitations.
+- [Worker rollout integration](research/worker-rollout-integration/2026-10-02/README.md): signal and ownership evidence plus focused cache, schema, fairness and deadline guidance, with runtime and agent results reported separately.
+- [Verification report](research/engineering-toolkit/verification.md) and [evaluation guide](evals/README.md): deterministic checks, runtime observations, independently scored agent trials, and known host limitations.
 
 Repository checks validate packaging, references, generated adapters, installer
 behavior, fixtures, and evidence bindings. They do not run a model or prove

@@ -1,0 +1,21 @@
+# microservice-integration
+
+## What it does
+
+Designs service-to-service interactions and contracts so participating services can change independently. It chooses collaboration semantics before transport and treats existing technology as a constraint to assess rather than a reason to replace the platform.
+
+## When to reach for it
+
+Use it for service communication, API/event contract evolution, consumer coupling, chatty calls, request-response versus messaging, and BFF aggregation. It excludes generic architecture reviews and single-operation retry deduplication. Use `messaging-reliability` for broker delivery/replay guarantees and `technical-deprecation` for retiring a supported contract.
+
+## It's working if
+
+- The interaction names participants, business decision owner, completion semantics, dependencies, and evidence for actual consumers.
+- The communication style has a use-case reason; required waiting or delayed completion is explicit.
+- A representative request/response or event defines meaningful fields and errors without exposing provider internals.
+- Affected consumer versions, compatibility, rollout stages, and incompatibility owners are identified.
+- Relevant consumers exercise provider behavior or gaps are explicitly unverified; checks actually run are reported.
+
+## Where it fits
+
+This is the service interaction and contract specialist. It neighbors `messaging-reliability` for delivery guarantees, `microservice-testing` for consumer/provider evidence, and `technical-deprecation` when a supported interface is retired. See [the integration skill](../../skills/engineering/microservice-integration/SKILL.md) and [messaging reading path](../reading-paths.md).

@@ -1,7 +1,7 @@
 // Check attribution freshness. This does not rerun or grade the experiments.
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
+import { originalPublishedDigest } from './lib/published-file.mjs';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -33,7 +33,7 @@ for (const [report, key, base, single] of reports) {
     if (path.isAbsolute(filename) || filename.includes('\\') || filename.split('/').some(part => !part || part === '..' || part === '.')) throw new Error(`Unsafe evidence source path in ${report}`);
     const source = path.join(base, filename);
     if (!/^[a-f0-9]{64}$/.test(expected)) throw new Error(`Invalid source hash: ${report}: ${filename}`);
-    const actual = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, source))).digest('hex');
+    const actual = originalPublishedDigest(fs.readFileSync(path.join(root, source)), source, root, expected);
     if (actual !== expected) failures.push(`${report}: source changed since observation: ${source}`);
     checked++;
   }

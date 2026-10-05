@@ -30,7 +30,7 @@ Each probe bounds its waits, joins its owned tasks or streams, and repairs resou
 
 The default [evidence report](evidence/verified-run.json) records runtime versions, per-case evidence, subprocess results, and SHA-256 hashes for this README, launcher, and all probe sources. Sources must remain unchanged throughout the run. A failed run writes a separate `failed-run-*.json`, preserving the previous successful report. `--report PATH` selects another output path. Check source hashes before reusing stored evidence after edits.
 
-These probes exercise a narrow part of the [research findings](../../docs/research/engineering-toolkit/extensions/cancellation-ownership.md). They provide no benchmark, memory-bound, transaction, remote-effect, or all-schedules correctness guarantee.
+These probes exercise a narrow part of the [research findings](../../research/engineering-toolkit/extensions/cancellation-ownership.md). They provide no benchmark, memory-bound, transaction, remote-effect, or all-schedules correctness guarantee.
 
 Primary contracts:
 

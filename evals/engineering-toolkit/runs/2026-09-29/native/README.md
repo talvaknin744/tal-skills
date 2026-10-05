@@ -100,4 +100,4 @@ acceptance. Reproduction requires new scoring and new evidence. The
 [session cleanup record](session-cleanup.json) confirms that all 24 temporary
 persisted evaluation/probe sessions were archived after collection; their history
 was not deleted. This archive does not modify or replace the separate
-[runtime example evidence](../../../../../docs/research/engineering-toolkit/verification.md).
+[runtime example evidence](../../../../../research/engineering-toolkit/verification.md).

@@ -5,11 +5,11 @@ import test from 'node:test';
 import { validateCoverageAttribution, validateCoverageCatalog } from '../scripts/research/coverage.mjs';
 import { parseResearchArchiveManifest, validateResearchArchiveCompleteness, validateResearchCoverageBindings, validateResearchInventoryBindings } from '../scripts/research/archive-manifest.mjs';
 
-const base = new URL('../docs/research/engineering-toolkit/2026-10-01/', import.meta.url);
+const base = new URL('../research/engineering-toolkit/2026-10-01/', import.meta.url);
 const manifest = JSON.parse(fs.readFileSync(new URL('archive-manifest.json', base)));
-const researchManifestText = fs.readFileSync(new URL('../docs/research/MANIFEST.md', import.meta.url), 'utf8');
+const researchManifestText = fs.readFileSync(new URL('../research/MANIFEST.md', import.meta.url), 'utf8');
 const researchManifest = parseResearchArchiveManifest(researchManifestText);
-const coverageCatalog = JSON.parse(fs.readFileSync(new URL('../docs/research/coverage-catalog.json', import.meta.url), 'utf8'));
+const coverageCatalog = JSON.parse(fs.readFileSync(new URL('../research/coverage-catalog.json', import.meta.url), 'utf8'));
 const entry = id => manifest.publishers.find(item => item.publisher_id === id);
 const proof = id => {
   const record = coverageCatalog.publishers.find(item => item.publisher_id === id);
@@ -62,7 +62,7 @@ test('research archive table binds every surveyed inventory to its archived cont
   assert.equal(researchManifest.archiveName, 'tal-skills-research-crawls-2026-10-01.tar.zst');
   assert.equal(researchManifest.archiveSha256.length, 64);
   assert.ok(researchManifest.archiveBytes > 0);
-  assert.equal(researchManifest.coverageCatalogSha256, createHash('sha256').update(fs.readFileSync(new URL('../docs/research/coverage-catalog.json', import.meta.url))).digest('hex'));
+  assert.equal(researchManifest.coverageCatalogSha256, createHash('sha256').update(fs.readFileSync(new URL('../research/coverage-catalog.json', import.meta.url))).digest('hex'));
   assert.match(researchManifest.releaseUrl, /v1\.0\.0\/tal-skills-research-crawls-2026-10-01\.tar\.zst$/);
 });
 

@@ -2,7 +2,7 @@
 
 Three small libraries reserve inventory in one PostgreSQL transaction. They use
 the same [schema](schema.sql), [scenario inventory](scenarios.json), and
-[behavior contract](../../docs/research/engineering-toolkit/backend-contract-review.md).
+[behavior contract](../../research/engineering-toolkit/backend-contract-review.md).
 Each language retains its native cancellation and resource-ownership mechanisms:
 
 - [Python](python/README.md): Psycopg async connections and task cancellation.

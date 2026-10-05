@@ -1,6 +1,6 @@
 # Change log
 
-## 2026-10-02
+## [1.0.0] - 2026-10-02
 
 - Closed the two selected overload evaluation gaps by routing broker and tenant reviews to one response scaffold with a final coverage audit for finite fleet waiting limits, recovery, actual release, interruption costs and verification records. Both substantive cases pass 14/14; unchanged regression and nontrigger cases also pass. Preserved intermediate partials and unchanged original rubrics.
 
@@ -13,9 +13,9 @@
 - Added a pinned Linux native-workflow collector with explicit coding tools, restricted write mounts, command boundary probes and owned-resource cleanup. Preserved host-invalid, interrupted and provider-capacity attempts alongside later independently reviewed runs.
 - Verified project-local installation for both host layouts against 232 managed source and adapter files; repeated installation changed zero files.
 
-See the [integration evidence](docs/research/worker-rollout-integration/2026-10-02/README.md).
+See the [integration evidence](research/worker-rollout-integration/2026-10-02/README.md).
 
-## 2026-10-01
+## [0.2.0] - 2026-10-01
 
 - Added `stream-processing-design` for late events, duplicate identities, corrections, finality, joins, and state lifetime.
 - Added `background-maintenance` for backfills, compaction, reclamation, and rebalancing within serving budgets.
@@ -24,18 +24,18 @@ See the [integration evidence](docs/research/worker-rollout-integration/2026-10-
 - Added a selectable project-local `npx` launcher for skills, native agents, and workflows, with dependency closure and protected configuration.
 - Reorganized the README around installation and task choice; added agent/workflow catalogs and publication drafts.
 - Recorded 60-publisher archive coverage, selected readings, access gaps, independent reviews, actual installation checks, and behavioral results with partial and failed attempts retained.
-- Added a separate [research follow-up](docs/research/distributed-systems-followup/2026-10-01/README.md) on online schema evolution, clocks, scheduling and coordination, with ten primary readings, three complete sample/public chapters and explicit proposed-versus-executed checks.
+- Added a separate [research follow-up](research/distributed-systems-followup/2026-10-01/README.md) on online schema evolution, clocks, scheduling and coordination, with ten primary readings, three complete sample/public chapters and explicit proposed-versus-executed checks.
 - Confirmed the public GitHub `npx` installation and bound the 438-test release CI result to `fe36680`.
 
 The repository contains 49 skills, 15 specialist roles, and eight workflows.
-See [verification](docs/research/engineering-toolkit/verification.md) for the scope
+See [verification](research/engineering-toolkit/verification.md) for the scope
 of each observed result.
 
-## 2026-09-29
+## [0.1.0] - 2026-09-29
 
 - Published the initial specialist-agent and engineering-workflow toolkit, runnable backend examples, protocol checks, and evaluation archives.
 - Added technical deprecation and focused cache-design, Python query-testing, draining, and correctness guidance.
 - Published source records, book access scopes, and the original 60-publisher survey.
 
 Historical checkpoints and their CI results remain in the
-[release records](docs/research/engineering-toolkit/verification.md).
+[release records](research/engineering-toolkit/verification.md).

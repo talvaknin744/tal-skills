@@ -80,6 +80,6 @@ Archive selected `evidence/` outputs, scores and freeze manifest under `runs/<UT
 
 ## Scope of the evidence
 
-The [evaluation contract](../../docs/research/engineering-toolkit/evaluation-contract.md) defines the cross-cutting A→B→C rollout, stale-cache-fill, reorder, restore and cleanup checks. The [host feasibility record](../../docs/research/engineering-toolkit/evaluation-host-feasibility.md) documents prior metadata/selection probes and their limits. Native workflow fixtures and planning live in separately owned `native-fixtures/` and `native-planning/`; a native role/workflow smoke is not replaced by a single-skill prompt trial.
+The [evaluation contract](../../research/engineering-toolkit/evaluation-contract.md) defines the cross-cutting A→B→C rollout, stale-cache-fill, reorder, restore and cleanup checks. The [host feasibility record](../../research/engineering-toolkit/evaluation-host-feasibility.md) documents prior metadata/selection probes and their limits. Native workflow fixtures and planning live in separately owned `native-fixtures/` and `native-planning/`; a native role/workflow smoke is not replaced by a single-skill prompt trial.
 
 These twenty minimum observations support qualitative findings. Without matched controls/repetitions they do not estimate skill uplift or general reliability. Local synthetic checks do not prove live Kubernetes, database, broker, provider or full MCP/A2A conformance. Report actual authored/executed/scored counts and every blocked requirement separately.

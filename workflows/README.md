@@ -51,5 +51,5 @@ and unresolved business decisions visible. A review request produces supported
 findings; it does not imply an implementation or production deployment.
 
 See the [usage guide](../docs/toolkit-usage.md) for installation updates and host
-limits, and [verification evidence](../docs/research/engineering-toolkit/verification.md)
+limits, and [verification evidence](../research/engineering-toolkit/verification.md)
 for the distinction between structural checks and observed agent behavior.

@@ -31,14 +31,14 @@ not imply a complete reading or a transferable guarantee.
 
 Access and reading scope:
 
-- [Performance and capacity research](research/performance-capacity/README.md), including applicability gates, source ledgers and verification limits.
-- [Language books](research/engineering-toolkit/books-languages.md).
-- [Messaging, infrastructure and reliability books](research/engineering-toolkit/books-operations.md).
-- [Quality and testing books](research/engineering-toolkit/books-quality.md).
+- [Performance and capacity research](../research/performance-capacity/README.md), including applicability gates, source ledgers and verification limits.
+- [Language books](../research/engineering-toolkit/books-languages.md).
+- [Messaging, infrastructure and reliability books](../research/engineering-toolkit/books-operations.md).
+- [Quality and testing books](../research/engineering-toolkit/books-quality.md).
 - [Earlier book-derived skills and editions](book-skills.md).
-- [Sixty-publisher survey and selected deep reads](research/engineering-toolkit/README.md).
-- [Seventeen additional articles](research/engineering-toolkit/extensions/README.md): protected task retirement, snapshot/delete handoff, regional replay, stream ownership, recovery inputs and composed tool authority.
-- [Technical-deprecation reading scope](research/engineering-toolkit/extensions/technical-deprecation.md) and [SQLAlchemy follow-up sources](research/engineering-toolkit/extensions/sqlalchemy-gotchas.md).
+- [Sixty-publisher survey and selected deep reads](../research/engineering-toolkit/README.md).
+- [Seventeen additional articles](../research/engineering-toolkit/extensions/README.md): protected task retirement, snapshot/delete handoff, regional replay, stream ownership, recovery inputs and composed tool authority.
+- [Technical-deprecation reading scope](../research/engineering-toolkit/extensions/technical-deprecation.md) and [SQLAlchemy follow-up sources](../research/engineering-toolkit/extensions/sqlalchemy-gotchas.md).
 
 The survey is curated coverage, not a popularity ranking. Practices were adopted
 with a trigger, failure mechanism, applicability limit, counterexample and
@@ -48,4 +48,4 @@ was sought where useful; excerpts and inaccessible material remain labeled.
 
 For cache design, start with [authority, capacity, and retention](../skills/engineering/microservice-operations/references/cache-design.md), then select [load protection](../skills/engineering/microservice-operations/references/cache-load-protection.md) or [cache consistency](../skills/engineering/concurrency-correctness/references/cache-coherence.md). Redis details illustrate specific contracts; they do not require a Redis-specific skill. The [local failure examples](../examples/cache-load-protection/README.md) distinguish actual Redis observations from virtual-time and in-process models.
 
-For nested retries, use the conditional [retry coordination reference](../skills/engineering/microservice-operations/references/retry-coordination.md). The [loopback example](../examples/retry-coordination/README.md) demonstrates bounded call-count amplification and partial adoption; it does not implement Uber’s production protocol. The [October archive review](research/engineering-toolkit/2026-10-01/README.md) separates indexed metadata from selected complete readings and names inaccessible history.
+For nested retries, use the conditional [retry coordination reference](../skills/engineering/microservice-operations/references/retry-coordination.md). The [loopback example](../examples/retry-coordination/README.md) demonstrates bounded call-count amplification and partial adoption; it does not implement Uber’s production protocol. The [October archive review](../research/engineering-toolkit/2026-10-01/README.md) separates indexed metadata from selected complete readings and names inaccessible history.
