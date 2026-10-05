@@ -277,13 +277,122 @@ test('score records cover all criterion IDs and weighted totals, including retai
   for (const [filename, digest] of Object.entries(archive.retained_files)) {
     assert.equal(sha256(fs.readFileSync(path.join(root, filename))), digest, filename);
   }
+  const r3Root = 'evals/cleanup-followup/runs/2026-10-05-activation/';
+  const r3 = readJson(`${r3Root}report.json`);
+  const identity = readJson(r3Root + r3.candidate.candidate_identity_path);
+  const manifest = readJson(r3Root + r3.candidate.codex_manifest_path);
+  assert.equal(r3.candidate.canonical_source_digest, identity.canonical.source_digest);
+  assert.equal(r3.candidate.codex_package_digest, identity.codex.source_digest);
+  assert.equal(r3.candidate.codex_package_digest, manifest.frozen_bundle_digest);
+  assert.equal(r3.candidate.source_equivalent_commit, identity.source_equivalent_commit);
+  assert.equal(r3.candidate.candidate_identity_file_sha256, sha256(fs.readFileSync(path.join(root, r3Root, r3.candidate.candidate_identity_path))));
+  assert.equal(r3.candidate.codex_manifest_file_sha256, sha256(fs.readFileSync(path.join(root, r3Root, r3.candidate.codex_manifest_path))));
+  const table = readJson(`${r3Root}mixed-stage-34-activation-table.json`).rows;
+  const selected = readRun('matrix.json').existing_cases.filter(row => row.group === 'positive' && row.skill !== 'architecture');
+  assert.equal(table.length, 34);
+  assert.deepEqual(table.map(row => row.case_key).sort(), selected.map(row => row.key).sort());
+  assert.equal(new Set(table.map(row => row.case_key)).size, 34);
+  for (const row of table) {
+    assert.equal(row.latest_attempts, 3, row.case_key);
+    assert.ok(row.latest_body_reads >= 2 && row.latest_body_reads <= 3, row.case_key);
+    assert.equal(row.latest_rate, row.latest_body_reads / 3, row.case_key);
+    assert.equal(row.prompt_sha256_unchanged, true, row.case_key);
+    if (row.updated_case_retested) {
+      assert.equal(row.retest_prompt_sha256, selected.find(item => item.key === row.case_key).prompt_sha256, row.case_key);
+    } else {
+      assert.equal(row.latest_stage, 'initial', row.case_key);
+    }
+  }
+  assert.deepEqual(table.filter(row => row.updated_case_retested).map(row => row.skill).sort(), [
+    'failure-oriented-testing', 'idempotency', 'microservice-testing', 'technical-deprecation',
+  ]);
+  const initial = readJson(`${r3Root}initial-activation-table.json`);
+  assert.equal(initial.planned_attempts, 102);
+  assert.equal(initial.executed_attempts, 101);
+  assert.equal(initial.timed_out_attempts, 1);
+  assert.equal(initial.rows.filter(row => row.observed_body_reads >= 2).length, 30);
+  const r3Scores = r3.grading.full_scores.flatMap(filename => readJson(r3Root + filename).rows);
+  assert.ok(r3Scores.length >= 57, 'complete description and architecture score vectors are retained');
+  for (const row of r3Scores) {
+    const expected = activationCriteria(row);
+    assert.deepEqual(row.criteria.map(item => [item.id, item.severity]).sort(), expected.map(item => [item.id, item.severity]).sort(), `${row.candidate}/${row.case_key}`);
+    assert.ok(row.criteria.every(item => [0, 1, 2].includes(item.score)), row.case_key);
+    assert.deepEqual(row.critical_results, row.criteria.filter(item => item.severity === 'critical').map(({ id, score }) => ({ id, score })));
+    assert.equal(row.unsuccessful_due_to_critical_failure, row.critical_results.some(item => item.score === 0), row.case_key);
+    assert.equal(row.critical_partial, row.critical_results.some(item => item.score === 1), row.case_key);
+    for (const severity of ['major', 'minor']) {
+      const criteria = row.criteria.filter(item => item.severity === severity);
+      const weight = severity === 'major' ? 2 : 1;
+      assert.deepEqual(row[`${severity}_weighted`], { earned: criteria.reduce((sum, item) => sum + item.score * weight, 0), maximum: criteria.length * 2 * weight }, `${row.candidate}/${row.case_key}/${severity}`);
+    }
+  }
+  const descriptions = readJson(`${r3Root}scores/description-finalblind-57-normalized.json`).rows;
+  assert.equal(descriptions.length, 57);
+  assert.equal(new Set(descriptions.map(row => `${row.candidate}/${row.replicate}`)).size, 57);
+  assert.equal(descriptions.filter(row => row.unsuccessful_due_to_critical_failure).length, 1, 'the failed earlier candidate remains visible');
+  const chosenCandidates = new Set(['codex-desc-02', 'codex-desc-03', 'codex-desc-04', 'codex-desc-08']);
+  const chosen = descriptions.filter(row => chosenCandidates.has(row.candidate));
+  assert.equal(chosen.length, 43);
+  assert.ok(chosen.every(row => !row.unsuccessful_due_to_critical_failure));
+  assert.equal(chosen.filter(row => row.critical_partial).length, r3.grading.selected_description_summary.critical_partial_rows);
+  assert.equal(chosen.flatMap(row => row.criteria).filter(row => !row.quote_audit_passed).length, r3.grading.selected_description_summary.criterion_quote_audit_gaps);
+  const finalArchitecture = readJson(`${r3Root}scores/architecture-stage12-final-scores-normalized.json`).rows;
+  assert.equal(finalArchitecture.length, 4, 'four distinct score views over three responders');
+  assert.ok(finalArchitecture.every(row => row.criteria.every(item => item.score === 2)));
+  assert.ok(finalArchitecture.every(row => row.candidate_codex_digest === identity.codex.source_digest));
+  assert.equal(finalArchitecture.find(row => row.view === 'explicit-marker').quote_audit_passed, true);
+  const nontriggers = chosen.filter(row => {
+    const [skill, id] = row.case_key.split('--');
+    return readJson(`evals/${skill}/cases.json`).cases.find(item => item.id === id).activation === 'do_not_auto_activate';
+  });
+  assert.equal(nontriggers.length, 4);
+  assert.ok(nontriggers.every(row => row.criteria.every(item => item.score === 2)));
+  for (const row of descriptions) {
+    const binding = row.source_binding;
+    assert.equal(sha256(fs.readFileSync(path.join(root, binding.source_case_file))), binding.source_case_file_sha256, row.case_key);
+    const source = readJson(binding.source_case_file).cases.find(item => `${binding.source_case_file.split('/')[1]}--${item.id ?? item.case_id}` === row.case_key);
+    assert.ok(source, row.case_key);
+    assert.equal(sha256(source.prompt), binding.prompt_sha256, row.case_key);
+  }
+  const r3Archive = readJson(`${r3Root}archive-manifest.json`);
+  assert.equal(r3Archive.archive_name, 'tal-skills-activation-rate-2026-10-05.tar.zst');
+  assert.match(r3Archive.archive_sha256, /^[a-f0-9]{64}$/);
+  assert.equal(r3Archive.outer_archive_assembled, true);
+  assert.equal(r3Archive.uploaded_to_v1_1, false, 'the preparation-time receipt remains immutable');
+  assert.deepEqual(r3Archive.pending_components, []);
+  assert.equal(r3Archive.component_archives.length, 19);
+  assert.ok(r3Archive.component_archives.every(row => row.verified));
+  assert.equal(new Set(r3.retained_files.map(row => row.path)).size, r3.retained_files.length);
+  const retained = new Map(r3.retained_files.map(row => [row.path, row]));
+  for (const filename of [...r3.grading.full_scores, ...r3.grading.source_score_vectors, 'review.md', 'activation.md', r3.candidate.candidate_identity_path, r3.candidate.codex_manifest_path]) {
+    assert.ok(retained.has(r3Root + filename), filename);
+  }
+  for (const { path: filename, sha256: digest, bytes } of r3.retained_files) {
+    assert.ok(!filename.startsWith('/') && !filename.split(/[\\/]/).includes('..'), filename);
+    const contents = fs.readFileSync(path.join(root, filename));
+    assert.equal(sha256(contents), digest, filename);
+    assert.equal(contents.length, bytes, filename);
+  }
 });
+
+function activationCriteria(row) {
+  const marker = readJson('evals/cleanup-followup/activation-cases.json').cases[0];
+  if (row.case_key.startsWith(marker.key)) {
+    return row.view === 'marker' || row.view?.endsWith('-marker') || row.case_key.endsWith('-marker') ? marker.marker_criteria : marker.content_criteria;
+  }
+  return corpusCriteria(row.case_key.replace(/-final-r3$/, ''));
+}
 
 function corpusCriteria(caseKey) {
   const authored = readJson('evals/cleanup-followup/cases.json').cases.find(row => row.key === caseKey);
   if (authored) return authored.criteria;
   const matrixCase = readRun('matrix.json').existing_cases.find(row => row.key === caseKey);
-  if (!matrixCase) throw new Error(`No canonical criteria for ${caseKey}`);
+  if (!matrixCase) {
+    const [skill, id] = caseKey.split('--');
+    const source = readJson(`evals/${skill}/cases.json`).cases.find(row => (row.id ?? row.case_id) === id);
+    if (!source) throw new Error(`No canonical criteria for ${caseKey}`);
+    return source.rubric;
+  }
   const source = readJson(matrixCase.source_case_file).cases.find(row => (row.id ?? row.case_id) === matrixCase.case_id);
   return matrixCase.skill === 'phase5-cleanup'
     ? readJson('evals/phase5-cleanup/rubric.json').cases.find(row => row.case_id === matrixCase.case_id).criteria

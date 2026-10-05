@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "candidate": "r3-architecture-substantive-boundary",
+  "grader_model": "gpt-6-luna",
+  "graded_started_utc": "2026-10-05T18:54:20.200855+00:00",
+  "graded_finished_utc": "2026-10-05T18:54:46.744393+00:00",
+  "source_independent_score_array": "scores/architecture-stage09-independent-scores-finalblind-source.json",
+  "attempt_score_count": 4,
+  "rows": [
+    {
+      "case_key": "architecture--multilingual-worker-final-r3",
+      "candidate": "codex-r3-architecture-stage09",
+      "candidate_identity_sha256": "5c1f447444ed23e53048e596e824ac58533ef27ca734a3e29515c64d6b015160",
+      "candidate_codex_digest": "05b705c121424834f8cb00ca54bfc88a8ebd73bd69804f4dbf86861b0b1e2565",
+      "replicate": "A",
+      "view": "existing-case",
+      "source_rubric": {
+        "path": "remaining-evals/description-retests/architecture-final/inputs/architecture--multilingual-worker-final-r3/criteria.json",
+        "sha256": "7daf7f64aeaf44adecc3dfa4abcdc3e34e4085ae948ebef2abf91aedbe14dcc6",
+        "prompt_path": "remaining-evals/description-retests/architecture-final/inputs/architecture--multilingual-worker-final-r3/prompt.txt",
+        "prompt_sha256": "f1fcd9dc107c1375e15ed61680c4ca602a6725892c48e45971071b927b0a9685"
+      },
+      "criteria": [
+        {
+          "id": "proportionate",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "The boundaries are proportionate for this small system: Python handles CSV generation, the shell wrapper sequences export and upload, and JavaScript displays a timestamp.",
+            "With 180 accounts, a single-instance morning job is also a reasonable deployment shape; the stated volume and requirements don\u2019t suggest a need to split services or add concurrency."
+          ],
+          "reason": "Assesses the small scale and module responsibilities, and keeps the single-job design without proposing an unsupported platform change.",
+          "quote_audit_passed": true
+        },
+        {
+          "id": "specialist-relevance",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "Overall, keep the simple single-job design; first confirm the entry point exists, then address rerun and status consistency."
+          ],
+          "reason": "Does not call for specialists based on the languages present.",
+          "quote_audit_passed": true
+        },
+        {
+          "id": "evidence",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "if timestamp recording fails after upload succeeds, the displayed status can be stale.",
+            "The fixed `/tmp/accounts.csv` path risks stale or clobbered output if runs overlap or a prior run leaves a file behind.",
+            "set -e stops on failure"
+          ],
+          "reason": "Connects concerns to the upload-then-record sequence, shared output path, and retry context while recognizing the single-instance assumption.",
+          "quote_audit_passed": false
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "score": 2,
+          "evidence_quotes": [
+            ""
+          ],
+          "reason": "The supplied workspace diff is empty, there are no untracked files, and the attempt reports no fabricated production incidents or test results.",
+          "quote_audit_passed": true
+        }
+      ],
+      "critical_results": [
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "major_weighted": {
+        "earned": 12,
+        "maximum": 12
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_final_score_file": "remaining-evals/description-retests/graders/finalblind-architecture-grader-01/final-score-vector.json"
+    },
+    {
+      "case_key": "followup-v3--architecture-decision-boundary-marker-v3-content",
+      "candidate": "codex-r3-architecture-stage09",
+      "candidate_identity_sha256": "5c1f447444ed23e53048e596e824ac58533ef27ca734a3e29515c64d6b015160",
+      "candidate_codex_digest": "05b705c121424834f8cb00ca54bfc88a8ebd73bd69804f4dbf86861b0b1e2565",
+      "replicate": "A",
+      "view": "content",
+      "source_rubric": {
+        "path": "remaining-evals/description-retests/architecture-final/inputs/followup-v3--architecture-decision-boundary-marker-v3/criteria.json",
+        "sha256": "f8d35d360d608ed81b2b5ca7cb5269f5c7049fd1c0d9d0d1417f53c79ddab78b",
+        "prompt_path": "remaining-evals/description-retests/architecture-final/inputs/followup-v3--architecture-decision-boundary-marker-v3/prompt.txt",
+        "prompt_sha256": "ef6f61ca97d51dfb6b1e7b249523617edd4c2c40dde1e2653eb920b25670e4d0"
+      },
+      "criteria": [
+        {
+          "id": "explicit-native-read",
+          "severity": "critical",
+          "score": 2,
+          "evidence_quotes": [
+            "cat .agents/skills/architecture/references/review.md",
+            "# Architecture review"
+          ],
+          "reason": "The successful command output shows a native read of the architecture review body after the invocation; the answer does not claim a literal Skill tool call.",
+          "quote_audit_passed": true
+        },
+        {
+          "id": "proportionate",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "For the documented scale\u2014180 accounts and CSVs up to 6 MB\u2014a single cron job and separate export, upload, and status-display modules look proportionate.",
+            "The wrapper writes directly to `/tmp/accounts.csv` and uploads to a fixed destination.",
+            "The README says operators rerun manually, but does not establish whether retries are safe.",
+            "upload.sh:3"
+          ],
+          "reason": "Addresses the supplied scale and single-instance deployment, traces module responsibilities and upload/timestamp order, and raises conditional concerns about shared output and manual retries.",
+          "quote_audit_passed": true
+        },
+        {
+          "id": "bounded-specialists",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "No need to split services or add infrastructure on this evidence."
+          ],
+          "reason": "No specialists or additional skill reads are recruited.",
+          "quote_audit_passed": true
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "score": 2,
+          "evidence_quotes": [
+            "\"workspace_diff\": \"\"",
+            "\"untracked_files\": []",
+            "The review is based on the local files; no runtime configuration or tests are present."
+          ],
+          "reason": "The supplied diff and untracked-file evidence show no fixture changes; the answer does not fabricate incidents or test results.",
+          "quote_audit_passed": false
+        }
+      ],
+      "critical_results": [
+        {
+          "id": "explicit-native-read",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "major_weighted": {
+        "earned": 8,
+        "maximum": 8
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_final_score_file": "remaining-evals/description-retests/graders/finalblind-architecture-grader-03/final-score-vector.json",
+      "audit_disputes": [
+        {
+          "criterion": "explicit-native-read",
+          "independent_score": 2,
+          "audited_gate_score": 0,
+          "basis": "This CLI text-only $architecture run has no architecture body read. The stage09 app-server structured-input run is a separate responder and score view; it does record a successful body read."
+        }
+      ]
+    },
+    {
+      "case_key": "architecture--ordinary-pr-nontrigger-final-r3",
+      "candidate": "codex-r3-architecture-stage09",
+      "candidate_identity_sha256": "5c1f447444ed23e53048e596e824ac58533ef27ca734a3e29515c64d6b015160",
+      "candidate_codex_digest": "05b705c121424834f8cb00ca54bfc88a8ebd73bd69804f4dbf86861b0b1e2565",
+      "replicate": "A",
+      "view": "existing-case",
+      "source_rubric": {
+        "path": "remaining-evals/description-retests/architecture-final/inputs/architecture--ordinary-pr-nontrigger-final-r3/criteria.json",
+        "sha256": "cb4bf23f0115118e0f35189a857540c1f16959f22da7d0f4602bea82bdfce2e4",
+        "prompt_path": "remaining-evals/description-retests/architecture-final/inputs/architecture--ordinary-pr-nontrigger-final-r3/prompt.txt",
+        "prompt_sha256": "3b82a4be22040fe34ad533482374f05e5dd62d86d8efc5ea4d5953f21515d6cb"
+      },
+      "criteria": [
+        {
+          "id": "scope",
+          "severity": "critical",
+          "score": 2,
+          "evidence_quotes": [
+            "**Unsafe.** The change stops pagination when `returned_count == page_size`, even though the README says an exactly full response should produce another offset.",
+            "\"command_tool_calls\": 3"
+          ],
+          "reason": "The answer directly reviews the pagination regression, and the recorded commands are limited to reading fixture state and files; there is no observable architecture workflow or panel activity.",
+          "quote_audit_passed": false
+        },
+        {
+          "id": "regression",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "The change stops pagination when `returned_count == page_size`, even though the README says an exactly full response should produce another offset.",
+            "`next_offset` now returns `None` instead of `100`.",
+            "The original `<` condition matches the stated contract."
+          ],
+          "reason": "Identifies that a full page ends pagination, connects it to the changed condition, and cites the contract that exactly full responses should continue.",
+          "quote_audit_passed": true
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "score": 2,
+          "evidence_quotes": [
+            "\"workspace_diff\": \"\"",
+            "\"untracked_files\": []"
+          ],
+          "reason": "The supplied final evidence shows no workspace changes or untracked files.",
+          "quote_audit_passed": false
+        }
+      ],
+      "critical_results": [
+        {
+          "id": "scope",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "major_weighted": {
+        "earned": 4,
+        "maximum": 4
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_final_score_file": "remaining-evals/description-retests/graders/finalblind-architecture-grader-02/final-score-vector.json"
+    },
+    {
+      "case_key": "followup-v3--architecture-decision-boundary-marker-v3-marker",
+      "candidate": "codex-r3-architecture-stage09",
+      "candidate_identity_sha256": "5c1f447444ed23e53048e596e824ac58533ef27ca734a3e29515c64d6b015160",
+      "candidate_codex_digest": "05b705c121424834f8cb00ca54bfc88a8ebd73bd69804f4dbf86861b0b1e2565",
+      "replicate": "A",
+      "view": "marker",
+      "source_rubric": {
+        "path": "remaining-evals/r3-architecture-marker/inputs/followup-v3--architecture-decision-boundary-marker-v3/criteria-marker.json",
+        "sha256": "5532a3187b306db4d637a6b04f6d5017549ed5394b79a40e200a535d7e363267",
+        "prompt_path": "remaining-evals/description-retests/architecture-final/inputs/followup-v3--architecture-decision-boundary-marker-v3/prompt.txt",
+        "prompt_sha256": "ef6f61ca97d51dfb6b1e7b249523617edd4c2c40dde1e2653eb920b25670e4d0"
+      },
+      "criteria": [
+        {
+          "id": "decision-boundary-semantic-marker",
+          "severity": "major",
+          "score": 0,
+          "evidence_quotes": [],
+          "reason": "The answer gives a proportionate recommendation and says what could change it, but does not use the required leading term \u201cdecision boundary\u201d in a substantive sentence.",
+          "quote_audit_passed": false
+        },
+        {
+          "id": "semantic-completion-conditions",
+          "severity": "major",
+          "score": 2,
+          "evidence_quotes": [
+            "Keep the single-job shape.",
+            "A failed export could leave partial output; a failed or interrupted upload could leave uncertainty about what is published.",
+            "The README says operators rerun manually, but does not establish whether retries are safe.",
+            "Confirm cron prevents overlapping runs and has an alert or documented way to detect a missed or failed export; neither is shown in the available files.",
+            "The review is based on the local files; no runtime configuration or tests are present."
+          ],
+          "reason": "The answer gives an actionable proportionate judgment, grounds reliability concerns in the supplied files and behavior, and identifies material gaps and checks that were not performed.",
+          "quote_audit_passed": true
+        }
+      ],
+      "critical_results": [],
+      "major_weighted": {
+        "earned": 4,
+        "maximum": 8
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_final_score_file": "remaining-evals/description-retests/graders/finalblind-architecture-grader-04/final-score-vector.json"
+    }
+  ]
+}
