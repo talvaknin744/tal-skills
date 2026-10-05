@@ -31,7 +31,7 @@ dead tuples, growth and vacuum progress. Ordinary vacuum and VACUUM FULL have
 different locking/space consequences. Include maintenance interference in the
 foreground workload and recovery plan.
 
-**Verify:** choose the observed branch—contention, parameter skew, pool ceiling,
-spill or maintenance—and compare the candidate under representative concurrency
+**Verify:** choose the observed branch: contention, parameter skew, pool ceiling,
+spill or maintenance. Compare the candidate under representative concurrency
 and writes. Query correctness, client outcomes and resource costs must move with
 the claimed improvement; one faster isolated plan supplies only plan evidence.

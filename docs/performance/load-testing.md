@@ -19,3 +19,17 @@ Use [load-testing](../../skills/performance/load-testing/SKILL.md) for represent
 ## Where it fits
 
 This skill establishes the evidence quality of an experiment. Use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) to identify what to measure, [overload-control](../../skills/performance/overload-control/SKILL.md) to compare containment policies, and [capacity-planning](../../skills/performance/capacity-planning/SKILL.md) to apply measured results to growth or failure scenarios. The [reading path](../reading-paths.md#workload-and-benchmark-evidence) points to k6 arrival and metric contracts and Prometheus distribution guidance.
+
+## Sources
+
+- k6 latest documentation, identified v2.3.x: [open/closed models](https://grafana.com/docs/k6/latest/using-k6/scenarios/concepts/open-vs-closed/),
+  [dropped iterations](https://grafana.com/docs/k6/latest/using-k6/scenarios/concepts/dropped-iterations/)
+  and [metric definitions](https://grafana.com/docs/k6/latest/using-k6/metrics/reference/).
+  These establish executor/metric boundaries; another tool needs its own contract.
+- [Prometheus histograms](https://prometheus.io/docs/practices/histograms/):
+  bucketing, aggregation and quantile error; client compatibility was not tested.
+- [Gregg active benchmarking](https://www.brendangregg.com/activebenchmarking.html):
+  inspect both generator and target during an experiment.
+- [SRE cascading failures](https://sre.google/sre-book/addressing-cascading-failures/):
+  capacity, warmup, resource limits and failure tests, selected sections of the
+  2016 book. Actual test safety and outcome oracles remain project-specific.
