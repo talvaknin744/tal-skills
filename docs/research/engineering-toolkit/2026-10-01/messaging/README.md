@@ -1,6 +1,6 @@
 # Messaging archive and general streaming design research
 
-Frozen 2026-10-01. [index.json](index.json) contains 6,345 canonical article URLs across the ten prior messaging publishers. [coverage.json](coverage.json) records each exact endpoint, successful collection page, terminal evidence, content hash, retrieval time, date semantics, and gap. Four new article bodies are marked `deep_read`; the other 6,341 URLs are indexed metadata. Ten records match earlier research sources. This collection does not claim every article ever published or that each indexed URL is currently live.
+Frozen 2026-10-01. The 6,345 canonical article URLs across the ten prior messaging publishers are preserved in the [research crawl archive manifest](../../../MANIFEST.md#archived-files). [coverage.json](../../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) records each exact endpoint, successful collection page, terminal evidence, content hash, retrieval time, date semantics, and gap. Four new article bodies are marked `deep_read`; the other 6,341 URLs are indexed metadata. Ten records match earlier research sources. This collection does not claim every article ever published or that each indexed URL is currently live.
 
 | Publisher | Article URLs | Titles | Publication dates | Earliest known publication |
 |---|---:|---:|---:|---|

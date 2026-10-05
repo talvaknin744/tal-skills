@@ -34,7 +34,7 @@ observed where recorded; no actual engine, migration, or fleet behavior was test
 [summary.json](summary.json) records every attempt, exact candidate identity,
 activation observations, omissions, and latest selection. [freeze.json](freeze.json)
 binds the candidate packages, case inputs, evaluator, and dependencies; the two
-[candidate copies](candidates/) retain their actual reviewed instructions.
+[candidate copies](../ARCHIVE.md) retain their actual reviewed instructions.
 The independent scorers were `/root/archive_quality` for stream processing and
 `/root/archive_infra` for maintenance; neither authored these packages or responses.
 Original seals and independent score bindings were validated before archiving.

@@ -215,6 +215,12 @@ function checkBindings(manifest, files, summary, archiveRoot) {
 
 /** Validate present manifests without imposing a final experiment count. */
 export function checkEvaluationEvidence(root = DEFAULT_ROOT) {
+  if (fs.existsSync(path.join(root, 'release-archive.json'))) return checkRetainedEvaluationEvidence(root);
+  return checkFullEvaluationEvidence(root);
+}
+
+/** Validate a restored release archive, including every original source binding. */
+export function checkFullEvaluationEvidence(root = DEFAULT_ROOT) {
   root = fs.realpathSync(root);
   const manifests = discover(root);
   if (!manifests.length) throw new Error(`No evaluation archive manifests found: ${root}`);
@@ -268,10 +274,96 @@ export function checkEvaluationEvidence(root = DEFAULT_ROOT) {
   return summary;
 }
 
+/** CI checks retained bytes; archived source bindings require a restored archive. */
+export function checkRetainedEvaluationEvidence(root) {
+  root = fs.realpathSync(root);
+  const catalog = JSON.parse(readFile(root, 'release-archive.json').toString('utf8'));
+  const archiveDoc = readFile(root, 'ARCHIVE.md').toString('utf8');
+  if (catalog.schema_version !== 1 || !Array.isArray(catalog.retained) || !catalog.retained.length
+      || !Array.isArray(catalog.archived_trees) || !catalog.archived_trees.length) throw new Error('Invalid release archive catalog');
+  const artifact = catalog.artifact;
+  if (!artifact || !/^tal-skills-evidence-\d{4}-\d{2}-\d{2}\.tar\.zst$/.test(artifact.name)
+      || !Number.isSafeInteger(artifact.bytes) || artifact.bytes <= 0) throw new Error('Invalid release artifact metadata');
+  digest(artifact.sha256, 'release archive');
+  for (const value of [artifact.name, artifact.sha256, String(artifact.bytes), artifact.release_url]) {
+    if (typeof value !== 'string' || !archiveDoc.includes(value)) throw new Error('ARCHIVE.md disagrees with release archive catalog');
+  }
+  const retained = new Map();
+  for (const entry of catalog.retained) {
+    const name = relativePath(entry.path);
+    if (retained.has(name)) throw new Error(`Duplicate retained path: ${name}`);
+    digest(entry.original_sha256, `${name}/original`);
+    digest(entry.sha256, `${name}/retained`);
+    const bytes = readFile(root, name);
+    equal(hash(bytes), entry.sha256, `retained bytes/${name}`);
+    if (entry.original_sha256 !== entry.sha256 && !['personal-home-path-redaction', 'archive-member-link'].includes(entry.transformation)) {
+      throw new Error(`Unexplained retained transformation: ${name}`);
+    }
+    retained.set(name, { ...entry, bytes });
+  }
+  const archived = [...catalog.archived_trees, ...(catalog.archived_files ?? [])].map(relativePath);
+  if (new Set(archived).size !== archived.length) throw new Error('Duplicate archived tree');
+  for (const tree of archived) if (fs.existsSync(path.join(root, tree))) throw new Error(`Archived tree still present: ${tree}`);
+  const actual = [];
+  function visit(directory, prefix = '') {
+    for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
+      const name = prefix ? `${prefix}/${item.name}` : item.name;
+      if (item.isSymbolicLink()) throw new Error(`Symlink refused: ${name}`);
+      if (item.isDirectory()) visit(path.join(directory, item.name), name);
+      else if (!['ARCHIVE.md', 'release-archive.json'].includes(name)) actual.push(name);
+    }
+  }
+  visit(root);
+  equal(JSON.stringify(actual.sort()), JSON.stringify([...retained.keys()].sort()), 'complete retained inventory');
+  let manifests = 0, bound = 0;
+  for (const [name, item] of retained) {
+    if (!isManifest(path.basename(name))) continue;
+    const manifest = JSON.parse(item.bytes);
+    if (manifest.schema_version !== 1 || !Array.isArray(manifest.files) || !manifest.files.length) throw new Error(`Invalid original manifest: ${name}`);
+    const seen = new Set();
+    for (const entry of manifest.files) {
+      const relative = relativePath(entry.path);
+      if (seen.has(relative)) throw new Error(`Duplicate manifest entry: ${relative}`);
+      seen.add(relative);
+      digest(entry.original_sha256, `${name}/${relative}/original`);
+      digest(entry.published_sha256, `${name}/${relative}/published`);
+      if (entry.transformed !== (entry.original_sha256 !== entry.published_sha256)) throw new Error(`Inconsistent transformation marker: ${relative}`);
+      const full = path.posix.join(path.posix.dirname(name), relative);
+      if (retained.has(full)) {
+        equal(retained.get(full).original_sha256, entry.published_sha256, `original retained binding/${full}`);
+        bound++;
+      } else if (!archived.some(tree => full === tree || full.startsWith(`${tree}/`))) throw new Error(`Unlocated original artifact: ${full}`);
+    }
+    if (manifest.base_manifest_sha256 !== undefined) {
+      const base = path.posix.join(path.posix.dirname(name), 'archive-manifest.json');
+      if (!retained.has(base)) throw new Error(`Missing supplement base: ${base}`);
+      equal(retained.get(base).original_sha256, digest(manifest.base_manifest_sha256, `${name}/base`), `supplement/${name}`);
+    }
+    manifests++;
+  }
+  for (const [name, item] of retained) {
+    if (!name.endsWith('/rubric.json')) continue;
+    const rubric = JSON.parse(item.bytes);
+    if (rubric.rubric_sha256 !== undefined) equal(hash(canonical(rubric.rubric)), rubric.rubric_sha256, `rubric content/${name}`);
+    for (const scoreName of ['score.json', 'independent-score.json']) {
+      const scoreEntry = retained.get(path.posix.join(path.posix.dirname(name), scoreName));
+      if (!scoreEntry) continue;
+      const score = JSON.parse(scoreEntry.bytes);
+      if (score.rubric_sha256 !== undefined) {
+        equal(score.rubric_sha256, rubric.rubric_sha256, `${name}/score rubric`);
+        equal(score.case_id, rubric.case_id, `${name}/score case`);
+      }
+    }
+  }
+  return { mode: 'retained-release-summaries', manifests_checked: manifests, retained_artifacts_checked: retained.size,
+    original_retained_bindings_checked: bound, archived_source_bindings_checked: 0,
+    note: 'Full archived sources were checked before removal; restore the hash-verified release asset to rerun checkFullEvaluationEvidence.' };
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const args = process.argv.slice(2);
     if (args.length > 1 || args[0]?.startsWith('--')) throw new Error('Usage: node scripts/check-evaluation-evidence.mjs [archive-root]');
-    console.log(`Published evaluation evidence verified: ${JSON.stringify(checkEvaluationEvidence(args[0]))}; experiments were not rerun or graded`);
+    console.log(`Evaluation archive integrity: ${JSON.stringify(checkEvaluationEvidence(args[0]))}; experiments were not rerun or graded`);
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

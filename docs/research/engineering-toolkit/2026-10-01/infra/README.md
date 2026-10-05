@@ -2,7 +2,7 @@
 
 Frozen on 2026-10-01. **10,922 scoped archive URLs** were indexed across the ten previously surveyed publishers, with **two explicitly supplemental sources** and **four new substantive article reads**. Metadata indexing is distinct from reading an article body. The archived URLs include positive designs and research, operational guidance, product announcements and incident accounts; selection for deep reading favored positive design mechanisms.
 
-[coverage.json](coverage.json) records exact collection boundaries, accessed pages, terminal observations, unknown dates, failed probes and exclusions. [index.json](index.json) retains canonical metadata and discovered aliases. [request-provenance.json](request-provenance.json) records final response SHA-256, status and UTC access time; the initial extraction responses were not hashed, so final revalidation is labeled separately.
+[coverage.json](../../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) records exact collection boundaries, accessed pages, terminal observations, unknown dates, failed probes and exclusions. The crawl inventory retaining canonical metadata and discovered aliases is in the [research crawl archive manifest](../../../MANIFEST.md#archived-files). [request-provenance.json](../../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-request-provenance-json) records final response SHA-256, status and UTC access time; the initial extraction responses were not hashed, so final revalidation is labeled separately.
 
 | Collection | Indexed URLs | Archive endpoint pages | Earliest observed publication | Terminal observation |
 | --- | ---: | ---: | --- | --- |

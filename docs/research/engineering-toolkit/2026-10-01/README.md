@@ -8,7 +8,10 @@ The scope includes system design, data placement, capacity, interface evolution,
 continuous computation and maintainability, alongside reliability failures.
 
 The [archive manifest](archive-manifest.json) binds each inventory and coverage
-record to its exact SHA-256. The [selected readings](selected-readings.json)
+record to its exact SHA-256. The crawl index files are stored in the external
+[research crawl archive](../../MANIFEST.md#archived-files), which lists their
+original repository paths, byte sizes, hashes, record counts, and planned release
+URL. The [selected readings](selected-readings.json)
 deduplicate the 29 article URLs and link their actual read scope and practice
 cards. Every adopted practice identifies its trigger, problem, mechanism,
 applicability limits, counterexample and proposed or executed verification.
@@ -138,63 +141,63 @@ unlisted, deleted and private-history boundary described above.
 
 | Publisher | Lane | Metadata URLs | History/access gap | Coverage |
 | --- | --- | ---: | --- | --- |
-| OpenAI | agents | 36 | See scope | [Evidence](agents/openai.coverage.json) |
-| Anthropic | agents | 25 | See scope | [Evidence](agents/anthropic.coverage.json) |
-| Hugging Face | agents | 871 | See scope | [Evidence](agents/hugging-face.coverage.json) |
-| LangChain | agents | 529 | See scope | [Evidence](agents/langchain.coverage.json) |
-| Vercel | agents | 1,673 | See scope | [Evidence](agents/vercel.coverage.json) |
-| Databricks | agents | 3,435 | See scope | [Evidence](agents/databricks.coverage.json) |
-| Snowflake | agents | 265 | See scope | [Evidence](agents/snowflake.coverage.json) |
-| NVIDIA | agents | 5,277 | See scope | [Evidence](agents/nvidia.coverage.json) |
-| Pinterest | agents | 11 | Yes | [Evidence](agents/pinterest.coverage.json) |
-| Twilio | agents | 3,719 | See scope | [Evidence](agents/twilio.coverage.json) |
-| Netflix | backend | 219 | Yes | [Evidence](backend/netflix/coverage.json) |
-| Uber | backend | 768 | See scope | [Evidence](backend/uber/coverage.json) |
-| Stripe | backend | 26 | Yes | [Evidence](backend/stripe/coverage.json) |
-| Shopify | backend | 432 | See scope | [Evidence](backend/shopify/coverage.json) |
-| GitHub | backend | 175 | See scope | [Evidence](backend/github/coverage.json) |
-| Slack | backend | 194 | See scope | [Evidence](backend/slack/coverage.json) |
-| Airbnb | backend | 71 | Yes | [Evidence](backend/airbnb/coverage.json) |
-| Spotify | backend | 288 | See scope | [Evidence](backend/spotify/coverage.json) |
-| DoorDash | backend | 341 | See scope | [Evidence](backend/doordash/coverage.json) |
-| Dropbox | backend | 410 | See scope | [Evidence](backend/dropbox/coverage.json) |
-| AWS | infra | 31 | See scope | [Evidence](infra/coverage.json) |
-| Google | infra | 1,617 | See scope | [Evidence](infra/coverage.json) |
-| Microsoft | infra | 31 | See scope | [Evidence](infra/coverage.json) |
-| Cloudflare | infra | 3,641 | See scope | [Evidence](infra/coverage.json) |
-| Fastly | infra | 1,039 | See scope | [Evidence](infra/coverage.json) |
-| Datadog | infra | 102 | See scope | [Evidence](infra/coverage.json) |
-| Grafana Labs | infra | 2,029 | See scope | [Evidence](infra/coverage.json) |
-| Honeycomb | infra | 669 | See scope | [Evidence](infra/coverage.json) |
-| HashiCorp | infra | 1,563 | See scope | [Evidence](infra/coverage.json) |
-| Fly.io | infra | 202 | See scope | [Evidence](infra/coverage.json) |
-| Confluent | messaging | 1,408 | See scope | [Evidence](messaging/coverage.json) |
-| Temporal | messaging | 433 | See scope | [Evidence](messaging/coverage.json) |
-| Redpanda | messaging | 437 | See scope | [Evidence](messaging/coverage.json) |
-| StreamNative | messaging | 365 | See scope | [Evidence](messaging/coverage.json) |
-| RabbitMQ project | messaging | 181 | See scope | [Evidence](messaging/coverage.json) |
-| Synadia / NATS | messaging | 297 | See scope | [Evidence](messaging/coverage.json) |
-| Estuary | messaging | 773 | See scope | [Evidence](messaging/coverage.json) |
-| Materialize | messaging | 180 | See scope | [Evidence](messaging/coverage.json) |
-| RisingWave | messaging | 2,125 | See scope | [Evidence](messaging/coverage.json) |
-| Decodable | messaging | 146 | See scope | [Evidence](messaging/coverage.json) |
-| JetBrains | quality | 2,294 | Yes | [Evidence](quality/coverage.json) |
-| Docker | quality | 948 | See scope | [Evidence](quality/coverage.json) |
-| Sentry | quality | 926 | See scope | [Evidence](quality/coverage.json) |
-| PostHog | quality | 358 | See scope | [Evidence](quality/coverage.json) |
-| Tailscale | quality | 405 | See scope | [Evidence](quality/coverage.json) |
-| GitLab | quality | 2,301 | See scope | [Evidence](quality/coverage.json) |
-| Snyk | quality | 2,052 | See scope | [Evidence](quality/coverage.json) |
-| Trail of Bits | quality | 526 | See scope | [Evidence](quality/coverage.json) |
-| Elastic | quality | 3,127 | See scope | [Evidence](quality/coverage.json) |
-| Discord | quality | 162 | Yes | [Evidence](quality/coverage.json) |
-| Meta | storage | 1,126 | See scope | [Evidence](storage/coverage.json) |
-| LinkedIn | storage | 923 | Yes | [Evidence](storage/coverage.json) |
-| Cockroach Labs | storage | 901 | See scope | [Evidence](storage/coverage.json) |
-| MongoDB | storage | 1,408 | Yes | [Evidence](storage/coverage.json) |
-| Redis | storage | 1,122 | See scope | [Evidence](storage/coverage.json) |
-| ScyllaDB | storage | 1,021 | See scope | [Evidence](storage/coverage.json) |
-| Tiger Data (formerly Timescale) | storage | 548 | See scope | [Evidence](storage/coverage.json) |
-| PlanetScale | storage | 321 | See scope | [Evidence](storage/coverage.json) |
-| Yugabyte | storage | 776 | See scope | [Evidence](storage/coverage.json) |
-| ClickHouse | storage | 899 | See scope | [Evidence](storage/coverage.json) |
+| OpenAI | agents | 36 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-openai-coverage-json) |
+| Anthropic | agents | 25 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-anthropic-coverage-json) |
+| Hugging Face | agents | 871 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-hugging-face-coverage-json) |
+| LangChain | agents | 529 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-langchain-coverage-json) |
+| Vercel | agents | 1,673 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-vercel-coverage-json) |
+| Databricks | agents | 3,435 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-databricks-coverage-json) |
+| Snowflake | agents | 265 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-snowflake-coverage-json) |
+| NVIDIA | agents | 5,277 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-nvidia-coverage-json) |
+| Pinterest | agents | 11 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-pinterest-coverage-json) |
+| Twilio | agents | 3,719 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-twilio-coverage-json) |
+| Netflix | backend | 219 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-netflix-coverage-json) |
+| Uber | backend | 768 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-uber-coverage-json) |
+| Stripe | backend | 26 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-stripe-coverage-json) |
+| Shopify | backend | 432 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-shopify-coverage-json) |
+| GitHub | backend | 175 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-github-coverage-json) |
+| Slack | backend | 194 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-slack-coverage-json) |
+| Airbnb | backend | 71 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-airbnb-coverage-json) |
+| Spotify | backend | 288 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-spotify-coverage-json) |
+| DoorDash | backend | 341 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-doordash-coverage-json) |
+| Dropbox | backend | 410 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-backend-dropbox-coverage-json) |
+| AWS | infra | 31 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Google | infra | 1,617 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Microsoft | infra | 31 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Cloudflare | infra | 3,641 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Fastly | infra | 1,039 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Datadog | infra | 102 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Grafana Labs | infra | 2,029 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Honeycomb | infra | 669 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| HashiCorp | infra | 1,563 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Fly.io | infra | 202 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-infra-coverage-json) |
+| Confluent | messaging | 1,408 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| Temporal | messaging | 433 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| Redpanda | messaging | 437 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| StreamNative | messaging | 365 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| RabbitMQ project | messaging | 181 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| Synadia / NATS | messaging | 297 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| Estuary | messaging | 773 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| Materialize | messaging | 180 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| RisingWave | messaging | 2,125 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| Decodable | messaging | 146 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-messaging-coverage-json) |
+| JetBrains | quality | 2,294 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Docker | quality | 948 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Sentry | quality | 926 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| PostHog | quality | 358 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Tailscale | quality | 405 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| GitLab | quality | 2,301 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Snyk | quality | 2,052 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Trail of Bits | quality | 526 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Elastic | quality | 3,127 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Discord | quality | 162 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-quality-coverage-json) |
+| Meta | storage | 1,126 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| LinkedIn | storage | 923 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| Cockroach Labs | storage | 901 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| MongoDB | storage | 1,408 | Yes | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| Redis | storage | 1,122 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| ScyllaDB | storage | 1,021 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| Tiger Data (formerly Timescale) | storage | 548 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| PlanetScale | storage | 321 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| Yugabyte | storage | 776 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |
+| ClickHouse | storage | 899 | See scope | [Evidence](../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json) |

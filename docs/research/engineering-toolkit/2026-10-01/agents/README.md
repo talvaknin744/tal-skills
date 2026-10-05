@@ -7,8 +7,8 @@ This lane covers exactly publisher-survey publishers 0–9: OpenAI through Twili
 - [findings.md](findings.md) ranks transferable practices and suggested existing-reference placements.
 - [deepchecks.md](deepchecks.md) covers Snowflake execution anchors and Pinterest datastore selection.
 - [selected-articles.json](selected-articles.json) holds five six-dimension cards and nine current official documentation crosschecks.
-- [index.json](index.json) points to canonical URL/title/date metadata in per-publisher files, with fields left null where unknown. Each record labels its reading status and source.
-- [coverage.json](coverage.json) points to the per-publisher audits containing every actual endpoint request, pagination terminal, exclusions, failures and known date bounds. Complete inventories and request logs are stored once.
+- The [research crawl archive manifest](../../../MANIFEST.md#archived-files) lists the archived combined and per-publisher inventories, which preserve canonical URL/title/date metadata with fields left null where unknown. Each record labels its reading status and source.
+- [coverage.json](../../../MANIFEST.md#file-docs-research-engineering-toolkit-2026-10-01-agents-coverage-json) points to the per-publisher audits containing every actual endpoint request, pagination terminal, exclusions, failures and known date bounds. Complete inventories and request logs are stored once.
 - [excluded-navigation.json](excluded-navigation.json) accounts for removed author/category/landing URLs.
 - [discovery-shortlist.json](discovery-shortlist.json) is only a title/URL keyword screen for later reading.
 

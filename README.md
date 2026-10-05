@@ -228,7 +228,7 @@ reported separately from observed workflow execution.
 | [workflows/](workflows/) | Task paths, stopping conditions, and handoff format |
 | [adapters/](adapters/) | Generated Codex and Claude native files |
 | [examples/](examples/) | Runnable experiments, commands, observations, and limits |
-| [docs/](docs/) | Usage, reading paths, research, provenance, and publication drafts |
+| [docs/](docs/) | Usage, reading paths, research, and provenance |
 | [evals/](evals/) | Behavioral cases, isolated inputs, and published evidence |
 | [tests/](tests/) | Deterministic regression and integrity checks |
 | [scripts/](scripts/) | Installation, generation, validation, and evaluation tools |
@@ -248,9 +248,7 @@ Keep public skill names stable, references local to each installable package,
 and completion criteria observable. Changes to agent instructions need behavioral
 evidence in addition to structural checks.
 
-See the [change log](CHANGELOG.md) for release scope and the
-[publication drafts](docs/publication/README.md) for a LinkedIn introduction and
-a longer Medium article grounded in the recorded evidence.
+See the [change log](CHANGELOG.md) for release scope.
 
 ## Attribution and license
 

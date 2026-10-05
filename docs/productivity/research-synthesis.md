@@ -47,7 +47,7 @@ The split follows independent invocation needs. Planning is useful before a sess
 
 The skills' scoring labels, state transitions, time allocations and protected-mock rules are engineering and teaching design choices. The combined package has not been tested for learning gains. Sponsor mentions, program surveys, personal trials of AI products and neuroscience analogies are not independent efficacy evidence. Historical product observations are not current product recommendations.
 
-## Use for Infi 2 now
+## Use for proof-heavy mathematics courses (real analysis, linear algebra)
 
 The original plan assumed 6 October 2026 and 48 total hours beginning 12 September. The student's actual progress is still unknown; reusing that calendar requires reconciliation rather than assuming elapsed units are complete. Preserve the reserved 2023א א1 and 2023א א2 papers until explicit release after the simulations. The skills contain this context conditionally rather than imposing those dates and papers on every learner.
 
