@@ -192,3 +192,31 @@ Host compatibility and observed limitations are recorded in the
 environment the desktop-bundled Codex was newer than the CLI on `PATH`, and Claude
 model execution required refreshed authentication. Use the recorded version and
 evidence for a claim; configuration parsing alone is not a successful workflow.
+
+## Standalone skill setup
+
+The skills CLI opens a project-local picker:
+
+```sh
+npx skills@latest add talvaknin744/tal-skills
+npx skills@latest add talvaknin744/tal-skills --skill idempotency --skill graceful-draining
+npx skills@latest add talvaknin744/tal-skills --list
+```
+
+Use `--full-depth` when listing or installing the nested Temporal integrations; ordinary discovery lists the 41 root skills, while full-depth discovery includes all 49 packages. Keep the complete package when copying manually.
+
+A bounded Codex request can name the skill:
+
+```text
+Use $idempotency to review this webhook handler.
+Check concurrent duplicates, changed payloads, and a crash after downstream success.
+Cite the code and propose a regression that forces each important ordering.
+```
+
+For the coordinated deployment workflow:
+
+```text
+Use $tal-worker-rollout to review our three-pod rolling deployment for 18-hour jobs.
+Inspect admission, retained input, checkpoint ownership, and retry accounting.
+Force successive maintenance handoffs and a genuine failure control.
+```

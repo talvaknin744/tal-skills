@@ -26,7 +26,7 @@ assignment boundary and evidence to return.
 ## Use a role
 
 Install a role or a [workflow](../workflows/README.md) through the
-[toolkit installer](../docs/toolkit-usage.md#install-in-a-project). Dependencies
+[toolkit installer](../docs/advanced-toolkit.md#install-in-a-project). Dependencies
 are installed with it. Ask the main session for a bounded assignment:
 
 ```text

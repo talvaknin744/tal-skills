@@ -11,13 +11,13 @@ const safePath = value => typeof value === 'string' && !path.posix.isAbsolute(va
   && !/[\\\x00-\x1f]/.test(value) && value.split('/').every(part => part && part !== '.' && part !== '..');
 export function originalPublishedDigest(bytes, relative, repository = root, expectedDigest) {
   const files = [];
-  for (const name of ['path-redactions.json', 'archive-link-transforms.json', 'package-relocations.json', 'research-relocations.json', 'release-publication.json']) {
+  for (const name of ['path-redactions.json', 'archive-link-transforms.json', 'package-relocations.json', 'research-relocations.json', 'release-publication.json', 'advanced-toolkit-relocations.json']) {
     const manifest = path.join(repository, 'docs', name);
     if (!fs.existsSync(manifest)) continue;
     const receipt = JSON.parse(fs.readFileSync(manifest, 'utf8'));
     if (receipt.schema_version !== 1 || !Array.isArray(receipt.files)) throw new Error('Invalid publication transformation receipt');
     for (const entry of receipt.files) {
-      if (!['personal-home-path-redaction', 'archive-member-link', 'package-relocation-link', 'research-relocation', 'research-member-link', 'release-publication'].includes(entry.transformation)) throw new Error(`Unknown publication transformation: ${name}`);
+      if (!['personal-home-path-redaction', 'archive-member-link', 'package-relocation-link', 'research-relocation', 'research-member-link', 'release-publication', 'documentation-relocation', 'documentation-link-and-context'].includes(entry.transformation)) throw new Error(`Unknown publication transformation: ${name}`);
       const originalPath = entry.original_path ?? entry.path;
       const publishedPath = entry.published_path ?? entry.path;
       if (!safePath(originalPath) || !safePath(publishedPath) || !hashPattern.test(entry.original_sha256)

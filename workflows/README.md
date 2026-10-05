@@ -18,7 +18,7 @@ checks, and a stopping condition.
 
 ## Install and invoke
 
-The [toolkit installer](../docs/toolkit-usage.md#install-in-a-project) supplies the
+The [toolkit installer](../docs/advanced-toolkit.md#install-in-a-project) supplies the
 workflow entrypoint, relevant native roles, complete skill dependencies, and shared
 documents. Source `WORKFLOW.md` files are canonical definitions; the installer
 creates the native `SKILL.md` entrypoints.
@@ -50,6 +50,6 @@ independent findings, and required checks are covered. Keep missing capabilities
 and unresolved business decisions visible. A review request produces supported
 findings; it does not imply an implementation or production deployment.
 
-See the [usage guide](../docs/toolkit-usage.md) for installation updates and host
+See the [usage guide](../docs/advanced-toolkit.md) for installation updates and host
 limits, and [verification evidence](../research/engineering-toolkit/verification.md)
 for the distinction between structural checks and observed agent behavior.

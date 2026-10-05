@@ -84,3 +84,23 @@ The final DDIA publisher pages exposed previews and an access route; the supplie
 ## Evaluation evidence
 
 The [eleven-case corpus](../evals/distributed-correctness/README.md) includes the two original incidents and book-derived failure cases. [Seven recorded trials](../evals/distributed-correctness/smoke-observations.md) sampled six distinct cases; one executable cache repair passed all five supplied checks after starting with three failures. The records distinguish structural checks, reviewed responses, and actual execution. No live cluster, real database isolation test, or 24-hour workload was run, and the trial restrictions were prompt-only.
+
+## Sources and verification
+
+Advice carries a trigger, failure mechanism, applicability limits, counterexample,
+and verification method. Historical company accounts inform a design question;
+they do not establish guarantees for a different system.
+
+- [Research ledger](engineering-toolkit/README.md): the 60-publisher survey, book access, selected readings, and adoption decisions.
+- [October archive review](engineering-toolkit/2026-10-01/README.md): 58,178 metadata URLs, 29 selected article-body readings, terminal collection evidence, and explicit historical/access gaps. Metadata enumeration is separate from article reading.
+- [Performance research](performance-capacity/README.md): measurement, capacity, overload, database work, and conditional Go/Python data-layout experiments.
+- [Temporal story review](../docs/temporal/README.md): all 70 customer-index entries, with written-story and talk-summary scope distinguished.
+- [Runnable examples](../examples/README.md): TypeScript, Python, and Go backend contracts plus messaging, cache races, worker handoffs, recovery, protocols, and retry coordination.
+- [Worker rollout integration](worker-rollout-integration/2026-10-02/README.md): signal and ownership evidence plus focused cache, schema, fairness and deadline guidance, with runtime and agent results reported separately.
+- [Verification report](engineering-toolkit/verification.md) and [evaluation guide](../evals/README.md): deterministic checks, runtime observations, independently scored agent trials, and known host limitations.
+
+Repository checks validate packaging, references, generated adapters, installer
+behavior, fixtures, and evidence bindings. They do not run a model or prove
+production reliability. Behavioral trials retain failed and blocked attempts and
+state their environment limits. Native loading and configuration parsing are
+reported separately from observed workflow execution.
