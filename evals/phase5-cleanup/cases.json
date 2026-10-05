@@ -1,0 +1,96 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "case_id": "positive-routing-conditional-specialists",
+      "prompt": "A payment rollout spans billing, the API and one event consumer. Review only the failure boundary that can duplicate a charge. Use a specialist only if the evidence shows a distinct question it can answer; do not ask me policy questions unless a material decision is actually blocked.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "conditional specialist routing with narrow delegation",
+      "fixture_dir": "fixtures/positive-routing-conditional-specialists"
+    },
+    {
+      "case_id": "positive-routing-chain",
+      "prompt": "We are extracting invoice creation from a monolith. Trace the data ownership and rollback boundary, and tell me what to change first.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "routing chain across extraction, integration, correctness",
+      "fixture_dir": "fixtures/positive-routing-chain"
+    },
+    {
+      "case_id": "skill-tool-unavailable-fallback",
+      "prompt": "Please review this small Go handler for a lost update. The specialist skill tool is unavailable in this host. Give me the most useful bounded review you can from the supplied code, and say what you could not verify.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "unavailable skill tool fallback",
+      "fixture_dir": "fixtures/skill-tool-unavailable-fallback"
+    },
+    {
+      "case_id": "leading-word-not-policy-trigger",
+      "prompt": "Plan the first two implementation steps for this local parser fix. Do not ask policy questions unless an actual consequential choice blocks the work.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "avoid leading-word activation / unnecessary policy questions",
+      "fixture_dir": "fixtures/leading-word-not-policy-trigger"
+    },
+    {
+      "case_id": "source-provenance-preservation",
+      "prompt": "Review this migration and support each factual claim with the supplied evidence file and its exact filename. If a claim cannot be sourced, mark it unresolved.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "preserve source provenance",
+      "fixture_dir": "fixtures/source-provenance-preservation"
+    },
+    {
+      "case_id": "boundary-nontrigger-local-edit",
+      "prompt": "Fix the typo in this comment: \u201crecieve\u201d should be \u201creceive\u201d.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "nontrigger for specialist routing",
+      "fixture_dir": "fixtures/boundary-nontrigger-local-edit"
+    },
+    {
+      "case_id": "boundary-changed-tradeoff",
+      "prompt": "A proposed data migration has a rollback window that closes once the new service accepts writes. Recommend an order of operations, and identify the one assumption that would change the recommendation.",
+      "capabilities": {
+        "skill_tool": true,
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "expected_activation": "conditional",
+      "capability_focus": "changed boundary requiring conditional policy question",
+      "fixture_dir": "fixtures/boundary-changed-tradeoff"
+    }
+  ]
+}

@@ -19,8 +19,8 @@ Identify the question, system boundary, goals, constraints, supplied artifacts, 
 
 Choose the requested mode and read its reference:
 
-- **Planning:** new designs, technology choices, refactors, or migrations — [planning.md](references/planning.md).
-- **Review:** assess an existing system or proposed design — [review.md](references/review.md).
+- **Planning:** new designs, technology choices, refactors, or migrations: [planning.md](references/planning.md).
+- **Review:** assess an existing system or proposed design: [review.md](references/review.md).
 
 When both are requested, assess the relevant current behavior before proposing its evolution. Scope is ready when the decision, constraints, and missing evidence are explicit.
 

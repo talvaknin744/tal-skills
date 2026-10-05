@@ -5,9 +5,7 @@ description: Assess Temporal production readiness before a launch, migration, or
 
 # Temporal production readiness
 
-Turn operational assumptions into evidence for a particular workload. Customer
-stories supply failure questions; the application's requirements and measured
-behavior decide readiness.
+Workload readiness means evidence that a particular Temporal workload meets its application requirements. Customer stories supply failure questions; measured behavior decides readiness.
 
 ## 1. Define the workload and decision
 
@@ -22,6 +20,8 @@ change and use the existing test and deployment conventions. Finish this step
 with a bounded decision: which workload, environment, and change are being
 assessed, with unknown requirements explicitly recorded.
 
+Example: Assess weekday invoice schedules in staging against the 15-minute completion objective.
+
 ## 2. Trace pressure through the system
 
 Follow one operation from accepted input through queues, execution, dependencies,
@@ -33,6 +33,8 @@ For recurring work, large fan-out, growing histories, or shared infrastructure,
 read [capacity and isolation](references/capacity-and-isolation.md). Complete this
 step when each applicable limit has an owner, a stated bound, and evidence of
 enforcement or a concrete gap. A configuration value alone is an assumption.
+
+Example: A per-Worker concurrency cap does not enforce a shared provider quota across replicas.
 
 ## 3. Define observations and failure rehearsals
 
@@ -49,6 +51,8 @@ identified risks. Each needs a workload, injected failure, expected business
 invariant, measurement, and pass/fail threshold. Derive thresholds from the
 application's deadlines and dependency quotas; another customer's scale is not
 a sizing target.
+
+Example: Fail the rehearsal when backlog age exceeds the business freshness deadline.
 
 ## 4. Gather evidence and give a bounded verdict
 
@@ -70,3 +74,5 @@ or a readiness verdict limited to the tested load and failure budget. For the
 origin of a recommendation or a disputed platform claim, consult
 [sources and interpretation](references/sources.md); source reading is optional
 when the evidence already answers the task.
+
+Example: Report a mocked timeout check separately from a staging outage rehearsal.

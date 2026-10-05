@@ -61,3 +61,19 @@ test('promoted skill structure accepts valid metadata and rejects malformed boun
   fs.writeFileSync(skillFile, fs.readFileSync(skillFile, 'utf8').replace('name: folder-skill', 'name: different-skill'));
   assert.match(check(wrongName), /name must match folder/);
 });
+
+test('prose style rejects new dashes and preserves only exact retained records', (t) => {
+  const root = fixture('Design reliable systems by identifying invariants, validating assumptions, and checking recovery behavior under realistic failure conditions.');
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const current = path.join(root, 'docs/new-page.md');
+  fs.mkdirSync(path.dirname(current), { recursive: true });
+  fs.writeFileSync(current, '# Current prose\n\nA boundary\u2014with an example.\n');
+  assert.match(check(root), /docs\/new-page.md: replace em-dashes/);
+  fs.writeFileSync(current, '# Current prose\n\nA boundary, with an example.\n');
+  const retained = 'docs/productivity/evaluation-notes.md';
+  fs.mkdirSync(path.dirname(path.join(root, retained)), { recursive: true });
+  fs.copyFileSync(path.join(repository, retained), path.join(root, retained));
+  assert.match(check(root), /Skill packaging and local references valid/);
+  fs.appendFileSync(path.join(root, retained), '\nNew prose\u2014not historical.\n');
+  assert.match(check(root), /evaluation-notes.md: replace em-dashes/);
+});
