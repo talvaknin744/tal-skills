@@ -7,7 +7,7 @@ The crawl indexes and collector outputs listed here were archived after every ex
 - Archive: `tal-skills-research-crawls-2026-10-01.tar.zst`
 - Archive SHA-256: 7865e38b40038aab4f0944614edd8ddf4ed05f0991a58e2b120a6a91727338d8
 - Compressed size: 2309358 bytes
-- Planned GitHub v1.0.0 release URL (pending upload): https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-research-crawls-2026-10-01.tar.zst
+- GitHub v1.0.0 release URL: https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-research-crawls-2026-10-01.tar.zst
 - Coverage catalog SHA-256: 8e92b33727679bb22413bdfa65ca44e141f5f0d1884549de13df75a07869a1a6
 
 ## Archived files
@@ -76,3 +76,5 @@ For a JSON array, record count is its length. For an object, it is the length of
 | <a id="file-docs-research-engineering-toolkit-2026-10-01-storage-coverage-json"></a>docs/research/engineering-toolkit/2026-10-01/storage/coverage.json | 92259 | a7d17fe800b7b575e887270b83efe10e39f1cac63da1b28b52d2daed7cfe96ba | 10 |
 | <a id="file-docs-research-engineering-toolkit-2026-10-01-storage-index-json"></a>docs/research/engineering-toolkit/2026-10-01/storage/index.json | 7836402 | 024b393aab8b9854f05aaf600153ff65b88dc40dfeabe93fc7aac9ca5ba3a032 | 10 |
 | <a id="file-docs-research-engineering-toolkit-2026-10-01-storage-request-log-json"></a>docs/research/engineering-toolkit/2026-10-01/storage/request-log.json | 236822 | e8119d423cebcc4f063b80ae2d946cdab5cc83b267117b7fb20a23a09e98c9b6 | 508 |
+
+Publication completed 2026-10-05. The [publication receipt](../docs/release-publication.json) records all three uploaded asset sizes, download URLs and GitHub SHA-256 digests. Historical member paths in the table remain unchanged.

@@ -5,7 +5,7 @@ The complete baseline engineering-toolkit and performance run trees are preserve
 - SHA-256: `c458344334e5772646c9d797ac13392386e913fe854edab99bac07f84a56f49e`
 - Compressed bytes: `7765035`
 - Regular file members: `10349`
-- Planned release: [https://github.com/talvaknin744/tal-skills/releases/tag/v1.0.0](https://github.com/talvaknin744/tal-skills/releases/tag/v1.0.0) (asset upload pending Phase 3)
+- Published release: [https://github.com/talvaknin744/tal-skills/releases/tag/v1.0.0](https://github.com/talvaknin744/tal-skills/releases/tag/v1.0.0) (all three assets uploaded and digest-verified 2026-10-05)
 - Source commit: `67eba56a33168f2d52c8d17397a1038f76e3f20d`
 
 Before pruning, the original integrity checker verified 256 manifests, 9,870

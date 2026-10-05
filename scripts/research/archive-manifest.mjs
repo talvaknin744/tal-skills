@@ -11,7 +11,7 @@ export function parseResearchArchiveManifest(markdown) {
   const archiveName = markdown.match(/^- Archive: `([^`]+)`$/m)?.[1];
   const archiveSha256 = markdown.match(/^- Archive SHA-256: ([a-f0-9]{64})$/m)?.[1];
   const archiveBytes = Number(markdown.match(/^- Compressed size: (\d+) bytes$/m)?.[1]);
-  const releaseUrl = markdown.match(/^- Planned GitHub v1\.0\.0 release URL \(pending upload\): (https:\/\/[^\s]+)$/m)?.[1];
+  const releaseUrl = markdown.match(/^- (?:Planned GitHub v1\.0\.0 release URL \(pending upload\)|GitHub v1\.0\.0 release URL): (https:\/\/[^\s]+)$/m)?.[1];
   const coverageCatalogSha256 = markdown.match(/^- Coverage catalog SHA-256: ([a-f0-9]{64})$/m)?.[1];
   if (!archiveName || !archiveSha256 || !Number.isSafeInteger(archiveBytes) || archiveBytes <= 0 || !releaseUrl || !coverageCatalogSha256) {
     fail('missing or invalid archive identity');
