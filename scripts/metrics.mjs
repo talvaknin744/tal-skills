@@ -42,7 +42,7 @@ const rows = [
   ['Skills missing agents/openai.yaml', allSkills.filter(name => !fs.existsSync(path.join(root, name.replace('SKILL.md', 'agents/openai.yaml')))).length],
   ['Descriptions over 40 words (promoted)', descriptionWords.filter(words => words > 40).length],
   ['Description words: max / avg (promoted)', `${Math.max(0, ...descriptionWords)} / ${descriptionWords.length ? (descriptionWords.reduce((a, b) => a + b, 0) / descriptionWords.length).toFixed(1) : 0}`],
-  ['Skills handing off to a sibling', skills.filter(name => /Hand off to the `[a-z0-9-]+` skill/.test(text(name))).length],
+  ['Skills handing off to a sibling', skills.filter(name => /Hand off to the `[a-z0-9-]+` skill/i.test(text(name))).length],
   ['Files with em-dashes (skills/, docs/, README, AGENTS, CHANGELOG, CONTRIBUTING)', files.filter(name => name.endsWith('.md') && (/^(skills|docs)\//.test(name) || ['README.md', 'AGENTS.md', 'CHANGELOG.md', 'CONTRIBUTING.md'].includes(name)) && text(name).includes('—')).length],
   ['README bytes', fs.statSync(path.join(root, 'README.md')).size],
   ['Docs pages for promoted skills', promoted.filter(name => { const [, bucket, skill] = name.split('/'); return fs.existsSync(path.join(root, `docs/${bucket}/${skill}.md`)); }).length],

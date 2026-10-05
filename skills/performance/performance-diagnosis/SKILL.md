@@ -38,7 +38,7 @@ averages from bursts and runnable work from blocked work.
 observation that could disprove the leading hypothesis.
 Example: if pool acquisition dominates, check whether a pool-wait reduction moves endpoint latency under matched demand.
 
-When the unresolved task is representative workload construction, Hand off to the `load-testing` skill. When database work or waits are implicated, Hand off to the `database-performance` skill. When the task is admission or overload containment, Hand off to the `overload-control` skill.
+When the unresolved task is representative workload construction, hand off to the `load-testing` skill. When database work or waits are implicated, hand off to the `database-performance` skill. When the task is admission or overload containment, hand off to the `overload-control` skill. If `load-testing` or `database-performance` or `overload-control` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
 
 ## 3. Choose the smallest intervention
 

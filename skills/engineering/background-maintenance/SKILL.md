@@ -107,4 +107,4 @@ run, remaining correctness or capacity limits, and the next check for each gap.
 
 ## Optional companion routing
 
-For workload or fleet sizing, Hand off to the `capacity-planning` skill. For cross-service dependencies, Hand off to the `microservice-operations` skill. For worker handoff, Hand off to the `graceful-draining` skill. For uncertain business effects, Hand off to the `idempotency` skill.
+For workload or fleet sizing, hand off to the `capacity-planning` skill. For cross-service dependencies, hand off to the `microservice-operations` skill. For worker handoff, hand off to the `graceful-draining` skill. For uncertain business effects, hand off to the `idempotency` skill. If `capacity-planning` or `microservice-operations` or `graceful-draining` or `idempotency` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.

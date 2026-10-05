@@ -81,4 +81,4 @@ final diff and recorded observations; proposed checks are labeled unexecuted.
 
 ## Optional companion routing
 
-When failure, generated-input, or adverse-ordering uncertainty needs a dedicated oracle, Hand off to the `failure-oriented-testing` skill.
+When failure, generated-input, or adverse-ordering uncertainty needs a dedicated oracle, hand off to the `failure-oriented-testing` skill. If `failure-oriented-testing` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.

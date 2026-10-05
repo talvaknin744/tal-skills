@@ -73,4 +73,4 @@ when checking attribution or applying a platform's policy.
 **Done:** each completion claim names its stage and evidence; unresolved consumer,
 policy, or recovery conditions remain visible.
 
-For service interaction design, Hand off to the `microservice-integration` skill. For consumer/provider verification, Hand off to the `microservice-testing` skill. For worker lifecycle during rollout, Hand off to the `graceful-draining` skill.
+For service interaction design, hand off to the `microservice-integration` skill. For consumer/provider verification, hand off to the `microservice-testing` skill. For worker lifecycle during rollout, hand off to the `graceful-draining` skill. If `microservice-integration` or `microservice-testing` or `graceful-draining` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
