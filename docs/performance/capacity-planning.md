@@ -2,7 +2,7 @@
 
 ## What it does
 
-Models a capacity envelope tied to useful work, resource demand, and promised operating scenarios. It covers growth, workload changes, backlog recovery, rollouts, failure headroom, downstream limits, and cost per useful operation.
+Models a capacity envelope tied to useful work, resource demand, and promised operating scenarios. Headroom is usable capacity remaining after promised demand and failure scenarios are accounted for. It covers growth, workload changes, backlog recovery, rollouts, failure headroom, downstream limits, and cost per useful operation.
 
 ## When to reach for it
 
