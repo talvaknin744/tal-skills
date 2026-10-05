@@ -1,12 +1,16 @@
 ---
 name: microservice-extraction
-description: Plan, review, or implement an incremental extraction from a monolith into a microservice. Use for migration seams, code/data separation, coexistence, and cutover recovery; exclude deciding service boundaries from scratch and ordinary deployments.
+description: Plan, review, or implement incremental monolith extraction. Use for migration seams, code/data separation, coexistence, and cutover recovery; exclude choosing boundaries from scratch and ordinary deployments.
 license: MIT
 ---
 
 # Microservice extraction
 
+**migration stage:** A migration stage moves one selected responsibility while declaring its caller routing and data authority.
+
 Extract one capability through observable stages, keeping the existing business behavior usable while ownership moves. Judge progress by the migration's intended benefit, not by how much of the monolith disappears.
+
+**Example:** For invoice generation, list the API caller, nightly job, reporting reader, and success measure before choosing the slice.
 
 ## 1. Bound the extraction
 
@@ -16,6 +20,8 @@ Compare the proposed extraction with a smaller local change that could achieve t
 
 **Done:** the slice and its callers, readers, writers, constraints, and material unknowns are recorded.
 
+**Example:** Compare code-first and data-first plans, stating which owner controls reads and writes at each stage.
+
 ## 2. Choose a migration sequence
 
 Separate the code move from the data move. Choose their order from the dominant risk: code first can expose value sooner; data first can establish whether independence is feasible. Sketch both before starting either. When the proposed boundary is uncertain or changes many existing code paths, read [boundary-rehearsal.md](references/boundary-rehearsal.md) to exercise it before moving storage. Use an internal abstraction or routing seam that can direct the selected operation to its old or new implementation.
@@ -24,13 +30,17 @@ For each stage, state which implementation handles each caller, which store owns
 
 **Done:** every stage has a single declared authority for each mutable record, a transition condition, and a recovery path. Code running in another process alone does not complete data separation.
 
+**Example:** After the new service accepts writes, identify whether rollback can reconcile them to the old store or requires forward repair.
+
 ## 3. Design coexistence and recovery
 
 Preserve contracts for callers that upgrade at different times. Explain how routing, configuration, schema changes, background workers, and in-flight work behave during overlap. For shadow or parallel execution, arrange comparison without repeating customer-visible effects.
 
-Read [cutover.md](references/cutover.md) to define validation, rollout, and recovery. Distinguish reverting a binary or route from recovering data. Once the new owner has accepted writes, returning traffic to an old copy requires a demonstrated reconciliation path; otherwise use a forward repair or an explicit bounded pause.
+Read [cutover.md](references/cutover.md) to define validation, rollout, and recovery. When cutover depends on infrastructure change safety, Call the Skill tool with "infrastructure-change-safety". For retirement/deprecation of old routes or writers, Call the Skill tool with "technical-deprecation". Distinguish reverting a binary or route from recovering data. Once the new owner has accepted writes, returning traffic to an old copy requires a demonstrated reconciliation path; otherwise use a forward repair or an explicit bounded pause.
 
 **Done:** failure before and after ownership transfer has a known authoritative state, a recovery action, and an observable outcome. Irreversible effects have an explicit treatment.
+
+**Example:** If only planning was requested, provide the next stage and its stop condition without presenting a rehearsal as executed.
 
 ## 4. Execute or deliver the next stage
 
