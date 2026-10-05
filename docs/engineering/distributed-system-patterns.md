@@ -6,7 +6,7 @@ Choose and specify a distributed topology from the constraint it must satisfy.
 
 ## When to reach for it
 
-Use when selecting or reviewing serving, partitioning, ownership, movement or batch-stage patterns. Start from a concrete constraint, not a pattern catalog.
+Use when selecting or reviewing serving, partitioning, ownership, movement or batch-stage patterns against a measured constraint. Isolated retry or duplicate-effect changes belong with their operation-level contract.
 
 ## It's working if
 

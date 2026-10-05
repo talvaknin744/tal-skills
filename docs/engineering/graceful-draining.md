@@ -6,7 +6,7 @@ Keep logical jobs recoverable while workers stop, roll out, scale down or transf
 
 ## When to reach for it
 
-Use when long-running work loses progress, is repeatedly interrupted, exhausts retries during rollout or needs bounded handoff.
+Use when interruption during deployment, scale-down or maintenance threatens resumable work, retries or ownership. For scheduled maintenance use background-maintenance; for a Temporal deployment use temporal-safe-deployments when available.
 
 ## It's working if
 

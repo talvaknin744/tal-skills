@@ -6,7 +6,7 @@ Make a specific failure observable and reproducible at the smallest boundary tha
 
 ## When to reach for it
 
-Use when a failure, generated input or adverse ordering needs a focused reproducible check. A test plan names unrun checks; implementation executes the authorized experiment.
+Use when a suspected failure, generated input or adverse ordering needs a reproducible check with an independent oracle. Settled low-risk edits already covered by meaningful tests do not need this workflow.
 
 ## It's working if
 

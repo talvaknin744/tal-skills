@@ -1,13 +1,13 @@
 ---
 name: failure-oriented-testing
-description: Design or strengthen tests for injected faults, adversarial execution orders, generated inputs, and recovery. Use when happy-path checks miss a suspected failure or an invariant needs a discriminating oracle; exclude settled low-risk edits already covered by meaningful tests.
+description: Design tests for injected faults, adversarial schedules, generated inputs or recovery. Use when a suspected failure needs an independent oracle and reproducible evidence; exclude settled low-risk edits with meaningful tests.
 license: MIT
 ---
 
 # Failure-oriented testing
 
 Make a particular failure observable and reproducible at the smallest boundary that
-retains it. Match the requested work: a test plan states unrun checks; an
+retains it. Here, an oracle is the independent rule that decides whether an outcome is correct. Match the requested work: a test plan states unrun checks; an
 implementation executes the authorized experiment.
 
 ## 1. Define the falsifiable claim
@@ -21,6 +21,8 @@ expectation reproduces its mistakes.
 
 **Done:** the test can say which promised outcome is wrong, and why its expectation
 is authoritative. Ambiguous requirements remain explicit questions.
+
+Example: State that after a timed-out commit retry, the record must exist exactly once.
 
 ## 2. Choose a credible experiment
 
@@ -39,6 +41,8 @@ the user's authorized environment and impact.
 **Done:** the setup retains the hypothesized failure, has bounded execution and
 cleanup, and names the claims it cannot establish.
 
+Example: Pause after the database write but before acknowledgement to retain the suspected duplicate window.
+
 ## 3. Prove sensitivity and preserve the counterexample
 
 Run the known faulty version or a representative seeded defect and confirm that
@@ -55,6 +59,8 @@ rejections for the chosen oracle.
 **Done:** a retained counterexample fails for the relevant reason, or the report
 explicitly says sensitivity remains unverified.
 
+Example: Seed a retry that creates a duplicate, then retain the smallest two-attempt history that still fails.
+
 ## 4. Verify the candidate and bound the conclusion
 
 Replay the counterexample against the candidate, then run independent input
@@ -69,3 +75,5 @@ attribution, reading scope, and evidence limits.
 
 **Done:** the unsafe behavior is detected, the candidate meets the selected
 contract on the recorded checks, and untested guarantees are clearly separated.
+
+Example: Replay the retained history and report database-version integration as unverified if only a fake ran.

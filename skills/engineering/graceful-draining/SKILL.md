@@ -1,13 +1,15 @@
 ---
 name: graceful-draining
-description: Design, implement, or review service shutdown and job handoff during deployment, scale-down, or maintenance. Use when long-running work loses progress, is repeatedly interrupted across workers, exhausts retries during rollouts, or needs a bounded drain with safe ownership transfer.
+description: Design, implement or review worker shutdown and job handoff during deployment, scale-down or maintenance. Use when interruption threatens resumable work or ownership; exclude routine shutdown without resumable jobs.
 license: MIT
 ---
 
 # Graceful draining
 
-Preserve the logical job while its worker changes. A worker stopping, a delivery
-being retried, and a business operation failing are separate events.
+Preserve the logical job while its worker changes. Here, handoff means durable transfer of resumable work and ownership to an eligible successor. A worker stopping, a delivery being retried, and a business operation failing are separate events.
+
+
+When the work is scheduled maintenance, conditionally route by calling the Skill tool with "background-maintenance"; when the change is a Temporal deployment, call the Skill tool with "temporal-safe-deployments". Continue with this workflow when those skills are unavailable, preserving the requested scope and stating the limits of available guidance.
 
 ## 1. Reconstruct the interruption
 
@@ -24,6 +26,8 @@ attempts, application failures, controller backoff, leases, and total job age.
 **Done:** a timeline names the logical job, worker generation, last durable
 checkpoint, uncertain effects, and the layer that declared failure. Mark missing
 evidence instead of treating an exit code as a diagnosis.
+
+Example: Record job ID, worker generation, checkpoint, and whether the external effect may already have committed.
 
 ## 2. Choose finish or resume
 
@@ -45,6 +49,8 @@ primary documentation; [sources](references/sources.md) records the research bas
 
 **Done:** each job class has a justified strategy, compatible destination, finite
 drain deadline, and a recovery or escalation action when that deadline expires.
+
+Example: Let image processing finish within 30 seconds, then resume from its last durable chunk if the deadline expires.
 
 ## 3. Close admission before transferring work
 
@@ -69,6 +75,8 @@ worker after it resumes.
 record, acknowledgment boundary, successor eligibility, and protection against
 late writes or cleanup from the previous owner.
 
+Example: Fence generation 8 before allowing generation 9 to claim new work.
+
 ## 4. Demonstrate survival and bounded failure
 
 Use deterministic schedules around the changed boundaries. Include successive
@@ -88,3 +96,5 @@ evidence, counter changes, and remaining gaps. Retire workers on durable termina
 completion or demonstrated recoverable continuation. Keep unresolved work visible
 with its last progress time and escalation; neither shutdown nor an unknown
 external outcome counts as successful job completion.
+
+Example: Stop A, then B, while an effect is pending and verify durable progress remains discoverable.

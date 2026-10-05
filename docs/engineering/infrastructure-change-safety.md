@@ -6,7 +6,7 @@ Plan and verify infrastructure transitions with explicit ownership, compatibilit
 
 ## When to reach for it
 
-Use when replacement, Terraform state ownership, mixed-version rollout or partial apply could interrupt service or lose data. Application-only edits can use their normal path.
+Use when replacement, Terraform state ownership, mixed-version rollout or partial apply could interrupt service or lose data. Application-only edits remain in their normal workflow.
 
 ## It's working if
 
