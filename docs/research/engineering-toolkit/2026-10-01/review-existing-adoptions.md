@@ -36,7 +36,7 @@ These live reads crosschecked the adoption ledgers. Reading publisher accounts i
 
 ## Exact reviewed files
 
-Paths are relative to `/Users/idanvaknin/Documents/ChatGPT/skills`. SHA256 covers complete file bytes, including context not included in the scoped verdict.
+Paths are relative to `$HOME/Documents/ChatGPT/skills`. SHA256 covers complete file bytes, including context not included in the scoped verdict.
 
 | File | SHA256 |
 | --- | --- |

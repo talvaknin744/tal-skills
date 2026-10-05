@@ -1,0 +1,35 @@
+{
+  "format_version": 1,
+  "change": "Generalize mathematics planning beyond a personal course while preserving syllabus authority, capacity reconciliation and reserved-paper protection.",
+  "cases": [
+    {
+      "id": "linear-algebra-scope",
+      "prompt": "Use the supplied learner context to plan my next linear algebra study session. Keep the files unchanged and do not schedule a reminder.",
+      "fixture_dir": "evals/learning-plan/fixtures/linear-algebra-scope",
+      "fixtures": ["context.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "planning",
+      "rubric": [
+        {"id": "syllabus", "severity": "critical", "criterion": "Uses vector spaces, linear maps, rank-nullity and diagonalization as supplied scope; does not insert integration or series as required linear algebra topics."},
+        {"id": "capacity", "severity": "critical", "criterion": "Allocates at most 120 minutes including breaks and feedback, treating only 30 reported minutes as completed."},
+        {"id": "protection", "severity": "critical", "criterion": "Keeps reserved paper A and its solutions unexposed, using permitted textbook exercises or newly authored tasks."},
+        {"id": "readiness", "severity": "major", "criterion": "Leaves unsampled topics or proof ability unresolved and provides an executable next session without claiming exam readiness."},
+        {"id": "scope", "severity": "critical", "criterion": "Leaves files unchanged and does not activate a reminder; if opening a diagnostic, asks one question and withholds its solution until an attempt."}
+      ]
+    },
+    {
+      "id": "calendar-format-nontrigger",
+      "prompt": "Reformat these three calendar entries as a Markdown table with columns Date and Event: October 6: team meeting; October 8: dentist; October 9: rent payment. Keep the dates and events unchanged. Do not suggest study tasks or schedule anything.",
+      "fixture_dir": "evals/learning-plan/fixtures/calendar-format-nontrigger",
+      "fixtures": ["context.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "avoid",
+      "task_mode": "planning",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Formats the supplied calendar entries without invoking learning-plan, introducing a study workflow, or asking for a syllabus or diagnostic."},
+        {"id": "preservation", "severity": "critical", "criterion": "Preserves all three dates and events and does not schedule external actions or modify files."}
+      ]
+    }
+  ]
+}

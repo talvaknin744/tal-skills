@@ -1,0 +1,62 @@
+// Original performance source checks, retained for hash-verified release restoration.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, lstat, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// Historical artifact integrity, not a rerun or independent grading of answers.
+const archive = process.argv[2];
+if (!archive) throw new Error('Usage: node scripts/check-performance-archive.mjs <restored-performance-run-root>');
+const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+const relative = value => typeof value === 'string' && value.length > 0
+  && !path.isAbsolute(value) && !value.includes('\\')
+  && value.split('/').every(part => part && part !== '.' && part !== '..');
+
+test('performance forward-test archive binds all published artifacts', async () => {
+  const manifest = JSON.parse(await readFile(path.join(archive, 'manifest.json'), 'utf8'));
+  assert.equal(manifest.schema_version, 1);
+  assert.equal(manifest.kind, 'adapted-forward-tests');
+  assert.ok(manifest.files.length > 0);
+  assert.equal(new Set(manifest.files.map(item => item.path)).size, manifest.files.length);
+  const actual = [];
+  async function visit(prefix = '') {
+    for (const entry of await readdir(path.join(archive, prefix), { withFileTypes: true })) {
+      assert.ok(!entry.isSymbolicLink());
+      const filename = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) await visit(filename);
+      else actual.push(filename);
+    }
+  }
+  await visit();
+  assert.deepEqual(actual.filter(name => name !== 'manifest.json').sort(),
+    manifest.files.map(item => item.path).sort());
+  for (const item of manifest.files) {
+    assert.ok(relative(item.path));
+    assert.match(item.sha256, /^[a-f0-9]{64}$/);
+    assert.ok((await lstat(path.join(archive, item.path))).isFile());
+    assert.equal(digest(await readFile(path.join(archive, item.path))), item.sha256);
+  }
+});
+
+test('forward-test inputs bind candidate, fixture and selected rubric snapshots', async () => {
+  const records = JSON.parse(await readFile(path.join(archive, 'index.json'), 'utf8'));
+  assert.equal(new Set(records.map(item => item.skill)).size, records.length);
+  for (const item of records) {
+    assert.ok(relative(item.skill));
+    const run = JSON.parse(await readFile(path.join(archive, item.skill, 'run-input.json'), 'utf8'));
+    assert.equal(run.skill, item.skill);
+    assert.equal(run.case_id, item.case_id);
+    assert.ok(run.capability_deviations.length > 0);
+    for (const [folder, files] of [['candidate', run.candidate_files], ['project', run.fixture_files]]) {
+      assert.ok(Object.keys(files).length > 0);
+      for (const [filename, expected] of Object.entries(files)) {
+        assert.ok(relative(filename));
+        assert.equal(digest(await readFile(path.join(archive, item.skill, folder, filename))), expected);
+      }
+    }
+    const rubric = JSON.parse(await readFile(path.join(archive, item.skill, 'rubric.json'), 'utf8'));
+    assert.equal(digest(Buffer.from(JSON.stringify(rubric))), run.source_rubric_sha256);
+  }
+});
