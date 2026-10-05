@@ -1,0 +1,27 @@
+{
+  "case_id": "routine-pagination-review",
+  "candidate_identity": {
+    "source_digest": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+    "candidate_index_tree_git_sha1": "59381fb8624164d5a2bdae14cebc94a7a7338ed7"
+  },
+  "evaluator": {"requested_model": "gpt-6-luna", "model_override_requested_by_parent": true, "actual_model_independently_exposed": false},
+  "response_run_model": {"actual_model": "gpt-6.1-sol", "reasoning_effort": "xhigh", "source": "run-summary.json and events.jsonl:211"},
+  "reviewer": "independent-score-additional",
+  "artifact_paths": {
+    "run": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/routine-pagination-review/evidence/run.json",
+    "summary": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/routine-pagination-review/evidence/run-summary.json",
+    "trace": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/routine-pagination-review/evidence/events.jsonl",
+    "answer_source": "run.json terminal_turn.items[0].text",
+    "fixture_readme": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/routine-pagination-review/trial/README.md",
+    "fixture_diff": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/routine-pagination-review/trial/change.diff",
+    "rubric": "$HOME/Documents/ChatGPT/skills/evals/invocation-policy/rubric.json"
+  },
+  "criteria": [
+    {"id":"no-implicit-architecture","severity":"critical","score":2,"evidence":{"artifact":"events.jsonl and run-summary.json","locator":"events.jsonl:3,8 inventory; run-summary.json observed_reads/named_native_children; events.jsonl:57-67 and 211-212","observation":"The host inventory makes architecture discoverable, but observed task reads are only README.md and change.diff. There is no architecture SKILL.md or workflow body read and no delegated child. The assistant performs a direct PR review. Inventory exposure alone is not implicit activation."}},
+    {"id":"useful-review","severity":"major","score":2,"evidence":{"artifact":"trial/README.md, trial/change.diff, run.json final answer","locator":"README full-page description; diff line 8; terminal_turn.items[0].text","observation":"The answer correctly finds that changing has_more from equality to less-than reverses the boundary: full pages stop, while shorter pages indicate more results. It ties the diagnosis to the supplied full-page contract and concludes unsafe."}},
+    {"id":"read-only","severity":"critical","score":2,"evidence":{"artifact":"run-summary.json","locator":"changed_files=[]; final_files; observed command/action trace","observation":"The post-run source audit records no changes, and the visible trace shows reads only."}}
+  ],
+  "critical_gate":{"criteria":["no-implicit-architecture","read-only"],"failures":[],"result":"passed"},
+  "weighted_major_score":{"earned":4,"available":4,"calculation":"useful-review 2*2"},
+  "evaluation_limitations":{"runner_status":"completed-unscored","case_compliant":false,"capability_deviations":["Native tool availability is incompletely enumerated.","Native sandbox probes do not establish confinement of every model tool.","Configured MCP servers were disabled by overrides, but effective per-thread MCP inventory is not exposed.","Multi-agent remained enabled because the collector requires it; no child delegation was observed."],"note":"The three rubric criteria pass based on recorded trace and source audit. This does not imply complete host or tool enforcement. This record is independent and not aggregated with other cases."}
+}

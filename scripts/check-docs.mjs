@@ -13,7 +13,7 @@ function markdownFiles(directory) {
   });
 }
 const files = ['README.md', 'CONTRIBUTING.md', 'AGENTS.md'].map(name => path.join(root, name));
-for (const directory of ['docs', 'examples', 'agents', 'workflows']) files.push(...markdownFiles(path.join(root, directory)));
+for (const directory of ['docs', 'examples', 'agents', 'workflows', 'integrations']) files.push(...markdownFiles(path.join(root, directory)));
 const failures = [];
 let links = 0;
 for (const filename of files.sort()) {

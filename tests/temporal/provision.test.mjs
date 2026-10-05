@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const source = readFileSync(new URL('../../skills/temporal/temporal-cloud-setup/scripts/provision.sh', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../../integrations/temporal/skills/temporal-cloud-setup/scripts/provision.sh', import.meta.url), 'utf8');
 const entrypoint = 'main "$@"\n';
 assert.ok(source.endsWith(entrypoint), 'Review the harness if the script entrypoint changes');
 const directory = mkdtempSync(path.join(tmpdir(), 'tal-provision-tests-'));

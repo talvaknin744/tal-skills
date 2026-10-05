@@ -12,6 +12,7 @@ agents:
   - tal-reliability
   - tal-typescript
 skills: []
+disable-model-invocation: true
 ---
 
 # Recovery validation

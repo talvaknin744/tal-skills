@@ -1,0 +1,212 @@
+{
+  "candidate": {
+    "source_sha256": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+    "index_tree": "59381fb8624164d5a2bdae14cebc94a7a7338ed7",
+    "identity_hash_rows": 2894,
+    "identity_hash_mismatches": [],
+    "missing_identity_files": []
+  },
+  "adapted_helper": {
+    "path": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/native-smoke-adapted.mjs",
+    "sha256": "cb3e55494840076f51e98e968c05790d4ba94823a70b2dcd45b926da179810d3",
+    "candidate_original_sha256": "649f13522e3d0cd18a96c4743739f97555527c8716c76f7f88b395563f775be4",
+    "recorded_sha_matches": true,
+    "diff": "invocation-policy/native-smoke-adaptation.diff",
+    "runtime_dependencies": {
+      "@iarna/toml": "resolved through phase2-eval/node_modules symlink to the primary installed dependency tree; package version 2.2.5",
+      "primary_node_modules": "$HOME/Documents/ChatGPT/skills/node_modules",
+      "symlink": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/node_modules",
+      "symlink_target": "$HOME/Documents/ChatGPT/skills/node_modules",
+      "module_resolution": "relative native ESM package resolution through the external ancestor symlink; no candidate-source files modified"
+    }
+  },
+  "completed_runs": [
+    {
+      "case_id": "ordinary-pr-nontrigger",
+      "source_sha": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+      "source_digest": "1e8bda4a663d2edfd67c97115462ec72c5f7bd2747f8e64e1f2e5255ad9051a2",
+      "regenerated_source_digest": "1e8bda4a663d2edfd67c97115462ec72c5f7bd2747f8e64e1f2e5255ad9051a2",
+      "generated_bundle_matches_candidate": true,
+      "install_plan_conflicts": [],
+      "installed_file_count": 12,
+      "reported_status": "completed-unscored",
+      "preflight_passed": true,
+      "execution_started": true,
+      "global_config_unchanged": true,
+      "cleanup": true,
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "xhigh",
+      "timeout_seconds": 180,
+      "turn_status": "completed",
+      "turn_duration_ms": 32297,
+      "changes": [],
+      "discovered_workflow_count": 0,
+      "discovered_workflows": [],
+      "named_native_children": [],
+      "final_answer": "The change is **unsafe**.\n\n**[P1] Full pages incorrectly end pagination** \u2014 [change.diff:8](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase2-native-2026-10-05.tar.zst#member=phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/trial/change.diff&line=8) changes `<` to `<=`. Since the endpoint returns at most `page_size` records, every valid response now returns `None`, silently truncating results after the first page.\n\nFor example, `next_offset(0, 50, 50)` should return `50`; the patch returns `None`.\n\nKeep `returned_count < page_size`. No files were edited."
+    },
+    {
+      "case_id": "offline-standard-review",
+      "source_sha": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+      "source_digest": "1e8bda4a663d2edfd67c97115462ec72c5f7bd2747f8e64e1f2e5255ad9051a2",
+      "regenerated_source_digest": "1e8bda4a663d2edfd67c97115462ec72c5f7bd2747f8e64e1f2e5255ad9051a2",
+      "generated_bundle_matches_candidate": true,
+      "install_plan_conflicts": [],
+      "installed_file_count": 12,
+      "reported_status": "completed-unscored",
+      "preflight_passed": true,
+      "execution_started": true,
+      "global_config_unchanged": true,
+      "cleanup": true,
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "xhigh",
+      "timeout_seconds": 180,
+      "turn_status": "completed",
+      "turn_duration_ms": 73990,
+      "changes": [],
+      "discovered_workflow_count": 0,
+      "discovered_workflows": [],
+      "named_native_children": [],
+      "final_answer": "**Add a stable provider idempotency key derived from the notification ID, and preserve the current send-then-mark order.** This is the smallest useful reliability improvement given the single dispatcher and provider support documented in [README.md](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase2-native-2026-10-05.tar.zst#member=phase2-eval/invocation-policy/runs/offline-standard-review/trial/README.md&line=3).\n\nThe current order is valuable: [dispatch.py](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase2-native-2026-10-05.tar.zst#member=phase2-eval/invocation-policy/runs/offline-standard-review/trial/dispatch.py&line=3) sends before recording completion. If the provider accepts the email and the process crashes before `sent_at` persists, the restart can send it again. A stable key lets the provider recognize that retry while keeping the notification eligible until completion is recorded.\n\nUse the same key across restarts, with a namespace that prevents collisions. The tradeoff is dependence on the provider\u2019s deduplication scope and retention period; retries beyond that period may still duplicate emails.\n\nWhat still needs validation:\n\n- **Provider contract:** confirm success means durable acceptance, and verify key scope, retention, and behavior when retrying the same payload.\n- **Recovery:** inject failure before acceptance, an ambiguous timeout, and a crash after acceptance but before the database update persists. Pass if retries eventually persist `sent_at` and produce one accepted email within the deduplication window.\n- **Failure isolation:** a send exception currently exits the function. Test a permanently failing notification alongside valid ones; pass if valid notifications continue progressing.\n- **Delivery requirement:** clarify whether \u201cno missed notification\u201d means provider acceptance or recipient delivery. This change addresses duplicate submissions; final delivery needs separate evidence.\n\nThis was a source-only review. No runtime checks were run, and nothing was modified."
+    },
+    {
+      "case_id": "routine-pagination-review",
+      "source_sha": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+      "source_digest": "4ee86c22ef84b9834d0fb5eb974f46a7930febdce2635ee6032f582c03196004",
+      "regenerated_source_digest": "4ee86c22ef84b9834d0fb5eb974f46a7930febdce2635ee6032f582c03196004",
+      "generated_bundle_matches_candidate": true,
+      "install_plan_conflicts": [],
+      "installed_file_count": 212,
+      "reported_status": "completed-unscored",
+      "preflight_passed": true,
+      "execution_started": true,
+      "global_config_unchanged": true,
+      "cleanup": true,
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "xhigh",
+      "timeout_seconds": 180,
+      "turn_status": "completed",
+      "turn_duration_ms": 44084,
+      "changes": [],
+      "discovered_workflow_count": 8,
+      "discovered_workflows": [
+        "tal-a2a-integration",
+        "tal-backend-delivery",
+        "tal-cleanup-review",
+        "tal-consistency-diagnosis",
+        "tal-mcp-integration",
+        "tal-messaging-evolution",
+        "tal-recovery-validation",
+        "tal-worker-rollout"
+      ],
+      "named_native_children": [],
+      "final_answer": "**Unsafe: the change reverses the pagination condition** in [change.diff](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase2-native-2026-10-05.tar.zst#member=phase2-eval/invocation-policy/runs/routine-pagination-review/trial/change.diff&line=7).\n\nWith a page size of 50:\n\n- **50 rows:** `has_more` becomes `False`, so clients stop and miss remaining records.\n- **0\u201349 rows:** `has_more` becomes `True`, prompting unnecessary requests and potentially repeated empty pages.\n\nKeep `has_more = len(rows) == page_size`, consistent with the documented contract. No files edited."
+    },
+    {
+      "case_id": "unrelated-formatting",
+      "source_sha": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+      "source_digest": "4ee86c22ef84b9834d0fb5eb974f46a7930febdce2635ee6032f582c03196004",
+      "regenerated_source_digest": "4ee86c22ef84b9834d0fb5eb974f46a7930febdce2635ee6032f582c03196004",
+      "generated_bundle_matches_candidate": true,
+      "install_plan_conflicts": [],
+      "installed_file_count": 212,
+      "reported_status": "completed-unscored",
+      "preflight_passed": true,
+      "execution_started": true,
+      "global_config_unchanged": true,
+      "cleanup": true,
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "xhigh",
+      "timeout_seconds": 180,
+      "turn_status": "completed",
+      "turn_duration_ms": 17652,
+      "changes": [
+        {
+          "path": "NOTES.md",
+          "allowed": true,
+          "change": "modified"
+        }
+      ],
+      "discovered_workflow_count": 8,
+      "discovered_workflows": [
+        "tal-a2a-integration",
+        "tal-backend-delivery",
+        "tal-cleanup-review",
+        "tal-consistency-diagnosis",
+        "tal-mcp-integration",
+        "tal-messaging-evolution",
+        "tal-recovery-validation",
+        "tal-worker-rollout"
+      ],
+      "named_native_children": [],
+      "final_answer": "Changed the heading in [NOTES.md](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase2-native-2026-10-05.tar.zst#member=phase2-eval/invocation-policy/runs/unrelated-formatting/trial/NOTES.md&line=1) to \u201cRelease Checklist.\u201d The wording and all other files are unchanged."
+    },
+    {
+      "case_id": "explicit-workflow-attempt-02",
+      "source_sha": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+      "source_digest": "dfb54b93d89670818d68dc8ad17cc677ba1e346e15d5c17af01bb9a13d6199ee",
+      "regenerated_source_digest": "dfb54b93d89670818d68dc8ad17cc677ba1e346e15d5c17af01bb9a13d6199ee",
+      "generated_bundle_matches_candidate": true,
+      "install_plan_conflicts": [],
+      "installed_file_count": 55,
+      "reported_status": "completed-unscored",
+      "preflight_passed": true,
+      "execution_started": true,
+      "global_config_unchanged": true,
+      "cleanup": true,
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "xhigh",
+      "timeout_seconds": 300,
+      "turn_status": "completed",
+      "turn_duration_ms": 168244,
+      "changes": [
+        {
+          "path": "README.md",
+          "allowed": true,
+          "change": "modified"
+        }
+      ],
+      "discovered_workflow_count": 1,
+      "discovered_workflows": [
+        "tal-cleanup-review"
+      ],
+      "named_native_children": [
+        {
+          "agent_role": "tal-cleanup",
+          "agent_path": "/root/final_cleanup_review",
+          "model": "gpt-6.1-sol",
+          "reasoning_effort": "xhigh"
+        }
+      ],
+      "final_answer": "Accepted; no findings.\n\nReviewed README.md digest: `48044cd09f8374863933e3a2684270ace7b61bdb7e64e1b918c21c837f03cea5`.\n\nStatic inspection confirms one setup command at README.md:8, prerequisite and working directory at :3, compatibility rationale at :11\u201312, and success expectation at :14. The invocation matches cli.py\u2019s required `--mode legacy` argument and output.\n\nCoordinator evidence establishes README-only scope and successful execution with the supplied Python interpreter: `ready (legacy)`, exit 0. I did not repeat runtime verification. Bare `python3` remains unavailable in this harness."
+    }
+  ],
+  "preserved_attempts": [
+    {
+      "path": "invocation-policy/preparation-attempt-02/ordinary-pr-nontrigger/evidence/run-summary.json",
+      "status": "blocked-or-failed",
+      "failure": "Disposable project config layer is not enabled; preflight only, no model turn; global config unchanged."
+    },
+    {
+      "path": "invocation-policy/runs/explicit-workflow/evidence/run-summary.json",
+      "status": "blocked-or-failed",
+      "failure": "Workflow timeout after 180s; native turn started and changed README.md; no final answer; global config unchanged."
+    },
+    {
+      "path": "invocation-policy/runs/explicit-workflow/evidence/verification-followup.attempt-01.json",
+      "status": "failed",
+      "failure": "Verifier bound to /opt/homebrew/bin/python3 symlink path; native sandbox denied execution with exit 71."
+    },
+    {
+      "path": "invocation-policy/runs/explicit-workflow/evidence/verification-followup.json",
+      "status": "passed-adapted-independent-check",
+      "result": "canonical interpreter exit 0, ready (legacy); this does not change attempt-01 turn status or satisfy bare-python3 resolution."
+    }
+  ],
+  "audit_method_note": "audit.attempt-01.json recorded a misleading direct source-byte comparison for generated adapters; generator output differs from canonical input by design. This final audit regenerates each package plan from the frozen candidate and compares the full installed file list, bytes hashes, modes, kinds, and source bindings.",
+  "known_gaps": [
+    "Native feature flags are not a complete tool inventory; no claim that every native tool was disabled is made. Multi-agent remained enabled because collector requires it; actual delegation is reported from traces.",
+    "Nontrigger discovery and absence of explicit activation/delegation were observed, but a complete internal host skill-load registry is unavailable.",
+    "Bare python3 remains unavailable in the restricted sandbox. The explicit workflow used canonical Homebrew Python with narrow read-only grants; root verified the binding, and the model was informed in a separate input block."
+  ]
+}

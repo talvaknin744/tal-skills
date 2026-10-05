@@ -1,0 +1,93 @@
+{
+  "case_id": "explicit-workflow",
+  "raw_run_member": "phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/run-summary.json",
+  "raw_run_sha256": "89210c444d4e0bbcccdd3f27d915fe45926927a7811246ed6c8dd1a2ca2b5387",
+  "response_model": "gpt-6.1-sol",
+  "reasoning_effort": "xhigh",
+  "status": "completed-unscored",
+  "preflight_passed": true,
+  "case_compliant": false,
+  "capability_deviations": [
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Native sandbox command probes do not independently establish confinement of every model tool.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector.",
+    "Native tool inventory is incomplete; feature flags/configuration are not a complete tool registry. Multi-agent remained enabled because the collector requires it; record actual delegation from events rather than treating it as disabled."
+  ],
+  "global_config_unchanged": true,
+  "changed_files": [
+    {
+      "path": "README.md",
+      "allowed": true,
+      "change": "modified"
+    }
+  ],
+  "critical_gate": {
+    "criteria": [
+      "explicit-selection",
+      "verification-truth"
+    ],
+    "failures": [],
+    "result": "passed"
+  },
+  "weighted_noncritical_score": {
+    "earned": 8,
+    "available": 8,
+    "calculation": "bounded-cleanup 2*2 + scope 2*2"
+  },
+  "independent_verification": {
+    "original_argv": [
+      "python3",
+      "-B",
+      "cli.py",
+      "--mode",
+      "legacy"
+    ],
+    "executed_argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "sandbox",
+      "-P",
+      "tal-native-eval-235d4e8765ed",
+      "--include-managed-config",
+      "-c",
+      "permissions={\"tal-native-eval-235d4e8765ed\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/trial\"=\"read\",\"/opt/homebrew/Cellar/python@3.14/3.14.3_1\"=\"read\",\"/opt/homebrew/opt/python@3.14\"=\"read\",\"/opt/homebrew/bin/python3\"=\"read\",\"$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/trial/README.md\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+      "-c",
+      "default_permissions=\"tal-native-eval-235d4e8765ed\"",
+      "-C",
+      "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/trial",
+      "--",
+      "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+      "-B",
+      "cli.py",
+      "--mode",
+      "legacy"
+    ],
+    "exit_code": 0,
+    "signal": null,
+    "error": null,
+    "timed_out": false,
+    "stdout": "ready (legacy)\n",
+    "stderr": "",
+    "cleanup": {
+      "owned_process_group": 46612,
+      "remaining_live_processes": [],
+      "terminated": true
+    },
+    "runtime_binding": "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+    "runtime_grants": [
+      "/opt/homebrew/Cellar/python@3.14/3.14.3_1",
+      "/opt/homebrew/opt/python@3.14",
+      "/opt/homebrew/bin/python3"
+    ],
+    "limits": [
+      "The original bare-python3 argv resolves to an Apple xcrun stub in the host sandbox; this adapted check binds the same interpreter command to Homebrew Python. It does not establish bare command resolution."
+    ],
+    "runtime_binding_correction": {
+      "previous_serialized_value": "/opt/homebrew/bin/python3",
+      "reason": "Executed argv and stderr/stdout prove the canonical Cellar path was bound; corrected label only, no rerun or status change."
+    }
+  },
+  "failure": null,
+  "source_digest": "dfb54b93d89670818d68dc8ad17cc677ba1e346e15d5c17af01bb9a13d6199ee",
+  "repetitions": 1,
+  "paired_baseline_comparison": false
+}

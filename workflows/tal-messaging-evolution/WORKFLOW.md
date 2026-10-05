@@ -13,6 +13,7 @@ agents:
   - tal-typescript
 skills:
   - microservice-integration
+disable-model-invocation: true
 ---
 
 # Messaging evolution

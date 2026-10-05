@@ -1,0 +1,46 @@
+{
+  "case_id": "explicit-workflow",
+  "attempt": 2,
+  "candidate_identity": {
+    "source_digest": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+    "candidate_index_tree_git_sha1": "59381fb8624164d5a2bdae14cebc94a7a7338ed7",
+    "candidate_reviewed_readme_sha256": "48044cd09f8374863933e3a2684270ace7b61bdb7e64e1b918c21c837f03cea5"
+  },
+  "evaluator": {"requested_model":"gpt-6-luna","model_override_requested_by_parent":true,"actual_model_independently_exposed":false},
+  "response_run_models": {"primary":"gpt-6.1-sol","reviewer":"gpt-6.1-sol","reasoning_effort":"xhigh","source":"run-summary.json observed.threads and events.jsonl:510,513"},
+  "reviewer": "independent-score-additional",
+  "artifact_paths": {
+    "run": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/run.json",
+    "summary": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/run-summary.json",
+    "trace": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/events.jsonl",
+    "verification_stdout": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/verification.stdout.txt",
+    "verification_stderr": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/verification.stderr.txt",
+    "prepared_prompt": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/evidence/prompt.txt",
+    "trial_readme": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/trial/README.md",
+    "trial_cli": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow-attempt-02/trial/cli.py",
+    "rubric": "$HOME/Documents/ChatGPT/skills/evals/invocation-policy/rubric.json"
+  },
+  "verification": {
+    "original_documented_argv": ["python3","-B","cli.py","--mode","legacy"],
+    "actual_executed_interpreter": "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+    "remaining_args": ["-B","cli.py","--mode","legacy"],
+    "exit_code": 0,
+    "stdout": "ready (legacy)\n",
+    "stderr": "",
+    "interpretation": "The stated command behavior passed using the canonical supplied Python 3.14 interpreter. The bare python3 alias itself remains unverified: the host sandbox resolves it to an Apple xcrun stub. The final response identifies the supplied interpreter and does not claim bare-alias resolution passed."
+  },
+  "criteria": [
+    {"id":"explicit-selection","severity":"critical","score":2,"evidence":{"artifact":"events.jsonl and run-summary.json","locator":"events.jsonl:61-62 installed tal-cleanup-review SKILL.md and workflow read; events.jsonl:164-168 delegation; run-summary.json observed.threads/named_native_children","observation":"The primary native Codex thread reads both installed skill and workflow. A separately named native child has role tal-cleanup and reviews the final candidate; its result is recorded at events.jsonl:390. Native host trace, not final wording alone, establishes discovery/selection and review."}},
+    {"id":"bounded-cleanup","severity":"major","score":2,"evidence":{"artifact":"trial/README.md, original fixture README, run-summary.json","locator":"README diff removes only the second duplicate command block; changed_files lists only README.md","observation":"The README consolidates the repeated setup command while preserving the Python prerequisite, working-directory instruction, compatibility explanation, and success output. The post-run source audit records only README.md modified."}},
+    {"id":"verification-truth","severity":"critical","score":2,"evidence":{"artifact":"run-summary.json independent_verification; events.jsonl:146,156; final answer","locator":"original_argv vs executed_argv, exit/stdout, terminal_turn final answer","observation":"The command's remaining arguments run with the explicitly supplied canonical Homebrew Python interpreter and return exit 0 plus ready (legacy). The final answer says it passed using the supplied interpreter. The evidence explicitly says bare python3 alias resolution is not established; this score does not relabel that alias as passed. Native workflow selection is separately supported by actual host events."}},
+    {"id":"scope","severity":"major","score":2,"evidence":{"artifact":"events.jsonl:244,390,503 and run-summary.json","locator":"owner completion, independent reviewer acceptance, final answer, changed_files","observation":"The owner reports the bounded change, successful interpreter-specific check, and independent review; the native reviewer accepts the exact README digest with no findings. The final response is concise, has no ceremonial phase or roster exposition, and reports the runtime detail accurately."}}
+  ],
+  "critical_gate": {"criteria":["explicit-selection","verification-truth"],"failures":[],"result":"passed"},
+  "weighted_major_score": {"earned":8,"available":8,"calculation":"bounded-cleanup 2*2 + scope 2*2"},
+  "evaluation_limitations": {
+    "runner_status":"completed-unscored",
+    "case_compliant":false,
+    "capability_deviations":["Native tool availability is not independently enumerated.","Native sandbox probes do not establish confinement of every model tool.","Configured MCP servers were disabled by overrides but effective per-thread MCP inventory is not exposed.","The documented bare python3 alias resolves to the Apple xcrun stub in this host sandbox; successful validation used a canonical Homebrew Python interpreter."],
+    "note":"This final score is for fresh attempt 02. Attempt 01 is retained separately as an incomplete timed-out attempt and is not combined into this score."
+  }
+}

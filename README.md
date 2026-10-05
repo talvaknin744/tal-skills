@@ -75,12 +75,12 @@ Start with the decision in front of you:
 | A deployment repeatedly interrupts a 24-hour job | [graceful-draining](skills/engineering/graceful-draining/SKILL.md) |
 | A timeout or duplicate delivery may repeat a business effect | [idempotency](skills/engineering/idempotency/SKILL.md) |
 | Services disagree, a cache fill races a write, or updates are lost | [concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md) |
-| Late events, replay, corrections, or joins change a streaming result | [stream-processing-design](skills/messaging/stream-processing-design/SKILL.md) |
+| Late events, replay, corrections, or joins change a streaming result | [stream-processing-design](skills/engineering/stream-processing-design/SKILL.md) |
 | Backfills or compaction compete with serving traffic | [background-maintenance](skills/engineering/background-maintenance/SKILL.md) |
 | Latency rose and the cause is unclear | [performance-diagnosis](skills/performance/performance-diagnosis/SKILL.md) |
 | Offered load exceeds useful service capacity | [overload-control](skills/performance/overload-control/SKILL.md) |
 | You need a safe service split or data migration | [microservice-boundaries](skills/engineering/microservice-boundaries/SKILL.md), [microservice-extraction](skills/engineering/microservice-extraction/SKILL.md) |
-| A backup restored, but safe application recovery is unproven | [recovery-validation](skills/reliability/recovery-validation/SKILL.md) |
+| A backup restored, but safe application recovery is unproven | [recovery-validation](skills/engineering/recovery-validation/SKILL.md) |
 | A supported API or library needs retirement | [technical-deprecation](skills/engineering/technical-deprecation/SKILL.md) |
 
 A routine local change can stay local. These skills are composable, and the
@@ -89,60 +89,72 @@ explains when to use a skill, a specialist, or a coordinated workflow.
 
 ### Full catalog
 
-| Concern | Skill | Use it for |
-|---|---|---|
-| Languages | [python-backend](skills/languages/python-backend/SKILL.md) | Python service boundaries, async ownership, cancellation and transactions |
-| Languages | [typescript-backend](skills/languages/typescript-backend/SKILL.md) | Runtime validation, trusted context and owned asynchronous resources |
-| Languages | [go-backend](skills/languages/go-backend/SKILL.md) | Context propagation, goroutine completion and transaction cleanup |
-| Messaging | [stream-processing-design](skills/messaging/stream-processing-design/SKILL.md) | Event time, late arrivals, duplicates, revisions, streaming joins and bounded state |
-| Messaging | [messaging-reliability](skills/messaging/messaging-reliability/SKILL.md) | Publication, acknowledgement, replay, ordering and bounded consumer failure |
-| Infrastructure | [infrastructure-change-safety](skills/infrastructure/infrastructure-change-safety/SKILL.md) | Partial applies, identity-preserving changes, rollout and recovery |
-| Reliability | [recovery-validation](skills/reliability/recovery-validation/SKILL.md) | Restored application contracts, accepted work, effects and recovery objectives |
-| Testing | [failure-oriented-testing](skills/testing/failure-oriented-testing/SKILL.md) | Independent oracles, controlled fault schedules and meaningful regressions |
-| Quality | [code-and-docs-cleanup](skills/quality/code-and-docs-cleanup/SKILL.md) | Evidence-backed simplification that preserves behavior and useful rationale |
-| Protocols | [mcp-engineering](skills/protocols/mcp-engineering/SKILL.md) | Pinned MCP versions, authority, resource isolation and request lifecycle |
-| Protocols | [a2a-engineering](skills/protocols/a2a-engineering/SKILL.md) | Pinned A2A versions, task ownership, observers and duplicate business effects |
-| Performance | [overload-control](skills/performance/overload-control/SKILL.md) | Load shedding, admission budgets, bounded queues, tenant fairness and recovery |
-| Performance | [performance-diagnosis](skills/performance/performance-diagnosis/SKILL.md) | Latency regressions, execution versus waiting, runtime limits and verified improvements |
-| Performance | [load-testing](skills/performance/load-testing/SKILL.md) | Representative arrivals, generator limits, workload accounting and saturation evidence |
-| Performance | [capacity-planning](skills/performance/capacity-planning/SKILL.md) | Resource-demand models, backlog drain, failure headroom, autoscaling and cost |
-| Performance | [database-performance](skills/performance/database-performance/SKILL.md) | Query plans, workload impact, pool/lock waits and maintenance tradeoffs |
-| Performance | [data-layout-performance](skills/performance/data-layout-performance/SKILL.md) | Measured Go/Python hot paths, locality, false sharing and bounded-structure correctness |
-| Productivity | [learning-plan](skills/productivity/learning-plan/SKILL.md) | Feasible study schedules, actual progress, prerequisite triage and exam preparation |
-| Productivity | [retrieval-coach](skills/productivity/retrieval-coach/SKILL.md) | Interactive recall, mathematical feedback and spaced review from observed attempts |
-| Productivity | [learning-experiments](skills/productivity/learning-experiments/SKILL.md) | Diagnose a study bottleneck and test one bounded change against fresh performance |
-| Engineering | [background-maintenance](skills/engineering/background-maintenance/SKILL.md) | Backfills, compaction and rebalancing alongside serving traffic |
-| Engineering | [architecture](skills/engineering/architecture/SKILL.md) | Architecture planning and review, with optional independent specialists and book grounding |
-| Engineering | [idempotency](skills/engineering/idempotency/SKILL.md) | Designing, implementing, and reviewing retry-safe APIs, webhooks, and queue workers |
-| Engineering | [graceful-draining](skills/engineering/graceful-draining/SKILL.md) | Preserving long-running jobs through shutdown, handoff, and rolling deployment |
-| Engineering | [concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md) | Diagnosing and fixing concurrent writes, stale caches, and replica-read races |
-| Engineering | [microservice-boundaries](skills/engineering/microservice-boundaries/SKILL.md) | Choosing cohesive service boundaries and ownership |
-| Engineering | [microservice-integration](skills/engineering/microservice-integration/SKILL.md) | Evolving service communication and API/event contracts |
-| Engineering | [microservice-data](skills/engineering/microservice-data/SKILL.md) | Data ownership, distributed workflows, and query projections |
-| Engineering | [microservice-extraction](skills/engineering/microservice-extraction/SKILL.md) | Staged service extraction, coexistence, and data cutover |
-| Engineering | [microservice-testing](skills/engineering/microservice-testing/SKILL.md) | Tests that support independent service delivery |
-| Engineering | [microservice-operations](skills/engineering/microservice-operations/SKILL.md) | Cross-service reliability, observability, and recovery |
-| Engineering | [distributed-system-patterns](skills/engineering/distributed-system-patterns/SKILL.md) | Choosing and composing distributed topology patterns |
-| Engineering | [legacy-code-changes](skills/engineering/legacy-code-changes/SKILL.md) | Characterizing untested behavior and isolating dependencies for a change |
-| Engineering | [technical-deprecation](skills/engineering/technical-deprecation/SKILL.md) | Migrating consumers before retiring supported libraries, APIs, configuration, or tools |
-| Engineering | [pragmatic-programming](skills/engineering/pragmatic-programming/SKILL.md) | Changeability, knowledge duplication, and feedback through working slices |
-| Engineering | [enterprise-application-patterns](skills/engineering/enterprise-application-patterns/SKILL.md) | Domain logic, persistence mapping, and transaction boundaries |
-| Engineering | [object-design-patterns](skills/engineering/object-design-patterns/SKILL.md) | Applying object patterns to concrete variation and coupling |
-| Temporal | [temporal-reliability](skills/temporal/temporal-reliability/SKILL.md) | Activity effects, uncertain outcomes, compensation, and durable waits |
-| Temporal | [temporal-safe-deployments](skills/temporal/temporal-safe-deployments/SKILL.md) | Replay compatibility, Worker deployments, history rollover, and migrations |
-| Temporal | [temporal-production-readiness](skills/temporal/temporal-production-readiness/SKILL.md) | Capacity, backlog, data lifetime, isolation, and recovery evidence |
-| Temporal | [temporal-ai-workflows](skills/temporal/temporal-ai-workflows/SKILL.md) | Durable agent loops, tool effects, context, budgets, and approvals |
+Promoted skills are grouped by package bucket and invocation. Architecture is user-invoked; the other promoted skills are model-invoked.
 
 
-Eight additional [adapted official Temporal skills](integrations/temporal/README.md)
-cover SDK development, design review, Cloud, operations, worker tuning,
-observability, serverless Workers, and Cloud setup. Their upstream revisions,
-licenses, local corrections, and update path are recorded separately.
+#### Engineering
 
-The [domain reading paths](docs/reading-paths.md) connect related skills and
-conditional references. [Book-derived skills](docs/book-skills.md) and the
-[learning skills](docs/productivity/research-synthesis.md) record their source scope,
-including edition differences, excerpts, and supplied material.
+##### User-invoked
+
+- [architecture](skills/engineering/architecture/SKILL.md) — Plan software architecture or assess existing systems and proposed designs. Use for architecture decisions, migrations, and architecture reviews; exclude routine implementation, debugging, and ordinary PR review.
+
+##### Model-invoked
+
+- [a2a-engineering](skills/engineering/a2a-engineering/SKILL.md) — Build or review Agent2Agent (A2A) clients and servers, including discovery, task continuation, streaming, cancellation, caller isolation, and duplicate delivery. Use for A2A protocol integrations; ordinary local coding-agent delegation does not require A2A.
+- [background-maintenance](skills/engineering/background-maintenance/SKILL.md) — Design, review, or tune compaction, reclamation, rebalancing, backfills, and index maintenance sharing foreground resources. Use for poor yield, shifting distributions, resource pressure, or unsafe resume; exclude finite local cleanup.
+- [code-and-docs-cleanup](skills/engineering/code-and-docs-cleanup/SKILL.md) — Use for explicit code or documentation cleanup, refactoring, unused-code removal, or stale-instruction repair, or an evidenced maintenance obstacle requiring behavior-preserving restructuring. Exclude routine feature implementation, bug fixes, spelling, and formatting without a separate cleanup task.
+- [concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md) — Diagnose, design, or fix race conditions across processes, including lost updates, write skew, stale cache fills, replica read-your-writes, and obsolete owners. Use when concurrent operations violate an invariant or freshness contract; exclude broad service decomposition and duplicate retries alone.
+- [distributed-system-patterns](skills/engineering/distributed-system-patterns/SKILL.md) — Select and compose distributed topology patterns when deciding between colocated helpers, replicated or sharded serving, scatter/gather, ownership election, and coordinated batch stages. Exclude broad production-readiness reviews and isolated retry or duplicate-handling changes.
+- [failure-oriented-testing](skills/engineering/failure-oriented-testing/SKILL.md) — Design or strengthen tests for injected faults, adversarial execution orders, generated inputs, and recovery. Use when happy-path checks miss a suspected failure or an invariant needs a discriminating oracle; exclude settled low-risk edits already covered by meaningful tests.
+- [graceful-draining](skills/engineering/graceful-draining/SKILL.md) — Design, implement, or review service shutdown and job handoff during deployment, scale-down, or maintenance. Use when long-running work loses progress, is repeatedly interrupted across workers, exhausts retries during rollouts, or needs a bounded drain with safe ownership transfer.
+- [idempotency](skills/engineering/idempotency/SKILL.md) — Design, implement, or review duplicate-safe APIs, webhook handlers, and queue workers. Use for idempotency keys, conflicting retries, concurrent execution, and recovery after uncertain side effects; exclude generic backoff tuning and pure read-only requests.
+- [infrastructure-change-safety](skills/engineering/infrastructure-change-safety/SKILL.md) — Plan, implement, or review infrastructure changes when resource replacement, Terraform state ownership, mixed-version rollout, or partial apply can interrupt service or lose data.
+- [legacy-code-changes](skills/engineering/legacy-code-changes/SKILL.md) — Change or assess untested legacy code using characterization tests and minimal dependency isolation. Use when missing behavioral coverage makes a requested change risky or constructors, globals, or hidden collaborators obstruct testing; exclude greenfield work and routine changes already covered by focused tests.
+- [mcp-engineering](skills/engineering/mcp-engineering/SKILL.md) — Implement or review MCP servers and clients when protocol versions, tool contracts, caller authorization, private caching, or cancellation affect correctness. Use for building MCP integrations, rather than merely calling an available tool.
+- [messaging-reliability](skills/engineering/messaging-reliability/SKILL.md) — Diagnose or implement reliable broker consumers, acknowledgements, retry and quarantine paths, event replay, and schema evolution. Use for lost or duplicate effects, out-of-order events, poison messages, and unsafe consumer checkpoints; exclude in-process collection transformations.
+- [microservice-boundaries](skills/engineering/microservice-boundaries/SKILL.md) — Choose or review microservice boundaries, assess a proposed service split, or diagnose a distributed monolith's coupling. Use for business capability decomposition and service ownership; exclude routine module refactoring and general architecture reviews.
+- [microservice-data](skills/engineering/microservice-data/SKILL.md) — Design or review data ownership across services, cross-service invariants and sagas, or reporting and query projections over service-owned data. Use when splitting shared tables or replacing cross-service transactions and joins; exclude single-database tuning and single-operation retry deduplication.
+- [microservice-extraction](skills/engineering/microservice-extraction/SKILL.md) — Plan, review, or implement an incremental extraction from a monolith into a microservice. Use for migration seams, code/data separation, coexistence, and cutover recovery; exclude deciding service boundaries from scratch and ordinary deployments.
+- [microservice-integration](skills/engineering/microservice-integration/SKILL.md) — Design or change service-to-service communication, evolve API and event contracts, or diagnose consumer coupling and chatty service calls. Use for request-response versus messaging decisions and BFF aggregation across services; exclude generic architecture reviews and single-operation retry deduplication.
+- [microservice-operations](skills/engineering/microservice-operations/SKILL.md) — Assess or improve operational readiness across microservice boundaries. Use for cascading failures, cross-service observability, independent deployment and recovery, or service-specific capacity and trust boundaries; exclude generic CI setup and single-process troubleshooting.
+- [microservice-testing](skills/engineering/microservice-testing/SKILL.md) — Design or review tests for independently deployable microservices. Use for consumer-driven contracts, service isolation, cross-service test coverage, or end-to-end suites that couple service releases; exclude ordinary unit-test work inside one application.
+- [recovery-validation](skills/engineering/recovery-validation/SKILL.md) — Validate backup recovery or disaster-recovery claims by rehearsing restores, measuring recoverable data loss and time to application usability, and checking restored state against business invariants. Use for restore runbooks, recovery drills, failed restores, or RPO/RTO evidence; ordinary backup scheduling alone does not require a recovery drill.
+- [stream-processing-design](skills/engineering/stream-processing-design/SKILL.md) — Design or review continuously maintained stream computations when choosing event-time windows, late-data handling, duplicate and correction semantics, temporal joins, output finality, or retained state. Exclude broker acknowledgement repairs and bounded in-process collection edits.
+- [technical-deprecation](skills/engineering/technical-deprecation/SKILL.md) — Plan, implement, or review retirement of a supported library, API, configuration option, or internal tool when consumers must migrate. Use for replacement readiness, stalled deprecations, and removal gates; exclude private unused-helper cleanup, worker draining, and public-product shutdown policy.
+
+#### Languages
+
+##### Model-invoked
+
+- [go-backend](skills/languages/go-backend/SKILL.md) — Implement or review Go services when context cancellation, goroutine ownership, resource cleanup, runtime input validation, or database transactions affect backend correctness.
+- [python-backend](skills/languages/python-backend/SKILL.md) — Implement or review Python services when async cancellation, database transactions, resource ownership, or mutable request state can change backend correctness.
+- [typescript-backend](skills/languages/typescript-backend/SKILL.md) — Implement or debug TypeScript services when runtime input validation, asynchronous resource ownership, request cancellation, or database transaction boundaries affect correctness. Use for backend handlers and workers, not browser UI styling or type-only library changes.
+
+#### Performance
+
+##### Model-invoked
+
+- [capacity-planning](skills/performance/capacity-planning/SKILL.md) — Model backend or infrastructure capacity for traffic growth, workload changes, backlog recovery, rollouts, and failure headroom. Use for fleet or pool sizing, autoscaling plans, downstream limits, and cost per useful operation; deployment inventory alone needs no sizing analysis.
+- [data-layout-performance](skills/performance/data-layout-performance/SKILL.md) — Assess or optimize measured Go and Python hot paths affected by data layout, CPU-cache locality, allocation, or shared-line contention. Use for AoS/SoA choices, hot/cold splitting, false sharing, and bounded ring/cache proposals; ordinary backend changes and dependency waiting keep their existing route.
+- [database-performance](skills/performance/database-performance/SKILL.md) — Diagnose database workload latency or throughput and validate query, index, transaction-lifetime, pool, or maintenance improvements. Use for expensive queries, plan regressions, contention, and database saturation; duplicate-effect or isolation correctness alone has its existing route.
+- [load-testing](skills/performance/load-testing/SKILL.md) — Build or assess backend load tests and benchmark evidence for representative demand, saturation, overload, and recovery. Use for workload models, generator limits, misleading throughput or percentile claims, and capacity experiments; ordinary unit-test assertions have their existing route.
+- [overload-control](skills/performance/overload-control/SKILL.md) — Design, implement, or review load shedding, admission limits, tenant fairness, bounded queues, and adaptive concurrency when demand or dependency slowdown exhausts service resources. Use for overload containment and recovery; replica forecasting and duplicate-effect correctness have separate workflows.
+- [performance-diagnosis](skills/performance/performance-diagnosis/SKILL.md) — Diagnose backend latency regressions, throughput plateaus, or resource saturation and validate a bounded improvement. Use for unexplained slowness, profiling, pool waits, container throttling, and distributed critical paths; capacity forecasts and workload construction have separate workflows.
+
+#### Temporal
+
+##### Model-invoked
+
+- [temporal-ai-workflows](skills/temporal/temporal-ai-workflows/SKILL.md) — Design, implement, or review Temporal AI and agent workflows. Use for durable model/tool boundaries, bounded reasoning loops, shared conversation state, human approvals, and agent recovery; exclude generic prompt tuning and AI tasks without Temporal.
+- [temporal-production-readiness](skills/temporal/temporal-production-readiness/SKILL.md) — Assess Temporal production readiness before a launch, migration, or capacity change. Use for schedule backlogs, fan-out limits, history growth, tenant isolation, and recovery evidence; complements SDK tuning and deployment guidance.
+- [temporal-reliability](skills/temporal/temporal-reliability/SKILL.md) — Design, review, or fix Temporal failure paths involving duplicate Activity effects, ambiguous timeouts, saga compensation, or durable waits and cancellation. Use for payments, provisioning, and other business mutations; generic SDK setup and worker tuning belong elsewhere.
+- [temporal-safe-deployments](skills/temporal/temporal-safe-deployments/SKILL.md) — Evolve Temporal applications safely across Workflow code changes, Worker rollouts, payload schemas, Continue-As-New boundaries, and workload migrations. Use when existing executions must survive a change or recover from a bad deployment.
+
+[Miscellaneous packages](skills/misc/README.md) are public and installable but unpromoted, and are excluded from the plugin and documentation-page catalogs. The eight [Temporal integrations](integrations/temporal/README.md#install-or-list-these-packages) remain installable with the skills CLI’s `--full-depth` option.
+
+[Eight adapted official Temporal integration packages](integrations/temporal/README.md) are catalogued separately.
+
+The [domain reading paths](docs/reading-paths.md) connect related skills and conditional references. [Book-derived skills](docs/book-skills.md) and the [learning skills](docs/productivity/research-synthesis.md) record their source scope, including edition differences, excerpts, and supplied material.
 
 ## Agents and workflows
 

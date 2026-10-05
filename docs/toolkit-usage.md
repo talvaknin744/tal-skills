@@ -22,7 +22,7 @@ For retirement of a supported library, API, configuration option, or internal
 tool, use [technical-deprecation](../skills/engineering/technical-deprecation/SKILL.md)
 as a standalone skill to establish consumer transitions and removal gates.
 
-For event-time windows, late arrivals, duplicates or streaming joins, use [stream-processing-design](../skills/messaging/stream-processing-design/SKILL.md), with the messaging specialist when delivery also matters. For backfills, compaction or rebalancing competing with live traffic, use [background-maintenance](../skills/engineering/background-maintenance/SKILL.md), with the reliability specialist when shared capacity needs review.
+For event-time windows, late arrivals, duplicates or streaming joins, use [stream-processing-design](../skills/engineering/stream-processing-design/SKILL.md), with the messaging specialist when delivery also matters. For backfills, compaction or rebalancing competing with live traffic, use [background-maintenance](../skills/engineering/background-maintenance/SKILL.md), with the reliability specialist when shared capacity needs review.
 
 A spelling fix or local pure function does not need the complete delivery path.
 For performance work, select a standalone skill by the decision:

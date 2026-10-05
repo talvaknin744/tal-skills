@@ -12,6 +12,7 @@ agents:
   - tal-python
   - tal-typescript
 skills: []
+disable-model-invocation: true
 ---
 
 # A2A integration

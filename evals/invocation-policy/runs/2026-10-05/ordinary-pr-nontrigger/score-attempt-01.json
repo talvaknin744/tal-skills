@@ -1,0 +1,91 @@
+{
+  "case_id": "ordinary-pr-nontrigger",
+  "candidate_identity": {
+    "source_digest": "1e8bda4a663d2edfd67c97115462ec72c5f7bd2747f8e64e1f2e5255ad9051a2",
+    "candidate_index_tree_git_sha1": "59381fb8624164d5a2bdae14cebc94a7a7338ed7",
+    "selection": ["architecture"]
+  },
+  "evaluator": {
+    "requested_model": "gpt-6-luna",
+    "model_override_requested_by_parent": true,
+    "actual_model_independently_exposed": false
+  },
+  "response_run_model": {
+    "actual_model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "source": "evidence/run.json effective_thread_model/effective_thread_reasoning and events.jsonl:207"
+  },
+  "host": {
+    "name": "Codex",
+    "version": "Codex Desktop/0.160.0 (Mac OS 14.2.0; arm64)",
+    "version_source": "events.jsonl:1 userAgent"
+  },
+  "reviewer": "independent-score-additional",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "artifact_paths": {
+    "run": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/evidence/run.json",
+    "trace": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/evidence/events.jsonl",
+    "prepared": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/evidence/prepared.json",
+    "prompt": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/evidence/prompt.txt",
+    "answer_and_diff": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/trial/change.diff",
+    "trial_readme": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/ordinary-pr-nontrigger/trial/README.md",
+    "fixture_readme": "$HOME/Documents/ChatGPT/skills/evals/architecture/fixtures/pull-request/README.md",
+    "fixture_diff": "$HOME/Documents/ChatGPT/skills/evals/architecture/fixtures/pull-request/change.diff",
+    "rubric": "$HOME/Documents/ChatGPT/skills/evals/architecture/cases.json"
+  },
+  "criteria": [
+    {
+      "id": "scope",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "events.jsonl and run.json",
+        "locator": "events.jsonl:3 and :8 host skill inventory; events.jsonl:20-58, :207-208; run.json observed.named_native_children and observed.observed_reads",
+        "observation": "The normal host inventory exposes the enabled architecture skill with its exclusion for routine/ordinary PR reviews. During the task the assistant says it will inspect the diff and pagination logic; observed file reads are limited to README.md and change.diff. There is no observed read of the installed architecture SKILL.md or workflow, no architecture-panel language in the final answer, and no child/delegation events. The architecture package being installed/discoverable in the fixture is not itself evidence it was activated."
+      }
+    },
+    {
+      "id": "regression",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "trial/README.md, trial/change.diff, terminal_turn final answer",
+        "locator": "README endpoint contract; diff line 8; run.json terminal_turn.items[0].text",
+        "observation": "The README says the endpoint returns at most page_size records and a shorter response ends pagination. The patch changes returned_count < page_size to returned_count <= page_size. The answer correctly concludes this is unsafe because a full page of exactly page_size records now returns None, with the concrete 50-of-50 example returning offset 50 before and None after."
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "run.json changed_files/final_files; fixture and trial SHA-256 comparison",
+        "locator": "run.json changed_files is empty; SHA-256 README 3d7644b5b47fb17e39ede52ca596b9954e0757903153e871786a31055091d75c and change.diff 7cd43bd8edac0bd0f79e6d3668b2ea13e188530f8de71b88db8be25cf617dfdb match originals",
+        "observation": "No fixture files changed in the run, and both supplied fixture file hashes independently match the originals. The trial was configured read-only."
+      }
+    }
+  ],
+  "critical_gate": {
+    "criteria": ["scope", "read-only"],
+    "failures": [],
+    "result": "passed"
+  },
+  "weighted_major_score": {
+    "earned": 2,
+    "available": 2,
+    "calculation": "regression 2*1"
+  },
+  "evaluation_limitations": {
+    "runner_status": "completed-unscored",
+    "case_compliant": false,
+    "capability_deviations": [
+      "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+      "Native sandbox command probes do not independently establish confinement of every model tool.",
+      "Configured MCP servers were disabled in thread-start overrides, but the effective per-thread MCP inventory is not independently exposed by the collector."
+    ],
+    "note": "The read-only rubric criterion passes on direct file hash evidence and the run manifest; that finding does not imply complete host/tool compliance. The score is limited to this case and does not aggregate with other cases."
+  }
+}

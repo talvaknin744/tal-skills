@@ -14,9 +14,9 @@ Eleven independently usable skills built from the seven supplied PDFs. They turn
 | Make cross-service behavior operable | [microservice-operations](../skills/engineering/microservice-operations/SKILL.md) | Both *Building Microservices* editions |
 | Choose and compose distributed topologies | [distributed-system-patterns](../skills/engineering/distributed-system-patterns/SKILL.md) | *Designing Distributed Systems* |
 | Change untested code with controlled dependencies | [legacy-code-changes](../skills/engineering/legacy-code-changes/SKILL.md) | Supplied *Working Effectively With Legacy Code* draft |
-| Improve changeability and test uncertain decisions | [pragmatic-programming](../skills/engineering/pragmatic-programming/SKILL.md) | Original *The Pragmatic Programmer* |
-| Structure enterprise domain logic and persistence | [enterprise-application-patterns](../skills/engineering/enterprise-application-patterns/SKILL.md) | *Patterns of Enterprise Application Architecture* |
-| Apply an object pattern to an actual variation point | [object-design-patterns](../skills/engineering/object-design-patterns/SKILL.md) | First-edition *Head First Design Patterns* |
+| Improve changeability and test uncertain decisions | [pragmatic-programming](../skills/misc/pragmatic-programming/SKILL.md) | Original *The Pragmatic Programmer* |
+| Structure enterprise domain logic and persistence | [enterprise-application-patterns](../skills/misc/enterprise-application-patterns/SKILL.md) | *Patterns of Enterprise Application Architecture* |
+| Apply an object pattern to an actual variation point | [object-design-patterns](../skills/misc/object-design-patterns/SKILL.md) | First-edition *Head First Design Patterns* |
 
 The existing `architecture` skill remains useful for broad planning and reviews. `idempotency` handles a single operation's retry identity, duplicate suppression, and uncertain effects. The new skills work independently of those packages and focus on their own decision boundaries.
 

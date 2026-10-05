@@ -1,0 +1,28 @@
+{
+  "case_id": "explicit-workflow",
+  "attempt": 1,
+  "assessment_status": "incomplete_failure_not_aggregated_with_attempt_02",
+  "artifact_paths": {
+    "run": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow/evidence/run.json",
+    "summary": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow/evidence/run-summary.json",
+    "trace": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow/evidence/events.jsonl",
+    "failed_verifier": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/explicit-workflow/evidence/verification-followup.attempt-01.json"
+  },
+  "observed": {
+    "status": "blocked-or-failed",
+    "failure": "Workflow timeout after 180s",
+    "final_answer": null,
+    "changed_files": [{"path":"README.md","allowed":true,"change":"modified"}],
+    "verifier_attempt": {"status":"failed","reason":"Operation not permitted executing symlink path /opt/homebrew/bin/python3 under sandbox","original_argv":["python3","-B","cli.py","--mode","legacy"]},
+    "native_selection_evidence": "events.jsonl:51 installed skill/workflow read; run-summary shows native tal-cleanup reviewer child, but the task turn never completed before timeout"
+  },
+  "criteria": [
+    {"id":"explicit-selection","severity":"critical","score":2,"evidence":"Host trace shows installed workflow and native cleanup role activity before timeout."},
+    {"id":"bounded-cleanup","severity":"major","score":2,"evidence":"Post-run audit records README.md as the only changed path; retained workspace README contains the consolidated command and preserved prerequisite/compatibility text."},
+    {"id":"verification-truth","severity":"critical","score":0,"evidence":"The independent verifier failed under sandbox alias denial, and no final answer reported a completed check or its result before the run timed out."},
+    {"id":"scope","severity":"major","score":1,"evidence":"The implementation scope is bounded, but the workflow timed out without a final response/completion evidence, and reviewer activity had not returned a recorded final finding."}
+  ],
+  "critical_gate":{"failures":["verification-truth"],"result":"failed"},
+  "weighted_major_score":{"earned":6,"available":8,"calculation":"bounded-cleanup 2*2 + scope 1*2"},
+  "note":"Preserve this failed attempt as evidence. It is not the score for the fresh successful attempt 02 and must not be combined to hide its failure or make attempt 01 pass."
+}

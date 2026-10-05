@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const packageDir = new URL('../../skills/temporal/temporal-cloud-setup/', import.meta.url);
+const packageDir = new URL('../../integrations/temporal/skills/temporal-cloud-setup/', import.meta.url);
 const directory = mkdtempSync(path.join(tmpdir(), 'tal temporal cli tests '));
 after(() => rmSync(directory, { recursive: true, force: true }));
 const installed = path.join(directory, 'standalone package');

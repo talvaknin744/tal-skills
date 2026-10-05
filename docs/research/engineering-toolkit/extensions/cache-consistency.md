@@ -46,7 +46,7 @@ each trigger, failure, mechanism, limit, counterexample, and verification case.
    paragraph, not another protocol manual.
 
 3. **Specify the snapshot-to-stream handoff for rebuilds.** Extend
-   [ordering-and-replay.md](../../../../skills/messaging/messaging-reliability/references/ordering-and-replay.md)
+   [ordering-and-replay.md](../../../../skills/engineering/messaging-reliability/references/ordering-and-replay.md)
    only when bootstrap overlaps live traffic. Name the source cut, collision
    handling, recoverable progress, deletion behavior, and admission criterion.
    Its existing complete-state/delta distinction remains necessary. A connector
@@ -86,7 +86,7 @@ pagination, or coordinated configuration reads, not every cache lookup.
   [Logical decoding, §§47.2.2–47.2.5](https://www.postgresql.org/docs/18/logicaldecoding-explanation.html)
 - **etcd 3.6 recovery:** the existing revision-bump and compaction guidance
   already addresses surviving watch consumers. Keep it in
-  [recovered-history.md](../../../../skills/reliability/recovery-validation/references/recovered-history.md).
+  [recovered-history.md](../../../../skills/engineering/recovery-validation/references/recovered-history.md).
   Generic applications need their own generation/rebuild contract; this
   extension supplies no additional tested restore recipe.
   [Recovery documentation](https://etcd.io/docs/v3.6/op-guide/recovery/)

@@ -40,15 +40,19 @@ function arrayOfIds(value, label, native = false) {
 export function loadCatalog(sourceRoot) {
   const root = fs.realpathSync(sourceRoot);
   const skills = new Map(), agents = new Map(), workflows = new Map();
-  const skillFiles = readTree(root, 'skills');
+  const skillFiles = new Map();
+  for (const directory of ['skills', 'integrations/temporal/skills']) {
+    if (!fs.existsSync(path.join(root, directory))) continue;
+    for (const [filename, file] of readTree(root, directory)) skillFiles.set(filename, file);
+  }
   for (const [filename, file] of skillFiles) {
-    const match = filename.match(/^skills\/([^/]+)\/([^/]+)\/SKILL\.md$/);
+    const match = filename.match(/^(?:skills\/([^/]+)\/|integrations\/temporal\/skills\/)([^/]+)\/SKILL\.md$/);
     if (!match) continue;
-    const [, concern, name] = match;
+    const concern = match[1] ?? 'temporal', name = match[2];
     checkId(concern, 'concern');
     const parsed = frontmatter(file.bytes, filename);
     if (parsed.metadata.name !== name || skills.has(name)) throw new Error(`Duplicate or mismatched skill: ${name}`);
-    const prefix = `skills/${concern}/${name}`;
+    const prefix = path.posix.dirname(filename);
     const files = new Map([...skillFiles].filter(([key]) => key.startsWith(`${prefix}/`)));
     for (const [key, value] of files) if (key.endsWith('.md')) {
       for (const target of localTargets(value.bytes.toString('utf8'))) {
@@ -78,7 +82,8 @@ export function loadCatalog(sourceRoot) {
   for (const [filename, file] of workflowFiles) {
     const match = filename.match(/^workflows\/([^/]+)\/WORKFLOW\.md$/);
     if (!match || match[1] === '_shared') continue;
-    const parsed = frontmatter(file.bytes, filename, ['schema_version', 'name', 'description', 'agents', 'skills']);
+    const parsed = frontmatter(file.bytes, filename, ['schema_version', 'name', 'description', 'agents', 'skills', 'disable-model-invocation']);
+    if (parsed.metadata['disable-model-invocation'] !== undefined && typeof parsed.metadata['disable-model-invocation'] !== 'boolean') throw new Error(`Invalid disable-model-invocation: ${filename}`);
     const name = parsed.metadata.name;
     if (name !== match[1] || workflows.has(name) || skills.has(name) || agents.has(name)) throw new Error(`Duplicate or mismatched workflow: ${name}`);
     workflows.set(name, { name, filename, file, ...parsed, agents: arrayOfIds(parsed.metadata.agents, `${name}.agents`, true), skills: arrayOfIds(parsed.metadata.skills, `${name}.skills`), files: new Map([...workflowFiles].filter(([key]) => key.startsWith(`workflows/${name}/`))) });

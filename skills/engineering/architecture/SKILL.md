@@ -1,5 +1,6 @@
 ---
 name: architecture
+disable-model-invocation: true
 description: Plan software architecture or assess existing systems and proposed designs. Use for architecture decisions, migrations, and architecture reviews; exclude routine implementation, debugging, and ordinary PR review.
 license: MIT
 ---

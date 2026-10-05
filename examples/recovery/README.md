@@ -75,5 +75,5 @@ and then interrupts non-atomic data loading. It makes no claim about tested
 `--single-transaction` behavior.
 
 See the independently installable
-[recovery-validation skill](../../skills/reliability/recovery-validation/SKILL.md)
+[recovery-validation skill](../../skills/engineering/recovery-validation/SKILL.md)
 for those conditional recovery concerns and primary source contracts.

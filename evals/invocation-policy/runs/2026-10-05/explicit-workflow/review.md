@@ -1,0 +1,7 @@
+# Independent score: explicit-workflow, attempt 02
+
+The native trace confirms the requested `tal-cleanup-review` skill and workflow were read in the primary Codex thread. A distinct native `tal-cleanup` reviewer checked the final README candidate and accepted its recorded digest without findings. The edit removes the duplicate command block and preserves the prerequisite, working directory, legacy compatibility explanation, and success output. The post-run source audit records only `README.md` changed.
+
+Critical `explicit-selection` and `verification-truth` pass (2/2). Both major criteria, `bounded-cleanup` and `scope`, score 2, weighted 8/8. The verification evidence must be read precisely: `python3 -B cli.py --mode legacy` was the original documented argv, while the actual executed interpreter was the canonical Homebrew Python 3.14 binary, followed by the same remaining arguments. It returned `ready (legacy)` and exit 0. The final answer discloses use of the supplied interpreter. This establishes the CLI behavior under that interpreter; the host's bare `python3` alias still resolves to an Apple xcrun stub and is not recorded as passed.
+
+The earlier attempt remains separate in `attempt-01-failure-assessment.json`: it timed out at 180 seconds without a final answer, and the independent verifier attempt failed when the symlink alias was denied. It cannot pass the response aggregate. Overall `case_compliant=false` remains visible for native host/tool inventory and confinement gaps. See [score.json](score.json) for criterion evidence and links.

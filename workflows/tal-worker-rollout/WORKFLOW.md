@@ -15,6 +15,7 @@ agents:
 skills:
   - temporal-reliability
   - temporal-safe-deployments
+disable-model-invocation: true
 ---
 
 # Safe worker rollout

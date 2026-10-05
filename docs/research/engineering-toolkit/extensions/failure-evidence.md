@@ -22,7 +22,7 @@ vendor-reported observations; its linked underlying reports and talk were not re
 ## Recommended additions, in order
 
 **1. Add a conditional stable recovery experiment.** The existing
-[fault-history reference](../../../../skills/testing/failure-oriented-testing/references/fault-histories.md)
+[fault-history reference](../../../../skills/engineering/failure-oriented-testing/references/fault-histories.md)
 already requires bounded schedules, replay, and a known-bad control. Its gap is an
 explicit switch from fault exploration to measuring progress under declared
 recovery conditions. Record the required healthy participants, retained data,
@@ -53,7 +53,7 @@ regressions. These are proposed application/testing transfers, not a new etcd
 compatibility guarantee.
 
 **3. Trace recovery inputs and failure evidence.** The
-[recovery skill](../../../../skills/reliability/recovery-validation/SKILL.md)
+[recovery skill](../../../../skills/engineering/recovery-validation/SKILL.md)
 already covers external oracles, tool versions, application authorization, and
 measured loss/time. Add conditional checks for artifact freshness, delivery of a
 deliberate backup failure signal, and transformations between an original source

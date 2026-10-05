@@ -1,0 +1,7 @@
+# Independent score: offline-standard-review
+
+The response gives a useful direct review from the supplied files and recommends the smallest reliability improvement: use a stable provider idempotency key derived from the notification ID while preserving send-then-mark order. It explains the duplicate-send window after provider acceptance and before `sent_at` persists, then identifies the provider contract and crash/retry cases that still need validation. The answer explicitly says no runtime checks were run and nothing was modified.
+
+Scores: critical `complete-offline` and `read-only` pass (2/2). All three major criteria (`failure-window`, `minimum-change`, `verification`) pass with score 2 each, weighted 12/12. The post-run audit lists `changed_files=[]`, and the trace shows no child delegation.
+
+The case requested subagents unavailable, while the collector states multi-agent remained enabled because its runner requires that capability. No child was observed, but this does not prove the host enforced the requested absence; overall `case_compliant=false` and the capability deviation remain visible. The response-run model is recorded as `gpt-6.1-sol` at `xhigh`; the parent requested `gpt-6-luna` for this evaluator, but the evaluator model itself is not independently exposed. See [score.json](score.json) for full criterion evidence and artifact locators. This score stands alone and is not aggregated with other cases.
