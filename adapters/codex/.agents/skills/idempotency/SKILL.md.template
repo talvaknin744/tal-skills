@@ -16,7 +16,9 @@ Honor the task mode: a review produces evidence and recommendations; an implemen
 
 ## 2. Specify equivalence and ownership
 
-Record the caller/tenant and operation scope, what makes two commands equivalent, which results may be returned on retry, and the guarantee's retention window. Authorize access before exposing an existing operation's result. A client token identifies one logical operation across its attempts; it does not grant access to that operation.
+Record the caller/tenant and operation scope, what makes two commands equivalent, which results may be returned on retry, and the guarantee's retention window. Authorize the current caller against current access state on every replay before exposing an existing operation's result, including after a session, role, or permission change; a cached response must never bypass the authorization a fresh request would receive. A client token identifies one logical operation across its attempts; it does not grant access to that operation.
+
+Compare the remembered intent with a validated, normalized command: the effect-relevant fields after validation and normalization (amount, currency, source, destination, scope), not raw body bytes or JSON key order. Reject a same-key command with different intent through the documented conflict response; never replay the earlier result or execute the new intent under the old key.
 
 Example: the same key with a changed transfer amount needs an explicit changed-intent response.
 

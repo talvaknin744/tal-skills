@@ -56,7 +56,13 @@ and reproduction command. A random seed or temporary fuzzer cache alone is weak
 long-term evidence. Keep unexpected exceptions visible; enumerate acceptable
 rejections for the chosen oracle.
 
-**Done:** a retained counterexample fails for the relevant reason, or the report
+Name the concrete wrong outcome the faulty version produced and state why it
+violates the promised result (for example, a final value of 1 where two accepted
+increments promise 2). A result is a semantic failure when it breaks the contract,
+even if no data race, exception, or tool warning was reported.
+
+**Done:** a retained counterexample fails for the relevant reason, the report names
+the observed wrong outcome and the promised outcome it violates, or the report
 explicitly says sensitivity remains unverified.
 
 Example: Seed a retry that creates a duplicate, then retain the smallest two-attempt history that still fails.

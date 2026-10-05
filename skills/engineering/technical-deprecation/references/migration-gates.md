@@ -48,6 +48,9 @@ unknown consumers with the accountable decision owner; a calendar date cannot
 silently accept that risk. Dry-run or rehearse against the actual packaging,
 configuration, or routing boundary being removed. Keep an unaffected consumer
 working while a deliberate legacy reference is detected by the intended check.
+State the retention horizon for snapshots, retained inputs, and old packages that
+recovery depends on, and the concrete stop, rollback, or roll-forward condition
+for the step; a merged deletion change is not completion evidence on its own.
 
 Record whether the old contract is merely hidden, disabled, or physically removed.
 An adapter still required by a supported client is unfinished retirement work.
