@@ -36,6 +36,8 @@ frozen revised candidate. Shared routing, role-contract or orchestration changes
 also need representative dependent workflow/host cases; select coverage from
 the changed boundary rather than running an unrelated roster.
 
+Every behavior-changing promoted-skill PR must include at least one `.changeset` entry for `tal-skills` with a user-visible summary. Choose the bump that matches the consumer-visible change. Release PRs must keep `package.json`, `.claude-plugin/plugin.json`, and the matching `tal-skills` marketplace version fields synchronized.
+
 Each new capability needs a realistic positive case, its failure-boundary checks
 and a nontrigger where applicable. Author the new case before claiming the
 capability works, keep raw inputs separate from its rubric, and execute it

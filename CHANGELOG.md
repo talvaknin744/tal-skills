@@ -1,5 +1,9 @@
 # Change log
 
+## Release process
+
+Changesets entries are the source for upcoming release notes. On the release branch, run `npx changeset version`, synchronize the package, plugin, and matching marketplace versions, then date the generated release heading using the actual publication date. Release evidence must identify its candidate and package hashes; do not describe pre-release candidate evaluations as evaluations of the final release source.
+
 ## [1.0.0] - 2026-10-02
 
 - Closed the two selected overload evaluation gaps by routing broker and tenant reviews to one response scaffold with a final coverage audit for finite fleet waiting limits, recovery, actual release, interruption costs and verification records. Both substantive cases pass 14/14; unchanged regression and nontrigger cases also pass. Preserved intermediate partials and unchanged original rubrics.

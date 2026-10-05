@@ -49,6 +49,8 @@ The zeros and placeholders above describe the record format; they are not measur
 
 Report activation alongside critical scores: automatic positives need at least two observed body reads in three fresh normal-discovery attempts. Keep all attempts, timeouts and skills read instead. After a description change, repeat that skill's positives three times and its complete existing nontrigger set once. For explicit-only skills, report observable invocation evidence separately; response markers establish only the tested output contract, and do not prove hidden body injection.
 
+For each published release, list evaluation artifacts by asset name, candidate commit, runtime/package hash, case set, and host. State whether each artifact is bound to the exact release source or to a pre-release candidate, and list unexecuted coverage. Keep prior release assets intact when attaching an artifact to a later release.
+
 ## Automated checks
 
 Run `npm test` for all deterministic checks, or `node --test tests/<skill-name>/evals.test.mjs` to validate one corpus. These checks cover case identifiers, rubric structure, capability declarations, and fixture existence and isolation. A **corpus integrity check** is not a behavioral evaluation of the agent. Architecture's book-contract recovery is tested separately by its contract tests; idempotency fixtures are examples to inspect, not a production idempotency library.

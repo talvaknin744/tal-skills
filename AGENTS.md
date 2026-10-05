@@ -23,7 +23,7 @@ limits visible. Do not claim an unavailable host or production guarantee passed.
 
 ## Structural invariants
 
-1. Every promoted skill outside `misc/` and `integrations/` appears in the root `README.md`, its bucket `README.md` and `.claude-plugin/plugin.json`, and has `docs/<bucket>/<skill>.md` and `agents/openai.yaml`.
+1. Every promoted skill outside `misc/` and `integrations/` appears in the root `README.md`, its bucket `README.md` and `.claude-plugin/plugin.json`, and has `docs/<bucket>/<skill>.md` and `agents/openai.yaml`. Every behavior-changing promoted-skill PR also includes a user-visible `.changeset` entry for `tal-skills`; on release, synchronize `package.json`, `.claude-plugin/plugin.json`, and the matching `tal-skills` marketplace version fields.
 2. Frontmatter `name` equals the package directory name. Allow only `name`, `description`, `license` and `disable-model-invocation`; preserve public names and self-contained packages.
 3. Each description is 15–40 words: capability, positive activation requests, then a useful sibling boundary. There are no long-description exceptions.
 4. A skill is user-invoked in both supported hosts or neither. Keep invocation metadata aligned; report an unavailable host as a coverage gap.
