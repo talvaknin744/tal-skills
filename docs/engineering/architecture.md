@@ -10,10 +10,10 @@ Use for architecture decisions, migrations, technology choices and architecture 
 
 ## It's working if
 
-- State the decision, system boundary, goals, constraints and material unknowns.
-- Trace relevant behavior and attach consequential claims to files, artifacts, source versions or executed observations.
-- Compare meaningful alternatives; describe consequence, smallest useful intervention, tradeoff and evidence that could change the recommendation.
-- Finish with a verdict, prioritized actions, assumptions and unresolved proof; separate observed checks from proposed validation.
+- The decision states the decision, system boundary, goals, constraints and material unknowns.
+- The review traces relevant behavior and links consequential claims to files, artifacts, source versions or executed observations.
+- The decision compares meaningful alternatives and records consequences, the smallest useful intervention, tradeoffs and evidence that could change the recommendation.
+- The report ends with a verdict, prioritized actions, assumptions and unresolved proof, with observed checks separated from proposed validation.
 
 ## Where it fits
 

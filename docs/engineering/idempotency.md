@@ -6,15 +6,15 @@ Make retries preserve one intended business outcome within an explicit identity 
 
 ## When to reach for it
 
-Use for duplicate-safe APIs, webhooks and queue workers, including concurrent execution and uncertain effects. Excludes generic retry tuning and read-only requests.
+Use for duplicate-safe APIs, webhooks and queue workers, including concurrent execution and uncertain effects. Generic retry tuning belongs to the relevant client or queue workflow; read-only requests need no effect-deduplication contract.
 
 ## It's working if
 
-- Name the harmful effect, logical operation identity and point where success becomes durable.
-- Specify caller scope, command equivalence, replay result and retention; authorize before revealing stored results.
-- Acquire execution ownership atomically before effects, using actual datastore guarantees across workers.
-- Reconcile interruptions at durable boundaries; distinguish proven failure, active work and unknown outcomes.
-- Verify duplicate, conflict and recovery scenarios and state provider-specific guarantees and limits.
+- The report names the harmful effect, logical operation identity and point where success becomes durable.
+- The specification states caller scope, command equivalence, replay result and retention; stored results are revealed only after authorization.
+- Execution ownership is acquired atomically before effects using datastore guarantees verified across workers.
+- The recovery record distinguishes proven failure, active work and unknown outcomes at each durable boundary.
+- Checks establish duplicate, conflict and recovery scenarios and state provider-specific guarantees and limits.
 
 ## Where it fits
 

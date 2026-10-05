@@ -6,15 +6,15 @@ Design or assess maintenance work that reduces storage or index debt while prese
 
 ## When to reach for it
 
-Use for compaction, reclamation, rebalancing, backfills or index maintenance that compete with serving resources. Finite local cleanup stays outside this boundary.
+Use when compaction, reclamation, rebalancing, backfills or index maintenance compete with serving resources. A finite local filename-filter pass belongs in ordinary application cleanup.
 
 ## It's working if
 
-- Name the debt, its arrival rate, completion or freshness horizon, and the foreground objective.
-- Choose policies from observed distributions and state eligibility, useful yield, cost and starvation behavior.
-- Bound shared CPU, memory, I/O, network and outstanding work; define the measured signal, actuator, bounds and recovery.
-- Preserve live-data, deletion, reader and placement invariants across pause, restart, ownership transfer and uncertain publication.
-- Report useful yield, foreground results, actual checks and remaining correctness or capacity gaps.
+- The report names the debt, its arrival rate, completion or freshness horizon, and the foreground objective.
+- The recommendation selects policies from observed distributions and states eligibility, useful yield, cost and starvation behavior.
+- Shared CPU, memory, I/O, network and outstanding work have explicit bounds, measured signals, actuators and recovery behavior.
+- The design preserves live-data, deletion, reader and placement invariants across pause, restart, ownership transfer and uncertain publication.
+- The report records useful yield, foreground results, actual checks and remaining correctness or capacity gaps.
 
 ## Where it fits
 

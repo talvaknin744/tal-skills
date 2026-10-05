@@ -1,6 +1,6 @@
 ---
 name: background-maintenance
-description: Design or review compaction, reclamation, rebalancing, backfills, or index work; use for foreground resource pressure, with capacity-planning for broad sizing.
+description: Design or review compaction, reclamation, rebalancing, backfills, or index work sharing foreground resources. Use for poor yield, shifting distributions, or unsafe resume. Finite local filename filtering needs no maintenance skill.
 license: MIT
 ---
 
@@ -14,12 +14,12 @@ usable index; completed jobs and rewritten bytes alone do not establish it.
 
 ## 1. Establish the maintenance claim
 
-Example: compaction debt grows faster in one tenant partition; compare its arrival rate and age with the freshness horizon.
-
 Inspect the affected planner, workers, storage engine, ownership records,
 configuration, and observations. Name the debt being reduced, its arrival rate,
 the required completion or freshness horizon, and the foreground objective.
 Separate a producer creating avoidable debt from a recovery policy clearing it.
+
+Example: compaction debt grows faster in one tenant partition; compare its arrival rate and age with the freshness horizon.
 
 Keep the requested mode: review produces findings, design produces a concrete
 policy, and implementation changes the scoped code or configuration. Production
@@ -33,13 +33,13 @@ missing evidence are explicit.
 
 ## 2. Choose work by distribution and cost
 
-Example: a sparse large-object tail may need a different policy; estimate planner, I/O, metadata, and network cost separately.
-
 Inspect distributions by relevant partition, cell, tenant, age, size, occupancy,
 or overlap. Compare steady state with the incident or proposed workload. An
 average can hide a costly tail; distinguish byte volume from object count and
 request concentration. Trace each policy's eligible inputs, actual outputs,
 resource cost, and durable yield, including temporary destination capacity.
+
+Example: a sparse large-object tail may need a different policy; estimate planner, I/O, metadata, and network cost separately.
 
 For policy selection, planner bounds, or engine-specific compaction knobs, read
 [policy and control](references/policy-and-control.md). Select the smallest
@@ -52,13 +52,13 @@ yield evidence, downstream budgets, and an uncovered-case or starvation check.
 
 ## 3. Make adaptation bounded
 
-Example: pause admission when storage headroom crosses a measured bound, then specify the resume signal and delay.
-
 Specify the measured signal, actuator, feedback direction, observation delay,
 adjustment bounds, and recovery behavior. Protect foreground latency and errors
 at the constrained resource. Use measured headroom and debt age to decide
 admission, throttling, or pausing; make persistent inability to meet both goals
 visible with an escalation path.
+
+Example: pause admission when storage headroom crosses a measured bound, then specify the resume signal and delay.
 
 For automatic tuning or interacting strategies, use the control-loop checks in
 [policy and control](references/policy-and-control.md). Validate the sign of the
@@ -70,11 +70,11 @@ bounded, serving stays within its objective, and debt remains observable.
 
 ## 4. Preserve semantics through interruption
 
-Example: a copied segment is not enough to retire its source; verify publication and stale-owner rules after restart.
-
 Identify the authoritative conditions for selecting, publishing, and retiring
 work. Pause, restart, ownership transfer, or a successful copy must preserve the
 application's live-data, deletion, reader, and placement invariants.
+
+Example: a copied segment is not enough to retire its source; verify publication and stale-owner rules after restart.
 
 For moves, backfills, rebuilds, source deletion, expired data, or resumable jobs, read
 [reclamation safety](references/reclamation-safety.md). Verify the adopted
@@ -87,13 +87,13 @@ and recovery of uncertain work have enforceable boundaries or explicit gaps.
 
 ## 5. Demonstrate useful progress
 
-Example: compare useful reclaimed capacity and foreground latency before and after an interrupted run.
-
 Use [verification](references/verification.md) to choose representative and
 adversarial checks. Compare the baseline and candidate on useful yield, every
 constrained resource, foreground outcomes, and semantic results after
 interruption. Run relevant local checks for implementation; distinguish models,
 proposed rehearsals, and actual engine or platform observations.
+
+Example: compare useful reclaimed capacity and foreground latency before and after an interrupted run.
 
 For broader sizing and failure headroom, compose `capacity-planning` when
 available; for cross-service dependencies, `microservice-operations`; for
@@ -107,4 +107,4 @@ run, remaining correctness or capacity limits, and the next check for each gap.
 
 ## Optional companion routing
 
-When the installed Skill tool exposes these companions, Call the Skill tool with "capacity-planning" for sizing, "microservice-operations" for cross-service dependencies, "graceful-draining" for handoff, or "idempotency" for uncertain effects. If unavailable, keep work scoped to this skill and disclose the gap.
+For workload or fleet sizing, Hand off to the `capacity-planning` skill. For cross-service dependencies, Hand off to the `microservice-operations` skill. For worker handoff, Hand off to the `graceful-draining` skill. For uncertain business effects, Hand off to the `idempotency` skill.

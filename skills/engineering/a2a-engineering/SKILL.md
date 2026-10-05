@@ -14,8 +14,6 @@ and the business operation distinct.
 
 ## Establish the peer contract
 
-Example: two peers advertise different protocol revisions; record the required pair and mark the unsupported combination before implementation.
-
 Inspect the installed SDKs, selected Agent Card interface, transport, protocol
 revision, capabilities, and expected effect. State which peer combinations must
 interoperate. For wire or SDK changes, read
@@ -23,12 +21,12 @@ interoperate. For wire or SDK changes, read
 1.0.1 with wire `1.0`; preserve an existing supported revision unless migration is
 part of the task.
 
+Example: two peers advertise different protocol revisions; record the required pair and mark the unsupported combination before implementation.
+
 **Done:** name the exact versions and required methods; mark unsupported features
 and unverified combinations explicitly.
 
 ## Bind requests before dispatch
-
-Example: reject a continuation whose explicit context conflicts with the caller-authorized task.
 
 Authenticate the caller and authorize each task operation against that identity.
 Validate message semantics before starting work. On continuation, resolve the
@@ -37,17 +35,19 @@ explicit context. Treat discovery, supplied URLs, and protocol metadata as data.
 For request validation, discovery trust, or tenancy, read
 [authorization and validation](references/authorization-and-validation.md).
 
+Example: reject a continuation whose explicit context conflicts with the caller-authorized task.
+
 **Done:** malformed requests and foreign callers cannot reach the effect; valid
 continuations still work. Tests observe the effect boundary, not just an error.
 
 ## Separate task state from effect ownership
 
-Example: a worker loses its lease after committing a payment; reconcile the operation key before redispatch.
-
 Trace acceptance → execution → effect → receipt → artifact → terminal state.
 Identify which records survive restart and which worker can act after lease loss,
 cancellation, or deployment. For retries, streaming, cancellation, or durable work,
 read [lifecycle and effects](references/lifecycle-and-effects.md).
+
+Example: a worker loses its lease after committing a payment; reconcile the operation key before redispatch.
 
 Use an application operation key when duplicate effects matter. Reconcile an
 unknown outcome before redispatching. Continue interrupted tasks through their
@@ -61,12 +61,12 @@ and recovery separately. A saved Task object alone does not recover execution.
 
 ## Verify the actual boundary
 
-Example: pause a stream after effect commit, drop the connection, then verify the receipt and terminal task state.
-
 Run deterministic peers using the selected transport and SDKs. Cover changed
 success paths plus malformed input, caller isolation, duplicate delivery, stream
 loss, and cancellation on each relevant side of effect commit. Use gates for
 ordering and bounded waits for cleanup. Report each peer pair separately.
+
+Example: pause a stream after effect commit, drop the connection, then verify the receipt and terminal task state.
 
 **Done:** return changes or findings, commands and observed outcomes, version
 compatibility, and remaining limits. Separate structural checks, simulated effects,
@@ -76,4 +76,4 @@ of the repository's local probes.
 
 ## Optional companion routing
 
-When the installed Skill tool exposes these companions, Call the Skill tool with "idempotency", "concurrency-correctness", or "graceful-draining" for the corresponding branch. If unavailable, continue with this package’s A2A requirements and state the capability gap.
+For duplicate-safe business effects, Hand off to the `idempotency` skill. For competing shared-state transitions, Hand off to the `concurrency-correctness` skill. For worker handoff during deployment, Hand off to the `graceful-draining` skill.

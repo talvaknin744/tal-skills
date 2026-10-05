@@ -22,7 +22,7 @@ Honor task mode: review stays read-only, design produces a concrete plan, and im
 
 Trace what happens when each relevant dependency is slow, unavailable, or returns an ambiguous result. Include shared connection pools, worker limits, queues, databases, and physical failure domains. Choose degraded behavior based on the user operation: omit optional enrichment, reject an unsafe action, or accept durable asynchronous work with a visible pending state.
 
-For a claim specifically about restored history or backup recovery, Call the Skill tool with "recovery-validation". For timeout, retry, circuit-breaker, bulkhead, or queue changes, read [failure-handling.md](references/failure-handling.md). Preserve one end-to-end time budget and bounded resource use. State how the system returns to normal after the dependency recovers.
+For a claim specifically about restored history or backup recovery, Hand off to the `recovery-validation` skill. For timeout, retry, circuit-breaker, bulkhead, or queue changes, read [failure-handling.md](references/failure-handling.md). Preserve one end-to-end time budget and bounded resource use. State how the system returns to normal after the dependency recovers.
 
 
 **Example:** A slow inventory dependency can trigger bounded waiting and a visible degraded response.
@@ -40,7 +40,7 @@ Check that a responder can distinguish user impact from a tolerated component fa
 
 ## 4. Preserve independent change
 
-When the operational change includes handing active work between workers during shutdown, Call the Skill tool with "graceful-draining".
+When the operational change includes handing active work between workers during shutdown, Hand off to the `graceful-draining` skill.
 
 Inspect how one service artifact is built, configured, deployed, and exposed to traffic. Keep environment configuration separate from the tested artifact. Check old/new compatibility during rollout, readiness and draining behavior, and whether a shared resource or pipeline forces unrelated services to change together.
 

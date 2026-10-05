@@ -21,3 +21,15 @@ test('relocated evidence retains original identity through two publication stage
   assert.equal(originalPublishedDigest(moved,'research/review.md',repo,sha256(redacted)),sha256(redacted));
   assert.throws(()=>originalPublishedDigest('edited score','research/review.md',repo),/publication changed/);
 });
+
+test('report spacing preserves the prior report digest and rejects later edits', t => {
+  const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'tal-report-publication-'));
+  t.after(() => fs.rmSync(repo, { recursive: true, force: true }));
+  fs.mkdirSync(path.join(repo, 'docs'));
+  const original = 'all84responders; score remains 0', published = 'all 84 responders; score remains 0';
+  fs.writeFileSync(path.join(repo, 'docs/cleanup-followup-publication.json'), JSON.stringify({schema_version:1, files:[{
+    path:'evals/run/review.md', transformation:'report-prose-spacing', original_sha256:sha256(original), published_sha256:sha256(published)
+  }]}));
+  assert.equal(originalPublishedDigest(published, 'evals/run/review.md', repo, sha256(original)), sha256(original));
+  assert.throws(() => originalPublishedDigest(published.replace('0', '2'), 'evals/run/review.md', repo), /publication changed/);
+});

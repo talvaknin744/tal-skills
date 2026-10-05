@@ -70,7 +70,7 @@ test('prose style rejects new dashes and preserves only exact retained records',
   fs.writeFileSync(current, '# Current prose\n\nA boundary\u2014with an example.\n');
   assert.match(check(root), /docs\/new-page.md: replace em-dashes/);
   fs.writeFileSync(current, '# Current prose\n\nA boundary, with an example.\n');
-  const retained = 'docs/productivity/evaluation-notes.md';
+  const retained = 'docs/misc/evaluation-notes.md';
   fs.mkdirSync(path.dirname(path.join(root, retained)), { recursive: true });
   fs.copyFileSync(path.join(repository, retained), path.join(root, retained));
   assert.match(check(root), /Skill packaging and local references valid/);

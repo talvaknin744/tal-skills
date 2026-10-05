@@ -6,7 +6,7 @@ Assesses or optimizes measured Go and Python hot paths where data layout, CPU-ca
 
 ## When to reach for it
 
-Use [data-layout-performance](../../skills/performance/data-layout-performance/SKILL.md) for evidence-backed AoS/SoA, hot/cold splitting, false sharing, or bounded ring/cache proposals. Ordinary backend changes and dependency waiting keep their existing route; use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) to establish the bottleneck and [database-performance](../../skills/performance/database-performance/SKILL.md) for database work or waits.
+Use [data-layout-performance](../../skills/performance/data-layout-performance/SKILL.md) for evidence-backed AoS/SoA, hot/cold splitting, false sharing, or bounded ring/cache proposals. Formatting-only requests use the normal formatting workflow. Use [performance-diagnosis](../../skills/performance/performance-diagnosis/SKILL.md) to establish the bottleneck and [database-performance](../../skills/performance/database-performance/SKILL.md) for database work or waits.
 
 ## It's working if
 

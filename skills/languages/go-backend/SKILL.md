@@ -16,4 +16,4 @@ Report the observed behavior, executed checks, and untested boundary. Runtime co
 
 For book provenance, pinned driver evidence, or version-sensitive guidance, read [sources and limits](references/sources.md).
 
-When a business effect needs duplicate-safe retries or shared-state invariants, if available, Call the Skill tool with "idempotency". If shared-state invariants are also in scope and that skill is available, Call the Skill tool with "concurrency-correctness". Otherwise state the unavailable dependency and continue within this skill and the requested scope.
+When a business effect needs duplicate-safe retries, Hand off to the `idempotency` skill. When shared-state invariants are in scope, Hand off to the `concurrency-correctness` skill.

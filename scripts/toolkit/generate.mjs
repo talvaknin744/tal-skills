@@ -21,6 +21,14 @@ export function select(catalog, { agents, workflows, skills } = {}) {
 const markdown = (metadata, body) => `---\n${stringify(metadata, { lineWidth: 0 }).trimEnd()}\n---\n\n${body.trim()}\n`;
 const textFile = (text, source, kind) => ({ bytes: Buffer.from(text.replace(/\r\n/g, '\n')), mode: 0o644, source, kind });
 const skillsRoot = host => host === 'codex' ? '.agents/skills' : '.claude/skills';
+// Canonical packages name the handoff; installed entrypoints use the host's
+// invocation syntax. Preserve metadata and every other byte of the package.
+export function renderSkillHandoffs(text, host) {
+  if (!['claude', 'codex'].includes(host)) throw new Error(`Invalid handoff host: ${host}`);
+  const end = text.match(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/)?.[0].length ?? 0;
+  return text.slice(0, end) + text.slice(end).replace(/Hand off to the `([a-z0-9-]+)` skill/g,
+    (_, name) => host === 'claude' ? `Call the Skill tool with "${name}"` : `Use $${name}`);
+}
 function roleText(role, host) {
   const native = `.${host}/agents/${role.name}.${host === 'codex' ? 'toml' : 'md'}`;
   const pointers = [`Read the [execution and result contract](../../.tal-skills/agents/CONTRACT.md) before working. Resolve these links relative to the installed \`${native}\` definition.`];
@@ -57,7 +65,10 @@ export function generateBundle(catalog, { host, agents, workflows, skills } = {}
     for (const name of skillNames) {
       const skill = catalog.skills.get(name), packageRoot = `${skillsRoot(selectedHost)}/${name}`;
       packageRoots.add(packageRoot);
-      for (const [key, file] of skill.files) add(`${packageRoot}/${key.slice(skill.prefix.length + 1)}`, { ...file, source: key, kind: 'skill' });
+      for (const [key, file] of skill.files) {
+        const bytes = key === skill.filename ? Buffer.from(renderSkillHandoffs(file.bytes.toString(), selectedHost)) : file.bytes;
+        add(`${packageRoot}/${key.slice(skill.prefix.length + 1)}`, { ...file, bytes, source: key, kind: 'skill' });
+      }
     }
     for (const name of selection.workflows) {
       const workflow = catalog.workflows.get(name), packageRoot = `${skillsRoot(selectedHost)}/${name}`;
@@ -103,10 +114,17 @@ export function validateBundle(files) {
 }
 export function adapterFiles(catalog) {
   const files = new Map();
+  const routed = sorted([...catalog.skills.values()].filter(skill => /Hand off to the `[a-z0-9-]+` skill/.test(skill.body)).map(skill => skill.name));
   for (const host of ['claude', 'codex']) {
     const bundle = generateBundle(catalog, { host });
     for (const [name, file] of bundle.files) if (['native-agent', 'workflow-wrapper'].includes(file.kind)) {
       files.set(`adapters/${host}/${name}${file.kind === 'workflow-wrapper' ? '.template' : ''}`, file);
+    }
+    if (routed.length) {
+      const skills = generateBundle(catalog, { host, skills: routed });
+      for (const [name, file] of skills.files) if (name.endsWith('/SKILL.md')) {
+        files.set(`adapters/${host}/${name}.template`, file);
+      }
     }
   }
   return new Map([...files].sort(([a], [b]) => a.localeCompare(b, 'en')));

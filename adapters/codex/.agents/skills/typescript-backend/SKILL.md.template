@@ -1,0 +1,17 @@
+---
+name: typescript-backend
+description: Implement or debug TypeScript backends when runtime validation, async ownership, cancellation, or database boundaries affect correctness; exclude browser styling and type-only library changes.
+---
+
+# TypeScript backend
+
+Validation means checking untrusted values at runtime before relying on their static type. Make the service's runtime behavior match its typed interface and failure contract.
+
+1. Read the relevant handler, dependency versions, compiler settings, and test commands. Identify the external input, business invariant, effect boundary, and owner of each asynchronous resource. Finish with the concrete success, rejection, cancellation, and uncertain-outcome cases this change must preserve.
+2. Implement the smallest change at those boundaries. Validate untrusted values before narrowing; keep domain decisions independent of transport objects. For parsing or API contracts, read [runtime boundaries](references/runtime-boundaries.md). For database work or cancellation, read [asynchronous ownership](references/async-ownership.md).
+3. Exercise the failure that motivated the change using the actual dependency where its behavior matters. Establish concurrency schedules with an observable barrier. After cancellation, prove owned work settled and a fresh request can acquire capacity. Run the repository's typecheck separately from executable tests; a TypeScript execution loader may strip types without checking them.
+4. Report the changed behavior, executed checks, and remaining limits. Distinguish a client timeout from completed cleanup and an uncertain external effect from a confirmed abort. Stop when the requested cases pass and every acquired resource has a completion path; widen scope only for a demonstrated related failure.
+
+Use the project's existing runtime and libraries. Consult [sources](references/sources.md) when verifying a driver-specific claim or selecting a version; the PostgreSQL example's pins are evidence, not a requirement for every service.
+
+When a business effect needs duplicate-safe retries, Use $idempotency. When shared-state invariants are in scope, Use $concurrency-correctness.

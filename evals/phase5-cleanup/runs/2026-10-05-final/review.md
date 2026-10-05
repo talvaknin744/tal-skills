@@ -1,8 +1,8 @@
 # Final consolidated Phase 5 behavioral evaluation
 
-Candidate `6006d637248a268202bc4114e79ae7c1d8d502e4bea75dac8fa78ffbfb48b9a5`. Native Codex CLI0.160.0; all84responders used requested Luna and completed. One candidate repetition, no paired baseline comparison.
+Candidate `6006d637248a268202bc4114e79ae7c1d8d502e4bea75dac8fa78ffbfb48b9a5`. Native Codex CLI 0.160.0; all 84 responders used requested Luna and completed. One candidate repetition, no paired baseline comparison.
 
-77existing +7focused cases attempted and executed. Responder timeouts, provider failures, fallback attempts and harness failures:0. Independently scored 84; unscored 0. Fresh final single-case adjudications completed: 13. Grading attempts: 47; timeouts: 6, all preserved.
+77 existing + 7 focused cases attempted and executed. Responder timeouts, provider failures, fallback attempts and harness failures: 0. Independently scored 84; unscored 0. Fresh final single-case adjudications completed: 13. Grading attempts: 47; timeouts: 6, all preserved.
 
 | Case | Existing/focused | Critical scores | Major weighted | Minor weighted | Grading |
 |---|---|---|---|---|---|
@@ -93,13 +93,13 @@ Candidate `6006d637248a268202bc4114e79ae7c1d8d502e4bea75dac8fa78ffbfb48b9a5`. Na
 
 Critical failure cases remain individually visible: go-backend--cancelled-fanout, messaging-reliability--local-observer-callback, performance-diagnosis--format-only, python-backend--cancelled-export, stream-processing-design--local-date-group-nontrigger, invocation-policy--skill-tool-unavailable-fallback.
 
-Full quotes and reasons, earlier scores, scoring disagreements and all failed/partial grading attempts are preserved. Critical partials remain separate from passes. The six14case grader attempts timed out; subsequent three-case grading omitted six case rows, which were sent to fresh single-case graders. Earlier compact grading views omitted mixed skill/fixture read output wholesale, while initial fixtures and raw traces remained available; corrected adjudication views remove only exact candidate instruction bodies.
+Full quotes and reasons, earlier scores, scoring disagreements and all failed/partial grading attempts are preserved. Critical partials remain separate from passes. The six 14-case grader attempts timed out; subsequent three-case grading omitted six case rows, which were sent to fresh single-case graders. Earlier compact grading views omitted mixed skill/fixture read output wholesale, while initial fixtures and raw traces remained available; corrected adjudication views remove only exact candidate instruction bodies.
 
 Only the native Codex host was executed. Claude Code routing is unexecuted. Native complete tool inventory, exact Skill-tool availability and global skill isolation were not independently proved. Successful content grades do not establish compliant activation or cross-host behavior. Exact backend model version and effective reasoning effort were not emitted by JSONL; no reasoning override was used. Existing corpus gaps and selected/unselected case coverage are retained in the matrix.
 
 Evidence audit checked 771 quotes: 708 normalized literal matches; 60 quotes require manual evidence review. These unresolved quote/source gaps remain explicit and no independent score was silently changed.
 
-Background cleanup nontrigger remains a conservative unmet gate: its trace directly reads the target skill despite the unchanged nontrigger criterion; freshgrade2 conflicts with original0. Go send-lifetime0 is disputed because the changed receiver consumes both results before returning; this is an evaluator disagreement, not proof of an observed sender leak. Both grades and exact evidence remain retained.
+Background cleanup nontrigger remains a conservative unmet gate: its trace directly reads the target skill despite the unchanged nontrigger criterion; fresh grade 2 conflicts with original 0. Go send-lifetime 0 is disputed because the changed receiver consumes both results before returning; this is an evaluator disagreement, not proof of an observed sender leak. Both grades and exact evidence remain retained.
 
 Raw candidate, inputs, native responder and grader attempts, observable traces, fixture projects, verification logs and publication redaction receipts are in the [verified release asset](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase5-final-2026-10-05.tar.zst). Archive SHA-256: `36b03e56813d688aa4c98ed1f0a7dc991738f77ed7d5a1e7ded50c93ef1055f6`.
 

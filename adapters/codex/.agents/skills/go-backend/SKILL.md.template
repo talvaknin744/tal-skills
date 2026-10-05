@@ -1,0 +1,19 @@
+---
+name: go-backend
+description: Implement or review Go backend services when cancellation, goroutine ownership, cleanup, runtime validation, or database transactions affect correctness; exclude non-backend Go tooling.
+---
+
+# Go backend
+
+Ownership means every acquired resource and concurrent operation has a named lifetime owner and completion path. Translate the accepted backend contract into Go's ownership and error paths. Keep a sequential transformation sequential; introducing workers, channels, or pools needs a reason in the requested behavior.
+
+1. **Locate the owners.** Inspect `go.mod`, the actual toolchain and driver versions, the request boundary, and existing checks. Identify the accepted input, effect, outcome, and owner of each acquired resource. Preserve established abstractions that express this contract.
+2. **Load the relevant branch.** For contexts, goroutines, admission capacity, rows, or HTTP bodies, read [work and resource ownership](references/ownership.md). For JSON decoding or an external input boundary, read [runtime validation](references/runtime-validation.md). For database effects, cancellation during a transaction, or uncertain commits, read [transaction outcomes](references/transaction-outcomes.md).
+3. **Implement the narrow change.** Keep cancellation identity inspectable through error wrapping, and represent any durable outcome separately. Each concurrent operation needs a lifetime owner; each acquired resource needs a finalization path. Runtime types alone do not establish valid input.
+4. **Observe the failure path.** Exercise the affected cancellation or interleaving with explicit gates. Verify owned work finishes and capacity becomes available again. Use real PostgreSQL when claiming database arbitration, rollback, or persistence. Run the project's relevant tests and `go test -race` for changed concurrent behavior; a passing race run covers executed schedules only.
+
+Report the observed behavior, executed checks, and untested boundary. Runtime correctness supports the existing idempotency, consistency, and durability contract; it does not create one by itself.
+
+For book provenance, pinned driver evidence, or version-sensitive guidance, read [sources and limits](references/sources.md).
+
+When a business effect needs duplicate-safe retries, Use $idempotency. When shared-state invariants are in scope, Use $concurrency-correctness.

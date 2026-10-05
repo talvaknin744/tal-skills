@@ -10,11 +10,11 @@ Use for explicit cleanup, refactoring, unused-code removal or stale-instruction 
 
 ## It's working if
 
-- Name the reader or next change being obstructed and the observable behavior to preserve.
-- Inspect callers, tests, generated entrypoints and history before classifying code as unused.
-- Characterize uncertain legacy behavior independently; distinguish current behavior from desired behavior.
-- Keep the smallest useful transformation and retain rationale explaining constraints or compatibility.
-- Check the final reader or code path and report benefit, checks and gaps.
+- The report names the reader or next change being obstructed and the observable behavior to preserve.
+- The review records inspection of callers, tests, generated entrypoints and history before classifying code as unused.
+- The characterization records uncertain legacy behavior independently and distinguishes current behavior from desired behavior.
+- The change retains the smallest useful transformation and retain rationale explaining constraints or compatibility.
+- The evidence checks the final reader or code path and report benefit, checks and gaps.
 
 ## Where it fits
 

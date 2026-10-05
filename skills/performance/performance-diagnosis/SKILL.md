@@ -1,6 +1,6 @@
 ---
 name: performance-diagnosis
-description: Diagnose backend latency, throughput plateaus, or resource saturation; validate bounded improvements. Use for unexplained slowness, profiling, pool waits, throttling, or distributed paths; capacity forecasts and workload construction follow separate workflows.
+description: Diagnose p99 regressions, backend latency, throughput plateaus, or resource saturation; validate bounded improvements. Use for unexplained slowness, profiling, pool waits, or throttling. For format-only changes, no skill applies.
 license: MIT
 ---
 
@@ -38,7 +38,7 @@ averages from bursts and runnable work from blocked work.
 observation that could disprove the leading hypothesis.
 Example: if pool acquisition dominates, check whether a pool-wait reduction moves endpoint latency under matched demand.
 
-When the unresolved task is representative workload construction, Call the Skill tool with "load-testing". When database work or waits are implicated, Call the Skill tool with "database-performance". When the task is admission or overload containment, Call the Skill tool with "overload-control". If the Skill tool is unavailable, continue the diagnosis with the relevant local instructions and available tools.
+When the unresolved task is representative workload construction, Hand off to the `load-testing` skill. When database work or waits are implicated, Hand off to the `database-performance` skill. When the task is admission or overload containment, Hand off to the `overload-control` skill.
 
 ## 3. Choose the smallest intervention
 

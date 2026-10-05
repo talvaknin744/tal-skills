@@ -1,6 +1,6 @@
 ---
 name: messaging-reliability
-description: Diagnose or implement broker consumers, acknowledgements, retries, quarantine, replay, and schema evolution. Use for lost, duplicate, or out-of-order effects and unsafe checkpoints; exclude in-process collection transformations.
+description: Diagnose broker delivery, acknowledgements, retries, quarantine, replay, and schema evolution. Use for lost, duplicate, out-of-order effects or unsafe checkpoints. Local synchronous callbacks and in-process collection transforms need no messaging skill.
 license: MIT
 ---
 

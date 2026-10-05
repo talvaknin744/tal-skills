@@ -36,7 +36,7 @@ For each candidate boundary, record its responsibility, commands or events, auth
 
 Walk a representative change through each candidate design. Count the components, teams, contracts, and releases that must move together. Trace a dependency outage as well as a successful call. Distinguish necessary business collaboration from exposure of another service's internals.
 
-When a split introduces network calls or existing services repeatedly change together, use [coupling.md](references/coupling.md) to test the seam. When the boundary is chosen and extraction work begins, Call the Skill tool with "microservice-extraction". For cross-owner invariants, Call the Skill tool with "microservice-data". When ownership, team alignment, or shared platforms drive the decision, read [ownership.md](references/ownership.md). Read only the relevant branch.
+When a split introduces network calls or existing services repeatedly change together, use [coupling.md](references/coupling.md) to test the seam. When the boundary is chosen and extraction begins, Hand off to the `microservice-extraction` skill. For cross-owner invariants, Hand off to the `microservice-data` skill. When ownership, team alignment, or shared platforms drive the decision, read [ownership.md](references/ownership.md). Read only the relevant branch.
 
 Compare credible options against the stated goal: retain a module, combine tightly coupled capabilities, or extract a service. Evaluate remote joins, latency, consistency, operational burden, and the ability to reverse a mistaken boundary. Keep strong atomic invariants together unless a concrete alternative preserves the required business behavior.
 

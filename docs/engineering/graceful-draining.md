@@ -10,11 +10,11 @@ Use when interruption during deployment, scale-down or maintenance threatens res
 
 ## It's working if
 
-- Trace a job through admission, claim, effects, durable progress, acknowledgement and termination; name the layer reporting failure.
-- Choose finish-or-resume behavior per job class with a finite deadline, compatible successor and escalation path.
-- Close admission at the authoritative claim point, account for in-flight claims and preserve checkpoint or acknowledgement dependencies.
-- Persist progress and ownership epochs, fence stale owners at protected resources and reconcile uncertain effects.
-- Exercise successive retirements and interruption boundaries; report durable outcome, checks and platform gaps.
+- The review traces a job through admission, claim, effects, durable progress, acknowledgement and termination, and identifies the layer reporting failure.
+- The recommendation selects finish-or-resume behavior per job class with a finite deadline, compatible successor and escalation path.
+- Admission closes at the authoritative claim point; in-flight claims and checkpoint or acknowledgement dependencies are accounted for.
+- Progress and ownership epochs persist, stale owners are fenced at protected resources, and uncertain effects have a reconciliation path.
+- Checks exercise successive retirements and interruption boundaries, with durable outcomes, executed checks and platform gaps reported.
 
 ## Where it fits
 

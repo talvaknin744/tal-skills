@@ -14,12 +14,12 @@ findings; an implementation edits the authorized slice.
 
 ## 1. Establish the cleanup contract
 
-Example: an exported command appears unused; trace dynamic entrypoints and consumers before removal.
-
 Identify the reader or next change being obstructed, the affected files and
 consumers, and the observable behavior to preserve. Include relevant errors,
 serialization, ordering, external effects, cancellation, resource ownership, and
 operational signals. Record any authorized behavior change separately.
+
+Example: an exported command appears unused; trace dynamic entrypoints and consumers before removal.
 
 Inspect callers, tests, generated/configured entrypoints, and relevant history
 before calling something unused. An exported path, dynamically loaded entrypoint,
@@ -31,13 +31,13 @@ preservation claim, with unresolved consumer questions visible.
 
 ## 2. Establish proportionate feedback
 
-Example: legacy and candidate agree, but both may share a bug; add an independent expectation for the risky outcome.
-
 Use existing behavior checks when they cover the changed boundary. Where missing
 feedback makes preservation uncertain, characterize the current public behavior
 before restructuring. Explicitly distinguish observed legacy behavior from the
 desired specification. Add an independent expectation for the risky outcome;
 agreement between old and new implementations can preserve the same bug.
+
+Example: legacy and candidate agree, but both may share a bug; add an independent expectation for the risky outcome.
 
 When failures, generated input, or adverse ordering are the uncertainty, the
 optional `failure-oriented-testing` skill adds deeper mechanics. Without it,
@@ -48,11 +48,11 @@ the proposed cleanup are recorded without silently redefining correctness.
 
 ## 3. Make the smallest useful change
 
-Example: repeated setup instructions conflict; update the canonical explanation and preserve distinct rationale.
-
 For code removal, extraction, or deduplication, read
 [preservation.md](references/preservation.md). For stale or repeated documentation,
 read [reader-path.md](references/reader-path.md). Read both only for a mixed change.
+
+Example: repeated setup instructions conflict; update the canonical explanation and preserve distinct rationale.
 
 Keep policies independent when their ownership or reasons for change differ.
 Preserve rationale explaining constraints, incidents, compatibility, and deliberate
@@ -65,11 +65,11 @@ contract intact; a behavior change remains separately reviewable.
 
 ## 4. Verify the resulting boundary
 
-Example: verify the edited reader path from its entrypoint and label an unavailable integration check as unrun.
-
 Run relevant checks against the final candidate. For documentation, exercise the
 affected reader path from its stated starting point and verify prerequisites,
 links, and commands. Report any environment-dependent steps not executed.
+
+Example: verify the edited reader path from its entrypoint and label an unavailable integration check as unrun.
 
 Inspect the diff for hidden policy coupling, removed responsibilities, misleading
 comments, and scope expansion. Report what became easier, preserved behavior,
@@ -81,4 +81,4 @@ final diff and recorded observations; proposed checks are labeled unexecuted.
 
 ## Optional companion routing
 
-When the installed Skill tool exposes it, Call the Skill tool with "failure-oriented-testing" for failure, generated-input, or adverse-ordering uncertainty. If unavailable, use the concrete counterexample, expected outcome, and bounded reproduction described here.
+When failure, generated-input, or adverse-ordering uncertainty needs a dedicated oracle, Hand off to the `failure-oriented-testing` skill.

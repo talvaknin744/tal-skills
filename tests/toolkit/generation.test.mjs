@@ -8,6 +8,7 @@ import { parse } from 'yaml';
 import { loadCatalog, generateBundle, adapterFiles } from '../../scripts/toolkit/index.mjs';
 import { contained, assertDistinctPaths, safeRelative } from '../../scripts/toolkit/paths.mjs';
 import { createFixture } from './fixtures.mjs';
+import { renderSkillHandoffs } from '../../scripts/toolkit/generate.mjs';
 
 const role = 'agents/languages/tal-python.md';
 function replace(f, filename, from, to) { f.write(filename, fs.readFileSync(path.join(f.source, filename), 'utf8').replace(from, to)); }
@@ -45,6 +46,41 @@ test('role-only selection includes the common contract and excludes workflows an
   assert.ok(bundle.files.has('.tal-skills/agents/CONTRACT.md'));
   assert.equal([...bundle.files.keys()].some(name => name.includes('workflows/') || name.includes('/unused/')), false);
   assert.deepEqual(generateBundle(catalog, { host: 'codex', workflows: ['tal-backend-delivery'] }).resolved, bundle.resolved);
+});
+
+test('sibling handoffs render for each host without changing metadata or resources', t => {
+  const f = createFixture(t);
+  const original = fs.readFileSync(path.join(f.source, 'skills/languages/python-backend/SKILL.md'), 'utf8');
+  const source = original + '\nIf cancellation spans tasks, Hand off to the `concurrency-correctness` skill. Keep local ownership clear.\n';
+  f.write('skills/languages/python-backend/SKILL.md', source);
+  const catalog = loadCatalog(f.source), bundle = generateBundle(catalog, { host: 'both', skills: ['python-backend'] });
+  for (const [host, root, phrase] of [['codex', '.agents', 'Use $concurrency-correctness'], ['claude', '.claude', 'Call the Skill tool with "concurrency-correctness"']]) {
+    const rendered = bundle.files.get(`${root}/skills/python-backend/SKILL.md`).bytes.toString();
+    assert.equal(rendered, source.replace('Hand off to the `concurrency-correctness` skill', phrase));
+    assert.deepEqual(yamlFrontmatter(Buffer.from(rendered)), yamlFrontmatter(Buffer.from(source)));
+    assert.equal(bundle.resolved.skills.includes('concurrency-correctness'), false, 'optional handoffs do not install extra packages');
+    assert.deepEqual(bundle.files.get(`${root}/skills/python-backend/references/details.md`).bytes,
+      fs.readFileSync(path.join(f.source, 'skills/languages/python-backend/references/details.md')));
+    const template = adapterFiles(catalog).get(`adapters/${host}/${root}/skills/python-backend/SKILL.md.template`);
+    assert.equal(template.bytes.toString(), rendered);
+  }
+  assert.equal(fs.readFileSync(path.join(f.source, 'skills/languages/python-backend/SKILL.md'), 'utf8'), source);
+  const metadataMention = '---\nname: unchanged\ndescription: Hand off to the `other` skill\n---\nRead local guidance.\n';
+  assert.equal(renderSkillHandoffs(metadataMention, 'codex'), metadataMention);
+  assert.throws(() => renderSkillHandoffs(source, 'both'), /Invalid handoff host/);
+});
+
+test('standalone Temporal installations retain actionable source indexes', () => {
+  const catalog = loadCatalog(path.resolve('.'));
+  const names = ['temporal-ai-workflows', 'temporal-production-readiness', 'temporal-reliability', 'temporal-safe-deployments'];
+  const bundle = generateBundle(catalog, { host: 'both', skills: names });
+  for (const name of names) for (const root of ['.agents', '.claude']) {
+    const source = bundle.files.get(`${root}/skills/${name}/references/sources.md`).bytes;
+    assert.deepEqual(source, fs.readFileSync(`skills/temporal/${name}/references/sources.md`));
+    assert.match(source.toString(), /https:\/\/docs\.temporal\.io\//, `${name}: installed SDK authority`);
+    assert.match(source.toString(), /https:\/\/temporal\.io\/resources\//, `${name}: attributed customer evidence`);
+    assert.match(source.toString(), /infer|claim|guarantee/i, `${name}: evidence limits`);
+  }
 });
 
 test('generation is pure after catalog loading, deterministic, and normalizes native CRLF', t => {

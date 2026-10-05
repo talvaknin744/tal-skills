@@ -10,10 +10,10 @@ Use for Agent2Agent discovery, task continuation, streaming, cancellation or dup
 
 ## It's working if
 
-- Name the protocol revision, SDK versions, selected Agent Card contract and peer combinations that must interoperate.
-- Authenticate and authorize each operation; validate messages before dispatch and bind continuations to caller-owned task context.
-- Trace acceptance through effect, receipt, artifact and terminal state, including restart, cancellation, duplicate delivery and stale workers.
-- Exercise both peers at the transport boundary and report compatibility separately from simulation or conformance.
+- The report names the protocol revision, SDK versions, selected Agent Card contract and peer combinations that must interoperate.
+- Each operation is authenticated and authorized; messages are validated before dispatch and continuations remain bound to caller-owned task context.
+- The review traces acceptance through effect, receipt, artifact and terminal state, including restart, cancellation, duplicate delivery and stale workers.
+- Checks exercise both peers at the transport boundary and report compatibility separately from simulation or conformance.
 
 ## Where it fits
 

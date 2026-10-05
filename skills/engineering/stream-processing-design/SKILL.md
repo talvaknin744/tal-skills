@@ -1,6 +1,6 @@
 ---
 name: stream-processing-design
-description: Design continuous stream computations. Use for event-time windows, late data, corrections, temporal joins, finality, or retained state; exclude broker acknowledgement repair and bounded in-process edits.
+description: Design continuous stream computations for event-time windows, late data, duplicates, corrections, joins, finality, and retained state; route broker acknowledgement repairs separately. Local in-memory date grouping needs no streaming skill.
 license: MIT
 ---
 
@@ -20,14 +20,14 @@ Completion: the result contract distinguishes arrival, contribution, progress, a
 
 ## Select the relevant branches
 
-For a materialized projection or cross-owner read model beyond operator semantics, Call the Skill tool with "microservice-data".
+For a materialized projection or cross-owner read model beyond operator semantics, Hand off to the `microservice-data` skill.
 
 - For windows, out-of-order or late input, temporal filters, or final output, read [time-and-finality.md](references/time-and-finality.md).
 - For duplicate input, source replay, newer revisions, or conflicting payloads under one identity, read [identity-and-corrections.md](references/identity-and-corrections.md). Compose its contribution rule with the selected late-data policy.
 - For maintained, historical, or latest-value enrichment, read [joins.md](references/joins.md).
 - For TTL, state sizing, historical bootstrap, or replay, read [state-and-history.md](references/state-and-history.md).
 
-Load the branches the request actually needs. For broker publication, acknowledgement, duplicate delivery, or source replay guarantees, Call the Skill tool with "messaging-reliability". Broker publication, acknowledgement, and external business-effect guarantees remain separate from operator contribution semantics. The package supplies the streaming contract without requiring another skill.
+Load the branches the request actually needs. For broker publication, acknowledgement, duplicate delivery, or source replay guarantees, Hand off to the `messaging-reliability` skill. Broker publication, acknowledgement, and external business-effect guarantees remain separate from operator contribution semantics. The package supplies the streaming contract without requiring another skill.
 
 
 **Example:** A repeated source record or replayed checkpoint calls for an identity rule before aggregate contribution is chosen.
