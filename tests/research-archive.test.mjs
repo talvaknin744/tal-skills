@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import test from 'node:test';
 import { validateCoverageAttribution, validateCoverageCatalog } from '../scripts/research/coverage.mjs';
-import { parseResearchArchiveManifest, validateResearchCoverageBindings, validateResearchInventoryBindings } from '../scripts/research/archive-manifest.mjs';
+import { parseResearchArchiveManifest, validateResearchArchiveCompleteness, validateResearchCoverageBindings, validateResearchInventoryBindings } from '../scripts/research/archive-manifest.mjs';
 
 const base = new URL('../docs/research/engineering-toolkit/2026-10-01/', import.meta.url);
 const manifest = JSON.parse(fs.readFileSync(new URL('archive-manifest.json', base)));
@@ -76,6 +76,16 @@ test('research archive table rejects digest tampering and unsafe or duplicate pa
   const duplicateRow = researchManifestText.match(/^\| (?:<a id="[a-z0-9-]+"><\/a>)?docs\/research\/engineering-toolkit\/2026-10-01\/agents\/openai\.index\.json \|.*$/m)?.[0];
   assert.ok(duplicateRow);
   assert.throws(() => parseResearchArchiveManifest(`${researchManifestText}${duplicateRow}\n`), /duplicate path/);
+});
+
+test('archive completeness also protects ancillary collector receipts', () => {
+  validateResearchArchiveCompleteness(researchManifest, coverageCatalog);
+  const omitted = structuredClone(researchManifest);
+  omitted.entries.delete('docs/research/engineering-toolkit/2026-10-01/storage/request-log.json');
+  assert.throws(() => validateResearchArchiveCompleteness(omitted, coverageCatalog), /complete archived inventory mismatch/);
+  const substituted = structuredClone(researchManifest);
+  substituted.entries.get('docs/research/engineering-toolkit/2026-10-01/storage/request-log.json').sha256 = 'a'.repeat(64);
+  assert.throws(() => validateResearchArchiveCompleteness(substituted, coverageCatalog), /complete archived inventory mismatch/);
 });
 
 test('each published coverage summary and gap list belongs to its surveyed publisher', () => {

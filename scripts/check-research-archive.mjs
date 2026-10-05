@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateCoverageAttribution, validateCoverageCatalog } from './research/coverage.mjs';
-import { parseResearchArchiveManifest, validateResearchCoverageBindings, validateResearchInventoryBindings } from './research/archive-manifest.mjs';
+import { parseResearchArchiveManifest, validateResearchArchiveCompleteness, validateResearchCoverageBindings, validateResearchInventoryBindings } from './research/archive-manifest.mjs';
 import { originalPublishedDigest, sha256 } from './lib/published-file.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -18,6 +18,7 @@ const researchArchive = parseResearchArchiveManifest(fs.readFileSync(path.join(r
 const coverageCatalogBytes = fs.readFileSync(path.join(root, 'docs/research/coverage-catalog.json'));
 if (sha256(coverageCatalogBytes) !== researchArchive.coverageCatalogSha256) throw new Error('Coverage catalog digest mismatch');
 const coverageCatalog = JSON.parse(coverageCatalogBytes);
+validateResearchArchiveCompleteness(researchArchive, coverageCatalog);
 validateResearchInventoryBindings(researchArchive, manifest);
 validateResearchCoverageBindings(researchArchive, manifest);
 const catalogEntries = validateCoverageCatalog(manifest, coverageCatalog, {

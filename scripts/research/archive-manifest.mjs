@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 const HASH = /^[a-f0-9]{64}$/;
 
 function fail(message) {
@@ -67,4 +69,18 @@ export function validateResearchCoverageBindings(parsed, publisherManifest, rese
     used.add(coveragePath);
   }
   return used;
+}
+
+export function researchInventoryDigest(parsed) {
+  const entries = [...parsed.entries.values()].sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+  return createHash('sha256').update(JSON.stringify(entries)).digest('hex');
+}
+
+export function validateResearchArchiveCompleteness(parsed, catalog) {
+  if (!Number.isSafeInteger(catalog.archived_file_count) || catalog.archived_file_count <= 0
+    || parsed.entries.size !== catalog.archived_file_count
+    || !HASH.test(catalog.archived_inventory_sha256 ?? '')
+    || researchInventoryDigest(parsed) !== catalog.archived_inventory_sha256) {
+    fail('complete archived inventory mismatch');
+  }
 }
