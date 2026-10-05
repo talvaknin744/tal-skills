@@ -1,0 +1,3818 @@
+{
+  "started_utc": "2026-10-05T18:39:35.543413+00:00",
+  "finished_utc": "2026-10-05T18:42:10.161217+00:00",
+  "grader_model": "gpt-6-luna",
+  "parallel_graders": 5,
+  "groups": [
+    {
+      "group_case": "failure-oriented-testing--green-transaction-fake::codex-desc-01",
+      "grader": "source-quality-04-failure-oriented-testing--green-transaction-fake--codex-desc-01",
+      "coverage_gaps": [
+        "No attempt executed a real database fault check; none establishes runtime recovery behavior.",
+        "No answer explicitly contrasts the ambiguous commit with a confirmed abort."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "The proposed check does not explicitly distinguish an ambiguous commit from a confirmed abort.",
+            "It does not explicitly mark the real database check as unexecuted."
+          ],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 1,
+              "evidence_quotes": [
+                "the database accepts `COMMIT` and applies the debit, but the acknowledgement is lost.",
+                "Verify the debit happens only once",
+                "A missing immediate lookup must not be treated as proof of abort."
+              ],
+              "reason": "Describes the ambiguous commit and checks the effect invariant, but does not distinguish it from a confirmed abort.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "Retry the same logical operation under a new request identity.",
+                "using a stable operation identity",
+                "it cannot show whether the database applied the debit"
+              ],
+              "reason": "Requires stable logical identity and recognizes the fake cannot establish actual database behavior.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 1,
+              "evidence_quotes": [
+                "gather evidence from the real database path: demonstrate the commit applied despite the lost acknowledgement, then show that retrying does not apply the debit again."
+              ],
+              "reason": "Specifies the real database behavior to check, but does not explicitly label the proposed check unexecuted.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "The supplied fake and incident trace do not provide that evidence."
+              ],
+              "reason": "Observed commands are read-only, the supplied diff is empty, and the answer makes no claim that runtime validation occurred.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "The proposed check focuses on ambiguous commit and unresolved status; it does not explicitly describe a confirmed-abort case."
+          ],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 1,
+              "evidence_quotes": [
+                "deterministically let the real database commit a debit, then drop the acknowledgement before the caller receives it.",
+                "Assert the debit is applied exactly once",
+                "an absent immediate status lookup is treated as unresolved—not proof of abort."
+              ],
+              "reason": "Specifies the post-commit acknowledgement loss and effect invariant, but does not distinguish the case from a confirmed abort.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "Retry using the same stable operation identity.",
+                "They do not establish the database’s commit, acknowledgement-loss, or transaction-status behavior."
+              ],
+              "reason": "Requires stable identity and explicitly limits what fake-only tests can establish.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 2,
+              "evidence_quotes": [
+                "the database engine and adapter actually used",
+                "the fault injected specifically after commit and before acknowledgement",
+                "I left all files unchanged and did not run tests."
+              ],
+              "reason": "Specifies a real database fault check and expected final state, and explicitly marks execution as not done.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "I left all files unchanged and did not run tests."
+              ],
+              "reason": "The supplied diff is empty, observed commands are read-only, and the answer separates proposed evidence from unexecuted validation.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [
+            "The proposed check does not explicitly distinguish ambiguous commit from confirmed abort."
+          ],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 1,
+              "evidence_quotes": [
+                "simulate a commit that applies the debit and then loses its acknowledgement.",
+                "Assert the debit takes effect exactly once",
+                "it must not be treated as proof of abort or trigger a second debit."
+              ],
+              "reason": "Describes the post-commit loss and checks effect invariants, but does not distinguish this from a confirmed abort.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "Retry the same logical operation with a new request identity.",
+                "using a stable operation identity",
+                "The current [fake.py](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-01/failure-oriented-testing--green-transaction-fake--replicate-03/project/fake.py) cannot model that"
+              ],
+              "reason": "Requires stable logical identity and states that the fake cannot model the relevant transaction state or establish database behavior.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 2,
+              "evidence_quotes": [
+                "The test runs against the real database engine and transaction semantics, not only `FakeDB`.",
+                "It injects or reproduces the failure after commit is applied but before the client receives the acknowledgement.",
+                "No live database is supplied, so this review can identify the needed check and evidence, but cannot establish database-level coverage."
+              ],
+              "reason": "Specifies the real database check and expected single effect, and makes clear it was not run or established.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "No live database is supplied, so this review can identify the needed check and evidence, but cannot establish database-level coverage."
+              ],
+              "reason": "The supplied diff is empty, observed commands are read-only, and the answer does not claim unexecuted runtime validation.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "valid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-01"
+    },
+    {
+      "group_case": "failure-oriented-testing--green-transaction-fake::codex-desc-07",
+      "grader": "source-quality-05-failure-oriented-testing--green-transaction-fake--codex-desc-07",
+      "coverage_gaps": [
+        "No attempt names a selected database or driver for the proposed real database fault check.",
+        "Attempt C does not explicitly distinguish a confirmed abort from a lost acknowledgement or mark the proposed database check unexecuted."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "The proposed retry uses a new request identity, and no selected database or driver is specified."
+          ],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 1,
+              "evidence_quotes": [
+                "drop the connection before the client receives the acknowledgement",
+                "the debit exists exactly once",
+                "Also cover an inconclusive immediate status lookup"
+              ],
+              "reason": "Covers the lost acknowledgement, effect invariant, and inconclusive lookup, but does not distinguish a confirmed abort from the ambiguous commit.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 1,
+              "evidence_quotes": [
+                "Retry the same logical operation under a new request identity",
+                "the fake alone cannot establish the database guarantee"
+              ],
+              "reason": "Recognizes the fake's limitation, but proposes a new request identity rather than requiring stable operation identity or describing a committed-but-unobserved model.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 1,
+              "evidence_quotes": [
+                "The check should fail against a version that blindly re-debits after the lost acknowledgement, and pass against the candidate.",
+                "This review did not run that check"
+              ],
+              "reason": "Proposes an unexecuted database check and expected effect, but names no selected database or driver.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "This review did not run that check; no live database is supplied"
+              ],
+              "reason": "The supplied evidence shows no workspace diff or untracked files; commands are reads, and the answer does not claim runtime validation.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "The proposed real database check does not identify a specific database or driver."
+          ],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 2,
+              "evidence_quotes": [
+                "debit applied, commit acknowledgement lost",
+                "Assert against an independent state oracle that the durable balance reflects exactly one debit",
+                "a missing immediate status result must not be treated as proof that the first attempt aborted"
+              ],
+              "reason": "Models the ambiguous commit, checks the effect invariant, and explicitly avoids treating missing status as a confirmed abort.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "the same stable operation identity",
+                "The fake alone can test application logic, but cannot establish database commit or status semantics"
+              ],
+              "reason": "Requires stable identity, models durable state before acknowledgement loss, and limits claims based on the fake.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 1,
+              "evidence_quotes": [
+                "An implementation-level check against the actual database and transaction code, using a controlled lost-acknowledgement boundary and the same stable operation identity.",
+                "I reviewed the files and skill guidance only; I did not change files, run tests, or use external services."
+              ],
+              "reason": "Specifies an unexecuted real database fault check and expected durable effect, but does not select a database or driver.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "I reviewed the files and skill guidance only; I did not change files, run tests, or use external services."
+              ],
+              "reason": "The supplied evidence shows no workspace diff or untracked files; observed commands are reads, and the answer clearly says runtime checks were not run.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [
+            "The answer does not describe a confirmed-abort case or explicitly state that the proposed database check remains unexecuted."
+          ],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 1,
+              "evidence_quotes": [
+                "model the commit as durable before the acknowledgement is lost",
+                "Assert the debit’s final effect occurs exactly once"
+              ],
+              "reason": "Models a lost acknowledgement and asserts the effect invariant, but does not distinguish this from a confirmed abort.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "retry with the new identity",
+                "stable operation identity",
+                "Fake-only results can establish application behavior against the fake, but cannot establish database transaction or connection-failure semantics."
+              ],
+              "reason": "Requires stable operation identity for recovery or arbitration, models a durable commit before lost acknowledgement, and limits claims about the fake.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 1,
+              "evidence_quotes": [
+                "Evidence from a real database that the transaction committed despite the lost acknowledgement and that retry handling prevents a second debit.",
+                "No files were changed and no external services were used."
+              ],
+              "reason": "Calls for real database evidence and reports no external services, but does not name a selected database or explicitly say the check was not executed.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "No files were changed and no external services were used."
+              ],
+              "reason": "The supplied evidence shows no workspace diff or untracked files; observed commands are reads. The answer makes no claim that runtime validation was performed.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "valid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-01"
+    },
+    {
+      "group_case": "failure-oriented-testing--race-clean-lost-update::codex-desc-08",
+      "grader": "source-quality-03-failure-oriented-testing--race-clean-lost-update--codex-desc-08",
+      "coverage_gaps": [
+        "No attempt reports race-detection results or explicitly describes their limits.",
+        "No attempt explicitly states that the result does not validate production behavior."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 1,
+              "evidence_quotes": [
+                "assert.equal(counter.value(), 2, 'two accepted increments must add two');",
+                "This makes the broken model’s lost update reproducible"
+              ],
+              "reason": "Asserts the required final value and identifies a lost update, but does not explicitly identify value 1 as the semantic failure.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "if (arrivals === 2) release();",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The rendezvous holds both calls at the checkpoint until both arrive. In the supplied fixture, this puts both split updates past their reads before either writes; the complete update reaches its checkpoint after updating and does not deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "// Retained schedule: start both calls; hold each at its checkpoint until\n // both have arrived; then let both finish before observing the value.",
+                "The corrected model preserves both increments."
+              ],
+              "reason": "Retains the schedule and reports broken/fixed discrimination, but provides no race-detection evidence or limitation on what that evidence establishes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                " M scenario.mjs",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The diff shows only scenario.mjs changed and the supplied check passes. The report does not state the limits of the result.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "PASS scenario rejects broken behavior and accepts the complete update",
+                "independent_rerun\": true"
+              ],
+              "reason": "The command output and independent rerun both show the verifier succeeded against the changed fixture.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 2,
+              "evidence_quotes": [
+                "assert.equal(counter.value(), 2, 'two accepted increments must add two');",
+                "The retained schedule makes the broken model read the same initial value twice, then write `1` twice."
+              ],
+              "reason": "Asserts the required final value and identifies the broken model’s result of 1 as the lost-update failure.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "if (arrivals === 2) release();",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The rendezvous holds both calls at the checkpoint until both arrive. In the supplied fixture, this puts both split updates past their reads before either writes; the complete update reaches its checkpoint after updating and does not deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "The retained schedule makes the broken model read the same initial value twice, then write `1` twice.",
+                "the regression rejects the lost update while accepting the corrected model."
+              ],
+              "reason": "Retains the schedule and reports broken/fixed discrimination, but provides no race-detection evidence or limitation on what that evidence establishes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                " M scenario.mjs",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The diff shows only scenario.mjs changed and the supplied check passes. The report does not state the limits of the result.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "PASS scenario rejects broken behavior and accepts the complete update",
+                "independent_rerun\": true"
+              ],
+              "reason": "The command output and independent rerun both show the verifier succeeded against the changed fixture.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 2,
+              "evidence_quotes": [
+                "assert.equal(counter.value(), 2, 'two accepted increments must add two');",
+                "The reproducible schedule is: both calls read `0`, both reach the gate, then both continue and write `1`."
+              ],
+              "reason": "Asserts the required final value and describes the lost-update result of 1.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "if (arrivals === 2) release();",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The rendezvous holds both calls at the checkpoint until both arrive. In the supplied fixture, this puts both split updates past their reads before either writes; the complete update reaches its checkpoint after updating and does not deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "// Both calls reach the checkpoint before either can continue. In the split\n // read/write implementation, both have already read zero at this point.",
+                "The complete update model preserves it."
+              ],
+              "reason": "Retains the schedule and reports broken/fixed discrimination, but provides no race-detection evidence or limitation on what that evidence establishes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                " M scenario.mjs",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The diff shows only scenario.mjs changed and the supplied check passes. The report does not state the limits of the result.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "PASS scenario rejects broken behavior and accepts the complete update",
+                "independent_rerun\": true"
+              ],
+              "reason": "The command output and independent rerun both show the verifier succeeded against the changed fixture.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "failure-oriented-testing--race-clean-lost-update::codex-desc-07",
+      "grader": "source-quality-02-failure-oriented-testing--race-clean-lost-update--codex-desc-07",
+      "coverage_gaps": [
+        "The supplied models show no protected memory accesses or race detector evidence, so those parts of the oracle and race-detection criterion cannot be confirmed."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "The supplied models use ordinary in-memory state; no protected memory accesses or race-detection tool are evidenced."
+          ],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 1,
+              "evidence_quotes": [
+                "The retained schedule makes both broken increments read the same initial value before either writes, so the final value is `1`.",
+                "The invariant is that two successful increments add two."
+              ],
+              "reason": "Identifies the lost-update value and invariant, but protected memory accesses are not evidenced.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "let arrivals = 0;",
+                "const gate = new Promise(resolve => { release = resolve; });",
+                "if (arrivals === 2) release();",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The explicit gate holds both calls until arrival two; the supplied fixed model updates before its checkpoint, so it can complete without deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "The corrected model applies both increments before reaching the checkpoint, so the final value is `2`.",
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update` (exit code 0)."
+              ],
+              "reason": "Reports broken/fixed discrimination and the minimal schedule, but gives no race-detection evidence or limits on what such evidence establishes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                "Both models and `verify.mjs` remain unchanged.",
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update` (exit code 0)."
+              ],
+              "reason": "The diff shows only scenario.mjs changed and execution evidence supports the reported check; the answer omits outcome limits.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update` (exit code 0).",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The answer, command output, and independent rerun report a successful verifier result.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "The supplied models show no protected memory accesses or race detector evidence."
+          ],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 1,
+              "evidence_quotes": [
+                "For the split read/write model, both calls read `0` before either writes, so the final value is `1` and the assertion fails.",
+                "The same invariant is checked for both models: two accepted increments must add two."
+              ],
+              "reason": "Identifies the semantic failure and invariant, but protected memory accesses are not evidenced.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "The scenario starts two increments together and holds each at the checkpoint until both arrive.",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The final fixture uses an explicit two-arrival gate; the supplied fixed model updates before reaching the checkpoint and therefore does not deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "For the complete update, each increment takes effect before reaching the checkpoint, so the final value is `2`.",
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update` (exit code 0)."
+              ],
+              "reason": "Describes broken/fixed discrimination and the retained schedule, but does not report race detection or its limits.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                "Updated only [scenario.mjs](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-07/failure-oriented-testing--race-clean-lost-update--replicate-02/project/scenario.mjs).",
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update` (exit code 0)."
+              ],
+              "reason": "Workspace diff confirms only scenario.mjs changed and the check is reported as run; outcome limits are omitted.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update` (exit code 0).",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The reported pass is substantiated by saved command output and an independent rerun.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 0,
+              "evidence_quotes": [
+                "I can’t inspect `models.mjs` under the workspace read restrictions.",
+                "I left `scenario.mjs` unchanged"
+              ],
+              "reason": "Leaves the assertion and provides no identified lost-update result.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 0,
+              "evidence_quotes": [
+                "I left `scenario.mjs` unchanged"
+              ],
+              "reason": "No controlled schedule was implemented.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 0,
+              "evidence_quotes": [
+                "I left `scenario.mjs` unchanged and did not run the verifier."
+              ],
+              "reason": "No regression, broken/fixed discrimination, or race-detection evidence is provided.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 0,
+              "evidence_quotes": [
+                "I left `scenario.mjs` unchanged and did not run the verifier."
+              ],
+              "reason": "Preserving files alone does not satisfy the criterion; no check result or limits are reported.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 0,
+              "evidence_quotes": [
+                "I left `scenario.mjs` unchanged and did not run the verifier.",
+                "node verify.mjs"
+              ],
+              "reason": "The verifier was not run by the attempt, and the supplied independent rerun fails.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "failure-oriented-testing--race-clean-lost-update::codex-desc-01",
+      "grader": "source-quality-01-failure-oriented-testing--race-clean-lost-update--codex-desc-01",
+      "coverage_gaps": [
+        "No supplied evidence reports race-detection results or explicitly limits them to executed-path evidence.",
+        "No attempt explicitly states that validation is limited to the supplied fixture and does not establish production correctness.",
+        "No evidence shows race detection or protected-memory-access results."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "No race-detection output is supplied, so protected-memory-access evidence cannot be assessed."
+          ],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 1,
+              "evidence_quotes": [
+                "assert.equal(counter.value(), 2, 'two accepted increments must add two');",
+                "so one increment is lost and the assertion fails."
+              ],
+              "reason": "The final-value oracle and lost-update failure are present, but no evidence addresses protected memory accesses.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "if (arrivals === 2) releaseBoth();",
+                "const first = counter.increment();\n const second = counter.increment();\n await Promise.all([first, second]);"
+              ],
+              "reason": "The fixture gates both checkpoint arrivals before either increment completes; the supplied fixed model reaches its checkpoint after updating, so this schedule does not deadlock on the complete update.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "PASS scenario rejects broken behavior and accepts the complete update",
+                "The complete update preserves both increments, so the same scenario passes."
+              ],
+              "reason": "The minimal schedule and broken/fixed discrimination are retained and verified, but race detection is not reported as additional executed-path evidence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                "Changed only [scenario.mjs](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-01/failure-oriented-testing--race-clean-lost-update--replicate-01/project/scenario.mjs).",
+                "`node verify.mjs` reported:\n\n```text\nPASS scenario rejects broken behavior and accepts the complete update\n```"
+              ],
+              "reason": "The supplied diff and status show only scenario.mjs changed, and the answer reports the check result. It does not state the validation limits or disclaim production validation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "node verify.mjs && git status --short && git diff -- scenario.mjs",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The command succeeded, and the supplied independent rerun also succeeded with the same output.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "No race-detection output is supplied, so protected-memory-access evidence cannot be assessed."
+          ],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 1,
+              "evidence_quotes": [
+                "assert.equal(counter.value(), 2, 'two accepted increments must add two');",
+                "so one increment is lost and the assertion fails."
+              ],
+              "reason": "The final-value oracle and lost-update failure are present, but no evidence addresses protected memory accesses.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "if (arrivals === 2) release();",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The fixture releases both calls only after both reach the checkpoint. The fixed model updates before its checkpoint, so it can complete without a serialization deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "The retained schedule launches both increments together and holds each at the checkpoint until both arrive.",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The minimal schedule and broken/fixed discrimination are retained and verified, but race detection is not reported as additional executed-path evidence.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                "Updated only [scenario.mjs](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-01/failure-oriented-testing--race-clean-lost-update--replicate-02/project/scenario.mjs).",
+                "`node verify.mjs` reported: `PASS scenario rejects broken behavior and accepts the complete update`."
+              ],
+              "reason": "The supplied diff shows only scenario.mjs changed, and the answer reports the check result. It does not state the validation limits or disclaim production validation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "/bin/zsh -lc 'node verify.mjs'",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The command succeeded, and the supplied independent rerun also succeeded with the same output.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [
+            "No race-detection output is supplied, so protected-memory-access evidence cannot be assessed."
+          ],
+          "criteria": [
+            {
+              "id": "oracle",
+              "score": 1,
+              "evidence_quotes": [
+                "assert.equal(counter.value(), 2, 'two accepted increments must add two');",
+                "so one update is lost."
+              ],
+              "reason": "The final-value oracle and lost-update failure are present, but no evidence addresses protected memory accesses.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "controlled-schedule",
+              "score": 2,
+              "evidence_quotes": [
+                "if (arrivals === 2) release();",
+                "await Promise.all([counter.increment(), counter.increment()]);"
+              ],
+              "reason": "The fixture releases both calls only after both reach the checkpoint. The fixed model updates before its checkpoint, so it can complete without a serialization deadlock.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retain-and-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "The retained schedule launches both increments together and holds each at the checkpoint until both arrive.",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The minimal schedule and broken/fixed discrimination are retained and verified, but race detection is not reported as additional executed-path evidence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                "Updated only [scenario.mjs](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-01/failure-oriented-testing--race-clean-lost-update--replicate-03/project/scenario.mjs).",
+                "Git status showed only `scenario.mjs` modified.",
+                "`node verify.mjs` passed: `PASS scenario rejects broken behavior and accepts the complete update`."
+              ],
+              "reason": "The supplied status and diff show only scenario.mjs changed, and the answer reports the check result. It does not state validation limits or disclaim production validation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "/bin/zsh -lc 'node verify.mjs'",
+                "PASS scenario rejects broken behavior and accepts the complete update"
+              ],
+              "reason": "The command succeeded, and the supplied independent rerun also succeeded with the same output.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "pure-format-assertion::codex-desc-08",
+      "grader": "source-quality-09-pure-format-assertion--codex-desc-08",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "bounded-selection",
+              "score": 2,
+              "evidence_quotes": [
+                "formatter.py"
+              ],
+              "reason": "Observed file listing and read; no failure-oriented-testing body read or specialist workflow launch appears in the supplied trace.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "focused-assertion",
+              "score": 2,
+              "evidence_quotes": [
+                "assert format_number(7) == \"0007\""
+              ],
+              "reason": "Provides the requested assertion without unrelated machinery or dependencies.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                ""
+              ],
+              "reason": "The supplied diff is empty, no untracked files or external operations are shown, and the answer makes no runtime validation claim.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "valid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-01"
+    },
+    {
+      "group_case": "pure-format-assertion::codex-desc-07",
+      "grader": "source-quality-08-pure-format-assertion--codex-desc-07",
+      "coverage_gaps": [
+        "No activation evidence is supplied beyond the two command records; they do not establish that the specialist workflow could not activate later.",
+        "No independent verification or runtime execution is supplied."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "bounded-selection",
+              "score": 2,
+              "evidence_quotes": [
+                "/bin/zsh -lc 'rg --files'",
+                "/bin/zsh -lc 'cat formatter.py && rg -n \"formatter|format|contract|assert\" .'"
+              ],
+              "reason": "The observed trace shows only file listing and source inspection, with no failure-oriented-testing read or specialist workflow launch.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "focused-assertion",
+              "score": 2,
+              "evidence_quotes": [
+                "assert format_number(7) == \"0007\""
+              ],
+              "reason": "Provides the requested assertion and adds no unrelated dependencies or failure machinery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []",
+                "\"independent_verification\": null",
+                "\"actual_commands\""
+              ],
+              "reason": "The supplied evidence shows no file changes, untracked files, external operations, or runtime-validation claim. The response is limited to the assertion and contract description.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "pure-format-assertion::codex-desc-01",
+      "grader": "source-quality-07-pure-format-assertion--codex-desc-01",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "The supplied trace does not independently establish whether the specialist workflow was activated outside the listed command calls."
+          ],
+          "criteria": [
+            {
+              "id": "bounded-selection",
+              "score": 2,
+              "evidence_quotes": [
+                "\"command_tool_calls\": 2",
+                "\"observed_tool_item_types\": [\"command_execution\"]"
+              ],
+              "reason": "The observed activity is limited to two file-inspection commands, with no evidence of loading or launching the specialist workflow.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "focused-assertion",
+              "score": 2,
+              "evidence_quotes": [
+                "assert format_number(7) == \"0007\""
+              ],
+              "reason": "Provides the requested assertion without additional machinery or dependencies.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []",
+                "assert format_number(7) == \"0007\""
+              ],
+              "reason": "The supplied evidence shows no file changes or untracked files. The answer contains only the assertion and makes no runtime-validation claims.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "failure-oriented-testing--green-transaction-fake::codex-desc-08",
+      "grader": "source-quality-06-failure-oriented-testing--green-transaction-fake--codex-desc-08",
+      "coverage_gaps": [
+        "No independent verification was supplied; the real database fault check remains proposed and unexecuted for all attempts."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 2,
+              "evidence_quotes": [
+                "then break the connection before the acknowledgement reaches the client",
+                "verify that the debit is applied only once",
+                "a missing immediate lookup must not be treated as proof of abort",
+                "An assertion that `commit()` was called once checks the fake’s invocation count, not the database’s transaction outcome."
+              ],
+              "reason": "Proposes the post-commit, pre-acknowledgement failure, checks the debit effect, and distinguishes an unknown outcome from abort.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "The retry must retrieve or safely arbitrate the transaction outcome using a stable operation identity",
+                "The fake’s single-commit assertion does not cover it."
+              ],
+              "reason": "Requires stable operation identity and recognizes the fake cannot establish database transaction outcomes.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "adapter-check",
+              "score": 2,
+              "evidence_quotes": [
+                "require evidence from a real database that exercises commit acceptance, lost acknowledgement, and retry",
+                "Verify the persisted balance or ledger effect and the transaction outcome after retry",
+                "I did not run tests or use external services."
+              ],
+              "reason": "Specifies a real-database check, expected effect/outcome evidence, and indicates it was not run.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "The incident trace describes the failure",
+                "No files were changed, and I did not run tests or use external services."
+              ],
+              "reason": "Separates incident evidence from the proposed check; the supplied workspace diff is empty, and the answer makes no runtime-validation claim.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 2,
+              "evidence_quotes": [
+                "the first attempt applies the debit, `COMMIT` succeeds, its acknowledgement is lost",
+                "A missing immediate lookup must not be treated as proof that the first attempt aborted.",
+                "with an independent assertion that the final debit exists exactly once."
+              ],
+              "reason": "Covers the ambiguous commit schedule, rejects treating missing status as abort, and uses the final debit effect as its oracle.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "using the same stable operation identity",
+                "The current fake cannot check that behavior",
+                "there is no live database here, so the database guarantee remains unverified."
+              ],
+              "reason": "Requires stable identity and does not present the fake as evidence of real database guarantees.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 2,
+              "evidence_quotes": [
+                "A retry through the real transaction/status-resolution path",
+                "with an independent assertion that the final debit exists exactly once.",
+                "there is no live database here, so the database guarantee remains unverified."
+              ],
+              "reason": "Specifies the real transaction/status path and expected single effect, and explicitly says the database guarantee is unverified.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "The local fake and trace establish the risk",
+                "there is no live database here, so the database guarantee remains unverified. I left all files unchanged."
+              ],
+              "reason": "Distinguishes local evidence from unverified database behavior. Supplied commands are reads only and the workspace diff is empty.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "uncertain-fault",
+              "score": 2,
+              "evidence_quotes": [
+                "then simulate the connection breaking before the acknowledgement.",
+                "Retry the same business operation and verify the balance reflects exactly one debit.",
+                "A missing immediate transaction-status lookup must not be interpreted as proof that the first attempt aborted."
+              ],
+              "reason": "Models loss after commit application, checks the business effect, and preserves uncertainty about transaction status.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "identity-and-fidelity",
+              "score": 2,
+              "evidence_quotes": [
+                "A second attempt must not be treated as a new operation just because it has a new request identity.",
+                "A fake-only pass can establish the client’s modeled retry behavior, but cannot establish the database’s commit or status guarantees."
+              ],
+              "reason": "Requires stable business-operation identity and explicitly limits what a fake can establish.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "adapter-check",
+              "score": 2,
+              "evidence_quotes": [
+                "It runs against the real database and transaction/status behavior used in production",
+                "with the database version and reproduction command recorded.",
+                "no tests or external services were used."
+              ],
+              "reason": "Specifies the real selected-database check, its expected single-debit result, and that it was not executed.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "The fake cannot reproduce the incident",
+                "No files were changed and no tests or external services were used."
+              ],
+              "reason": "Distinguishes the fake’s limits from the incident and makes no unexecuted runtime-validation claim. Supplied commands are reads only and the workspace diff is empty.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "idempotency--expired-lease-owner::codex-desc-02",
+      "grader": "source-quality-11-idempotency--expired-lease-owner--codex-desc-02",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "stale-effect",
+              "score": 2,
+              "evidence_quotes": [
+                "If a job is reclaimed by a different worker, the stale worker can still decrement stock.",
+                "Worker A claims reservation R and pauses before `reserve_stock`.",
+                "Its lease expires. Worker B reclaims R, records R in the reservation ledger, decrements stock once, and commits.",
+                "Worker A resumes and attempts the same reservation."
+              ],
+              "reason": "Describes the takeover and stale worker’s second effect, and explains why the completion owner check does not protect inventory.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "atomic-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "add a reservation ledger with `reservation_id` as its primary key, and insert into it and decrement stock in the same transaction.",
+                "A duplicate insert must prevent the decrement."
+              ],
+              "reason": "Pairs uniqueness enforcement with the inventory decrement in one transaction.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "claim-isolation",
+              "score": 2,
+              "evidence_quotes": [
+                "Its atomic claim prevents simultaneous claims while the lease is live, but it does not stop a worker from continuing after its lease expires."
+              ],
+              "reason": "Acknowledges the claim’s atomicity and limited protection without alleging a claim race.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "recoverable-state",
+              "score": 2,
+              "evidence_quotes": [
+                "Keep the ledger row as durable evidence that this reservation was applied.",
+                "Also inject a failure between the ledger insert and stock update: both must roll back, leaving the reservation retryable without a partial decrement."
+              ],
+              "reason": "Provides durable deduplication evidence and addresses transactional recovery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "proportionate-check",
+              "score": 2,
+              "evidence_quotes": [
+                "Worker A claims reservation R and pauses before `reserve_stock`.",
+                "Its lease expires. Worker B reclaims R, records R in the reservation ledger, decrements stock once, and commits.",
+                "Confirm stock decreased once, one ledger row exists for R"
+              ],
+              "reason": "Uses the existing database and gives an observable takeover schedule with one inventory effect.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "No files changed.",
+                "\"workspace_diff\": \"\", \"untracked_files\": []"
+              ],
+              "reason": "Reports no file changes; observable fixture evidence shows an empty diff and no untracked files, and the answer does not claim the test passed.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "stale-effect",
+              "score": 2,
+              "evidence_quotes": [
+                "it does not prevent a paused worker from resuming after another worker has taken over.",
+                "This guard alone does not prevent duplicate stock changes"
+              ],
+              "reason": "Identifies the stale worker risk and distinguishes job-state protection from stock-effect protection; the schedule shows A resuming after B completes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "atomic-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "In one transaction, record a reservation keyed by `reservation_id`, decrement stock only when inserting that record for the first time, and mark the job complete."
+              ],
+              "reason": "Places the unique business-effect record and protected decrement within one transaction.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "claim-isolation",
+              "score": 2,
+              "evidence_quotes": [
+                "The lease elects a temporary owner"
+              ],
+              "reason": "Acknowledges the claim’s limited ownership role without diagnosing an unsupported read-before-insert race.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "recoverable-state",
+              "score": 2,
+              "evidence_quotes": [
+                "a rollback must leave no reservation or decrement; a committed transaction followed by lost acknowledgment must be safe to retry."
+              ],
+              "reason": "Addresses interrupted commit recovery and durable deduplication via the reservation record.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "proportionate-check",
+              "score": 2,
+              "evidence_quotes": [
+                "Worker A claims reservation `R` and pauses before reserving stock.",
+                "Its lease expires; worker B claims `R`.",
+                "Assert that only one durable reservation exists, stock was decremented once"
+              ],
+              "reason": "Proposes an observable SQL-backed takeover and retry schedule whose expected result is one effect.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "I inspected the code and design only; no files were changed and no tests were run.",
+                "\"workspace_diff\": \"\", \"untracked_files\": []"
+              ],
+              "reason": "Reports no changes and no test result claim; observable fixture evidence shows an empty diff and no untracked files.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "stale-effect",
+              "score": 2,
+              "evidence_quotes": [
+                "The later owner check protects only the job’s completion update, not the stock effect.",
+                "A resumes and also decrements stock. Its completion update may affect zero rows because B changed the owner, but the second decrement has already happened."
+              ],
+              "reason": "Clearly describes the takeover schedule and why the completion owner check cannot prevent the stale inventory effect.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "atomic-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "in one database transaction insert that key and decrement stock.",
+                "A duplicate insert must prevent the decrement"
+              ],
+              "reason": "Uses a unique ledger key and transaction to protect the inventory effect.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "claim-isolation",
+              "score": 2,
+              "evidence_quotes": [
+                "The claim update is atomic, but the lease only decides who may claim a pending job; it does not fence a worker that has already passed the claim."
+              ],
+              "reason": "Acknowledges atomic claiming and its limited protection without asserting a claim race.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "recoverable-state",
+              "score": 2,
+              "evidence_quotes": [
+                "add a reservation ledger with a unique key",
+                "Also interrupt between the ledger insert and stock decrement: the transaction should roll both back, allowing a retry to apply the effect once."
+              ],
+              "reason": "Requires durable uniqueness and addresses rollback/retry recovery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "proportionate-check",
+              "score": 2,
+              "evidence_quotes": [
+                "pausing A after its claim and resuming it after B completes.",
+                "Assert stock decreases once, there is one ledger entry for R, and the job remains completed.",
+                "Also interrupt between the ledger insert and stock decrement"
+              ],
+              "reason": "Gives observable takeover and crash checks using the existing database, with one successful reservation effect.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "\"workspace_diff\": \"\", \"untracked_files\": []"
+              ],
+              "reason": "Observable evidence shows no fixture changes; the answer proposes validation without claiming it passed.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "idempotency--outbox-send-mark-crash::codex-desc-02",
+      "grader": "source-quality-13-idempotency--outbox-send-mark-crash--codex-desc-02",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "crash-window",
+              "score": 2,
+              "evidence_quotes": [
+                "If MailPort accepts the email and the relay crashes before `markSent` completes, the outbox row remains eligible for retry.",
+                "That retry gets a fresh key, so MailPort treats it as a new request and can accept a duplicate receipt."
+              ],
+              "reason": "Explains the acceptance-before-mark crash window and why the outbox retry can duplicate a receipt.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "stable-provider-key",
+              "score": 2,
+              "evidence_quotes": [
+                "derive the key from the outbox row’s stable identity, with a namespace for this message kind",
+                "Retries and overlapping workers then send the same key with the same immutable payload."
+              ],
+              "reason": "Recommends an operation-stable namespaced key and preserves the immutable payload across retries.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "guarantee-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "MailPort’s contract says it deduplicates both concurrent and sequential requests for seven days; the relay retries for at most 48 hours, so the stated deduplication window covers the retry period.",
+                "This supports deduplicated **provider acceptance**. The contract does not guarantee inbox delivery."
+              ],
+              "reason": "Limits the guarantee to provider acceptance, states the seven-day retention and 48-hour retry fit, and disclaims inbox delivery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "failure-validation",
+              "score": 2,
+              "evidence_quotes": [
+                "Simulate a crash after MailPort accepts the message but before `markSent`; retry the row and confirm the same key is used, MailPort returns the original acceptance result, and only one email is accepted.",
+                "Run two workers on the same row concurrently and verify only one acceptance, followed by successful marking."
+              ],
+              "reason": "Covers crash/replay and concurrent delivery, one acceptance, same key, and eventual marking.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "I made no file changes and did not run validation.",
+                "\"workspace_diff\": \"\", \"untracked_files\": []"
+              ],
+              "reason": "The supplied evidence shows an empty diff and no untracked files; the answer reports no executed validation.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "crash-window",
+              "score": 2,
+              "evidence_quotes": [
+                "If MailPort accepts the email and the relay crashes before `markSent` completes, the row remains eligible for retry.",
+                "The retry gets a different key, so MailPort treats it as a new send and may accept a duplicate receipt."
+              ],
+              "reason": "Identifies the provider-acceptance-before-mark crash window and its duplicate-send cause.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "stable-provider-key",
+              "score": 2,
+              "evidence_quotes": [
+                "derive the key deterministically from the stable `event_id`, with a distinct namespace for receipt messages",
+                "The payload is immutable, so retries use the same key and payload."
+              ],
+              "reason": "Recommends a stable namespaced key derived from persisted event identity and retains the immutable payload.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "guarantee-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "The 48-hour retry limit fits within its seven-day deduplication window.",
+                "This protects provider acceptance, not inbox delivery; it does not guarantee that a receipt reaches the customer’s inbox."
+              ],
+              "reason": "States the retention and retry relationship and confines the guarantee to provider acceptance.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "failure-validation",
+              "score": 2,
+              "evidence_quotes": [
+                "Simulate MailPort accepting the send, then crash before `markSent`; retry and assert there is only one accepted email and the row can be marked sent.",
+                "Run two workers on the same row concurrently and assert MailPort accepts only one email.",
+                "Verify that retries of one event produce the same key"
+              ],
+              "reason": "Proposes crash/replay and concurrent delivery checks, with same-key use, one acceptance, and local completion.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Read-only review; no files were edited and no tests were run.",
+                "\"workspace_diff\": \"\", \"untracked_files\": []"
+              ],
+              "reason": "The supplied evidence shows no workspace changes, and the answer does not present a proposed integration test as executed.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "crash-window",
+              "score": 2,
+              "evidence_quotes": [
+                "If the relay crashes there, the row remains unsent and gets retried.",
+                "Each call currently creates a new random idempotency key, so MailPort sees a new request and can accept another email."
+              ],
+              "reason": "Clearly describes the crash window after acceptance and before marking, explaining the retry can duplicate acceptance.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "stable-provider-key",
+              "score": 2,
+              "evidence_quotes": [
+                "derive a stable key from the row’s immutable `event_id`, with a namespace for this receipt message, and reuse it on every attempt.",
+                "Keep the payload unchanged for that key"
+              ],
+              "reason": "Specifies a stable namespaced key derived from event identity and immutable payload reuse.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "guarantee-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "The 48-hour retry window is within MailPort’s seven-day deduplication period.",
+                "This protects provider acceptance, not inbox delivery."
+              ],
+              "reason": "Correctly bounds the guarantee and includes retry horizon and retention.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "failure-validation",
+              "score": 2,
+              "evidence_quotes": [
+                "Verify that retries and concurrent sends for one row use the same key and produce one accepted email; simulate acceptance followed by a crash before `markSent`, then retry and confirm the original result is recorded without another email."
+              ],
+              "reason": "Includes crash/replay, concurrent sending, same-key use, one acceptance, and recording completion.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "\"workspace_diff\": \"\", \"untracked_files\": []"
+              ],
+              "reason": "The supplied fixture evidence shows no file changes; the response presents validation as a plan using a fake MailPort, not as an executed result.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "idempotency--unknown-external-payout::codex-desc-02",
+      "grader": "source-quality-12-idempotency--unknown-external-payout--codex-desc-02",
+      "coverage_gaps": [
+        "No independent verification was supplied. The empty workspace diff and final fixture support that incident.md remained unchanged; they do not establish any external payout verification."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "unknown-not-failed",
+              "score": 2,
+              "evidence_quotes": [
+                "After the timeout in `op-204`, the payout may already have executed",
+                "local record and the provider’s effect are not committed atomically"
+              ],
+              "reason": "Treats the timeout as an unknown outcome and rejects local key storage as sufficient protection.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "no-invented-capability",
+              "score": 2,
+              "evidence_quotes": [
+                "WireDesk never sees that key and cannot use it to suppress duplicate payouts",
+                "The incident says WireDesk offers neither."
+              ],
+              "reason": "Does not assume provider idempotency, lookup, transaction participation, or safe automatic re-execution.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "safe-replay",
+              "score": 2,
+              "evidence_quotes": [
+                "return the existing operation’s status. Do not dispatch another payout while the outcome is uncertain."
+              ],
+              "reason": "Same-key requests return the existing status without redispatch during uncertainty.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-reconciliation",
+              "score": 2,
+              "evidence_quotes": [
+                "staff review the daily settlement file and investigate the payout",
+                "Retry only after establishing that the original payout did not execute.",
+                "If the file cannot resolve the outcome, keep the operation unresolved"
+              ],
+              "reason": "Uses the documented manual path, preserves evidence and operation identity, and requires established non-execution before retry; states the unresolved limitation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "I left [incident.md](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-02/idempotency--unknown-external-payout--replicate-01/project/incident.md) unchanged."
+              ],
+              "reason": "The supplied workspace diff is empty and the final fixture is unchanged. No external payout verification or reconciliation is claimed.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "unknown-not-failed",
+              "score": 2,
+              "evidence_quotes": [
+                "It cannot tell us whether the timed-out payout was accepted.",
+                "There is no safe automatic choice for that unknown outcome."
+              ],
+              "reason": "Recognizes the payout may have executed and rejects local key storage as enough to make retries safe.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "no-invented-capability",
+              "score": 2,
+              "evidence_quotes": [
+                "WireDesk receives no idempotency key or caller reference, and offers no status lookup.",
+                "neither gives WireDesk deduplication."
+              ],
+              "reason": "Respects the provider limitations and does not assume an unavailable capability.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "safe-replay",
+              "score": 2,
+              "evidence_quotes": [
+                "A later request with the same key should return that operation’s current status",
+                "prevent duplicate client requests or workers from dispatching another WireDesk call"
+              ],
+              "reason": "Associates repeated requests with the unresolved operation and prevents another payout dispatch.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-reconciliation",
+              "score": 2,
+              "evidence_quotes": [
+                "staff can request the daily settlement file and investigate manually. Record the evidence and disposition.",
+                "Retry after confirmed nonpayment only under a controlled procedure",
+                "If the result remains uncertain, leave it unresolved and escalate"
+              ],
+              "reason": "Uses the documented investigation path, retains evidence, requires confirmed nonpayment before a replacement attempt, and acknowledges remaining duplicate risk.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "I left [incident.md](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-02/idempotency--unknown-external-payout--replicate-02/project/incident.md) unchanged."
+              ],
+              "reason": "The supplied workspace diff is empty and the final fixture is unchanged. No external payout verification or reconciliation is claimed.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "unknown-not-failed",
+              "score": 2,
+              "evidence_quotes": [
+                "after the timeout we cannot tell whether the payout happened.",
+                "Retrying `op-204` could pay twice."
+              ],
+              "reason": "Treats the timeout as an unknown outcome that may have paid; local key storage does not make provider retries safe.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "no-invented-capability",
+              "score": 2,
+              "evidence_quotes": [
+                "WireDesk has no idempotency parameter, caller reference, or lookup API"
+              ],
+              "reason": "Does not assume provider idempotency, lookup, transaction participation, or safe re-execution.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "safe-replay",
+              "score": 2,
+              "evidence_quotes": [
+                "Return a stable pending or unresolved operation status to client retries with the same key. Do not dispatch another payout."
+              ],
+              "reason": "Keeps repeats tied to the existing operation and avoids dispatching during uncertainty.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-reconciliation",
+              "score": 2,
+              "evidence_quotes": [
+                "Have operations request the daily settlement file and investigate the unresolved payout.",
+                "Record the evidence and an explicit terminal disposition—confirmed paid, confirmed not paid, or still unresolved.",
+                "If the file cannot establish the outcome, keep it unresolved"
+              ],
+              "reason": "Specifies manual investigation, evidence retention, and continued unresolved status when the outcome cannot be established; states the limitation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "The incident document remains unchanged."
+              ],
+              "reason": "The supplied workspace diff is empty and the final fixture is unchanged. No external payout verification or reconciliation is claimed.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "valid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-01"
+    },
+    {
+      "group_case": "idempotency--scoped-transfer-identity::codex-desc-02",
+      "grader": "source-quality-10-idempotency--scoped-transfer-identity--codex-desc-02",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "scoped-auth",
+              "score": 2,
+              "evidence_quotes": [
+                "The handler’s cache identity is just the idempotency key.",
+                "The cached-result path also runs **before** `authorizeWallet`.",
+                "For a matching key and fingerprint, return the stored outcome only after checking the caller’s current authorization to access it."
+              ],
+              "reason": "Identifies cross-tenant replay and disclosure, the pre-authorization cache hit, and requires trusted scoping and current authorization on replay.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "intent-binding",
+              "score": 2,
+              "evidence_quotes": [
+                "bind each operation to a trusted scope and validated intent.",
+                "store a fingerprint of the normalized transfer command, including wallet, destination, exact minor-unit amount, and currency.",
+                "For a matching key with a different fingerprint, return a documented conflict without moving money."
+              ],
+              "reason": "Requires a validated normalized command with effect-relevant fields and rejects changed intent.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "atomic-effect",
+              "score": 2,
+              "evidence_quotes": [
+                "Two concurrent requests with the same key can both miss and move money before either caches a result.",
+                "Atomically claim the identity in shared durable storage, then commit the transfer and its recoverable outcome together where possible.",
+                "If `moveMoney` crosses a separate system boundary, preserve the operation identity there and define how uncertain outcomes are reconciled."
+              ],
+              "reason": "Identifies the concurrent miss race and addresses durable ownership, effect/outcome recovery, and uncertainty across a separate effect boundary.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "distinct-operations",
+              "score": 0,
+              "evidence_quotes": [],
+              "reason": "Does not explicitly preserve the requirement that different keys can represent deliberate equal transfers.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "observable-checks",
+              "score": 2,
+              "evidence_quotes": [
+                "Same tenant and key, changed amount or other transfer field: conflict and no additional transfer.",
+                "Different tenants, same key: independent operations with no cross-tenant replay.",
+                "Revoked or unauthorized caller retry: cached outcome isn’t disclosed.",
+                "Concurrent requests for one scoped key: shared-store arbitration permits only one effect.",
+                "Interruption around the transfer commit: retry recovers a committed outcome without duplicating the transfer; a rolled-back transfer remains retryable."
+              ],
+              "reason": "Calls for all specified scenarios with explicit effect or access expectations.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Review only; files are unchanged and no tests were run.",
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []"
+              ],
+              "reason": "The attempt distinguishes proposed checks from execution, states files are unchanged and tests were not run; supplied evidence shows no diff or untracked files.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "scoped-auth",
+              "score": 2,
+              "evidence_quotes": [
+                "If tenant A’s cached response exists, tenant B’s request can receive it before `authorizeWallet` runs.",
+                "A cache hit bypasses wallet authorization.",
+                "Use a durable idempotency record scoped by trusted tenant identity, operation type, and key.",
+                "A matching completed request may return its stored outcome only after checking the caller’s current authorization to access the transfer."
+              ],
+              "reason": "Identifies cross-tenant disclosure and authorization bypass, and requires trusted scope and current authorization on replay.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "intent-binding",
+              "score": 2,
+              "evidence_quotes": [
+                "Bind it to a fingerprint of the validated transfer intent, including the wallet, destination, exact amount, and currency.",
+                "The same scoped key with a different fingerprint should return a documented conflict without another effect or disclosure of the original result."
+              ],
+              "reason": "Requires validated effect-relevant intent binding and conflict on changed intent.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "atomic-effect",
+              "score": 2,
+              "evidence_quotes": [
+                "Two requests can both miss the cache, then both call `moveMoney` before either stores a result.",
+                "Because `moveMoney` durably writes the transfer, the strongest design is to commit the transfer and its idempotency outcome atomically in the same datastore transaction.",
+                "If that is not possible, the operation needs a durable pending/uncertain state and a recovery path; a cache alone cannot establish exactly-once effects."
+              ],
+              "reason": "Identifies concurrent misses and the effect/outcome durability problem, proposing atomic commit or recovery for uncertainty.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "distinct-operations",
+              "score": 0,
+              "evidence_quotes": [],
+              "reason": "Does not explicitly preserve the requirement that different keys can represent deliberate equal transfers.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "observable-checks",
+              "score": 2,
+              "evidence_quotes": [
+                "Same key in two tenants creates independent operations and never replays across tenants.",
+                "Same tenant and key with changed amount, destination, wallet, or currency is rejected with no second transfer.",
+                "Concurrent first attempts across workers produce one transfer.",
+                "A retry after session revocation cannot retrieve a result without current authorization.",
+                "failure after commit but before response allows recovery without a duplicate."
+              ],
+              "reason": "Covers the required checks with explicit effect counts or denied access, including commit-before-response.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Review only; files were left unchanged, and I did not run tests.",
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []"
+              ],
+              "reason": "Distinguishes proposed checks from execution and states files were unchanged and tests were not run; supplied evidence shows no diff or untracked files.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "scoped-auth",
+              "score": 2,
+              "evidence_quotes": [
+                "If two tenants use the same key, whichever request populates it first can cause the other request to receive that cached response without authorization or a transfer.",
+                "scope the idempotency record to the authenticated tenant and transfer operation",
+                "if retries must reauthorize, do that before returning a cached result."
+              ],
+              "reason": "Identifies cross-tenant disclosure and replay authorization bypass, and recommends trusted tenant scoping and authorization before replay.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "intent-binding",
+              "score": 1,
+              "evidence_quotes": [
+                "store a canonical fingerprint of the transfer inputs alongside the response.",
+                "on the same scoped key with a different fingerprint, reject the request with a conflict."
+              ],
+              "reason": "Binds a fingerprint and rejects changed intent, but does not specify a validated normalized semantic command or clarify equivalence beyond canonical inputs.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "atomic-effect",
+              "score": 1,
+              "evidence_quotes": [
+                "Two concurrent requests can both miss the cache, then both call `moveMoney` before either stores a result.",
+                "The key claim and transfer outcome need atomic coordination or a durable idempotency record; a simple `get` followed by `set` still allows two concurrent misses to move money twice."
+              ],
+              "reason": "Addresses concurrent misses and proposes coordination, but does not explicitly address the ledger-commit/cache-write crash window or recovery of a committed effect.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "distinct-operations",
+              "score": 0,
+              "evidence_quotes": [],
+              "reason": "Does not explicitly preserve the requirement that different keys can represent deliberate equal transfers.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "observable-checks",
+              "score": 1,
+              "evidence_quotes": [
+                "Same key, different tenants: each tenant gets its own transfer and response.",
+                "Same tenant and key, different amount or other transfer input: reject without moving money.",
+                "Concurrent same-key requests: at most one transfer is created.",
+                "Revoked or unauthorized retry: confirm the intended authorization policy."
+              ],
+              "reason": "Includes cross-tenant, changed-amount, concurrent, and replay-access checks, but omits a commit-before-response check and does not clearly assert denied access for revoked replay.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []",
+                "\"independent_verification\": null"
+              ],
+              "reason": "Supplied evidence shows no fixture changes or untracked files; the answer presents checks as proposed and makes no claim that they were executed.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "pure-get-backoff-nontrigger::codex-desc-02",
+      "grader": "source-quality-17-pure-get-backoff-nontrigger--codex-desc-02",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "no-unneeded-protocol",
+              "score": 2,
+              "evidence_quotes": [
+                "The loop makes **three requests**, which matches the requirement"
+              ],
+              "reason": "Reviews only the GET retry loop and does not introduce idempotency machinery or mutation-recovery workflow.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "correct-delay",
+              "score": 2,
+              "evidence_quotes": [
+                "The delays are too long: with `attempt + 1` in the exponent, it sleeps **200 ms** after the first 503 and **400 ms** after the second.",
+                "Change the exponent to `attempt`:",
+                "That gives the required **100 ms**, then **200 ms** delays."
+              ],
+              "reason": "Identifies both actual waits and recommends removing the extra exponent increment.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "correct-attempts",
+              "score": 2,
+              "evidence_quotes": [
+                "The loop makes **three requests**, which matches the requirement, and it skips sleeping after the third 503. It also returns immediately for statuses other than 503."
+              ],
+              "reason": "Correctly identifies the request maximum, final no-sleep behavior, and immediate return for other statuses.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []",
+                "GET /status returns a public health snapshot. It has no side effects, including\nno analytics counter, billable action, or queue insertion."
+              ],
+              "reason": "The supplied evidence shows no fixture changes or untracked files, and the answer invents no endpoint side effects.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "idempotency--natural-invitation-invariant::codex-desc-02",
+      "grader": "source-quality-15-idempotency--natural-invitation-invariant--codex-desc-02",
+      "coverage_gaps": [
+        "No independent verification results were supplied."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "Concurrent behavior has not been demonstrated by supplied test results."
+          ],
+          "criteria": [
+            {
+              "id": "natural-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "the transaction locks the invitation, checks authorization, and returns the existing membership when acceptance has already committed",
+                "each invitation can produce at most one membership (`UNIQUE (invitation_id)`)"
+              ],
+              "reason": "Identifies the invitation lock, stored outcome, and unique membership constraints as sufficient design support without requiring the proposed framework.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "authorization-state",
+              "score": 2,
+              "evidence_quotes": [
+                "Authorization must still be checked before returning it, and revoked memberships must remain an access error rather than being recreated."
+              ],
+              "reason": "Preserves current authorization and revoked-member behavior on replay.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-validation",
+              "score": 1,
+              "evidence_quotes": [
+                "concurrent acceptance attempts, retry after commit, a different authenticated user, and replay after revocation",
+                "ensure constraint conflicts are handled consistently with the accepted branch"
+              ],
+              "reason": "Calls for the relevant concurrency and replay checks, but does not explicitly state the observable result of one membership and no recreation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "evidence-limit",
+              "score": 2,
+              "evidence_quotes": [
+                "No concurrency test results were supplied, so retry safety is a design claim to validate, not yet demonstrated."
+              ],
+              "reason": "Separates the described design from unprovided test evidence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "No Redis, client keys, second response store, or cleanup worker is indicated.",
+                "workspace_diff\": \"\""
+              ],
+              "reason": "The answer avoids unrelated external-effect infrastructure; supplied evidence shows an empty workspace diff.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "The answer says tests were not run; concurrent behavior remains unverified."
+          ],
+          "criteria": [
+            {
+              "id": "natural-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "the transaction locks the invitation, checks authorization, and returns the existing membership when acceptance has already committed",
+                "memberships.invitation_id UNIQUE` prevents two memberships for one invitation"
+              ],
+              "reason": "Uses the invitation lock, stored membership outcome, and unique membership constraint as the local design basis without requiring the framework.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "authorization-state",
+              "score": 2,
+              "evidence_quotes": [
+                "check the authenticated user’s verified email before returning an existing membership",
+                "keep revoked memberships from being returned or recreated"
+              ],
+              "reason": "Retains authorization checks and prevents revoked membership replay from restoring access.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-validation",
+              "score": 2,
+              "evidence_quotes": [
+                "exercise simultaneous attempts and confirm they produce one membership, and that a retry after commit returns it",
+                "keep revoked memberships from being returned or recreated"
+              ],
+              "reason": "Specifies the concurrency and post-commit replay outcomes, and addresses unauthorized and revoked retries.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "evidence-limit",
+              "score": 2,
+              "evidence_quotes": [
+                "Concurrent-acceptance results were not supplied.",
+                "The schema shown does not enforce that `accepted_membership_id` refers to a membership for that invitation, workspace, or user"
+              ],
+              "reason": "Does not certify correctness from schema alone and identifies missing test evidence and schema limits.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "No Redis locks, random client keys, second response database, or cleanup worker are justified by the supplied requirements.",
+                "workspace_diff\": \"\""
+              ],
+              "reason": "Avoids unrelated infrastructure; supplied evidence shows an empty workspace diff.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [
+            "The answer notes that concurrency behavior still needs validation."
+          ],
+          "criteria": [
+            {
+              "id": "natural-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "the transaction already locks the invitation, checks authorization, and returns the existing membership when acceptance has committed",
+                "each invitation can create at most one membership (`UNIQUE(invitation_id)`)"
+              ],
+              "reason": "Recognizes the local transaction and membership constraints as a sufficient design basis without requiring the generic framework.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "authorization-state",
+              "score": 2,
+              "evidence_quotes": [
+                "A different authenticated user must still fail authorization before receiving existing membership details, and the revoked-member branch must keep returning an access error rather than recreating access."
+              ],
+              "reason": "Preserves authorization and revoked-member behavior on replay.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-validation",
+              "score": 2,
+              "evidence_quotes": [
+                "add concurrency coverage for two simultaneous acceptances, plus a retry after commit with the response lost. Confirm both yield one membership",
+                "an unauthorized user and a replay after revocation do not reveal details or restore access."
+              ],
+              "reason": "Specifies the requested replay checks and observable outcomes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "evidence-limit",
+              "score": 2,
+              "evidence_quotes": [
+                "No test results were supplied, so the guarantee is supported by the described design and constraints but not yet demonstrated under concurrency."
+              ],
+              "reason": "Clearly limits the claim to the described design and supplied constraints.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "The repository is unchanged.",
+                "workspace_diff\": \"\""
+              ],
+              "reason": "Claims no repository changes, corroborated by the empty supplied workspace diff; no unrelated external-effect infrastructure is proposed.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "idempotency--bounded-webhook-edit::codex-desc-02",
+      "grader": "source-quality-16-idempotency--bounded-webhook-edit--codex-desc-02",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "actual-fix",
+              "score": 2,
+              "evidence_quotes": [
+                "idempotencyKey: `audit-webhook:${event.id}`",
+                "assert.deepEqual(calls.map((call) => call.idempotencyKey), [",
+                "audit-webhook:11111111-1111-4111-8111-111111111111"
+              ],
+              "reason": "The final adapter diff uses the event ID in the audit-webhook namespace, and the successful local check observes the same key on retries and a different key for another event.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "order-and-result",
+              "score": 2,
+              "evidence_quotes": [
+                "const receipt = await bridge.post(event.payload, {",
+                "await outbox.markDispatched(event.id, receipt.id);",
+                "return receipt;",
+                "assert.equal(recovered.id, repeated.id);"
+              ],
+              "reason": "Provider acceptance precedes marking; the receipt is returned. The injected mark failure is followed by retry using the same observed key and receipt.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "meaningful-checks",
+              "score": 2,
+              "evidence_quotes": [
+                "Verified repeated delivery reuses the key and receipt, distinct events get distinct keys, and retry after an injected failure following provider acceptance does not create a second accepted effect.",
+                "verified: repeated event, distinct event, post-acceptance failure recovery",
+                "`git diff --check` passed."
+              ],
+              "reason": "A successful local fake check observes repeated and distinct keys and post-acceptance mark-failure recovery. The answer identifies the fake and conditions provider behavior on the supplied contract.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope",
+              "score": 2,
+              "evidence_quotes": [
+                "diff --git a/deliver.mjs b/deliver.mjs",
+                "idempotencyKey: `audit-webhook:${event.id}`",
+                "untracked_files\": []"
+              ],
+              "reason": "The observed change is limited to the adapter, adds no dependency or unrelated schema/framework change, and uses the contract's namespace and immutable event identity.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "honest-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "The checks used a local provider fake; provider behavior relies on the contract in `requirements.md`.",
+                "does not create a second accepted effect"
+              ],
+              "reason": "The response distinguishes the local fake from provider behavior and does not claim end-to-end delivery or real-provider deduplication.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "The first local verification command failed due to a mock receipt assertion; a corrected rerun passed."
+          ],
+          "criteria": [
+            {
+              "id": "actual-fix",
+              "score": 2,
+              "evidence_quotes": [
+                "idempotencyKey: `audit-webhook:${event.id}`",
+                "assert.equal(keys[0], `audit-webhook:${eventA.id}`);",
+                "assert.equal(keys[2], `audit-webhook:${eventB.id}`);"
+              ],
+              "reason": "The final adapter diff uses the event ID in the specified namespace; the successful rerun observes the expected keys for repeated and distinct events.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "order-and-result",
+              "score": 2,
+              "evidence_quotes": [
+                "const receipt = await bridge.post(event.payload, {",
+                "await outbox.markDispatched(event.id, receipt.id);",
+                "return receipt;",
+                "assert.equal(retryReceipt.id, `receipt-${acceptedAfterFirst}`);"
+              ],
+              "reason": "The adapter marks only after provider acceptance and returns its receipt. The successful retry check confirms it recovers the original receipt after mark failure.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "meaningful-checks",
+              "score": 2,
+              "evidence_quotes": [
+                "A local mock verified that repeated events reuse the receipt, distinct events get separate acceptances, and a retry after provider acceptance and an outbox failure does not create another acceptance.",
+                "verified: repeated event, distinct event, and retry after provider acceptance",
+                "`git diff --check` passed."
+              ],
+              "reason": "The corrected local mock check covers actual keys, repeated and distinct events, and acceptance followed by mark failure and retry. Results are reported; the response describes this as a local mock, not a real provider test.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope",
+              "score": 2,
+              "evidence_quotes": [
+                "diff --git a/deliver.mjs b/deliver.mjs",
+                "idempotencyKey: `audit-webhook:${event.id}`",
+                "untracked_files\": []"
+              ],
+              "reason": "The observed change is confined to the adapter and introduces no dependency or unrelated schema/framework change; its key matches the supplied contract.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "honest-boundary",
+              "score": 1,
+              "evidence_quotes": [
+                "A local mock verified that repeated events reuse the receipt",
+                "does not create another acceptance"
+              ],
+              "reason": "The answer labels the verification as a local mock, but does not explicitly limit the conclusion to key propagation/recovery or state that real provider deduplication was not tested.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "actual-fix",
+              "score": 2,
+              "evidence_quotes": [
+                "idempotencyKey: `audit-webhook:${event.id}`",
+                "assert.equal(keys[1], keys[0], 'same event reuses provider key');",
+                "assert.equal(keys[2], 'audit-webhook:22222222-2222-4222-8222-222222222222');"
+              ],
+              "reason": "The final adapter diff uses the event ID in the specified namespace, and the successful local check observes the repeated and distinct keys.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "order-and-result",
+              "score": 2,
+              "evidence_quotes": [
+                "const receipt = await bridge.post(event.payload, {",
+                "await outbox.markDispatched(event.id, receipt.id);",
+                "return receipt;",
+                "assert.equal(recovered, accepted.get('audit-webhook:33333333-3333-4333-8333-333333333333'));"
+              ],
+              "reason": "The adapter marks after provider acceptance and returns the receipt. The successful check simulates mark failure after acceptance and verifies retry recovery with the same key.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "meaningful-checks",
+              "score": 2,
+              "evidence_quotes": [
+                "Focused checks passed: retries reused the same receipt, distinct event IDs used distinct keys, and a retry after provider acceptance recovered the receipt when outbox marking failed.",
+                "Focused delivery checks passed: repeat, distinct events, accepted-then-mark-fails recovery.",
+                "`git diff --check` passed."
+              ],
+              "reason": "The successful local fake check covers repeated and distinct keys plus acceptance followed by mark failure and retry. The answer reports the checks and results.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope",
+              "score": 2,
+              "evidence_quotes": [
+                "diff --git a/deliver.mjs b/deliver.mjs",
+                "idempotencyKey: `audit-webhook:${event.id}`",
+                "untracked_files\": []"
+              ],
+              "reason": "The observed change is confined to the adapter with no added dependencies or unrelated schema/framework changes, and uses the contract's namespace and event ID.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "honest-boundary",
+              "score": 1,
+              "evidence_quotes": [
+                "Focused checks passed: retries reused the same receipt, distinct event IDs used distinct keys, and a retry after provider acceptance recovered the receipt when outbox marking failed."
+              ],
+              "reason": "The response describes local focused checks but does not explicitly identify the mock or limit the conclusion to key propagation/recovery; it also omits an explicit statement that real provider deduplication was not tested.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "idempotency--retention-and-version-drift::codex-desc-02",
+      "grader": "source-quality-14-idempotency--retention-and-version-drift--codex-desc-02",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "unresolved-retention",
+              "score": 2,
+              "evidence_quotes": [
+                "Keep `pending` and `unknown` records from being deleted as if they were completed.",
+                "use the provider’s authoritative lookup while available (90 days), and define what staff do when lookup can no longer establish the outcome."
+              ],
+              "reason": "Rejects TTL-only deletion for unresolved records and addresses recovery after the provider lookup window.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "expired-identity",
+              "score": 2,
+              "evidence_quotes": [
+                "Once cleanup deletes a record, the same key may look new and cause a second shipment.",
+                "Whether 14 day support replays are in scope for retained records, and how cleanup treats each state."
+              ],
+              "reason": "Identifies the 72-hour, late-device, and 14-day replay conflict, references the 90-day provider lookup horizon, and flags retention and expiry behavior for decision.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "normalization-version",
+              "score": 2,
+              "evidence_quotes": [
+                "Persisting a normalization version and normalized command (or otherwise preserving the old comparison semantics) lets the service compare retries to the original intent.",
+                "Hashing raw JSON does not solve semantic equivalence or default changes."
+              ],
+              "reason": "Explains the changed omitted-field default and proposes preserving original comparison semantics; rejects raw JSON hashing as sufficient.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "legacy-evidence",
+              "score": 0,
+              "evidence_quotes": [],
+              "reason": "Does not acknowledge that existing hash-only records cannot establish their original accepted command or specify a legacy comparison or migration policy.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "rollout-checks",
+              "score": 1,
+              "evidence_quotes": [
+                "A retry with genuinely changed intent should be rejected; a completed operation should return its authorized prior result, active work should remain observable as pending, and an uncertain result should be reconciled rather than redispatched as new work.",
+                "Which normalizer/comparison versions remain available for outstanding operations, and how records carry the version or normalized command needed to apply them."
+              ],
+              "reason": "Gives expected retry behavior and flags release decisions, but does not specify replay checks across versions or unresolved records past cleanup age.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "I reviewed [policy.md](/<home>/Documents/ChatGPT/tal-skills-cleanup-archives/remaining-evals/description-retests/runs/codex-desc-02/idempotency--retention-and-version-drift--replicate-01/project/policy.md) without modifying it.",
+                "workspace_diff\": \"\""
+              ],
+              "reason": "The observable diff is empty, and the answer claims review without modification or execution of a migration or recovery procedure.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "unresolved-retention",
+              "score": 2,
+              "evidence_quotes": [
+                "Keep `pending` and `unknown` records until they reach a terminal disposition. Preserve enough evidence to investigate and reconcile them.",
+                "The provider lookup lasts 90 days, so the recovery policy needs to account for that window and what happens after it."
+              ],
+              "reason": "Rejects deleting unresolved records based only on age and addresses recovery beyond the lookup window.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "expired-identity",
+              "score": 2,
+              "evidence_quotes": [
+                "A 72-hour TTL would remove the record needed to recognize those attempts.",
+                "Decide what happens to a retry after those windows; deletion alone makes the key appear unused.",
+                "The provider lookup lasts 90 days, so the recovery policy needs to account for that window and what happens after it."
+              ],
+              "reason": "Covers the documented client window, late retries, 14-day support replays, and downstream lookup horizon, and flags post-expiry policy.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "normalization-version",
+              "score": 2,
+              "evidence_quotes": [
+                "A retry of a version 1 operation must be compared using that operation’s original interpretation and return or report its existing outcome.",
+                "Hashing raw JSON does not solve this: omitted defaults and explicit defaults can represent the same intent while having different JSON."
+              ],
+              "reason": "Identifies the changed omitted-field meaning and requires preserving the original interpretation; explains why raw JSON hashing is insufficient.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "legacy-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Existing records have no normalization version or normalized command. They cannot be reliably compared under version 2 from the hash alone.",
+                "The rollout needs a compatibility strategy for those records, such as retaining the version 1 comparison behavior while they remain retryable, or explicitly handling records whose original intent cannot be established."
+              ],
+              "reason": "Acknowledges the limitation of existing hashes and proposes concrete legacy handling.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "rollout-checks",
+              "score": 1,
+              "evidence_quotes": [
+                "A retry of a version 1 operation must be compared using that operation’s original interpretation and return or report its existing outcome.",
+                "Keep `pending` and `unknown` records until they reach a terminal disposition.",
+                "Define the retry horizon, including late client retries and 14-day support replay, and what the API does after that horizon."
+              ],
+              "reason": "Specifies expected behavior for versioned retries, unresolved records, and late replays, and flags open choices, but does not spell out replay checks across versions or past cleanup age.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "I reviewed `policy.md` and made no changes.",
+                "workspace_diff\": \"\""
+              ],
+              "reason": "The observable diff is empty, and the answer claims review without modification or execution of a migration or recovery procedure.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "unresolved-retention",
+              "score": 2,
+              "evidence_quotes": [
+                "For `pending` or `unknown` records, retain their state and enough stable downstream reference or reconciliation data to establish whether the provider operation succeeded before allowing a retry to cause another effect."
+              ],
+              "reason": "Rejects discarding unresolved recovery evidence based on cleanup age.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "expired-identity",
+              "score": 2,
+              "evidence_quotes": [
+                "The documented client retry window is 72 hours, but device retries can arrive later, and support can replay retained jobs for 14 days.",
+                "The 90-day provider lookup window helps staff reconcile outcomes; it does not prevent a replay from creating a new operation.",
+                "How long records must remain available, accounting for the 14-day replay window and potentially later device retries—not just the 72-hour documented window."
+              ],
+              "reason": "Addresses the 72-hour window, 14-day support replay, late devices, and 90-day downstream lookup horizon; flags the retention decision.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "normalization-version",
+              "score": 2,
+              "evidence_quotes": [
+                "A deployment must not silently reinterpret an existing key with the new normalizer.",
+                "Records need enough information to resolve retries and recovery across versions: at minimum, the normalization version or the normalized command used when the record was created.",
+                "Hashing raw JSON does not solve this: omitted fields and explicit defaults can encode the same command, while equivalent JSON can vary in representation."
+              ],
+              "reason": "Addresses version drift and preserving the original command or version; rejects raw JSON hashing as a fix.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "legacy-evidence",
+              "score": 1,
+              "evidence_quotes": [
+                "How the system will handle records already stored without a normalization version or command, including retries that arrive after the new normalizer is deployed."
+              ],
+              "reason": "Recognizes the legacy-record problem and flags a decision, but does not specify a concrete legacy comparison or migration policy.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "rollout-checks",
+              "score": 1,
+              "evidence_quotes": [
+                "A retry after its idempotency record expires could create a duplicate shipment.",
+                "For `pending` or `unknown` records, retain their state and enough stable downstream reference or reconciliation data to establish whether the provider operation succeeded before allowing a retry to cause another effect.",
+                "How long records must remain available, accounting for the 14-day replay window and potentially later device retries—not just the 72-hour documented window."
+              ],
+              "reason": "Describes expected behavior for unresolved and late retries and flags release choices, but does not specify replay checks across versions or unresolved records past cleanup age.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "workspace_diff\": \"\"",
+                "The supplied project contains only `policy.md`; this review is based on that rollout description."
+              ],
+              "reason": "The observable diff is empty, and the answer does not claim that a migration or recovery procedure was executed.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "microservice-testing--unknown-api-consumers::codex-desc-03",
+      "grader": "source-quality-18-microservice-testing--unknown-api-consumers--codex-desc-03",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "bounded-contract-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "These results support compatibility for those tested interactions.",
+                "They do **not** establish that the change is safe for every consumer."
+              ],
+              "reason": "Limits the evidence to the tested interactions and says it does not cover every consumer.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "breaking-change",
+              "score": 1,
+              "evidence_quotes": [
+                "Passing these tests is not proof that no consumer still needs `customer_id` or `email`."
+              ],
+              "reason": "Names both removed fields and unrepresented consumers, but does not explicitly identify their removal at the same endpoint as a potential break.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "targeted-proof",
+              "score": 2,
+              "evidence_quotes": [
+                "use field-usage telemetry to determine whether any consumer still depends on the removed fields",
+                "establish a deprecation date or another explicit migration gate"
+              ],
+              "reason": "Proposes telemetry, partner evidence, version coexistence, and a deprecation or migration gate.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "release-risk",
+              "score": 2,
+              "evidence_quotes": [
+                "because rollback may require manual replay of partner processing",
+                "Until the unknown consumers are addressed and the rollout conditions are met"
+              ],
+              "reason": "Addresses replay exposure, frames validation and rollout conditions as future work, and rejects release-wide safety based on the suite.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Targeted validation and release conditions:",
+                "Until the unknown consumers are addressed and the rollout conditions are met"
+              ],
+              "reason": "The supplied evidence shows no fixture changes; the response separates existing test results from proposed validation and release conditions.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "bounded-contract-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Together, these checks support compatibility for those tested consumers and code paths.",
+                "They do not prove the change is safe for all callers."
+              ],
+              "reason": "Clearly bounds what the passing checks establish and excludes unknown callers.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "breaking-change",
+              "score": 1,
+              "evidence_quotes": [
+                "The tests also do not establish partner processing behavior, compatibility with every deployed consumer version",
+                "Keep old fields available while callers remain unidentified or unverified."
+              ],
+              "reason": "Recognizes risk to unknown consumers from field removal, but does not explicitly connect both `email` and `customer_id` removal at the same endpoint to a potential break.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "targeted-proof",
+              "score": 2,
+              "evidence_quotes": [
+                "Obtain and verify partner contracts against the proposed response",
+                "Announce a deprecation date and migration path"
+              ],
+              "reason": "Recommends partner checks, traffic attribution and version validation, and a deprecation date with migration path.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "release-risk",
+              "score": 2,
+              "evidence_quotes": [
+                "partner failures during the change may still require manual replay",
+                "document how to identify and manually replay failed partner work after rollback"
+              ],
+              "reason": "Addresses rollback and replay risk, proposes rollout gates, and does not claim the suite certifies production safety.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Before removing fields, target validation at the gaps:",
+                "The release note provides no evidence that the partner or older-key gaps have been closed."
+              ],
+              "reason": "The supplied evidence shows no fixture changes; the response presents checks as future validation and distinguishes them from the existing results.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "bounded-contract-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Together, they support the change for those tested interactions and versions.",
+                "They do **not** establish safety for every consumer."
+              ],
+              "reason": "Limits compatibility evidence to the tested interactions and versions.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "breaking-change",
+              "score": 2,
+              "evidence_quotes": [
+                "The proposed version removes email and renames customer_id to id at the same endpoint.",
+                "Before removing fields at the shared endpoint",
+                "does not justify calling the breaking change safe for all consumers."
+              ],
+              "reason": "Identifies the field removal and rename at the shared endpoint and the resulting risk to unrepresented consumers.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "targeted-proof",
+              "score": 2,
+              "evidence_quotes": [
+                "Identify which partners and older-key consumers are still active",
+                "Verify the relevant consumer expectations against the provider implementation",
+                "announce a deprecation date, provide an overlap period"
+              ],
+              "reason": "Recommends consumer inventory, partner evidence and provider verification, and a deprecation and migration transition.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "release-risk",
+              "score": 2,
+              "evidence_quotes": [
+                "confirm how failed processing will be detected and replayed",
+                "have a tested rollback and manual replay procedure"
+              ],
+              "reason": "Addresses replay and rollback exposure, frames checks and conditions as proposed, and rejects a claim that the suite proves release-wide safety.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Before removing fields at the shared endpoint, target the unresolved risks:",
+                "Release confidence also depends on rollout conditions:"
+              ],
+              "reason": "The supplied evidence shows no fixture changes; the response distinguishes proposed checks and rollout conditions from the existing test results.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "pure-unit-test-nontrigger::codex-desc-03",
+      "grader": "source-quality-20-pure-unit-test-nontrigger--codex-desc-03",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "nontrigger",
+              "score": 2,
+              "evidence_quotes": [
+                "The expected result should be **6**, since `double(3)` returns `3 * 2`."
+              ],
+              "reason": "Addresses only the pure function’s expected value; no contract tests, service environments, or broader testing program are introduced.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "expected-value",
+              "score": 2,
+              "evidence_quotes": [
+                "The expected result should be **6**, since `double(3)` returns `3 * 2`."
+              ],
+              "reason": "Correctly identifies 6 for double(3) and keeps the multiplication behavior unchanged.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope",
+              "score": 2,
+              "evidence_quotes": [
+                "The expected result should be **6**, since `double(3)` returns `3 * 2`."
+              ],
+              "reason": "Keeps the response to the local assertion and does not claim to have executed a test or found dependencies.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "The expected result should be **6**, since `double(3)` returns `3 * 2`.",
+                "\"workspace_diff\": \"\"",
+                "\"untracked_files\": []"
+              ],
+              "reason": "The fixture is unchanged, and the response states the correction without claiming a test was executed.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "microservice-testing--mocked-checkout-gap::codex-desc-03",
+      "grader": "source-quality-19-microservice-testing--mocked-checkout-gap--codex-desc-03",
+      "coverage_gaps": [
+        "No tests were executed or independently verified, so the proposed success criteria have no run results. Production behavior remains untested."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "The answer does not define pending-age or consumer-error thresholds, and it does not fully describe what these local tests leave unproven in production."
+          ],
+          "criteria": [
+            {
+              "id": "distinct-boundaries",
+              "score": 2,
+              "evidence_quotes": [
+                "Keep the end-to-end check for the customer journey if useful, but use focused tests for the delivery guarantees.",
+                "**Checkout transaction test**",
+                "**Relay restart test**",
+                "**Fulfillment redelivery test**"
+              ],
+              "reason": "Retains fast mapping coverage and proposes targeted database, relay/broker, and consumer checks.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "replay-schedules",
+              "score": 2,
+              "evidence_quotes": [
+                "Have the broker acknowledge a send, then stop the relay before it marks the outbox row sent. Restart the relay.",
+                "Let the reservation commit, then simulate loss of the acknowledgment and redeliver the event."
+              ],
+              "reason": "Specifies both required failure windows and recovery actions.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "observable-outcome",
+              "score": 2,
+              "evidence_quotes": [
+                "Verify there is one reservation for that order and the order status is `reserved`.",
+                "after restart and bounded retries, the row is marked sent",
+                "exactly one reservation exists, status is `reserved`"
+              ],
+              "reason": "Defines reservation uniqueness, eventual outbox completion, and recovered status using persisted outcomes.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "confidence-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "That proves the assembled journey, but by itself does not prove the transaction or either recovery guarantee.",
+                "The plan mentions outbox age and consumer processing errors but does not define alert thresholds"
+              ],
+              "reason": "Explains the narrow end-to-end test's limits and notes observability thresholds are unspecified, but does not clearly state the broader limits of local tests versus production behavior.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "Use focused tests",
+                "The plan gives no event schema or deployed consumer/provider versions"
+              ],
+              "reason": "Presents recommendations as proposed tests rather than executed checks; supplied evidence shows an empty workspace diff and no untracked files.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [
+            "The answer does not clearly state what the local broker/database tests and narrow end-to-end test leave unproven about production behavior."
+          ],
+          "criteria": [
+            {
+              "id": "distinct-boundaries",
+              "score": 2,
+              "evidence_quotes": [
+                "Keep the field-mapping unit test for fast feedback on event fields.",
+                "**Checkout transaction with a real database**",
+                "**Relay recovery with the real broker and database**",
+                "**Consumer redelivery with the real broker and database**"
+              ],
+              "reason": "Preserves mapping coverage and adds focused datastore, relay/broker, and consumer checks.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "replay-schedules",
+              "score": 2,
+              "evidence_quotes": [
+                "The test observes the crash point after broker acknowledgment and before marking the row sent.",
+                "A successful reservation commit followed by a lost acknowledgment can be retried"
+              ],
+              "reason": "Identifies both crash/acknowledgment windows and describes restart or redelivery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "observable-outcome",
+              "score": 2,
+              "evidence_quotes": [
+                "After the relay restarts, the event is available to consumers and the outbox row becomes sent within a deadline.",
+                "After redelivery, the order has one reservation, enforced by the `order_id` uniqueness constraint, and its status is reserved within a deadline."
+              ],
+              "reason": "Specifies eventual outbox completion, exactly one reservation at the supplied uniqueness boundary, and recovered status.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "confidence-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "A website journey test could add confidence in the assembled user experience, but it is not needed to cover these specific persistence and redelivery risks.",
+                "Outbox age and consumer processing errors can help diagnose failures, but they are not sufficient success criteria by themselves."
+              ],
+              "reason": "Distinguishes the journey test from persistence and recovery checks and treats metrics as diagnostic, but does not clearly describe limits relative to production behavior.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "The proposed single end-to-end check is too weak as the only release evidence"
+              ],
+              "reason": "Frames the tests as a proposal, not as checks executed; supplied evidence shows an empty workspace diff and no untracked files.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [
+            "The answer gives useful test-level deadlines but does not clearly distinguish local-test and narrow end-to-end confidence from untested production behavior."
+          ],
+          "criteria": [
+            {
+              "id": "distinct-boundaries",
+              "score": 2,
+              "evidence_quotes": [
+                "Keep the field-mapping unit tests if they are useful, and add three focused checks at the boundaries that cover those risks:",
+                "**Checkout service test**",
+                "**Relay and broker integration test**",
+                "**Fulfillment consumer integration test**"
+              ],
+              "reason": "Preserves mapping tests and covers datastore, broker/relay, and consumer boundaries.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "replay-schedules",
+              "score": 2,
+              "evidence_quotes": [
+                "Simulate broker acknowledgment followed by relay termination before the row is marked sent; restart the relay.",
+                "Ensure the first database commit succeeds while its acknowledgment is lost, then allow redelivery."
+              ],
+              "reason": "Specifies both required failure windows and the corresponding recovery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "observable-outcome",
+              "score": 2,
+              "evidence_quotes": [
+                "After restart, the order reaches `reserved` within a deadline. The outbox row eventually becomes sent, and any repeat delivery does not create more than one reservation.",
+                "The order has exactly one reservation; redelivery is acknowledged or otherwise handled as a successful duplicate"
+              ],
+              "reason": "Requires eventual outbox completion, one reservation using the supplied uniqueness boundary, and correct recovered status.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "confidence-limit",
+              "score": 1,
+              "evidence_quotes": [
+                "This test proves the user-visible composition; it does not replace the focused crash-recovery checks.",
+                "Use outbox age and consumer processing errors as supporting signals or diagnostic assertions"
+              ],
+              "reason": "Explains the end-to-end journey's narrow proof and the diagnostic role of observability, but does not clearly identify production behavior left untested.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "The proposed single end-to-end test is insufficient as the replacement for the current tests."
+              ],
+              "reason": "Describes proposed validation rather than claiming execution; supplied evidence shows an empty workspace diff and no untracked files.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "private-format-helper::codex-desc-04",
+      "grader": "source-quality-23-private-format-helper--codex-desc-04",
+      "coverage_gaps": [
+        "The saved trace omits the output of the candidate instruction read, so whether technical-deprecation was loaded cannot be determined."
+      ],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [
+            "Technical-deprecation activation is not established by the available trace."
+          ],
+          "criteria": [
+            {
+              "id": "bounded-selection",
+              "score": 1,
+              "evidence_quotes": [
+                "/bin/zsh -lc 'cat .agents/skills/code-and-docs-cleanup/SKILL.md'",
+                "[Candidate instruction read output omitted from blind quality review.]"
+              ],
+              "reason": "The trace shows a cleanup skill read and omits its output, so it does not establish whether technical-deprecation was loaded. No consumer-retirement process is evident.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-removal",
+              "score": 2,
+              "evidence_quotes": [
+                "-def _old_label(prefix, value):",
+                "`format_label` and the exported surface are unchanged.",
+                "\"__all__ == [\\\"format_label\\\"]\""
+              ],
+              "reason": "The diff removes only `_old_label`; the verifier confirms the exported surface and helper absence, and the answer reports preservation of `format_label`.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "executed-verification",
+              "score": 2,
+              "evidence_quotes": [
+                "python3 -B verify.py && git diff -- labels.py && git status --short",
+                "{\"checks\": 2, \"failures\": [], \"passed\": 2}",
+                "\"independent_rerun\": true"
+              ],
+              "reason": "Saved command evidence and an independent rerun show the verifier passed against the final fixture.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "M labels.py",
+                "Git status shows only `labels.py` modified.",
+                "\"untracked_files\": []"
+              ],
+              "reason": "The diff and status show only `labels.py` changed, with no untracked files. The answer reports local verification and makes no external or production validation claim.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "technical-deprecation--periodic-export-client::codex-desc-04",
+      "grader": "source-quality-21-technical-deprecation--periodic-export-client--codex-desc-04",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "consumer-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "They do not cover the August close-audit job image, generated templates, ad-hoc installations, unexecuted clients, or all possible consumers.",
+                "Reconcile the archived job image and template, investigate ad-hoc installations and usage attribution, and record what remains unknown."
+              ],
+              "reason": "Rejects the short observation and narrow scan as absence proof, identifies monthly and excluded consumers, and proposes bounded discovery and rehearsal.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "replacement-contract",
+              "score": 2,
+              "evidence_quotes": [
+                "V2 reads a live collection, omits voided invoices, and can change between pages.",
+                "Acceptance evidence must show every expected row, including voided rows; stable record IDs, values, and order on repeat; and a way to reproduce the accepted export later."
+              ],
+              "reason": "Explains the missing immutable snapshot behavior and blocks migration pending demonstrated compatibility or an authorized requirement change.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "stage-and-ownership",
+              "score": 2,
+              "evidence_quotes": [
+                "V1 still has a supported contract with no promised removal date",
+                "The ledger service owner has not approved removal",
+                "Assign a migration owner",
+                "The current proposal does not meet this gate."
+              ],
+              "reason": "Separates current support from proposed removal and readiness, names known roles, and treats migration ownership and approval as unresolved.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "prevent-new-adoption",
+              "score": 2,
+              "evidence_quotes": [
+                "Update generated projects to use the approved interface, then verify that a newly generated project no longer imports v1.",
+                "Add a scoped check that rejects new v1 use while allowing explicitly tracked existing consumers during migration.",
+                "Define the exception owner and exit condition before enforcing a broader block."
+              ],
+              "reason": "Proposes changing the template and a scoped new-use check with a bounded legacy exception path; preserves supported existing use.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "removal-and-recovery-gates",
+              "score": 2,
+              "evidence_quotes": [
+                "The September 30 run remains a supported v1 use unless a verified replacement and an authorized transition are ready.",
+                "Define recovery that includes the snapshot data required for historical reproduction; restoring the binary alone is insufficient.",
+                "Stop if a supported consumer, required behavior, or recovery path remains unresolved.",
+                "A merged deletion PR is not evidence that consumer transitions, removal, or recovery were verified."
+              ],
+              "reason": "Requires consumer checks and recovery evidence before removal, recognizes binary restore cannot recover deleted data, and supplies stop and completion conditions.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "No files were changed, no notices were sent, and no services or registries were contacted."
+              ],
+              "reason": "States no external changes and accurately frames the work as a proposal/review rather than executed migration or removal; the supplied workspace diff and untracked-file evidence are empty.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "consumer-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Zero matches and calls are useful observations within their stated scope, not proof of no consumers.",
+                "The source scan covers three current default branches and excludes the generated template and archived job image.",
+                "Improve consumer evidence and set a stop point."
+              ],
+              "reason": "Rejects the observations as complete absence proof, identifies periodic/excluded and unknown consumers, and proposes bounded investigation and escalation.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "replacement-contract",
+              "score": 2,
+              "evidence_quotes": [
+                "V1 returns an immutable period snapshot, including voided invoices, with stable IDs, values, and order.",
+                "V2 reads a live collection, omits voided invoices, and has no period-close snapshot mode.",
+                "V2 is not ready for this consumer unless it gains equivalent snapshot behavior, or the business owner explicitly approves changing the audit requirement."
+              ],
+              "reason": "Identifies the snapshot and voided-row incompatibility and blocks migration until compatibility or an explicit approved requirement change.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "stage-and-ownership",
+              "score": 2,
+              "evidence_quotes": [
+                "V1 remains a supported contract with no promised removal date.",
+                "The ledger platform maintainers should own the compatibility work. The ledger service owner should make the eventual removal decision.",
+                "Those are role assignments from the inventory, not evidence that either role has accepted this plan.",
+                "Financial reporting needs a named migration assignee."
+              ],
+              "reason": "Distinguishes supported state and eventual removal decision, assigns actions to known roles, and makes absent ownership and acceptance explicit.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "prevent-new-adoption",
+              "score": 2,
+              "evidence_quotes": [
+                "Developer productivity should update the batch-job template and add a check scoped to new imports or projects.",
+                "Do not apply a blanket rule that breaks existing reporting jobs.",
+                "Record any temporary exceptions with an owner and exit condition."
+              ],
+              "reason": "Defines template/default and scoped-check changes while retaining supported existing consumers through owned, bounded exceptions.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "removal-and-recovery-gates",
+              "score": 2,
+              "evidence_quotes": [
+                "Rehearse the close-audit against the retained synthetic snapshot and compare snapshot identity, all rows including voided invoices, stable IDs, values, and ordering across repeated exports.",
+                "Review a removal release only after its gates pass.",
+                "Confirm the applicable support policy and approved date, consumer transitions or explicit risk acceptance, replacement checks, and recovery of both code and required snapshot data.",
+                "A merged deletion PR would show a code change, not that consumers migrated or the contract was safely retired."
+              ],
+              "reason": "Sets rehearsal and evidence gates, preserves necessary data in recovery, and distinguishes code deletion from verified completion.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "No rehearsal or removal verification is recorded in the supplied evidence."
+              ],
+              "reason": "Does not claim migration or removal has occurred; explicitly states their verification is absent. The supplied diff and untracked-file evidence are empty and the response proposes review actions only.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "consumer-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "The evidence does not establish that v1 is unused: the seven-day gateway sample covers authenticated calls to one gateway, not offline or unexecuted jobs; the source scan covers three current branches but excludes the archived close-audit image, generated template, and ad-hoc installations.",
+                "Close the visibility gaps and control new adoption.",
+                "Identify runnable archived images and ad-hoc installations, or have the service owner explicitly accept those unknowns."
+              ],
+              "reason": "Rejects the narrow metrics as absence proof, accounts for monthly and excluded consumers, and proposes bounded gap closure or explicit owner acceptance.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "replacement-contract",
+              "score": 2,
+              "evidence_quotes": [
+                "V2 does not preserve the close-audit contract.",
+                "In the supplied sample, filtering v2 for the same period returns only `inv-1`, while the immutable snapshot also contains voided `inv-2`.",
+                "The close-audit requirement remains in force unless the business owner explicitly changes it."
+              ],
+              "reason": "Identifies the missing voided record and snapshot guarantees and retains the requirement pending explicit change.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "stage-and-ownership",
+              "score": 2,
+              "evidence_quotes": [
+                "The v1 library entry point and `/exports/v1` endpoint are supported and have no promised removal date.",
+                "Removal is also unapproved by the ledger service owner",
+                "Financial reporting should name an assignee for the archived close-audit job; developer productivity should name one for the template."
+              ],
+              "reason": "Separates support status, approval, and readiness; names the known decision/interface roles and proposes actions while identifying missing assignees.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "prevent-new-adoption",
+              "score": 2,
+              "evidence_quotes": [
+                "Update the template and add a scoped check against new v1 use, with a documented owner and exit condition for existing exceptions.",
+                "Verify that a new v1 dependency is caught while the still-supported reporting job remains permitted."
+              ],
+              "reason": "Stops new template adoption with a scoped check and retains a bounded path for supported legacy use.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "removal-and-recovery-gates",
+              "score": 2,
+              "evidence_quotes": [
+                "Rehearse the close-audit against the retained synthetic snapshot, comparing IDs, values, order, snapshot identity, and voided rows.",
+                "Stop if any required behavior differs or the rehearsal cannot run.",
+                "recovery of both code and snapshot data",
+                "verify a legacy use is rejected and a supported control still works."
+              ],
+              "reason": "Makes rehearsal and completion evidence prerequisites, preserves snapshot data in recovery, and defines stop and post-removal verification conditions.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "No files were changed, and no teams or services were contacted.",
+                "The supplied evidence does not establish a complete consumer inventory, a close-audit replacement, removal approval, or a data recovery plan."
+              ],
+              "reason": "Reports no external action and keeps migration/removal and recovery as unproven rather than claiming execution; supplied workspace diff and untracked-file evidence are empty.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    },
+    {
+      "group_case": "technical-deprecation--config-channel-migration::codex-desc-04",
+      "grader": "source-quality-22-technical-deprecation--config-channel-migration--codex-desc-04",
+      "coverage_gaps": [],
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "cohort-and-coverage",
+              "score": 2,
+              "evidence_quotes": [
+                "The remaining inventory is material: 20 installations were on 3.6 at the latest version report; 18 offline installations were last seen on 3.6 on September 4 and are next expected October 19, after the proposed completion date; and 12 locally administered installations lack current version, config, and startup evidence.",
+                "The zero legacy-write count only covers documents submitted through the central console in the seven-day window; the metric observes neither reads nor startup nor local editing.",
+                "A queued file or executable download acknowledgement is not proof of receipt and successful restart."
+              ],
+              "reason": "Accounts for the full cohorts and unknowns, limits what the dashboard establishes, and distinguishes delivery, receipt, and startup evidence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "semantic-mapping",
+              "score": 2,
+              "evidence_quotes": [
+                "It treats **false and zero as falsy**, replacing explicit user settings with installation policy.",
+                "For example, `read_ahead_enabled: false` with `read_ahead_limit: 0` can become policy values `true` and `128`.",
+                "For omitted fields, writing today’s policy values explicitly also stops them inheriting policy changes at later startups.",
+                "Check executable/config ordering for 3.6 and 3.8; define a bounded cohort, stop condition, halt role, escalation point, and recovery that restores both executable and configuration and addresses queued files."
+              ],
+              "reason": "Identifies false/zero corruption, lost omission inheritance, and 3.6 rejection risk. Requires semantic preservation but does not explicitly spell out 3.8 per-field precedence; overall coverage is strong.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "staged-rollout-and-adoption",
+              "score": 2,
+              "evidence_quotes": [
+                "Relay 3.6 and 3.8, their documented keys, and editor 9.2 remain supported through **2026-12-31**.",
+                "Keep legacy readers and editor 9.2 available for supported versions until policy permits retirement and remaining consumers have been reconciled.",
+                "Track readers, writers, templates, editors, retained files, queued updates, local kits, offline installations, and customer-managed installations."
+              ],
+              "reason": "Separates advisory preparation, migration, and later removal; honors support term and requires cohort evidence while preserving legacy paths.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "rollback-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "the rollback evidence does not cover configuration recovery.",
+                "define a bounded cohort, stop condition, halt role, escalation point, and recovery that restores both executable and configuration and addresses queued files.",
+                "No migration owner, retirement owner, or approved exception decision is recorded."
+              ],
+              "reason": "Recognizes that binary rollback is insufficient and requires config/queue recovery, bounded controls, and acknowledges unassigned owners.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retirement-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Rehearse removal at the actual console and kit boundaries while demonstrating that a legacy reference is detected and a supported control still works.",
+                "After an authorized removal, inspect shipped artifacts and observe both checks; until then, report retirement as pending."
+              ],
+              "reason": "Specifies boundary-level post-removal observations and avoids claiming retirement from rollout or notices.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Now: internally prepare an accurate advisory notice and migration plan.",
+                "The proposal’s claimed replacement readiness, customer agreement, safe rollback, and October completion are not established by the supplied inventory."
+              ],
+              "reason": "Review remains a plan, makes no observable external changes, and distinguishes evidence limits from completed migration/removal.",
+              "quote_audit_passed": false
+            }
+          ]
+        },
+        {
+          "label": "B",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "cohort-and-coverage",
+              "score": 2,
+              "evidence_quotes": [
+                "The 18 offline installations have unknown current files and no startup observation.",
+                "The 12 locally administered installations have unknown files and process state; central delivery is disabled.",
+                "The 70/70 capability figure covers only online installations reporting executable 3.8.",
+                "A queued update is not an acknowledgement or successful restart."
+              ],
+              "reason": "Covers all material cohorts and unknowns, limits dashboard evidence, and separates queued delivery, acknowledgement, and restart.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "semantic-mapping",
+              "score": 2,
+              "evidence_quotes": [
+                "Under the contract, `false` and `0` are explicit values, while omitted fields inherit policy at each startup.",
+                "Relay 3.6 accepts only the legacy spellings. It rejects the entire file at startup if it contains the unknown top-level key `prefetch`, including when the file also contains valid legacy keys.",
+                "A missing replacement field falls back to the corresponding legacy field, then to installation policy."
+              ],
+              "reason": "Identifies false/zero and omission semantics, old-parser rejection, and explicitly states the per-field precedence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "staged-rollout-and-adoption",
+              "score": 2,
+              "evidence_quotes": [
+                "The contract supports them through year end, and the inventory has no approved migration or retirement owner.",
+                "Keep legacy parsing, console acceptance, and editor 9.2 available for supported consumers through the contract term.",
+                "Track readers, writers, templates, and editors separately."
+              ],
+              "reason": "Separates advisory notice, migration, and retirement; respects the support commitment and preserves compatibility while requiring adoption evidence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "rollback-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "Executable rollback does not restore configuration bytes or remove queued updates; central revisions last seven days, while customers can be disconnected for 45 days, and local editors create no central revisions.",
+                "The package should demonstrate recovery with the actual converted file and queued state, test rollback to every still-supported executable",
+                "Start with representative cases from materially different behaviors, and stop on any semantic mismatch, parse or startup failure, or unproven recovery path."
+              ],
+              "reason": "Explains rollback limits and retained-artifact risk and calls for tested recovery and bounded stop criteria. Notes unassigned owners elsewhere.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "retirement-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "rehearse removal at the actual console, editor, and configuration boundaries; and prove both that a legacy reference is detected and that a supported control still works.",
+                "Report separately what is deprecated, disabled, or physically removed."
+              ],
+              "reason": "Defines actual removal evidence and distinguishes notice/deprecation from physical retirement.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "No customer migration, communication, deployment, or file changes are authorized in this review."
+              ],
+              "reason": "Clearly limits actions to a read-only review and does not claim execution.",
+              "quote_audit_passed": true
+            }
+          ]
+        },
+        {
+          "label": "C",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "cohort-and-coverage",
+              "score": 2,
+              "evidence_quotes": [
+                "Its 70/70 denominator is online installations reporting 3.8. It excludes the 20 installations on 3.6, the 18 offline installations, and the 12 locally administered installations.",
+                "The 18 offline installations have no current configuration sample or post-contact health observation.",
+                "The 12 local installations have disabled central delivery and no current version or configuration evidence.",
+                "record per installation: current executable and config, conversion result, delivery/receipt, restart, startup health, and recovery outcome."
+              ],
+              "reason": "Covers the full inventory, identifies stale and missing evidence, limits capability/write metrics, and separates delivery from restart health.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "semantic-mapping",
+              "score": 2,
+              "evidence_quotes": [
+                "Contract semantics preserve explicit `false` for `enabled` and explicit `0` for `max_items`; both are present values.",
+                "Omitted fields inherit installation policy at each startup, and policy may change.",
+                "Relay 3.6 rejects any file containing `prefetch`, even alongside valid legacy keys.",
+                "Relay 3.8 accepts either format."
+              ],
+              "reason": "Correctly handles falsy values, omission, and 3.6 parser rejection; 3.8 accepts both formats, although per-field precedence is not stated explicitly.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "staged-rollout-and-adoption",
+              "score": 2,
+              "evidence_quotes": [
+                "Relay 3.6 and 3.8, their documented legacy keys, and editor 9.2 remain supported through **2026-12-31**.",
+                "A 3.8 pilot is a reasonable next migration step once those checks pass, because 3.8 accepts either format.",
+                "Keep 3.6 on legacy-only configuration until its executable upgrade is confirmed.",
+                "Physical removal needs a later decision based on reconciled consumer and recovery evidence."
+              ],
+              "reason": "Distinguishes preparation/pilot from retirement, honors the support term, and gates migration on executable compatibility and cohort evidence.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "rollback-boundary",
+              "score": 2,
+              "evidence_quotes": [
+                "Executable rollback does not restore file bytes or remove queued updates.",
+                "Confirm configuration restoration and queued-update removal during rollback rehearsal, not just binary rollback.",
+                "Define a stop condition and a role authorized to halt each batch."
+              ],
+              "reason": "Recognizes rollback boundary, requires a tested config/queue recovery path, and proposes bounded stop authority; unresolved owner roles are explicitly identified.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "retirement-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "After any authorized removal, inspect the shipped console and kit boundary and verify both that a legacy use is rejected where intended and that a supported control still works.",
+                "The retirement decision should follow observed migrations and tested configuration recovery, not the proposed calendar dates alone."
+              ],
+              "reason": "Requires observable checks at actual boundaries after authorized removal and does not treat rollout as retirement.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "Proceed with the planning and validation work",
+                "No edits, migration execution, deployment, infrastructure access, customer contact, or internal messages are authorized."
+              ],
+              "reason": "Proposes planning and validation without claiming actual migration or external changes; no changes are visible in the supplied evidence.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "correction_output_invalid",
+      "identity_mapping_file": "identity-map-private.json",
+      "final_score_source": "attempt-02"
+    }
+  ],
+  "attempt_score_count": 57,
+  "responders_scored": [
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-01"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-02"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-03"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-01"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-02"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-03"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-01"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-02"
+    },
+    {
+      "case": "failure-oriented-testing--race-clean-lost-update::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--race-clean-lost-update--replicate-03"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-01"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-02"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-03"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-01"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-02"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-03"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-01"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-02"
+    },
+    {
+      "case": "failure-oriented-testing--green-transaction-fake::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--green-transaction-fake--replicate-03"
+    },
+    {
+      "case": "pure-format-assertion::codex-desc-01",
+      "variant": "codex-desc-01",
+      "attempt": "failure-oriented-testing--pure-format-assertion"
+    },
+    {
+      "case": "pure-format-assertion::codex-desc-07",
+      "variant": "codex-desc-07",
+      "attempt": "failure-oriented-testing--pure-format-assertion"
+    },
+    {
+      "case": "pure-format-assertion::codex-desc-08",
+      "variant": "codex-desc-08",
+      "attempt": "failure-oriented-testing--pure-format-assertion"
+    },
+    {
+      "case": "idempotency--scoped-transfer-identity::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--scoped-transfer-identity--replicate-01"
+    },
+    {
+      "case": "idempotency--scoped-transfer-identity::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--scoped-transfer-identity--replicate-02"
+    },
+    {
+      "case": "idempotency--scoped-transfer-identity::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--scoped-transfer-identity--replicate-03"
+    },
+    {
+      "case": "idempotency--expired-lease-owner::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--expired-lease-owner--replicate-01"
+    },
+    {
+      "case": "idempotency--expired-lease-owner::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--expired-lease-owner--replicate-02"
+    },
+    {
+      "case": "idempotency--expired-lease-owner::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--expired-lease-owner--replicate-03"
+    },
+    {
+      "case": "idempotency--unknown-external-payout::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--unknown-external-payout--replicate-01"
+    },
+    {
+      "case": "idempotency--unknown-external-payout::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--unknown-external-payout--replicate-02"
+    },
+    {
+      "case": "idempotency--unknown-external-payout::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--unknown-external-payout--replicate-03"
+    },
+    {
+      "case": "idempotency--outbox-send-mark-crash::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--outbox-send-mark-crash--replicate-01"
+    },
+    {
+      "case": "idempotency--outbox-send-mark-crash::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--outbox-send-mark-crash--replicate-02"
+    },
+    {
+      "case": "idempotency--outbox-send-mark-crash::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--outbox-send-mark-crash--replicate-03"
+    },
+    {
+      "case": "idempotency--retention-and-version-drift::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--retention-and-version-drift--replicate-01"
+    },
+    {
+      "case": "idempotency--retention-and-version-drift::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--retention-and-version-drift--replicate-02"
+    },
+    {
+      "case": "idempotency--retention-and-version-drift::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--retention-and-version-drift--replicate-03"
+    },
+    {
+      "case": "idempotency--natural-invitation-invariant::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--natural-invitation-invariant--replicate-01"
+    },
+    {
+      "case": "idempotency--natural-invitation-invariant::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--natural-invitation-invariant--replicate-02"
+    },
+    {
+      "case": "idempotency--natural-invitation-invariant::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--natural-invitation-invariant--replicate-03"
+    },
+    {
+      "case": "idempotency--bounded-webhook-edit::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--bounded-webhook-edit--replicate-01"
+    },
+    {
+      "case": "idempotency--bounded-webhook-edit::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--bounded-webhook-edit--replicate-02"
+    },
+    {
+      "case": "idempotency--bounded-webhook-edit::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--bounded-webhook-edit--replicate-03"
+    },
+    {
+      "case": "pure-get-backoff-nontrigger::codex-desc-02",
+      "variant": "codex-desc-02",
+      "attempt": "idempotency--pure-get-backoff-nontrigger"
+    },
+    {
+      "case": "microservice-testing--unknown-api-consumers::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--unknown-api-consumers--replicate-01"
+    },
+    {
+      "case": "microservice-testing--unknown-api-consumers::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--unknown-api-consumers--replicate-02"
+    },
+    {
+      "case": "microservice-testing--unknown-api-consumers::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--unknown-api-consumers--replicate-03"
+    },
+    {
+      "case": "microservice-testing--mocked-checkout-gap::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--mocked-checkout-gap--replicate-01"
+    },
+    {
+      "case": "microservice-testing--mocked-checkout-gap::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--mocked-checkout-gap--replicate-02"
+    },
+    {
+      "case": "microservice-testing--mocked-checkout-gap::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--mocked-checkout-gap--replicate-03"
+    },
+    {
+      "case": "pure-unit-test-nontrigger::codex-desc-03",
+      "variant": "codex-desc-03",
+      "attempt": "microservice-testing--pure-unit-test-nontrigger"
+    },
+    {
+      "case": "technical-deprecation--periodic-export-client::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--periodic-export-client--replicate-01"
+    },
+    {
+      "case": "technical-deprecation--periodic-export-client::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--periodic-export-client--replicate-02"
+    },
+    {
+      "case": "technical-deprecation--periodic-export-client::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--periodic-export-client--replicate-03"
+    },
+    {
+      "case": "technical-deprecation--config-channel-migration::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--config-channel-migration--replicate-01"
+    },
+    {
+      "case": "technical-deprecation--config-channel-migration::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--config-channel-migration--replicate-02"
+    },
+    {
+      "case": "technical-deprecation--config-channel-migration::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--config-channel-migration--replicate-03"
+    },
+    {
+      "case": "private-format-helper::codex-desc-04",
+      "variant": "codex-desc-04",
+      "attempt": "technical-deprecation--private-format-helper"
+    }
+  ]
+}
