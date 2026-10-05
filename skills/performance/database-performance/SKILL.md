@@ -1,6 +1,6 @@
 ---
 name: database-performance
-description: Diagnose database workload latency or throughput and validate query, index, transaction-lifetime, pool, or maintenance improvements. Use for expensive queries, plan regressions, contention, and database saturation; duplicate-effect or isolation correctness alone has its existing route.
+description: Diagnose database performance and validate query, index, transaction, pool, or maintenance changes. Use costly queries, plan regressions, contention, or saturation; duplicate-effect correctness alone follows its existing route.
 license: MIT
 ---
 
@@ -8,6 +8,7 @@ license: MIT
 
 Connect application impact to the database work and waiting that cause it, then
 validate the smallest justified intervention on the actual engine.
+Query cost is the database work and waiting attributable to an application request.
 
 ## 1. Establish the workload and timing boundary
 
@@ -19,6 +20,7 @@ use the authorized target for requested execution.
 
 **Done:** the affected workload, baseline interval, timing boundary, invariant
 and evidence gaps are explicit.
+Example: separate pool acquisition and server execution for the same request class over the incident window.
 
 ## 2. Locate the constraint
 
@@ -31,6 +33,7 @@ corresponding primary contracts and obtain equivalent observations.
 **Done:** the leading mechanism is supported by aligned path/wait/workload
 evidence, with a measurement that could reject it. A fast isolated plan remains
 separate from end-to-end performance.
+Example: test whether rising lock waits track the requests whose latency regressed.
 
 ## 3. Choose and budget the intervention
 
@@ -43,6 +46,7 @@ target for the actual command rather than assuming rollback reverses everything.
 
 **Done:** the candidate addresses the measured mechanism and has explicit
 correctness, resource, deployment and recovery checks.
+Example: compare removing one repeated query with adding its index, including the added write cost and rollback path.
 
 ## 4. Validate representative outcomes
 
@@ -54,3 +58,4 @@ affects them. For review/design, provide proposed checks with acceptance criteri
 **Done:** report the supported cause, changed behavior or recommendation,
 executed checks, tradeoffs and untested conditions. Keep toy/warm isolated results
 within their observed scope. [Sources](references/sources.md) records provenance.
+Example: report matched client p95, useful throughput, query count, wait time, and write-resource change.

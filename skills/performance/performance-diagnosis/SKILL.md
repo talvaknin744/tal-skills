@@ -1,6 +1,6 @@
 ---
 name: performance-diagnosis
-description: Diagnose backend latency regressions, throughput plateaus, or resource saturation and validate a bounded improvement. Use for unexplained slowness, profiling, pool waits, container throttling, and distributed critical paths; capacity forecasts and workload construction have separate workflows.
+description: Diagnose backend latency, throughput plateaus, or resource saturation; validate bounded improvements. Use for unexplained slowness, profiling, pool waits, throttling, or distributed paths; capacity forecasts and workload construction follow separate workflows.
 license: MIT
 ---
 
@@ -9,6 +9,7 @@ license: MIT
 Explain the constraint on useful work, then demonstrate whether the requested
 intervention changes it. A plausible profile is a hypothesis about the affected
 operation until correlated with its path and workload.
+Bottleneck means the executing or waiting constraint that limits useful work.
 
 ## 1. Establish the observation boundary
 
@@ -19,6 +20,7 @@ errors, rejection and unfinished work separately. Keep review read-only; impleme
 the scoped repair when requested and use the authorized test environment.
 
 **Done:** symptom, baseline window, workload, target and missing evidence are explicit.
+Example: compare the affected endpoint's p95 and completion rate with the same measures before the regression.
 
 ## 2. Locate executing and waiting work
 
@@ -34,6 +36,9 @@ averages from bursts and runnable work from blocked work.
 
 **Done:** the delay is localized as far as evidence permits, with a concrete
 observation that could disprove the leading hypothesis.
+Example: if pool acquisition dominates, check whether a pool-wait reduction moves endpoint latency under matched demand.
+
+When the unresolved task is representative workload construction, Call the Skill tool with "load-testing". When database work or waits are implicated, Call the Skill tool with "database-performance". When the task is admission or overload containment, Call the Skill tool with "overload-control". If the Skill tool is unavailable, continue the diagnosis with the relevant local instructions and available tools.
 
 ## 3. Choose the smallest intervention
 
@@ -45,6 +50,7 @@ freshness, ordering and accepted-work contracts.
 
 **Done:** the chosen change has a causal rationale, expected signal, tradeoff and
 stop condition; unresolved hypotheses have a discriminating next measurement.
+Example: reduce fan-out only when downstream attempts explain the delay, and stop if useful completions fall.
 
 ## 4. Verify the mechanism and outcome
 
@@ -57,3 +63,4 @@ checks and acceptance conditions without claiming execution.
 **Done:** report the supported cause, change or recommendation, observed effect,
 and remaining limits. Separate a local improvement from sustainable fleet capacity.
 Read [sources](references/sources.md) for primary grounding and reading scope.
+Example: report a confirmed queue-wait reduction and endpoint outcome separately from any untested fleet-capacity estimate.

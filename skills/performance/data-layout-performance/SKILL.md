@@ -1,6 +1,6 @@
 ---
 name: data-layout-performance
-description: Assess or optimize measured Go and Python hot paths affected by data layout, CPU-cache locality, allocation, or shared-line contention. Use for AoS/SoA choices, hot/cold splitting, false sharing, and bounded ring/cache proposals; ordinary backend changes and dependency waiting keep their existing route.
+description: Optimize measured Go/Python hot paths affected by layout, locality, allocation, or false sharing. Use for AoS/SoA, hot/cold splits, or bounded rings; ordinary backend changes and dependency waits use existing routes.
 license: MIT
 ---
 
@@ -9,6 +9,7 @@ license: MIT
 Choose a representation from its measured access pattern and required semantics.
 A worthwhile outcome may be retaining the existing structure when the expected
 service benefit does not justify its cost.
+Layout choice follows workload semantics and measured cost.
 
 ## 1. Establish criticality
 
@@ -21,6 +22,7 @@ conversion and synchronization paid by production.
 **Done:** a material contribution or explicit experimental question justifies the
 layout investigation; otherwise explain the stronger constraint and stop at that
 bounded assessment. A mean profile alone cannot rule out a rare tail-critical path.
+Example: compare allocation profiles with the affected request cohort before changing a shared buffer.
 
 ## 2. Specify semantics before layout
 
@@ -31,6 +33,7 @@ ownership. Honor read-only review; implement only the requested scoped change.
 
 **Done:** an independent correctness oracle and required invariants distinguish
 a faster equivalent implementation from changed or lost work.
+Example: specify ring overwrite behavior and compare every retained value with a simple reference queue.
 
 ## 3. Select the justified branch
 
@@ -47,6 +50,7 @@ hot-path/ownership evidence before becoming a refactor.
 
 **Done:** each chosen transformation has a mechanism, correctness preconditions,
 cost boundary and expected observation; universal speedups remain unsupported.
+Example: split cold fields only if the hot scan avoids their cache lines without raising conversion cost past the measured gain.
 
 ## 4. Validate correctness and useful benefit
 
@@ -60,3 +64,4 @@ well as kernel timing. Report tool/hardware limitations and variability.
 improvement, or the recommendation states why it is unjustified or what remains
 unverified. Microbenchmark improvement alone supplies no endpoint p99/capacity
 guarantee. [Sources](references/sources.md) records primary reading scope.
+Example: compare repeated runs at the production-sized working set and include buffer construction in the timed service path.
