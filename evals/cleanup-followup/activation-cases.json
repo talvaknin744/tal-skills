@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "key": "followup-v3--architecture-decision-boundary-marker-v3",
+      "skill": "architecture",
+      "case_id": "architecture-decision-boundary-marker-v3",
+      "group": "focused-marker-v3",
+      "existing_case": false,
+      "input_dir": "inputs/followup-v3--architecture-decision-boundary-marker-v3",
+      "fixture_source": "evals/architecture/fixtures/multilingual-worker",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+          "bytes": 489
+        },
+        {
+          "path": "export.py",
+          "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+          "bytes": 280
+        },
+        {
+          "path": "status.js",
+          "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+          "bytes": 145
+        },
+        {
+          "path": "upload.sh",
+          "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+          "bytes": 150
+        }
+      ],
+      "prompt_sha256": "ef6f61ca97d51dfb6b1e7b249523617edd4c2c40dde1e2653eb920b25670e4d0",
+      "content_criteria_sha256": "11cd12b7ac759d91c6c919aaec834a4769f3d65efa20173cfc39d8154cc59b4b",
+      "marker_criteria_sha256": "2522d090bbea1099be092f68cd6adb6c6da799474027ecb8a2cf8565534e0495",
+      "source_explicit_case_key": "followup-v2--architecture-explicit-native-v2",
+      "candidate_variant": "r3-final",
+      "contract_reason": "Versioned observable decision-boundary and semantic-completion contract. The original explicit-native-read criterion and its failed observations remain separately scored; the new marker observation does not prove hidden body injection.",
+      "editable_files": [],
+      "prompt": "Use $architecture to give this small export system a proportionate review. Are its module boundaries and single-job deployment reasonable, and which reliability concerns deserve attention first? Keep the result concise and read-only. Use no external services.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "native_skill_reader": true,
+        "literal_skill_tool": false
+      },
+      "content_criteria": [
+        {
+          "id": "explicit-native-read",
+          "severity": "critical",
+          "criterion": "The observable trace includes a successful native read of the architecture SKILL.md body after the explicit $architecture user invocation. Does not claim an unavailable literal Skill tool was called."
+        },
+        {
+          "id": "proportionate",
+          "severity": "major",
+          "criterion": "Assesses the actual supplied scale and module responsibilities, respects the single-instance assumption, and connects reliability observations to the upload/record sequence, shared temporary output or retry procedure."
+        },
+        {
+          "id": "bounded-specialists",
+          "severity": "major",
+          "criterion": "Does not recruit specialists solely because several languages appear. Any actual delegation or additional skill read has a concrete unresolved question; neither broad orchestration nor a prescribed roster is required."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves supplied fixture and package files unchanged and does not fabricate production incidents or test results."
+        }
+      ],
+      "marker_criteria": [
+        {
+          "id": "decision-boundary-semantic-marker",
+          "severity": "major",
+          "criterion": "The response uses the body-only leading term decision boundary in a substantive sentence that names the current system and proportionate decision, respects the supplied single-instance constraint, and states what evidence could change the recommendation. The phrase alone, a heading quota, or a copied glossary sentence is insufficient."
+        },
+        {
+          "id": "semantic-completion-conditions",
+          "severity": "major",
+          "criterion": "The review semantically reaches the requested endpoint: it gives an actionable proportionate judgment, connects the primary reliability finding to supplied evidence, and makes unperformed checks or material evidence gaps explicit. A ceremonial Done heading or assertion of completion without these conditions does not pass. Do not require exact heading syntax."
+        }
+      ],
+      "fixture_dir": "fixtures/followup-v3--architecture-decision-boundary-marker-v3",
+      "content_criteria_sha256_encoding": "Criteria array serialized as Python JSON with sorted keys and compact comma/colon separators, no trailing LF",
+      "marker_criteria_sha256_encoding": "Criteria array serialized as Python JSON with sorted keys and compact comma/colon separators, no trailing LF"
+    }
+  ]
+}

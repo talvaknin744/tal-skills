@@ -1,6 +1,6 @@
 ---
 name: technical-deprecation
-description: Retire supported libraries, APIs, configuration, or internal tools when consumers must migrate. Use for replacement readiness and removal gates; exclude private helper cleanup, worker draining, and product shutdown.
+description: Retire supported libraries, APIs, configuration, or internal tools when consumers must migrate. Use for replacement readiness, removal gates, and periodic export client retirement; exclude private helper cleanup, worker draining, and product shutdown.
 license: MIT
 ---
 

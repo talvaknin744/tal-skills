@@ -1,6 +1,6 @@
 ---
 name: idempotency
-description: Make API, webhook and worker retries duplicate-safe. Use for idempotency keys, concurrent duplicates and uncertain business effects. For retry timing, use overload-control.
+description: Design or review idempotency for API, webhook and worker retries. Use for tenant-scoped keys, transfer handlers, amount conflicts, concurrent duplicates and uncertain business effects. For retry timing, use overload-control.
 license: MIT
 ---
 

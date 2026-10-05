@@ -1,0 +1,316 @@
+{
+  "schema_version": "normalized-score-rows-1",
+  "candidate": "codex-r3-architecture-stage11",
+  "score_status": "finalblind_scored",
+  "source_score_file": "architecture-stage11-final-scores-source.json",
+  "rows": [
+    {
+      "case_key": "architecture--ordinary-pr-nontrigger-final-r3",
+      "candidate": "codex-r3-architecture-stage11",
+      "candidate_identity_sha256": "45b7b39603aa67ae201f4cf923e21fd8799901fbe4d258a1c739d30574e3b847",
+      "candidate_codex_digest": "805d7bda27035e6f3497600a6c99d73a75d967b2bb5518d7dc0a3c5045a14eea",
+      "replicate": "A",
+      "view": "ordinary-pr-control",
+      "score_status": "finalblind_scored",
+      "criteria": [
+        {
+          "id": "scope",
+          "score": 2,
+          "evidence_quotes": [
+            "Review this small PR for a correctness regression. Tell me whether the pagination change is safe. Do not edit files.",
+            "git status --short && git diff --",
+            "README.md",
+            "change.diff"
+          ],
+          "reason": "The request was handled as an ordinary code review; the recorded activity shows only inspection, with no architecture workflow or panel convened.",
+          "quote_audit_passed": true,
+          "severity": "critical"
+        },
+        {
+          "id": "regression",
+          "score": 2,
+          "evidence_quotes": [
+            "`<=` makes `next_offset` return `None` when `returned_count == page_size`.",
+            "A shorter response ends pagination.",
+            "pagination stops early and omits later records whenever a page is full."
+          ],
+          "reason": "The answer identifies the full-page regression, ties it to the <= comparison, and states the endpoint contract that a full page should continue pagination.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        },
+        {
+          "id": "read-only",
+          "score": 2,
+          "evidence_quotes": [
+            "git status --short && git diff --",
+            "## Pagination helper change",
+            "The proposed patch is in `change.diff`.",
+            ""
+          ],
+          "reason": "The final status and diff inspection completed with exit code 0 and produced no changes; the supplied fixture remains unchanged.",
+          "quote_audit_passed": false,
+          "severity": "critical"
+        }
+      ],
+      "critical_results": [
+        {
+          "id": "scope",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "major_weighted": {
+        "earned": 4,
+        "maximum": 4
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_status": "failed_after_one_quote_repair",
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_binding": {
+        "prompt_sha256": "3b82a4be22040fe34ad533482374f05e5dd62d86d8efc5ea4d5953f21515d6cb",
+        "criteria_sha256": "cb4bf23f0115118e0f35189a857540c1f16959f22da7d0f4602bea82bdfce2e4",
+        "criteria_path": "remaining-evals/description-retests/architecture-final/inputs/architecture--ordinary-pr-nontrigger-final-r3/criteria.json",
+        "source_case_file": "architecture--ordinary-pr-nontrigger-final-r3",
+        "source_score_file": "remaining-evals/description-retests/architecture-app-server/stage11-independent-scores.json"
+      }
+    },
+    {
+      "case_key": "followup-v3--architecture-decision-boundary-marker-v3",
+      "candidate": "codex-r3-architecture-stage11",
+      "candidate_identity_sha256": "45b7b39603aa67ae201f4cf923e21fd8799901fbe4d258a1c739d30574e3b847",
+      "candidate_codex_digest": "805d7bda27035e6f3497600a6c99d73a75d967b2bb5518d7dc0a3c5045a14eea",
+      "replicate": "A",
+      "view": "explicit-content",
+      "score_status": "finalblind_scored",
+      "criteria": [
+        {
+          "id": "explicit-native-read",
+          "score": 2,
+          "evidence_quotes": [
+            "\"type\":\"skill\",\"name\":\"architecture\"",
+            "\"command\":\"cat .agents/skills/architecture/SKILL.md\",\"exit_code\":0"
+          ],
+          "reason": "The input includes the architecture skill and the trace records a successful read of its body after the user invocation. No unavailable literal Skill tool is claimed.",
+          "quote_audit_passed": false,
+          "severity": "critical"
+        },
+        {
+          "id": "proportionate",
+          "score": 2,
+          "evidence_quotes": [
+            "The small module split and single daily job are proportionate to 180 accounts, a largest stated CSV of 6 MB, and no realtime or compliance requirements.",
+            "The fixed `/tmp/accounts.csv` is safe only if the single-instance guarantee covers manual reruns as well as cron.",
+            "verify that rerunning safely replaces or completes the same artifact."
+          ],
+          "reason": "The review grounds the deployment judgment in the supplied scale and constraints, respects the single-instance assumption, and connects reliability concerns to export, upload, status recording, shared temporary output, and manual reruns.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        },
+        {
+          "id": "bounded-specialists",
+          "score": 2,
+          "evidence_quotes": [
+            "This was a read-only review; I ran no checks."
+          ],
+          "reason": "No specialist delegation or additional skill read is evidenced; no roster is prescribed.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        },
+        {
+          "id": "read-only",
+          "score": 2,
+          "evidence_quotes": [
+            "This was a read-only review; I ran no checks.",
+            "The supplied files don’t include `export_cli` or the cron configuration, so command wiring, locking, and alerting remain unverified."
+          ],
+          "reason": "The trace shows inspection commands only and no fixture writes. The answer does not fabricate production incidents or claim tests were run.",
+          "quote_audit_passed": true,
+          "severity": "critical"
+        }
+      ],
+      "critical_results": [
+        {
+          "id": "explicit-native-read",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "major_weighted": {
+        "earned": 8,
+        "maximum": 8
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_status": "failed_after_one_quote_repair",
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_binding": {
+        "prompt_sha256": "ef6f61ca97d51dfb6b1e7b249523617edd4c2c40dde1e2653eb920b25670e4d0",
+        "criteria_sha256": "11cd12b7ac759d91c6c919aaec834a4769f3d65efa20173cfc39d8154cc59b4b",
+        "criteria_path": "evals/cleanup-followup/activation-cases.json#content_criteria",
+        "source_case_file": "followup-v3--architecture-decision-boundary-marker-v3",
+        "source_score_file": "remaining-evals/description-retests/architecture-app-server/stage11-independent-scores.json"
+      }
+    },
+    {
+      "case_key": "architecture--multilingual-worker-final-r3",
+      "candidate": "codex-r3-architecture-stage11",
+      "candidate_identity_sha256": "45b7b39603aa67ae201f4cf923e21fd8799901fbe4d258a1c739d30574e3b847",
+      "candidate_codex_digest": "805d7bda27035e6f3497600a6c99d73a75d967b2bb5518d7dc0a3c5045a14eea",
+      "replicate": "A",
+      "view": "multilingual",
+      "score_status": "finalblind_scored",
+      "criteria": [
+        {
+          "id": "proportionate",
+          "score": 2,
+          "evidence_quotes": [
+            "For 180 accounts and a 6 MB maximum CSV, one daily job with manual reruns is a reasonable deployment shape; extra services or queueing are not justified by the stated needs."
+          ],
+          "reason": "Assesses the stated scale and keeps the deployment proportionate.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        },
+        {
+          "id": "specialist-relevance",
+          "score": 2,
+          "evidence_quotes": [],
+          "reason": "No specialist is recruited.",
+          "quote_audit_passed": false,
+          "severity": "major"
+        },
+        {
+          "id": "evidence",
+          "score": 2,
+          "evidence_quotes": [
+            "The wrapper records the timestamp after upload.",
+            "A failure after upload can lead to uploading the same fixed destination again.",
+            "The repository doesn’t show the cron configuration or upload implementation, so overlap handling and upload atomicity can’t be assessed."
+          ],
+          "reason": "Ties concerns to the upload, timestamp-recording, and rerun sequence, and treats overlap as unassessable given the stated single-instance setup.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        },
+        {
+          "id": "read-only",
+          "score": 2,
+          "evidence_quotes": [
+            "This was a read-only review; I made no changes or ran tests.",
+            "git status --short && git ls-files"
+          ],
+          "reason": "The answer reports no changes or tests; observable evidence shows a status check and file listing, with no write operation or fabricated production incident or test result.",
+          "quote_audit_passed": true,
+          "severity": "critical"
+        }
+      ],
+      "critical_results": [
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "major_weighted": {
+        "earned": 12,
+        "maximum": 12
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_status": "failed_after_one_quote_repair",
+      "quote_audit_passed": false,
+      "coverage_gaps": [],
+      "source_binding": {
+        "prompt_sha256": "f1fcd9dc107c1375e15ed61680c4ca602a6725892c48e45971071b927b0a9685",
+        "criteria_sha256": "7daf7f64aeaf44adecc3dfa4abcdc3e34e4085ae948ebef2abf91aedbe14dcc6",
+        "criteria_path": "remaining-evals/description-retests/architecture-final/inputs/architecture--multilingual-worker-final-r3/criteria.json",
+        "source_case_file": "skills/evals/architecture/fixtures/multilingual-worker",
+        "source_score_file": "remaining-evals/description-retests/architecture-app-server/stage11-independent-scores.json"
+      }
+    },
+    {
+      "case_key": "followup-v3--architecture-decision-boundary-marker-v3",
+      "candidate": "codex-r3-architecture-stage11",
+      "candidate_identity_sha256": "45b7b39603aa67ae201f4cf923e21fd8799901fbe4d258a1c739d30574e3b847",
+      "candidate_codex_digest": "805d7bda27035e6f3497600a6c99d73a75d967b2bb5518d7dc0a3c5045a14eea",
+      "replicate": "A",
+      "view": "explicit-marker",
+      "score_status": "finalblind_scored",
+      "criteria": [
+        {
+          "id": "decision-boundary-semantic-marker",
+          "score": 1,
+          "evidence_quotes": [
+            "The **decision boundary** is those workload and service constraints: reconsider the deployment only if delivery deadlines, recovery needs, volume, or the intended file contract demand it.",
+            "The small module split and single daily job are proportionate to 180 accounts, a largest stated CSV of 6 MB, and no realtime or compliance requirements."
+          ],
+          "reason": "It names the proportionate deployment judgment and conditions that could change it. The marker sentence does not name the current system or acknowledge its supplied single-instance constraint.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        },
+        {
+          "id": "semantic-completion-conditions",
+          "score": 2,
+          "evidence_quotes": [
+            "The README says one CSV per active account, but the exporter writes one CSV containing all active accounts, and the wrapper uploads a single `exports/accounts.csv` object",
+            "The supplied files don’t include `export_cli` or the cron configuration, so command wiring, locking, and alerting remain unverified.",
+            "This was a read-only review; I ran no checks."
+          ],
+          "reason": "It gives an actionable judgment, grounds the primary reliability concern in the README/exporter mismatch, and states material evidence gaps and that no checks were run.",
+          "quote_audit_passed": true,
+          "severity": "major"
+        }
+      ],
+      "critical_results": [],
+      "major_weighted": {
+        "earned": 6,
+        "maximum": 8
+      },
+      "minor_weighted": {
+        "earned": 0,
+        "maximum": 0
+      },
+      "unsuccessful_due_to_critical_failure": false,
+      "critical_partial": false,
+      "quote_status": "valid",
+      "quote_audit_passed": true,
+      "coverage_gaps": [],
+      "source_binding": {
+        "prompt_sha256": "ef6f61ca97d51dfb6b1e7b249523617edd4c2c40dde1e2653eb920b25670e4d0",
+        "criteria_sha256": "2522d090bbea1099be092f68cd6adb6c6da799474027ecb8a2cf8565534e0495",
+        "criteria_path": "evals/cleanup-followup/activation-cases.json#marker_criteria",
+        "source_case_file": "followup-v3--architecture-decision-boundary-marker-v3",
+        "source_score_file": "remaining-evals/description-retests/architecture-app-server/stage11-independent-scores.json"
+      }
+    }
+  ],
+  "run_metadata": {
+    "started_utc": "2026-10-05T19:24:55.142727+00:00",
+    "finished_utc": "2026-10-05T19:25:13.759211+00:00",
+    "grader_model": "gpt-6-luna",
+    "parallel_graders": 4,
+    "attempt_score_count": 4,
+    "candidate_freeze": "11-architecture-explicit-term",
+    "responder_attempts": 3,
+    "provider_model_revision": "not emitted",
+    "usage_totals": "Recorded in responder summary and per-attempt tokenUsage events."
+  }
+}

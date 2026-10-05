@@ -1,0 +1,221 @@
+{
+  "started_utc": "2026-10-05T19:30:26.835193+00:00",
+  "finished_utc": "2026-10-05T19:32:18.692686+00:00",
+  "grader_model": "gpt-6-luna",
+  "parallel_graders_max": 4,
+  "attempt_score_count": 4,
+  "groups": [
+    {
+      "group_case": "stage12-explicit-marker",
+      "grader": "stage12-explicit-marker",
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "decision-boundary-semantic-marker",
+              "score": 2,
+              "evidence_quotes": [
+                "Decision boundary: for this small, single-instance daily export, keep the current job shape; revisit it if verified upload behavior, artifact requirements, or recovery needs demand stronger publication or scheduling guarantees."
+              ],
+              "reason": "The sentence uses the required term and gives a proportionate recommendation for the single-instance system, with evidence that could change it.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "semantic-completion-conditions",
+              "score": 2,
+              "evidence_quotes": [
+                "A single daily job also fits the stated scale: 180 accounts, largest file 6 MB, one instance",
+                "The README describes one CSV per active account, while the exporter writes all active rows to one CSV",
+                "The uploader’s replacement/atomicity behavior isn’t shown; confirm success means the complete file is visible at the stable key."
+              ],
+              "reason": "The review gives an actionable judgment, ties reliability concerns to supplied evidence, and identifies unresolved checks and evidence gaps.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "valid",
+      "scores_and_reasons_from": "attempt-01",
+      "quote_correction_attempted": false
+    },
+    {
+      "group_case": "stage12-explicit-content",
+      "grader": "stage12-explicit-content",
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "explicit-native-read",
+              "score": 2,
+              "evidence_quotes": [
+                "\"type\":\"skill\",\"name\":\"architecture\"",
+                "\"command\":\"cat .agents/skills/architecture/SKILL.md\",\"exit_code\":0"
+              ],
+              "reason": "The input receipt shows the explicit architecture skill item, and the supplied successful read evidence confirms the SKILL.md body was read. No unavailable literal Skill tool is claimed.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "proportionate",
+              "score": 2,
+              "evidence_quotes": [
+                "A single daily job also fits the stated scale: 180 accounts, largest file 6 MB, one instance",
+                "The wrapper stops on command errors and records the upload time only after upload succeeds",
+                "Failures are retried manually"
+              ],
+              "reason": "The answer assesses module boundaries and the single-instance deployment in light of the supplied scale, and prioritizes concerns tied to upload and timestamp order and manual recovery.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "bounded-specialists",
+              "score": 2,
+              "evidence_quotes": [
+                "A service split or worker queue isn’t justified by this evidence.",
+                "The uploader’s replacement/atomicity behavior isn’t shown; confirm success means the complete file is visible at the stable key."
+              ],
+              "reason": "No specialists were recruited. The additional architecture reference read accompanies concrete review questions, and the answer does not prescribe broad orchestration or a roster.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "\"command\":\"git rev-parse --short HEAD && git status --short\"",
+                "\"aggregatedOutput\":\"acf9b9d\\n\""
+              ],
+              "reason": "The trace shows read-only inspections and a clean status output; it reports no fabricated production incidents or test results.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "failed_after_one_quote_repair",
+      "scores_and_reasons_from": "attempt-01",
+      "quote_correction_attempted": true
+    },
+    {
+      "group_case": "stage12-multilingual-control",
+      "grader": "stage12-multilingual-control",
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "proportionate",
+              "score": 2,
+              "evidence_quotes": [
+                "The boundaries are proportionate: Python handles the query and CSV writing, the shell wrapper runs and uploads the export, and the JavaScript page displays its timestamp.",
+                "A single cron job also fits the stated scale and daily schedule; there’s no clear reason to split this into services."
+              ],
+              "reason": "Assesses the responsibilities and scale and supports keeping the single cron job without adding unnecessary services.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "specialist-relevance",
+              "score": 2,
+              "evidence_quotes": [],
+              "reason": "No specialists were recruited or suggested.",
+              "quote_audit_passed": false
+            },
+            {
+              "id": "evidence",
+              "score": 2,
+              "evidence_quotes": [
+                "The wrapper writes to a fixed path in `/tmp`. An overlapping run could overwrite it; a unique temporary file with cleanup would reduce that risk.",
+                "Since failed uploads are retried manually, verify that uploading to the same remote key replaces the prior file safely. The timestamp is recorded only after upload succeeds"
+              ],
+              "reason": "Connects concerns to the fixed shared output path and upload-then-timestamp sequence, while accounting for manual retries. It does not dispute the single-instance assumption; it frames overlapping runs as a risk scenario.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "This was a read-only review; I made no changes and ran no tests.",
+                "\"git status --short\""
+              ],
+              "reason": "The answer reports no changes or test runs, and the observable evidence shows a clean git status. It does not claim any production incident or test result.",
+              "quote_audit_passed": false
+            }
+          ]
+        }
+      ],
+      "quote_status": "failed_after_one_quote_repair",
+      "scores_and_reasons_from": "attempt-01",
+      "quote_correction_attempted": true
+    },
+    {
+      "group_case": "stage12-ordinary-control",
+      "grader": "stage12-ordinary-control",
+      "runs": [
+        {
+          "label": "A",
+          "technical_uncertainties": [],
+          "criteria": [
+            {
+              "id": "scope",
+              "score": 2,
+              "evidence_quotes": [
+                "Text-only unchanged prompt. No structured skill input item.",
+                "I’ll inspect the PR diff and the surrounding pagination flow, then assess whether the change can skip, duplicate, or misorder results. I won’t modify files."
+              ],
+              "reason": "The attempt handled the request as a direct code review; the evidence shows no architecture workflow or panel was loaded or convened.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "regression",
+              "score": 2,
+              "evidence_quotes": [
+                "changing `<` to `<=` makes `next_offset` return `None` when a response contains exactly `page_size` records.",
+                "The contract says that case should return the next offset.",
+                "Since the endpoint requests at most `page_size` records, this can stop pagination after the first full page and omit later records."
+              ],
+              "reason": "Identifies the regression, ties it to the changed comparison, and explains why a full page must continue under the endpoint contract.",
+              "quote_audit_passed": true
+            },
+            {
+              "id": "read-only",
+              "score": 2,
+              "evidence_quotes": [
+                "/bin/zsh -lc 'git status --short && git diff --'",
+                "/bin/zsh -lc 'pwd && rg --files | head -30'"
+              ],
+              "reason": "The initial status and diff were clean, and the final status command produced no changes; no fixture edits are observable.",
+              "quote_audit_passed": true
+            }
+          ]
+        }
+      ],
+      "quote_status": "valid",
+      "scores_and_reasons_from": "attempt-01",
+      "quote_correction_attempted": false
+    }
+  ],
+  "candidate_freeze": "12-architecture-complete-boundary",
+  "responder_attempts": 3,
+  "provider_model_revision": "not emitted",
+  "usage_totals": {
+    "totalTokens": 248896,
+    "inputTokens": 241479,
+    "cachedInputTokens": 199680,
+    "outputTokens": 7417,
+    "reasoningOutputTokens": 3953,
+    "cacheWriteInputTokens": 0
+  },
+  "retained_harness_attempts": [
+    {
+      "source": "stage12-independent-scores.json",
+      "issue": "Initial control grader names collided with stage11 directories and were stopped by FileExistsError before model call; the same two unchanged control cases were then graded once using fresh stage12-only grader names.",
+      "record": "stage12-independent-scores.json"
+    },
+    {
+      "source": "stage12-runner-duplicate-blocked.json",
+      "issue": "None; stage12 responder workspaces were created once."
+    }
+  ],
+  "quote_corrections": "At most one quote-only correction per case/candidate. Initial numeric vectors preserved where correction output failed validation; exact-quote gaps remain flagged."
+}
