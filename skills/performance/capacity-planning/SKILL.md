@@ -51,4 +51,4 @@ cost basis, evidence and remaining limits. State the evidence needed before a
 forecast or linear estimate becomes demonstrated capacity.
 Consult [sources](references/sources.md) for primary reading scope.
 
-When measured workload evidence is needed to validate material assumptions, Hand off to the `load-testing` skill.
+When measured workload evidence is needed to validate material assumptions, hand off to the `load-testing` skill. If `load-testing` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.

@@ -20,14 +20,14 @@ Completion: the result contract distinguishes arrival, contribution, progress, a
 
 ## Select the relevant branches
 
-For a materialized projection or cross-owner read model beyond operator semantics, Use $microservice-data.
+For a materialized projection or cross-owner read model beyond operator semantics, use $microservice-data. If `microservice-data` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
 
 - For windows, out-of-order or late input, temporal filters, or final output, read [time-and-finality.md](references/time-and-finality.md).
 - For duplicate input, source replay, newer revisions, or conflicting payloads under one identity, read [identity-and-corrections.md](references/identity-and-corrections.md). Compose its contribution rule with the selected late-data policy.
 - For maintained, historical, or latest-value enrichment, read [joins.md](references/joins.md).
 - For TTL, state sizing, historical bootstrap, or replay, read [state-and-history.md](references/state-and-history.md).
 
-Load the branches the request actually needs. For broker publication, acknowledgement, duplicate delivery, or source replay guarantees, Use $messaging-reliability. Broker publication, acknowledgement, and external business-effect guarantees remain separate from operator contribution semantics. The package supplies the streaming contract without requiring another skill.
+Load the branches the request actually needs. For broker publication, acknowledgement, duplicate delivery, or source replay guarantees, use $messaging-reliability. Broker publication, acknowledgement, and external business-effect guarantees remain separate from operator contribution semantics. The package supplies the streaming contract without requiring another skill. If `messaging-reliability` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
 
 
 **Example:** A repeated source record or replayed checkpoint calls for an identity rule before aggregate contribution is chosen.

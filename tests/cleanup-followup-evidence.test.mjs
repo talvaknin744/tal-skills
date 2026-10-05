@@ -47,6 +47,24 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
       assert.equal(sha256(fs.readFileSync(path.join(fixtureDir, fixture.path))), fixture.sha256, `${row.key}/${fixture.path}`);
     }
   }
+  const handoff = readJson('evals/cleanup-followup/handoff-fallback-cases.json');
+  assert.equal(handoff.schema_version, 1);
+  assert.equal(handoff.cases.length, 1);
+  for (const row of handoff.cases) {
+    assert.equal(sha256(row.prompt), row.prompt_sha256, row.key);
+    assert.equal(row.criteria_sha256_encoding, 'criteria.json file bytes: {criteria: [...]} serialized with two-space JSON indentation and a trailing LF');
+    assert.equal(sha256(JSON.stringify({ criteria: row.criteria }, null, 2) + '\n'), row.criteria_sha256, row.key);
+    assert.deepEqual(row.install_skill_names, ['python-backend']);
+    assert.ok(row.fixture_dir.startsWith('fixtures/'), row.key);
+    const fixtureDir = path.join(root, 'evals/cleanup-followup', row.fixture_dir);
+    const actual = fs.readdirSync(fixtureDir, { recursive: true }).filter(name => fs.statSync(path.join(fixtureDir, name)).isFile()).sort();
+    assert.deepEqual(actual, row.fixture_files.map(file => file.path).sort(), row.key);
+    for (const fixture of row.fixture_files) {
+      const bytes = fs.readFileSync(path.join(fixtureDir, fixture.path));
+      assert.equal(sha256(bytes), fixture.sha256, `${row.key}/${fixture.path}`);
+      assert.deepEqual(bytes, fs.readFileSync(path.join(root, row.fixture_source, fixture.path)));
+    }
+  }
 });
 
 test('retained source prompts and rubrics still match their original case files', () => {
@@ -70,10 +88,21 @@ test('retained source prompts and rubrics still match their original case files'
   }
 });
 
-test('final revised-r3 package is the generated Codex package represented by its frozen identity', () => {
-  const identity = readRun('candidate-identity-r3.json');
-  const manifest = readRun('identities/revised-r3.json');
+test('current published candidate matches the generated and canonical package identities', () => {
+  const historicalIdentity = readRun('candidate-identity-r3.json');
+  const historicalManifest = readRun('identities/revised-r3.json');
+  assert.equal(digestRows(historicalIdentity.canonical.files), historicalIdentity.canonical.source_digest);
+  assert.equal(historicalIdentity.codex.source_digest, historicalManifest.frozen_bundle_digest);
+  assert.equal(digestRows(historicalManifest.files), historicalManifest.source_digest);
+  const current = readJson('evals/current-candidate.json');
+  assert.equal(current.schema_version, 1);
+  for (const filename of [current.identity_path, current.manifest_path]) {
+    assert.ok(filename.startsWith('evals/') && !filename.split(/[\\/]/).includes('..'), filename);
+  }
+  const identity = readJson(current.identity_path);
+  const manifest = readJson(current.manifest_path);
   const generated = generateBundle(loadCatalog(root), { host: 'codex', skills: identity.skills });
+  assert.equal(generated.sourceDigest, identity.codex.generator_source_digest);
   const currentFiles = [...generated.files]
     .filter(([filename]) => filename.startsWith('.agents/skills/'))
     .map(([filename, file]) => ({ path: filename.slice('.agents/skills/'.length), sha256: sha256(file.bytes) }))

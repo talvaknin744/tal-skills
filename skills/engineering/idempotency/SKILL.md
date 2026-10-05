@@ -44,6 +44,6 @@ Example: force concurrent first attempts, then interrupt after the business comm
 
 Verify provider-specific behavior against the installed SDK/API version and current primary documentation when needed. If access is unavailable, identify the unresolved dependency and continue with local evidence; never claim a provider guarantee from the presence of a header alone. Reference locations are collected in [sources.md](references/sources.md).
 
-When retry timing or admission budgets also need a contract, Hand off to the `overload-control` skill.
+When retry timing or admission budgets also need a contract, hand off to the `overload-control` skill. If `overload-control` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
 
 Finish with the supported guarantee, remaining limits, changed files or concrete findings, and checks actually run. For a design, include the ownership and recovery rules. For a narrow fix, keep unrelated redesign as a separate observation. Completion means the scoped repeat/interruption scenarios are demonstrated or explicitly unverified, with a next validation step for any material gap.

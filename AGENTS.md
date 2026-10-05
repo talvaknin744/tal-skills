@@ -29,6 +29,6 @@ limits visible. Do not claim an unavailable host or production guarantee passed.
 4. A skill is user-invoked in both supported hosts or neither. Keep invocation metadata aligned; report an unavailable host as a coverage gap.
 5. Archive raw run snapshots and crawl dumps outside the source tree, and keep new files over 1 MB and personal paths out. Retention governs: preserve every existing case, fixture, verifier, rubric, score, review, archive manifest, snapshot and regression freeze even when numerical targets cannot be met.
 6. Generate adapters from canonical skills, agents and workflows. Never hand-edit adapters; run `npm run check:generated` after regeneration.
-7. Reach sibling skills with ``Hand off to the `<name>` skill``, never relative links across package folders. Generate the supported host's invocation syntax in adapters. Preserve actionable provenance and installed-package resources.
+7. Reach sibling skills with ``Hand off to the `<name>` skill``, never relative links across package folders. Add a standalone fallback sentence to each handoff paragraph so work can continue from available local guidance while sibling-specific conclusions stay unresolved. Generate the supported host's invocation syntax in adapters. Preserve actionable provenance and installed-package resources.
 
 Use commas, colons, periods or parentheses in current prose. The style checker preserves exact historical records and unchanged miscellaneous packages by content hash; new prose cannot extend those exceptions.

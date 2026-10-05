@@ -9,7 +9,7 @@ license: MIT
 Preserve the logical job while its worker changes. Here, handoff means durable transfer of resumable work and ownership to an eligible successor. A worker stopping, a delivery being retried, and a business operation failing are separate events.
 
 
-For scheduled maintenance beyond worker handoff, Hand off to the `background-maintenance` skill. For a Temporal deployment, Hand off to the `temporal-safe-deployments` skill.
+For scheduled maintenance beyond worker handoff, hand off to the `background-maintenance` skill. For a Temporal deployment, hand off to the `temporal-safe-deployments` skill. If `background-maintenance` or `temporal-safe-deployments` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
 
 ## 1. Reconstruct the interruption
 

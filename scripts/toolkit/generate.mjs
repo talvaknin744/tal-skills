@@ -26,8 +26,11 @@ const skillsRoot = host => host === 'codex' ? '.agents/skills' : '.claude/skills
 export function renderSkillHandoffs(text, host) {
   if (!['claude', 'codex'].includes(host)) throw new Error(`Invalid handoff host: ${host}`);
   const end = text.match(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/)?.[0].length ?? 0;
-  return text.slice(0, end) + text.slice(end).replace(/Hand off to the `([a-z0-9-]+)` skill/g,
-    (_, name) => host === 'claude' ? `Call the Skill tool with "${name}"` : `Use $${name}`);
+  return text.slice(0, end) + text.slice(end).replace(/([Hh])and off to the `([a-z0-9-]+)` skill/gi,
+    (_, initial, name) => {
+      const verb = initial === 'H' ? ['Call', 'Use'] : ['call', 'use'];
+      return host === 'claude' ? `${verb[0]} the Skill tool with "${name}"` : `${verb[1]} $${name}`;
+    });
 }
 function roleText(role, host) {
   const native = `.${host}/agents/${role.name}.${host === 'codex' ? 'toml' : 'md'}`;
@@ -114,7 +117,7 @@ export function validateBundle(files) {
 }
 export function adapterFiles(catalog) {
   const files = new Map();
-  const routed = sorted([...catalog.skills.values()].filter(skill => /Hand off to the `[a-z0-9-]+` skill/.test(skill.body)).map(skill => skill.name));
+  const routed = sorted([...catalog.skills.values()].filter(skill => /Hand off to the `[a-z0-9-]+` skill/i.test(skill.body)).map(skill => skill.name));
   for (const host of ['claude', 'codex']) {
     const bundle = generateBundle(catalog, { host });
     for (const [name, file] of bundle.files) if (['native-agent', 'workflow-wrapper'].includes(file.kind)) {

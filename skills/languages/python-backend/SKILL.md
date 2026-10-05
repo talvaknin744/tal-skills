@@ -18,4 +18,4 @@ Report the behavior changed, the executed scenarios, and remaining limits. For a
 
 For source editions and the precise reading scope behind this guidance, read [sources](references/sources.md).
 
-When a business effect needs duplicate-safe retries, Hand off to the `idempotency` skill. When shared-state invariants are in scope, Hand off to the `concurrency-correctness` skill.
+When a business effect needs duplicate-safe retries, hand off to the `idempotency` skill. When shared-state invariants are in scope, hand off to the `concurrency-correctness` skill. If `idempotency` or `concurrency-correctness` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "description": "New R1 focused evaluation case for continuing supported local work when an explicitly requested specialist sibling is absent. Original eight-case cleanup-followup corpus remains unchanged.",
+  "cases": [
+    {
+      "key": "followup-v3--standalone-absent-idempotency-sibling-v3",
+      "skill": "python-backend",
+      "case_id": "standalone-absent-idempotency-sibling-v3",
+      "group": "focused-v3",
+      "existing_case": false,
+      "fixture_source": "evals/python-backend/fixtures/cancelled-export",
+      "fixture_files": [
+        {
+          "path": "exporter.py",
+          "sha256": "ce210aee8a396bf20182d11e631b5907cd4bad441026656557b22e9930668c59",
+          "bytes": 290
+        },
+        {
+          "path": "request.md",
+          "sha256": "7675c7c354a32666be2a02aed37a3052018c96cab5f625bceea06d56ffafc561",
+          "bytes": 589
+        },
+        {
+          "path": "verify.py",
+          "sha256": "425d4097d94403b748fddd94ba0a045d62ad657574ef9eaec6dda2e6421cdbed",
+          "bytes": 2334
+        }
+      ],
+      "prompt_sha256": "43c26422c053d4f0d23e2e73ac494b8c72784b40dc9d6baa43e1f8b46d31b827",
+      "criteria_sha256": "d78334a882be6300c0cac618a32b4f1c79838ea756981fc828cb845b466742cc",
+      "candidate_variant": "codex-r1",
+      "install_skill_names": [
+        "python-backend"
+      ],
+      "editable_files": [
+        "exporter.py"
+      ],
+      "verification_argv": [
+        "python3",
+        "-B",
+        "verify.py"
+      ],
+      "contract_reason": "Standalone missing-sibling capability evaluation. The explicitly requested idempotency specialist package is absent; the responder should continue locally within Python guidance and disclose unresolved specialist limits.",
+      "prompt": "Please use the python-backend skill to review and make the smallest safe fix to exporter.py in this supplied project. The provider may have committed a batch before its response was lost, so do not treat cancellation as rollback or blindly resend it as a new business operation. Also consult the idempotency skill for domain-specific guidance. If that sibling skill is unavailable in this run, say so and continue the local work supported by the available Python guidance. Keep the existing export signature and only change exporter.py. Do not use network, package installation, or external services. Run python3 -B verify.py and report its actual result and limits.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "native_skill_reader": true,
+        "literal_skill_tool": false
+      },
+      "criteria": [
+        {
+          "id": "safe-local-python-fix",
+          "severity": "critical",
+          "criterion": "Makes the smallest correct local fix supported by the supplied Python backend guidance: cancellation reaches owned work and the task is awaited before the pooled connection is released; cancellation is propagated rather than turned into an empty success. Preserves the function signature, accepted batch values, and all files except exporter.py."
+        },
+        {
+          "id": "uncertain-remote-effect",
+          "severity": "critical",
+          "criterion": "Explains that a lost response or cancellation does not establish rollback; the provider may already have committed. Rejects blindly retrying the effect as a new business operation, preserves/requires the same stable batch identity for safe retry, and does not claim undocumented provider deduplication or reconciliation."
+        },
+        {
+          "id": "absent-sibling-disclosure-and-progress",
+          "severity": "critical",
+          "criterion": "Identifies that the requested idempotency sibling package is unavailable in this run, does not invent an available skill/tool or claim to have consulted it, and still completes valid local work supported by the available Python package."
+        },
+        {
+          "id": "unresolved-specialist-limits",
+          "severity": "major",
+          "criterion": "Clearly states which domain-specific idempotency recommendations remain unresolved without the sibling specialist guidance; grounds conclusions in supplied evidence and does not invent provider contracts, APIs, or production guarantees."
+        },
+        {
+          "id": "scope-verification",
+          "severity": "critical",
+          "criterion": "Runs the supplied verifier, reports its observed result and limits, and leaves all supplied inputs except exporter.py unchanged. No external service or package installation is used."
+        }
+      ],
+      "fixture_dir": "fixtures/followup-v3--standalone-absent-idempotency-sibling-v3",
+      "criteria_sha256_encoding": "criteria.json file bytes: {criteria: [...]} serialized with two-space JSON indentation and a trailing LF"
+    }
+  ]
+}

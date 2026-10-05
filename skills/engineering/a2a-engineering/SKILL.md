@@ -76,4 +76,4 @@ of the repository's local probes.
 
 ## Optional companion routing
 
-For duplicate-safe business effects, Hand off to the `idempotency` skill. For competing shared-state transitions, Hand off to the `concurrency-correctness` skill. For worker handoff during deployment, Hand off to the `graceful-draining` skill.
+For duplicate-safe business effects, hand off to the `idempotency` skill. For competing shared-state transitions, hand off to the `concurrency-correctness` skill. For worker handoff during deployment, hand off to the `graceful-draining` skill. If `idempotency` or `concurrency-correctness` or `graceful-draining` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.

@@ -64,4 +64,4 @@ Finish when every user question is answered or explicitly unresolved, each repor
 
 When independent specialist capability is available, dispatch the relevant named lenses from [panels.md](references/panels.md): Systems and pragmatic design, Data, Reliability, Security, Change management, Testing, Algorithms, Cloud, AI or ML, or Language and runtime. Give each the decision question and evidence request. If unavailable, continue with available evidence and disclose the gap.
 
-When verification needs fault injection or adversarial schedules, Hand off to the `failure-oriented-testing` skill.
+When verification needs fault injection or adversarial schedules, hand off to the `failure-oriented-testing` skill. If `failure-oriented-testing` is not installed, continue with this skill's local guidance, leave conclusions specific to the missing sibling unresolved, and do not guarantee its outcomes.
