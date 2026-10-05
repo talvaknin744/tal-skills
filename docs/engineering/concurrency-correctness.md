@@ -6,7 +6,7 @@ Diagnose and prevent concurrent histories that violate a mutation invariant or f
 
 ## When to reach for it
 
-Use for lost updates, write skew, stale cache fills, replica read-your-writes and obsolete owners. Excludes broad decomposition and duplicate retries alone.
+Use for lost updates, write skew, stale cache fills, replica freshness and obsolete owners. Broad decomposition and duplicate retries alone stay outside this boundary.
 
 ## It's working if
 

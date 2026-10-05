@@ -6,7 +6,7 @@ Build or review interoperating A2A clients and servers, preserving protocol, cal
 
 ## When to reach for it
 
-Use for Agent2Agent discovery, tasks, continuation, streaming or cancellation. Ordinary local coding-agent delegation is outside this protocol boundary.
+Use for Agent2Agent discovery, task continuation, streaming, cancellation or duplicate delivery. Ordinary local agent delegation stays outside this protocol boundary.
 
 ## It's working if
 

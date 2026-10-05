@@ -6,7 +6,7 @@ Design or assess maintenance work that reduces storage or index debt while prese
 
 ## When to reach for it
 
-Use for compaction, reclamation, rebalancing, backfills and index maintenance that compete with serving resources. Excludes finite local cleanup.
+Use for compaction, reclamation, rebalancing, backfills or index maintenance that compete with serving resources. Finite local cleanup stays outside this boundary.
 
 ## It's working if
 

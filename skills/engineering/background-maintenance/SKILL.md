@@ -1,16 +1,20 @@
 ---
 name: background-maintenance
-description: Design, review, or tune compaction, reclamation, rebalancing, backfills, and index maintenance sharing foreground resources. Use for poor yield, shifting distributions, resource pressure, or unsafe resume; exclude finite local cleanup.
+description: Design or review compaction, reclamation, rebalancing, backfills, or index work; use for foreground resource pressure, with capacity-planning for broad sizing.
 license: MIT
 ---
 
 # Background maintenance
+
+A maintenance budget bounds background work against the foreground workload.
 
 Reduce maintenance debt within the foreground workload's resource and correctness
 contract. Useful progress is safely reclaimed capacity, improved placement, or a
 usable index; completed jobs and rewritten bytes alone do not establish it.
 
 ## 1. Establish the maintenance claim
+
+Example: compaction debt grows faster in one tenant partition; compare its arrival rate and age with the freshness horizon.
 
 Inspect the affected planner, workers, storage engine, ownership records,
 configuration, and observations. Name the debt being reduced, its arrival rate,
@@ -29,6 +33,8 @@ missing evidence are explicit.
 
 ## 2. Choose work by distribution and cost
 
+Example: a sparse large-object tail may need a different policy; estimate planner, I/O, metadata, and network cost separately.
+
 Inspect distributions by relevant partition, cell, tenant, age, size, occupancy,
 or overlap. Compare steady state with the incident or proposed workload. An
 average can hide a costly tail; distinguish byte volume from object count and
@@ -39,12 +45,14 @@ For policy selection, planner bounds, or engine-specific compaction knobs, read
 [policy and control](references/policy-and-control.md). Select the smallest
 supported policy set covering the observed distributions. Account separately
 for planner CPU/memory, worker I/O, metadata operations, network locality, and
-foreground contention; bound outstanding work as well as active workers.
+foreground contention; bound outstanding work as well as active workers within the maintenance budget.
 
 **Done:** each proposed policy has a justified eligibility predicate, cost and
 yield evidence, downstream budgets, and an uncovered-case or starvation check.
 
 ## 3. Make adaptation bounded
+
+Example: pause admission when storage headroom crosses a measured bound, then specify the resume signal and delay.
 
 Specify the measured signal, actuator, feedback direction, observation delay,
 adjustment bounds, and recovery behavior. Protect foreground latency and errors
@@ -62,6 +70,8 @@ bounded, serving stays within its objective, and debt remains observable.
 
 ## 4. Preserve semantics through interruption
 
+Example: a copied segment is not enough to retire its source; verify publication and stale-owner rules after restart.
+
 Identify the authoritative conditions for selecting, publishing, and retiring
 work. Pause, restart, ownership transfer, or a successful copy must preserve the
 application's live-data, deletion, reader, and placement invariants.
@@ -76,6 +86,8 @@ separates their evidence from this skill's design and verification requirements.
 and recovery of uncertain work have enforceable boundaries or explicit gaps.
 
 ## 5. Demonstrate useful progress
+
+Example: compare useful reclaimed capacity and foreground latency before and after an interrupted run.
 
 Use [verification](references/verification.md) to choose representative and
 adversarial checks. Compare the baseline and candidate on useful yield, every
@@ -92,3 +104,7 @@ skills are absent.
 
 **Done:** report scoped changes or findings, measured outcomes, checks actually
 run, remaining correctness or capacity limits, and the next check for each gap.
+
+## Optional companion routing
+
+When the installed Skill tool exposes these companions, Call the Skill tool with "capacity-planning" for sizing, "microservice-operations" for cross-service dependencies, "graceful-draining" for handoff, or "idempotency" for uncertain effects. If unavailable, keep work scoped to this skill and disclose the gap.
