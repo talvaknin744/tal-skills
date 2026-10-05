@@ -7,7 +7,7 @@ license: MIT
 
 # Architecture
 
-A decision boundary names the system, constraints, and evidence that could change the recommendation. Name the decision boundary in the response using that term, including which evidence could change the recommendation.
+A decision boundary names the system, constraints, and evidence that could change the recommendation. State the decision boundary in a substantive sentence connecting the current system, constraints, recommended design and evidence that could change the recommendation.
 
 Produce a decision the user can act on, grounded in the system's evidence and constraints. Scale the analysis to the decision's consequences.
 
