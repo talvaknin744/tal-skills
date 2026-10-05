@@ -68,7 +68,7 @@ author and eight independent checks on custom loopback HTTP peers and bounded
 models. It demonstrates nested amplification and propagation gaps; it does not
 reproduce Uber middleware or prove fleet-wide admission/cancellation guarantees.
 
-The [selectable launcher](../../docs/toolkit-usage.md#choose-with-npx) resolves standalone
+The [selectable launcher](../../docs/advanced-toolkit.md#choose-with-npx) resolves standalone
 skills alongside agents/workflows. Actual
 [packed npx installation](2026-10-01/launcher-installation.json) checks selection,
 repeat installation, settings preservation, and collision rejection. The
