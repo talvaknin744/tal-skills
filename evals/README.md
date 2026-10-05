@@ -53,7 +53,7 @@ For each published release, list evaluation artifacts by asset name, candidate c
 
 ## Release evidence associations
 
-The `v1.1.0` release carries the archives below. These are evaluations or attempts against identified pre-release candidates, not a claim that every case ran against the final release commit. The earlier follow-up asset remains unchanged on `v1.0.0` and is attached again with identical bytes.
+The `v1.1.0` release carries the archives below. These are evaluations or attempts against identified pre-release candidates, not a claim that every case ran against the final release commit. The earlier follow-up asset remains unchanged on `v1.0.0` and is attached again with identical bytes. Run manifests preserve their preparation-time upload state; the release page records publication and verified asset digests.
 
 | Asset | Candidate and host | Retained results |
 | --- | --- | --- |
