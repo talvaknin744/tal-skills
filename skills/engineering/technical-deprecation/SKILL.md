@@ -1,13 +1,14 @@
 ---
 name: technical-deprecation
-description: Plan, implement, or review retirement of a supported library, API, configuration option, or internal tool when consumers must migrate. Use for replacement readiness, stalled deprecations, and removal gates; exclude private unused-helper cleanup, worker draining, and public-product shutdown policy.
+description: Retire supported libraries, APIs, configuration, or internal tools when consumers must migrate. Use for replacement readiness and removal gates; exclude private helper cleanup, worker draining, and product shutdown.
 license: MIT
 ---
 
 # Technical deprecation
 
-Retire a technical contract through evidenced consumer transitions. Keep the
-requested scope: review returns findings; planning supplies the next stage;
+Compatibility means the behavior existing consumers rely on under the supported
+policy. Retire a technical contract through evidenced consumer transitions. Keep
+the requested scope: review returns findings; planning supplies the next stage;
 implementation performs the authorized migration slice. A warning, deadline,
 or replacement launch does not establish that removal is safe.
 
@@ -71,3 +72,5 @@ when checking attribution or applying a platform's policy.
 
 **Done:** each completion claim names its stage and evidence; unresolved consumer,
 policy, or recovery conditions remain visible.
+
+For service interaction design, if available, Call the Skill tool with "microservice-integration". For consumer/provider verification, if available, Call the Skill tool with "microservice-testing". For worker lifecycle during rollout, if available, Call the Skill tool with "graceful-draining". This retirement skill remains self-contained when those tools are unavailable.

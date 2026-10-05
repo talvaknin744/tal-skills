@@ -1,11 +1,11 @@
 ---
 name: go-backend
-description: Implement or review Go services when context cancellation, goroutine ownership, resource cleanup, runtime input validation, or database transactions affect backend correctness.
+description: Implement or review Go backend services when cancellation, goroutine ownership, cleanup, runtime validation, or database transactions affect correctness; exclude non-backend Go tooling.
 ---
 
 # Go backend
 
-Translate the accepted backend contract into Go's ownership and error paths. Keep a sequential transformation sequential; introducing workers, channels, or pools needs a reason in the requested behavior.
+Ownership means every acquired resource and concurrent operation has a named lifetime owner and completion path. Translate the accepted backend contract into Go's ownership and error paths. Keep a sequential transformation sequential; introducing workers, channels, or pools needs a reason in the requested behavior.
 
 1. **Locate the owners.** Inspect `go.mod`, the actual toolchain and driver versions, the request boundary, and existing checks. Identify the accepted input, effect, outcome, and owner of each acquired resource. Preserve established abstractions that express this contract.
 2. **Load the relevant branch.** For contexts, goroutines, admission capacity, rows, or HTTP bodies, read [work and resource ownership](references/ownership.md). For JSON decoding or an external input boundary, read [runtime validation](references/runtime-validation.md). For database effects, cancellation during a transaction, or uncertain commits, read [transaction outcomes](references/transaction-outcomes.md).
@@ -15,3 +15,5 @@ Translate the accepted backend contract into Go's ownership and error paths. Kee
 Report the observed behavior, executed checks, and untested boundary. Runtime correctness supports the existing idempotency, consistency, and durability contract; it does not create one by itself.
 
 For book provenance, pinned driver evidence, or version-sensitive guidance, read [sources and limits](references/sources.md).
+
+When a business effect needs duplicate-safe retries or shared-state invariants, if available, Call the Skill tool with "idempotency". If shared-state invariants are also in scope and that skill is available, Call the Skill tool with "concurrency-correctness". Otherwise state the unavailable dependency and continue within this skill and the requested scope.

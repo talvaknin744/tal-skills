@@ -1,13 +1,12 @@
 ---
 name: capacity-planning
-description: Model backend or infrastructure capacity for traffic growth, workload changes, backlog recovery, rollouts, and failure headroom. Use for fleet or pool sizing, autoscaling plans, downstream limits, and cost per useful operation; deployment inventory alone needs no sizing analysis.
+description: Model backend or infrastructure capacity for growth, backlog recovery, rollout headroom, fleet or pool sizing, autoscaling, downstream limits, and cost per useful operation; exclude inventory without sizing decisions.
 license: MIT
 ---
 
 # Capacity planning
 
-Produce a capacity envelope tied to useful work, resource demand and the
-operating scenarios the service promises to support.
+Headroom is usable capacity remaining after promised demand and failure scenarios are accounted for. Produce a capacity envelope tied to useful work, resource demand and the operating scenarios the service promises to support.
 
 ## 1. Establish demand and objectives
 
@@ -51,3 +50,5 @@ CPU rises. Include correctness and backlog/resource recovery as relevant.
 cost basis, evidence and remaining limits. State the evidence needed before a
 forecast or linear estimate becomes demonstrated capacity.
 Consult [sources](references/sources.md) for primary reading scope.
+
+When measured workload evidence is needed to validate material assumptions, use the available skill: Call the Skill tool with "load-testing". If it is unavailable, state that dependency and continue with a scoped experiment proposal.

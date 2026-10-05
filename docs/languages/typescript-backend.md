@@ -2,7 +2,7 @@
 
 ## What it does
 
-Guides TypeScript service changes where runtime validation, asynchronous resource ownership, cancellation, or transaction boundaries affect correctness. It checks that runtime behavior matches the typed interface and failure contract.
+Guides TypeScript service changes where runtime validation, asynchronous resource ownership, cancellation, or transaction boundaries affect correctness. Validation checks untrusted values at runtime before relying on their static type. It checks that runtime behavior matches the typed interface and failure contract.
 
 ## When to reach for it
 

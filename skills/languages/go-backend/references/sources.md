@@ -10,10 +10,7 @@ Inspected scope: publisher contents, the [Chapter 14 opening context preview](ht
 
 Nine complete author example files were read at these immutable commits:
 
-| Source | Files inspected |
-| --- | --- |
-| [Chapter 12, `08720ea422a3c0f0076ed6efc11147687f47163d`](https://github.com/learning-go-book-2e/ch12/tree/08720ea422a3c0f0076ed6efc11147687f47163d/sample_code) | `backpressure/main.go`, `context_cancel/main.go`, `pipeline/ABProcessor.go`, `pipeline/CProcessor.go`, `pipeline/main.go`, `time_out/main.go` |
-| [Chapter 14, `71878380fe1c02a872f55fdba65ed44ac7ef997b`](https://github.com/learning-go-book-2e/ch14/tree/71878380fe1c02a872f55fdba65ed44ac7ef997b/sample_code) | `cancel_http/main.go`, `nested_timers/main.go`, `own_cancellation/main.go` |
+Inspected author example files and immutable revisions are listed in the Go backend source record in the repository Go backend docs page.
 
 Direct code review found that `time_out` does not pass context into its worker, `backpressure` releases capacity after its callback, and `cancel_http` leaves successful response bodies unclosed. These observations motivate ownership checks; they are not claims about surrounding unread prose. The author samples were read, not executed. Proposed tests for worker completion, recovered panic capacity, and body closure are evaluation designs, not recorded passes.
 

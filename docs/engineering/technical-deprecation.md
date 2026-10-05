@@ -18,4 +18,4 @@ Use it for retiring a supported library, API, configuration option, or internal 
 
 ## Where it fits
 
-This is the supported technical contract retirement specialist. It neighbors `microservice-integration` for compatibility planning and `microservice-testing` for provider evidence; `graceful-draining` covers worker lifecycle rather than public contract retirement. See [the deprecation skill](../../skills/engineering/technical-deprecation/SKILL.md) and [supported contract retirement reading path](../reading-paths.md).
+This is the supported technical contract retirement specialist. Compatibility means preserving the behavior existing consumers rely on under the stated support policy. It neighbors `microservice-integration` for compatibility planning and `microservice-testing` for provider evidence; `graceful-draining` covers worker lifecycle rather than public contract retirement. See [the deprecation skill](../../skills/engineering/technical-deprecation/SKILL.md) and [supported contract retirement reading path](../reading-paths.md).

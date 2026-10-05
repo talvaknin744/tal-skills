@@ -1,11 +1,11 @@
 ---
 name: typescript-backend
-description: Implement or debug TypeScript services when runtime input validation, asynchronous resource ownership, request cancellation, or database transaction boundaries affect correctness. Use for backend handlers and workers, not browser UI styling or type-only library changes.
+description: Implement or debug TypeScript backends when runtime validation, async ownership, cancellation, or database boundaries affect correctness; exclude browser styling and type-only library changes.
 ---
 
 # TypeScript backend
 
-Make the service's runtime behavior match its typed interface and failure contract.
+Validation means checking untrusted values at runtime before relying on their static type. Make the service's runtime behavior match its typed interface and failure contract.
 
 1. Read the relevant handler, dependency versions, compiler settings, and test commands. Identify the external input, business invariant, effect boundary, and owner of each asynchronous resource. Finish with the concrete success, rejection, cancellation, and uncertain-outcome cases this change must preserve.
 2. Implement the smallest change at those boundaries. Validate untrusted values before narrowing; keep domain decisions independent of transport objects. For parsing or API contracts, read [runtime boundaries](references/runtime-boundaries.md). For database work or cancellation, read [asynchronous ownership](references/async-ownership.md).
@@ -13,3 +13,5 @@ Make the service's runtime behavior match its typed interface and failure contra
 4. Report the changed behavior, executed checks, and remaining limits. Distinguish a client timeout from completed cleanup and an uncertain external effect from a confirmed abort. Stop when the requested cases pass and every acquired resource has a completion path; widen scope only for a demonstrated related failure.
 
 Use the project's existing runtime and libraries. Consult [sources](references/sources.md) when verifying a driver-specific claim or selecting a version; the PostgreSQL example's pins are evidence, not a requirement for every service.
+
+When a business effect needs duplicate-safe retries or shared-state invariants, if available, Call the Skill tool with "idempotency". If shared-state invariants are also in scope and that skill is available, Call the Skill tool with "concurrency-correctness". Otherwise state the unavailable dependency and continue within this skill and the requested scope.

@@ -2,7 +2,7 @@
 
 ## What it does
 
-Guides Python service changes where asynchronous cancellation, resource ownership, database transactions, or mutable request state can change observable backend behavior. It keeps local calculations small and effects owned.
+Guides Python service changes where asynchronous cancellation, resource ownership, database transactions, or mutable request state can change observable backend behavior. Lifetime means the interval a task or resource remains owned and must be completed or cleaned up. It keeps local calculations small and effects owned.
 
 ## When to reach for it
 
