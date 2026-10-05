@@ -1,0 +1,1 @@
+Changed the heading in [NOTES.md](https://github.com/talvaknin744/tal-skills/releases/download/v1.0.0/tal-skills-phase2-native-2026-10-05.tar.zst#member=phase2-eval/invocation-policy/runs/unrelated-formatting/trial/NOTES.md&line=1) to “Release Checklist.” The wording and all other files are unchanged.

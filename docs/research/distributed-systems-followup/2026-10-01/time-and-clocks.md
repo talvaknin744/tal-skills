@@ -26,7 +26,7 @@ This adds new paper reading to the recorded adoptions searched; it does not clai
 | Must operation B follow operation A? | Propagated dependency or logical timestamp plus an actual communication history | Preserve causal edges. A smaller logical number alone does not establish an edge or elapsed seconds. |
 | Is an absolute instant definitely past? | A clock service with a justified containing interval | Overlap means uncertainty; define whether to wait, reject or use another authority. Ordinary wall-clock APIs do not supply this guarantee. |
 
-These are author synthesis. Event-time finality and watermarks remain under [stream-processing-design](../../../../skills/messaging/stream-processing-design/references/time-and-finality.md); this follow-up does not add a second windowing workflow.
+These are author synthesis. Event-time finality and watermarks remain under [stream-processing-design](../../../../skills/engineering/stream-processing-design/references/time-and-finality.md); this follow-up does not add a second windowing workflow.
 
 ## Six-dimensional paper findings
 

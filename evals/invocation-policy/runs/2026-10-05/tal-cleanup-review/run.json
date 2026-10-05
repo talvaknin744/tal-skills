@@ -1,0 +1,77 @@
+{
+  "case_id": "tal-cleanup-review",
+  "raw_run_member": "phase2-native-existing-run/evidence/run.json",
+  "raw_run_sha256": "c26a9b8c44832aaa724d7e38743fb6b823fb8e67e3b9b329789a5edb833688f4",
+  "response_model": "gpt-6.1-sol",
+  "reasoning_effort": "xhigh",
+  "status": "failed-verification",
+  "preflight_passed": true,
+  "case_compliant": false,
+  "capability_deviations": [
+    "Native tool availability is not independently enumerated; disabled capability settings are configuration evidence.",
+    "Native sandbox command probes do not independently establish confinement of every model tool.",
+    "Configured MCP servers were disabled in thread-start overrides; effective per-thread MCP inventory is not independently exposed by this collector."
+  ],
+  "global_config_unchanged": true,
+  "changed_files": [
+    {
+      "path": "README.md",
+      "allowed": true,
+      "change": "modified"
+    }
+  ],
+  "critical_gate": {
+    "criteria": [
+      "bounded_edit",
+      "native_loading",
+      "ownership_and_review",
+      "isolation_and_scope"
+    ],
+    "failures": [],
+    "result": "passed"
+  },
+  "weighted_noncritical_score": {
+    "earned": 10,
+    "available": 12,
+    "calculation": "short_path 2*2 + reader_command 1*2 + evidence_limits 2*2"
+  },
+  "independent_verification": {
+    "argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "sandbox",
+      "-P",
+      "tal-native-eval-fd652bb75835",
+      "--include-managed-config",
+      "-c",
+      "permissions={\"tal-native-eval-fd652bb75835\"={\"filesystem\"={\":root\"=\"deny\",\":minimal\"=\"read\",\":tmpdir\"=\"deny\",\":slash_tmp\"=\"deny\",\"$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/trial\"=\"read\",\"$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/trial/README.md\"=\"write\",\"$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/trial/__pycache__\"=\"write\"},\"network\"={\"enabled\"=false}}}",
+      "-c",
+      "default_permissions=\"tal-native-eval-fd652bb75835\"",
+      "-C",
+      "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/trial",
+      "--",
+      "python3",
+      "-B",
+      "cli.py",
+      "--mode",
+      "legacy"
+    ],
+    "kind": "behavior_observation",
+    "exit_code": 1,
+    "signal": null,
+    "error": null,
+    "timed_out": false,
+    "cleanup": {
+      "owned_process_group": 32697,
+      "remaining_live_processes": [],
+      "terminated": true
+    },
+    "isolation": "named native profile: deny root, minimal system reads, trial reads, declared writes, network disabled; managed configuration included; credential environment variables withheld",
+    "limits": [
+      "Command sandbox checks do not enumerate all native model tools."
+    ]
+  },
+  "failure": null,
+  "source_digest": "dfb54b93d89670818d68dc8ad17cc677ba1e346e15d5c17af01bb9a13d6199ee",
+  "repetitions": 1,
+  "paired_baseline_comparison": false
+}

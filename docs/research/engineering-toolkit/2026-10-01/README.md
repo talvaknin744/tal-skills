@@ -58,7 +58,7 @@ Full article bodies, hydration payloads and temporary caches are not bundled.
 
 The user approved two new independently installable skills:
 
-- [Stream processing design](../../../../skills/messaging/stream-processing-design/SKILL.md):
+- [Stream processing design](../../../../skills/engineering/stream-processing-design/SKILL.md):
   time domains, out-of-order and late arrivals, logical duplicates, corrections,
   joins, finality, replay and state lifetime. Operator contributions and external
   business effects have separate contracts.
@@ -76,10 +76,10 @@ Focused conditional branches deepen existing packages:
 | Interface evolution | [Behavioral compatibility and affected-path evidence](../../../../skills/engineering/microservice-integration/references/compatibility.md) |
 | Capacity and admission | [Prepared survivor capacity and useful completion](../../../../skills/engineering/microservice-operations/references/capacity.md) |
 | Retry amplification | [Retry coordination](../../../../skills/engineering/microservice-operations/references/retry-coordination.md) |
-| Configuration rollout | [Snapshot/update distribution](../../../../skills/infrastructure/infrastructure-change-safety/references/configuration-distribution.md) |
+| Configuration rollout | [Snapshot/update distribution](../../../../skills/engineering/infrastructure-change-safety/references/configuration-distribution.md) |
 | Service extraction | [Executable boundary rehearsal](../../../../skills/engineering/microservice-extraction/references/boundary-rehearsal.md) |
-| Failure testing | [Independent state models](../../../../skills/testing/failure-oriented-testing/references/state-models.md) |
-| Agent recovery | [Task, execution, artifacts and receipt lifetime](../../../../skills/protocols/a2a-engineering/references/lifecycle-and-effects.md) |
+| Failure testing | [Independent state models](../../../../skills/engineering/failure-oriented-testing/references/state-models.md) |
+| Agent recovery | [Task, execution, artifacts and receipt lifetime](../../../../skills/engineering/a2a-engineering/references/lifecycle-and-effects.md) |
 
 Existing messaging and reliability specialists now declare the two new skill
 dependencies. The roster remains **15 agents and eight workflows**; conditional

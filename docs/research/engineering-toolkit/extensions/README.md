@@ -33,8 +33,8 @@ Four focused references carry the larger additions:
 
 - [Projection rebuilds](../../../../skills/engineering/concurrency-correctness/references/projection-rebuild.md)
 - [Owned Node streams](../../../../skills/languages/typescript-backend/references/node-streams.md)
-- [Tool data flow](../../../../skills/protocols/mcp-engineering/references/tool-dataflow.md)
-- [Recovery inputs](../../../../skills/reliability/recovery-validation/references/recovery-inputs.md)
+- [Tool data flow](../../../../skills/engineering/mcp-engineering/references/tool-dataflow.md)
+- [Recovery inputs](../../../../skills/engineering/recovery-validation/references/recovery-inputs.md)
 
 Company accounts supply failure mechanisms and examples, not universal defaults.
 For example, an ECS successful deployment can retain old protected tasks under

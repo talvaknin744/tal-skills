@@ -38,7 +38,7 @@ test('both native formats inherit settings, resolve relevant dependencies, and k
 
 test('role-only selection includes the common contract and excludes workflows and unrelated packages', t => {
   const f = createFixture(t);
-  f.write('skills/productivity/unused/SKILL.md', '---\nname: unused\ndescription: An unrelated skill.\n---\nDo unrelated work.\n');
+  f.write('skills/misc/unused/SKILL.md', '---\nname: unused\ndescription: An unrelated skill.\n---\nDo unrelated work.\n');
   const catalog = loadCatalog(f.source);
   const bundle = generateBundle(catalog, { host: 'codex', agents: ['tal-python'] });
   assert.deepEqual(bundle.resolved, { agents: ['tal-python'], skills: ['python-backend'] });

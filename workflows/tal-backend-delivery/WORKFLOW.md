@@ -13,6 +13,7 @@ agents:
   - tal-typescript
 skills:
   - architecture
+disable-model-invocation: true
 ---
 
 # Backend delivery

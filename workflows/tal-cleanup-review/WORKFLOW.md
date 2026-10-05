@@ -10,6 +10,7 @@ agents:
   - tal-python
   - tal-typescript
 skills: []
+disable-model-invocation: true
 ---
 
 # Cleanup and review

@@ -1,0 +1,94 @@
+{
+  "status": "executed-with-runs-and-audited",
+  "candidate_source_sha256": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+  "candidate_index_tree": "59381fb8624164d5a2bdae14cebc94a7a7338ed7",
+  "original": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/candidate-source/scripts/native-smoke.mjs",
+  "original_sha256": "649f13522e3d0cd18a96c4743739f97555527c8716c76f7f88b395563f775be4",
+  "prior_adapted_sha256": "e2a54634b29957ff917c9e52d43288352dd1b200c3af388342efbbcff18f0b07",
+  "adapted": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/native-smoke-adapted.mjs",
+  "adapted_sha256": "cb3e55494840076f51e98e968c05790d4ba94823a70b2dcd45b926da179810d3",
+  "changes": [
+    {
+      "before": "import { loadCatalog, buildInstallPlan, applyInstallPlan } from './toolkit/index.mjs';",
+      "after": "import { loadCatalog, buildInstallPlan, applyInstallPlan } from '$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/candidate-source/scripts/toolkit/index.mjs';"
+    },
+    {
+      "before": "import { readTree, readRegular, safeRelative, contained, sha256, checkId } from './toolkit/paths.mjs';",
+      "after": "import { readTree, readRegular, safeRelative, contained, sha256, checkId } from '$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/candidate-source/scripts/toolkit/paths.mjs';"
+    },
+    {
+      "before": "import { options, repositoryRoot } from './toolkit/cli.mjs';",
+      "after": "import { options, repositoryRoot } from '$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/candidate-source/scripts/toolkit/cli.mjs';"
+    },
+    {
+      "before": "checkId(workflow, 'workflow', true);",
+      "after": "if (workflow.startsWith('tal-')) checkId(workflow, 'workflow', true); else checkId(workflow, 'skill');"
+    },
+    {
+      "before": "export function nativePermissionProfile(trialRoot, { editableFiles = [], runtimeOutputPaths = [], readonlyBindFiles = false } = {}) {",
+      "after": "export function nativePermissionProfile(trialRoot, { editableFiles = [], runtimeOutputPaths = [], readonlyBindFiles = false, runtimeReadPaths = [] } = {}) {"
+    },
+    {
+      "before": "  const root = fs.realpathSync(trialRoot), filesystem = { ':root': 'deny', ':minimal': 'read', ':tmpdir': 'deny', ':slash_tmp': 'deny', [root]: 'read' };",
+      "after": "  const root = fs.realpathSync(trialRoot), filesystem = { ':root': 'deny', ':minimal': 'read', ':tmpdir': 'deny', ':slash_tmp': 'deny', [root]: 'read' };\n  for (const readPath of runtimeReadPaths) { if (!path.isAbsolute(readPath) || readPath.includes('\\0')) throw new Error('Runtime read paths must be absolute'); filesystem[path.resolve(readPath)] = 'read'; }"
+    },
+    {
+      "before": "export async function collectNativeRun({ trialRoot, workflow, prompt, mode, editableFiles = [], runtimeOutputPaths = [], readonlyBindFiles = false, expectedNativeRoles = [], evidenceRoot, binary, binaryArgs = [], timeoutSeconds = 600, children = 2, spawnHost = spawnOwned, isolationProbe = probeNativeIsolation, preflightOnly = false, inheritedDefaults = null }) {",
+      "after": "export async function collectNativeRun({ trialRoot, workflow, prompt, mode, editableFiles = [], runtimeOutputPaths = [], runtimeReadPaths = [], readonlyBindFiles = false, expectedNativeRoles = [], evidenceRoot, binary, binaryArgs = [], timeoutSeconds = 600, children = 2, spawnHost = spawnOwned, isolationProbe = probeNativeIsolation, preflightOnly = false, inheritedDefaults = null, explicitActivation = true }) {"
+    },
+    {
+      "before": "  const permission = nativePermissionProfile(root, { editableFiles, runtimeOutputPaths, readonlyBindFiles });",
+      "after": "  const permission = nativePermissionProfile(root, { editableFiles, runtimeOutputPaths, runtimeReadPaths, readonlyBindFiles });"
+    },
+    {
+      "before": "text: `$${workflow}\\n${prompt}`",
+      "after": "text: `${explicitActivation && !prompt.startsWith(`$${workflow}`) ? `$${workflow}\\n` : ''}${prompt}`"
+    },
+    {
+      "before": "  return { binary, args: ['sandbox', '-P', permission.id, '--include-managed-config', '-c', configArg('permissions', { [permission.id]: permission.profile }), '-c', configArg('default_permissions', permission.id), '-C', permission.root, '--', ...argv], options: { cwd: permission.root, env, stdio: ['pipe', 'pipe', 'pipe'] } };",
+      "after": "  const actualArgv = argv[0] === 'python3' ? ['/opt/homebrew/bin/python3', ...argv.slice(1)] : argv;\n  return { binary, args: ['sandbox', '-P', permission.id, '--include-managed-config', '-c', configArg('permissions', { [permission.id]: permission.profile }), '-c', configArg('default_permissions', permission.id), '-C', permission.root, '--', ...actualArgv], options: { cwd: permission.root, env, stdio: ['pipe', 'pipe', 'pipe'] }, originalArgv: argv };"
+    },
+    {
+      "before": "await client.request('turn/start', { threadId: primaryThread, permissions: permission.id, environments: [localEnvironment], input: [{ type: 'text', text: `${explicitActivation && !prompt.startsWith(`$${workflow}`) ? `$${workflow}\\n` : ''}${prompt}` }] });",
+      "after": "await client.request('turn/start', { threadId: primaryThread, permissions: permission.id, environments: [localEnvironment], input: [...(runtimeContext ? [{ type: 'text', text: runtimeContext }] : []), { type: 'text', text: `${explicitActivation && !prompt.startsWith(`$${workflow}`) ? `$${workflow}\\n` : ''}${prompt}` }] });"
+    },
+    {
+      "before": "['/opt/homebrew/bin/python3', ...argv.slice(1)]",
+      "after": "['/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14', ...argv.slice(1)]"
+    },
+    {
+      "before": "collectNativeRun signature did not accept explicitActivation or runtimeContext",
+      "after": "collectNativeRun accepts explicitActivation and runtimeContext while leaving prompt bytes unchanged"
+    }
+  ],
+  "runtime_binding": {
+    "original_verification_argv_preserved": true,
+    "execution_binds_bare_python3_to": "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+    "read_only_grants": [
+      "/opt/homebrew/Cellar/python@3.14/3.14.3_1",
+      "/opt/homebrew/opt/python@3.14",
+      "/opt/homebrew/bin/python3"
+    ],
+    "basis": "parent verified absolute Python 3.14.3 under native sandbox; bare python3 still resolves unusable Apple stub"
+  },
+  "runtime_context": {
+    "separate_input_block": true,
+    "case": "explicit-workflow only",
+    "text": "Harness-provided runtime context for local verification: Python 3 interpreter available at `/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14`; bare `python3` is unavailable within the restricted sandbox. The case prompt is sent unchanged as a separate text block."
+  },
+  "runs": [
+    "runs/ordinary-pr-nontrigger/evidence/run-summary.json",
+    "runs/offline-standard-review/evidence/run-summary.json",
+    "runs/routine-pagination-review/evidence/run-summary.json",
+    "runs/unrelated-formatting/evidence/run-summary.json",
+    "runs/explicit-workflow/evidence/run-summary.json",
+    "runs/explicit-workflow-attempt-02/evidence/run-summary.json"
+  ],
+  "runtime_dependencies": {
+    "@iarna/toml": "resolved through phase2-eval/node_modules symlink to the primary installed dependency tree; package version 2.2.5",
+    "primary_node_modules": "$HOME/Documents/ChatGPT/skills/node_modules",
+    "symlink": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/node_modules",
+    "symlink_target": "$HOME/Documents/ChatGPT/skills/node_modules",
+    "module_resolution": "relative native ESM package resolution through the external ancestor symlink; no candidate-source files modified"
+  }
+}

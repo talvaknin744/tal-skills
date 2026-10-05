@@ -5,7 +5,7 @@ import { parse } from 'yaml';
 import { markdownTargets } from './lib/markdown-links.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const skillRoot = path.join(root, 'skills');
+const skillRoots = ['skills', 'integrations/temporal/skills'].map(name => path.join(root, name));
 const errors = [];
 const checked = [];
 const seenNames = new Set();
@@ -26,12 +26,21 @@ function filesUnder(directory) {
 }
 
 const skillDirectories = [];
-for (const concern of fs.readdirSync(skillRoot, { withFileTypes: true })) {
-  if (!concern.isDirectory()) continue;
-  requireCondition(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(concern.name), `Invalid concern name: ${concern.name}`);
-  const concernRoot = path.join(skillRoot, concern.name);
-  for (const entry of fs.readdirSync(concernRoot, { withFileTypes: true })) {
-    if (entry.isDirectory()) skillDirectories.push({ entry, directory: path.join(concernRoot, entry.name), concern: concern.name });
+for (const skillRoot of skillRoots) {
+  if (!fs.existsSync(skillRoot)) continue;
+  if (path.relative(root, skillRoot) === 'integrations/temporal/skills') {
+    for (const entry of fs.readdirSync(skillRoot, { withFileTypes: true })) {
+      if (entry.isDirectory()) skillDirectories.push({ entry, directory: path.join(skillRoot, entry.name), concern: 'temporal' });
+    }
+    continue;
+  }
+  for (const concern of fs.readdirSync(skillRoot, { withFileTypes: true })) {
+    if (!concern.isDirectory()) continue;
+    requireCondition(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(concern.name), `Invalid concern name: ${concern.name}`);
+    const concernRoot = path.join(skillRoot, concern.name);
+    for (const entry of fs.readdirSync(concernRoot, { withFileTypes: true })) {
+      if (entry.isDirectory()) skillDirectories.push({ entry, directory: path.join(concernRoot, entry.name), concern: concern.name });
+    }
   }
 }
 
@@ -89,7 +98,7 @@ for (const { entry, directory, concern } of skillDirectories) {
       errors.push(`${entry.name}: invalid UI metadata: ${error.message}`);
     }
   }
-  checked.push(`${concern}/${entry.name}`);
+  checked.push(`${path.relative(root, directory)}`);
 }
 
 requireCondition(checked.length > 0, 'No skills found');

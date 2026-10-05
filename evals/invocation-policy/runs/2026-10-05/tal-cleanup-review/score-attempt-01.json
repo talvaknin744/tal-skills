@@ -1,0 +1,150 @@
+{
+  "case_id": "tal-cleanup-review",
+  "candidate_identity": {
+    "candidate_freeze_sha256": "01a5cb24d4b2f10ffc3e37072f2375d455732c0e36f1b147bf3746a1104e08f2",
+    "candidate_tree_sha256": "59381fb8624164d5a2bdae14cebc94a7a7338ed7",
+    "installed_final_candidate_closure": {
+      "file_count": 55,
+      "source_digest": "dfb54b93d89670818d68dc8ad17cc677ba1e346e15d5c17af01bb9a13d6199ee",
+      "byte_mismatches": []
+    }
+  },
+  "model": {
+    "primary": "gpt-6.1-sol",
+    "native_reviewer": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "source": "evidence/run.json observed.threads and events.jsonl:498,501",
+    "note": "Actual exposed run metadata; no Luna response model was run for this scoring task."
+  },
+  "host": {
+    "name": "Codex",
+    "version": "codex-cli 0.160.0",
+    "sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8"
+  },
+  "reviewer": "independent-score-existing-luna",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "original_run": {
+    "status": "failed-verification",
+    "case_compliant": false,
+    "verification_argv": ["python3", "-B", "cli.py", "--mode", "legacy"],
+    "verification_exit_code": 1,
+    "stderr": "xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun",
+    "final_answer_claim": "Runtime success remains unverified.",
+    "unchanged_failure": true
+  },
+  "followup": {
+    "argv": ["/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14", "-B", "cli.py", "--mode", "legacy"],
+    "exit_code": 0,
+    "stdout": "ready (legacy)\n",
+    "stderr": "",
+    "interpreter_sha256": "760d13aa43656d9e51bcbc1847088691a035f9dc37030070f1d4993f55d4e689",
+    "fixture_sha256": "b4e73b0494c80d8fa08a80940918927d6f16702c7066ef480cbf5000ead2782d",
+    "interpretation": "Narrow read-only execution of the remaining exact original arguments with an explicitly resolved Homebrew interpreter. This supports the CLI behavior but does not pass the original bare-python3 runtime gate or relabel the original run."
+  },
+  "artifact_paths": {
+    "answer_and_trace": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/evidence/events.jsonl",
+    "run": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/evidence/run.json",
+    "prepared": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/evidence/prepared.json",
+    "original_verification_stdout": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/evidence/verification.stdout.txt",
+    "original_verification_stderr": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/evidence/verification.stderr.txt",
+    "runtime_binding_followup": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/evidence/runtime-binding-followup.json",
+    "trial_readme": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-native-existing-run/trial/README.md",
+    "original_readme": "$HOME/Documents/ChatGPT/skills/evals/engineering-toolkit/native-fixtures/tal-cleanup-review/rawfiles/README.md",
+    "original_cli": "$HOME/Documents/ChatGPT/skills/evals/engineering-toolkit/native-fixtures/tal-cleanup-review/rawfiles/cli.py"
+  },
+  "criteria": [
+    {
+      "id": "bounded_edit",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "events.jsonl",
+        "locator": "items 203, 401, 494; run.json changed_files/final_files; trial/README.md diff against unchanged rawfiles/README.md and cli.py",
+        "observation": "The final diff removes only the repeated setup paragraph/code block. The prerequisite, run-from-this-directory guidance, legacy/version-1 compatibility reason, success output remain. run.json records README.md as the only changed source file, allowed=true. The supplied cli.py remains unchanged."
+      }
+    },
+    {
+      "id": "short_path",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "events.jsonl",
+        "locator": "items 54-86, 169-211, 200, 391-397",
+        "observation": "The owner directly handles the small README change. One named native tal-cleanup reviewer examines the final candidate and reports no actionable findings; the owner reports the result. The trace shows no unrelated architecture, durability, or fault-injection pipeline."
+      }
+    },
+    {
+      "id": "reader_command",
+      "severity": "major",
+      "score": 1,
+      "evidence": {
+        "artifact": "verification.stderr.txt; run.json independent_verification; runtime-binding-followup.json; events.jsonl items 391 and 491",
+        "locator": "original failed invocation and separate follow-up result",
+        "observation": "The exact documented command using bare python3 failed before Python execution because Apple's xcrun launcher was unavailable. The original final report correctly leaves runtime success unverified. A separate read-only run with the exact remaining arguments under a resolved Homebrew Python 3.14 interpreter exits 0 and prints ready (legacy), and byte identity is recorded for the frozen 55-file installed candidate closure. This supports command behavior but does not satisfy or overwrite the original bare-python3 reader gate."
+      }
+    },
+    {
+      "id": "native_loading",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "events.jsonl; run.json observed",
+        "locator": "events.jsonl items 3, 20, 55-56, 64-66, 498-501; run.json observed.threads/observed_reads",
+        "observation": "The named Codex host reports actual model metadata. The primary thread reads installed tal-cleanup-review SKILL.md and WORKFLOW.md; the child is explicitly registered with native role tal-cleanup and reads installed cleanup guidance. This is native role loading, not generic-child fallback."
+      }
+    },
+    {
+      "id": "ownership_and_review",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "events.jsonl; run.json",
+        "locator": "events.jsonl items 200, 391-397, 401; run.json observed.threads and final_files",
+        "observation": "One primary owner modifies README.md, then a separate native tal-cleanup reviewer inspects the stable 342-byte candidate (cksum recorded in its review) and reports no findings. The owner acknowledges that review; there is no correction requiring another review. Candidate freeze identity is recorded separately."
+      }
+    },
+    {
+      "id": "isolation_and_scope",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "run.json; prepared.json; runtime-binding-followup.json",
+        "locator": "run.json boundary_probe, filesystem_enforcement, changed_files, capability_deviations; follow-up installed_final_candidate_closure",
+        "observation": "The native profile declares only the trial README writable, denies network and broad filesystem access, and records README.md as the sole changed file. The follow-up reports all 55 installed closure files byte-identical to the frozen final candidate. Case_compliant remains false and capability deviations are retained because sandbox probes do not establish confinement of every model tool or all tool availability."
+      }
+    },
+    {
+      "id": "evidence_limits",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "events.jsonl items 391 and 491; verification.stderr.txt; runtime-binding-followup.json",
+        "locator": "review report, final answer, original and follow-up verifier records",
+        "observation": "The final answer says the requested command failed because Apple developer tools are missing and leaves runtime success unverified. The independent review distinguishes its static inspection and attempted runtime check. The later alternate-interpreter success is recorded here with its limitation, while the original run remains failed-verification and case_compliant=false."
+      }
+    }
+  ],
+  "critical_gate": {
+    "criteria": ["bounded_edit", "native_loading", "ownership_and_review", "isolation_and_scope"],
+    "failures": [],
+    "result": "passed"
+  },
+  "weighted_noncritical_score": {
+    "earned": 6,
+    "available": 8,
+    "calculation": "short_path 2*2 + reader_command 1*2 + evidence_limits 2*2"
+  },
+  "evaluation_limitations": {
+    "case_compliant": false,
+    "capability_deviations": [
+      "The original named native profile denies root writes and network while allowing only declared trial writes, but probes do not independently establish confinement of every native model tool.",
+      "Native tool availability and the effective per-thread MCP inventory are not independently enumerated by the collector.",
+      "The original bare-python3 reader check remains unavailable in the host; alternate-interpreter success is a separate supplemental observation.",
+      "Hidden reasoning was neither available nor requested for scoring."
+    ],
+    "coverage": "One original existing-workflow case scored; the five additional Phase2 cases are out of scope for this record."
+  }
+}

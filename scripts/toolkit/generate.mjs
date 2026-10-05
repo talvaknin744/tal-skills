@@ -65,7 +65,11 @@ export function generateBundle(catalog, { host, agents, workflows, skills } = {}
       const filename = `${packageRoot}/SKILL.md`;
       const target = path.posix.relative(packageRoot, `.tal-skills/${workflow.filename}`);
       const body = `Run [${name}](${target}) for the user's current request. Resolve the link relative to this installed SKILL.md file. Keep coordination in the main session and load only the specialists needed by the workflow.${selectedHost === 'claude' ? '\n\nTask: $ARGUMENTS' : ''}`;
-      add(filename, textFile(markdown({ name, description: workflow.metadata.description }, body), workflow.filename, 'workflow-wrapper'));
+      const metadata = { name, description: workflow.metadata.description };
+      if (workflow.metadata['disable-model-invocation'] === true) metadata['disable-model-invocation'] = true;
+      add(filename, textFile(markdown(metadata, body), workflow.filename, 'workflow-wrapper'));
+      const policySource = workflow.files.get(`workflows/${name}/agents/openai.yaml`);
+      if (policySource) add(`${packageRoot}/agents/openai.yaml`, { ...policySource, source: `workflows/${name}/agents/openai.yaml`, kind: 'workflow-policy' });
     }
   }
   assertDistinctPaths(files.keys());

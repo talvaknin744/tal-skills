@@ -1,0 +1,1 @@
+$tal-cleanup-review Please consolidate the repeated setup command in README.md. Preserve its prerequisite and compatibility explanation, run the documented command, and keep the change limited to README.md. Report the change and check result.

@@ -40,7 +40,9 @@ test('Temporal evidence preserves the difference between full text, summaries, a
 test('every customer lesson routes to a real independently installable skill', async () => {
   for (const name of new Set(ledger.stories.flatMap(story => story.skills))) {
     assert.match(name, /^temporal-[a-z-]+$/);
-    assert.ok((await stat(path.join(root, 'skills/temporal', name, 'SKILL.md'))).isFile());
+    const adapted = upstream.skills.find(skill => skill.name === name);
+    const packagePath = adapted?.local_path ?? `skills/temporal/${name}`;
+    assert.ok((await stat(path.join(root, packagePath, 'SKILL.md'))).isFile());
   }
 });
 
@@ -50,7 +52,7 @@ test('all eight official-derived skills have pinned Temporal ownership and retai
   for (const skill of upstream.skills) {
     assert.match(skill.repo, /^temporalio\/[a-z0-9-]+$/);
     assert.match(skill.commit, /^[a-f0-9]{40}$/);
-    assert.equal(skill.local_path, `skills/temporal/${skill.name}`);
+    assert.equal(skill.local_path, `integrations/temporal/skills/${skill.name}`);
     assert.ok(skill.source_path && skill.license_source);
     const directory = await realpath(path.join(root, skill.local_path));
     const license = await readFile(path.join(directory, 'LICENSE'), 'utf8');

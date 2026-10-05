@@ -60,7 +60,7 @@ Researched 2026-10-01. Four new first-party article bodies were read for general
 - **Counterexample — synthesis:** A delayed transaction requiring its historical exchange rate is incorrectly priced by a latest-value lookup after the rate changes.
 - **Verification — proposed:** Change a dimension between event occurrence and processing; compare latest-value, historical, and maintained-join expectations. Include deletion and late matching input; require a sink that can represent each selected output change. No pipeline test ran.
 
-**Placement:** Prefer a conditional join-semantics reference reached from `microservice-data/references/projections.md` for service-owned projections. Broker acknowledgement policy belongs in `messaging-reliability`; it does not decide this enrichment contract. [Existing projection reference](../../../../../skills/engineering/microservice-data/references/projections.md), [messaging trigger](../../../../../skills/messaging/messaging-reliability/SKILL.md)
+**Placement:** Prefer a conditional join-semantics reference reached from `microservice-data/references/projections.md` for service-owned projections. Broker acknowledgement policy belongs in `messaging-reliability`; it does not decide this enrichment contract. [Existing projection reference](../../../../../skills/engineering/microservice-data/references/projections.md), [messaging trigger](../../../../../skills/engineering/messaging-reliability/SKILL.md)
 
 ## Ranked disposition
 

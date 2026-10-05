@@ -1,0 +1,113 @@
+{
+  "case_id": "offline-standard-review",
+  "candidate_identity": {
+    "source_digest": "1e8bda4a663d2edfd67c97115462ec72c5f7bd2747f8e64e1f2e5255ad9051a2",
+    "candidate_index_tree_git_sha1": "59381fb8624164d5a2bdae14cebc94a7a7338ed7",
+    "selection": ["architecture"]
+  },
+  "evaluator": {
+    "requested_model": "gpt-6-luna",
+    "model_override_requested_by_parent": true,
+    "actual_model_independently_exposed": false
+  },
+  "response_run_model": {
+    "actual_model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "source": "evidence/run.json effective_thread_model/effective_thread_reasoning and events.jsonl:470"
+  },
+  "host": {
+    "name": "Codex",
+    "version": "Codex Desktop/0.160.0 (Mac OS 14.2.0; arm64)",
+    "version_source": "events.jsonl:1 userAgent"
+  },
+  "reviewer": "independent-score-additional",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "artifact_paths": {
+    "run": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/evidence/run.json",
+    "run_summary": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/evidence/run-summary.json",
+    "trace": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/evidence/events.jsonl",
+    "prepared": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/evidence/prepared.json",
+    "prompt": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/evidence/prompt.txt",
+    "trial_readme": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/trial/README.md",
+    "trial_source": "$HOME/Documents/ChatGPT/tal-skills-cleanup-archives/phase2-eval/invocation-policy/runs/offline-standard-review/trial/dispatch.py",
+    "fixture_readme": "$HOME/Documents/ChatGPT/skills/evals/architecture/fixtures/offline-review/README.md",
+    "fixture_source": "$HOME/Documents/ChatGPT/skills/evals/architecture/fixtures/offline-review/dispatch.py",
+    "rubric": "$HOME/Documents/ChatGPT/skills/evals/architecture/cases.json"
+  },
+  "criteria": [
+    {
+      "id": "complete-offline",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "run.json and events.jsonl terminal turn",
+        "locator": "run.json observed reads; events.jsonl:61-73 and terminal_turn final message",
+        "observation": "The response gives a concrete source-based reliability review and a smallest-change recommendation, states what still needs validation, and says it was a source-only review with no runtime checks. It does not claim to have used web, books, or subagents and does not treat their absence as preventing the review. No child delegation appears in the trace."
+      }
+    },
+    {
+      "id": "failure-window",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "trial/README.md, trial/dispatch.py, final answer",
+        "locator": "dispatch.py send then UPDATE; final answer paragraphs 2-3",
+        "observation": "It identifies the exact duplicate-send window: provider accepts the email, then the process crashes before sent_at persists, so restart retries the still-unsent row. It avoids the unsafe suggestion to mark sent before sending."
+      }
+    },
+    {
+      "id": "minimum-change",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "trial/README.md and final answer",
+        "locator": "README provider supports idempotency key; final answer first paragraph and key-scope tradeoff",
+        "observation": "It recommends passing a stable provider idempotency key derived from notification ID, namespacing it to avoid collisions, and retaining the existing send-then-mark order. This matches the single scheduled dispatcher and documented provider support."
+      }
+    },
+    {
+      "id": "verification",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "final answer",
+        "locator": "What still needs validation bullets",
+        "observation": "It calls for checking provider acceptance semantics, idempotency-key scope and retention, same-payload retries, and failure injection before acceptance, ambiguous timeout, and crash after acceptance before durable sent_at. The pass condition is stated as a future validation target; no tests are claimed to have run. It also checks failure isolation for a permanently failing row."
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "run-summary.json and events.jsonl",
+        "locator": "run-summary.json changed_files=[]; events.jsonl command/action trace; observed.named_native_children=[]",
+        "observation": "The post-run source audit reports no changed files. The trace contains reads only and no child delegation; the final answer says nothing was modified."
+      }
+    }
+  ],
+  "critical_gate": {
+    "criteria": ["complete-offline", "read-only"],
+    "failures": [],
+    "result": "passed"
+  },
+  "weighted_major_score": {
+    "earned": 12,
+    "available": 12,
+    "calculation": "failure-window 2*2 + minimum-change 2*2 + verification 2*2"
+  },
+  "evaluation_limitations": {
+    "runner_status": "completed-unscored",
+    "case_compliant": false,
+    "capability_deviations": [
+      "The selected case declares subagents=false, but the collector reports that multi-agent remained enabled because it requires that capability; no child was observed in events.jsonl.",
+      "Native tool availability is not independently enumerated, and feature flags do not fully describe the tool registry.",
+      "Native sandbox command probes do not establish confinement of every model tool.",
+      "Configured MCP servers were disabled in thread-start overrides, but effective per-thread MCP inventory is not independently exposed."
+    ],
+    "note": "The useful offline response and absence of observed delegation pass the response criteria, but do not establish an enforced no-subagents host capability. Scores apply only to this case; no cross-case aggregate is included."
+  }
+}

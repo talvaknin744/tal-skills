@@ -8,9 +8,9 @@ The [reviewed-video catalog](reviewed-video-catalog.md) accounts for all 91 revi
 
 | Need | Skill | Observable outcome |
 |---|---|---|
-| Turn an exam or useful project into feasible work | [learning-plan](../../skills/productivity/learning-plan/SKILL.md) | Capacity reconciled, required skills mapped, next session executable |
-| Practise and remember | [retrieval-coach](../../skills/productivity/retrieval-coach/SKILL.md) | Attempt before feedback, verified repair, accurate spaced-review state |
-| Improve a failing study habit | [learning-experiments](../../skills/productivity/learning-experiments/SKILL.md) | One replacement action tested on fresh delayed performance |
+| Turn an exam or useful project into feasible work | [learning-plan](../../skills/misc/learning-plan/SKILL.md) | Capacity reconciled, required skills mapped, next session executable |
+| Practise and remember | [retrieval-coach](../../skills/misc/retrieval-coach/SKILL.md) | Attempt before feedback, verified repair, accurate spaced-review state |
+| Improve a failing study habit | [learning-experiments](../../skills/misc/learning-experiments/SKILL.md) | One replacement action tested on fresh delayed performance |
 
 The split follows independent invocation needs. Planning is useful before a session, tutoring during one, and experimentation when a recurring bottleneck appears. Each skill is self-contained. Its ordinary steps stay in the entrypoint; mathematics, scheduling, state transitions and source details are disclosed through conditional references. No study request requires loading the entire research catalog.
 
