@@ -1,10 +1,12 @@
 ---
 name: messaging-reliability
-description: Diagnose or implement reliable broker consumers, acknowledgements, retry and quarantine paths, event replay, and schema evolution. Use for lost or duplicate effects, out-of-order events, poison messages, and unsafe consumer checkpoints; exclude in-process collection transformations.
+description: Diagnose or implement broker consumers, acknowledgements, retries, quarantine, replay, and schema evolution. Use for lost, duplicate, or out-of-order effects and unsafe checkpoints; exclude in-process collection transformations.
 license: MIT
 ---
 
 # Messaging reliability
+
+**recoverable disposition:** A recoverable disposition records how each message reaches a safe, observable outcome.
 
 Make each message reach a recoverable disposition without losing required effects or repeating harmful ones. Keep the existing broker and storage choices unless the evidence requires a change.
 

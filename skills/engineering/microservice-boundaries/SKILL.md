@@ -1,12 +1,16 @@
 ---
 name: microservice-boundaries
-description: Choose or review microservice boundaries, assess a proposed service split, or diagnose a distributed monolith's coupling. Use for business capability decomposition and service ownership; exclude routine module refactoring and general architecture reviews.
+description: Choose or review microservice boundaries, assess a proposed split, or diagnose distributed-monolith coupling. Use for business capability decomposition and service ownership; exclude routine module refactoring and general architecture reviews.
 license: MIT
 ---
 
 # Microservice boundaries
 
+**boundary map:** A boundary map assigns each capability, invariant, state, and contract to an owner.
+
 Choose boundaries that let useful changes ship independently. Treat a service as an owned business capability with a contract and state, rather than a target size or a separate process for every entity.
+
+**Example:** If the goal is independent release, count the teams and releases required by one representative business change.
 
 ## 1. Establish the reason to split
 
@@ -16,6 +20,8 @@ Match the requested mode: a review yields findings; a design yields a boundary p
 
 **Done:** the decision has a concrete goal, evidence or an explicit assumption, and a condition for judging improvement. Service count alone is not that condition.
 
+**Example:** For an order capability, record who owns the order state, payment invariant, and shipment event.
+
 ## 2. Map capabilities and invariants
 
 Trace representative business changes from entry point through rules, state transitions, storage, and downstream effects. Name each capability in the domain's language. Distinguish a bounded context's internal model from the information it exposes. Similar names in different contexts need not imply one shared model.
@@ -24,15 +30,19 @@ For each candidate boundary, record its responsibility, commands or events, auth
 
 **Done:** every capability and invariant affected by this decision has a proposed home, and contested ownership is visible.
 
+**Ask:** Which dependency outage or coordinated release would show that this proposed seam is still coupled?
+
 ## 3. Test independence
 
 Walk a representative change through each candidate design. Count the components, teams, contracts, and releases that must move together. Trace a dependency outage as well as a successful call. Distinguish necessary business collaboration from exposure of another service's internals.
 
-When a split introduces network calls or existing services repeatedly change together, use [coupling.md](references/coupling.md) to test the seam. When ownership, team alignment, or shared platforms drive the decision, read [ownership.md](references/ownership.md). Read only the relevant branch.
+When a split introduces network calls or existing services repeatedly change together, use [coupling.md](references/coupling.md) to test the seam. When the boundary is chosen and extraction work begins, Call the Skill tool with "microservice-extraction". For cross-owner invariants, Call the Skill tool with "microservice-data". When ownership, team alignment, or shared platforms drive the decision, read [ownership.md](references/ownership.md). Read only the relevant branch.
 
 Compare credible options against the stated goal: retain a module, combine tightly coupled capabilities, or extract a service. Evaluate remote joins, latency, consistency, operational burden, and the ability to reverse a mistaken boundary. Keep strong atomic invariants together unless a concrete alternative preserves the required business behavior.
 
 **Done:** each candidate has an evidenced benefit, its dominant cost, and a change or failure scenario that could invalidate it.
+
+**Example:** Propose isolating one module for a release and name the observed pass/fail condition before extracting it.
 
 ## 4. Recommend a bounded next step
 
