@@ -49,6 +49,19 @@ The zeros and placeholders above describe the record format; they are not measur
 
 Report activation alongside critical scores: automatic positives need at least two observed body reads in three fresh normal-discovery attempts. Keep all attempts, timeouts and skills read instead. After a description change, repeat that skill's positives three times and its complete existing nontrigger set once. For explicit-only skills, report observable invocation evidence separately; response markers establish only the tested output contract, and do not prove hidden body injection.
 
+For each published release, list evaluation artifacts by asset name, candidate commit, runtime/package hash, case set, and host. State whether each artifact is bound to the exact release source or to a pre-release candidate, and list unexecuted coverage. Keep prior release assets intact when attaching an artifact to a later release.
+
+## Release evidence associations
+
+The `v1.1.0` release carries the archives below. These are evaluations or attempts against identified pre-release candidates, not a claim that every case ran against the final release commit. The earlier follow-up asset remains unchanged on `v1.0.0` and is attached again with identical bytes. Run manifests preserve their preparation-time upload state; the release page records publication and verified asset digests.
+
+| Asset | Candidate and host | Retained results |
+| --- | --- | --- |
+| `tal-skills-cleanup-followup-2026-10-05.tar.zst` | PR #14 candidate forms; canonical digest `71faa28065eb8c6f3d639bba3969f73910e67e39183f22d3215a2693db7a055b`, generated Codex digest `1f87df85b6866186ac4893876d977f7c8a660a343ac85fdcf4337f8d3764befd`. | [119 scores and 120 attempts](cleanup-followup/runs/2026-10-05/review.md), with prior failures and host gaps. |
+| `tal-skills-handoff-fallback-2026-10-05.tar.zst` | R1 source equivalent to `83627a5`; frozen canonical digest `cf9449f0ec966013b1cdacfcac16ee06dfb3a0161ad6bb168c746520a2acaad5`, generated Codex digest `b8811ff601af2272fbb3d793dff45e160e2df71e44ae4aad0f92d3af6bb77f23`. | [39 independently scored cases](cleanup-followup/runs/2026-10-05-r1/review.md), including remaining critical partials and quote-audit gaps. |
+| `tal-skills-activation-rate-2026-10-05.tar.zst` | R3 mixed frozen candidates; final skill source equivalent to `e6942fd`, canonical digest `02811e198b88054357d518e3ed8389bf002d70189b482ac2112ad7732af403db`. | [Activation and independent scoring](cleanup-followup/runs/2026-10-05-activation/review.md); the report identifies each attempt's candidate and invocation surface. |
+| `tal-skills-claude-code-2026-10-05.tar.zst` | Claude Code 2.1.150; isolated installation of 1.0.0 matched marketplace commit `74d141db54dddaec5b594fcf1f0d6d047a6a51b4`. | [Installation and blocked attempts](claude-code/runs/2026-10-05/review.md): zero completed behavioral cases and zero scores; authentication remains unresolved. The [publication receipt](claude-code/runs/2026-10-05/publication-receipt.json) maps the retained internal bundle to the redacted public copy. |
+
 ## Automated checks
 
 Run `npm test` for all deterministic checks, or `node --test tests/<skill-name>/evals.test.mjs` to validate one corpus. These checks cover case identifiers, rubric structure, capability declarations, and fixture existence and isolation. A **corpus integrity check** is not a behavioral evaluation of the agent. Architecture's book-contract recovery is tested separately by its contract tests; idempotency fixtures are examples to inspect, not a production idempotency library.
