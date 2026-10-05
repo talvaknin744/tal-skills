@@ -1,5 +1,13 @@
 # Change log
 
+## [1.1.0] - 2026-10-05
+
+- Skills recognize narrower task boundaries and name related skills through portable handoffs. A standalone installation continues with its available guidance when a sibling is missing and leaves sibling-specific conclusions unresolved.
+- Improve automatic activation for deterministic regression tests, tenant-scoped retry identities, independently deployed service release evidence and periodic export client retirement. Architecture remains explicitly invoked and states its decision boundary, recommendation and evidence that could change it.
+- Clarify protocol, distributed-system, concurrency, maintenance, cleanup, infrastructure, recovery, backend-language, performance and microservice guidance. Add Temporal workflow, production readiness, reliability and safe deployment skills.
+- Provide a task-oriented README, one primary installation path and public skill pages with invocation guidance. Plugin manifests and repository invariants were established in v1.0.0; this release keeps their versions aligned.
+- Preserve behavioral evidence, failed attempts and coverage limits. The release's evaluation assets identify the candidates they tested; earlier candidate archives do not establish exact final-release behavior. Claude installation succeeded in an isolated profile, while model execution remains authentication-blocked.
+
 ## Release process
 
 Changesets entries are the source for upcoming release notes. On the release branch, run `npx changeset version`, synchronize the package, plugin, and matching marketplace versions, then date the generated release heading using the actual publication date. Release evidence must identify its candidate and package hashes; do not describe pre-release candidate evaluations as evaluations of the final release source.
