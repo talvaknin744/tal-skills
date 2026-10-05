@@ -85,6 +85,60 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
       assert.deepEqual(bytes, fs.readFileSync(path.join(root, row.fixture_source, fixture.path)));
     }
   }
+  const claude = readJson('evals/cleanup-followup/claude-code-cases.json');
+  assert.equal(claude.schema_version, 1);
+  assert.equal(claude.cases.length, 3);
+  assert.deepEqual(claude.cases.map(row => row.key), [
+    'claude-code--python-idempotency-handoff-v4',
+    'claude-code--architecture-plugin-unqualified-v1',
+    'claude-code--architecture-plugin-namespaced-v1',
+  ]);
+  const byKey = new Map(claude.cases.map(row => [row.key, row]));
+  for (const row of claude.cases) {
+    assert.equal(sha256(row.prompt), row.prompt_sha256, row.key);
+    assert.equal(sha256(JSON.stringify({ criteria: row.criteria }, null, 2) + '\n'), row.criteria_sha256, row.key);
+    assert.ok(row.fixture_dir.startsWith('evals/cleanup-followup/fixtures/'), row.key);
+    const fixtureDir = path.join(root, row.fixture_dir);
+    const actual = fs.readdirSync(fixtureDir, { recursive: true }).filter(name => fs.statSync(path.join(fixtureDir, name)).isFile()).sort();
+    assert.deepEqual(actual, row.fixture_files.map(file => file.path).sort(), row.key);
+    const digest = sha256(row.fixture.files.map(file => `${file.path}\0${file.sha256}\n`).join(''));
+    assert.equal(digest, row.fixture.source_digest, row.key);
+    for (const fixture of row.fixture_files) {
+      const bytes = fs.readFileSync(path.join(fixtureDir, fixture.path));
+      assert.equal(sha256(bytes), fixture.sha256, `${row.key}/${fixture.path}`);
+      assert.equal(bytes.length, fixture.bytes, `${row.key}/${fixture.path}`);
+      assert.deepEqual(bytes, fs.readFileSync(path.join(root, row.fixture_source, fixture.path)), `${row.key}/${fixture.path} source copy`);
+    }
+  }
+  const unqualified = byKey.get('claude-code--architecture-plugin-unqualified-v1');
+  const namespaced = byKey.get('claude-code--architecture-plugin-namespaced-v1');
+  assert.deepEqual(unqualified.criteria, namespaced.criteria);
+  assert.deepEqual(unqualified.fixture, namespaced.fixture);
+  assert.equal(unqualified.prompt.replace('/architecture', '/tal-skills:architecture'), namespaced.prompt);
+  assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[0].id, 'actual-python-skill');
+  assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[1].id, 'actual-idempotency-handoff');
+});
+
+test('Claude Code R4 report retains blocked counts and a verifiable external archive receipt', () => {
+  const report = fs.readFileSync(path.join(root, 'evals/cleanup-followup/claude-code-report.md'), 'utf8');
+  const review = fs.readFileSync(path.join(root, 'evals/claude-code/runs/2026-10-05/review.md'), 'utf8');
+  const manifest = readJson('evals/claude-code/runs/2026-10-05/archive-manifest.json');
+  assert.match(report, /\.\.\/claude-code\/runs\/2026-10-05\/review\.md/);
+  assert.match(report, /\.\.\/claude-code\/runs\/2026-10-05\/archive-manifest\.json/);
+  assert.match(review, /\*\*Status: blocked\.\*\*/);
+  assert.equal(manifest.status, 'blocked');
+  assert.equal(manifest.execution.completed_runs, 0);
+  assert.equal(manifest.execution.graded_runs, 0);
+  assert.equal(manifest.execution.auth_blocked_model_attempts, 2);
+  assert.equal(manifest.execution.canonical_plugin_cases_started, 0);
+  assert.equal(manifest.execution.architecture_syntax_cases_started, 0);
+  assert.equal(manifest.execution.generated_v4_skill_catalog_observed, true);
+  assert.equal(manifest.installation.declared_skill_paths, 35);
+  assert.equal(manifest.installation.all_35_skill_trees_match_marketplace, true);
+  assert.match(manifest.external_archive.filename, /^remaining-claude-code-r4-2026-10-05\.tar\.zst$/);
+  assert.match(manifest.external_archive.sha256, /^[a-f0-9]{64}$/);
+  assert.equal(manifest.external_archive.zstd_test, 'passed');
+  for (const hash of Object.values(manifest.receipt_hashes_sha256)) assert.match(hash, /^[a-f0-9]{64}$/);
 });
 
 test('retained source prompts and rubrics still match their original case files', () => {
