@@ -8,6 +8,8 @@ Defines the meaning and changing behavior of continuously maintained stream resu
 
 Use it for continuously maintained event-time windows, late data, corrections, temporal joins, finality, or retained state. Broker acknowledgement repair belongs to messaging-reliability; bounded in-memory transformations belong in ordinary application code.
 
+Invocation: automatic
+
 ## It's working if
 
 - The result contract distinguishes arrival, contribution, progress, and externally visible output.

@@ -8,6 +8,8 @@ Designs service-to-service interactions and contracts so participating services 
 
 Design service-to-service calls, APIs, events, or BFF aggregation. Use for contract evolution, consumer coupling, or chatty calls; exclude generic architecture reviews and retry deduplication. Use `messaging-reliability` for broker delivery/replay guarantees and `technical-deprecation` for retiring a supported contract.
 
+Invocation: automatic
+
 ## It's working if
 
 - The interaction names participants, business decision owner, completion semantics, dependencies, and evidence for actual consumers.

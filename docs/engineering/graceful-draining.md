@@ -8,6 +8,8 @@ Keep logical jobs recoverable while workers stop, roll out, scale down or transf
 
 Use when interruption during deployment, scale-down or maintenance threatens resumable work, retries or ownership. For scheduled maintenance use background-maintenance; for a Temporal deployment use temporal-safe-deployments when available.
 
+Invocation: automatic
+
 ## It's working if
 
 - The review traces a job through admission, claim, effects, durable progress, acknowledgement and termination, and identifies the layer reporting failure.

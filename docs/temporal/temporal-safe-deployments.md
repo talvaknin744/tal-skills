@@ -8,6 +8,8 @@ Guides code, Worker, payload, and workload changes while existing Temporal execu
 
 Use [temporal-safe-deployments](../../skills/temporal/temporal-safe-deployments/SKILL.md) when open or sleeping runs, pending Activities, handlers, child Workflows, or continued runs may encounter a deployment or migration. Production routing, resets, termination, and migration need authorization for those operations.
 
+Invocation: automatic
+
 ## It's working if
 
 - Affected execution classes and their compatibility requirements are identified.

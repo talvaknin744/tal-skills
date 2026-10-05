@@ -8,6 +8,8 @@ Guides TypeScript service changes where runtime validation, asynchronous resourc
 
 Use [typescript-backend](../../skills/languages/typescript-backend/SKILL.md) for backend handlers and workers when external values or asynchronous effects cross a correctness boundary. It is not for browser UI styling or type-only library changes. Consult runtime-boundaries or asynchronous-ownership guidance when applicable.
 
+Invocation: automatic
+
 ## It's working if
 
 - The handler, dependency versions, compiler settings, and checks are identified.

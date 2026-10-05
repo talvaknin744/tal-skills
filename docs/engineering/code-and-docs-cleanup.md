@@ -8,6 +8,8 @@ Make a bounded, behavior-preserving cleanup that removes an evidenced maintenanc
 
 Use for explicit cleanup, refactoring, unused-code removal or stale-instruction repair. Routine features, bug fixes and formatting alone stay outside this boundary.
 
+Invocation: automatic
+
 ## It's working if
 
 - The report names the reader or next change being obstructed and the observable behavior to preserve.

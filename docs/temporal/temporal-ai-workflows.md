@@ -8,6 +8,8 @@ Guides durable AI and agent business processes with explicit decisions, permissi
 
 Use [temporal-ai-workflows](../../skills/temporal/temporal-ai-workflows/SKILL.md) when Temporal owns a durable model/tool workflow, bounded reasoning loop, shared conversation state, human approval, or agent recovery. Generic prompt tuning and AI tasks without Temporal are outside its scope.
 
+Invocation: automatic
+
 ## It's working if
 
 - The business task, stable identity, successful outcome, and interruption points are named.

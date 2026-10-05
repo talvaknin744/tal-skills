@@ -39,7 +39,7 @@ The split follows independent invocation needs. Planning is useful before a sess
 | Short sessions are praised, while exams require extended reasoning | Use short recall where it fits; preserve long problems and simulations |
 | Coaching ladders and quizzes assign levels and percentiles | Diagnose concrete task failures instead of fixed learner identities |
 | Fast reading and polished maps look efficient | Evaluate total time, delayed correctness and transfer |
-| Numerical claims promise dramatic gains | Exclude unverified percentages, universal thresholds and neurological explanations from operational rules |
+| Numerical claims promise dramatic gains | Keep unverified percentages, universal thresholds, and neurological explanations out of operational rules |
 
 ## Independent evidence and its limits
 

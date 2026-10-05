@@ -14,6 +14,34 @@ const bytes = files.reduce((sum, name) => sum + fs.statSync(path.join(root, name
 const text = name => fs.readFileSync(path.join(root, name), 'utf8');
 const skills = files.filter(name => /^skills\/[^/]+\/[^/]+\/SKILL\.md$/.test(name));
 const promoted = skills.filter(name => !name.startsWith('skills/misc/'));
+const leadingTerms = JSON.parse(text('scripts/leading-terms.json'));
+const promotedNames = promoted.map(name => name.split('/')[2]).sort();
+const mappedNames = Object.keys(leadingTerms.terms_by_skill ?? {}).sort();
+const unmappedNames = [...(leadingTerms.unmapped_skills ?? [])].sort();
+if (leadingTerms.schema_version !== 1
+  || new Set([...mappedNames, ...unmappedNames]).size !== promotedNames.length
+  || [...mappedNames, ...unmappedNames].sort().some((name, index) => name !== promotedNames[index])) {
+  throw new Error('leading-terms.json must map every promoted skill once or list it as unmapped');
+}
+let leadingTermCount = 0;
+const belowThresholdLeadingTerms = [];
+for (const [skillName, terms] of Object.entries(leadingTerms.terms_by_skill)) {
+  if (!Array.isArray(terms) || terms.length === 0 || new Set(terms).size !== terms.length) {
+    throw new Error(`leading-terms.json: ${skillName} must have distinct leading terms`);
+  }
+  const filename = promoted.find(name => name.split('/')[2] === skillName);
+  const body = text(filename).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '').replace(/^#[^\r\n]*\r?\n/, '');
+  for (const term of terms) {
+    if (typeof term !== 'string' || !term.trim()) throw new Error(`leading-terms.json: invalid term for ${skillName}`);
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const occurrences = body.match(new RegExp(`\\b${escaped}\\b`, 'gi'))?.length ?? 0;
+    if (occurrences < 3) belowThresholdLeadingTerms.push(`${skillName}: ${term} (${occurrences})`);
+    leadingTermCount++;
+  }
+}
+if (belowThresholdLeadingTerms.length) {
+  throw new Error(`leading-terms.json contains terms below the three-use threshold: ${belowThresholdLeadingTerms.join(', ')}`);
+}
 const allSkills = files.filter(name => /^(skills\/[^/]+|integrations\/[^/]+\/skills)\/[^/]+\/SKILL\.md$/.test(name));
 const descriptionWords = promoted.map(name => {
   const frontmatter = text(name).match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -24,6 +52,7 @@ const descriptionWords = promoted.map(name => {
 const buckets = fs.readdirSync(path.join(root, 'skills'), { withFileTypes: true }).filter(entry => entry.isDirectory());
 const pack = git('count-objects', '-vH').split('\n').find(line => line.startsWith('size-pack:'))?.slice(10).trim() ?? 'unavailable';
 const homeHits = files.flatMap(name => personalPathHits(text(name)).map(hit => ({ name, ...hit })));
+const emDashExceptions = JSON.parse(text('scripts/prose-style-exceptions.json')).files;
 const rows = [
   ['Working tree source size (MiB, excluding ignored local environments)', (bytes / 1_048_576).toFixed(1)],
   ['Working tree source bytes', bytes],
@@ -42,8 +71,12 @@ const rows = [
   ['Skills missing agents/openai.yaml', allSkills.filter(name => !fs.existsSync(path.join(root, name.replace('SKILL.md', 'agents/openai.yaml')))).length],
   ['Descriptions over 40 words (promoted)', descriptionWords.filter(words => words > 40).length],
   ['Description words: max / avg (promoted)', `${Math.max(0, ...descriptionWords)} / ${descriptionWords.length ? (descriptionWords.reduce((a, b) => a + b, 0) / descriptionWords.length).toFixed(1) : 0}`],
+  ['Leading terms occurring at least 3 times in own SKILL body', `${leadingTermCount} terms across ${mappedNames.length} skills`],
+  ['Mapped leading terms below three uses in own SKILL body', belowThresholdLeadingTerms.length],
+  ['Promoted skills without a mapped leading term', unmappedNames.join(', ') || 'none'],
   ['Skills handing off to a sibling', skills.filter(name => /Hand off to the `[a-z0-9-]+` skill/i.test(text(name))).length],
   ['Files with em-dashes (skills/, docs/, README, AGENTS, CHANGELOG, CONTRIBUTING)', files.filter(name => name.endsWith('.md') && (/^(skills|docs)\//.test(name) || ['README.md', 'AGENTS.md', 'CHANGELOG.md', 'CONTRIBUTING.md'].includes(name)) && text(name).includes('—')).length],
+  ['Exact retained em-dash exemptions', emDashExceptions.map(entry => entry.path).join(', ')],
   ['README bytes', fs.statSync(path.join(root, 'README.md')).size],
   ['Docs pages for promoted skills', promoted.filter(name => { const [, bucket, skill] = name.split('/'); return fs.existsSync(path.join(root, `docs/${bucket}/${skill}.md`)); }).length],
   ['plugin.json present', fs.existsSync(path.join(root, '.claude-plugin/plugin.json')) ? 'yes' : 'no'],

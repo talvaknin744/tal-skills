@@ -8,6 +8,8 @@ Guides Python service changes where asynchronous cancellation, resource ownershi
 
 Use [python-backend](../../skills/languages/python-backend/SKILL.md) when a Python handler or worker crosses async, database, or caller-owned state boundaries. Read the async-ownership or transaction-outcomes reference for the affected branch. It does not require a service framework for a pure local calculation.
 
+Invocation: automatic
+
 ## It's working if
 
 - The supported Python and driver versions, entrypoint, transaction owner, and existing checks are identified.

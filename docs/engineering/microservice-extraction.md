@@ -8,6 +8,8 @@ Moves one capability incrementally from a monolith while keeping business behavi
 
 Use it to plan, review, or implement an incremental service extraction, including migration seams, code/data separation, coexistence, and cutover recovery. It excludes choosing boundaries from scratch and ordinary deployments. Start with `microservice-boundaries` if the seam is not decided; use `microservice-operations` for general operating readiness.
 
+Invocation: automatic
+
 ## It's working if
 
 - The selected slice, benefit, callers, readers, writers, constraints, invariants, and material unknowns are recorded.

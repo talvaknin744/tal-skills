@@ -8,6 +8,8 @@ Produce an evidence-grounded decision about system design, migration or an exist
 
 Use for architecture decisions, migrations, technology choices and architecture reviews. Routine implementation and debugging stay outside this boundary. Invoke explicitly with Claude /architecture or Codex $architecture; automatic model invocation is disabled.
 
+Invocation: user-invoked. Claude Code: /architecture. Codex: $architecture. Automatic invocation is disabled.
+
 ## It's working if
 
 - The decision states the decision, system boundary, goals, constraints and material unknowns.

@@ -8,6 +8,8 @@ Make retries preserve one intended business outcome within an explicit identity 
 
 Use for duplicate-safe APIs, webhooks and queue workers, including concurrent execution and uncertain effects. Generic retry tuning belongs to the relevant client or queue workflow; read-only requests need no effect-deduplication contract.
 
+Invocation: automatic
+
 ## It's working if
 
 - The report names the harmful effect, logical operation identity and point where success becomes durable.

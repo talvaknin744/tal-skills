@@ -8,6 +8,8 @@ Plan and verify infrastructure transitions with explicit ownership, compatibilit
 
 Use when replacement, Terraform state ownership, mixed-version rollout or partial apply could interrupt service or lose data. Application-only edits remain in their normal workflow.
 
+Invocation: automatic
+
 ## It's working if
 
 - The plan identifies provider/runtime versions, workspace and target identity, affected resources, durable data and authorized action.
