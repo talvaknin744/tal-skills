@@ -679,3 +679,59 @@ test('versioned reporting corrections preserve original fixtures and isolate tru
   assert.deepEqual(gates.baseline_rows, readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/gates.json').baseline_rows);
   assert.deepEqual(gates.versioned_authoring_corrections, corpus.replacement_notes);
 });
+
+test('complete corrected Sol and blind Fable vectors retain the same 70 attempts and separate gate failures', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const sol = readJson(`${directory}/scores/codex-reporting-05-normalized.json`);
+  const fable = readJson(`${directory}/scores/codex-reporting-05-fable-normalized.json`);
+  assert.equal(sol.rows.length, 70);
+  assert.equal(fable.rows.length, 70);
+  assert.deepEqual(sol.rows.map(row => row.replicate), fable.rows.map(row => row.replicate));
+  assert.deepEqual(sol.activation_rows, fable.activation_rows);
+  for (const [scores, sourceFile] of [[sol, 'codex-reporting-05-independent-source.json'], [fable, 'codex-reporting-05-fable-independent-source.json']]) {
+    const source = readJson(`${directory}/scores/${sourceFile}`);
+    assert.equal(source.attempt_score_count, 70);
+    assert.equal(scores.summary.all_registered_gates_passed, false);
+    assert.equal(scores.summary.governing_candidate_gates_passed, false);
+    assert.equal(scores.summary.governing_gate_misses, scores.governing_gate_misses.length);
+    const excluded = new Set(scores.authoring_corrections.map(item => item.original));
+    assert.deepEqual(scores.governing_gate_misses, scores.gate_misses.filter(item => !(excluded.has(item.case_key) && ['activation', 'target'].includes(item.gate))));
+    assert.deepEqual(scores.authoring_corrections, readJson(`${directory}/reporting-v2-gates.json`).versioned_authoring_corrections);
+    for (const row of scores.rows) {
+      const raw = source.groups.find(group => group.grader === row.grader.id).runs.find(run => run.label === row.blind_label);
+      assert.deepEqual(row.criteria.map(({ severity, ...item }) => item), raw.criteria);
+      assert.ok(row.criteria.every(item => item.evidence_quotes.every(quote => quote.length > 0)));
+      assert.equal(row.candidate_commit, '77aa852a206f5fc0472a6d6c7c38d87fc979e75f');
+      assert.equal(row.candidate_package_digest, '4cfcadc6274d23fdbab10de31fb8a3d539a65a612df0c3de2849e3a235e0f689');
+    }
+  }
+  assert.equal(fable.grader_model, 'claude-fable-5-1');
+  assert.equal(fable.grading_independence.saw_sol_scores, false);
+  assert.equal(fable.grading_independence.saw_candidate_package_guidance, false);
+  assert.equal(fable.same_model_grading_coverage_gap, false);
+  assert.equal(sol.same_model_grading_coverage_gap, true);
+});
+
+test('final reporting prompts restore source requests without changing any earlier rubric or fixture', () => {
+  const corpus = readJson('evals/cleanup-followup/reporting-gates-v3-cases.json');
+  const prior = readJson('evals/cleanup-followup/reporting-gates-v2-cases.json');
+  const existing = readJson('evals/idempotency/cases.json');
+  assert.equal(corpus.cases.length, 3);
+  assert.equal(corpus.replacement_notes.length, 3);
+  for (const row of corpus.cases) {
+    const source = prior.cases.find(item => item.id === row.source_attribution.source_focused_case_id);
+    assert.ok(source, row.id);
+    assert.deepEqual(row.rubric, source.rubric);
+    assert.deepEqual(row.capabilities, source.capabilities);
+    assert.equal(row.source_attribution.fixture_reused_without_changes, true);
+    for (const filename of row.fixtures) assert.deepEqual(fs.readFileSync(path.join(root, row.fixture_dir, filename)), fs.readFileSync(path.join(root, source.fixture_dir, filename)));
+    if (row.id === 'existing-claim-guarantee-v3') assert.equal(row.prompt, existing.cases.find(item => item.id === 'expired-lease-owner').prompt);
+    if (row.id === 'provider-fake-limit-report-v3') assert.equal(row.prompt, existing.cases.find(item => item.id === 'bounded-webhook-edit').prompt);
+    if (row.id === 'counterexample-final-report-v3') assert.equal(row.prompt, source.prompt.replace('nature of the failure and whether a race detector ran', 'nature of the failure, whether a race detector ran and limits of the checks actually run'));
+  }
+  const gates = readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/final-gates.json');
+  assert.equal(gates.planned_attempts, 79);
+  assert.equal(gates.versioned_authoring_corrections.length, 5);
+  assert.deepEqual(gates.baseline_rows, readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/gates.json').baseline_rows);
+  assert.equal(gates.models.fallback_on_any_primary_governing_miss, 'gpt-6-astra');
+});

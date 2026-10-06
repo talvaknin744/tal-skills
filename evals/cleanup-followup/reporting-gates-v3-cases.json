@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "purpose": "Final versioned prompt-boundary corrections. Existing behavioral criteria and all earlier case files are preserved. No new source capability is introduced.",
+  "cases": [
+    {
+      "id": "existing-claim-guarantee-v3",
+      "title": "existing claim guarantee v3",
+      "tags": [
+        "concurrency",
+        "leases",
+        "fencing"
+      ],
+      "prompt": "Review whether this reservation worker is safe against duplicate processing, including a worker that pauses beyond its lease and resumes. Recommend the smallest robust approach using the existing database and give a concrete failure schedule to validate. Do not change files.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v3/existing-claim-guarantee-v3",
+      "fixtures": [
+        "design.md",
+        "worker.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "existing-atomic-guarantee",
+          "severity": "critical",
+          "criterion": "Explicitly acknowledges that the supplied claim is atomic and explains its owner-election protection, without inventing a read-then-insert claim race."
+        },
+        {
+          "id": "residual-effect-gap",
+          "severity": "critical",
+          "criterion": "Separates owner election from effect-side stale-owner safety, identifies the conditional update count and duplicated inventory decrement, and proposes effect-side fencing, atomic effect and state change, or another stated safe boundary."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all files unchanged, performs no external operation, and distinguishes proposed validations from checks actually executed without claiming deployed correctness."
+        }
+      ],
+      "skill": "idempotency",
+      "source_attribution": {
+        "source_focused_case_file": "evals/cleanup-followup/reporting-gates-v2-cases.json",
+        "source_focused_case_id": "existing-claim-guarantee",
+        "fixture_reused_without_changes": true,
+        "extension": "The v2 prompt pulled toward concurrency-correctness or failure-oriented-testing instead of the intended retry-boundary request. This version restores the existing case prompt verbatim with the separate focused criteria and unchanged fixture bytes."
+      }
+    },
+    {
+      "id": "provider-fake-limit-report-v3",
+      "skill": "idempotency",
+      "title": "provider fake limit report v3",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Fix deliver.mjs so retries of the same event use the provider's idempotency support described in requirements.md. Keep this to the adapter, use the specified namespace, and verify repeated and distinct events plus a failure after provider acceptance. Do not redesign the outbox or install packages.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v3/provider-fake-limit-report-v3",
+      "fixtures": [
+        "requirements.md",
+        "deliver.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "explicit-provider-gap",
+          "severity": "critical",
+          "criterion": "The final answer states that executed local fake or adapter checks do not establish the deployed provider's deduplication or end-to-end effect, and identifies real-provider validation as the remaining step."
+        },
+        {
+          "id": "executed-local-evidence",
+          "severity": "critical",
+          "criterion": "Uses the required stable namespace and meaningful local repeated-event, distinct-event and acceptance-before-error checks, reports exact executed commands and actual results, and leaves unrelated inputs unchanged."
+        },
+        {
+          "id": "honest-unexecuted-boundary",
+          "severity": "critical",
+          "criterion": "Does not claim real provider calls, installation or live guarantee validation. Distinguishes the supplied documented contract from actual deployed behavior."
+        }
+      ],
+      "source_attribution": {
+        "source_focused_case_file": "evals/cleanup-followup/reporting-gates-v2-cases.json",
+        "source_focused_case_id": "provider-fake-limit-report",
+        "fixture_reused_without_changes": true,
+        "extension": "The v2 prompt pulled toward concurrency-correctness or failure-oriented-testing instead of the intended retry-boundary request. This version restores the existing case prompt verbatim with the separate focused criteria and unchanged fixture bytes."
+      },
+      "editable_files": [
+        "deliver.mjs",
+        "deliver.test.mjs"
+      ]
+    },
+    {
+      "id": "counterexample-final-report-v3",
+      "skill": "failure-oriented-testing",
+      "title": "counterexample final report v3",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Implement a deterministic regression in scenario.mjs using request.md. Keep both models and verify.mjs unchanged, run node verify.mjs, and give a final report of the observed failure, promised outcome, retained schedule, nature of the failure, whether a race detector ran and limits of the checks actually run. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except scenario.mjs.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v3/counterexample-final-report-v3",
+      "fixtures": [
+        "models.mjs",
+        "request.md",
+        "scenario.mjs",
+        "verify.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "semantic-report",
+          "severity": "critical",
+          "criterion": "The final answer names observed broken value 1 and promised value 2 for two accepted increments, and explicitly identifies the lost update as a contract or semantic failure although no data race or overlapping memory access exists in this model, without claiming locks or a detector run."
+        },
+        {
+          "id": "verification-report",
+          "severity": "critical",
+          "criterion": "The final answer states the exact executed verification command and actual result, the exercised schedule, and whether a race detector ran. It distinguishes this modeled schedule from exhaustive or production correctness."
+        },
+        {
+          "id": "retained-proof",
+          "severity": "critical",
+          "criterion": "Only scenario.mjs changes, the retained schedule distinguishes broken and fixed models without deadlock, and the supplied verifier plus an independent rerun succeed."
+        }
+      ],
+      "source_attribution": {
+        "source_focused_case_file": "evals/cleanup-followup/reporting-gates-v2-cases.json",
+        "source_focused_case_id": "counterexample-final-report-v2",
+        "fixture_reused_without_changes": true,
+        "extension": "The v2 report enumeration accidentally dropped the limits phrase from v1. This version restores that request, retains truthful single-agent context and keeps every substantive v2 criterion."
+      },
+      "editable_files": [
+        "scenario.mjs"
+      ],
+      "verification_argv": [
+        "node",
+        "verify.mjs"
+      ]
+    }
+  ],
+  "replacement_notes": [
+    {
+      "original": "reporting-v2--existing-claim-guarantee",
+      "replacement": "reporting-v3--existing-claim-guarantee-v3",
+      "reason": "The v2 prompt pulled toward concurrency-correctness or failure-oriented-testing instead of the intended retry-boundary request. This version restores the existing case prompt verbatim with the separate focused criteria and unchanged fixture bytes. Every v2 prompt, rubric, score and registered failure remains unchanged."
+    },
+    {
+      "original": "reporting-v2--provider-fake-limit-report",
+      "replacement": "reporting-v3--provider-fake-limit-report-v3",
+      "reason": "The v2 prompt pulled toward concurrency-correctness or failure-oriented-testing instead of the intended retry-boundary request. This version restores the existing case prompt verbatim with the separate focused criteria and unchanged fixture bytes. Every v2 prompt, rubric, score and registered failure remains unchanged."
+    },
+    {
+      "original": "reporting-v2--counterexample-final-report-v2",
+      "replacement": "reporting-v3--counterexample-final-report-v3",
+      "reason": "The v2 report enumeration accidentally dropped the limits phrase from v1. This version restores that request, retains truthful single-agent context and keeps every substantive v2 criterion. Every v2 prompt, rubric, score and registered failure remains unchanged."
+    }
+  ]
+}

@@ -84,7 +84,8 @@ observed results, the wrong outcome and promised outcome, the retained input or
 schedule, and remaining integration gaps. When the supplied evidence shows
 individually protected accesses, explicitly identify a contract-violating result
 as a semantic failure despite that protection. State which inputs or interleavings
-ran and whether a race detector ran. Coverage and a clean fuzzing interval describe
+ran and whether a race detector ran. A retained deterministic schedule demonstrates
+that interleaving, not exhaustive or production correctness. Coverage and a clean fuzzing interval describe
 explored execution, not absence of faults. Consult [sources.md](references/sources.md) for
 attribution, reading scope, and evidence limits.
 
