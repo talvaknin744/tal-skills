@@ -87,11 +87,13 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
   }
   const claude = readJson('evals/cleanup-followup/claude-code-cases.json');
   assert.equal(claude.schema_version, 1);
-  assert.equal(claude.cases.length, 3);
+  assert.equal(claude.cases.length, 5);
   assert.deepEqual(claude.cases.map(row => row.key), [
     'claude-code--python-idempotency-handoff-v4',
     'claude-code--architecture-plugin-unqualified-v1',
     'claude-code--architecture-plugin-namespaced-v1',
+    'claude-code--architecture-plugin-unqualified-v2',
+    'claude-code--architecture-plugin-namespaced-v2',
   ]);
   const byKey = new Map(claude.cases.map(row => [row.key, row]));
   for (const row of claude.cases) {
@@ -115,6 +117,15 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
   assert.deepEqual(unqualified.criteria, namespaced.criteria);
   assert.deepEqual(unqualified.fixture, namespaced.fixture);
   assert.equal(unqualified.prompt.replace('/architecture', '/tal-skills:architecture'), namespaced.prompt);
+  const unqualifiedV2 = byKey.get('claude-code--architecture-plugin-unqualified-v2');
+  const namespacedV2 = byKey.get('claude-code--architecture-plugin-namespaced-v2');
+  assert.deepEqual(unqualifiedV2.criteria, namespacedV2.criteria);
+  assert.deepEqual(unqualifiedV2.fixture, unqualified.fixture);
+  assert.ok(unqualifiedV2.prompt.startsWith('/architecture '), 'v2 places the command first');
+  assert.ok(namespacedV2.prompt.startsWith('/tal-skills:architecture '), 'v2 places the namespaced command first');
+  assert.equal(unqualifiedV2.prompt.replace('/architecture', '/tal-skills:architecture'), namespacedV2.prompt);
+  assert.equal(unqualifiedV2.criteria[0].id, 'host-command-resolution');
+  assert.notDeepEqual(unqualifiedV2.criteria, unqualified.criteria, 'v1 criteria are retained unchanged beside the v2 contract');
   assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[0].id, 'actual-python-skill');
   assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[1].id, 'actual-idempotency-handoff');
 });
@@ -441,3 +452,405 @@ function corpusCriteria(caseKey) {
     ? readJson('evals/phase5-cleanup/rubric.json').cases.find(row => row.case_id === matrixCase.case_id).criteria
     : source.rubric;
 }
+
+test('Claude Code 2026-10-06 executed record is internally consistent and keeps its counts visible', () => {
+  const dir = 'evals/claude-code/runs/2026-10-06';
+  const report = readJson(`${dir}/report.json`);
+  const manifest = readJson(`${dir}/archive-manifest.json`);
+  const review = fs.readFileSync(path.join(root, `${dir}/review.md`), 'utf8');
+  const claudeReport = fs.readFileSync(path.join(root, 'evals/cleanup-followup/claude-code-report.md'), 'utf8');
+  assert.match(claudeReport, /\.\.\/claude-code\/runs\/2026-10-06\/review\.md/);
+  assert.match(review, /\*\*Status: executed\.\*\*/);
+  assert.equal(report.status, 'executed');
+  assert.equal(report.candidate.commit_mac_clone, '594ff61');
+  assert.equal(report.candidate_refinement.commit_cloud_clone, '2d9312f');
+  assert.deepEqual(Object.keys(report.score_sets), ['claude-code-haiku', 'changed-skills-haiku', 'sonnet-comparison', 'refinement-rerun']);
+  assert.equal(manifest.external_archive.filename, 'tal-skills-claude-code-2026-10-06.tar.zst');
+  assert.match(manifest.external_archive.sha256, /^[a-f0-9]{64}$/);
+  assert.equal(manifest.external_archive.zstd_test, 'passed');
+  assert.deepEqual(report.archive_manifest, manifest.external_archive);
+  assert.equal(manifest.members.length, manifest.external_archive.tar_member_count);
+  for (const member of manifest.members) {
+    assert.match(member.original_sha256, /^[a-f0-9]{64}$/);
+    assert.match(member.published_sha256, /^[a-f0-9]{64}$/);
+    assert.equal(member.transformed, member.original_sha256 !== member.published_sha256, member.path);
+  }
+  let totalRows = 0;
+  let totalGaps = 0;
+  for (const [name, summary] of Object.entries(report.score_sets)) {
+    const { rows } = readJson(`${dir}/scores/${name}-normalized.json`);
+    assert.equal(rows.length, summary.rows, name);
+    assert.equal(rows.filter(row => row.execution_status === 'completed').length, summary.completed_runs, name);
+    assert.equal(rows.filter(row => row.grader).length, summary.graded_runs, name);
+    assert.equal(rows.filter(row => row.unsuccessful_due_to_critical_failure).length, summary.critical_zero_rows, name);
+    assert.equal(rows.filter(row => row.critical_partial).length, summary.critical_partial_rows, name);
+    assert.equal(rows.filter(row => row.result === 'pass').length, summary.pass_rows, name);
+    assert.equal(rows.flatMap(row => row.criteria).filter(item => !item.quote_audit_passed).length, summary.criterion_quote_audit_gaps, name);
+    assert.equal(rows.flatMap(row => row.criteria).length, summary.criteria_graded, name);
+    for (const row of rows) {
+      assert.equal(sha256(fs.readFileSync(path.join(root, row.source_binding.source_case_file))), row.source_binding.source_case_file_sha256, row.replicate);
+      const corpus = readJson(row.source_binding.source_case_file).cases;
+      const source = corpus.find(item => `${row.source_binding.source_case_file.split('/')[1]}--${item.id ?? item.case_id}` === row.case_key);
+      assert.ok(source, row.case_key);
+      assert.equal(sha256(source.prompt), row.source_binding.prompt_sha256, row.replicate);
+      const rubric = source.rubric ?? source.criteria;
+      assert.deepEqual(row.criteria.map(item => [item.id, item.severity]).sort(), rubric.map(item => [item.id, item.severity]).sort(), row.replicate);
+      assert.ok(row.criteria.every(item => [0, 1, 2].includes(item.score)), row.replicate);
+      assert.deepEqual(row.critical_results, row.criteria.filter(item => item.severity === 'critical').map(({ id, score }) => ({ id, score })));
+      assert.equal(row.unsuccessful_due_to_critical_failure, row.critical_results.some(item => item.score === 0), row.replicate);
+      assert.equal(row.critical_partial, row.critical_results.some(item => item.score === 1), row.replicate);
+      assert.equal(row.grader.independence.saw_candidate_skill_body, false, row.replicate);
+      assert.ok(Object.values(row.artifact_paths).every(value => value.startsWith(`${name}/`)), row.replicate);
+      for (const item of row.criteria) {
+        assert.equal(item.quote_audit_passed, item.evidence_quotes.every(quote => quote.exact_match) && (item.evidence_quotes.length > 0 || item.score === 0), `${row.replicate}/${item.id}`);
+      }
+    }
+    totalRows += rows.length;
+    totalGaps += summary.criterion_quote_audit_gaps;
+  }
+  assert.equal(totalRows, 169);
+  assert.equal(totalGaps, 38);
+  const sonnet = readJson(`${dir}/scores/sonnet-comparison-normalized.json`).rows;
+  const refinement = readJson(`${dir}/scores/refinement-rerun-normalized.json`).rows;
+  const sonnetScores = (rows, caseKey, criterion) => rows.filter(row => row.case_key === caseKey && row.responder_model.startsWith('claude-sonnet')).map(row => row.criteria.find(item => item.id === criterion).score);
+  assert.deepEqual(sonnetScores(sonnet, 'microservice-testing--unknown-api-consumers', 'breaking-change'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(sonnet, 'technical-deprecation--periodic-export-client', 'removal-and-recovery-gates'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(refinement, 'idempotency--scoped-transfer-identity', 'scoped-auth'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(refinement, 'idempotency--scoped-transfer-identity', 'intent-binding'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(refinement, 'failure-oriented-testing--race-clean-lost-update', 'oracle'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(sonnet, 'failure-oriented-testing--race-clean-lost-update', 'oracle'), [1, 2, 2], 'the pre-refinement Sonnet partial stays visible');
+  const haiku = readJson(`${dir}/scores/claude-code-haiku-normalized.json`).rows;
+  const v2 = haiku.filter(row => row.case_key.endsWith('-v2') && row.case_key.includes('architecture-plugin'));
+  assert.equal(v2.length, 6);
+  assert.ok(v2.every(row => row.activation.command_expansions.includes('/tal-skills:architecture')));
+  const v1 = haiku.filter(row => row.case_key.endsWith('-v1') && row.case_key.includes('architecture-plugin'));
+  assert.equal(v1.length, 6);
+  assert.equal(v1.filter(row => row.unsuccessful_due_to_critical_failure).length, 5, 'the v1 mid-sentence form keeps its failures visible');
+});
+
+
+test('focused reporting cases retain attributed fixture bytes and cover compatible widening separately', () => {
+  const corpus = readJson('evals/cleanup-followup/reporting-gates-cases.json');
+  assert.equal(corpus.cases.length, 4);
+  assert.equal(new Set(corpus.cases.map(row => row.id)).size, 4);
+  assert.deepEqual(corpus.cases.map(row => row.skill).sort(), [
+    'failure-oriented-testing', 'idempotency', 'microservice-testing', 'technical-deprecation',
+  ]);
+  for (const row of corpus.cases) {
+    assert.ok(row.fixture_dir.startsWith('evals/cleanup-followup/fixtures/reporting-gates/'));
+    const actual = fs.readdirSync(path.join(root, row.fixture_dir)).sort();
+    assert.deepEqual(actual, [...row.fixtures].sort(), row.id);
+    assert.ok(row.rubric.length >= 3 && row.rubric.every(item => item.severity === 'critical'));
+    assert.equal(row.capabilities.web, false);
+    assert.equal(row.capabilities.subagents, false);
+    if (row.source_attribution.fixture_reused_without_changes) {
+      const source = readJson(row.source_attribution.source_case_file).cases.find(item => item.id === row.source_attribution.source_case_id);
+      assert.ok(source, row.id);
+      for (const filename of row.fixtures) {
+        assert.equal(sha256(fs.readFileSync(path.join(root, row.fixture_dir, filename))),
+          sha256(fs.readFileSync(path.join(root, source.fixture_dir, filename))), `${row.id}/${filename}`);
+      }
+    }
+  }
+  const boundary = corpus.cases.find(row => row.id === 'compatible-request-widening');
+  assert.deepEqual(boundary.rubric.map(item => item.id), ['compatible-widening', 'breaking-controls', 'read-only-limits']);
+  assert.equal(boundary.task_mode, 'review');
+});
+
+test('Codex critical-gate stages retain complete independent vectors and every failed gate', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const stages = [['codex-critical-02', 43], ['codex-critical-03', 43], ['codex-reporting-04', 55]];
+  for (const [candidate, expected] of stages) {
+    const scores = readJson(`${directory}/scores/${candidate}-normalized.json`);
+    const source = readJson(`${directory}/scores/${candidate}-independent-source.json`);
+    assert.equal(scores.candidate, candidate);
+    assert.equal(scores.rows.length, expected);
+    assert.equal(new Set(scores.rows.map(row => row.replicate)).size, expected);
+    assert.equal(source.attempt_score_count, expected);
+    assert.equal(scores.summary.graded_criteria, scores.rows.reduce((sum, row) => sum + row.criteria.length, 0));
+    assert.equal(scores.summary.critical_zero_rows, scores.rows.filter(row => row.unsuccessful_due_to_critical_failure).length);
+    assert.equal(scores.summary.critical_partial_rows, scores.rows.filter(row => row.critical_partial).length);
+    assert.equal(scores.summary.criterion_quote_audit_gaps, scores.rows.reduce((sum, row) => sum + row.criteria.filter(item => !item.quote_audit_passed).length, 0));
+    assert.equal(scores.summary.gate_misses, scores.gate_misses.length);
+    assert.equal(scores.summary.all_registered_gates_passed, false);
+    assert.ok(scores.gate_misses.length > 0, candidate);
+    for (const row of scores.rows) {
+      assert.equal(row.execution_status, 'executed');
+      assert.match(row.candidate_commit, /^[a-f0-9]{40}$/);
+      assert.match(row.candidate_package_digest, /^[a-f0-9]{64}$/);
+      assert.equal(sha256(fs.readFileSync(path.join(root, row.source_binding.source_case_file))), row.source_binding.source_case_file_sha256);
+      assert.equal(row.grader.independence.authored_candidate, false);
+      assert.equal(row.grader.independence.authored_response, false);
+      assert.equal(row.grader.independence.saw_candidate_skill_body, false);
+      assert.equal(row.grader.same_model_independent_session, row.responder_model === row.grader.model);
+      const original = source.groups.find(group => group.grader === row.grader.id).runs.find(run => run.label === row.blind_label);
+      assert.deepEqual(row.criteria.map(({ severity, ...item }) => item), original.criteria);
+      assert.deepEqual(row.critical_results, row.criteria.filter(item => item.severity === 'critical').map(({ id, score }) => ({ id, score })));
+      assert.equal(row.result, row.criteria.every(item => item.score === 2) ? 'pass' : row.critical_results.some(item => item.score === 0) ? 'fail' : 'partial');
+      for (const filename of Object.values(row.artifact_paths)) assert.ok(!filename.startsWith('/') && !filename.split('/').includes('..'), filename);
+      for (const digest of Object.values(row.artifact_hashes)) assert.match(digest, /^[a-f0-9]{64}$/);
+    }
+    const activation = readJson(`${directory}/${candidate}-activation-table.json`);
+    assert.deepEqual(activation, scores.activation_rows);
+    for (const item of activation) {
+      const rows = scores.rows.filter(row => row.case_key === item.case_key);
+      assert.equal(item.attempts, rows.length);
+      assert.equal(item.target_body_reads, rows.filter(row => row.activation.target_body_read_observed).length);
+      assert.equal(item.activation_gate_passed, rows.length === item.expected_attempts && (item.group === 'nontrigger' ? item.target_body_reads === 0 : item.target_body_reads >= 2));
+    }
+  }
+  const original = readJson(`${directory}/gates.json`);
+  const reporting = readJson(`${directory}/reporting-gates.json`);
+  assert.equal(original.baseline_rows.length, 17);
+  assert.deepEqual(reporting.baseline_rows, original.baseline_rows);
+  assert.equal(reporting.parent_gate_file_sha256, sha256(fs.readFileSync(path.join(root, `${directory}/gates.json`))));
+});
+
+test('versioned quote re-audit retains the original 43 rows and all 33 unresolved quotes', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-05-activation';
+  const audit = readJson(`${directory}/scores/description-quote-reaudit-v2.json`);
+  const bytes = fs.readFileSync(path.join(root, audit.original_score_file));
+  assert.equal(sha256(bytes), 'ef3f7a2b71ebbda87511ee93ecf86b255c94d32e17d477071da84081945904c3');
+  assert.equal(audit.original_score_file_sha256, sha256(bytes));
+  const original = JSON.parse(bytes).rows;
+  assert.equal(original.length, 43);
+  assert.equal(audit.rows.length, 33);
+  assert.equal(audit.criteria_reaudited, 33);
+  assert.equal(audit.criteria_now_passing, 0);
+  assert.equal(audit.criteria_still_failing, 33);
+  assert.equal(audit.scores_changed, false);
+  const gaps = original.flatMap(row => row.criteria.filter(item => !item.quote_audit_passed).map(item => ({ row, item })));
+  assert.equal(gaps.length, audit.rows.length);
+  for (const { row, item } of gaps) {
+    const found = audit.rows.find(entry => entry.candidate === row.candidate && entry.replicate === row.replicate && entry.criterion_id === item.id);
+    assert.ok(found, `${row.replicate}/${item.id}`);
+    assert.equal(found.original_score, item.score);
+    assert.equal(found.original_reason, item.reason);
+    assert.deepEqual(found.quotes.map(entry => entry.quote), item.evidence_quotes);
+    assert.equal(found.re_audit_passed, found.quotes.length > 0 && found.quotes.every(entry => entry.quote.length > 0 && entry.exact_packet_match));
+    assert.equal(found.re_audit_passed, false);
+    for (const [key, digest] of Object.entries(found.evidence_binding)) if (key.endsWith('_sha256')) assert.match(digest, /^[a-f0-9]{64}$/);
+  }
+  const release = readJson(`${directory}/release-upload-verification-2026-10-06.json`);
+  assert.equal(release.expected_sha256, audit.archive_sha256);
+  assert.equal(release.download_sha256, audit.archive_sha256);
+  assert.equal(release.status, 'verified_existing_asset');
+  assert.equal(release.historical_preparation_manifest_changed, false);
+});
+
+test('versioned reporting corrections preserve original fixtures and isolate truthful context extensions', () => {
+  const corpus = readJson('evals/cleanup-followup/reporting-gates-v2-cases.json');
+  assert.equal(corpus.cases.length, 5);
+  assert.equal(corpus.replacement_notes.length, 2);
+  const byId = new Map(corpus.cases.map(row => [row.id, row]));
+  assert.ok(byId.has('counterexample-final-report-v2'));
+  assert.ok(byId.has('compatible-request-widening-v2'));
+  assert.ok(byId.has('uncertain-commit-model-report'));
+  assert.ok(byId.has('existing-claim-guarantee'));
+  assert.ok(byId.has('provider-fake-limit-report'));
+  for (const row of corpus.cases) {
+    const origin = row.source_attribution;
+    const sourceFile = origin.source_focused_case_file ?? origin.source_case_file;
+    const sourceId = origin.source_focused_case_id ?? origin.source_case_id;
+    const source = readJson(sourceFile).cases.find(item => item.id === sourceId);
+    assert.ok(source, row.id);
+    assert.equal(row.capabilities.web, false);
+    assert.equal(row.capabilities.subagents, false);
+    assert.ok(row.rubric.every(item => item.severity === 'critical'));
+    const directory = path.join(root, row.fixture_dir);
+    const files = fs.readdirSync(directory, { recursive: true }).filter(name => fs.statSync(path.join(directory, name)).isFile()).sort();
+    assert.deepEqual(files, [...row.fixtures].sort());
+    for (const filename of files) {
+      const current = fs.readFileSync(path.join(directory, filename));
+      const prior = fs.readFileSync(path.join(root, source.fixture_dir, filename));
+      if (row.id === 'counterexample-final-report-v2' && filename === 'request.md') {
+        assert.equal(origin.fixture_reused_without_changes, false);
+        assert.ok(current.subarray(0, prior.length).equals(prior));
+        assert.match(current.toString(), /one JavaScript agent/);
+        assert.match(current.toString(), /No two memory accesses to value overlap/);
+        assert.match(current.toString(), /none has run/);
+      } else assert.deepEqual(current, prior, `${row.id}/${filename}`);
+    }
+  }
+  const counterexample = byId.get('counterexample-final-report-v2');
+  assert.ok(!/semantic|protected/.test(counterexample.prompt));
+  const gates = readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/reporting-v2-gates.json');
+  assert.equal(gates.planned_attempts, 70);
+  assert.deepEqual(gates.baseline_rows, readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/gates.json').baseline_rows);
+  assert.deepEqual(gates.versioned_authoring_corrections, corpus.replacement_notes);
+});
+
+test('complete corrected Sol and blind Fable vectors retain the same 70 attempts and separate gate failures', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const sol = readJson(`${directory}/scores/codex-reporting-05-normalized.json`);
+  const fable = readJson(`${directory}/scores/codex-reporting-05-fable-normalized.json`);
+  assert.equal(sol.rows.length, 70);
+  assert.equal(fable.rows.length, 70);
+  assert.deepEqual(sol.rows.map(row => row.replicate), fable.rows.map(row => row.replicate));
+  assert.deepEqual(sol.activation_rows, fable.activation_rows);
+  for (const [scores, sourceFile] of [[sol, 'codex-reporting-05-independent-source.json'], [fable, 'codex-reporting-05-fable-independent-source.json']]) {
+    const source = readJson(`${directory}/scores/${sourceFile}`);
+    assert.equal(source.attempt_score_count, 70);
+    assert.equal(scores.summary.all_registered_gates_passed, false);
+    assert.equal(scores.summary.governing_candidate_gates_passed, false);
+    assert.equal(scores.summary.governing_gate_misses, scores.governing_gate_misses.length);
+    const excluded = new Set(scores.authoring_corrections.map(item => item.original));
+    assert.deepEqual(scores.governing_gate_misses, scores.gate_misses.filter(item => !(excluded.has(item.case_key) && ['activation', 'target'].includes(item.gate))));
+    assert.deepEqual(scores.authoring_corrections, readJson(`${directory}/reporting-v2-gates.json`).versioned_authoring_corrections);
+    for (const row of scores.rows) {
+      const raw = source.groups.find(group => group.grader === row.grader.id).runs.find(run => run.label === row.blind_label);
+      assert.deepEqual(row.criteria.map(({ severity, ...item }) => item), raw.criteria);
+      assert.ok(row.criteria.every(item => item.evidence_quotes.every(quote => quote.length > 0)));
+      assert.equal(row.candidate_commit, '77aa852a206f5fc0472a6d6c7c38d87fc979e75f');
+      assert.equal(row.candidate_package_digest, '4cfcadc6274d23fdbab10de31fb8a3d539a65a612df0c3de2849e3a235e0f689');
+    }
+  }
+  assert.equal(fable.grader_model, 'claude-fable-5-1');
+  assert.equal(fable.grading_independence.saw_sol_scores, false);
+  assert.equal(fable.grading_independence.saw_candidate_package_guidance, false);
+  assert.equal(fable.same_model_grading_coverage_gap, false);
+  assert.equal(sol.same_model_grading_coverage_gap, true);
+});
+
+test('final reporting prompts restore source requests without changing any earlier rubric or fixture', () => {
+  const corpus = readJson('evals/cleanup-followup/reporting-gates-v3-cases.json');
+  const prior = readJson('evals/cleanup-followup/reporting-gates-v2-cases.json');
+  const existing = readJson('evals/idempotency/cases.json');
+  assert.equal(corpus.cases.length, 3);
+  assert.equal(corpus.replacement_notes.length, 3);
+  for (const row of corpus.cases) {
+    const source = prior.cases.find(item => item.id === row.source_attribution.source_focused_case_id);
+    assert.ok(source, row.id);
+    assert.deepEqual(row.rubric, source.rubric);
+    assert.deepEqual(row.capabilities, source.capabilities);
+    assert.equal(row.source_attribution.fixture_reused_without_changes, true);
+    for (const filename of row.fixtures) assert.deepEqual(fs.readFileSync(path.join(root, row.fixture_dir, filename)), fs.readFileSync(path.join(root, source.fixture_dir, filename)));
+    if (row.id === 'existing-claim-guarantee-v3') assert.equal(row.prompt, existing.cases.find(item => item.id === 'expired-lease-owner').prompt);
+    if (row.id === 'provider-fake-limit-report-v3') assert.equal(row.prompt, existing.cases.find(item => item.id === 'bounded-webhook-edit').prompt);
+    if (row.id === 'counterexample-final-report-v3') assert.equal(row.prompt, source.prompt.replace('nature of the failure and whether a race detector ran', 'nature of the failure, whether a race detector ran and limits of the checks actually run'));
+  }
+  const gates = readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/final-gates.json');
+  assert.equal(gates.planned_attempts, 79);
+  assert.equal(gates.versioned_authoring_corrections.length, 5);
+  assert.deepEqual(gates.baseline_rows, readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/gates.json').baseline_rows);
+  assert.equal(gates.models.fallback_on_any_primary_governing_miss, 'gpt-6-astra');
+});
+
+test('final frozen Sol and Astra retain all 79 attempts and both independent grader vectors', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const expected = [
+    ['codex-final-06', 'gpt-6.1-sol', 6, 0],
+    ['codex-final-07', 'gpt-6-astra', 0, 1],
+  ];
+  for (const [candidate, model, solMisses, fableMisses] of expected) {
+    let previous;
+    for (const [suffix, misses] of [['', solMisses], ['-fable', fableMisses]]) {
+      const scores = readJson(`${directory}/scores/${candidate}${suffix}-normalized.json`);
+      const source = readJson(`${directory}/scores/${candidate}${suffix}-independent-source.json`);
+      assert.equal(scores.rows.length, 79);
+      assert.equal(source.attempt_score_count, 79);
+      assert.equal(new Set(scores.rows.map(row => row.replicate)).size, 79);
+      assert.equal(scores.responder_model, model);
+      assert.equal(scores.summary.graded_criteria, 333);
+      assert.equal(scores.summary.all_registered_gates_passed, false);
+      assert.equal(scores.summary.governing_gate_misses, misses);
+      assert.equal(scores.summary.governing_candidate_gates_passed, misses === 0);
+      assert.equal(scores.governing_gate_misses.length, misses);
+      const corrected = new Set(scores.authoring_corrections.map(item => item.original));
+      assert.equal(corrected.size, 5);
+      assert.deepEqual(scores.governing_gate_misses, scores.gate_misses.filter(item => !(corrected.has(item.case_key) && ['activation', 'target'].includes(item.gate))));
+      assert.deepEqual(scores.authoring_corrections, readJson(`${directory}/final-gates.json`).versioned_authoring_corrections);
+      assert.equal(scores.summary.criterion_quote_audit_gaps, scores.rows.reduce((sum, row) => sum + row.criteria.filter(item => !item.quote_audit_passed).length, 0));
+      for (const row of scores.rows) {
+        assert.equal(row.execution_status, 'executed');
+        assert.equal(row.candidate_commit, '08a45e8f38ad88c6c28e9b0caefdf443739941aa');
+        assert.equal(row.candidate_package_digest, 'a0ed4d1358ad22aaf1f6edc445b7f7a5b0a7e4696ea7b435d9eb965073f695bb');
+        assert.equal(sha256(fs.readFileSync(path.join(root, row.source_binding.source_case_file))), row.source_binding.source_case_file_sha256);
+        const raw = source.groups.find(group => group.grader === row.grader.id).runs.find(run => run.label === row.blind_label);
+        assert.deepEqual(row.criteria.map(({ severity, ...item }) => item), raw.criteria);
+        assert.equal(row.grader.independence.authored_candidate, false);
+        assert.equal(row.grader.independence.authored_response, false);
+        assert.equal(row.grader.independence.saw_candidate_skill_body, false);
+        if (row.independent_verification) assert.equal(row.independent_verification.exit_code, 0);
+      }
+      assert.deepEqual(readJson(`${directory}/${candidate}${suffix}-activation-table.json`), scores.activation_rows);
+      if (previous) {
+        assert.deepEqual(scores.rows.map(row => row.replicate), previous.rows.map(row => row.replicate));
+        assert.deepEqual(scores.activation_rows, previous.activation_rows);
+        assert.equal(scores.grader_model, 'claude-fable-5-1');
+        assert.equal(scores.grading_independence.saw_sol_scores, false);
+        assert.equal(scores.grading_independence.saw_candidate_package_guidance, false);
+      }
+      previous = scores;
+    }
+  }
+});
+
+test('Astra quote adjudication preserves the failed original audit and supports only a scoped adequacy claim', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const scores = readJson(`${directory}/scores/codex-final-07-fable-normalized.json`);
+  const audit = readJson(`${directory}/scores/astra-retained-proof-quote-reaudit-v2.json`);
+  const approval = readJson(`${directory}/scores/astra-retained-proof-quote-reaudit-v2-approval.json`);
+  const row = scores.rows.find(item => item.replicate === audit.replicate);
+  const original = row.criteria.find(item => item.id === audit.criterion_id);
+  assert.equal(original.score, 2);
+  assert.equal(original.quote_audit_passed, false);
+  assert.deepEqual(audit.original_evidence_quotes, original.evidence_quotes);
+  assert.equal(audit.original_quote_audit_passed, false);
+  assert.equal(audit.numeric_score_changed, false);
+  assert.equal(audit.original_numeric_score, original.score);
+  assert.equal(audit.new_exact_quotes_passed, true);
+  assert.deepEqual(audit.replacement_quote_audit.map(item => item.quote), original.evidence_quotes.filter(quote => quote !== '1 file changed'));
+  assert.equal(audit.replacement_quote_audit.length, 7);
+  assert.ok(audit.replacement_quote_audit.every(item => item.exact_packet_match));
+  assert.deepEqual(audit.observable_scope.changed_paths, ['scenario.mjs']);
+  assert.deepEqual(audit.observable_scope.untracked_files, []);
+  assert.equal(audit.observable_scope.independent_verification.exit_code, 0);
+  assert.equal(approval.verdict, 'ACCEPT');
+  assert.equal(approval.model, 'claude-fable-5-1');
+  assert.equal(approval.audit_sha256, sha256(fs.readFileSync(path.join(root, `${directory}/scores/astra-retained-proof-quote-reaudit-v2.json`))));
+  const report = readJson(`${directory}/report-v2-final.json`);
+  assert.equal(report.scored_responder_attempts, 369);
+  assert.equal(report.final_grading.governing_attempts, 64);
+  assert.equal(report.final_grading.fallback_fable_original_governing_misses, 1);
+  assert.equal(report.final_grading.fallback_fable_adjudicated_governing_misses, 0);
+  assert.equal(report.final_grading.all_registered_gates_passed, false);
+  assert.equal(report.model_adequacy.selected, 'gpt-6-astra');
+  const reruns = readJson(`${directory}/independent-webhook-reruns.json`);
+  assert.equal(reruns.executed_reruns, 24);
+  assert.equal(reruns.runs.length, 24);
+  for (const model of ['gpt-6.1-sol', 'gpt-6-astra']) assert.equal(reruns.runs.filter(item => item.model === model).length, 12);
+  assert.ok(reruns.runs.every(item => item.result.exit_code === 0 && item.result.argv.join(' ') === 'node --test deliver.test.mjs'));
+});
+
+test('final archive receipt binds immutable source records and reports verified redaction without hiding prior failures', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const manifest = readJson(`${directory}/archive-manifest.json`);
+  const report = readJson(`${directory}/report-v2-final.json`);
+  assert.equal(manifest.status, 'verified_held_for_next_release');
+  assert.deepEqual(manifest.external_archive, report.archive);
+  assert.equal(manifest.external_archive.archive_sha256, 'd9080cb19fe408a4a758648b587e0cc4c93b488ebbeddc2f4758e4e0128b3670');
+  assert.equal(manifest.external_archive.inventory_sha256, '3af6b8d4b475922abc753ba5f61a264811b8deebaa84cb3759c67f8cc5eec93e');
+  assert.equal(manifest.external_archive.member_hash_verification, 'all-members-match');
+  assert.equal(manifest.external_archive.zstd_test, 'passed');
+  assert.equal(manifest.external_archive.personal_home_literal_scan_matches, 0);
+  assert.equal(manifest.external_archive.decoded_json_personal_home_scan_matches, 0);
+  assert.equal(manifest.external_archive.regular_files, 104311);
+  assert.ok(manifest.files.length > 50);
+  assert.equal(new Set(manifest.files.map(item => item.path)).size, manifest.files.length);
+  for (const item of manifest.files) {
+    assert.ok(!item.path.startsWith('/') && !item.path.split('/').includes('..'));
+    const bytes = fs.readFileSync(path.join(root, directory, item.path));
+    assert.ok(bytes.length < 1000000, item.path);
+    assert.equal(sha256(bytes), item.published_sha256, item.path);
+    assert.equal(item.original_sha256, item.published_sha256);
+    assert.equal(item.transformed, false);
+    assert.equal(manifest.retained_files[item.path], item.published_sha256);
+  }
+  assert.equal(report.stages.length, 6);
+  assert.equal(report.scored_responder_attempts, report.stages.reduce((sum, stage) => sum + stage.summary.rows, 0));
+  assert.ok(report.stages.every(stage => stage.summary.all_registered_gates_passed === false));
+  const bindings = readJson(`${directory}/publication-bindings-verification.json`);
+  assert.equal(bindings.artifact_bindings_checked, 3582);
+  assert.equal(bindings.distinct_bound_artifacts, 1922);
+});

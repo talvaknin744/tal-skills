@@ -1,0 +1,73 @@
+{
+  "schema_version": 2,
+  "status": "executed_versioned_quote_reaudit",
+  "candidate": "codex-final-07",
+  "case_key": "reporting-v3--counterexample-final-report-v3",
+  "replicate": "reporting-v3--counterexample-final-report-v3--replicate-01",
+  "criterion_id": "retained-proof",
+  "original_numeric_score": 2,
+  "numeric_score_changed": false,
+  "original_quote_audit_passed": false,
+  "original_evidence_quotes": [
+    "Changed only `scenario.mjs`; both models and `verify.mjs` remain unchanged.",
+    "M scenario.mjs",
+    "1 file changed",
+    "releases[0]();",
+    "releases[1]();",
+    "PASS scenario rejects broken behavior and accepts the complete update",
+    "Broken model: observed 1, promised 2; two accepted increments must add two",
+    "Fixed model: final-value assertion of 2 passed"
+  ],
+  "replacement_quote_audit": [
+    {
+      "quote": "Changed only `scenario.mjs`; both models and `verify.mjs` remain unchanged.",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "M scenario.mjs",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "releases[0]();",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "releases[1]();",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "PASS scenario rejects broken behavior and accepts the complete update",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "Broken model: observed 1, promised 2; two accepted increments must add two",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "Fixed model: final-value assertion of 2 passed",
+      "exact_packet_match": true
+    }
+  ],
+  "new_exact_quotes_passed": true,
+  "packet_path": "astra-regression/graders/astra-fable-blind-24/project/evidence.json",
+  "packet_sha256": "bcf594a34f5592d01c6d52e696f13893dca004a58c73a7668140e477bb648c70",
+  "original_final_score_vector_sha256": "54f2b397dbfb6c4124d574f647447caea74255f81a7dbd05544a74fe24acf854",
+  "observable_scope": {
+    "changed_paths": [
+      "scenario.mjs"
+    ],
+    "untracked_files": [],
+    "independent_verification": {
+      "argv": [
+        "node",
+        "verify.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.055,
+      "stdout": "PASS scenario rejects broken behavior and accepts the complete update\n",
+      "stderr": "",
+      "independent_rerun": true
+    }
+  },
+  "method": "Exact plain substrings are matched against decoded text-valued evidence. A separate versioned audit drops the nonexistent diff-stat quote, preserves all original scores, reasons, quote lists and failed gate results, and requires Fable adjudication before adequacy is claimed."
+}

@@ -13,3 +13,17 @@ Claude's product command forms differ by installation location: a project skill 
 The compact dated status and external archive digest are recorded in the
 [Claude Code run review](../claude-code/runs/2026-10-05/review.md) and its
 [archive manifest](../claude-code/runs/2026-10-05/archive-manifest.json).
+
+## 2026-10-06 executed record
+
+The authentication gap closed on 6 October 2026 in an isolated cloud workspace with
+Claude Code 2.1.289: 169 runs completed and were independently graded against the
+`fix/critical-partial-gates` candidates. The [2026-10-06 review](../claude-code/runs/2026-10-06/review.md),
+[report](../claude-code/runs/2026-10-06/report.json) and
+[archive manifest](../claude-code/runs/2026-10-06/archive-manifest.json) record activation
+per responder model, the host's slash-command resolution (the new v2 host-syntax pair in
+[the versioned Claude corpus](claude-code-cases.json)), the Sonnet results for the seven
+previously partial criteria, and the remaining gaps: the README marketplace path was not
+exercised, Haiku responders stay below the activation and quality bar, four idempotency
+cases lack Sonnet rows, and the Codex-host regression is separate. The 2026-10-05 blocked
+record above is unchanged.

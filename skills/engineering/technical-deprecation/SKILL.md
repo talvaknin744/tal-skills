@@ -64,8 +64,24 @@ evidence. A newly discovered caller or unmet replacement requirement stops the
 dependent retirement step. Rehearse removal at the affected boundary in an
 isolated target; retain a legacy-use control that demonstrates the check's sensitivity.
 
-Report completed migrations, remaining users and visibility gaps, checks actually
-run, and the next release/removal gate. Separate ready-to-remove from removed.
+Before each removal step, state the retention horizon for recovery artifacts
+(snapshots, retained inputs, exported data, old packages) and keep them until that
+agreed horizon passes; restoring an old binary cannot recreate deleted data. Name
+the concrete stop, rollback, or roll-forward condition for that step (for example,
+a consumer rehearsal fails or a required completion record is missing) and the
+completion evidence required beyond a merged deletion change, such as recorded
+rehearsal results and consumer completion or approved-exception records.
+
+In the final answer, report completed migrations, remaining users and visibility
+gaps, checks actually run, and the next release/removal gate. For configuration
+transitions, state each field's semantic mapping and the precedence rule supplied
+by the contract. Leave missing policy unresolved. Distinguish reader rollout from
+writer, template and default transitions, including how compatible cohorts are
+prevented from adding new legacy usage. Give concrete stop and recovery conditions,
+with a time or attempt bound for escalation and the accountable role. When policy
+leaves a bound or assignment unspecified, propose a concrete bound or accountable
+role and mark the proposal as awaiting approval.
+Separate ready-to-remove from removed.
 If the task ends before retirement, retain an actionable owner and next step rather
 than declaring the deprecation complete. Read [sources](references/sources.md)
 when checking attribution or applying a platform's policy.

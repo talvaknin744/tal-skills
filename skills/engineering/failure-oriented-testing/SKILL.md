@@ -30,6 +30,9 @@ List the real implementation/runtime, substituted dependencies, initial state,
 input or schedule, observation, and finite budget. Exercise the implementation
 actually deployed, including a native extension when that is the risky boundary.
 A fake cannot establish a real database, broker, or network guarantee.
+For uncertain commits, choose a double or real system that can represent the effect
+as durable while acknowledgement is lost, and name the expected recovered result
+or explicit unresolved status in the report.
 
 For generated inputs, differential checks, or native fuzzing, read
 [generated-inputs.md](references/generated-inputs.md). When an operation's meaning
@@ -56,7 +59,15 @@ and reproduction command. A random seed or temporary fuzzer cache alone is weak
 long-term evidence. Keep unexpected exceptions visible; enumerate acceptable
 rejections for the chosen oracle.
 
-**Done:** a retained counterexample fails for the relevant reason, or the report
+Name the concrete wrong outcome the faulty version produced and state why it
+violates the promised result (for example, a final value of 1 where two accepted
+increments promise 2). Say explicitly when the individual accesses were protected
+(each read and write held a lock, the race detector stayed clean) and the result is
+still wrong: a result that breaks the contract is a semantic failure even when no
+data race, exception, or tool warning was reported.
+
+**Done:** a retained counterexample fails for the relevant reason and the report
+names the observed wrong outcome and the promised outcome it violates, or the report
 explicitly says sensitivity remains unverified.
 
 Example: Seed a retry that creates a duplicate, then retain the smallest two-attempt history that still fails.
@@ -68,9 +79,14 @@ families or schedules chosen for the original risk. Check recovery state and own
 resources as well as the immediate return value. Preserve prior failure evidence
 when a run is flaky; reset state and control the order that determines the result.
 
-Report the exact candidate, commands, observed outcomes, explored domain, and
-remaining integration gap. Coverage and a clean fuzzing interval describe explored
-execution, not absence of faults. Consult [sources.md](references/sources.md) for
+In the final answer, report the exact candidate, verification commands and their
+observed results, the wrong outcome and promised outcome, the retained input or
+schedule, and remaining integration gaps. When the supplied evidence shows
+individually protected accesses, explicitly identify a contract-violating result
+as a semantic failure despite that protection. State which inputs or interleavings
+ran and whether a race detector ran. A retained deterministic schedule demonstrates
+that interleaving, not exhaustive or production correctness. Coverage and a clean fuzzing interval describe
+explored execution, not absence of faults. Consult [sources.md](references/sources.md) for
 attribution, reading scope, and evidence limits.
 
 **Done:** the unsafe behavior is detected, the candidate meets the selected

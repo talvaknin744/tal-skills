@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "status": "executed_versioned_quote_reaudit",
+  "candidate": "codex-reporting-04",
+  "case_key": "failure-oriented-testing--pure-format-assertion",
+  "replicate": "failure-oriented-testing--pure-format-assertion",
+  "criterion_id": "scope-and-evidence",
+  "original_numeric_score": 2,
+  "numeric_score_changed": false,
+  "original_quote_audit_passed": false,
+  "original_evidence_quotes": [
+    "\"workspace_diff\": \"\"",
+    "\"untracked_files\": []",
+    "cat formatter.py",
+    "assert format_number(7) == \"0007\""
+  ],
+  "replacement_quote_audit": [
+    {
+      "quote": "rg --files",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "cat formatter.py",
+      "exact_packet_match": true
+    },
+    {
+      "quote": "assert format_number(7) == \"0007\"",
+      "exact_packet_match": true
+    }
+  ],
+  "new_exact_quotes_passed": true,
+  "deterministic_negative_evidence": {
+    "scope_changes": {
+      "changed_or_new": [],
+      "deleted": []
+    },
+    "initial_scope_hash": "f7c6346147bf445befe2d9385f0c307fd2c13adee1ac1afc91eb6a502939a9dc",
+    "final_scope_hash": "f7c6346147bf445befe2d9385f0c307fd2c13adee1ac1afc91eb6a502939a9dc",
+    "empty_workspace_diff": true,
+    "untracked_files": [],
+    "record_path": "runs/codex-reporting-04/failure-oriented-testing--pure-format-assertion/record.json",
+    "record_sha256": "5ab2755f570a487626af70147dbe8fd6d431d3f9696fc33d60b3e61648531f9d",
+    "diff_path": "runs/codex-reporting-04/failure-oriented-testing--pure-format-assertion/workspace-diff.patch",
+    "diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "packet_path": "graders/reporting-blind-02/project/evidence.json",
+  "packet_sha256": "df9d63322306d91a6196d08e096712bc1b6abcad92667fb1cdb43e33d15f928a",
+  "method": "New exact strings are matched literally against decoded text-valued evidence. File-preservation absence is supported separately by matching initial and final scope hashes, the saved empty diff and empty untracked inventory. This is a separate audit and does not overwrite any original score, quote or gate result.",
+  "adjudication": "Deterministic file-preservation evidence and local read commands support the original numeric score 2. The original quote list wrongly cited serialized empty harness fields. Separate Fable approval is required for publication."
+}

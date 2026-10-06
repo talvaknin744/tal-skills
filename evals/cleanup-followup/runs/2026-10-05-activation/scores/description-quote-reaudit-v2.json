@@ -1,0 +1,1416 @@
+{
+  "schema_version": 2,
+  "status": "executed",
+  "executed_at": "2026-10-06T08:59:06.318122+00:00",
+  "method": "For each historically failed criterion, retain every original quote and score. Match each nonempty quote literally against decoded string values in the original archived grading attempt packet. No whitespace, punctuation, JSON escaping or path normalization is applied. Separately report literal matches in the archived raw answer. This re-audit does not adjudicate numeric scores or replace missing quotes.",
+  "original_score_file": "evals/cleanup-followup/runs/2026-10-05-activation/scores/description-final-selected-43-normalized.json",
+  "original_score_file_sha256": "ef3f7a2b71ebbda87511ee93ecf86b255c94d32e17d477071da84081945904c3",
+  "original_score_rows": 43,
+  "archive_name": "tal-skills-activation-rate-2026-10-05.tar.zst",
+  "archive_sha256": "3ef33e4622e9d8cc4e7f4aac8d1116776274fb09376b6944fd6e0e5d350a5783",
+  "criteria_reaudited": 33,
+  "criteria_now_passing": 0,
+  "criteria_still_failing": 33,
+  "scores_changed": false,
+  "rows": [
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--race-clean-lost-update",
+      "replicate": "failure-oriented-testing--race-clean-lost-update--replicate-01",
+      "criterion_id": "controlled-schedule",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The gate waits for both calls before releasing either; this works with the serialized fixed update because its checkpoint occurs after its update.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "hold both at the checkpoint until both arrive",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "if (arrivals === 2) release();",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/6/aggregated_output",
+              "offset": 502
+            },
+            {
+              "json_pointer": "/final_fixture/scenario.mjs",
+              "offset": 247
+            },
+            {
+              "json_pointer": "/workspace_diff",
+              "offset": 486
+            }
+          ],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "await Promise.all([counter.increment(), counter.increment()]);",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/6/aggregated_output",
+              "offset": 756
+            },
+            {
+              "json_pointer": "/final_fixture/scenario.mjs",
+              "offset": 494
+            },
+            {
+              "json_pointer": "/workspace_diff",
+              "offset": 740
+            }
+          ],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-003/project/evidence.json",
+        "packet_sha256": "d78f70ab9ed09271ea9f578b94b137ad234a46a22ea4d160b1be50145cc16143",
+        "identity_map_path": "desc/graders/finalblind-grader-003/identity-map-private.json",
+        "identity_map_sha256": "0d8361cb6c92422853578a388ee2549ecf4b3903f4349e0ececdf4737626c517",
+        "answer_path": "desc_stage08_005/attempt-01/answer.md",
+        "answer_sha256": "a44fe11b0fbf7320e4e557e634990a29de5e62b041b80fee86553df6f367efd1"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--race-clean-lost-update",
+      "replicate": "failure-oriented-testing--race-clean-lost-update--replicate-01",
+      "criterion_id": "executed-verification",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence includes a successful verifier run and an independent rerun with matching output.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"independent_rerun\": true",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"exit_code\": 0",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"stdout\": \"PASS scenario rejects broken behavior and accepts the complete update\\n\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-003/project/evidence.json",
+        "packet_sha256": "d78f70ab9ed09271ea9f578b94b137ad234a46a22ea4d160b1be50145cc16143",
+        "identity_map_path": "desc/graders/finalblind-grader-003/identity-map-private.json",
+        "identity_map_sha256": "0d8361cb6c92422853578a388ee2549ecf4b3903f4349e0ececdf4737626c517",
+        "answer_path": "desc_stage08_005/attempt-01/answer.md",
+        "answer_sha256": "a44fe11b0fbf7320e4e557e634990a29de5e62b041b80fee86553df6f367efd1"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--race-clean-lost-update",
+      "replicate": "failure-oriented-testing--race-clean-lost-update--replicate-02",
+      "criterion_id": "executed-verification",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence includes a successful verifier run and an independent rerun with matching output.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"independent_rerun\": true",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"exit_code\": 0",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"stdout\": \"PASS scenario rejects broken behavior and accepts the complete update\\n\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-003/project/evidence.json",
+        "packet_sha256": "d78f70ab9ed09271ea9f578b94b137ad234a46a22ea4d160b1be50145cc16143",
+        "identity_map_path": "desc/graders/finalblind-grader-003/identity-map-private.json",
+        "identity_map_sha256": "0d8361cb6c92422853578a388ee2549ecf4b3903f4349e0ececdf4737626c517",
+        "answer_path": "desc_stage08_006/attempt-01/answer.md",
+        "answer_sha256": "fd87ae5c85e7b1fea5a656f903d4d8b6800831f76b5cb8aa2051e4e37f25dbad"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--race-clean-lost-update",
+      "replicate": "failure-oriented-testing--race-clean-lost-update--replicate-03",
+      "criterion_id": "executed-verification",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence includes a successful verifier run and an independent rerun with matching output.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"independent_rerun\": true",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"exit_code\": 0",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"stdout\": \"PASS scenario rejects broken behavior and accepts the complete update\\n\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-003/project/evidence.json",
+        "packet_sha256": "d78f70ab9ed09271ea9f578b94b137ad234a46a22ea4d160b1be50145cc16143",
+        "identity_map_path": "desc/graders/finalblind-grader-003/identity-map-private.json",
+        "identity_map_sha256": "0d8361cb6c92422853578a388ee2549ecf4b3903f4349e0ececdf4737626c517",
+        "answer_path": "desc_stage08_007/attempt-01/answer.md",
+        "answer_sha256": "acd948c4a5f4dc29716cf4618e98fa3cd05b3012f8402e2971e69e78db57ab3a"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--green-transaction-fake",
+      "replicate": "failure-oriented-testing--green-transaction-fake--replicate-01",
+      "criterion_id": "identity-and-fidelity",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Requires stable operation identity, preserves the unknown outcome, and does not treat the fake as evidence of database behavior.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "The retry must retrieve or safely arbitrate the transaction outcome using a stable operation identity; a missing immediate lookup must not be treated as proof of abort.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 610
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "The fake’s single-commit assertion does not cover it.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-006/project/evidence.json",
+        "packet_sha256": "ad1656cf806c5ec5cb2d601219f525eefe8fc2d6a597c9f8857d9e240e77943c",
+        "identity_map_path": "desc/graders/finalblind-grader-006/identity-map-private.json",
+        "identity_map_sha256": "95bedac440050c43208531b7b7f6c5464d3621674c5ef723036002f5243c1818",
+        "answer_path": "desc_stage08_001/attempt-01/answer.md",
+        "answer_sha256": "749ba05b394d741411640a2a6887d27cbc857b052bcb7e137bc552a5f2e0ab95"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--green-transaction-fake",
+      "replicate": "failure-oriented-testing--green-transaction-fake--replicate-01",
+      "criterion_id": "scope-and-evidence",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Separates supplied facts from proposed checks, reports no runtime validation or external use, and the supplied diff evidence shows no changes.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "The incident trace describes the failure, and the fake’s single-commit assertion does not cover it.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1100
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "No files were changed, and I did not run tests or use external services.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1200
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\", \"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-006/project/evidence.json",
+        "packet_sha256": "ad1656cf806c5ec5cb2d601219f525eefe8fc2d6a597c9f8857d9e240e77943c",
+        "identity_map_path": "desc/graders/finalblind-grader-006/identity-map-private.json",
+        "identity_map_sha256": "95bedac440050c43208531b7b7f6c5464d3621674c5ef723036002f5243c1818",
+        "answer_path": "desc_stage08_001/attempt-01/answer.md",
+        "answer_sha256": "749ba05b394d741411640a2a6887d27cbc857b052bcb7e137bc552a5f2e0ab95"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--green-transaction-fake",
+      "replicate": "failure-oriented-testing--green-transaction-fake--replicate-02",
+      "criterion_id": "scope-and-evidence",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Distinguishes supplied evidence from the proposed check, reports no changes or runtime claim, and the supplied evidence records no live database.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "The local fake and trace establish the risk, but there is no live database here, so the database guarantee remains unverified. I left all files unchanged.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1472
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\", \"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"No live database is supplied to this review.\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-006/project/evidence.json",
+        "packet_sha256": "ad1656cf806c5ec5cb2d601219f525eefe8fc2d6a597c9f8857d9e240e77943c",
+        "identity_map_path": "desc/graders/finalblind-grader-006/identity-map-private.json",
+        "identity_map_sha256": "95bedac440050c43208531b7b7f6c5464d3621674c5ef723036002f5243c1818",
+        "answer_path": "desc_stage08_002/attempt-01/answer.md",
+        "answer_sha256": "6defd6b56f85c3bdfa5024965b9c7d5a8fbe060db8022081408efe0e6c24c56a"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--green-transaction-fake",
+      "replicate": "failure-oriented-testing--green-transaction-fake--replicate-03",
+      "criterion_id": "scope-and-evidence",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Clearly separates fixture facts and proposed checks, reports unchanged files and no runtime or external operations, consistent with the supplied diff evidence.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "The fake cannot reproduce the incident: `commit()` always returns `\"committed\"`, while `apply()` makes the debit before committing.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 0
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "No files were changed and no tests or external services were used.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1519
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\", \"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-006/project/evidence.json",
+        "packet_sha256": "ad1656cf806c5ec5cb2d601219f525eefe8fc2d6a597c9f8857d9e240e77943c",
+        "identity_map_path": "desc/graders/finalblind-grader-006/identity-map-private.json",
+        "identity_map_sha256": "95bedac440050c43208531b7b7f6c5464d3621674c5ef723036002f5243c1818",
+        "answer_path": "desc_stage08_003/attempt-01/answer.md",
+        "answer_sha256": "187fe380c7252685dcce0e30deaf95ca666034a81a844911dc8433e0f2fc5493"
+      }
+    },
+    {
+      "candidate": "codex-desc-08",
+      "case_key": "failure-oriented-testing--pure-format-assertion",
+      "replicate": "failure-oriented-testing--pure-format-assertion",
+      "criterion_id": "scope-and-evidence",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence shows no diff or untracked files and no external operation. The answer makes no claim that runtime validation was executed.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "assert format_number(7) == \"0007\"",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 0
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage08-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-009/project/evidence.json",
+        "packet_sha256": "8141eb2bc9056be0fb4535e2a5cdbbe0dbaff0286d2d61b1d72b6bfdacc7cf1c",
+        "identity_map_path": "desc/graders/finalblind-grader-009/identity-map-private.json",
+        "identity_map_sha256": "70a224a0cb5fe0c5d0b66e53b9f82657ad194169b2b653f42e7ff1209ea6ea69",
+        "answer_path": "desc_stage08_004/attempt-01/answer.md",
+        "answer_sha256": "17aef2cbb67d7c6f4afda7009be6c15730c34fa0f5b88b8b21aa5d07b987ba44"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--scoped-transfer-identity",
+      "replicate": "idempotency--scoped-transfer-identity--replicate-01",
+      "criterion_id": "distinct-operations",
+      "severity": "major",
+      "original_score": 0,
+      "original_reason": "Does not explicitly preserve deliberate equal transfers as distinct operations when they use different keys.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-010/project/evidence.json",
+        "packet_sha256": "c521d285a166e1394d0960ca5803765b6f81ac7f9f7b00bd067de7b3018cf20a",
+        "identity_map_path": "desc/graders/finalblind-grader-010/identity-map-private.json",
+        "identity_map_sha256": "954744e76c524e67a3ab19f34a396ac2048dabf5fb1e5520bd7a6e9428e8943e",
+        "answer_path": "desc_stage02_017/attempt-01/answer.md",
+        "answer_sha256": "09c7a7717f3efe501276879508facf43d057b3ba538854f5e770f1dc4b195d90"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--scoped-transfer-identity",
+      "replicate": "idempotency--scoped-transfer-identity--replicate-01",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "States the files are unchanged and no tests ran; supplied evidence shows no fixture diff or untracked files.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Review only; files are unchanged and no tests were run.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 2519
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\",",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-010/project/evidence.json",
+        "packet_sha256": "c521d285a166e1394d0960ca5803765b6f81ac7f9f7b00bd067de7b3018cf20a",
+        "identity_map_path": "desc/graders/finalblind-grader-010/identity-map-private.json",
+        "identity_map_sha256": "954744e76c524e67a3ab19f34a396ac2048dabf5fb1e5520bd7a6e9428e8943e",
+        "answer_path": "desc_stage02_017/attempt-01/answer.md",
+        "answer_sha256": "09c7a7717f3efe501276879508facf43d057b3ba538854f5e770f1dc4b195d90"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--scoped-transfer-identity",
+      "replicate": "idempotency--scoped-transfer-identity--replicate-02",
+      "criterion_id": "distinct-operations",
+      "severity": "major",
+      "original_score": 0,
+      "original_reason": "Does not explicitly preserve the requirement that different keys can represent two deliberate equal transfers.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-010/project/evidence.json",
+        "packet_sha256": "c521d285a166e1394d0960ca5803765b6f81ac7f9f7b00bd067de7b3018cf20a",
+        "identity_map_path": "desc/graders/finalblind-grader-010/identity-map-private.json",
+        "identity_map_sha256": "954744e76c524e67a3ab19f34a396ac2048dabf5fb1e5520bd7a6e9428e8943e",
+        "answer_path": "desc_stage02_018/attempt-01/answer.md",
+        "answer_sha256": "3f1446806abaf83132144f67a311886bb2782fe23632126b47a2823babd1404d"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--scoped-transfer-identity",
+      "replicate": "idempotency--scoped-transfer-identity--replicate-02",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Distinguishes review from executed tests and states the files were unchanged; supplied evidence shows no fixture diff or untracked files.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Review only; files were left unchanged, and I did not run tests.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 2714
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\",",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-010/project/evidence.json",
+        "packet_sha256": "c521d285a166e1394d0960ca5803765b6f81ac7f9f7b00bd067de7b3018cf20a",
+        "identity_map_path": "desc/graders/finalblind-grader-010/identity-map-private.json",
+        "identity_map_sha256": "954744e76c524e67a3ab19f34a396ac2048dabf5fb1e5520bd7a6e9428e8943e",
+        "answer_path": "desc_stage02_018/attempt-01/answer.md",
+        "answer_sha256": "3f1446806abaf83132144f67a311886bb2782fe23632126b47a2823babd1404d"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--scoped-transfer-identity",
+      "replicate": "idempotency--scoped-transfer-identity--replicate-03",
+      "criterion_id": "distinct-operations",
+      "severity": "major",
+      "original_score": 0,
+      "original_reason": "Does not explicitly preserve deliberate equal transfers under different keys.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-010/project/evidence.json",
+        "packet_sha256": "c521d285a166e1394d0960ca5803765b6f81ac7f9f7b00bd067de7b3018cf20a",
+        "identity_map_path": "desc/graders/finalblind-grader-010/identity-map-private.json",
+        "identity_map_sha256": "954744e76c524e67a3ab19f34a396ac2048dabf5fb1e5520bd7a6e9428e8943e",
+        "answer_path": "desc_stage02_019/attempt-01/answer.md",
+        "answer_sha256": "3b4500e3041df4a0aabf2d8c82a60d76c403ef86fe3d10e435e93c8cb118fb24"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--scoped-transfer-identity",
+      "replicate": "idempotency--scoped-transfer-identity--replicate-03",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Supplied evidence shows no fixture changes or untracked files; the listed commands are read-only inspections, and no verification was claimed as executed.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"workspace_diff\": \"\",",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"observed_tool_item_types\": [\"command_execution\"]",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-010/project/evidence.json",
+        "packet_sha256": "c521d285a166e1394d0960ca5803765b6f81ac7f9f7b00bd067de7b3018cf20a",
+        "identity_map_path": "desc/graders/finalblind-grader-010/identity-map-private.json",
+        "identity_map_sha256": "954744e76c524e67a3ab19f34a396ac2048dabf5fb1e5520bd7a6e9428e8943e",
+        "answer_path": "desc_stage02_019/attempt-01/answer.md",
+        "answer_sha256": "3b4500e3041df4a0aabf2d8c82a60d76c403ef86fe3d10e435e93c8cb118fb24"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--outbox-send-mark-crash",
+      "replicate": "idempotency--outbox-send-mark-crash--replicate-01",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The answer says no files were changed and does not claim a proposed integration test was executed; the supplied workspace diff is empty.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "I made no file changes and did not run validation.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1634
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-013/project/evidence.json",
+        "packet_sha256": "ce7ab19c3606883674ac3dd0863a31ee7b8664935434e36888996ec8627195ab",
+        "identity_map_path": "desc/graders/finalblind-grader-013/identity-map-private.json",
+        "identity_map_sha256": "ec585ba1f01861eb18061361232c36017a407b31dde2f8f1cfa238aa85789ec9",
+        "answer_path": "desc_stage02_010/attempt-01/answer.md",
+        "answer_sha256": "9567d022dec19964f8ca9cb58ca94c6bb1a777314d10e2c40619863a9e5b57b5"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--outbox-send-mark-crash",
+      "replicate": "idempotency--outbox-send-mark-crash--replicate-02",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Explicitly reports no edits or executed tests, and the supplied workspace diff is empty.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Read-only review; no files were edited and no tests were run.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1643
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-013/project/evidence.json",
+        "packet_sha256": "ce7ab19c3606883674ac3dd0863a31ee7b8664935434e36888996ec8627195ab",
+        "identity_map_path": "desc/graders/finalblind-grader-013/identity-map-private.json",
+        "identity_map_sha256": "ec585ba1f01861eb18061361232c36017a407b31dde2f8f1cfa238aa85789ec9",
+        "answer_path": "desc_stage02_011/attempt-01/answer.md",
+        "answer_sha256": "368dbf71f08c294badd56e5bb4c402f4cc97dd52579374a75edcc642e9924d52"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--outbox-send-mark-crash",
+      "replicate": "idempotency--outbox-send-mark-crash--replicate-03",
+      "criterion_id": "stable-provider-key",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Recommends a stable namespaced key based on the persisted event identity and retaining the same payload on replay.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "derive a stable key from the row’s immutable `event_id`, with a namespace for this receipt message, and reuse it on every attempt.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Keep the payload unchanged for that key; MailPort rejects reuse with a different payload.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 735
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-013/project/evidence.json",
+        "packet_sha256": "ce7ab19c3606883674ac3dd0863a31ee7b8664935434e36888996ec8627195ab",
+        "identity_map_path": "desc/graders/finalblind-grader-013/identity-map-private.json",
+        "identity_map_sha256": "ec585ba1f01861eb18061361232c36017a407b31dde2f8f1cfa238aa85789ec9",
+        "answer_path": "desc_stage02_012/attempt-01/answer.md",
+        "answer_sha256": "802ba72ae9ee15c3737532fe5ae16771cbbc5a9f2008d4466464f22a8068aca3"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--outbox-send-mark-crash",
+      "replicate": "idempotency--outbox-send-mark-crash--replicate-03",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The observed command is read-only, the supplied diff is empty, and the answer presents validation as a plan rather than claiming it was executed.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "/bin/zsh -lc 'cat relay.mjs && cat requirements.md'",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/2/command",
+              "offset": 0
+            }
+          ],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-013/project/evidence.json",
+        "packet_sha256": "ce7ab19c3606883674ac3dd0863a31ee7b8664935434e36888996ec8627195ab",
+        "identity_map_path": "desc/graders/finalblind-grader-013/identity-map-private.json",
+        "identity_map_sha256": "ec585ba1f01861eb18061361232c36017a407b31dde2f8f1cfa238aa85789ec9",
+        "answer_path": "desc_stage02_012/attempt-01/answer.md",
+        "answer_sha256": "802ba72ae9ee15c3737532fe5ae16771cbbc5a9f2008d4466464f22a8068aca3"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--retention-and-version-drift",
+      "replicate": "idempotency--retention-and-version-drift--replicate-02",
+      "criterion_id": "expired-identity",
+      "severity": "major",
+      "original_score": 2,
+      "original_reason": "Explains how deletion can make a key appear new and requires deciding how documented and later replays are handled.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "A retry after those windows; deletion alone makes the key appear unused.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Define the retry horizon, including late client retries and 14-day support replay, and what the API does after that horizon.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 2456
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-014/project/evidence.json",
+        "packet_sha256": "b330f13319c6ffbcbf3ab43c006e836bad6e9447136998d9550baa9988992790",
+        "identity_map_path": "desc/graders/finalblind-grader-014/identity-map-private.json",
+        "identity_map_sha256": "02940133efdf6ae0e8f28c3276aef0debd9cc487f2d37d3748eeaa363a246d6a",
+        "answer_path": "desc_stage02_015/attempt-01/answer.md",
+        "answer_sha256": "ac833a70638e00078722daf6935f734c718b10350cefb40c0f00e9e14a8ad060"
+      }
+    },
+    {
+      "candidate": "codex-desc-02",
+      "case_key": "idempotency--pure-get-backoff-nontrigger",
+      "replicate": "idempotency--pure-get-backoff-nontrigger",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied workspace diff is empty, and the answer recommends a code correction without claiming or inventing endpoint side effects.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "GET /status returns a public health snapshot. It has no side effects, including\nno analytics counter, billable action, or queue insertion.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/1/aggregated_output",
+              "offset": 27
+            },
+            {
+              "json_pointer": "/final_fixture/requirements.md",
+              "offset": 27
+            }
+          ],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage02-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-017/project/evidence.json",
+        "packet_sha256": "93a996b81e8be9b1e67226233046292847e7414e94e8fccf45e050b25671dc90",
+        "identity_map_path": "desc/graders/finalblind-grader-017/identity-map-private.json",
+        "identity_map_sha256": "44948d387b3366e0d5c1cabc665d946c45e1b127332c74b2f6c6cd415676b3fb",
+        "answer_path": "desc_stage02_013/attempt-01/answer.md",
+        "answer_sha256": "e5e9c831cdf222bb91a05b49715f7bf701cf49c260998ec2d8cacfdee6392990"
+      }
+    },
+    {
+      "candidate": "codex-desc-03",
+      "case_key": "microservice-testing--mocked-checkout-gap",
+      "replicate": "microservice-testing--mocked-checkout-gap--replicate-01",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence shows no workspace changes; the answer presents proposed tests, and the recorded commands only read files.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Propose the smallest useful set of tests",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage03-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-019/project/evidence.json",
+        "packet_sha256": "8ac12ca3112f7fb187d2c0d04d64a919672239be799971d0071d444704d498a2",
+        "identity_map_path": "desc/graders/finalblind-grader-019/identity-map-private.json",
+        "identity_map_sha256": "a7e51dc7ea65dd09d38159ff63b3cabf506c761cd433bbcc2aab8cc23b978bb6",
+        "answer_path": "desc_stage03_001/attempt-01/answer.md",
+        "answer_sha256": "8647995e890b34a632984a7314c350dfe51e17310ac152408efb2da083c9e117"
+      }
+    },
+    {
+      "candidate": "codex-desc-03",
+      "case_key": "microservice-testing--mocked-checkout-gap",
+      "replicate": "microservice-testing--mocked-checkout-gap--replicate-02",
+      "criterion_id": "distinct-boundaries",
+      "severity": "major",
+      "original_score": 2,
+      "original_reason": "Preserves the fast mapping test and adds targeted checks at the checkout, relay, and consumer boundaries.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Keep the field-mapping unit test for fast feedback on event fields.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "**Checkout transaction with a real database**",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 417
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "**Relay recovery with the real broker and database**",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 665
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "**Consumer redelivery with the real broker and database**",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1072
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage03-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-019/project/evidence.json",
+        "packet_sha256": "8ac12ca3112f7fb187d2c0d04d64a919672239be799971d0071d444704d498a2",
+        "identity_map_path": "desc/graders/finalblind-grader-019/identity-map-private.json",
+        "identity_map_sha256": "a7e51dc7ea65dd09d38159ff63b3cabf506c761cd433bbcc2aab8cc23b978bb6",
+        "answer_path": "desc_stage03_002/attempt-01/answer.md",
+        "answer_sha256": "3a31892065d414415f81078c70a6a6fde95de5b9d6cf0389ed4560ed6cf444c7"
+      }
+    },
+    {
+      "candidate": "codex-desc-03",
+      "case_key": "microservice-testing--mocked-checkout-gap",
+      "replicate": "microservice-testing--mocked-checkout-gap--replicate-02",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence shows no workspace changes; the answer describes proposed tests, and recorded commands only read files.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "add three focused tests",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 218
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage03-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-019/project/evidence.json",
+        "packet_sha256": "8ac12ca3112f7fb187d2c0d04d64a919672239be799971d0071d444704d498a2",
+        "identity_map_path": "desc/graders/finalblind-grader-019/identity-map-private.json",
+        "identity_map_sha256": "a7e51dc7ea65dd09d38159ff63b3cabf506c761cd433bbcc2aab8cc23b978bb6",
+        "answer_path": "desc_stage03_002/attempt-01/answer.md",
+        "answer_sha256": "3a31892065d414415f81078c70a6a6fde95de5b9d6cf0389ed4560ed6cf444c7"
+      }
+    },
+    {
+      "candidate": "codex-desc-03",
+      "case_key": "microservice-testing--mocked-checkout-gap",
+      "replicate": "microservice-testing--mocked-checkout-gap--replicate-03",
+      "criterion_id": "read-only",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The supplied evidence shows no workspace changes; the answer presents proposed checks, and recorded commands only read files.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "\"workspace_diff\": \"\"",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "add three focused checks",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 401
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage03-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-019/project/evidence.json",
+        "packet_sha256": "8ac12ca3112f7fb187d2c0d04d64a919672239be799971d0071d444704d498a2",
+        "identity_map_path": "desc/graders/finalblind-grader-019/identity-map-private.json",
+        "identity_map_sha256": "a7e51dc7ea65dd09d38159ff63b3cabf506c761cd433bbcc2aab8cc23b978bb6",
+        "answer_path": "desc_stage03_003/attempt-01/answer.md",
+        "answer_sha256": "1c3395ec1ffbee64553b88ecb6a2c7cd1a0b056e33644bc567b4718e1ce1ed67"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--private-format-helper",
+      "replicate": "technical-deprecation--private-format-helper",
+      "criterion_id": "executed-verification",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The saved command and independent rerun both report successful protected verification.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "{\"checks\": 2, \"failures\": [], \"passed\": 2}",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/3/aggregated_output",
+              "offset": 0
+            },
+            {
+              "json_pointer": "/independent_verification/stdout",
+              "offset": 0
+            }
+          ],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "\"independent_rerun\": true",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-023/project/evidence.json",
+        "packet_sha256": "fd2df182fe070ba0c723400a8a9a5a6e15088e8bc5eb5cb104214a198f647b52",
+        "identity_map_path": "desc/graders/finalblind-grader-023/identity-map-private.json",
+        "identity_map_sha256": "91a9c52f9b8161163e995c20f5b81db5e3c557ea1b66090ca48294649458c4f4",
+        "answer_path": "desc_stage04_007/attempt-01/answer.md",
+        "answer_sha256": "6f96cd9b648ad652d925e988bee035dd837429a9d1e10b7aba874f65543c3b51"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--private-format-helper",
+      "replicate": "technical-deprecation--private-format-helper",
+      "criterion_id": "scope-and-evidence",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "The diff and status show only `labels.py` changed, and the answer reports the local verifier result without claiming external validation.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "M labels.py",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/3/aggregated_output",
+              "offset": 424
+            }
+          ],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Git status shows only `labels.py` modified.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 188
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "\"untracked_files\": []",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-023/project/evidence.json",
+        "packet_sha256": "fd2df182fe070ba0c723400a8a9a5a6e15088e8bc5eb5cb104214a198f647b52",
+        "identity_map_path": "desc/graders/finalblind-grader-023/identity-map-private.json",
+        "identity_map_sha256": "91a9c52f9b8161163e995c20f5b81db5e3c557ea1b66090ca48294649458c4f4",
+        "answer_path": "desc_stage04_007/attempt-01/answer.md",
+        "answer_sha256": "6f96cd9b648ad652d925e988bee035dd837429a9d1e10b7aba874f65543c3b51"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--periodic-export-client",
+      "replicate": "technical-deprecation--periodic-export-client--replicate-01",
+      "criterion_id": "replacement-contract",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Identifies the missing snapshot, voided-row, and reproducibility behavior and blocks migration absent demonstrated compatibility or an approved requirement change.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "V1 returns an immutable period snapshot, including voided invoices, in repeatable order. V2 reads a live collection, omits voided invoices, and can change between pages.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Keep that requirement in force unless an explicit business decision changes it.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1666
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-021/project/evidence.json",
+        "packet_sha256": "36ec9a0c821a4f875725015e8af737ee9523f83ae08a9904d88464bc46d0bb64",
+        "identity_map_path": "desc/graders/finalblind-grader-021/identity-map-private.json",
+        "identity_map_sha256": "60a6a3eda13795267714b3e87f871e8107c005c3dbb2382d06637c379b9ce434",
+        "answer_path": "desc_stage04_004/attempt-01/answer.md",
+        "answer_sha256": "5d7700738ab7aaeed7f652ce389661e89fcf47396ffb4b5ac40f71637206174a"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--periodic-export-client",
+      "replicate": "technical-deprecation--periodic-export-client--replicate-02",
+      "criterion_id": "removal-and-recovery-gates",
+      "severity": "critical",
+      "original_score": 1,
+      "original_reason": "Requires rehearsal, consumer transition/risk evidence, and recovery before removal, but does not specify retaining artifacts through an agreed horizon or define concrete stop/rollback conditions.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Rehearse the close-audit case against the retained synthetic snapshot",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Confirm the applicable support policy and approved date, consumer transitions or explicit risk acceptance, replacement checks, and recovery of both code and required snapshot data.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 3363
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "Rehearse removal at the endpoint and library boundaries",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 3544
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-021/project/evidence.json",
+        "packet_sha256": "36ec9a0c821a4f875725015e8af737ee9523f83ae08a9904d88464bc46d0bb64",
+        "identity_map_path": "desc/graders/finalblind-grader-021/identity-map-private.json",
+        "identity_map_sha256": "60a6a3eda13795267714b3e87f871e8107c005c3dbb2382d06637c379b9ce434",
+        "answer_path": "desc_stage04_005/attempt-01/answer.md",
+        "answer_sha256": "1bca8d6ec3408e7b50a4bb312b51d16aa16269cde2baf7b35e58e3bbbe0694ab"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--config-channel-migration",
+      "replicate": "technical-deprecation--config-channel-migration--replicate-01",
+      "criterion_id": "staged-rollout-and-adoption",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Separates preparation, migration gates, and retirement; honors the commitment and recognizes compatibility and local-editor needs.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Relay 3.6 and 3.8, their documented keys, and editor 9.2 remain supported through **2026-12-31**.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 233
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "Keep current documented formats and editor support available under the existing commitment.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 3946
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "Track readers, writers, templates, and editors separately.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-022/project/evidence.json",
+        "packet_sha256": "1630856d7f1e75d97548587ec74a7cd4ace41362edc6606b5058ddbfde4de9fb",
+        "identity_map_path": "desc/graders/finalblind-grader-022/identity-map-private.json",
+        "identity_map_sha256": "652a549d9c0a02a287826df1b28799d2d2ef028fee34ef34f5e83823ce5a46a2",
+        "answer_path": "desc_stage04_001/attempt-01/answer.md",
+        "answer_sha256": "13d1726e585095bdd9c941a5f01948108b71d5c22199c869936e1c69978fa1a8"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--config-channel-migration",
+      "replicate": "technical-deprecation--config-channel-migration--replicate-01",
+      "criterion_id": "retirement-evidence",
+      "severity": "major",
+      "original_score": 2,
+      "original_reason": "Defines consumer reconciliation and post-removal artifact/control evidence without claiming retirement occurred.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "Reconcile readers, writers, templates, editors, retained files, queued updates, local kits, offline installations, and customer-managed installations.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "After an authorized removal, inspect shipped artifacts and observe both checks; until then, report retirement as pending.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 5694
+            }
+          ],
+          "exact_archived_answer_match": true
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-022/project/evidence.json",
+        "packet_sha256": "1630856d7f1e75d97548587ec74a7cd4ace41362edc6606b5058ddbfde4de9fb",
+        "identity_map_path": "desc/graders/finalblind-grader-022/identity-map-private.json",
+        "identity_map_sha256": "652a549d9c0a02a287826df1b28799d2d2ef028fee34ef34f5e83823ce5a46a2",
+        "answer_path": "desc_stage04_001/attempt-01/answer.md",
+        "answer_sha256": "13d1726e585095bdd9c941a5f01948108b71d5c22199c869936e1c69978fa1a8"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--config-channel-migration",
+      "replicate": "technical-deprecation--config-channel-migration--replicate-02",
+      "criterion_id": "semantic-mapping",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Captures false/zero and omission semantics, changing policy, and explicitly describes per-field fallback precedence. It also discusses 3.6 incompatibility in the staged section.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "it uses policy when a legacy value is falsy or omitted.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        },
+        {
+          "quote": "Under the contract, `false` and `0` are explicit values, while omitted fields inherit policy at each startup.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/answer",
+              "offset": 1825
+            }
+          ],
+          "exact_archived_answer_match": true
+        },
+        {
+          "quote": "A missing replacement field falls back to the corresponding legacy field, then to installation policy.",
+          "exact_packet_match": true,
+          "packet_matches": [
+            {
+              "json_pointer": "/actual_commands/2/aggregated_output",
+              "offset": 9844
+            },
+            {
+              "json_pointer": "/final_fixture/contract.md",
+              "offset": 2056
+            }
+          ],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-022/project/evidence.json",
+        "packet_sha256": "1630856d7f1e75d97548587ec74a7cd4ace41362edc6606b5058ddbfde4de9fb",
+        "identity_map_path": "desc/graders/finalblind-grader-022/identity-map-private.json",
+        "identity_map_sha256": "652a549d9c0a02a287826df1b28799d2d2ef028fee34ef34f5e83823ce5a46a2",
+        "answer_path": "desc_stage04_002/attempt-01/answer.md",
+        "answer_sha256": "b046048c4d2c668b016d5477cabdaf307ba0fd9477a6f6d12e0f9a30e86e28a3"
+      }
+    },
+    {
+      "candidate": "codex-desc-04",
+      "case_key": "technical-deprecation--config-channel-migration",
+      "replicate": "technical-deprecation--config-channel-migration--replicate-03",
+      "criterion_id": "scope-and-evidence",
+      "severity": "critical",
+      "original_score": 2,
+      "original_reason": "Workspace diff and untracked file evidence are empty, and the answer states that it proposes evidence rather than claiming execution.",
+      "original_quote_audit_passed": false,
+      "re_audit_passed": false,
+      "quotes": [
+        {
+          "quote": "No migration, customer communication, deployment, or file changes are authorized in this review.",
+          "exact_packet_match": false,
+          "packet_matches": [],
+          "exact_archived_answer_match": false
+        }
+      ],
+      "evidence_binding": {
+        "component_archive": "components/desc-stage04-responders.tar.zst",
+        "packet_component_archive": "components/completed-grade-attempts.tar.zst",
+        "packet_path": "desc/graders/finalblind-grader-022/project/evidence.json",
+        "packet_sha256": "1630856d7f1e75d97548587ec74a7cd4ace41362edc6606b5058ddbfde4de9fb",
+        "identity_map_path": "desc/graders/finalblind-grader-022/identity-map-private.json",
+        "identity_map_sha256": "652a549d9c0a02a287826df1b28799d2d2ef028fee34ef34f5e83823ce5a46a2",
+        "answer_path": "desc_stage04_003/attempt-01/answer.md",
+        "answer_sha256": "715e010f7d961ac5c7dbbf26531f9cfde4e5b493bd662109d62bb014152b2e9f"
+      }
+    }
+  ]
+}

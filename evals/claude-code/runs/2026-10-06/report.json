@@ -1,0 +1,1214 @@
+{
+ "schema_version": 1,
+ "status": "executed",
+ "run_date": "2026-10-06",
+ "publication_status": "raw observable artifacts assembled into the external archive below with the local evidence root masked; attach to the release that carries the fix",
+ "host": {
+  "cli": "claude",
+  "version": "2.1.291 (Claude Code)",
+  "machine_scope": "isolated cloud Linux workspace with authenticated Claude Code; one fresh CLAUDE_CONFIG_DIR per attempt; not a clean physical machine; not the macOS host used for the 2026-10-05 blocked record"
+ },
+ "candidate": {
+  "branch": "fix/critical-partial-gates",
+  "commit_mac_clone": "594ff61",
+  "commit_cloud_clone": "dede5ce",
+  "tree_sha": "35e0e6e19bc11c6965092dc10ba0661a799efe87",
+  "base_commit": "1a32344",
+  "plugin_form": "frozen git archive of the candidate tree passed as --plugin-dir with --setting-sources local",
+  "plugin_skills_digest": "9970e744e9eeafc80f3f4e929f25954e719cb6e95e172aa19d6fd5e6262e7159",
+  "plugin_skill_files": 282,
+  "generated_form": "project-local .claude/skills packages produced by scripts/install-toolkit.mjs --host claude from the same tree, --setting-sources project,local",
+  "generated_skills_digest": "3fb3eaaf60edb17d5b2f4537bb2573e2ca8954b1fb93e7e124104881656f4f59",
+  "commit_published_branch": "594ff61"
+ },
+ "runner": {
+  "argv_shape": [
+   "claude",
+   "--print",
+   "--verbose",
+   "--input-format",
+   "stream-json",
+   "--output-format",
+   "stream-json",
+   "--replay-user-messages",
+   "--no-session-persistence",
+   "--model",
+   "<haiku|sonnet>",
+   "--permission-mode",
+   "dontAsk",
+   "--allowedTools",
+   "Read,Bash,Skill,Glob,Grep,Write,Edit",
+   "--disallowedTools",
+   "WebFetch,WebSearch,Task,Agent,Workflow,SendMessage,ToolSearch",
+   "--setting-sources",
+   "<local|project,local>",
+   "[--plugin-dir <frozen candidate>]"
+  ],
+  "prompt_delivery": "case prompt sent verbatim as one stream-json user message and replayed into the saved trace; canonical corpus cases carry the prefix \"The supplied project is in the current directory. Use relevant installed skills when useful.\" mirroring the Codex runner composition; Claude-specific and follow-up cases carry no prefix",
+  "permission_mode": "dontAsk (no bypass of permission rules; denied actions fail visibly)",
+  "model_override": "explicit --model haiku or sonnet per score set",
+  "fallback_override": null
+ },
+ "candidate_refinement": {
+  "score_set": "refinement-rerun",
+  "commit_cloud_clone": "2d9312f",
+  "tree_sha": "116aa9f89e922ba9db9eeb82dd5df8829e06f2b5",
+  "parent": "dede5ce",
+  "plugin_skills_digest": "5db668b428e171383dfc52b8cfdfbc6565e5ae9b8dee0290dbf18143fcae9fe3",
+  "generated_skills_digest": "3df8367540373448385092dbdf0005e8ec3e936b3a8edefd315f1d8fc1b63cd2",
+  "changed_skills": [
+   "failure-oriented-testing",
+   "idempotency"
+  ],
+  "commit_published_branch": "14f6b9c"
+ },
+ "score_sets": {
+  "claude-code-haiku": {
+   "rows": 49,
+   "completed_runs": 49,
+   "graded_runs": 49,
+   "critical_zero_rows": 16,
+   "critical_partial_rows": 33,
+   "pass_rows": 4,
+   "criterion_quote_audit_gaps": 13,
+   "criteria_graded": 217,
+   "responder_cost_usd": 2.74,
+   "grader_cost_usd": 1.44
+  },
+  "changed-skills-haiku": {
+   "rows": 40,
+   "completed_runs": 40,
+   "graded_runs": 40,
+   "critical_zero_rows": 6,
+   "critical_partial_rows": 31,
+   "pass_rows": 2,
+   "criterion_quote_audit_gaps": 10,
+   "criteria_graded": 204,
+   "responder_cost_usd": 2.1,
+   "grader_cost_usd": 1.2
+  },
+  "sonnet-comparison": {
+   "rows": 45,
+   "completed_runs": 45,
+   "graded_runs": 45,
+   "critical_zero_rows": 8,
+   "critical_partial_rows": 9,
+   "pass_rows": 23,
+   "criterion_quote_audit_gaps": 9,
+   "criteria_graded": 219,
+   "responder_cost_usd": 3.9,
+   "grader_cost_usd": 1.24
+  },
+  "refinement-rerun": {
+   "rows": 35,
+   "completed_runs": 35,
+   "graded_runs": 35,
+   "critical_zero_rows": 3,
+   "critical_partial_rows": 19,
+   "pass_rows": 4,
+   "criterion_quote_audit_gaps": 6,
+   "criteria_graded": 181,
+   "responder_cost_usd": 2.26,
+   "grader_cost_usd": 1.13
+  }
+ },
+ "activation": {
+  "claude-code-haiku": {
+   "distributed-correctness--cache-fill-invalidation": {
+    "mode": "activate",
+    "target_skills": [
+     "concurrency-correctness"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "recovery-validation--restored-order-ledger": {
+    "mode": "activate",
+    "target_skills": [
+     "recovery-validation"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "python-backend--cancelled-export": {
+    "mode": "activate",
+    "target_skills": [
+     "python-backend"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "background-maintenance--finite-local-cleanup-nontrigger": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "background-maintenance"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "distributed-correctness--rolling-worker-drain": {
+    "mode": "activate",
+    "target_skills": [
+     "graceful-draining"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "graceful-draining"
+     ],
+     [
+      "graceful-draining"
+     ],
+     [
+      "graceful-draining"
+     ]
+    ],
+    "met": true
+   },
+   "performance-diagnosis--held-pool": {
+    "mode": "activate",
+    "target_skills": [
+     "performance-diagnosis"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "performance-diagnosis"
+     ],
+     [
+      "performance-diagnosis"
+     ],
+     [
+      "performance-diagnosis"
+     ]
+    ],
+    "met": true
+   },
+   "messaging-reliability--local-observer-callback": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "messaging-reliability"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "performance-diagnosis--format-only": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "performance-diagnosis"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "stream-processing-design--local-date-group-nontrigger": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "stream-processing-design"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "idempotency--scoped-transfer-identity": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "followup--architecture-explicit-native-v2": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "followup--explicit-native-sibling-handoff-v3": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "microservice-extraction"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "microservice-extraction"
+     ],
+     [
+      "microservice-extraction",
+      "infrastructure-change-safety",
+      "technical-deprecation"
+     ],
+     [
+      "microservice-extraction",
+      "graceful-draining",
+      "infrastructure-change-safety"
+     ]
+    ],
+    "met": true
+   },
+   "claude-code--python-idempotency-v4--plugin": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "python-backend",
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "python-backend",
+      "idempotency"
+     ],
+     [
+      "python-backend",
+      "idempotency"
+     ],
+     [
+      "python-backend",
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "claude-code--python-idempotency-v4--generated": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "python-backend",
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "python-backend",
+      "idempotency"
+     ],
+     [
+      "python-backend",
+      "idempotency"
+     ],
+     [
+      "python-backend",
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "claude-code--architecture-plugin-unqualified-v1": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [
+      "microservice-boundaries"
+     ],
+     [
+      "code-and-docs-cleanup"
+     ]
+    ],
+    "met": false
+   },
+   "claude-code--architecture-plugin-namespaced-v1": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [],
+     [],
+     [
+      "architecture"
+     ]
+    ],
+    "met": false
+   },
+   "claude-code--architecture-plugin-unqualified-v2": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "claude-code--architecture-plugin-namespaced-v2": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   }
+  },
+  "changed-skills-haiku": {
+   "failure-oriented-testing--race-clean-lost-update": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "failure-oriented-testing--green-transaction-fake": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 2,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ],
+     []
+    ],
+    "met": true
+   },
+   "failure-oriented-testing--pure-format-assertion": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ]
+    ],
+    "false_activation_attempts": 1,
+    "met": false
+   },
+   "idempotency--expired-lease-owner": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--unknown-external-payout": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--outbox-send-mark-crash": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--retention-and-version-drift": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 2,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     []
+    ],
+    "met": true
+   },
+   "idempotency--natural-invitation-invariant": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "idempotency--bounded-webhook-edit": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [],
+     [
+      "idempotency"
+     ],
+     []
+    ],
+    "met": false
+   },
+   "idempotency--pure-get-backoff-nontrigger": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "microservice-testing--unknown-api-consumers": {
+    "mode": "activate",
+    "target_skills": [
+     "microservice-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "microservice-testing--mocked-checkout-gap": {
+    "mode": "activate",
+    "target_skills": [
+     "microservice-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [
+      "microservice-testing"
+     ],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "microservice-testing--pure-unit-test-nontrigger": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "microservice-testing"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "technical-deprecation--periodic-export-client": {
+    "mode": "activate",
+    "target_skills": [
+     "technical-deprecation"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [],
+     [
+      "technical-deprecation"
+     ],
+     []
+    ],
+    "met": false
+   },
+   "technical-deprecation--config-channel-migration": {
+    "mode": "activate",
+    "target_skills": [
+     "technical-deprecation"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "technical-deprecation--private-format-helper": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "technical-deprecation"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   }
+  },
+  "sonnet-comparison": {
+   "distributed-correctness--cache-fill-invalidation": {
+    "mode": "activate",
+    "target_skills": [
+     "concurrency-correctness"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "concurrency-correctness"
+     ],
+     [
+      "concurrency-correctness"
+     ],
+     [
+      "concurrency-correctness"
+     ]
+    ],
+    "met": true
+   },
+   "recovery-validation--restored-order-ledger": {
+    "mode": "activate",
+    "target_skills": [
+     "recovery-validation"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "recovery-validation"
+     ],
+     [
+      "recovery-validation"
+     ],
+     [
+      "recovery-validation"
+     ]
+    ],
+    "met": true
+   },
+   "python-backend--cancelled-export": {
+    "mode": "activate",
+    "target_skills": [
+     "python-backend"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "python-backend"
+     ],
+     [
+      "python-backend"
+     ],
+     [
+      "python-backend"
+     ]
+    ],
+    "met": true
+   },
+   "followup--architecture-explicit-native-v2": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "claude-code--architecture-plugin-unqualified-v1": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "claude-code--architecture-plugin-namespaced-v1": {
+    "mode": "explicit-in-prompt",
+    "target_skills": [
+     "architecture"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [],
+     [
+      "architecture"
+     ],
+     []
+    ],
+    "met": false
+   },
+   "failure-oriented-testing--race-clean-lost-update": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--natural-invitation-invariant": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--bounded-webhook-edit": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "microservice-testing--unknown-api-consumers": {
+    "mode": "activate",
+    "target_skills": [
+     "microservice-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "microservice-testing"
+     ],
+     [
+      "microservice-testing"
+     ],
+     [
+      "microservice-testing"
+     ]
+    ],
+    "met": true
+   },
+   "microservice-testing--mocked-checkout-gap": {
+    "mode": "activate",
+    "target_skills": [
+     "microservice-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "microservice-testing"
+     ],
+     [
+      "microservice-testing"
+     ],
+     [
+      "microservice-testing"
+     ]
+    ],
+    "met": true
+   },
+   "technical-deprecation--periodic-export-client": {
+    "mode": "activate",
+    "target_skills": [
+     "technical-deprecation"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "technical-deprecation"
+     ],
+     [
+      "technical-deprecation"
+     ],
+     [
+      "technical-deprecation"
+     ]
+    ],
+    "met": true
+   },
+   "technical-deprecation--config-channel-migration": {
+    "mode": "activate",
+    "target_skills": [
+     "technical-deprecation"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "technical-deprecation"
+     ],
+     [
+      "technical-deprecation"
+     ],
+     [
+      "technical-deprecation"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--scoped-transfer-identity": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "failure-oriented-testing--green-transaction-fake": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ]
+    ],
+    "met": true
+   }
+  },
+  "refinement-rerun": {
+   "idempotency--scoped-transfer-identity": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "failure-oriented-testing--race-clean-lost-update": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     [],
+     [],
+     []
+    ],
+    "met": false
+   },
+   "failure-oriented-testing--green-transaction-fake": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 2,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ],
+     []
+    ],
+    "met": true
+   },
+   "failure-oriented-testing--pure-format-assertion": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "idempotency--expired-lease-owner": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--unknown-external-payout": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--outbox-send-mark-crash": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 2,
+    "skills_invoked": [
+     [],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--retention-and-version-drift": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--natural-invitation-invariant": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 1,
+    "skills_invoked": [
+     [],
+     [],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": false
+   },
+   "idempotency--bounded-webhook-edit": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 2,
+    "skills_invoked": [
+     [],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--pure-get-backoff-nontrigger": {
+    "mode": "do_not_auto_activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 1,
+    "target_body_exposed": 0,
+    "skills_invoked": [
+     []
+    ],
+    "false_activation_attempts": 0,
+    "met": true
+   },
+   "failure-oriented-testing--race-clean-lost-update--sonnet": {
+    "mode": "activate",
+    "target_skills": [
+     "failure-oriented-testing"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ],
+     [
+      "failure-oriented-testing"
+     ]
+    ],
+    "met": true
+   },
+   "idempotency--scoped-transfer-identity--sonnet": {
+    "mode": "activate",
+    "target_skills": [
+     "idempotency"
+    ],
+    "attempts": 3,
+    "target_body_exposed": 3,
+    "skills_invoked": [
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ],
+     [
+      "idempotency"
+     ]
+    ],
+    "met": true
+   }
+  }
+ },
+ "grading": {
+  "grader": "separate claude -p process, model sonnet, no tools, sees prompt, rubric, answer, observable trace summary and workspace diff; never sees the candidate skill body",
+  "scale": "0 fail, 1 partial, 2 pass; critical criteria gate; major weight 2; minor weight 1",
+  "quote_audit": "every evidence quote checked as an exact substring (whitespace, curly quotes and outer backticks normalized) of answer.md, the trace summary, observable-trace.jsonl or workspace.diff; rubric text and run metadata excluded; scores are never changed by the audit"
+ },
+ "archive_manifest": {
+  "filename": "tal-skills-claude-code-2026-10-06.tar.zst",
+  "sha256": "00badcae3986722ee7b317b16518bcca96b0dec14aa624ab6757f8726aa0c6f3",
+  "compressed_bytes": 1815812,
+  "tar_bytes": 16189440,
+  "zstd_test": "passed",
+  "tar_member_count": 1971,
+  "masking": "local evidence root, repository checkout path and the workspace home prefix are replaced by <evidence-root>, <repo> and <home> in every text member and in the published JSON"
+ },
+ "retained_files": {}
+}
