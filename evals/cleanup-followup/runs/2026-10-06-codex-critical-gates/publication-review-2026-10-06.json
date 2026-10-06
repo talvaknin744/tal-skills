@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-06",
+  "reviewer_model": "claude-fable-5-1",
+  "reviewer_host": "Claude Code 2.1.285",
+  "verdict": "ACCEPT",
+  "supplied_evidence_review_only": true,
+  "review_prompt_path": "reviews/step-12-final-publication-prompt.txt",
+  "review_prompt_sha256": "d6e5c2c1a3efc8e2de8fe8df78471e52a1c22d25a5bce7a35fdde5b840cd39b9",
+  "review_result_path": "reviews/step-12-final-publication-result.json",
+  "review_result_sha256": "33fadc2dc4bd45f384556df2436225e1e24eaecf4d5721b5d44fae7faa2a38e3",
+  "reviewed_human_report_sha256": "ed5647dd9ba2f3a644e6275a61bdd9639218d1dcd0bd63bc494a98fa0f3bcfa1",
+  "result": "# Verdict: ACCEPT, conditional on the publication-only metadata commit below\n\n## What I reviewed versus what was executed\nI read only the supplied excerpts: `review-v2-final.md`, `report-v2-final.json`, `capability-coverage.json`, the bindings receipt, the changeset, log tails, and the four SKILL.md bodies plus `migration-gates.md`. I ran no checks. The 570-test validate pass, 88-adapter check, 24 webhook reruns, archive hash/path scans, and the 3,582 bindings are **supplied execution evidence**, not my verification. I did not see the score vectors, the Astra adjudication file, `independent-webhook-reruns.json`, `archive-manifest.json`, or `publication-bindings-verification.json`. My step-11 role overlap (reviewer and Fable grader) remains a disclosed limitation.\n\n## Consistency checks that pass on the supplied evidence\n- Arithmetic reconciles: 43+43+55+70+79+79 = 369 responder attempts; nine grader vectors = 597 rows; 597\u00d76 = 3,582 bindings; 79\u221215 = 64 governing attempts.\n- Source identity is stable across Sol06/Astra07 (same commit, tree, package digest). Final-06 pointer with final-07 vector on identical bytes is documented, not a new candidate.\n- Five original critical criteria: 2/2/2 under both graders, 3/3 target reads; four nontriggers at 0 reads. Astra07 Fable quote miss retained and adjudicated separately, original vector unchanged.\n- All-registered stays false everywhere; failed Luna/Sol vectors, 33 historical quote gaps, `6145496` unexecuted preparation, and the older `review.md`/`report.json` are preserved.\n- The four skill bodies match the eight accepted request-item verdicts. Descriptions are 29\u201332 words each, frontmatter keys are within the allowed set, handoff paragraphs carry standalone fallbacks.\n- No source edits after freeze; no release publication; both archives held outside the checkout with digests recorded.\n\n## Required in the publication-only metadata commit (no source changes)\n1. **Changeset coverage.** The only supplied changeset records evaluation adequacy and embeds a JSON blob. Invariant 1 requires a user-visible entry for the behavior changes. Either confirm a separate existing changeset already names the four skills' changed behavior (replay authorization and intent fingerprinting, semantic-failure reporting, removed/renamed/retyped field rule, retention and stop/recovery/completion gates), or add those lines to this entry. If neither is done, this becomes CHANGE.\n2. **Report status.** Update `status` from `behaviorally_accepted_publication_review_pending` and add a dated publication-review receipt naming this verdict and its unverified items. Leave `review-v2-final.md` byte-unchanged; record the supplement separately as it already anticipates.\n3. **Override provenance.** State in the PR description that the original request file says do not merge and that the human explicitly overrode it, with the file left unchanged.\n4. **Residual disclosures to keep visible in the PR:** no current-source Claude responder, no marketplace/provider/production pass, Sol06 grader disagreement unrelabeled, 31 packages routing-only, role overlap.\n\n## Proposed next action\nApproved as stated: commit the metadata above, `git push -u origin fix/critical-partial-gates`, open the draft PR with the given title, wait for CI, then request my separate head/CI review before ready-for-review and merge, merging only with Codex and Fable agreement.",
+  "changeset_condition": {
+    "status": "satisfied_by_existing_behavior_changesets",
+    "entries": [
+      {
+        "path": ".changeset/critical-partial-gates.md",
+        "sha256": "8964f9afa579c9211551e396176e0d0c13d56e69ad2f2948a00134ef6fbc948e",
+        "text": "---\n\"tal-skills\": patch\n---\n\nClose the seven critical partial gaps: failure-oriented-testing names the observed wrong outcome and the promised result it violates; idempotency requires current authorization on every replay and compares a validated, normalized command; microservice-testing lists each removed or renamed field at its unchanged endpoint as a breaking change; technical-deprecation states recovery-artifact retention horizons and concrete stop, rollback, or roll-forward conditions before removal.\n"
+      },
+      {
+        "path": ".changeset/claude-code-host-record.md",
+        "sha256": "ff507ae037825a346811d37e75148df436947bdf5d9bb6b729e84efa3ac5bd68",
+        "text": "---\n\"tal-skills\": patch\n---\n\nSharpen idempotency replay scoping (results keyed by tenant and operation with the client token, fingerprint of the validated normalized command) and failure-oriented-testing wording for contract-violating results that occur with protected accesses and a clean race detector.\n"
+      },
+      {
+        "path": ".changeset/reporting-evidence-gates.md",
+        "sha256": "566be8a529e19ce80d95bc34d991375f10b0b25c1c3b45d823f119f724ea1b9e",
+        "text": "---\n\"tal-skills\": patch\n---\n\nMake existing final-report obligations explicit: failure-oriented-testing reports protected-access semantic failures and verification limits, idempotency quotes executed commands and local test boundaries, and technical-deprecation states configuration precedence, writer transitions and bounded escalation. Microservice-testing limits the in-place re-type breaking-change rule to incompatible type changes.\n"
+      },
+      {
+        "path": ".changeset/complete-retry-boundary-reports.md",
+        "sha256": "b8ac757fbb605620ab6228872f923b636b8847a8a6fb987a15e2cb09a53f5ab4",
+        "text": "---\n\"tal-skills\": patch\n---\n\nClarify that a retained deterministic schedule demonstrates its interleaving rather than exhaustive correctness. Make completed-record expiry risks visible in idempotency guidance and structure existing verification, fake-boundary and remaining-validation obligations as completion items.\n"
+      },
+      {
+        "path": ".changeset/uncertain-outcome-and-provider-evidence.md",
+        "sha256": "6d9c987f4c30f35581dfbb015c1541b6fa4c90527c2ab3b0f3b83115e1dd28a9",
+        "text": "---\n\"tal-skills\": patch\n---\n\nRequire failure-oriented-testing experiments to represent committed effects with lost acknowledgements and report the expected recovery outcome. Require idempotency reviews to name existing atomic-claim guarantees, and distinguish local fake evidence from deployed provider deduplication and the end-to-end effect.\n"
+      }
+    ]
+  },
+  "report_status_condition": "Updated in report-v2-final.json. Reviewed review-v2-final.md remains byte-unchanged.",
+  "merge_override": "Original .cowork/codex-request-01.md says do not merge and remains unchanged. Human directly authorizes eventual merge when Codex and Fable agree. PR description will state this provenance.",
+  "review_erratum": {
+    "original_claim": "The only supplied changeset records evaluation adequacy and embeds a JSON blob.",
+    "correction": "The supplied changeset has YAML frontmatter and one prose paragraph, with no JSON blob. The review packet placed an archive JSON summary after the file content. Behavior changesets already exist and are supplied in this receipt. Original reviewer result remains unchanged.",
+    "changeset_sha256": "c0c0c7b0af5be8eff1cbbc296a22118c42b9ffc7caaf4b60baceae2a23299285"
+  },
+  "unverified_by_reviewer": [
+    "Score vectors, Astra adjudication file, independent webhook rerun receipt, full archive manifest and bindings report were not supplied in step 12. Earlier step 11 directly reviewed Astra adjudication and normalized score summaries.",
+    "Validation, generated adapters, archive hash and personal-path scans and test reruns are supplied execution evidence, not checks run by the reviewer.",
+    "Fable reviewer and independent Fable graders share a model in separate fresh sessions."
+  ],
+  "next_step": "Push and open draft PR, wait for CI, separate exact head and CI Fable review before ready and merge."
+}

@@ -735,3 +735,122 @@ test('final reporting prompts restore source requests without changing any earli
   assert.deepEqual(gates.baseline_rows, readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/gates.json').baseline_rows);
   assert.equal(gates.models.fallback_on_any_primary_governing_miss, 'gpt-6-astra');
 });
+
+test('final frozen Sol and Astra retain all 79 attempts and both independent grader vectors', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const expected = [
+    ['codex-final-06', 'gpt-6.1-sol', 6, 0],
+    ['codex-final-07', 'gpt-6-astra', 0, 1],
+  ];
+  for (const [candidate, model, solMisses, fableMisses] of expected) {
+    let previous;
+    for (const [suffix, misses] of [['', solMisses], ['-fable', fableMisses]]) {
+      const scores = readJson(`${directory}/scores/${candidate}${suffix}-normalized.json`);
+      const source = readJson(`${directory}/scores/${candidate}${suffix}-independent-source.json`);
+      assert.equal(scores.rows.length, 79);
+      assert.equal(source.attempt_score_count, 79);
+      assert.equal(new Set(scores.rows.map(row => row.replicate)).size, 79);
+      assert.equal(scores.responder_model, model);
+      assert.equal(scores.summary.graded_criteria, 333);
+      assert.equal(scores.summary.all_registered_gates_passed, false);
+      assert.equal(scores.summary.governing_gate_misses, misses);
+      assert.equal(scores.summary.governing_candidate_gates_passed, misses === 0);
+      assert.equal(scores.governing_gate_misses.length, misses);
+      const corrected = new Set(scores.authoring_corrections.map(item => item.original));
+      assert.equal(corrected.size, 5);
+      assert.deepEqual(scores.governing_gate_misses, scores.gate_misses.filter(item => !(corrected.has(item.case_key) && ['activation', 'target'].includes(item.gate))));
+      assert.deepEqual(scores.authoring_corrections, readJson(`${directory}/final-gates.json`).versioned_authoring_corrections);
+      assert.equal(scores.summary.criterion_quote_audit_gaps, scores.rows.reduce((sum, row) => sum + row.criteria.filter(item => !item.quote_audit_passed).length, 0));
+      for (const row of scores.rows) {
+        assert.equal(row.execution_status, 'executed');
+        assert.equal(row.candidate_commit, '08a45e8f38ad88c6c28e9b0caefdf443739941aa');
+        assert.equal(row.candidate_package_digest, 'a0ed4d1358ad22aaf1f6edc445b7f7a5b0a7e4696ea7b435d9eb965073f695bb');
+        assert.equal(sha256(fs.readFileSync(path.join(root, row.source_binding.source_case_file))), row.source_binding.source_case_file_sha256);
+        const raw = source.groups.find(group => group.grader === row.grader.id).runs.find(run => run.label === row.blind_label);
+        assert.deepEqual(row.criteria.map(({ severity, ...item }) => item), raw.criteria);
+        assert.equal(row.grader.independence.authored_candidate, false);
+        assert.equal(row.grader.independence.authored_response, false);
+        assert.equal(row.grader.independence.saw_candidate_skill_body, false);
+        if (row.independent_verification) assert.equal(row.independent_verification.exit_code, 0);
+      }
+      assert.deepEqual(readJson(`${directory}/${candidate}${suffix}-activation-table.json`), scores.activation_rows);
+      if (previous) {
+        assert.deepEqual(scores.rows.map(row => row.replicate), previous.rows.map(row => row.replicate));
+        assert.deepEqual(scores.activation_rows, previous.activation_rows);
+        assert.equal(scores.grader_model, 'claude-fable-5-1');
+        assert.equal(scores.grading_independence.saw_sol_scores, false);
+        assert.equal(scores.grading_independence.saw_candidate_package_guidance, false);
+      }
+      previous = scores;
+    }
+  }
+});
+
+test('Astra quote adjudication preserves the failed original audit and supports only a scoped adequacy claim', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const scores = readJson(`${directory}/scores/codex-final-07-fable-normalized.json`);
+  const audit = readJson(`${directory}/scores/astra-retained-proof-quote-reaudit-v2.json`);
+  const approval = readJson(`${directory}/scores/astra-retained-proof-quote-reaudit-v2-approval.json`);
+  const row = scores.rows.find(item => item.replicate === audit.replicate);
+  const original = row.criteria.find(item => item.id === audit.criterion_id);
+  assert.equal(original.score, 2);
+  assert.equal(original.quote_audit_passed, false);
+  assert.deepEqual(audit.original_evidence_quotes, original.evidence_quotes);
+  assert.equal(audit.original_quote_audit_passed, false);
+  assert.equal(audit.numeric_score_changed, false);
+  assert.equal(audit.original_numeric_score, original.score);
+  assert.equal(audit.new_exact_quotes_passed, true);
+  assert.deepEqual(audit.replacement_quote_audit.map(item => item.quote), original.evidence_quotes.filter(quote => quote !== '1 file changed'));
+  assert.equal(audit.replacement_quote_audit.length, 7);
+  assert.ok(audit.replacement_quote_audit.every(item => item.exact_packet_match));
+  assert.deepEqual(audit.observable_scope.changed_paths, ['scenario.mjs']);
+  assert.deepEqual(audit.observable_scope.untracked_files, []);
+  assert.equal(audit.observable_scope.independent_verification.exit_code, 0);
+  assert.equal(approval.verdict, 'ACCEPT');
+  assert.equal(approval.model, 'claude-fable-5-1');
+  assert.equal(approval.audit_sha256, sha256(fs.readFileSync(path.join(root, `${directory}/scores/astra-retained-proof-quote-reaudit-v2.json`))));
+  const report = readJson(`${directory}/report-v2-final.json`);
+  assert.equal(report.scored_responder_attempts, 369);
+  assert.equal(report.final_grading.governing_attempts, 64);
+  assert.equal(report.final_grading.fallback_fable_original_governing_misses, 1);
+  assert.equal(report.final_grading.fallback_fable_adjudicated_governing_misses, 0);
+  assert.equal(report.final_grading.all_registered_gates_passed, false);
+  assert.equal(report.model_adequacy.selected, 'gpt-6-astra');
+  const reruns = readJson(`${directory}/independent-webhook-reruns.json`);
+  assert.equal(reruns.executed_reruns, 24);
+  assert.equal(reruns.runs.length, 24);
+  for (const model of ['gpt-6.1-sol', 'gpt-6-astra']) assert.equal(reruns.runs.filter(item => item.model === model).length, 12);
+  assert.ok(reruns.runs.every(item => item.result.exit_code === 0 && item.result.argv.join(' ') === 'node --test deliver.test.mjs'));
+});
+
+test('final archive receipt binds immutable source records and reports verified redaction without hiding prior failures', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const manifest = readJson(`${directory}/archive-manifest.json`);
+  const report = readJson(`${directory}/report-v2-final.json`);
+  assert.equal(manifest.status, 'verified_held_for_next_release');
+  assert.deepEqual(manifest.external_archive, report.archive);
+  assert.equal(manifest.external_archive.archive_sha256, 'd9080cb19fe408a4a758648b587e0cc4c93b488ebbeddc2f4758e4e0128b3670');
+  assert.equal(manifest.external_archive.inventory_sha256, '3af6b8d4b475922abc753ba5f61a264811b8deebaa84cb3759c67f8cc5eec93e');
+  assert.equal(manifest.external_archive.member_hash_verification, 'all-members-match');
+  assert.equal(manifest.external_archive.zstd_test, 'passed');
+  assert.equal(manifest.external_archive.personal_home_literal_scan_matches, 0);
+  assert.equal(manifest.external_archive.decoded_json_personal_home_scan_matches, 0);
+  assert.equal(manifest.external_archive.regular_files, 104311);
+  assert.ok(manifest.files.length > 50);
+  assert.equal(new Set(manifest.files.map(item => item.path)).size, manifest.files.length);
+  for (const item of manifest.files) {
+    assert.ok(!item.path.startsWith('/') && !item.path.split('/').includes('..'));
+    const bytes = fs.readFileSync(path.join(root, directory, item.path));
+    assert.ok(bytes.length < 1000000, item.path);
+    assert.equal(sha256(bytes), item.published_sha256, item.path);
+    assert.equal(item.original_sha256, item.published_sha256);
+    assert.equal(item.transformed, false);
+    assert.equal(manifest.retained_files[item.path], item.published_sha256);
+  }
+  assert.equal(report.stages.length, 6);
+  assert.equal(report.scored_responder_attempts, report.stages.reduce((sum, stage) => sum + stage.summary.rows, 0));
+  assert.ok(report.stages.every(stage => stage.summary.all_registered_gates_passed === false));
+  const bindings = readJson(`${directory}/publication-bindings-verification.json`);
+  assert.equal(bindings.artifact_bindings_checked, 3582);
+  assert.equal(bindings.distinct_bound_artifacts, 1922);
+});
