@@ -2,4 +2,4 @@
 "tal-skills": patch
 ---
 
-Execute the previously auth-blocked Claude Code behavioral record (169 independently graded runs on the fix candidates), add the v2 message-initial architecture host-syntax pair, and sharpen idempotency replay scoping and failure-oriented-testing semantic-failure wording after Haiku responders scored them partial.
+Sharpen idempotency replay scoping (results keyed by tenant and operation with the client token, fingerprint of the validated normalized command) and failure-oriented-testing wording for contract-violating results that occur with protected accesses and a clean race detector.

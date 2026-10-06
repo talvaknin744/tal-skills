@@ -63,8 +63,8 @@ increments promise 2). Say explicitly when the individual accesses were protecte
 still wrong: a result that breaks the contract is a semantic failure even when no
 data race, exception, or tool warning was reported.
 
-**Done:** a retained counterexample fails for the relevant reason, the report names
-the observed wrong outcome and the promised outcome it violates, or the report
+**Done:** a retained counterexample fails for the relevant reason and the report
+names the observed wrong outcome and the promised outcome it violates, or the report
 explicitly says sensitivity remains unverified.
 
 Example: Seed a retry that creates a duplicate, then retain the smallest two-attempt history that still fails.

@@ -12,7 +12,7 @@ Build consumer evidence that a service can change without breaking its users. Ch
 
 Read the changed behavior, service interfaces, consumers, persistence adapters, existing tests, and relevant delivery stages. Identify the user-visible outcome and the release decision these tests must support. Record which services, dependency versions, environments, and failure cases are in scope.
 
-For an interface change, list every removed, renamed, or re-typed field together with the endpoint or event where it changes in place. A field removed or renamed at an unchanged address is a breaking change for every consumer the contract suite does not represent, however many internal tests pass; name each such field and address explicitly.
+For an interface change, list every removed, renamed, or re-typed field together with the endpoint or event where it changes in place. A field removed, renamed, or re-typed at an unchanged address is a breaking change for every consumer that reads it, including consumers the contract suite does not represent, however many internal tests pass; name each such field and address explicitly.
 
 Honor the task mode: a strategy supplies a test plan; a review remains read-only; implementation changes the requested tests and necessary seams. Reuse existing runners and fixtures.
 
