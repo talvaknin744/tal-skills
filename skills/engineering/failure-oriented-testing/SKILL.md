@@ -58,8 +58,10 @@ rejections for the chosen oracle.
 
 Name the concrete wrong outcome the faulty version produced and state why it
 violates the promised result (for example, a final value of 1 where two accepted
-increments promise 2). A result is a semantic failure when it breaks the contract,
-even if no data race, exception, or tool warning was reported.
+increments promise 2). Say explicitly when the individual accesses were protected
+(each read and write held a lock, the race detector stayed clean) and the result is
+still wrong: a result that breaks the contract is a semantic failure even when no
+data race, exception, or tool warning was reported.
 
 **Done:** a retained counterexample fails for the relevant reason, the report names
 the observed wrong outcome and the promised outcome it violates, or the report
