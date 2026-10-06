@@ -6,7 +6,7 @@
 
 Claude Code 2.1.289 ran in an isolated cloud Linux workspace with normal account authentication and a fresh `CLAUDE_CONFIG_DIR` per attempt. The plugin form passed a frozen `git archive` of the candidate tree as `--plugin-dir` with `--setting-sources local`; the generated form copied `scripts/install-toolkit.mjs --host claude` packages into the project's `.claude/skills` with `--setting-sources project,local`. Web, subagent and workflow tools were disallowed through the CLI tool policy; the filesystem was not jailed. The case prompt was sent verbatim as one stream-json user message and replayed into the saved trace, so the exact text the host received is in every trace. Canonical corpus cases carry the same framing sentence the Codex runner composes ("The supplied project is in the current directory. Use relevant installed skills when useful."); Claude-specific and follow-up cases carry no prefix.
 
-Three score sets ran against commit `594ff61` (tree `35e0e6e1`, the seven-partial fix on top of `1a32344`); the refinement rerun ran against `2d9312f`, which changes only `failure-oriented-testing` and `idempotency`. Package digests are in [report.json](report.json) and `candidate/` inside the archive. This is not the README marketplace installation path and not a clean physical machine.
+Three score sets ran against commit `594ff61` (tree `35e0e6e1`, the seven-partial fix on top of `1a32344`); the refinement rerun ran against `2d9312f` (published on the branch as `14f6b9c`, identical tree), which changes only `failure-oriented-testing` and `idempotency`. Package digests are in [report.json](report.json) and `candidate/` inside the archive. This is not the README marketplace installation path and not a clean physical machine.
 
 ## Activation
 
@@ -33,7 +33,7 @@ The Haiku critical zeros are concentrated in `recovery-identity`, `effect-uncert
 
 ## The seven critical partials
 
-| Criterion | Haiku, skill activated | Sonnet, candidate `594ff61` | Sonnet, candidate `2d9312f` |
+| Criterion | Haiku, skill activated | Sonnet, candidate `594ff61` | Sonnet, candidate `2d9312f` (branch `14f6b9c`) |
 | --- | --- | --- | --- |
 | failure-oriented-testing `oracle` | 1, 1, 1 (activated in 1 of 3) | 1, 2, 2 | 2, 2, 2 |
 | idempotency `scoped-auth` | 1, 1, 1 then 1, 1, 2 | 2, 2, 2 | 2, 2, 2 |
