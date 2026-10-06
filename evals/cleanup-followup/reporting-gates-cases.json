@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "purpose": "Focused checks for explicit final-answer reporting obligations, executed separately from the retained existing regression cases. Existing prompts, rubrics, fixtures and scores are unchanged.",
+  "cases": [
+    {
+      "id": "counterexample-final-report",
+      "skill": "failure-oriented-testing",
+      "title": "counterexample final report",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Implement a deterministic regression in scenario.mjs using request.md. Keep both models and verify.mjs unchanged, run node verify.mjs, and give a final report of the observed failure, promised outcome, retained schedule and limits of the checks actually run. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except scenario.mjs.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates/counterexample-final-report",
+      "fixtures": [
+        "models.mjs",
+        "request.md",
+        "scenario.mjs",
+        "verify.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "semantic-report",
+          "severity": "critical",
+          "criterion": "The final answer names observed broken value 1 and promised value 2 for two accepted increments, and explicitly identifies a semantic contract failure despite individually protected accesses."
+        },
+        {
+          "id": "verification-report",
+          "severity": "critical",
+          "criterion": "The final answer states the exact executed verification command and actual result, the exercised schedule, and whether a race detector ran. It distinguishes this modeled schedule from exhaustive or production correctness."
+        },
+        {
+          "id": "retained-proof",
+          "severity": "critical",
+          "criterion": "Only scenario.mjs changes, the retained schedule distinguishes broken and fixed models without deadlock, and the supplied verifier plus an independent rerun succeed."
+        }
+      ],
+      "source_attribution": {
+        "source_case_file": "evals/failure-oriented-testing/cases.json",
+        "source_case_id": "race-clean-lost-update",
+        "fixture_reused_without_changes": true
+      },
+      "editable_files": [
+        "scenario.mjs"
+      ],
+      "verification_argv": [
+        "node",
+        "verify.mjs"
+      ]
+    },
+    {
+      "id": "webhook-final-report",
+      "skill": "idempotency",
+      "title": "webhook final report",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Fix deliver.mjs so retries of the same event use the provider idempotency support described in requirements.md. Keep this to the adapter and relevant local verification, use the specified namespace, and verify repeated and distinct events plus a failure after provider acceptance. Give a final report of the change, commands actually executed, their observed results and the boundary the local checks cover. Do not redesign the outbox, install packages or use external services.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates/webhook-final-report",
+      "fixtures": [
+        "requirements.md",
+        "deliver.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "command-results",
+          "severity": "critical",
+          "criterion": "The final answer gives the exact local verification command or commands and observed results. Saved tool outputs substantiate execution, not just a proposed test."
+        },
+        {
+          "id": "boundary-report",
+          "severity": "critical",
+          "criterion": "The final answer explicitly limits local evidence to stable key propagation and recovery using a fake, leaving real provider deduplication and end-to-end effects unverified."
+        },
+        {
+          "id": "meaningful-recovery",
+          "severity": "critical",
+          "criterion": "The adapter uses stable audit-webhook event identities, retains receipt and acceptance-before-mark ordering, and executed local checks observe repeated keys, distinct event keys, and acceptance followed by mark failure and retry. Scope is adapter and relevant local verification only."
+        }
+      ],
+      "source_attribution": {
+        "source_case_file": "evals/idempotency/cases.json",
+        "source_case_id": "bounded-webhook-edit",
+        "fixture_reused_without_changes": true
+      }
+    },
+    {
+      "id": "configuration-final-report",
+      "skill": "technical-deprecation",
+      "title": "configuration final report",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Review the supplied configuration retirement proposal and consumer inventory. Keep all files unchanged and use no external services. Give a staged migration plan with a final report of compatibility semantics, transitions of readers and writers, remaining gates, and how blocked progress is escalated. Separate checks actually run from checks still proposed.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates/configuration-final-report",
+      "fixtures": [
+        "contract.md",
+        "inventory.json",
+        "proposal.md",
+        "request.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "mapping-and-rule",
+          "severity": "critical",
+          "criterion": "States each field semantic mapping and the supplied mixed-document per-field precedence rule: replacement value when present, otherwise legacy value, otherwise the governing default policy. Missing policy remains unresolved rather than invented."
+        },
+        {
+          "id": "cohort-transitions",
+          "severity": "critical",
+          "criterion": "Separates reader compatibility rollout from writer, template and default transitions, and gives an explicit check preventing new legacy adoption for compatible cohorts while old supported cohorts remain functional."
+        },
+        {
+          "id": "bounded-escalation",
+          "severity": "critical",
+          "criterion": "States concrete stop and recovery conditions with a finite time or attempt bound and an accountable escalation role. Unsupported bounds or assignments are explicitly proposed pending decisions, not claimed approved."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves supplied files unchanged and states which local inspection or checks actually ran and which migration checks remain unexecuted. No production or completed-retirement guarantee is invented."
+        }
+      ],
+      "source_attribution": {
+        "source_case_file": "evals/technical-deprecation/cases.json",
+        "source_case_id": "config-channel-migration",
+        "fixture_reused_without_changes": true
+      }
+    },
+    {
+      "id": "compatible-request-widening",
+      "skill": "microservice-testing",
+      "title": "Separate compatible input widening from breaking response changes",
+      "tags": [
+        "changed-boundary",
+        "compatibility"
+      ],
+      "prompt": "Review the three in-place interface changes using contract.md and consumer.mjs. Classify each of the three changes as compatible or breaking for supported consumers and explain why, naming the affected fields and the unchanged address. Keep files unchanged, use no external services, and distinguish the supplied contract from untested deployed behavior.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates/compatible-request-widening",
+      "fixtures": [
+        "consumer.mjs",
+        "contract.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "compatible-widening",
+          "severity": "critical",
+          "criterion": "Lists the tag request-field widening at GET /catalog and recognizes that the supplied preservation of every old valid string request makes it compatible with the supported existing input contract. Does not classify every type change as breaking."
+        },
+        {
+          "id": "breaking-controls",
+          "severity": "critical",
+          "criterion": "Explicitly names incompatible response re-type price_cents and removed response field next_cursor at unchanged GET /catalog as breaking for supplied field-reading consumers, including the concrete integer and cursor dependencies."
+        },
+        {
+          "id": "read-only-limits",
+          "severity": "critical",
+          "criterion": "Leaves all files unchanged, uses only supplied local evidence and distinguishes supported-contract reasoning from unexecuted production or exhaustive consumer validation."
+        }
+      ],
+      "source_attribution": {
+        "kind": "new_authored_changed_boundary",
+        "reason": "Tests the corrected distinction between compatible widening and incompatible re-type, with removal as a breaking control."
+      }
+    }
+  ]
+}

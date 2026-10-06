@@ -76,9 +76,13 @@ families or schedules chosen for the original risk. Check recovery state and own
 resources as well as the immediate return value. Preserve prior failure evidence
 when a run is flaky; reset state and control the order that determines the result.
 
-Report the exact candidate, commands, observed outcomes, explored domain, and
-remaining integration gap. Coverage and a clean fuzzing interval describe explored
-execution, not absence of faults. Consult [sources.md](references/sources.md) for
+In the final answer, report the exact candidate, verification commands and their
+observed results, the wrong outcome and promised outcome, the retained input or
+schedule, and remaining integration gaps. When the supplied evidence shows
+individually protected accesses, explicitly identify a contract-violating result
+as a semantic failure despite that protection. State which inputs or interleavings
+ran and whether a race detector ran. Coverage and a clean fuzzing interval describe
+explored execution, not absence of faults. Consult [sources.md](references/sources.md) for
 attribution, reading scope, and evidence limits.
 
 **Done:** the unsafe behavior is detected, the candidate meets the selected

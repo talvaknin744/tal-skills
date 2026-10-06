@@ -528,3 +528,31 @@ test('Claude Code 2026-10-06 executed record is internally consistent and keeps 
   assert.equal(v1.filter(row => row.unsuccessful_due_to_critical_failure).length, 5, 'the v1 mid-sentence form keeps its failures visible');
 });
 
+
+test('focused reporting cases retain attributed fixture bytes and cover compatible widening separately', () => {
+  const corpus = readJson('evals/cleanup-followup/reporting-gates-cases.json');
+  assert.equal(corpus.cases.length, 4);
+  assert.equal(new Set(corpus.cases.map(row => row.id)).size, 4);
+  assert.deepEqual(corpus.cases.map(row => row.skill).sort(), [
+    'failure-oriented-testing', 'idempotency', 'microservice-testing', 'technical-deprecation',
+  ]);
+  for (const row of corpus.cases) {
+    assert.ok(row.fixture_dir.startsWith('evals/cleanup-followup/fixtures/reporting-gates/'));
+    const actual = fs.readdirSync(path.join(root, row.fixture_dir)).sort();
+    assert.deepEqual(actual, [...row.fixtures].sort(), row.id);
+    assert.ok(row.rubric.length >= 3 && row.rubric.every(item => item.severity === 'critical'));
+    assert.equal(row.capabilities.web, false);
+    assert.equal(row.capabilities.subagents, false);
+    if (row.source_attribution.fixture_reused_without_changes) {
+      const source = readJson(row.source_attribution.source_case_file).cases.find(item => item.id === row.source_attribution.source_case_id);
+      assert.ok(source, row.id);
+      for (const filename of row.fixtures) {
+        assert.equal(sha256(fs.readFileSync(path.join(root, row.fixture_dir, filename))),
+          sha256(fs.readFileSync(path.join(root, source.fixture_dir, filename))), `${row.id}/${filename}`);
+      }
+    }
+  }
+  const boundary = corpus.cases.find(row => row.id === 'compatible-request-widening');
+  assert.deepEqual(boundary.rubric.map(item => item.id), ['compatible-widening', 'breaking-controls', 'read-only-limits']);
+  assert.equal(boundary.task_mode, 'review');
+});
