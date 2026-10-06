@@ -270,6 +270,186 @@
           "bytes": 150
         }
       ]
+    },
+    {
+      "key": "claude-code--architecture-plugin-unqualified-v2",
+      "case_id": "architecture-plugin-unqualified-v2",
+      "group": "claude-code-host-syntax-v2",
+      "existing_case": false,
+      "candidate_variant": "prescribed-unqualified-plugin-form-message-initial",
+      "prompt": "/architecture give this small export system a proportionate architecture review. Are its module boundaries and single-job deployment reasonable, and which reliability concerns deserve attention first? Keep the result concise and read-only. Use no external services.",
+      "prompt_sha256": "e1c97203cbc171f4ce605c30681c3c21f366ba7e64429fd2409ac4c6ad836844",
+      "criteria": [
+        {
+          "id": "host-command-resolution",
+          "severity": "critical",
+          "criterion": "The observable transcript shows the host resolving the message-initial slash command for this installation form (a replayed user message carrying a `<command-name>` expansion naming the architecture skill, or a successful Skill tool invocation and result for it). Catalog presence, a file mention, or a final-answer marker alone is insufficient."
+        },
+        {
+          "id": "explicit-form-resolution",
+          "severity": "critical",
+          "criterion": "The requested explicit invocation form resolves to the architecture skill body for this installation form; the review follows the skill's proportionate-review guidance and does not claim an unsupported alias or an invocation that did not occur."
+        },
+        {
+          "id": "proportionate-review",
+          "severity": "major",
+          "criterion": "Gives a concise, read-only review grounded in the supplied small export system, including module responsibility, single-job deployment assumption, and its material reliability concerns."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves fixture and installed packages unchanged, uses no external services, and does not invent production incidents or checks."
+        }
+      ],
+      "criteria_sha256": "2e012609d45aaf970f14b143d45346f7e26df7e91b0181a423f3d30c869382ee",
+      "fixture_source": "evals/architecture/fixtures/multilingual-worker",
+      "fixture": {
+        "source_digest": "246c09d41217ba8716600dcb470d16dd112fd9d8ad8f1ebb20f2137dfc09d759",
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+            "bytes": 489
+          },
+          {
+            "path": "export.py",
+            "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+            "bytes": 280
+          },
+          {
+            "path": "status.js",
+            "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+            "bytes": 145
+          },
+          {
+            "path": "upload.sh",
+            "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+            "bytes": 150
+          }
+        ]
+      },
+      "fixture_dir": "evals/cleanup-followup/fixtures/claude-code-architecture-command-v1",
+      "contract_reason": "Versioned replacement for the v1 host-syntax pair after the 2026-10-06 Claude Code run showed that this host expands a slash command only when it begins the message (mid-sentence `/architecture` is left to the model, which read files directly in 6 of 6 Sonnet attempts) and resolves the unqualified `/architecture` to the unique plugin command `/tal-skills:architecture` as a `<command-name>` expansion with the skill body injected, without a Skill tool call. The v1 cases and their criteria remain unchanged; v2 places the same command first and scores the host's actual resolution mechanism.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "actual_skill_tool": true,
+        "normal_skill_discovery": true
+      },
+      "installation_form": "README-installed tal-skills plugin",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+          "bytes": 489
+        },
+        {
+          "path": "export.py",
+          "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+          "bytes": 280
+        },
+        {
+          "path": "status.js",
+          "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+          "bytes": 145
+        },
+        {
+          "path": "upload.sh",
+          "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+          "bytes": 150
+        }
+      ]
+    },
+    {
+      "key": "claude-code--architecture-plugin-namespaced-v2",
+      "case_id": "architecture-plugin-namespaced-v2",
+      "group": "claude-code-host-syntax-v2",
+      "existing_case": false,
+      "candidate_variant": "documented-plugin-namespace-form-message-initial",
+      "prompt": "/tal-skills:architecture give this small export system a proportionate architecture review. Are its module boundaries and single-job deployment reasonable, and which reliability concerns deserve attention first? Keep the result concise and read-only. Use no external services.",
+      "prompt_sha256": "500d528820db748e4ff0d8fce3924b5ce468614395045b01e9f6ff03b99ffde4",
+      "criteria": [
+        {
+          "id": "host-command-resolution",
+          "severity": "critical",
+          "criterion": "The observable transcript shows the host resolving the message-initial slash command for this installation form (a replayed user message carrying a `<command-name>` expansion naming the architecture skill, or a successful Skill tool invocation and result for it). Catalog presence, a file mention, or a final-answer marker alone is insufficient."
+        },
+        {
+          "id": "explicit-form-resolution",
+          "severity": "critical",
+          "criterion": "The requested explicit invocation form resolves to the architecture skill body for this installation form; the review follows the skill's proportionate-review guidance and does not claim an unsupported alias or an invocation that did not occur."
+        },
+        {
+          "id": "proportionate-review",
+          "severity": "major",
+          "criterion": "Gives a concise, read-only review grounded in the supplied small export system, including module responsibility, single-job deployment assumption, and its material reliability concerns."
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves fixture and installed packages unchanged, uses no external services, and does not invent production incidents or checks."
+        }
+      ],
+      "criteria_sha256": "2e012609d45aaf970f14b143d45346f7e26df7e91b0181a423f3d30c869382ee",
+      "fixture_source": "evals/architecture/fixtures/multilingual-worker",
+      "fixture": {
+        "source_digest": "246c09d41217ba8716600dcb470d16dd112fd9d8ad8f1ebb20f2137dfc09d759",
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+            "bytes": 489
+          },
+          {
+            "path": "export.py",
+            "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+            "bytes": 280
+          },
+          {
+            "path": "status.js",
+            "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+            "bytes": 145
+          },
+          {
+            "path": "upload.sh",
+            "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+            "bytes": 150
+          }
+        ]
+      },
+      "fixture_dir": "evals/cleanup-followup/fixtures/claude-code-architecture-command-v1",
+      "contract_reason": "Versioned replacement for the v1 host-syntax pair after the 2026-10-06 Claude Code run showed that this host expands a slash command only when it begins the message (mid-sentence `/architecture` is left to the model, which read files directly in 6 of 6 Sonnet attempts) and resolves the unqualified `/architecture` to the unique plugin command `/tal-skills:architecture` as a `<command-name>` expansion with the skill body injected, without a Skill tool call. The v1 cases and their criteria remain unchanged; v2 places the same command first and scores the host's actual resolution mechanism.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "actual_skill_tool": true,
+        "normal_skill_discovery": true
+      },
+      "installation_form": "README-installed tal-skills plugin",
+      "fixture_files": [
+        {
+          "path": "README.md",
+          "sha256": "4d6855cebc3dc0a3ebae1e4d185f10c2451a9cd7f84002551486c3886f28e244",
+          "bytes": 489
+        },
+        {
+          "path": "export.py",
+          "sha256": "e226f0603998aa61b48becd6059dbac82c96aacdd84b04fc143bb40c427bd9b3",
+          "bytes": 280
+        },
+        {
+          "path": "status.js",
+          "sha256": "7aa05f0ec5f1c42c6de826359441a473d444c9d7419144ac34ebf8340d4b8406",
+          "bytes": 145
+        },
+        {
+          "path": "upload.sh",
+          "sha256": "55eb0d34194b2e919667c7e6dcc9f3678cf635332ddde4be26620f81a5bb6b27",
+          "bytes": 150
+        }
+      ]
     }
   ]
 }

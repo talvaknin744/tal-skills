@@ -87,11 +87,13 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
   }
   const claude = readJson('evals/cleanup-followup/claude-code-cases.json');
   assert.equal(claude.schema_version, 1);
-  assert.equal(claude.cases.length, 3);
+  assert.equal(claude.cases.length, 5);
   assert.deepEqual(claude.cases.map(row => row.key), [
     'claude-code--python-idempotency-handoff-v4',
     'claude-code--architecture-plugin-unqualified-v1',
     'claude-code--architecture-plugin-namespaced-v1',
+    'claude-code--architecture-plugin-unqualified-v2',
+    'claude-code--architecture-plugin-namespaced-v2',
   ]);
   const byKey = new Map(claude.cases.map(row => [row.key, row]));
   for (const row of claude.cases) {
@@ -115,6 +117,15 @@ test('canonical versioned cases retain prompt, criteria and fixture identities',
   assert.deepEqual(unqualified.criteria, namespaced.criteria);
   assert.deepEqual(unqualified.fixture, namespaced.fixture);
   assert.equal(unqualified.prompt.replace('/architecture', '/tal-skills:architecture'), namespaced.prompt);
+  const unqualifiedV2 = byKey.get('claude-code--architecture-plugin-unqualified-v2');
+  const namespacedV2 = byKey.get('claude-code--architecture-plugin-namespaced-v2');
+  assert.deepEqual(unqualifiedV2.criteria, namespacedV2.criteria);
+  assert.deepEqual(unqualifiedV2.fixture, unqualified.fixture);
+  assert.ok(unqualifiedV2.prompt.startsWith('/architecture '), 'v2 places the command first');
+  assert.ok(namespacedV2.prompt.startsWith('/tal-skills:architecture '), 'v2 places the namespaced command first');
+  assert.equal(unqualifiedV2.prompt.replace('/architecture', '/tal-skills:architecture'), namespacedV2.prompt);
+  assert.equal(unqualifiedV2.criteria[0].id, 'host-command-resolution');
+  assert.notDeepEqual(unqualifiedV2.criteria, unqualified.criteria, 'v1 criteria are retained unchanged beside the v2 contract');
   assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[0].id, 'actual-python-skill');
   assert.equal(byKey.get('claude-code--python-idempotency-handoff-v4').criteria[1].id, 'actual-idempotency-handoff');
 });
@@ -441,3 +452,79 @@ function corpusCriteria(caseKey) {
     ? readJson('evals/phase5-cleanup/rubric.json').cases.find(row => row.case_id === matrixCase.case_id).criteria
     : source.rubric;
 }
+
+test('Claude Code 2026-10-06 executed record is internally consistent and keeps its counts visible', () => {
+  const dir = 'evals/claude-code/runs/2026-10-06';
+  const report = readJson(`${dir}/report.json`);
+  const manifest = readJson(`${dir}/archive-manifest.json`);
+  const review = fs.readFileSync(path.join(root, `${dir}/review.md`), 'utf8');
+  const claudeReport = fs.readFileSync(path.join(root, 'evals/cleanup-followup/claude-code-report.md'), 'utf8');
+  assert.match(claudeReport, /\.\.\/claude-code\/runs\/2026-10-06\/review\.md/);
+  assert.match(review, /\*\*Status: executed\.\*\*/);
+  assert.equal(report.status, 'executed');
+  assert.equal(report.candidate.commit_mac_clone, '594ff61');
+  assert.equal(report.candidate_refinement.commit_cloud_clone, '2d9312f');
+  assert.deepEqual(Object.keys(report.score_sets), ['claude-code-haiku', 'changed-skills-haiku', 'sonnet-comparison', 'refinement-rerun']);
+  assert.equal(manifest.external_archive.filename, 'tal-skills-claude-code-2026-10-06.tar.zst');
+  assert.match(manifest.external_archive.sha256, /^[a-f0-9]{64}$/);
+  assert.equal(manifest.external_archive.zstd_test, 'passed');
+  assert.deepEqual(report.archive_manifest, manifest.external_archive);
+  assert.equal(manifest.members.length, manifest.external_archive.tar_member_count);
+  for (const member of manifest.members) {
+    assert.match(member.original_sha256, /^[a-f0-9]{64}$/);
+    assert.match(member.published_sha256, /^[a-f0-9]{64}$/);
+    assert.equal(member.transformed, member.original_sha256 !== member.published_sha256, member.path);
+  }
+  let totalRows = 0;
+  let totalGaps = 0;
+  for (const [name, summary] of Object.entries(report.score_sets)) {
+    const { rows } = readJson(`${dir}/scores/${name}-normalized.json`);
+    assert.equal(rows.length, summary.rows, name);
+    assert.equal(rows.filter(row => row.execution_status === 'completed').length, summary.completed_runs, name);
+    assert.equal(rows.filter(row => row.grader).length, summary.graded_runs, name);
+    assert.equal(rows.filter(row => row.unsuccessful_due_to_critical_failure).length, summary.critical_zero_rows, name);
+    assert.equal(rows.filter(row => row.critical_partial).length, summary.critical_partial_rows, name);
+    assert.equal(rows.filter(row => row.result === 'pass').length, summary.pass_rows, name);
+    assert.equal(rows.flatMap(row => row.criteria).filter(item => !item.quote_audit_passed).length, summary.criterion_quote_audit_gaps, name);
+    assert.equal(rows.flatMap(row => row.criteria).length, summary.criteria_graded, name);
+    for (const row of rows) {
+      assert.equal(sha256(fs.readFileSync(path.join(root, row.source_binding.source_case_file))), row.source_binding.source_case_file_sha256, row.replicate);
+      const corpus = readJson(row.source_binding.source_case_file).cases;
+      const source = corpus.find(item => `${row.source_binding.source_case_file.split('/')[1]}--${item.id ?? item.case_id}` === row.case_key);
+      assert.ok(source, row.case_key);
+      assert.equal(sha256(source.prompt), row.source_binding.prompt_sha256, row.replicate);
+      const rubric = source.rubric ?? source.criteria;
+      assert.deepEqual(row.criteria.map(item => [item.id, item.severity]).sort(), rubric.map(item => [item.id, item.severity]).sort(), row.replicate);
+      assert.ok(row.criteria.every(item => [0, 1, 2].includes(item.score)), row.replicate);
+      assert.deepEqual(row.critical_results, row.criteria.filter(item => item.severity === 'critical').map(({ id, score }) => ({ id, score })));
+      assert.equal(row.unsuccessful_due_to_critical_failure, row.critical_results.some(item => item.score === 0), row.replicate);
+      assert.equal(row.critical_partial, row.critical_results.some(item => item.score === 1), row.replicate);
+      assert.equal(row.grader.independence.saw_candidate_skill_body, false, row.replicate);
+      assert.ok(Object.values(row.artifact_paths).every(value => value.startsWith(`${name}/`)), row.replicate);
+      for (const item of row.criteria) {
+        assert.equal(item.quote_audit_passed, item.evidence_quotes.every(quote => quote.exact_match) && (item.evidence_quotes.length > 0 || item.score === 0), `${row.replicate}/${item.id}`);
+      }
+    }
+    totalRows += rows.length;
+    totalGaps += summary.criterion_quote_audit_gaps;
+  }
+  assert.equal(totalRows, 169);
+  assert.equal(totalGaps, 38);
+  const sonnet = readJson(`${dir}/scores/sonnet-comparison-normalized.json`).rows;
+  const refinement = readJson(`${dir}/scores/refinement-rerun-normalized.json`).rows;
+  const sonnetScores = (rows, caseKey, criterion) => rows.filter(row => row.case_key === caseKey && row.responder_model.startsWith('claude-sonnet')).map(row => row.criteria.find(item => item.id === criterion).score);
+  assert.deepEqual(sonnetScores(sonnet, 'microservice-testing--unknown-api-consumers', 'breaking-change'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(sonnet, 'technical-deprecation--periodic-export-client', 'removal-and-recovery-gates'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(refinement, 'idempotency--scoped-transfer-identity', 'scoped-auth'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(refinement, 'idempotency--scoped-transfer-identity', 'intent-binding'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(refinement, 'failure-oriented-testing--race-clean-lost-update', 'oracle'), [2, 2, 2]);
+  assert.deepEqual(sonnetScores(sonnet, 'failure-oriented-testing--race-clean-lost-update', 'oracle'), [1, 2, 2], 'the pre-refinement Sonnet partial stays visible');
+  const haiku = readJson(`${dir}/scores/claude-code-haiku-normalized.json`).rows;
+  const v2 = haiku.filter(row => row.case_key.endsWith('-v2') && row.case_key.includes('architecture-plugin'));
+  assert.equal(v2.length, 6);
+  assert.ok(v2.every(row => row.activation.command_expansions.includes('/tal-skills:architecture')));
+  const v1 = haiku.filter(row => row.case_key.endsWith('-v1') && row.case_key.includes('architecture-plugin'));
+  assert.equal(v1.length, 6);
+  assert.equal(v1.filter(row => row.unsuccessful_due_to_critical_failure).length, 5, 'the v1 mid-sentence form keeps its failures visible');
+});
+
