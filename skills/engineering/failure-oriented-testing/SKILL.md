@@ -30,6 +30,9 @@ List the real implementation/runtime, substituted dependencies, initial state,
 input or schedule, observation, and finite budget. Exercise the implementation
 actually deployed, including a native extension when that is the risky boundary.
 A fake cannot establish a real database, broker, or network guarantee.
+For uncertain commits, choose a double or real system that can represent the effect
+as durable while acknowledgement is lost, and name the expected recovered result
+or explicit unresolved status in the report.
 
 For generated inputs, differential checks, or native fuzzing, read
 [generated-inputs.md](references/generated-inputs.md). When an operation's meaning

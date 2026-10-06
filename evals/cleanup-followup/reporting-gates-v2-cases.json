@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "purpose": "Versioned corrections for two authored boundary cases and focused evaluations for three additional source obligations. Every v1 case and historical result remains unchanged.",
+  "cases": [
+    {
+      "id": "counterexample-final-report-v2",
+      "skill": "failure-oriented-testing",
+      "title": "counterexample final report v2",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Implement a deterministic regression in scenario.mjs using request.md. Keep both models and verify.mjs unchanged, run node verify.mjs, and give a final report of the observed failure, promised outcome, retained schedule, nature of the failure and whether a race detector ran. Work only in the supplied local fixture and use no external services or package installation. Preserve all files except scenario.mjs.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v2/counterexample-final-report-v2",
+      "fixtures": [
+        "models.mjs",
+        "request.md",
+        "scenario.mjs",
+        "verify.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "semantic-report",
+          "severity": "critical",
+          "criterion": "The final answer names observed broken value 1 and promised value 2 for two accepted increments, and explicitly identifies the lost update as a contract or semantic failure although no data race or overlapping memory access exists in this model, without claiming locks or a detector run."
+        },
+        {
+          "id": "verification-report",
+          "severity": "critical",
+          "criterion": "The final answer states the exact executed verification command and actual result, the exercised schedule, and whether a race detector ran. It distinguishes this modeled schedule from exhaustive or production correctness."
+        },
+        {
+          "id": "retained-proof",
+          "severity": "critical",
+          "criterion": "Only scenario.mjs changes, the retained schedule distinguishes broken and fixed models without deadlock, and the supplied verifier plus an independent rerun succeed."
+        }
+      ],
+      "source_attribution": {
+        "source_case_file": "evals/failure-oriented-testing/cases.json",
+        "source_case_id": "race-clean-lost-update",
+        "fixture_reused_without_changes": false,
+        "source_focused_case_file": "evals/cleanup-followup/reporting-gates-cases.json",
+        "source_focused_case_id": "counterexample-final-report",
+        "extension": "request.md truthfully names single-agent execution, nonoverlapping memory accesses and asynchronous operation interleaving. Models, scenario and verifier bytes are unchanged."
+      },
+      "editable_files": [
+        "scenario.mjs"
+      ],
+      "verification_argv": [
+        "node",
+        "verify.mjs"
+      ]
+    },
+    {
+      "id": "compatible-request-widening-v2",
+      "skill": "microservice-testing",
+      "title": "compatible request widening v2",
+      "tags": [
+        "changed-boundary",
+        "compatibility"
+      ],
+      "prompt": "Review the release evidence and test strategy for the three proposed in-place interface changes in contract.md, with consumers unknown beyond consumer.mjs. Classify each of the three changes as compatible or breaking for supported consumers and explain why, naming the affected fields and the unchanged address. State what the supplied consumer check establishes and what release evidence is still needed. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v2/compatible-request-widening-v2",
+      "fixtures": [
+        "consumer.mjs",
+        "contract.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "compatible-widening",
+          "severity": "critical",
+          "criterion": "Lists the tag request-field widening at GET /catalog and recognizes that the supplied preservation of every old valid string request makes it compatible with the supported existing input contract. Does not classify every type change as breaking."
+        },
+        {
+          "id": "breaking-controls",
+          "severity": "critical",
+          "criterion": "Explicitly names incompatible response re-type price_cents and removed response field next_cursor at unchanged GET /catalog as breaking for supplied field-reading consumers, including the concrete integer and cursor dependencies."
+        },
+        {
+          "id": "read-only-limits",
+          "severity": "critical",
+          "criterion": "Leaves all files unchanged, uses only supplied local evidence and distinguishes supported-contract reasoning from unexecuted production or exhaustive consumer validation."
+        }
+      ],
+      "source_attribution": {
+        "kind": "new_authored_changed_boundary",
+        "reason": "Tests the corrected distinction between compatible widening and incompatible re-type, with removal as a breaking control.",
+        "source_focused_case_file": "evals/cleanup-followup/reporting-gates-cases.json",
+        "source_focused_case_id": "compatible-request-widening",
+        "fixture_reused_without_changes": true,
+        "extension": "Prompt adds a release-evidence and test-strategy task, including unknown consumers. Contract and consumer fixture bytes are unchanged."
+      }
+    },
+    {
+      "id": "uncertain-commit-model-report",
+      "title": "uncertain commit model report",
+      "tags": [
+        "correctness",
+        "failure-boundary"
+      ],
+      "prompt": "Review the fake and incident trace. Propose the highest-value failure check, describe what the chosen experiment can represent and its expected recovery outcome, and state the evidence needed before claiming database behavior is covered. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v2/uncertain-commit-model-report",
+      "fixtures": [
+        "fake.py",
+        "incident.md"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "credible-uncertainty-model",
+          "severity": "critical",
+          "criterion": "Explicitly requires a double or selected real database capable of representing a durable committed effect with an acknowledgement lost to the caller, preserving stable logical operation identity through recovery."
+        },
+        {
+          "id": "recovery-result",
+          "severity": "critical",
+          "criterion": "Names exactly one logical debit applied with no second decrement, and the expected recovered stable result or explicit unresolved status while authoritative status cannot be established. A missing status is not proof of abort."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all files unchanged, performs no external operation, and marks the real database fault check as unexecuted. It does not claim fake coverage establishes deployed database guarantees."
+        }
+      ],
+      "skill": "failure-oriented-testing",
+      "source_attribution": {
+        "source_case_file": "evals/failure-oriented-testing/cases.json",
+        "source_case_id": "green-transaction-fake",
+        "fixture_reused_without_changes": true
+      }
+    },
+    {
+      "id": "existing-claim-guarantee",
+      "title": "existing claim guarantee",
+      "tags": [
+        "concurrency",
+        "leases",
+        "fencing"
+      ],
+      "prompt": "Review the leased worker against the requirements. State the guarantees the supplied mechanisms already provide, identify the remaining stale-owner gap and the least invasive correction, and outline checks needed for the claimed boundary. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v2/existing-claim-guarantee",
+      "fixtures": [
+        "design.md",
+        "worker.py"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "existing-atomic-guarantee",
+          "severity": "critical",
+          "criterion": "Explicitly acknowledges that the supplied claim is atomic and explains its owner-election protection, without inventing a read-then-insert claim race."
+        },
+        {
+          "id": "residual-effect-gap",
+          "severity": "critical",
+          "criterion": "Separates owner election from effect-side stale-owner safety, identifies the conditional update count and duplicated inventory decrement, and proposes effect-side fencing, atomic effect and state change, or another stated safe boundary."
+        },
+        {
+          "id": "read-only-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all files unchanged, performs no external operation, and distinguishes proposed validations from checks actually executed without claiming deployed correctness."
+        }
+      ],
+      "skill": "idempotency",
+      "source_attribution": {
+        "source_case_file": "evals/idempotency/cases.json",
+        "source_case_id": "expired-lease-owner",
+        "fixture_reused_without_changes": true
+      }
+    },
+    {
+      "id": "provider-fake-limit-report",
+      "skill": "idempotency",
+      "title": "provider fake limit report",
+      "tags": [
+        "focused-reporting-contract",
+        "failure-boundary"
+      ],
+      "prompt": "Fix deliver.mjs so retries of the same event use the provider idempotency support described in requirements.md. Keep this to the adapter and relevant local verification, use the specified namespace, and verify repeated and distinct events plus a failure after provider acceptance. Give a final report of the change, commands actually executed, their observed results and the boundary the local checks cover. Do not redesign the outbox, install packages or use external services. Use deliver.test.mjs for any added local test file.",
+      "fixture_dir": "evals/cleanup-followup/fixtures/reporting-gates-v2/provider-fake-limit-report",
+      "fixtures": [
+        "requirements.md",
+        "deliver.mjs"
+      ],
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true
+      },
+      "activation": "activate",
+      "task_mode": "implementation",
+      "rubric": [
+        {
+          "id": "explicit-provider-gap",
+          "severity": "critical",
+          "criterion": "The final answer states that executed local fake or adapter checks do not establish the deployed provider's deduplication or end-to-end effect, and identifies real-provider validation as the remaining step."
+        },
+        {
+          "id": "executed-local-evidence",
+          "severity": "critical",
+          "criterion": "Uses the required stable namespace and meaningful local repeated-event, distinct-event and acceptance-before-error checks, reports exact executed commands and actual results, and leaves unrelated inputs unchanged."
+        },
+        {
+          "id": "honest-unexecuted-boundary",
+          "severity": "critical",
+          "criterion": "Does not claim real provider calls, installation or live guarantee validation. Distinguishes the supplied documented contract from actual deployed behavior."
+        }
+      ],
+      "source_attribution": {
+        "source_case_file": "evals/idempotency/cases.json",
+        "source_case_id": "bounded-webhook-edit",
+        "fixture_reused_without_changes": true,
+        "source_focused_case_file": "evals/cleanup-followup/reporting-gates-cases.json",
+        "source_focused_case_id": "webhook-final-report",
+        "extension": "Retained implementation task and fixture, with an explicit allowed local test filename and separate focused criteria for the newly explicit provider-fake reporting sentence."
+      },
+      "editable_files": [
+        "deliver.mjs",
+        "deliver.test.mjs"
+      ]
+    }
+  ],
+  "replacement_notes": [
+    {
+      "original": "reporting-gates--counterexample-final-report",
+      "replacement": "reporting-v2--counterexample-final-report-v2",
+      "reason": "The v1 protected-access demand was unsupported by its lock-free single-agent fixture. New request facts clarify actual execution and the replacement tests the corresponding semantic distinction. The v1 numerical and gate failures remain recorded."
+    },
+    {
+      "original": "reporting-gates--compatible-request-widening",
+      "replacement": "reporting-v2--compatible-request-widening-v2",
+      "reason": "The v1 classification-only prompt plausibly routes to microservice-integration. The replacement asks for release-evidence and test-strategy review with unknown consumers, matching microservice-testing activation. V1 expected activation and its failures remain unchanged."
+    }
+  ]
+}

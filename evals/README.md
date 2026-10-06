@@ -66,3 +66,7 @@ The `v1.1.0` release carries the archives below. These are evaluations or attemp
 ## Automated checks
 
 Run `npm test` for all deterministic checks, or `node --test tests/<skill-name>/evals.test.mjs` to validate one corpus. These checks cover case identifiers, rubric structure, capability declarations, and fixture existence and isolation. A **corpus integrity check** is not a behavioral evaluation of the agent. Architecture's book-contract recovery is tested separately by its contract tests; idempotency fixtures are examples to inspect, not a production idempotency library.
+
+## October 6 clarification and release receipt
+
+The [versioned Claude review clarification](claude-code/runs/2026-10-06/review-v2-errata.md) scopes the historical activation and host-syntax claims to their observed runs and records trace-resolved model identifiers. The original review and score records remain unchanged. The [dated release verification](cleanup-followup/runs/2026-10-05-activation/release-upload-verification-2026-10-06.json) confirms that the activation archive is already on v1.1.0 with the retained digest. The [versioned exact-quote re-audit](cleanup-followup/runs/2026-10-05-activation/scores/description-quote-reaudit-v2.json) rechecks all 33 historical gaps against the archived grading packets and raw answers, retains all 33 as unresolved, and changes no numerical score. The October 6 Claude archive is verified and held outside the checkout for the next release.

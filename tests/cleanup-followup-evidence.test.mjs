@@ -556,3 +556,126 @@ test('focused reporting cases retain attributed fixture bytes and cover compatib
   assert.deepEqual(boundary.rubric.map(item => item.id), ['compatible-widening', 'breaking-controls', 'read-only-limits']);
   assert.equal(boundary.task_mode, 'review');
 });
+
+test('Codex critical-gate stages retain complete independent vectors and every failed gate', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-06-codex-critical-gates';
+  const stages = [['codex-critical-02', 43], ['codex-critical-03', 43], ['codex-reporting-04', 55]];
+  for (const [candidate, expected] of stages) {
+    const scores = readJson(`${directory}/scores/${candidate}-normalized.json`);
+    const source = readJson(`${directory}/scores/${candidate}-independent-source.json`);
+    assert.equal(scores.candidate, candidate);
+    assert.equal(scores.rows.length, expected);
+    assert.equal(new Set(scores.rows.map(row => row.replicate)).size, expected);
+    assert.equal(source.attempt_score_count, expected);
+    assert.equal(scores.summary.graded_criteria, scores.rows.reduce((sum, row) => sum + row.criteria.length, 0));
+    assert.equal(scores.summary.critical_zero_rows, scores.rows.filter(row => row.unsuccessful_due_to_critical_failure).length);
+    assert.equal(scores.summary.critical_partial_rows, scores.rows.filter(row => row.critical_partial).length);
+    assert.equal(scores.summary.criterion_quote_audit_gaps, scores.rows.reduce((sum, row) => sum + row.criteria.filter(item => !item.quote_audit_passed).length, 0));
+    assert.equal(scores.summary.gate_misses, scores.gate_misses.length);
+    assert.equal(scores.summary.all_registered_gates_passed, false);
+    assert.ok(scores.gate_misses.length > 0, candidate);
+    for (const row of scores.rows) {
+      assert.equal(row.execution_status, 'executed');
+      assert.match(row.candidate_commit, /^[a-f0-9]{40}$/);
+      assert.match(row.candidate_package_digest, /^[a-f0-9]{64}$/);
+      assert.equal(sha256(fs.readFileSync(path.join(root, row.source_binding.source_case_file))), row.source_binding.source_case_file_sha256);
+      assert.equal(row.grader.independence.authored_candidate, false);
+      assert.equal(row.grader.independence.authored_response, false);
+      assert.equal(row.grader.independence.saw_candidate_skill_body, false);
+      assert.equal(row.grader.same_model_independent_session, row.responder_model === row.grader.model);
+      const original = source.groups.find(group => group.grader === row.grader.id).runs.find(run => run.label === row.blind_label);
+      assert.deepEqual(row.criteria.map(({ severity, ...item }) => item), original.criteria);
+      assert.deepEqual(row.critical_results, row.criteria.filter(item => item.severity === 'critical').map(({ id, score }) => ({ id, score })));
+      assert.equal(row.result, row.criteria.every(item => item.score === 2) ? 'pass' : row.critical_results.some(item => item.score === 0) ? 'fail' : 'partial');
+      for (const filename of Object.values(row.artifact_paths)) assert.ok(!filename.startsWith('/') && !filename.split('/').includes('..'), filename);
+      for (const digest of Object.values(row.artifact_hashes)) assert.match(digest, /^[a-f0-9]{64}$/);
+    }
+    const activation = readJson(`${directory}/${candidate}-activation-table.json`);
+    assert.deepEqual(activation, scores.activation_rows);
+    for (const item of activation) {
+      const rows = scores.rows.filter(row => row.case_key === item.case_key);
+      assert.equal(item.attempts, rows.length);
+      assert.equal(item.target_body_reads, rows.filter(row => row.activation.target_body_read_observed).length);
+      assert.equal(item.activation_gate_passed, rows.length === item.expected_attempts && (item.group === 'nontrigger' ? item.target_body_reads === 0 : item.target_body_reads >= 2));
+    }
+  }
+  const original = readJson(`${directory}/gates.json`);
+  const reporting = readJson(`${directory}/reporting-gates.json`);
+  assert.equal(original.baseline_rows.length, 17);
+  assert.deepEqual(reporting.baseline_rows, original.baseline_rows);
+  assert.equal(reporting.parent_gate_file_sha256, sha256(fs.readFileSync(path.join(root, `${directory}/gates.json`))));
+});
+
+test('versioned quote re-audit retains the original 43 rows and all 33 unresolved quotes', () => {
+  const directory = 'evals/cleanup-followup/runs/2026-10-05-activation';
+  const audit = readJson(`${directory}/scores/description-quote-reaudit-v2.json`);
+  const bytes = fs.readFileSync(path.join(root, audit.original_score_file));
+  assert.equal(sha256(bytes), 'ef3f7a2b71ebbda87511ee93ecf86b255c94d32e17d477071da84081945904c3');
+  assert.equal(audit.original_score_file_sha256, sha256(bytes));
+  const original = JSON.parse(bytes).rows;
+  assert.equal(original.length, 43);
+  assert.equal(audit.rows.length, 33);
+  assert.equal(audit.criteria_reaudited, 33);
+  assert.equal(audit.criteria_now_passing, 0);
+  assert.equal(audit.criteria_still_failing, 33);
+  assert.equal(audit.scores_changed, false);
+  const gaps = original.flatMap(row => row.criteria.filter(item => !item.quote_audit_passed).map(item => ({ row, item })));
+  assert.equal(gaps.length, audit.rows.length);
+  for (const { row, item } of gaps) {
+    const found = audit.rows.find(entry => entry.candidate === row.candidate && entry.replicate === row.replicate && entry.criterion_id === item.id);
+    assert.ok(found, `${row.replicate}/${item.id}`);
+    assert.equal(found.original_score, item.score);
+    assert.equal(found.original_reason, item.reason);
+    assert.deepEqual(found.quotes.map(entry => entry.quote), item.evidence_quotes);
+    assert.equal(found.re_audit_passed, found.quotes.length > 0 && found.quotes.every(entry => entry.quote.length > 0 && entry.exact_packet_match));
+    assert.equal(found.re_audit_passed, false);
+    for (const [key, digest] of Object.entries(found.evidence_binding)) if (key.endsWith('_sha256')) assert.match(digest, /^[a-f0-9]{64}$/);
+  }
+  const release = readJson(`${directory}/release-upload-verification-2026-10-06.json`);
+  assert.equal(release.expected_sha256, audit.archive_sha256);
+  assert.equal(release.download_sha256, audit.archive_sha256);
+  assert.equal(release.status, 'verified_existing_asset');
+  assert.equal(release.historical_preparation_manifest_changed, false);
+});
+
+test('versioned reporting corrections preserve original fixtures and isolate truthful context extensions', () => {
+  const corpus = readJson('evals/cleanup-followup/reporting-gates-v2-cases.json');
+  assert.equal(corpus.cases.length, 5);
+  assert.equal(corpus.replacement_notes.length, 2);
+  const byId = new Map(corpus.cases.map(row => [row.id, row]));
+  assert.ok(byId.has('counterexample-final-report-v2'));
+  assert.ok(byId.has('compatible-request-widening-v2'));
+  assert.ok(byId.has('uncertain-commit-model-report'));
+  assert.ok(byId.has('existing-claim-guarantee'));
+  assert.ok(byId.has('provider-fake-limit-report'));
+  for (const row of corpus.cases) {
+    const origin = row.source_attribution;
+    const sourceFile = origin.source_focused_case_file ?? origin.source_case_file;
+    const sourceId = origin.source_focused_case_id ?? origin.source_case_id;
+    const source = readJson(sourceFile).cases.find(item => item.id === sourceId);
+    assert.ok(source, row.id);
+    assert.equal(row.capabilities.web, false);
+    assert.equal(row.capabilities.subagents, false);
+    assert.ok(row.rubric.every(item => item.severity === 'critical'));
+    const directory = path.join(root, row.fixture_dir);
+    const files = fs.readdirSync(directory, { recursive: true }).filter(name => fs.statSync(path.join(directory, name)).isFile()).sort();
+    assert.deepEqual(files, [...row.fixtures].sort());
+    for (const filename of files) {
+      const current = fs.readFileSync(path.join(directory, filename));
+      const prior = fs.readFileSync(path.join(root, source.fixture_dir, filename));
+      if (row.id === 'counterexample-final-report-v2' && filename === 'request.md') {
+        assert.equal(origin.fixture_reused_without_changes, false);
+        assert.ok(current.subarray(0, prior.length).equals(prior));
+        assert.match(current.toString(), /one JavaScript agent/);
+        assert.match(current.toString(), /No two memory accesses to value overlap/);
+        assert.match(current.toString(), /none has run/);
+      } else assert.deepEqual(current, prior, `${row.id}/${filename}`);
+    }
+  }
+  const counterexample = byId.get('counterexample-final-report-v2');
+  assert.ok(!/semantic|protected/.test(counterexample.prompt));
+  const gates = readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/reporting-v2-gates.json');
+  assert.equal(gates.planned_attempts, 70);
+  assert.deepEqual(gates.baseline_rows, readJson('evals/cleanup-followup/runs/2026-10-06-codex-critical-gates/gates.json').baseline_rows);
+  assert.deepEqual(gates.versioned_authoring_corrections, corpus.replacement_notes);
+});
