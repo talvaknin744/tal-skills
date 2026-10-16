@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "publisher_id": "mongodb",
+  "publisher_name": "MongoDB",
+  "crawler_summary_sha256": "aaa16b61207674f0ca5174a3ceba5f97314f3402a147b6668f2f3e1728cb0c28",
+  "crawler_summary_path": "publishers/mongodb/summary.json",
+  "counters": {
+    "baseline_records": 1408,
+    "known_urls": 1418,
+    "processed_urls": 1418,
+    "http_article_attempted_urls": 1418,
+    "body_retrieved_urls": 1416,
+    "body_extracted": 1414,
+    "body_fetched_unextracted": 2,
+    "pending": 0,
+    "article_scope_count": 1418,
+    "excluded_nonarticle_count": 0,
+    "read_articles": 1
+  },
+  "article_status_counts": {
+    "body_extracted": 1414,
+    "body_fetched_unextracted": 2,
+    "not_found": 1,
+    "redirected_outside_scope": 1
+  },
+  "discovery_scope": "Default root company blog URLs from the complete publisher declared blog sitemap, public blog API records and the verified historical inventory. Localized duplicate trees and nonblog nodes remain outside this discovery scope.",
+  "terminal_status": "exposed_frontier_processed_with_gaps",
+  "source_urls": [
+    "https://www.mongodb.com/sitemap-index.xml",
+    "https://www.mongodb.com/sitemap-blog-pages.xml",
+    "https://www.mongodb.com/blog/api/posts?limit=12",
+    "https://www.mongodb.com/blog/api/posts?limit=24",
+    "https://www.mongodb.com/blog/api/posts?limit=3267"
+  ],
+  "gaps": [
+    "The public posts API advertises 3267 records, increases returned results from 12 to 24, but clamps large cumulative limits at 50. Page, skip and offset probes retain the same identities. The sitemap is finite but does not establish enumeration of that advertised total.",
+    "The publicly linked client bundle was inspected to establish intended cumulative limit behavior. Its resource find endpoint returns a different node collection, not proof of missing blog archive coverage.",
+    "Redirects to product or collection pages are retained as unresolved article bodies. Deleted and unavailable historical URLs remain recorded. Most sitemap title and publication metadata still requires article inspection; last modification is never substituted for publication."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.mongodb.com/company/blog/engineering/formal-methods-beyond-correctness-isolation-permissiveness-distributed-transactions",
+      "reading_scope": "Substantive textual article explanation read through the official web page. Figures are not used as unique evidence.",
+      "retrieval_source": "web tool",
+      "contract_verification_limits": "The article and its substantive textual explanation were read. Linked TLA+ sources, the paper, production transactions and model checker were not run. No general database isolation setting or permissiveness benchmark is certified."
+    }
+  ],
+  "evidence": [
+    {
+      "archive_path": "storage-a-discovery/mongodb/requests.json",
+      "sha256": "0b24441919d4ce0e1fd674d749c48eee32de674d2c3e47287a2ba626053a74cb"
+    },
+    {
+      "archive_path": "storage-a-discovery/mongodb/inventory.json",
+      "sha256": "5c18a3b28d395f66e6257d61ceff54daba4cbadf2fff491e7a3905438f09ba7d"
+    },
+    {
+      "archive_path": "storage-a-probes/mongo-api-discovery.json",
+      "sha256": "14066d6b328318132419a9f04e21bf1daba99d72477d8af9fdae4c333b6c692e"
+    },
+    {
+      "archive_path": "storage-a-probes/mongo-api-followup.json",
+      "sha256": "e36463b469bda6498f6b7fcfda864a8e77cdc97d7c5229df8f0598dba2271161"
+    },
+    {
+      "archive_path": "storage-a-probes/mongodb-unresolved-articles.json",
+      "sha256": "77231be0a0ee3d32c88ceee7faa05a1174a6741e07b4a9a428b50dfc5a94f273"
+    },
+    {
+      "archive_path": "storage-a-probes/mongodb-unresolved-articles-final.json",
+      "sha256": "329f882cc233078d19682d157b2e755daede69de8a1ae9652b69b6be694c8a20"
+    },
+    {
+      "archive_path": "storage-a-probes/mongodb-unresolved-articles-classification-final.json",
+      "sha256": "cfbae842d2c7adb6e204a3620405f9522d3d17c2b36e4b472afaf3835d9fb780"
+    }
+  ],
+  "recommendation": {
+    "mechanism": "The article composes a distributed transaction model with an explicit storage engine contract and checks isolation using committed transaction histories. It separately measures permissiveness, the allowed histories relative to those permitted by the chosen isolation definition. A safety pass can therefore coexist with unnecessary blocking or aborts. This supports a small `concurrency-correctness` or `failure-oriented-testing` addition: name the modeled interface assumptions, validate them against the real adapter and measure independent progress alongside safety.",
+    "proposed_check": "Proposed, unexecuted: an implementation preserves the claimed isolation by serializing all disjoint transactions. The safety oracle passes, while a separate progress comparison detects unnecessary contention. An adapter that violates the modeled prepare visibility contract must fail conformance even if the abstract model passes.",
+    "disposition": "Research candidate only. No skill instructions or behavioral evaluation were changed by this publisher report."
+  },
+  "all_article_bodies_read": false,
+  "automatic_extraction_limits": "Extraction does not verify article identity or complete semantics; main container text can retain ancillary prose. Deliberate reading is recorded independently.",
+  "collector_identities": [
+    "c2342990bb8a8bb0f3859cce4b2f7490ff235fd1031b009286cf44b46c92847f",
+    "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278",
+    "d6c2a0b647891cb603c32dda46436790a7c4bdb4f76f5f3bf34700b863f1e3fc"
+  ]
+}

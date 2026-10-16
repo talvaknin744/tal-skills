@@ -1,0 +1,128 @@
+{
+  "runs": [
+    {
+      "id": "recent-ping",
+      "events": [
+        {
+          "ms": 1,
+          "event": "authority_applies",
+          "seq": 41,
+          "value": "job-red queued"
+        },
+        {
+          "ms": 2,
+          "event": "write_acknowledged"
+        },
+        {
+          "ms": 3,
+          "event": "transport_ping_reply"
+        },
+        {
+          "ms": 4,
+          "event": "query_invoked",
+          "query_ref": "q1",
+          "deadline_ms": 80
+        },
+        {
+          "ms": 5,
+          "event": "current_path_returns",
+          "value": "not found"
+        },
+        {
+          "ms": 60,
+          "event": "gateway_applies",
+          "seq": 41,
+          "value": "job-red queued"
+        }
+      ]
+    },
+    {
+      "id": "ordered-wire",
+      "events": [
+        {
+          "ms": 1,
+          "event": "authority_applies",
+          "seq": 41,
+          "value": "job-red queued"
+        },
+        {
+          "ms": 2,
+          "event": "write_acknowledged"
+        },
+        {
+          "ms": 4,
+          "event": "query_invoked",
+          "query_ref": "q2",
+          "deadline_ms": 80
+        },
+        {
+          "ms": 5,
+          "event": "barrier_sent",
+          "query_ref": "q2",
+          "epoch": "leader8",
+          "stream": "s8"
+        },
+        {
+          "ms": 6,
+          "event": "authority_records_barrier",
+          "through_seq": 41
+        },
+        {
+          "ms": 7,
+          "event": "gateway_receives_update",
+          "seq": 41,
+          "application": "queued"
+        },
+        {
+          "ms": 8,
+          "event": "gateway_receives_barrier_ack",
+          "query_ref": "q2",
+          "epoch": "leader8",
+          "stream": "s8",
+          "through_seq": 41
+        },
+        {
+          "ms": 9,
+          "event": "current_path_returns",
+          "value": "not found"
+        },
+        {
+          "ms": 60,
+          "event": "gateway_applies",
+          "seq": 41,
+          "value": "job-red queued"
+        }
+      ]
+    },
+    {
+      "id": "unavailable",
+      "events": [
+        {
+          "ms": 1,
+          "event": "authority_applies",
+          "seq": 41,
+          "value": "job-red queued"
+        },
+        {
+          "ms": 2,
+          "event": "write_acknowledged"
+        },
+        {
+          "ms": 4,
+          "event": "query_invoked",
+          "query_ref": "q3",
+          "deadline_ms": 80
+        },
+        {
+          "ms": 5,
+          "event": "stream_disconnected"
+        },
+        {
+          "ms": 80,
+          "event": "deadline",
+          "usable_authority_response": false
+        }
+      ]
+    }
+  ]
+}

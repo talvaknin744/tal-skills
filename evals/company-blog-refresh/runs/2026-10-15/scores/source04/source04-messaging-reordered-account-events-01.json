@@ -1,0 +1,284 @@
+{
+  "run_id": "source04-messaging-reordered-account-events-01",
+  "run_evidence_sha256": "3b8293a9cce1f547076e3b59b329b990f96a50d14a85503d8384db35ac7e1439",
+  "final_workspace_tree_sha256": "d76aba9471ad58e6b3054320bf31b6eaac552d95dd2fbb22bac051d2dfefabb1",
+  "case_id": "reordered-account-events",
+  "candidate_tree_sha256": "e1c1a5f1300cbae8be83ea7f6e398c465d289cdae86837137f1277e1b5a82d2b",
+  "rubric_sha256": "6a39d2c81da07de17cbf8e2db60c209a9ace3d938d11ca798171978599a7c2f1",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "reordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 14 through 18, lines 18 through 18",
+        "observation": "The answer preserves account scoped monotone revision arbitration and ties it to immutable complete snapshots. It explains both the faulty final11/silver state and the repaired12/gold state rather than treating every historical message type as discardable.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 18,
+            "quote": "For this history, that contract produces **revision `12`, `gold`, with one `e12` audit**."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 18,
+            "quote": "Complete snapshots allow revision jumps and safely supersede late snapshots."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dedup-effect",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 14 through 14, lines 14 through 16",
+        "observation": "The proposed durable account watermark and atomic conditional write arbitrate concurrent state changes and insert the audit only on successful mutation. Sequential duplicate and lost ACK simulation returns one audit. Concurrency is correctly addressed in the contract, with its missing fault test scored separately.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 14,
+            "quote": "In one database transaction, conditionally insert/update when the incoming revision exceeds the stored revision, and insert exactly one audit **only when that mutation succeeds**."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 16,
+            "quote": "Use a conditional write or locking; a transaction containing an unprotected read-then-write is insufficient under concurrency."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    },
+    {
+      "id": "poison-and-checks",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13 through 13, lines 20 through 20",
+        "observation": "The answer gives bounded malformed handling and concrete final state/audit counts. The saved SQLite script checks sequential duplicate/reordering, lost ACK and rollback. It does not execute concurrent deliveries or supply a concrete concurrent delivery check with expected state/effect counts. The concurrency-safe contract alone does not complete this separate check criterion.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 13,
+            "end": 13,
+            "quote": "Permanently malformed events go directly to durable quarantine containing the original payload, source identity and failure reason."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "I checked the supplied function and the proposed conditional-write model using in-memory SQLite, including lost ACK after commit and audit failure causing full rollback."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 through 22, lines 22 through 22",
+        "observation": "The actual command runs only an in-memory SQLite model and local reads. The independently verified baseline and final workspace inventories are identical, and no external or delegation event is present. The answer scopes its executed checks to the local model without claiming broker integration.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 22,
+            "quote": "These were local checks, not broker integration tests."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "All files remain unchanged; no external services were used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "reordering": "pass",
+    "dedup-effect": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "partial",
+    "all_criteria_points": 7,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 2,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 50,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": false,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "4ba4f48e3e8c47b9d0d099eebfec7aa8c987c1c7d963de1ca7186fb42b05f62d",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 88.204,
+  "tool_calls": 7,
+  "token_usage": {
+    "input_tokens": 88963,
+    "cached_input_tokens": 67072,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 4154,
+    "reasoning_output_tokens": 1366
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "93f9912a4e87f2d0a8d7c6d9c7c618c5c96183f6c2dc5f9fef8881474aedc630",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+        "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "93f9912a4e87f2d0a8d7c6d9c7c618c5c96183f6c2dc5f9fef8881474aedc630"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g '*' project\"",
+        "exit_code": 0,
+        "output_sha256": "e43146076e59fe3e6e64b7a9fa3ad9f6ba54c4e10680ce6b59c45d957f1b789b"
+      },
+      {
+        "line": 10,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat project/consumer.py project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "cd7c256e35a4ed3d6979c4a04b5092b71fa5b4360fd24ae618864c04cfa8a95a"
+      },
+      {
+        "line": 11,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/delivery-and-recovery.md .agents/skills/messaging-reliability/references/ordering-and-replay.md'",
+        "exit_code": 0,
+        "output_sha256": "d1146ba0b6365aaefb79d01b8ae2f6754e88805f55f33bbaad1b20b3e0025939"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc \"pwd; rg --files --hidden -g '\"'!'\"\\\\.git/**' -g '\"'!'\"\\\\.agents/**'; for p in /AGENTS.md /tmp/AGENTS.md /tmp/tal-skills-schema-registry-native-2026-10-15-r01/AGENTS.md /tmp/tal-skills-schema-registry-native-2026-10-15-r01/trials/AGENTS.md /tmp/tal-skills-schema-registry-native-2026-10-15-r01/trials/source04-messaging-reordered-account-events-01/AGENTS.md AGENTS.md project/AGENTS.md; do if [ -f \\\"\"'$p\" ]; then cat \"$p\"; fi; done'",
+        "exit_code": 0,
+        "output_sha256": "a110b0287204d5cb0fb7fce100774ac66e9fc058b45488918aebc2198387994d"
+      },
+      {
+        "line": 16,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/consumer.py; nl -ba project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "8ae1eed4c2778ad4c76f7c6d15703a0ec54f1369b534eb308edbff4ba5d1f5de"
+      },
+      {
+        "line": 18,
+        "item": "item_8",
+        "command": "/bin/zsh -lc \"python3 -B -c 'from pathlib import Path\nimport sqlite3\n\nnamespace = {}\nexec(compile(Path(\\\"project/consumer.py\\\").read_text(), \\\"project/consumer.py\\\", \\\"exec\\\"), namespace)\noriginal = namespace[\\\"consume\\\"]\n\nclass DB:\n    def __init__(self):\n        self.conn = sqlite3.connect(\\\":memory:\\\")\n        self.conn.executescript(\\\"\\\"\\\"\n            CREATE TABLE accounts(account_id TEXT PRIMARY KEY, revision INTEGER, tier TEXT);\n            CREATE TABLE audits(event_id TEXT);\n        \\\"\\\"\\\")\n    def transaction(self):\n        return self.conn\n    def set_account(self, account, revision, tier):\n        self.conn.execute(\\\"\\\"\\\"INSERT INTO accounts VALUES (?, ?, ?)\n            ON CONFLICT(account_id) DO UPDATE SET revision=excluded.revision, tier=excluded.tier\\\"\\\"\\\",\n            (account, revision, tier))\n    def insert_audit(self, event_id):\n        self.conn.execute(\\\"INSERT INTO audits VALUES (?)\\\", (event_id,))\n    def result(self):\n        return {\\\"accounts\\\": self.conn.execute(\\\"SELECT * FROM accounts\\\").fetchall(),\n                \\\"audits\\\": self.conn.execute(\\\"SELECT event_id FROM audits\\\").fetchall()}\n\nclass Delivery:\n    def __init__(self, fail_ack=False):\n        self.fail_ack = fail_ack\n        self.acked = False\n    def ack(self):\n        if self.fail_ack:\n            raise ConnectionError(\\\"injected loss at acknowledgement boundary\\\")\n        self.acked = True\n\nhistory = [\n    dict(event_id=\\\"e12\\\", account_id=\\\"a\\\", revision=12, tier=\\\"gold\\\"),\n    dict(event_id=\\\"e12\\\", account_id=\\\"a\\\", revision=12, tier=\\\"gold\\\"),\n    dict(event_id=\\\"e11\\\", account_id=\\\"a\\\", revision=11, tier=\\\"silver\\\"),\n]\n\ndef guarded(event, db, delivery):\n    with db.transaction():\n        applied = db.conn.execute(\\\"\\\"\\\"INSERT INTO accounts VALUES (?, ?, ?)\n            ON CONFLICT(account_id) DO UPDATE SET revision=excluded.revision, tier=excluded.tier\n            WHERE accounts.revision < excluded.revision\n            RETURNING account_id\\\"\\\"\\\",\n            (event[\\\"account_id\\\"], event[\\\"revision\\\"], event[\\\"tier\\\"])).fetchone()\n        if applied:\n            db.insert_audit(event[\\\"event_id\\\"])\n    delivery.ack()\n\nfor label, consumer in [(\\\"supplied consumer\\\", original), (\\\"atomic newer-only model\\\", guarded)]:\n    db = DB()\n    for event in history:\n        consumer(event, db, Delivery())\n    print(label, db.result())\n    db = DB()\n    try:\n        consumer(history[0], db, Delivery(fail_ack=True))\n    except ConnectionError:\n        pass\n    for event in history:\n        consumer(event, db, Delivery())\n    print(label + \\\" / commit then lost ACK and replay\\\", db.result())\n\ndb = DB()\ndb.conn.execute(\\\"CREATE TRIGGER fail_audit BEFORE INSERT ON audits BEGIN SELECT RAISE(ABORT, '\\\\''injected audit failure'\\\\''); END\\\")\ndelivery = Delivery()\ntry:\n    guarded(history[0], db, delivery)\nexcept sqlite3.IntegrityError:\n    pass\nassert db.result() == {\\\"accounts\\\": [], \\\"audits\\\": []}\nassert not delivery.acked\ndb.conn.execute(\\\"DROP TRIGGER fail_audit\\\")\nguarded(history[0], db, Delivery())\nassert db.result() == {\\\"accounts\\\": [(\\\"a\\\", 12, \\\"gold\\\")], \\\"audits\\\": [(\\\"e12\\\",)]}\nprint(\\\"atomic newer-only model / audit failure: full rollback, no ACK, retry applies once\\\")\nprint(\\\"SQLite runtime:\\\", sqlite3.sqlite_version)\n'\"",
+        "exit_code": 0,
+        "output_sha256": "654ebb2316e0502ae881ff3236a1b8293250cfb7fc0720f1239b43652cd78e3c"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "partial",
+      "critical_scores": [
+        {
+          "id": "reordering",
+          "score": 2
+        },
+        {
+          "id": "dedup-effect",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ]
+    }
+  }
+}

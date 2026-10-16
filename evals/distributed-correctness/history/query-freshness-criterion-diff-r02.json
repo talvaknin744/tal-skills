@@ -1,0 +1,7 @@
+[
+  {
+    "path": "/cases/0/rubric/2/criterion",
+    "before": "Disallows not found strict success in the first two traces; can wait until 60 ms and return job-red queued within 80 ms under these traces. In unavailable, returns explicit UNAVAILABLE by 80 ms without resetting the total budget or falling back to stale success.",
+    "after": "Disallows not found strict success at the two supplied stale returns. In ordered-wire, the matching query ACK received at 8 ms and contiguous prefix 41 application at 60 ms support a queued result captured at or after 60 ms within the 80 ms deadline. In recent-ping, application at 60 ms alone is not a query-related ordering proof: the gateway must request and establish a matching proof before successful capture. The trace supplies no completion time for that new proof, so UNAVAILABLE by 80 ms is permitted if it is absent. In unavailable, returns explicit UNAVAILABLE by 80 ms without restarting the total budget or falling back to stale success."
+  }
+]

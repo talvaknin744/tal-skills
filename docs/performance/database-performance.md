@@ -17,6 +17,7 @@ Invocation: automatic
 - The candidate addresses that mechanism and includes correctness, resource, deployment, and recovery checks.
 - A representative matched comparison reports client latency, useful throughput, query count, waits, plan or execution evidence, and changed resource costs.
 - The result records executed checks, tradeoffs, untested conditions, and the scope of isolated or toy results.
+- PgBouncer changes preserve the required state lifetime and distinguish conditional protocol preparation support from SQL preparation across backend reassignment.
 
 ## Where it fits
 
@@ -38,3 +39,11 @@ This skill handles database-specific diagnosis and intervention. Use [performanc
 - [SQLAlchemy performance](https://docs.sqlalchemy.org/en/21/faq/performance.html):
   query/loading attribution, conditional on the target ORM. Pool-budget and
   application-invariant checks are derived requirements, not ORM guarantees.
+- [PgBouncer features](https://www.pgbouncer.org/features.html),
+  [prepared statement FAQ](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling)
+  and [configuration](https://www.pgbouncer.org/config.html#max_prepared_statements):
+  pool mode compatibility, protocol tracking and version dependent state support.
+- PostgreSQL 18 [SET](https://www.postgresql.org/docs/18/sql-set.html) and
+  [advisory locks](https://www.postgresql.org/docs/18/explicit-locking.html#ADVISORY-LOCKS):
+  transaction local settings and lock lifetimes. These contracts require checks
+  against the target engine and application invariant.

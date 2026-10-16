@@ -1,0 +1,162 @@
+{
+  "run_id": "final-agent-evaluation-refund-success-without-effect-03",
+  "run_evidence_sha256": "e2ce52029deff74a3aa3b9ee24f8602ac634bcb42edcd73ebdf8977bfe8bf326",
+  "final_workspace_tree_sha256": "ce8cf7e3476ad3391459f9a9cf563b0b8bea96e830b6c43fdae746ed23477124",
+  "case_id": "refund-success-without-effect",
+  "candidate_tree_sha256": "b7ca2295d82249968f739a4fd49ae7483af24e13fd7c3f45f1af98893ba07e24",
+  "rubric_sha256": "5d3a5b8dc12d4070dcd3353d0ef26b450f1f201e0b19a742f95cb078aa2df9c4",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "final-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 7 through 17",
+        "observation": "The answer rejects the false positive from authoritative zero refunds and balance 100 instead of 140, while ticket and prerequisites pass. It states \"The synchronous tool and post-completion snapshot make the missing refund a confirmed failure.\" Cause stays unresolved."
+      }
+    },
+    {
+      "id": "independent-grading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 21 through 27",
+        "observation": "The proposed independent gates require correct IDs, exactly one processed 40 USD refund, balance 140, resolved T72 and complete unrelated state evidence, separately from authorized process and grounded reporting. It states \"Missing coverage stays UNKNOWN\" and rejects critical failures or unknowns outside aggregate effort."
+      }
+    },
+    {
+      "id": "oracle-sensitivity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 17, 22 and 29 through 39; trace completed item_10 at line 22",
+        "observation": "The answer contrasts one valid control, fourteen wrong-state controls and missing evidence unknown with response/acknowledgements held constant. It permits alternate tool paths, preserves this artifact as a grader regression and leaves cause unresolved. It states \"The phrase check passed all sixteen unchanged responses\" while the outcome oracle discriminated correctly."
+      }
+    },
+    {
+      "id": "repeatable-run-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 39",
+        "observation": "The future unexecuted plan contains success, identity/refusal, ineligibility, tool error and missing effect cases with finite fresh trials. It states \"Reset session and application state before every trial\" and captures immutable source, full model/settings, host/harness/tools/fixture/grader identities, answers, observable traces, final snapshots, grades and effort. Unknown identities remain explicit."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 31 through 39; run input_integrity; all observable trace events",
+        "observation": "The answer states \"All files remain unchanged; no model or external service was used.\" Sixteen local controls are truthfully reported with constructed states distinguished from observed corrections and integrated reliability untested. Saved inputs remain unchanged and no external/delegation event appears."
+      }
+    }
+  ],
+  "critical_gates": {
+    "final-state-oracle": "pass",
+    "independent-grading": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 10,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Fresh repaired candidate observed answer and trace; broader host/network/read isolation remains unverified."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0ef92b4fae10dd2a2294b88bc0a9f3f9aba639ee3c1878fd0daebe4d3f09d963",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 178.396,
+  "tool_calls": 9,
+  "token_usage": {
+    "input_tokens": 89109,
+    "cached_input_tokens": 55168,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 7784,
+    "reasoning_output_tokens": 4018
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "a683571e9f4709894ee391ada165595f2ab6b126c9fb3b1394cae4851eeb4e28",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "Captured normal discovery only, separate from broader host confinement and causal improvement."
+  },
+  "archive_stage": "r05",
+  "stage_qualified_run_id": "r05/final-agent-evaluation-refund-success-without-effect-03",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-run-runtime-and-dependency-hash-match",
+        "status": "pass",
+        "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+        "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2"
+      },
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "final-state-oracle",
+              "score": 2
+            },
+            {
+              "id": "independent-grading",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,570 @@
+{
+  "run_id": "source06-messaging-v2-registry-restore-identity-gap-01",
+  "run_evidence_sha256": "03fc96e02fa9dc871edfafdcb368553615e38138b73e4c7cc632b8b0c09a11d2",
+  "final_workspace_tree_sha256": "dd4ecfdab6a5ddd7877acc542283f6b3752a98a0964156db74ea5016631347d0",
+  "case_id": "v2-registry-restore-identity-gap",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "f22af27f0009b789023d7fcec4c447db30a05211bb9d48f7d14b9441313d959f",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "failed-dependency-gate",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 5 through 5, lines 6 through 6, lines 7 through 7, lines 9 through 9, lines 24 through 24, lines 25 through 25, lines 26 through 26",
+        "observation": "Rejects readiness despite record preservation and healthy services. Identifies the occupied writer ID 42, ineffective replacement 1042 and missing original money v1 with default context and historical USD 1.00 meaning.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "**No. Keep orders consumers paused and gate ordinary schema registration, including the bootstrap producer’s automatic registration.** The supplied evidence proves that the restored records are present, but their schema lookup and business interpretation are unsafe."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 5,
+            "quote": "- **Wrong writer identity:** retained records carry ID **42**, while the configured target’s captured lookup returns `ops.Heartbeat`. Recreating Order at **1042** cannot repair those unchanged records."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 6,
+            "end": 6,
+            "quote": "- **Missing reference and changed meaning:** historical Order requires `money` **version 1**, ID **8**, expressing USD cents. Target Order instead references version 2, which expresses micro USD. Neither required historical mapping is intact. See the [inventory](</tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01/workspace/project/recovery-inventory.json:7>)."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 7,
+            "quote": "- **Insufficient acceptance evidence:** the supplied 25/25 count and matching raw checksum establish topic preservation. Registry health and a green latest compatibility result establish neither retained decoding nor correct amounts. Target registry version, mode mutability, client version and actual retained decoding remain unverified."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "My offline inspection of the supplied sample confirmed the five-byte framing contains ID **42**. Using the supplied historical schema, its payload consumes exactly and yields **A1, USD, amount 100 cents = $1.00**. Treating that integer as micro USD yields **$0.000100**, a 10,000-fold understatement. A reader default of `scale=6` does not convert historical cents."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "3. **Reconstruct in an isolated, verified-empty destination using a supported procedure.** Preserve default context `.` and restore dependencies first:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 25,
+            "quote": "   - `money` v1 → ID **8**, exact historical schema and cents meaning."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 26,
+            "end": 26,
+            "quote": "   - `orders-value` v1 → ID **42**, exact schema and `shop.Money → money v1` reference."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          20,
+          22
+        ]
+      }
+    },
+    {
+      "id": "mutation-and-import-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 13 through 13, lines 14 through 14, lines 20 through 20, lines 22 through 22, lines 24 through 24, lines 28 through 28",
+        "observation": "Holds consumers and registration, rejects overwriting occupied 42 and full import into the populated target, applies supplied individual subject and free ID failures, and requires an applicable supported mode procedure before isolated reconstruction.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "**No. Keep orders consumers paused and gate ordinary schema registration, including the bootstrap producer’s automatic registration.** The supplied evidence proves that the restored records are present, but their schema lookup and business interpretation are unsafe."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 13,
+            "end": 13,
+            "quote": "| Import historical Order at ID 42 over bootstrap | **Reject as proposed.** ID 42 is occupied by another schema, and `orders-value` is already populated. The stated subject-import prerequisites fail; importing Order alone also leaves `money` v1 missing. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 14,
+            "quote": "| Import the full inventory into the populated target, then immediately change mode | **Reject as proposed.** The stated complete-migration contract requires an empty destination. Mode prerequisites and deployed-version support are unproved. A mode change cannot repair collisions or demonstrate reconstruction completeness. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "1. **Maintain the gates and preserve evidence.** Assign the incident lead ownership of admission and the registry operator ownership of registration controls. Preserve all 25 archived records byte-for-byte, their partition order, checksums, source inventory and the populated target’s conflicting metadata. Do not rewrite embedded IDs, reserialize historical records, delete collisions or skip undecodable records."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "2. **Bound reconstruction to the retained orders history.** Inventory writer IDs and recursively required references across all 25 records. The supplied minimum is two mappings; one sample does not prove coverage of every record. Record the target registry/client versions, actual lookup scope and applicable import-mode prerequisites. The logical inventory is available, but a raw metadata-log backup and complete reconstruction proof are absent."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "3. **Reconstruct in an isolated, verified-empty destination using a supported procedure.** Preserve default context `.` and restore dependencies first:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 28,
+            "end": 28,
+            "quote": "   Restore the supplied subject compatibility settings, `BACKWARD_TRANSITIVE`, and verify every required mapping. Retain the populated target for investigation and rollback. Do not describe this limited logical reconstruction as a proven whole-registry restore."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          19,
+          20
+        ]
+      }
+    },
+    {
+      "id": "supported-versus-unknown",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 7, lines 16 through 16, lines 18 through 18, lines 22 through 22, lines 24 through 24, lines 30 through 30, lines 46 through 46",
+        "observation": "Uses supplied source inventory and migration conditions without asserting unknown deployed version or mode support. Requires installed server/client and lookup evidence, distinguishes logical inventory from absent verified raw backup and reconstruction, and calls the procedure proposed.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 7,
+            "quote": "- **Insufficient acceptance evidence:** the supplied 25/25 count and matching raw checksum establish topic preservation. Registry health and a green latest compatibility result establish neither retained decoding nor correct amounts. Target registry version, mode mutability, client version and actual retained decoding remain unverified."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 16,
+            "end": 16,
+            "quote": "These conclusions follow the migration conditions explicitly supplied in [request.md](</tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01/workspace/project/request.md:22>); no external guidance was fetched."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 18,
+            "quote": "The bounded recovery plan below is **proposed and unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "2. **Bound reconstruction to the retained orders history.** Inventory writer IDs and recursively required references across all 25 records. The supplied minimum is two mappings; one sample does not prove coverage of every record. Record the target registry/client versions, actual lookup scope and applicable import-mode prerequisites. The logical inventory is available, but a raw metadata-log backup and complete reconstruction proof are absent."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "3. **Reconstruct in an isolated, verified-empty destination using a supported procedure.** Preserve default context `.` and restore dependencies first:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "4. **Verify through the deployed client before effects.** With effects and production checkpoints disabled, use a fresh client without surviving schema caches. Confirm its endpoint and context lookup resolve ID 42 and the exact reference closure. Decode all 25 records and reconcile amounts against authoritative expectations. Only A1’s ledger expectation is supplied; the remaining records’ business validation is still outstanding. Any application conversion to micro USD must explicitly preserve monetary value."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 46,
+            "end": 46,
+            "quote": "**Current supported conclusion:** topic preservation is evidenced; safe decoding and application effects are not. I performed only read-only evidence inspection and offline byte/arithmetic checks. All files remain unchanged; no broker, registry, client, migration command or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          19,
+          20
+        ]
+      }
+    },
+    {
+      "id": "complete-mapping-and-meaning",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 through 20, lines 24 through 24, lines 25 through 25, lines 26 through 26, lines 28 through 28, lines 30 through 30, lines 38 through 38, lines 39 through 39, lines 41 through 41",
+        "observation": "Plans an isolated empty destination preserving default context, original IDs/versions, reference closure and compatibility. Requires actual cold client A1 USD 1.00 and all retained records, wrong context and missing reference controls, with existing target retained.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "1. **Maintain the gates and preserve evidence.** Assign the incident lead ownership of admission and the registry operator ownership of registration controls. Preserve all 25 archived records byte-for-byte, their partition order, checksums, source inventory and the populated target’s conflicting metadata. Do not rewrite embedded IDs, reserialize historical records, delete collisions or skip undecodable records."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "3. **Reconstruct in an isolated, verified-empty destination using a supported procedure.** Preserve default context `.` and restore dependencies first:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 25,
+            "quote": "   - `money` v1 → ID **8**, exact historical schema and cents meaning."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 26,
+            "end": 26,
+            "quote": "   - `orders-value` v1 → ID **42**, exact schema and `shop.Money → money v1` reference."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 28,
+            "end": 28,
+            "quote": "   Restore the supplied subject compatibility settings, `BACKWARD_TRANSITIVE`, and verify every required mapping. Retain the populated target for investigation and rollback. Do not describe this limited logical reconstruction as a proven whole-registry restore."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "4. **Verify through the deployed client before effects.** With effects and production checkpoints disabled, use a fresh client without surviving schema caches. Confirm its endpoint and context lookup resolve ID 42 and the exact reference closure. Decode all 25 records and reconcile amounts against authoritative expectations. Only A1’s ledger expectation is supplied; the remaining records’ business validation is still outstanding. Any application conversion to micro USD must explicitly preserve monetary value."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 38,
+            "end": 38,
+            "quote": "| Cold-cache client lookup; separately place ID 42 in another context | Only the configured recovery authority resolves historical Order. A matching number elsewhere cannot satisfy admission. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 39,
+            "end": 39,
+            "quote": "| Remove `money` v1 from the isolated test registry | Admission fails closed; zero business effects and no checkpoint advancement past affected work. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 41,
+            "end": 41,
+            "quote": "| Complete reconstruction and decode all 25 records | Unchanged record bytes/count/order; complete required mapping coverage; A1 remains exactly $1.00; every other amount reconciles. |"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          20,
+          22
+        ]
+      }
+    },
+    {
+      "id": "evidence-and-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 7, lines 18 through 18, lines 20 through 20, lines 22 through 22, lines 30 through 30, lines 32 through 32, lines 44 through 44, lines 46 through 46",
+        "observation": "Keeps collision and allocated target, archive/checksum/source inventory and absent backup evidence visible with named incident, registry and application owners. Separates topic preservation from unexecuted client, other 24 values and effect acceptance.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 7,
+            "quote": "- **Insufficient acceptance evidence:** the supplied 25/25 count and matching raw checksum establish topic preservation. Registry health and a green latest compatibility result establish neither retained decoding nor correct amounts. Target registry version, mode mutability, client version and actual retained decoding remain unverified."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 18,
+            "quote": "The bounded recovery plan below is **proposed and unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "1. **Maintain the gates and preserve evidence.** Assign the incident lead ownership of admission and the registry operator ownership of registration controls. Preserve all 25 archived records byte-for-byte, their partition order, checksums, source inventory and the populated target’s conflicting metadata. Do not rewrite embedded IDs, reserialize historical records, delete collisions or skip undecodable records."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "2. **Bound reconstruction to the retained orders history.** Inventory writer IDs and recursively required references across all 25 records. The supplied minimum is two mappings; one sample does not prove coverage of every record. Record the target registry/client versions, actual lookup scope and applicable import-mode prerequisites. The logical inventory is available, but a raw metadata-log backup and complete reconstruction proof are absent."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "4. **Verify through the deployed client before effects.** With effects and production checkpoints disabled, use a fresh client without surviving schema caches. Confirm its endpoint and context lookup resolve ID 42 and the exact reference closure. Decode all 25 records and reconcile amounts against authoritative expectations. Only A1’s ledger expectation is supplied; the remaining records’ business validation is still outstanding. Any application conversion to micro USD must explicitly preserve monetary value."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 32,
+            "end": 32,
+            "quote": "5. **Admit effects only after their recovery boundary is established.** The evidence does not identify logical event identity, durable effects, checkpoint semantics or duplicate protection. The application owner must establish these before replay. Then use one consumer initially, retain partition order, stop on the first mapping/decode/value discrepancy, and checkpoint only safely completed work. Ordinary registration remains gated until separately validated."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 44,
+            "end": 44,
+            "quote": "Monitor mapping/reference failures, amount mismatches, unexpected registrations and oldest blocked-record age, with named recovery owners."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 46,
+            "end": 46,
+            "quote": "**Current supported conclusion:** topic preservation is evidenced; safe decoding and application effects are not. I performed only read-only evidence inspection and offline byte/arithmetic checks. All files remain unchanged; no broker, registry, client, migration command or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          20,
+          22
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9 through 9, lines 18 through 18, lines 46 through 46",
+        "observation": "Offline framing and primitive arithmetic are explicitly distinct from unexecuted service/client recovery; actual trace and baseline confirm no external operations or file changes.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "My offline inspection of the supplied sample confirmed the five-byte framing contains ID **42**. Using the supplied historical schema, its payload consumes exactly and yields **A1, USD, amount 100 cents = $1.00**. Treating that integer as micro USD yields **$0.000100**, a 10,000-fold understatement. A reader default of `scale=6` does not convert historical cents."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 18,
+            "quote": "The bounded recovery plan below is **proposed and unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 46,
+            "end": 46,
+            "quote": "**Current supported conclusion:** topic preservation is evidenced; safe decoding and application effects are not. I performed only read-only evidence inspection and offline byte/arithmetic checks. All files remain unchanged; no broker, registry, client, migration command or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          7,
+          10,
+          11,
+          13,
+          15,
+          19,
+          20,
+          22
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "failed-dependency-gate": "pass",
+    "mutation-and-import-boundary": "pass",
+    "supported-versus-unknown": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "3624a64269fb0ea1cb41b587c3360ca368c78f8b8c9edc8e029861e521078958",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 123.977,
+  "tool_calls": 9,
+  "token_usage": {
+    "input_tokens": 102399,
+    "cached_input_tokens": 85248,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 6328,
+    "reasoning_output_tokens": 2705
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 7,
+        "item": "item_2",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/schema-registry-identity.md",
+        "sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/sources.md",
+        "sha256": "93cac378e1fae242421efccadfe115d2c5662d408d66bf148d724266a8d8d0f0",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'request.md' -g 'recovery-inventory.json' -g 'SKILL.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"' . /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01/workspace/.agents/skills/messaging-reliability\"",
+        "exit_code": 0,
+        "output_sha256": "c10d296a879c347646a3dc0a5edeb6c1310cfbb20ccaba4c9e9a7a85dc530e44"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01/workspace/.agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7"
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/schema-registry-identity.md .agents/skills/messaging-reliability/references/ordering-and-replay.md .agents/skills/messaging-reliability/references/sources.md'",
+        "exit_code": 0,
+        "output_sha256": "5826a930c32850fb11daa5a6aeeee72330c6b7cb04b36289f0f344ef4c4aef2e"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'for d in / /private /private/tmp /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03 /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01 /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01/workspace /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-01/workspace/project; do if [ -f \"$d/AGENTS.md\" ]; then printf '\"'\\\\n%s\\\\n' \\\"\"'$d/AGENTS.md\"; cat \"$d/AGENTS.md\"; fi; done'",
+        "exit_code": 0,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc 'cat project/request.md project/recovery-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "413076f2f762157801260111072cda585ab71face5ddf4101c27b7aa75e78fe3"
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "command": "/bin/zsh -lc \"rg --files -g '\"'!node_modules'\"' -g '\"'!vendor'\"' project .agents/skills/messaging-reliability\"",
+        "exit_code": 0,
+        "output_sha256": "c3ae4d339faf629361a67ee9f87f18251a9cd144014af80061992b7b35c32c5b"
+      },
+      {
+        "line": 19,
+        "item": "item_8",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "5a0e86b52386ae5a9fbcad652f449ec26ceaa2a7b51585b7cb4ac77c3ad2d216"
+      },
+      {
+        "line": 20,
+        "item": "item_9",
+        "command": "/bin/zsh -lc 'nl -ba project/recovery-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "35bb3964c2ab701d544b3eca399acd6eff3db9e3937a943dde38443349da2e7b"
+      },
+      {
+        "line": 22,
+        "item": "item_10",
+        "command": "/bin/zsh -lc \"python3 -B -c 'import json\nfrom decimal import Decimal\nfrom pathlib import Path\n\np = json.loads(Path(\\\"project/recovery-inventory.json\\\").read_text())\nr = p[\\\"retained_sample\\\"]\nb = bytes.fromhex(r[\\\"value_hex\\\"])\npos = 5\n\ndef avro_long():\n    global pos\n    n = shift = 0\n    while True:\n        if pos >= len(b):\n            raise ValueError(\\\"truncated value\\\")\n        c = b[pos]\n        pos += 1\n        n |= (c & 127) << shift\n        if not c & 128:\n            return (n >> 1) \"'^ -(n & 1)\n        shift += 7\n\ndef avro_string():\n    global pos\n    n = avro_long()\n    if n < 0 or pos + n > len(b):\n        raise ValueError(\"invalid string length\")\n    s = b[pos:pos+n].decode(\"utf-8\")\n    pos += n\n    return s\n\naccount = avro_string()\ncurrency = avro_string()\namount = avro_long()\nassert b[0] == 0\nassert int.from_bytes(b[1:5], \"big\") == 42\nassert pos == len(b)\nassert (account, currency, amount) == (\"A1\", \"USD\", 100)\nassert r[\"source_ledger\"][\"amount_decimal\"] == f\"{Decimal(amount) / Decimal(100):.2f}\"\nprint(json.dumps({\n  \"check\": \"offline manual framing and Avro primitive inspection; no registry or client SDK\",\n  \"wire_bytes\": len(b),\n  \"magic_byte\": b[0],\n  \"writer_id\": int.from_bytes(b[1:5], \"big\"),\n  \"account\": account,\n  \"currency\": currency,\n  \"amount_long\": amount,\n  \"unconsumed_payload_bytes\": len(b)-pos,\n  \"historical_USD\": f\"{Decimal(amount)/Decimal(100):.2f}\",\n  \"if_same_integer_interpreted_as_micro_USD\": f\"{Decimal(amount)/Decimal(1000000):.6f}\",\n  \"static_assertions\": \"passed\"\n}, indent=2))\nsource = p[\"source\"]\ntarget = p[\"target\"]\nfor s in source[\"schemas\"]:\n    same_id = [t for t in target[\"schemas\"] if t[\"id\"] == s[\"id\"]]\n    same_version = [t for t in target[\"schemas\"] if (t[\"subject\"],t[\"version\"]) == (s[\"subject\"],s[\"version\"])]\n    print(json.dumps({\n      \"required_mapping\": {\"context\": source[\"context\"], \"subject\": s[\"subject\"], \"version\": s[\"version\"], \"id\": s[\"id\"]},\n      \"target_at_id\": [{\"subject\": t[\"subject\"], \"version\": t[\"version\"]} for t in same_id],\n      \"target_at_subject_version\": [{\"id\": t[\"id\"], \"references\": t[\"references\"]} for t in same_version],\n      \"exact_mapping_present\": any(all(t[k] == s[k] for k in [\"subject\",\"version\",\"id\",\"schema_type\",\"schema\",\"references\"]) for t in same_id)\n    }))\n'\"'\"",
+        "exit_code": 0,
+        "output_sha256": "5b69b44ac5a2aa8a3e6fbc57790e4388c86d15d96e52f462f05b364dad407898"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "failed-dependency-gate",
+          "score": 2
+        },
+        {
+          "id": "mutation-and-import-boundary",
+          "score": 2
+        },
+        {
+          "id": "supported-versus-unknown",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

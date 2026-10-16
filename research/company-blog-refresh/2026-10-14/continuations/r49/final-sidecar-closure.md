@@ -1,0 +1,3 @@
+The archive10 set is now closed, including the verified archive, evidence, preparation companions and the final publication receipt. Its final seal is `9665a1514211103659a8e861d18b488d0330de63e91d940261247e9984a55e5f`. The seal binds 107 files and 811,858,110 bytes, with 108 files and 811,895,716 bytes including the seal itself.
+
+Producer and independent readback exited 0. Root separately verified every final member hash, size, mode, modification time and the exact namespace. The 12,006 prior files remain preserved. The archive was not repacked. This closure adds no crawl availability, reading or behavioral score. Original source, link, nested receipt and historical capture qualifications remain in the [archive report](post-source09-archive.md).

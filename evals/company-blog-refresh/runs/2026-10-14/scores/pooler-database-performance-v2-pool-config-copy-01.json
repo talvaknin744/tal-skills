@@ -1,0 +1,125 @@
+{
+  "run_id": "pooler-database-performance-v2-pool-config-copy-01",
+  "run_evidence_sha256": "0c95fc92288530df988e6639c1d8eaa858a3e8a8f377f5f95943fa52e2a29046",
+  "final_workspace_tree_sha256": "fc45dd91a5a781dfd7e4ef4e4ae937148e9107c586741ad5509022af1003f01e",
+  "case_id": "v2-pool-config-copy",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "9025415b692ca1324a49eb7ece13d20e81ce3e5f1512a08dc78e50f63848c663",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; evidence/trace.jsonl all observable events",
+        "observation": "The answer is exactly \"pool_mode selects the connection reuse policy.\". The complete observable trace reads only the supplied change file, with optional local file discovery, and no candidate body read, profiling, sampling or compatibility investigation."
+      }
+    },
+    {
+      "id": "correct-comment",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "The complete answer is \"pool_mode selects the connection reuse policy.\", matching the supplied wording contract without added advice."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json",
+        "locator": "input_integrity; observed_external_or_delegation_events; evidence/workspace-changes.json changes",
+        "observation": "The saved run records unchanged baseline, allowed changes only, no forbidden changes and no external or delegation event. Observable commands read only local files; the final response makes no execution claim."
+      }
+    }
+  ],
+  "critical_gates": {
+    "nontrigger": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric only; capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "be20469d919d3fd29040c71486feb6530daead8c7622be1257878b2038b7f0ce",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 17.582,
+  "tool_calls": 2,
+  "token_usage": {
+    "input_tokens": 49776,
+    "cached_input_tokens": 44928,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 195,
+    "reasoning_output_tokens": 0
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "not_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "all observable events",
+      "observation": "No matching candidate body read or broader investigation is observed in this attempt."
+    },
+    "candidate_metadata_observed": true,
+    "limitation": "Observed loading only; no hidden injection or population activation guarantee is inferred."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "nontrigger",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

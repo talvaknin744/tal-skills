@@ -1,0 +1,147 @@
+{
+  "run_id": "agent-agent-evaluation-refund-success-without-effect-01",
+  "run_evidence_sha256": "39bc44f68e083569490927ffd54734d0ee24bf79d9cfe9c76698559944cda512",
+  "final_workspace_tree_sha256": "4f94aac3bed59021063413150d24e041d48888876b7e128e7154e24fc0f94062",
+  "case_id": "refund-success-without-effect",
+  "candidate_tree_sha256": "9dffe272c13cf08d048f24864d986a3039da210c918e02eb6451b5203af47f6f",
+  "rubric_sha256": "5d3a5b8dc12d4070dcd3353d0ef26b450f1f201e0b19a742f95cb078aa2df9c4",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "final-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 3, 5 and 12 through 20",
+        "observation": "The answer states \"The supplied trial fails the task contract despite passing that check.\" It grounds the refund and balance failures in \"contains no refund and still has balance 100 USD\", while ticket resolution and phrase matching pass. It identifies the independently read final snapshot as authoritative."
+      }
+    },
+    {
+      "id": "independent-grading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9 through 18 and 24 through 30",
+        "observation": "The proposed state gate requires \"exactly one refund\" for C72/O72, \"amount_usd=40\", \"status=processed\", balance 140 USD, resolved T72 and complete unrelated state comparison. It separately grades identity, eligibility and tool arguments, final effects and response truthfulness. \"Missing evidence receives `UNKNOWN`\" and \"Release acceptance requires every critical gate to pass.\" Optional model communication grading is not introduced for the deterministic factual review."
+      }
+    },
+    {
+      "id": "oracle-sensitivity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20, 25, 32 and 34 through 40; evidence/trace.jsonl completed item_8, line 18",
+        "observation": "The answer preserves \"refund-001\" as a regression with verdict FAIL, says \"Its cause remains unknown\", and permits \"equivalent valid tool paths\". Its paired control adds a processed refund and balance 140, then removes the refund and restores balance 100 while holding wording constant. The local prototype trace records a passing valid control and failing supplied/no-effect controls with exit code 0. These checks are explicitly bounded to chosen controls."
+      }
+    },
+    {
+      "id": "repeatable-run-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 and 32",
+        "observation": "The answer proposes valid completion, unverified identity, ineligible orders and duplicate prevention cases, and states \"Version the grader and fixtures, and record candidate/settings identities, reset conditions and trial budgets for future comparisons.\" This recognizes repeatability, but omits an explicit fresh session per trial, complete source/model/harness/tool identities and capture of future answer/observable trace/final state artifacts. The local gate prototype does not replace those future trial contracts."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json",
+        "locator": "input_integrity, observed_external_or_delegation_events; evidence/answer.md lines 20, 40 and 42; evidence/trace.jsonl completed command events item_1 through item_6 and item_8",
+        "observation": "All observed commands read local artifacts or execute an in-memory local prototype. Saved input integrity reports unchanged baseline and allowed changes only; changes and observed external or delegation events are empty. The answer states \"This validates those prototype checks against the chosen controls; it does not establish agent reliability or a deployed evaluator repair\", and \"No model or external service was used.\" It does not claim future model trials were executed."
+      }
+    }
+  ],
+  "critical_gates": {
+    "final-state-oracle": "pass",
+    "independent-grading": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "partial",
+    "all_criteria_points": 9,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 6,
+    "major_weighted_maximum": 8,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed answer and trace for the precorrection candidate; declared capability isolation deviations remain.",
+    "remaining_gap": "repeatable-run-contract omits material future trial identity, session and artifact conditions."
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 6, completed item_1",
+      "observation": "Successful cat of the frozen candidate SKILL.md returns its body."
+    },
+    "candidate_metadata_observed": false,
+    "catalog_exposure_limitation": "Metadata initialization timed out. This is a precorrection candidate observation and does not establish final candidate activation."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "ad12caea48c1a3077e4434f1661b5f203cc0d81b6cf66100cfc4d88472bfbdcd",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": null,
+  "model_settings": null,
+  "host_version": null,
+  "elapsed_seconds": 258.414,
+  "tool_calls": 7,
+  "token_usage": {
+    "input_tokens": 138365,
+    "cached_input_tokens": 90752,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 7580,
+    "reasoning_output_tokens": 2587
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [
+    "Host version unavailable: Command failed: /Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex --version\n",
+    "Native preflight did not confirm the staged candidate description; selection results lack verified catalog exposure."
+  ],
+  "candidate_association": "Frozen precorrection agent package. Final package changed sibling fallback sentences after this stage; no final candidate behavior is claimed.",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "partial",
+          "critical_scores": [
+            {
+              "id": "final-state-oracle",
+              "score": 2
+            },
+            {
+              "id": "independent-grading",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

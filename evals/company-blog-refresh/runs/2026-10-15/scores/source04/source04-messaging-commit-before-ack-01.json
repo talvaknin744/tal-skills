@@ -1,0 +1,279 @@
+{
+  "run_id": "source04-messaging-commit-before-ack-01",
+  "run_evidence_sha256": "3697b657a9c5cd45c8de58636353ba0c01db45612e847b611b7c77e190067db4",
+  "final_workspace_tree_sha256": "0fa9a0f1ad07665be5f77bf518f429c7a27e1993a71755322a67d8e9d99dcba3",
+  "case_id": "commit-before-ack",
+  "candidate_tree_sha256": "e1c1a5f1300cbae8be83ea7f6e398c465d289cdae86837137f1277e1b5a82d2b",
+  "rubric_sha256": "41e332526f34adcc48e0a6f4ee6a6b968c2f274cfab0da8f7ebd8969dd1db725",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "durable-dedup",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 18 through 18, lines 24 through 24",
+        "observation": "Durable unique ownership is coupled to the debit and notification obligation, with intent checks and replay horizon retention. The recorded local commit/redelivery model yields one debit and one outbox row, and the answer separately calls for reconciliation of the debit that preceded this proposed change.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 18,
+            "quote": "The claim, debit, and outbox row must commit together."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "one committed debit and one notification obligation per stable operation identity, despite redelivery or concurrent attempts, provided the claim remains retained."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    },
+    {
+      "id": "external-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 through 20, lines 25 through 25",
+        "observation": "The answer separates the atomic database obligation from an external sender, explicitly preserves provider uncertainty and possible duplicate email, and avoids claiming that email shares the debit transaction. The saved simulated provider schedule demonstrates two acceptances while debit remains once.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "A crash after provider acceptance but before recording success leaves an uncertain result; retrying can send another email."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 25,
+            "quote": "Duplicate emails remain possible."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    },
+    {
+      "id": "fault-schedule",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 31 through 31, lines 31 through 31",
+        "observation": "The saved script checks sequential commit/redelivery, precommit rollback, changed intent and provider acceptance followed by retry with explicit effect counts. The answer identifies the concurrency gap but does not execute concurrent duplicate claims or specify their concrete fault schedule. Before/after ACK coverage is also narrower than the complete requested fault matrix, so the criterion is partial.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 31,
+            "end": 31,
+            "quote": "Local, in-memory SQLite checks reproduced the double debit and validated the proposed transaction boundaries, rollback, and changed-intent rejection."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 31,
+            "end": 31,
+            "quote": "Actual database concurrency and broker recovery still require deployment-specific fault tests."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 31 through 31, lines 31 through 31",
+        "observation": "The observed command uses SQLite in memory and an in-process list for provider acceptances. The answer distinguishes simulations from actual database concurrency and broker recovery. Independently verified workspace inventories are unchanged and the actual trace contains no external or delegation event.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 31,
+            "end": 31,
+            "quote": "A simulated provider schedule demonstrated duplicate email acceptance after a crash."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 31,
+            "end": 31,
+            "quote": "All files remained unchanged; no external services were used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          18
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "durable-dedup": "pass",
+    "external-boundary": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "partial",
+    "all_criteria_points": 7,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 2,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 50,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": false,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "4ba4f48e3e8c47b9d0d099eebfec7aa8c987c1c7d963de1ca7186fb42b05f62d",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 76.009,
+  "tool_calls": 7,
+  "token_usage": {
+    "input_tokens": 84306,
+    "cached_input_tokens": 63872,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3909,
+    "reasoning_output_tokens": 1364
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "93f9912a4e87f2d0a8d7c6d9c7c618c5c96183f6c2dc5f9fef8881474aedc630",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+        "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "93f9912a4e87f2d0a8d7c6d9c7c618c5c96183f6c2dc5f9fef8881474aedc630"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '*' project\"",
+        "exit_code": 0,
+        "output_sha256": "2f8cba6fb0ceddb1531436dce468341babb83bca370b266ed5be6920db46f80f"
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat project/request.md project/consumer.pseudo'",
+        "exit_code": 0,
+        "output_sha256": "806f71ff71c8adcc8750aa1d39f9b13111a5abe52120a053e81e122c8eae69d1"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/delivery-and-recovery.md'",
+        "exit_code": 0,
+        "output_sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g AGENTS.md -g CLAUDE.md -g '\"'!**/.git/**'\"' .\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 16,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/consumer.pseudo\nnl -ba project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "43cf34eef0c857761e62b6c4272604e29ea3897f4b66f4cb9f6e82c694243483"
+      },
+      {
+        "line": 18,
+        "item": "item_8",
+        "command": "/bin/zsh -lc \"python3 -B -c 'import sqlite3\n\noriginal_balance = 100\nfor delivery in range(2):\n    original_balance -= 50\nassert original_balance == 0\nprint('\\\\''Original commit/redelivery schedule: two debits, total 100.'\\\\'')\n\ndb = sqlite3.connect('\\\\'':memory:'\\\\'', isolation_level=None)\ndb.executescript(\\\"\\\"\\\"\nCREATE TABLE orders (id TEXT PRIMARY KEY, balance INTEGER NOT NULL);\nINSERT INTO orders VALUES ('\\\\''o-9'\\\\'', 100);\nCREATE TABLE inbox (id TEXT PRIMARY KEY, order_id TEXT NOT NULL, amount INTEGER NOT NULL);\nCREATE TABLE outbox (id TEXT PRIMARY KEY, order_id TEXT NOT NULL, status TEXT NOT NULL);\n\\\"\\\"\\\")\n\ndef consume(message_id, order_id, amount, fail=False):\n    db.execute('\\\\''BEGIN'\\\\'')\n    try:\n        inserted = db.execute('\\\\''INSERT INTO inbox VALUES (?, ?, ?) ON CONFLICT(id) DO NOTHING'\\\\'',\n                              (message_id, order_id, amount)).rowcount\n        if inserted:\n            db.execute('\\\\''UPDATE orders SET balance = balance - ? WHERE id = ?'\\\\'', (amount, order_id))\n            if fail:\n                raise RuntimeError('\\\\''injected crash before transaction commit'\\\\'')\n            db.execute(\\\"INSERT INTO outbox VALUES (?, ?, '\\\\''pending'\\\\'')\\\", (message_id, order_id))\n        elif db.execute('\\\\''SELECT order_id, amount FROM inbox WHERE id = ?'\\\\'', (message_id,)).fetchone() \"'!= (order_id, amount):\n            raise ValueError('\"'\\\\''identity reused with different intent'\\\\'')\n        db.execute('\\\\''COMMIT'\\\\'')\n    except BaseException:\n        db.execute('\\\\''ROLLBACK'\\\\'')\n        raise\n\nconsume('\\\\''m-7'\\\\'', '\\\\''o-9'\\\\'', 50)\nconsume('\\\\''m-7'\\\\'', '\\\\''o-9'\\\\'', 50)\nassert db.execute('\\\\''SELECT balance FROM orders'\\\\'').fetchone()[0] == 50\nassert db.execute('\\\\''SELECT COUNT(*) FROM inbox'\\\\'').fetchone()[0] == 1\nassert db.execute('\\\\''SELECT COUNT(*) FROM outbox'\\\\'').fetchone()[0] == 1\nprint('\\\\''Corrected commit/redelivery schedule: one debit of 50, one pending notification.'\\\\'')\n\ntry:\n    consume('\\\\''m-8'\\\\'', '\\\\''o-9'\\\\'', 10, fail=True)\nexcept RuntimeError:\n    pass\nassert db.execute('\\\\''SELECT balance FROM orders'\\\\'').fetchone()[0] == 50\nassert db.execute(\\\"SELECT COUNT(*) FROM inbox WHERE id = '\\\\''m-8'\\\\''\\\").fetchone()[0] == 0\nprint('\\\\''Failure before commit: claim and debit both rolled back.'\\\\'')\n\ntry:\n    consume('\\\\''m-7'\\\\'', '\\\\''o-9'\\\\'', 60)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError('\\\\''changed intent was accepted'\\\\'')\nprint('\\\\''Same identity with changed intent: rejected without another debit.'\\\\'')\n\nprovider_acceptances = []\nprovider_acceptances.append('\\\\''m-7'\\\\'')\nassert db.execute(\\\"SELECT status FROM outbox WHERE id = '\\\\''m-7'\\\\''\\\").fetchone()[0] == '\\\\''pending'\\\\''\nprovider_acceptances.append('\\\\''m-7'\\\\'')\ndb.execute(\\\"UPDATE outbox SET status = '\\\\''accepted'\\\\'' WHERE id = '\\\\''m-7'\\\\''\\\")\nassert len(provider_acceptances) == 2\nassert db.execute('\\\\''SELECT balance FROM orders'\\\\'').fetchone()[0] == 50\nprint('\\\\''Provider-accepted/crash/retry schedule: two email acceptances are possible; debit remains once.'\\\\'')\nprint('\\\\''SQLite in-memory state-machine checks only; no actual broker or provider was exercised.'\\\\'')\n'\"",
+        "exit_code": 0,
+        "output_sha256": "29a86ca36e04901d0f5f2e4776763e9756325a47df801cd8e9f8356f0b391c0c"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "partial",
+      "critical_scores": [
+        {
+          "id": "durable-dedup",
+          "score": 2
+        },
+        {
+          "id": "external-boundary",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ]
+    }
+  }
+}

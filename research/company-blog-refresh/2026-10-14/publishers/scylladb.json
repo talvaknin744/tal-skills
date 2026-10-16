@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "publisher_id": "scylladb",
+  "publisher_name": "ScyllaDB",
+  "research_date": "2026-10-14",
+  "crawler_summary_path": "publishers/scylladb/summary.json",
+  "crawler_summary_sha256": "0eb01bd00f6a64638faab77196f94ebf0a1056750626afea933097b2a135fb6c",
+  "counters": {
+    "baseline_records": 1021,
+    "known_urls": 1022,
+    "processed_urls": 1022,
+    "http_article_attempted_urls": 0,
+    "body_retrieved_urls": 1022,
+    "body_extracted": 1012,
+    "body_fetched_unextracted": 10,
+    "pending": 0,
+    "excluded_nonarticle": 0,
+    "scoped_article_urls": 1022,
+    "read_articles": 2
+  },
+  "discovery_scope": "Default public WordPress post collection, including dated article permalinks. Nonblog site pages are excluded. Public content API pages cover every advertised post identity.",
+  "terminal_status": "publisher_declared_collection_exhausted",
+  "terminal_evidence": "The public API advertised 1,022 posts across 11 pages. All 11 pages were consumed, page 11 contained 22 posts, and page 12 returned HTTP 400. This establishes the exposed post collection, not deleted, private, or unlinked lifetime content.",
+  "independent_discovery_review_path": "scylladb/independent-discovery-review.json",
+  "independent_discovery_review_sha256": "692e98345cf8e0de01205ff854d8a4b4c740e05e7b88eaa2b942893ea9886d47",
+  "gaps": [
+    "Ten short posts did not pass the automatic 120 word substantive extraction threshold. Their original content HTML remains available in the retained public API responses.",
+    "The generic discovery scope used current dated permalinks plus verified historical inventory. Complete article discovery rests on independently exhausted public API pagination.",
+    "The first import command failed because the CLI parsed an equals sign inside a query as the file delimiter. The failed run remains retained, and corrected per page imports succeeded."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.scylladb.com/2026/04/07/incremental-repair-faster",
+      "reading_scope": "Full article body, deliberately read for this research wave",
+      "evidence_sha256": "39a5c7d1d1bd81f3425603f698894df1ca12df7ab3722cb50ffd9074cb797153",
+      "receipt_sha256": "1587354272e1fd5b45ecd312694af842f13fb8116e55a1aa060e7ddc808433a4"
+    },
+    {
+      "url": "https://www.scylladb.com/2022/06/30/preventing-data-resurrection-with-repair-based-tombstone-garbage-collection",
+      "reading_scope": "Full article body, deliberately read for this research wave",
+      "evidence_sha256": "ff65af23c114aba66f8e965ff60d0c4a9d197f71bacd489a3a4992b150fbbc1c",
+      "receipt_sha256": "f709c1ed450bf05e89d1f1def808987a1516f67dfe21bbf08eab26195674160d"
+    }
+  ],
+  "read_contracts": [
+    {
+      "url": "https://docs.scylladb.com/manual/stable/cql/ddl.html#tombstones-gc-options",
+      "reading_scope": "Tombstones GC options subsection, including propagation delay and table support exceptions",
+      "retrieval_source": "web tool"
+    }
+  ],
+  "all_article_bodies_read": false,
+  "limits": [
+    "Complete response and extraction counts do not establish agent reading of every article.",
+    "Terminal proof applies to exposed public collections, not deleted, private or unlinked lifetime content.",
+    "No live engine experiment, production operation or behavioral skill evaluation was executed by this publisher research task."
+  ],
+  "implementation_status": "Research recommendations only, no skill instruction edits",
+  "evidence_files": [
+    {
+      "path": "publishers/scylladb/article-state.jsonl",
+      "sha256": "d05e28c9509a307d31f5bd35112ea4066a4a3e569fe31ecb2921d9f5d2abec49"
+    },
+    {
+      "path": "publishers/scylladb/source-state.jsonl",
+      "sha256": "deb7ef1de5a34d98ad0a26ef780a785119f4f7ea29c02fd9b75dd90fff26f7ab"
+    },
+    {
+      "path": "scylladb/api-requests.json",
+      "sha256": "3cd45a4ca731ffab9b5cec31a291d6191315536b2c22d667931e2371023dacb6"
+    },
+    {
+      "path": "scylladb/api-summary.json",
+      "sha256": "e6647795cecc74eed273fdc10e6a8081e205995204d9fceadb9d4163213c254b"
+    }
+  ]
+}

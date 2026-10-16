@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "publisher_id": "streamnative",
+  "candidate_identity": "2026-10-14-company-blog-refresh",
+  "crawler_summary_sha256": "ac724937a70a0410e1fb3b2100b7676ac912894e1f28aad705a47ce824439122",
+  "crawler_summary_path": "publishers/streamnative/summary.json",
+  "crawler_script_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698",
+  "last_collector_invocation": {
+    "started_at": "2026-10-14T18:46:46.321043+00:00",
+    "config": {
+      "publisher_id": "streamnative",
+      "baseline_inventory_sha256": "cfeb6771e0e282bfb2a1ccf1e2d1fbf69e6e26c64a05613ddb849df20ecf4d89",
+      "baseline_coverage_sha256": "c309a6c5f2b810ba6d48204810e8bad5730f91fa62fc735f941dafcfc5e46660",
+      "baseline_record_count": 365,
+      "scope": "Official English blog article paths under /blog/; company and NATS project grouped for Synadia/NATS; Confluent developer blog included. Category/tag/author/pagination/feed and documentation paths excluded.",
+      "fresh_discovery_include_prefixes": [
+        "https://streamnative.io/blog/"
+      ],
+      "timeout_seconds": 30,
+      "retries": 2,
+      "per_host_concurrency": 3,
+      "per_host_request_interval_seconds": 0.35,
+      "source_url_overrides": [],
+      "no_article_count_cap": true,
+      "excluded_nonarticle_patterns": [],
+      "no_default_sources": false
+    },
+    "collector_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698"
+  },
+  "collector_identity_semantics": "SHA256 of collector recorded by this publisher latest actual invocation. Prior invocations remain in runs.jsonl.",
+  "counters": {
+    "baseline_records": 365,
+    "known_urls": 368,
+    "processed_urls": 368,
+    "http_article_attempted_urls": 368,
+    "body_retrieved_urls": 368,
+    "body_extracted": 368,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 1
+  },
+  "current_discovered_urls": 368,
+  "fresh_union_urls": 368,
+  "new_urls_since_baseline": 3,
+  "current_status_counts": {
+    "body_extracted": 368
+  },
+  "distinct_final_retrieved_body_urls": 368,
+  "same_scope_redirect_targets": [],
+  "body_count_semantics": "Known URL dispositions with successful in-scope body responses. Same-scope redirects can share a final article or replace historical content.",
+  "all_article_bodies_read": false,
+  "unresolved_article_records": [],
+  "discovery_scope": {
+    "allowed_hosts": [
+      "streamnative.io"
+    ],
+    "include_path_prefix": "/blog/",
+    "excluded_path_segments": [
+      "tags",
+      "tag",
+      "categories",
+      "category",
+      "author",
+      "authors",
+      "page",
+      "series",
+      "tutorial",
+      "data-engineering",
+      "data-basics",
+      "ai-llm",
+      "data-insights",
+      "podcasts",
+      "archive",
+      "feed"
+    ],
+    "excluded_numeric_archive_paths": true,
+    "excluded_feed_and_payload_paths": true,
+    "language_boundary": "Official English article paths only. Language-prefixed paths excluded by /blog/ filter.",
+    "baseline_policy": "Union current discoveries with every retained baseline article URL."
+  },
+  "discovery_receipt_path": "messaging-a-discovery/streamnative/discovery.json",
+  "discovery_receipt_sha256": "8c2d9e5f34a4865e50492281a40793201d0864dbe3c3f1f43000c603113878a0",
+  "discovery_script_path": "messaging-a-discover.py",
+  "discovery_script_sha256": "542022a03447a6e04ca8d1e09566dc3fdbc0e1e72bdc39888d0595fa1b603c00",
+  "collection_page_count": 3,
+  "terminal_status": "exposed_discovery_terminal; all_known_frontier_processed",
+  "terminal_evidence": [
+    {
+      "url": "https://streamnative.io/sitemap.xml",
+      "kind": "sitemap",
+      "status": 200,
+      "sha256": "c28f715e2427fab04da5a4d3322bc509b3cae45cc86d2bfb0bdee568259776f2",
+      "terminal_reason": "finite_urlset_exhausted"
+    },
+    {
+      "url": "https://streamnative.io/blog",
+      "kind": "archive",
+      "status": 200,
+      "sha256": "2ac109c084fdc8f8763563c6753077ca002c2f9ff0b4016168183ad77d2f7fb1",
+      "terminal_reason": "no_next_link_observed"
+    },
+    {
+      "url": "https://streamnative.io/blog/_payload.json?_b=d3448034-d5fb-446c-b83a-69e4d8ae8aa5",
+      "kind": "nuxt_payload",
+      "status": 200,
+      "sha256": "827391bf84f3b986c79a7608a1dc2fe2fad3946286974cb10d967b8773440ea5",
+      "terminal_reason": "complete_embedded_listing_array_exhausted"
+    }
+  ],
+  "gaps": [
+    "Discovery establishes exposed current publisher collections, not every article ever published. Deleted, private and unlisted articles remain outside this proof.",
+    "Automatic extraction is separate from deliberate reading. All unread article bodies remain a reading coverage gap.",
+    "The shared crawler used bodies-only mode. Its discovery_complete field is false; publisher-specific terminal discovery is bound separately in this receipt.",
+    "Initial sitemap probes hit an unavailable BeautifulSoup XML parser. The raw responses and failed probe records were retained, and subsequent ElementTree discovery parsed them successfully."
+  ],
+  "read_articles": [
+    {
+      "url": "https://streamnative.io/blog/a-comparison-of-transaction-buffer-snapshot-strategies-in-apache-pulsar",
+      "reading_scope": "Complete substantive textual article body, code and captions. Embedded image pixels were not inspected. Code was not executed.",
+      "evidence_sha256": "0007f6fd3fa3331a52f151af1a37a302a75de289250ba00c6bce8525202acb54",
+      "evidence_path": "messaging-a-probes/9b5a45e97d1ac48f3f402fc51f42a0d12de25f4a785f0ccb65137c56a3eb56d0.raw"
+    }
+  ],
+  "reading_count_semantics": "Distinct blog article bodies deliberately read in this refresh. Current documentation cross-checks are separate.",
+  "final_redirect_review_path": "messaging-a-redirect-review.json",
+  "final_redirect_review_sha256": "116944466bee7a155ad48f14f2edeb69532e01fbe85ccdac46d54a5ead7a8aad",
+  "checks_actually_run": [
+    "Recovered baseline union",
+    "All discovery raw response SHA256 bindings verified",
+    "Fresh finite sitemap and feed parsing",
+    "Exposed archive next-link traversal without an article or page cap",
+    "Structured listing exhaustion where present",
+    "Shared crawler body attempts and extracted text receipts",
+    "Hash verified cache reextraction",
+    "Selected complete textual article readings",
+    "Final body URL scope review for every successful body record"
+  ],
+  "preserved_attempts": {
+    "initial_probe_results_path": "messaging-a-probes/probes.json",
+    "initial_probe_results_sha256": "8bfe47868f72947f11c075175558f3e8895d3a6619e6b64dbfeffe5edeb2b544",
+    "initial_probe_errors": [
+      {
+        "url": "https://streamnative.io/sitemap.xml",
+        "error": "Couldn't find a tree builder with the features you requested: xml. Do you need to install a parser library?"
+      }
+    ],
+    "initial_body_invocation_note": "The first four publisher runs supplied a JSON URL list to a newline-only CLI and therefore traversed baseline records. A corrected newline list resumed every fresh URL. Original stdout and append-only request events remain external.",
+    "body_invocation_logs": [
+      {
+        "path": "messaging-a-discovery/streamnative/crawler-final-reextract.stdout",
+        "sha256": "ac724937a70a0410e1fb3b2100b7676ac912894e1f28aad705a47ce824439122"
+      },
+      {
+        "path": "messaging-a-discovery/streamnative/crawler-resume.stdout",
+        "sha256": "d68c98a6b98650dcd21d1b28ad4148e71713bbd8baab0ff34ef806679c94efde"
+      },
+      {
+        "path": "messaging-a-discovery/streamnative/crawler.stdout",
+        "sha256": "c387fc7324a6b71f072f8a9f50fca4692481cb5c7fdf96f8eec0c615f58d58bf"
+      }
+    ]
+  },
+  "behavioral_checks_executed": [],
+  "independent_scores": null,
+  "host_coverage": "No supported-host behavior evaluation or production broker guarantee was executed in this publisher research."
+}

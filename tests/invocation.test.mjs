@@ -26,8 +26,8 @@ const parseSkill = filename => {
   return parse(match[1]);
 };
 
-test('all 49 skill packages agree on explicit-only versus model invocation', () => {
-  assert.equal(packageDirs.length, 49);
+test('all 50 skill packages agree on explicit-only versus model invocation', () => {
+  assert.equal(packageDirs.length, 50);
   const names = new Set();
   for (const directory of packageDirs) {
     const skillFile = path.join(directory, 'SKILL.md');
@@ -47,7 +47,7 @@ test('all 49 skill packages agree on explicit-only versus model invocation', () 
     assert.equal(headerExplicit, explicitSkills.has(name), `${name}: unexpected invocation decision`);
     assert.equal(ui.policy?.allow_implicit_invocation === true, false, `${name}: use absence for model-invoked default`);
   }
-  assert.equal(names.size, 49);
+  assert.equal(names.size, 50);
   assert.equal([...explicitSkills].every(name => names.has(name)), true);
 });
 

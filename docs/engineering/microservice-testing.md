@@ -18,6 +18,8 @@ Invocation: automatic
 - Required stages have known triggers, owners, failure signals, and environments; remaining release coupling is explained.
 - Passed, failed, and unrun checks are distinguished, and every original risk links to evidence or an explicit gap.
 
+- A data publication gate tests the final transformed serving artifact against its intended healthy baseline, demonstrates harmful data blocks publication and leaves invalid comparisons or changed artifacts unapproved.
+
 ## Where it fits
 
 This is the service-boundary testing specialist. It neighbors `microservice-integration` for contract design, `failure-oriented-testing` for fault scenarios, and `technical-deprecation` for evidence that consumers have migrated. See [the testing skill](../../skills/engineering/microservice-testing/SKILL.md) and [failure-oriented testing path](../reading-paths.md).

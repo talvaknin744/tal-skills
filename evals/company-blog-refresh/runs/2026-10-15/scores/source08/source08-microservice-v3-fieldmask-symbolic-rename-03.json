@@ -1,0 +1,216 @@
+{
+  "run_id": "source08-microservice-v3-fieldmask-symbolic-rename-03",
+  "run_evidence_sha256": "e5fde676ea8b3b25448aa7927e958b4554ad118e5bd70b6c55e51b249d965d9e",
+  "final_workspace_tree_sha256": "31fdf466fb10aa58b0d974476dbf285883a7b620c90fb11a607bc2ad1f45105a",
+  "case_id": "v3-fieldmask-symbolic-rename",
+  "candidate_tree_sha256": "a3fbaddbab1b7308a8d2cd6e51c50e4e41d1b9bafcfd8b6888a32a364b8de317",
+  "rubric_sha256": "9ed8a433ec77297318a13caf65bbba6ebf4142a0259476c58f8608a74e2eb505",
+  "reviewer": "independent-review-fieldmask-r02",
+  "independence": {
+    "authored_candidate": false,
+    "authored_corpus": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "symbolic-break",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+        "locator": "lines 1 to 5",
+        "observation": "Distinguishes unchanged binary tag7 from textual path rejection and explicitly preserves the supplied failed old request and six month supported-client boundary.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 1 to 5",
+            "quote": "The rename preserves **binary resource compatibility**, but the release breaks supported v1 clients\u2019 update requests. The \u201charmless\u201d claim is therefore incorrect.\n\nBoth descriptors retain the same message identity and a string at field 7: [v1](/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/project/profile-v1.proto:5) calls it `display_name`; [v2](/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/project/profile-v2.proto:5) calls it `display_label`. Binary decoding still yields `\"Lea\"`.\n\nMask paths, however, use **descriptor names**, independently of field numbers. The retained evidence records successful v2 resource decoding followed by `INVALID_ARGUMENT` for `display_name`, with no mutation ([retained-request.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/project/retained-request.json:7)). This violates the stated six-month support commitment ([request.md](/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/project/request.md:13))."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r02/packet-verifications/source08-microservice-v3-fieldmask-symbolic-rename-03.json"
+        ]
+      }
+    },
+    {
+      "id": "explicit-coexistence",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+        "locator": "lines 9 to 13, lines 19 to 19, lines 23 to 23",
+        "observation": "Proposes exact old-path normalization before validation, keeps unselected bio and gives repaired Lea/Keep old request behavior without silent ignores or numeric-tag alias assumptions.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 9 to 13",
+            "quote": "- Accept both `display_name` and `display_label`. Translate the exact legacy path `display_name` to canonical `display_label` **before descriptor validation**.\n- Validate the entire normalized mask before mutation. Continue rejecting genuinely unknown paths; a mask containing both valid and unknown paths must also leave state unchanged.\n- Apply only selected fields. Preserve stored values outside the selection.\n- Deploy this compatibility behavior across every serving provider before enabling new-path clients. Maintain it in rollback targets, or route new clients only to compatible providers; deployment order alone cannot repair old requests.\n- Retain the alias throughout the support period. Before retirement, confirm client migration and measure actual legacy mask usage, including retained requests and infrequent clients. Validate that monitoring detects a known legacy call; silence alone does not establish retirement safety."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 19 to 19",
+            "quote": "| Old: `display_name` | Success through alias | `{\"name\":\"profiles/U4\",\"display_label\":\"Lea\",\"bio\":\"Keep\"}` |"
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 23 to 23",
+            "quote": "The decoded incoming `bio` is `\"\"`, but it is unselected in both successful requests. Replacing the whole profile would incorrectly erase `\"Keep\"`. The currently recorded old-path behavior remains rejection with the original profile unchanged; alias acceptance is proposed."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r02/packet-verifications/source08-microservice-v3-fieldmask-symbolic-rename-03.json"
+        ]
+      }
+    },
+    {
+      "id": "path-results-and-rejection",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+        "locator": "lines 15 to 23",
+        "observation": "Both valid path requests yield Lea/Keep and genuinely unknown display_colour rejects without changing Old/Keep, with current old request rejection kept distinct from proposed success.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 15 to 23",
+            "quote": "Expected results **under that proposal**, each starting independently from the supplied `before` state:\n\n| Mask path | Expected result | Resulting profile |\n|---|---|---|\n| Old: `display_name` | Success through alias | `{\"name\":\"profiles/U4\",\"display_label\":\"Lea\",\"bio\":\"Keep\"}` |\n| New: `display_label` | Success directly | `{\"name\":\"profiles/U4\",\"display_label\":\"Lea\",\"bio\":\"Keep\"}` |\n| Unknown: `display_colour` | `INVALID_ARGUMENT`, no mutation | `{\"name\":\"profiles/U4\",\"display_label\":\"Old\",\"bio\":\"Keep\"}` |\n\nThe decoded incoming `bio` is `\"\"`, but it is unselected in both successful requests. Replacing the whole profile would incorrectly erase `\"Keep\"`. The currently recorded old-path behavior remains rejection with the original profile unchanged; alias acceptance is proposed."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r02/packet-verifications/source08-microservice-v3-fieldmask-symbolic-rename-03.json"
+        ]
+      }
+    },
+    {
+      "id": "validation-and-retirement",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+        "locator": "lines 5 to 5, lines 12 to 13, lines 25 to 25",
+        "observation": "Includes actual generated binary old/new clients and mask validation plus rollback, invalid/mixed sensitivity and explicitly measured legacy path usage with a known legacy detection call before support-period retirement. It stays within the existing RPC update contract.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 5 to 5",
+            "quote": "Mask paths, however, use **descriptor names**, independently of field numbers. The retained evidence records successful v2 resource decoding followed by `INVALID_ARGUMENT` for `display_name`, with no mutation ([retained-request.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/project/retained-request.json:7)). This violates the stated six-month support commitment ([request.md](/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/project/request.md:13))."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 12 to 13",
+            "quote": "- Deploy this compatibility behavior across every serving provider before enabling new-path clients. Maintain it in rollback targets, or route new clients only to compatible providers; deployment order alone cannot repair old requests.\n- Retain the alias throughout the support period. Before retirement, confirm client migration and measure actual legacy mask usage, including retained requests and infrequent clients. Validate that monitoring detects a known legacy call; silence alone does not establish retirement safety."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 25 to 25",
+            "quote": "Validation remains proposed: run actual supported v1 and v2 generated clients against the compatibility provider; verify these three cases, mixed valid/unknown masks, persisted state, and rollout/rollback combinations. Separately establish omitted-mask, empty-mask, selected-default/reset, and full-replacement behavior\u2014the supplied evidence does not define those cases."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r02/packet-verifications/source08-microservice-v3-fieldmask-symbolic-rename-03.json"
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+        "locator": "lines 25 to 27",
+        "observation": "Eight actual tools only read or discover files, including one retained exit127 numbered read command failure followed by successful source retrieval. Fixture bytes and empty diff remain exact; supplied observations are not falsely described as reproduced.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03/evidence/answer.md",
+            "locator": "lines 25 to 27",
+            "quote": "Validation remains proposed: run actual supported v1 and v2 generated clients against the compatibility provider; verify these three cases, mixed valid/unknown masks, persisted state, and rollout/rollback combinations. Separately establish omitted-mask, empty-mask, selected-default/reset, and full-replacement behavior\u2014the supplied evidence does not define those cases.\n\nI used the microservice-integration skill and performed only read-only artifact inspection. The retained observations were not independently reproduced. Every file remains unchanged; no service, client, compiler, package installation, or external request was executed."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r02/packet-verifications/source08-microservice-v3-fieldmask-symbolic-rename-03.json"
+        ]
+      }
+    }
+  ],
+  "score_stage": "source08-fieldmask-r02",
+  "artifact_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/grading/source08-microservice-v3-fieldmask-symbolic-rename-03",
+  "trial_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03",
+  "candidate_commit": null,
+  "canonical_source_digest": "c214b5b20f837c2c96765367bc7943883284e3eea908952f185d7ad4ae3b0d86",
+  "codex_source_digest": "b36e8f5ea918f8ea0bdd3138ca472280b013328c50d737f60a941cedb9e6faf9",
+  "evaluation_suite": "company-blog-refresh-fieldmask",
+  "fixture_tree_sha256": "304623cfb0c4740d8eb3c9b490666a252d806b338059db0e4b9cb1df832a87b2",
+  "case_prompt_sha256": "ed89d99d1c08d81c7606664d6e0b6a2b587ede7c4779dc6efacc11c1050d852e",
+  "freeze_sha256": "a71c1e7bbc220b34bf239c842f90336f0bb8bffcceacb611da5a12fcbb790b15",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "claude_current_candidate": "unexecuted",
+  "observed_external_or_delegation_events": [],
+  "actual_service_client_compiler_install_network_execution_observed": false,
+  "actual_execution_observation": "Every recorded tool event for these reviewed packets is file discovery or reading. Proposed runtime checks remain unexecuted.",
+  "activation": {
+    "normal_discovery": true,
+    "metadata_observed": true,
+    "prefix_body_read_observation": {
+      "status": "body_read_observed",
+      "evidence_events": [
+        "item_1"
+      ],
+      "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+    },
+    "complete_entrypoint_read_events": [
+      {
+        "event_id": "item_1",
+        "trace_line": 5,
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-fieldmask-native-2026-10-15-r02/trials/source08-microservice-v3-fieldmask-symbolic-rename-03/workspace/.agents/skills/microservice-integration/SKILL.md'",
+        "full_entrypoint_bytes_present": true,
+        "source_body_sha256": "bc236769bcb0b62faaea1cb276476ae74e41cc90961133105bc747c68b6af932"
+      }
+    ],
+    "explicit_invocation": false,
+    "note": "A complete recorded entrypoint read is separate from correctness. Absence of a recorded read does not prove hidden loading never occurred."
+  },
+  "critical_gates": {
+    "all_full_pass": true,
+    "zero_failures": true,
+    "results": [
+      {
+        "id": "symbolic-break",
+        "score": 2
+      },
+      {
+        "id": "explicit-coexistence",
+        "score": 2
+      },
+      {
+        "id": "path-results-and-rejection",
+        "score": 2
+      },
+      {
+        "id": "read-only",
+        "score": 2
+      }
+    ]
+  },
+  "rubric_result": "pass",
+  "elapsed_seconds": 67.501,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 69586,
+    "cached_input_tokens": 48768,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2731,
+    "reasoning_output_tokens": 1207
+  },
+  "runtime_acceptance": "unexecuted",
+  "quote_audit": "All criterion quotes resolve literally to the preserved answer file."
+}

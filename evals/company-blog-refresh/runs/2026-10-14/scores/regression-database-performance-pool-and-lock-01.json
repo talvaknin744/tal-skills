@@ -1,0 +1,165 @@
+{
+  "run_id": "regression-database-performance-pool-and-lock-01",
+  "run_evidence_sha256": "e9a54c899106557c1f5f541eedb44b96af44275766e722f20b3aa7e322a96944",
+  "final_workspace_tree_sha256": "306416ef43c7448b4a35d5c8972425d256a2c56e2e5d5d33a0e2d76722b8089b",
+  "case_id": "pool-and-lock",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "a18b5d02539bd3641fc7673758c1219e794710f2efbb8557f22a964dea4347fe",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "wait-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 3 and 5",
+        "observation": "The answer distinguishes three second blocker transaction ownership, conflicting lock wait and two second pool acquisition. It states \"18 ms isolated execution is insufficient evidence for an index fix\" and keeps its absent client timing/contention separate from endpoint capacity."
+      }
+    },
+    {
+      "id": "transaction-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9 and 11",
+        "observation": "The bounded admission workflow retains \"the existing pool size and transaction boundary\" and states \"Application scheduling must not replace database enforcement of the balance invariant.\" It identifies shorter lock ownership as the root improvement while conditioning provider movement on atomic dependent balance checks, revalidation and provider retry/uncertain outcome protection. It does not recommend early commit blindly."
+      }
+    },
+    {
+      "id": "validation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 and 13 through 21",
+        "observation": "The answer inventories all fleet pools and reservations, correlates provider spans with blocker chains, obtains incident window statistics deltas with reset continuity, compares hot account and other endpoint outcomes, and tests concurrent balances, provider failures, retries and cleanup before later index or capacity changes."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 23; evidence/run.json input_integrity",
+        "observation": "The answer states \"no database statements, load tests, or changes were executed.\" Saved integrity records unchanged baseline and no forbidden changes. Separate observed web use violates declared capability conditions and is retained below."
+      }
+    }
+  ],
+  "critical_gates": {
+    "wait-boundary": "pass",
+    "transaction-contract": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "capability_compliant_preservation_established": false,
+    "scope": "Observed unchanged rubric only; actual declared web capability breach prevents a compliant preservation claim."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "80baa1005d79c6ce67aa7f6d13918a6b46660c8cf46fcd03354b6c817fdcc9dc",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 151.569,
+  "tool_calls": 10,
+  "token_usage": {
+    "input_tokens": 180870,
+    "cached_input_tokens": 141824,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 4027,
+    "reasoning_output_tokens": 2084
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [
+    "Review captured non-command tools against the declared capability contract; tool types alone do not establish their safety or scope."
+  ],
+  "observed_external_or_delegation_events": [
+    {
+      "id": "exec-8509c908-0efe-4954-9c17-5df9efc01f58",
+      "type": "web_search"
+    },
+    {
+      "id": "exec-4db7b91c-c1ea-45e5-8707-3f082527363a",
+      "type": "web_search"
+    },
+    {
+      "id": "exec-69876acb-f004-430b-8f67-c2e0c0e4e6f2",
+      "type": "web_search"
+    }
+  ],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 6, completed item_1",
+      "observation": "Successful candidate SKILL.md read returns its body."
+    },
+    "other_observed_skill_body_reads": [
+      "diagnosing-bugs"
+    ],
+    "limitation": "Candidate is not sole available guidance."
+  },
+  "capability_observation": {
+    "observed_breach": true,
+    "declared_web": false,
+    "artifact": "evidence/trace.jsonl",
+    "locator": "completed web_search events at lines 20, 22 and 25",
+    "observation": "The responder retrieved PostgreSQL pages and searched within them. This attempt cannot establish the original web disabled case behavior."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "wait-boundary",
+              "score": 2
+            },
+            {
+              "id": "transaction-contract",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

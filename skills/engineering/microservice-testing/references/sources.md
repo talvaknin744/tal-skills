@@ -18,3 +18,9 @@ PDF page numbers below count from the first PDF page, starting at 1. The supplie
 | Cross-functional and live-system evidence | Ch. 7, “Cross-Functional Testing,” “Performance Tests,” PDF 171–172 (print 151–152); Ch. 8, “Implementing Semantic Monitoring,” PDF 182 (print 162) | Ch. 9, “From Preproduction to In-Production Testing,” “Making Testing in Production Safe,” PDF 375–377; “Cross-Functional Testing,” “Performance Tests,” “Robustness Tests,” PDF 378–381 |
 
 The books support balancing scope against feedback, testing a service in isolation, consumer expectations as executable compatibility checks, and measuring qualities beyond functionality. Specific contemporary framework APIs and provider guarantees must be verified from the project's versions and current primary documentation when implementing; historical tooling examples are not prescriptions.
+
+## Data publication approval
+
+Netflix, [The Data Canary: How Netflix Validates Catalog Metadata](https://netflixtechblog.com/the-data-canary-how-netflix-validates-catalog-metadata-18b699d58e36), published 2026-06-19. Complete retained publisher RSS prose was read on 2026-10-15. It describes final transformed data missed by input and code checks, a healthy production version baseline compared with a new candidate version through playback populations, and deliberate corruption that blocked publication. Tenant cadence, session assignment and restart handling belong to that system's experiment.
+
+Binding approval to the actual tested serving artifact, distinguishing intended comparison versions and leaving invalid comparisons inconclusive in [broader-tests.md](broader-tests.md) are independently authored applications. The article defines no universal content digest or publication API. Live traffic, sticky routing, thresholds, timing and traffic fraction are not general requirements. Images, linked implementation, rendered page parity and performance claims were not verified.

@@ -1,0 +1,201 @@
+{
+  "run_id": "source07-microservice-v3-aip134-omitted-mask-01",
+  "run_evidence_sha256": "230ae1cd8607905d2cacba8c9a793c9407ae9f14e0e3bc26b7a1ada56ea93e12",
+  "final_workspace_tree_sha256": "9a6c444a8654e1283adb90ba9102de8a664cb2d5b5274224c99dbaaf5fc35040",
+  "case_id": "v3-aip134-omitted-mask",
+  "candidate_tree_sha256": "1d09336bca338f757e89a375eb2243400ed0aeeb96b3a3de4a01eea590729c3e",
+  "rubric_sha256": "ed92ea44d9e2414294094f37a850e76037c2724da7c8a0319f6e1484de7d8f6d",
+  "reviewer": "independent-review-fieldmask-r01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_corpus": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "omitted-mask-boundary",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+        "locator": "lines 1 to 11",
+        "observation": "Applies the declared optional AIP 134 nonempty field selection and gives New, Lin and rating5, rather than importing the general Protobuf omitted all convention.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+            "locator": "lines 1 to 11",
+            "quote": "Rejecting omitted masks **breaks Books v2\u2019s declared contract**: `updateMask` is optional, and omission selects mutable fields with nonempty values ([contract.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-aip134-omitted-mask-01/workspace/project/contract.json:10)).\n\nEach request independently starts from the original state. These are **contract-derived results**, not observed service responses. Every resulting resource retains `name: \"publishers/P1/books/B2\"`.\n\n| Request | `title` | `author` | `rating` | Explanation |\n|---|---|---|---|---|\n| `omitted-mask` | `\"New\"` | `\"Lin\"` | `5` | Only nonempty `title` is selected. Empty `author` and absent `rating` preserve stored values. |\n| `explicit-author-reset` | `\"Old\"` | `\"\"` | `5` | The explicit `author` mask selects its supplied default value, intentionally clearing it. Other fields remain unchanged. |\n| `wildcard-replacement` | `\"New\"` | `\"\"` | `0` | `*` replaces all mutable fields. The absent `rating` takes its declared default, `0`. |\n\nThe reviewer\u2019s general-Protobuf interpretation does not override this provider\u2019s explicitly adopted AIP 134 dialect ([request.md](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-aip134-omitted-mask-01/workspace/project/request.md:3)). The supplied v1 request is valid and preserves the later `rating` field. Rejecting it before the update implementation still changes accepted behavior and breaks a supported consumer. Intentional clearing requires selecting `author`; explicit wildcard replacement legitimately resets fields unknown to an older client."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-aip134-omitted-mask-01.json"
+        ]
+      }
+    },
+    {
+      "id": "reset-and-replacement",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+        "locator": "lines 3 to 9",
+        "observation": "Preserves the complete resource identity and distinguishes reset Old/empty/5 from wildcard New/empty/0 and omitted New/Lin/5.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+            "locator": "lines 3 to 9",
+            "quote": "Each request independently starts from the original state. These are **contract-derived results**, not observed service responses. Every resulting resource retains `name: \"publishers/P1/books/B2\"`.\n\n| Request | `title` | `author` | `rating` | Explanation |\n|---|---|---|---|---|\n| `omitted-mask` | `\"New\"` | `\"Lin\"` | `5` | Only nonempty `title` is selected. Empty `author` and absent `rating` preserve stored values. |\n| `explicit-author-reset` | `\"Old\"` | `\"\"` | `5` | The explicit `author` mask selects its supplied default value, intentionally clearing it. Other fields remain unchanged. |\n| `wildcard-replacement` | `\"New\"` | `\"\"` | `0` | `*` replaces all mutable fields. The absent `rating` takes its declared default, `0`. |"
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-aip134-omitted-mask-01.json"
+        ]
+      }
+    },
+    {
+      "id": "optional-mask-contract",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+        "locator": "lines 11 to 13",
+        "observation": "Rejects mandatory omission denial as compatible preservation, keeps valid omission, and explains explicit clearing and wildcard risk to unknown rating.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+            "locator": "lines 11 to 13",
+            "quote": "The reviewer\u2019s general-Protobuf interpretation does not override this provider\u2019s explicitly adopted AIP 134 dialect ([request.md](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-aip134-omitted-mask-01/workspace/project/request.md:3)). The supplied v1 request is valid and preserves the later `rating` field. Rejecting it before the update implementation still changes accepted behavior and breaks a supported consumer. Intentional clearing requires selecting `author`; explicit wildcard replacement legitimately resets fields unknown to an older client.\n\nKeep omission supported on the existing interface. If mandatory masks are required, introduce a separate contract with coexistence and verified consumer migration before retiring the current behavior."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-aip134-omitted-mask-01.json"
+        ]
+      }
+    },
+    {
+      "id": "actual-client-verification",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+        "locator": "lines 15 to 20",
+        "observation": "Proposes actual client serialization and provider version pins, empty/default and nonempty behavior, stored results for each request and current versus proposed acceptance controls. No dialect is inferred from the FieldMask type alone.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+            "locator": "lines 15 to 20",
+            "quote": "Recommended compatibility verification\u2014all **unrun**:\n\n- **Actual serialization:** Capture the supported v1 client\u2019s ProtoJSON PATCH output and pin client/provider versions. Verify whether `updateMask` is absent and whether empty `author` is emitted or suppressed. For explicit clearing, verify that `\"author\"` survives serialization and that default suppression still yields the intended decoded reset value.\n- **Stored outcomes:** Independently restore the original state for each supplied request, then inspect persisted values against the table. Verify preservation of the unknown `rating`, intentional author clearing, wildcard resetting of `rating`, and unchanged `name`.\n- **Rejection behavior:** Compare the current and proposed validation paths using the omitted-mask request as the affected case and explicit-mask requests as controls. Record acceptance/error behavior and stored state; no specific error code is supplied.\n- **Mask distinctions:** Do not assume an explicitly empty mask behaves like an omitted mask. Its behavior is unspecified in the supplied evidence and needs separate clarification and verification if actual clients emit it."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-aip134-omitted-mask-01.json"
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+        "locator": "lines 3 to 3, lines 22 to 22",
+        "observation": "Seven actual tool commands only discover or read files. Every supplied fixture byte and empty diff verify. Results are contract derived and proposed checks remain unexecuted.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+            "locator": "lines 3 to 3",
+            "quote": "Each request independently starts from the original state. These are **contract-derived results**, not observed service responses. Every resulting resource retains `name: \"publishers/P1/books/B2\"`."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01/evidence/answer.md",
+            "locator": "lines 22 to 22",
+            "quote": "[requests.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-aip134-omitted-mask-01/workspace/project/requests.json:8) explicitly marks generated-client/provider verification as unexecuted. Only supplied files were read; every file remains unchanged, and no runtime or external request was invoked."
+          }
+        ],
+        "supporting_artifacts": [
+          "/private/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-aip134-omitted-mask-01.json"
+        ]
+      }
+    }
+  ],
+  "score_stage": "source07-fieldmask-r01",
+  "artifact_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-aip134-omitted-mask-01",
+  "trial_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-aip134-omitted-mask-01",
+  "candidate_commit": null,
+  "canonical_source_digest": "11dbdd432ab00b10bb6cdb58488cd801fb61b2503fad20a5e46335249870aa01",
+  "codex_source_digest": "7e26eb328307a0586d27ead276d751261db8d699ce1163f966f0b1133d3b6c4c",
+  "evaluation_suite": "company-blog-refresh-fieldmask",
+  "fixture_tree_sha256": "dc70ce01f8b789b3ca128de7ac883c115238b67984146cb657df714bb898b84d",
+  "case_prompt_sha256": "c51300e1aeaae94f29a3d4b63925527f20a673b83f9a7afc03e29d053df814d6",
+  "freeze_sha256": "cdf4762e7c184220c8e8ed89fba493306c4a9b1c56e0e598258210f7fa2cef32",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "claude_current_candidate": "unexecuted",
+  "observed_external_or_delegation_events": [],
+  "actual_service_client_compiler_install_network_execution_observed": false,
+  "actual_execution_observation": "Every recorded tool event for these reviewed packets is file discovery or reading. Proposed runtime checks remain unexecuted.",
+  "activation": {
+    "normal_discovery": true,
+    "metadata_observed": true,
+    "prefix_body_read_observation": {
+      "status": "body_read_observed",
+      "evidence_events": [
+        "item_1"
+      ],
+      "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+    },
+    "complete_entrypoint_read_events": [
+      {
+        "event_id": "item_1",
+        "trace_line": 5,
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-aip134-omitted-mask-01/workspace/.agents/skills/microservice-integration/SKILL.md'",
+        "full_entrypoint_bytes_present": true,
+        "source_body_sha256": "bc236769bcb0b62faaea1cb276476ae74e41cc90961133105bc747c68b6af932"
+      }
+    ],
+    "explicit_invocation": false,
+    "note": "A complete recorded entrypoint read is separate from correctness. Absence of a recorded read does not prove hidden loading never occurred."
+  },
+  "critical_gates": {
+    "all_full_pass": true,
+    "zero_failures": true,
+    "results": [
+      {
+        "id": "omitted-mask-boundary",
+        "score": 2
+      },
+      {
+        "id": "reset-and-replacement",
+        "score": 2
+      },
+      {
+        "id": "optional-mask-contract",
+        "score": 2
+      },
+      {
+        "id": "read-only",
+        "score": 2
+      }
+    ]
+  },
+  "rubric_result": "pass",
+  "elapsed_seconds": 44.83,
+  "tool_calls": 7,
+  "token_usage": {
+    "input_tokens": 67477,
+    "cached_input_tokens": 56704,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 1685,
+    "reasoning_output_tokens": 516
+  },
+  "runtime_acceptance": "unexecuted",
+  "quote_audit": "All criterion quotes resolve literally to the preserved answer file."
+}

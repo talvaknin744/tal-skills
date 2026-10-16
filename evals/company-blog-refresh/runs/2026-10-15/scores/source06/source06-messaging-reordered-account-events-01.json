@@ -1,0 +1,295 @@
+{
+  "run_id": "source06-messaging-reordered-account-events-01",
+  "run_evidence_sha256": "45aa750470150eda10783cc1e65ea6b3cd138ce630f8fd345be3d5180892aaa5",
+  "final_workspace_tree_sha256": "31e6756460020315880e794484e3ff7e4da74778eb34b076ac76331a5f872361",
+  "case_id": "reordered-account-events",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "6a39d2c81da07de17cbf8e2db60c209a9ace3d938d11ca798171978599a7c2f1",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "reordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 9, lines 12 through 12",
+        "observation": "The answer explains the faulty11/silver state, scopes durable revision arbitration by account and immutable complete snapshots and preserves12/gold after delayed11. It does not generalize stale-message dropping to delta contracts.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 9,
+            "quote": "1. **Use `account_id` and its authoritative revision to govern application.** Require each revision to identify one immutable snapshot. Complete snapshots may skip revisions; older or equal revisions are successful no-ops. Publication `event_id` alone cannot prevent stale updates.\n2. **Make the revision comparison, account update, and audit one database transaction.** Use a conditional update/upsert or equivalent serialization that handles concurrent creation and updates. Insert the audit only when the snapshot advances the stored revision. A separate read/check followed by an unconditional write is unsafe.\n3. **Acknowledge after the transaction commits**, including successful no-ops. An uncertain commit or lost ACK can be retried safely. Retain the account’s revision watermark throughout the permitted replay horizon; a separate processed-event table isn’t necessary for these specified effects."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 12,
+            "end": 12,
+            "quote": "Under this contract, the supplied history ends at **revision 12, `gold`, with one audit for `e12`**; all three deliveries can be acknowledged."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dedup-effect",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 8 through 9, lines 18 through 22",
+        "observation": "The proposed conditional upsert or equivalent serial transaction couples revision advance and audit, with durable watermark retention and equal/old revisions as no-ops. The actual atomic local model gives one update/audit for duplicate12 contenders and safe arbitration under overlap.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 8,
+            "end": 9,
+            "quote": "2. **Make the revision comparison, account update, and audit one database transaction.** Use a conditional update/upsert or equivalent serialization that handles concurrent creation and updates. Insert the audit only when the snapshot advances the stored revision. A separate read/check followed by an unconditional write is unsafe.\n3. **Acknowledge after the transaction commits**, including successful no-ops. An uncertain commit or lost ACK can be retried safely. Retain the account’s revision watermark throughout the permitted replay horizon; a separate processed-event table isn’t necessary for these specified effects."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 22,
+            "quote": "| `e12`, duplicate `e12`, then `e11` | Original: silver/11, three audits. Contract: gold/12, one audit; three ACKs. |\n| Failure before commit; modeled restart and retry | Initially no effect or ACK; retry produces one update and audit. |\n| Commit, lose ACK; modeled restart and retry | One update and audit overall; retry ACK succeeds. |\n| Two `e12` contenders pause before the transaction, then release together | Atomic arbitration permits one update and audit; both ACK. |\n| Revisions 11 and 12 overlap | Always gold/12; two audits if 11 applies first, otherwise one. |"
+          }
+        ]
+      }
+    },
+    {
+      "id": "poison-and-checks",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10 through 10, lines 16 through 25",
+        "observation": "The actual saved model uses a controlled pretransaction barrier for duplicate and reordered contenders, explicit allowed audit counts by winner order and concrete final12/gold/ACK outcomes. It also checks sequential duplicates/reordering, precommit rollback, commit/lostACK/restart and durable bounded malformed disposition. Actual DB/broker validation remains honestly unexecuted.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 10,
+            "end": 10,
+            "quote": "4. **Give malformed events a durable terminal disposition.** Preserve the payload, available identity, and failure reason in local quarantine before ACK. If quarantine cannot commit, keep the source recoverable. Bound transient retries and persist recovery state so restarts cannot reset an endless retry loop. Duplicate quarantine copies after a lost ACK may be acceptable."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 16,
+            "end": 25,
+            "quote": "| Executed model schedule | Result |\n|---|---|\n| `e12`, duplicate `e12`, then `e11` | Original: silver/11, three audits. Contract: gold/12, one audit; three ACKs. |\n| Failure before commit; modeled restart and retry | Initially no effect or ACK; retry produces one update and audit. |\n| Commit, lose ACK; modeled restart and retry | One update and audit overall; retry ACK succeeds. |\n| Two `e12` contenders pause before the transaction, then release together | Atomic arbitration permits one update and audit; both ACK. |\n| Revisions 11 and 12 overlap | Always gold/12; two audits if 11 applies first, otherwise one. |\n| Quarantine unavailable; later commit quarantine, lose ACK, restart and retry | Outage leaves source unacknowledged; recovery produces zero business effects and may duplicate quarantine records. |\n\nThese checks model atomic transactions and recovery; actual database isolation, constraints, broker/client versions, and restart durability weren’t supplied. Deployment validation should repeat the concurrency and crash schedules against those implementations. Monitor oldest unfinished delivery and quarantine age."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          10,
+          11,
+          13,
+          15,
+          18
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 14 through 14, lines 25 through 27",
+        "observation": "Observed Python commands execute an in-memory lock/transaction model and modeled restart only. The answer labels that scope and leaves actual DB isolation/broker/durability unverified. Independent workspace inventories are unchanged and no external/delegation event occurs.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 14,
+            "quote": "I ran the original handler and a proposed contract model locally in memory:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 27,
+            "quote": "These checks model atomic transactions and recovery; actual database isolation, constraints, broker/client versions, and restart durability weren’t supplied. Deployment validation should repeat the concurrency and crash schedules against those implementations. Monitor oldest unfinished delivery and quarantine age.\n\nAll files remained unchanged; no external services were used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          10,
+          11,
+          13,
+          15,
+          18
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "reordering": "pass",
+    "dedup-effect": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0dc43596383f0e05521dcde314fdff7d91acc5bdf52575d96f129ef0210dd627",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 147.939,
+  "tool_calls": 7,
+  "token_usage": {
+    "input_tokens": 111934,
+    "cached_input_tokens": 87040,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 6747,
+    "reasoning_output_tokens": 2125
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+        "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-reordered-account-events-01/workspace/.agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"pwd\nrg --files -g AGENTS.md -g '*consumer*' -g '*history*' -g '*broker*' -g '*README*' -g '*pyproject*' -g '*test*' -g '*requirements*' -g '*CONTEXT*' project .agents\"",
+        "exit_code": 0,
+        "output_sha256": "df0d824297b0b82a96ea62ae4f3a7e9b0e1f099d7de377c06c57f008e3da534d"
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'nl -ba project/consumer.py'",
+        "exit_code": 0,
+        "output_sha256": "1e6d5020b27408bffa0d94c259b1b268885282a8d02b657141ffa66fb425b7c8"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/ordering-and-replay.md\ncat .agents/skills/messaging-reliability/references/delivery-and-recovery.md'",
+        "exit_code": 0,
+        "output_sha256": "df18a70741011a99c9be794ad07eedfe657c04ba02b03a4e35a451db143c3eec"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!.git'\"' project\nrg --files --hidden -g AGENTS.md -g '\"'!.git'\"' .\"",
+        "exit_code": 1,
+        "output_sha256": "e43146076e59fe3e6e64b7a9fa3ad9f6ba54c4e10680ce6b59c45d957f1b789b"
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "command": "/bin/zsh -lc \"nl -ba project/request.md\nrg --files --hidden -g '\"'!.git'\"' -g '\"'!skills/**'\"' -g '\"'!.agents/skills/**'\"' .\"",
+        "exit_code": 0,
+        "output_sha256": "5a4bff6d70d4eb001c79d7ad110f6dacecb6a42d897da2bda363aef0c460414c"
+      },
+      {
+        "line": 18,
+        "item": "item_8",
+        "command": "/bin/zsh -lc \"python3 -B -c 'from pathlib import Path\nfrom contextlib import contextmanager\nfrom threading import Barrier, Lock, Thread\n\nnamespace = {}\nexec(compile(Path(\\\"project/consumer.py\\\").read_text(), \\\"project/consumer.py\\\", \\\"exec\\\"), namespace)\noriginal = namespace[\\\"consume\\\"]\ne12 = {\\\"account_id\\\": \\\"a\\\", \\\"revision\\\": 12, \\\"tier\\\": \\\"gold\\\", \\\"event_id\\\": \\\"e12\\\"}\ne11 = {\\\"account_id\\\": \\\"a\\\", \\\"revision\\\": 11, \\\"tier\\\": \\\"silver\\\", \\\"event_id\\\": \\\"e11\\\"}\n\nclass DB:\n    def __init__(self):\n        self.accounts, self.audits, self.quarantine = {}, [], []\n        self.lock = Lock()\n        self.fail_commit = False\n        self.fail_quarantine = False\n    @contextmanager\n    def transaction(self):\n        with self.lock:\n            old = (self.accounts.copy(), self.audits[:], self.quarantine[:])\n            try:\n                yield\n                if self.fail_commit:\n                    self.fail_commit = False\n                    raise RuntimeError(\\\"commit failure\\\")\n            except BaseException:\n                self.accounts, self.audits, self.quarantine = old\n                raise\n    def set_account(self, key, revision, tier):\n        self.accounts[key] = (revision, tier)\n    def insert_audit(self, event_id):\n        self.audits.append(event_id)\n    def advance_account(self, event):\n        key, revision = event[\\\"account_id\\\"], event[\\\"revision\\\"]\n        if key in self.accounts and revision <= self.accounts[key][0]:\n            return False\n        self.set_account(key, revision, event[\\\"tier\\\"])\n        return True\n    def save_bad(self, event):\n        if self.fail_quarantine:\n            raise RuntimeError(\\\"quarantine unavailable\\\")\n        self.quarantine.append(event.copy())\n    def restart_model(self):\n        restarted = DB()\n        restarted.accounts = self.accounts.copy()\n        restarted.audits = self.audits[:]\n        restarted.quarantine = self.quarantine[:]\n        return restarted\n\nclass Delivery:\n    def __init__(self, lose_ack=False):\n        self.acked = False\n        self.lose_ack = lose_ack\n    def ack(self):\n        if self.lose_ack:\n            raise RuntimeError(\\\"lost acknowledgement\\\")\n        self.acked = True\n\ndef candidate(event, db, delivery, barrier=None):\n    valid = (all(k in event for k in (\\\"account_id\\\", \\\"revision\\\", \\\"tier\\\", \\\"event_id\\\"))\n             and type(event.get(\\\"revision\\\")) is int)\n    if barrier is not None:\n        barrier.wait(timeout=5)\n    with db.transaction():\n        if not valid:\n            db.save_bad(event)\n        elif db.advance_account(event):\n            db.insert_audit(event[\\\"event_id\\\"])\n    delivery.ack()\n\ndef expect_failure(callback):\n    try:\n        callback()\n    except RuntimeError:\n        return\n    raise AssertionError(\\\"expected failure\\\")\n\nraw = DB()\nraw_deliveries = [Delivery() for _ in range(3)]\nfor event, delivery in zip((e12, e12, e11), raw_deliveries):\n    original(event, raw, delivery)\nassert raw.accounts == {\\\"a\\\": (11, \\\"silver\\\")} and raw.audits == [\\\"e12\\\", \\\"e12\\\", \\\"e11\\\"]\nassert all(d.acked for d in raw_deliveries)\nprint(\\\"Actual handler / supplied history: a=(11,silver); audits=[e12,e12,e11]; ACKs=3\\\")\n\nfixed = DB()\nfixed_deliveries = [Delivery() for _ in range(3)]\nfor event, delivery in zip((e12, e12, e11), fixed_deliveries):\n    candidate(event, fixed, delivery)\nassert fixed.accounts == {\\\"a\\\": (12, \\\"gold\\\")} and fixed.audits == [\\\"e12\\\"]\nassert all(d.acked for d in fixed_deliveries)\nprint(\\\"Candidate / supplied history: a=(12,gold); audits=[e12]; ACKs=3\\\")\n\nrollback = DB()\nrollback.fail_commit = True\nattempt = Delivery()\nexpect_failure(lambda: candidate(e12, rollback, attempt))\nassert rollback.accounts == {} and rollback.audits == [] and not attempt.acked\nrollback = rollback.restart_model()\ncandidate(e12, rollback, Delivery())\nassert rollback.accounts == {\\\"a\\\": (12, \\\"gold\\\")} and rollback.audits == [\\\"e12\\\"]\nprint(\\\"Candidate / failure before commit then model restart and retry: pre-commit effects=0, ACKs=0; after retry updates=1, audits=1, ACKs=1\\\")\n\nlost = DB()\nattempt = Delivery(lose_ack=True)\nexpect_failure(lambda: candidate(e12, lost, attempt))\nassert lost.accounts == {\\\"a\\\": (12, \\\"gold\\\")} and lost.audits == [\\\"e12\\\"] and not attempt.acked\nlost = lost.restart_model()\ncandidate(e12, lost, Delivery())\nassert lost.audits == [\\\"e12\\\"]\nprint(\\\"Candidate / commit then lost ACK then model restart and retry: total updates=1, audits=1; retry ACK succeeds\\\")\n\ndef overlap(first, second, expected_audits):\n    db, barrier, errors = DB(), Barrier(3), []\n    deliveries = [Delivery(), Delivery()]\n    def contender(event, delivery):\n        try:\n            candidate(event, db, delivery, barrier)\n        except BaseException as error:\n            errors.append(error)\n    threads = [Thread(target=contender, args=(event, delivery))\n               for event, delivery in zip((first, second), deliveries)]\n    for thread in threads:\n        thread.start()\n    barrier.wait(timeout=5)\n    for thread in threads:\n        thread.join(timeout=5)\n        assert not thread.is_alive()\n    assert not errors, errors\n    assert db.accounts == {\\\"a\\\": (12, \\\"gold\\\")}\n    assert len(db.audits) in expected_audits\n    assert all(d.acked for d in deliveries)\n    return db.audits\n\nassert overlap(e12, e12, {1}) == [\\\"e12\\\"]\nprint(\\\"Candidate / duplicate contenders paused before transaction then released together: updates=1, audits=1, ACKs=2\\\")\naudit_order = overlap(e11, e12, {1, 2})\nassert audit_order in ([\\\"e12\\\"], [\\\"e11\\\", \\\"e12\\\"])\nprint(\\\"Candidate / revisions 11 and 12 overlap: a=(12,gold); audits=\\\"+str(audit_order)+\\\"; ACKs=2; permissible audit count is 1 or 2\\\")\nfor events, expected in (((e11, e12), [\\\"e11\\\", \\\"e12\\\"]), ((e12, e11), [\\\"e12\\\"])):\n    db = DB()\n    for event in events:\n        candidate(event, db, Delivery())\n    assert db.accounts == {\\\"a\\\": (12, \\\"gold\\\")} and db.audits == expected\nprint(\\\"Candidate / both serial arbitration orders: 11 first gives audits=[e11,e12]; 12 first gives audits=[e12]; final a=(12,gold)\\\")\n\nbad = {\\\"event_id\\\": \\\"bad\\\"}\nquarantine = DB()\nquarantine.fail_quarantine = True\nattempt = Delivery()\nexpect_failure(lambda: candidate(bad, quarantine, attempt))\nassert quarantine.quarantine == [] and not attempt.acked\nquarantine.fail_quarantine = False\nattempt = Delivery(lose_ack=True)\nexpect_failure(lambda: candidate(bad, quarantine, attempt))\nassert quarantine.quarantine == [bad] and not attempt.acked\nquarantine = quarantine.restart_model()\ncandidate(bad, quarantine, Delivery())\nassert len(quarantine.quarantine) == 2 and quarantine.audits == [] and quarantine.accounts == {}\nprint(\\\"Candidate / malformed: unavailable quarantine leaves ACKs=0; saved quarantine then lost ACK permits duplicate quarantine on model restart; final quarantine copies=2, business effects=0, retry ACK succeeds\\\")\nprint(\\\"Scope: in-memory transactional model only; actual broker, database isolation, restart durability, and audit constraints not supplied or tested.\\\")\n'\"",
+        "exit_code": 0,
+        "output_sha256": "010329c8fe6eecafeaa11c70a5ff4e424b42a3317852ad86c222681fae899967"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "reordering",
+          "score": 2
+        },
+        {
+          "id": "dedup-effect",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

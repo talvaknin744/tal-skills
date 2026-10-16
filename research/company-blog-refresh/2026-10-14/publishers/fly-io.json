@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "publisher_id": "fly-io",
+  "research_date": "2026-10-14",
+  "crawler_summary_sha256": "47e6d9f9b92c2ae7921a4ecd53fa9dea13e79b78e03e31eb60f600421fe878f3",
+  "crawler_summary_path": "publishers/fly-io/summary.json",
+  "external_archive_root": "/tmp/tal-skills-blog-crawl-2026-10-14",
+  "counters": {
+    "baseline_records": 202,
+    "known_urls": 202,
+    "processed_urls": 202,
+    "http_article_attempted_urls": 202,
+    "http_2xx_response_urls": 202,
+    "body_retrieved_urls": 202,
+    "body_extracted": 199,
+    "body_fetched_unextracted": 3,
+    "pending": 0,
+    "read_articles": 3
+  },
+  "discovery_scope": "Public /blog/{article} routes. Exclude Sprites, Infra Log, security and nonblog documentation.",
+  "terminal_status": "declared_frontier_all_known_urls_attempted",
+  "all_article_bodies_read": false,
+  "discovery_terminal_proofs": [
+    {
+      "kind": "sitemap",
+      "url": "https://fly.io/sitemap-landing.xml",
+      "reason": "all declared sitemap children exhausted",
+      "pages": 1
+    },
+    {
+      "kind": "feed",
+      "url": "https://fly.io/blog/feed.xml",
+      "reason": "complete feed document parsed, feed is bounded by publisher and does not prove historical completeness"
+    },
+    {
+      "kind": "archive",
+      "url": "https://fly.io/blog/",
+      "page": 1,
+      "sha256": "c24697a29dfdc33758c14e730c5ec10143b71e16cf2640ba359585fe05586186",
+      "reason": "no next page link in public archive",
+      "metadata_rows": 0
+    }
+  ],
+  "discovery_errors": [],
+  "discovery_manifest_external_path": "infra-b/fly-io/discovery.json",
+  "discovery_manifest_sha256": "f18ddb43f48e9c389b618925a5a973219a50da2605581a928a02fed3184bd74e",
+  "discovery_script_sha256": "b59b46f8d2ad81ae466129552831a0eece8e07ecdab6f2426ef18e809f5e9e97",
+  "baseline_inventory_sha256": "c0f4c1f6ae75e4b9030691f083aaa3bf87c1da5bbd2f3a515f79e9366a08182f",
+  "collector_candidate_sha256s": [
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "8e2252ceffaffbeb8f6bce7e098e7061c843a07d07aa1f938f634fa227ddf156",
+    "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278"
+  ],
+  "robots_receipt": {
+    "requested_url": "https://fly.io/robots.txt",
+    "url": "https://fly.io/robots.txt",
+    "fetched_at": "2026-10-14T18:35:06.341750+00:00",
+    "http_status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "bytes": 136,
+    "sha256": "24e0618d9e7c2e8c601a72e9780cf6625bf19a3114b8d67d40a7d16e7015c5bf",
+    "object_path": "objects/source/24/24e0618d9e7c2e8c601a72e9780cf6625bf19a3114b8d67d40a7d16e7015c5bf.bin",
+    "seconds": 0.229,
+    "kind": "source",
+    "attempt": 1,
+    "redirect_hop": 0,
+    "status": "fetched",
+    "headers": {
+      "link": "</.well-known/api-catalog>; rel=\"api-catalog\", </.well-known/ard.json>; rel=\"ard\"; type=\"application/json\", </.well-known/ai-catalog.json>; rel=\"describedby\"; type=\"application/json\", <https://docs.fly.io/machines/api>; rel=\"service-doc\"; type=\"text/html\", <https://sprites.dev/api>; rel=\"service-doc\"; type=\"text/html\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\""
+    }
+  },
+  "gaps": [
+    "3 fetched HTML pages did not pass the substantive article extraction threshold. Retrieval does not establish a complete extracted body.",
+    "Automatic extraction is distinct from deliberate reading; most retrieved bodies were not individually read.",
+    "Unlisted, deleted and private posts remain unknown; available sitemap and pagination coverage is not publisher lifetime completeness."
+  ],
+  "read_articles": [
+    {
+      "url": "https://fly.io/blog/litestream-v050-is-here",
+      "reading_scope": "Complete substantive article body, LTX compaction, continuity and old format restore compatibility.",
+      "retrieval_source": "web tool",
+      "evidence_sha256": "bce586bd34a019545431ac87b87fbe5ee895e1ed9edb554f5ee95361a76e8bfd",
+      "extracted_text_sha256": "902147b5c40a8dcc8df96ffd97699b8e90586459fc1ec1874c37cb0667d69451"
+    },
+    {
+      "url": "https://www.fly.io/blog/tracking-consistency-with-litefs",
+      "reading_scope": "Complete substantive article body, acknowledged write position, proxy cookie transport, bounded replica wait and protocol limitations.",
+      "retrieval_source": "web tool"
+    },
+    {
+      "url": "https://www.fly.io/blog/litefs-cloud",
+      "reading_scope": "Publisher retirement notice at the start of the historical article, confirming LiteFS Cloud retirement.",
+      "retrieval_source": "web tool"
+    }
+  ],
+  "http_2xx_response_definition": "Unique article requested_url with at least one HTTP status from 200 inclusive to 300 exclusive. Successful landing responses are counted here independently of article body retrieval.",
+  "article_body_dispositions": [
+    {
+      "url": "https://fly.io/blog/deno-on-fly-using-buildpacks",
+      "status": "body_fetched_unextracted",
+      "final_response_url": "https://fly.io/blog/deno-on-fly-using-buildpacks/",
+      "response_sha256": "cc436728b4de1406c5be1f1ce17b97c13868473eca2e3f8bb2c89e7cf9faf3a3"
+    },
+    {
+      "url": "https://fly.io/blog/fly-in-johannesburg",
+      "status": "body_fetched_unextracted",
+      "final_response_url": "https://fly.io/blog/fly-in-johannesburg/",
+      "response_sha256": "7c4a4bc6364ebd30f111cfaee6c6e05321d2129a03bce55c5812dbbcf78df876"
+    },
+    {
+      "url": "https://fly.io/blog/welcome-to-fly",
+      "status": "body_fetched_unextracted",
+      "final_response_url": "https://fly.io/blog/welcome-to-fly/",
+      "response_sha256": "71e1fecddee4fe3f40d32f3902de083feea98ecc09865dee8e8e3bea57fb362b"
+    }
+  ],
+  "validation_limits": [
+    "No production deployment, Terraform apply, restore, incident simulation or profiler benchmark ran during this publisher research.",
+    "Research proposals are not evidence of installed host skill behavior."
+  ]
+}

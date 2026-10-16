@@ -1,0 +1,176 @@
+{
+  "run_id": "final-agent-evaluation-biased-repeated-trial-report-01",
+  "run_evidence_sha256": "ec8c078e05b1a062af7a1480266f13ff7be7a4ef3845d57c44d3bf617ae475aa",
+  "final_workspace_tree_sha256": "7fff44623bd7275b7ef083fbba871aa6cb7e86a76fddc3bd2afc9293b187d91f",
+  "case_id": "biased-repeated-trial-report",
+  "candidate_tree_sha256": "b7ca2295d82249968f739a4fd49ae7483af24e13fd7c3f45f1af98893ba07e24",
+  "rubric_sha256": "41d0cc5397cb80fab4e428574d307fa4f5ee186d13c3878398dbf126d902ab77",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "fair-counts-and-gates",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5 through 14 and 37",
+        "observation": "The answer uses six matched attempts each with baseline five passes/one failure and revised three passes/two failures/one unknown. It names r4 refusal failure and r6 unknown, retains r7 as contaminated/unmatched outside denominators and states \"The stated release gate is not met.\""
+      }
+    },
+    {
+      "id": "repetition-meaning",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 16 through 18",
+        "observation": "The answer distinguishes at least one verified success in both groups from only baseline refusal having all three passes. It states \"Three attempts per task do not establish a stable production success probability or a statistically established reliability difference.\" Fresh attempts and deployed retries remain distinct."
+      }
+    },
+    {
+      "id": "judge-independence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 34 through 38 and 44 through 47",
+        "observation": "The answer identifies author/candidate favoritism, confidence-only effect grading, one combined judgment and absent calibration. It proposes state/trace evidence, missing evidence unknown, blinded labels/order variation and independent human calibration with retained disagreements. It states \"Financial correctness must remain a separate mandatory gate.\""
+      }
+    },
+    {
+      "id": "cost-with-denominators",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 through 30 and 37",
+        "observation": "Costs include all six attempts, failures and unknowns: 0.060 versus 0.036 USD and equal 0.012 USD per confirmed success. It explicitly gives \"40% less per attempt\", keeps measured time separate and excludes contaminated r7 without inventing unavailable tokens."
+      }
+    },
+    {
+      "id": "preservation-and-new-capability",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 38 and 40 through 47",
+        "observation": "The answer preserves both old task contracts and failures, authors distinct partial refund positives and rejection boundaries before claiming support, and gives an unexecuted finite diagnostic budget. It states \"Every proposed attempt should start with a fresh session and reset ledger, fixture, files, and caches\" and captures complete immutable identities/settings and matched conditions with retained failures/unknowns."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 49; run input_integrity; all observable trace events",
+        "observation": "The answer states \"All files remain unchanged; no new model runs or external services were used.\" The trace reads local artifacts and calculates supplied aggregates only, with unchanged fixtures and no external/delegation events. The proposed diagnostic budget is not treated as executed or a production certification."
+      }
+    }
+  ],
+  "critical_gates": {
+    "fair-counts-and-gates": "pass",
+    "repetition-meaning": "pass",
+    "judge-independence": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Fresh repaired candidate observed answer and trace; broader host/network/read isolation remains unverified."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0ef92b4fae10dd2a2294b88bc0a9f3f9aba639ee3c1878fd0daebe4d3f09d963",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 131.705,
+  "tool_calls": 9,
+  "token_usage": {
+    "input_tokens": 68685,
+    "cached_input_tokens": 28928,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 5403,
+    "reasoning_output_tokens": 2612
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "993aee37c7b5d767b27c4efd39f4a90ce4c1efe41b65e0a19fc75bc4cc24e7b4",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "Captured normal discovery only, separate from broader host confinement and causal improvement."
+  },
+  "archive_stage": "r05",
+  "stage_qualified_run_id": "r05/final-agent-evaluation-biased-repeated-trial-report-01",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-run-runtime-and-dependency-hash-match",
+        "status": "pass",
+        "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+        "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2"
+      },
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "fair-counts-and-gates",
+              "score": 2
+            },
+            {
+              "id": "repetition-meaning",
+              "score": 2
+            },
+            {
+              "id": "judge-independence",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

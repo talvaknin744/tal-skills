@@ -31,7 +31,7 @@ averages from bursts and runnable work from blocked work.
 
 - For CPU, allocation/GC, scheduling or container constraints, read
   [runtime attribution](references/runtime.md).
-- For fan-out, retries, batching or transport delays, read
+- For fan-out, retries, batching, transport delays or sampled trace evidence, read
   [distributed paths](references/distributed-paths.md).
 
 **Done:** the delay is localized as far as evidence permits, with a concrete

@@ -1,0 +1,543 @@
+{
+  "run_id": "source06-messaging-v2-registry-restore-identity-gap-02",
+  "run_evidence_sha256": "4f9f44bca25e00c58900b0973308eb2615eee34e5504e09264687d7f6c2343c6",
+  "final_workspace_tree_sha256": "dd4ecfdab6a5ddd7877acc542283f6b3752a98a0964156db74ea5016631347d0",
+  "case_id": "v2-registry-restore-identity-gap",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "f22af27f0009b789023d7fcec4c447db30a05211bb9d48f7d14b9441313d959f",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "failed-dependency-gate",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 3 through 3, lines 5 through 5, lines 9 through 9, lines 10 through 10, lines 11 through 11, lines 15 through 15, lines 17 through 17",
+        "observation": "Keeps admission closed, names the default lookup authority, wrong writer 42, ineffective 1042 and missing money v1 cents reference. States topic checksum and compatibility cannot establish historical USD 1.00 semantics.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "**No—the restored orders path is not ready for client admission.** Keep consumer effects paused and require ordinary automatic registration to be blocked before recovery proceeds. The supplied target still has auto-registration enabled."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 3,
+            "end": 3,
+            "quote": "The 25-record count and matching raw checksum establish business-topic preservation. They do not establish correct schema resolution, monetary interpretation, or safe application effects. Those checks remain unverified ([inventory](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/project/recovery-inventory.json:27))."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 5,
+            "quote": "The required lookup authority is the client-selected registry endpoint and default context `.`. Within that authority:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "| ID `42` → `shop.Order`, `orders-value` v1 | ID `42` → `ops.Heartbeat` | Archived records resolve to the wrong writer schema. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 10,
+            "end": 10,
+            "quote": "| `shop.Money` → `money` v1, ID `8`, USD cents | Version 1 returns `40402`; v2 uses micro USD | The historical reference and monetary meaning are missing. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 11,
+            "end": 11,
+            "quote": "| Original Order’s reference to `money` v1 | Recreated Order ID `1042` references v2 | The recreation does not repair records carrying ID `42`. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 15,
+            "end": 15,
+            "quote": "Offline byte inspection of the supplied sample confirms magic byte `00`, writer ID `42`, account `A1`, currency `USD`, and amount `100`: **USD 1.00 under the historical cents contract**, consuming the entire payload. Interpreting `100` as micro USD would produce USD `0.000100`, a 10,000-fold understatement. The Heartbeat schema can read the payload’s first value as `beat=2`, leaving eight bytes; whether the actual client rejects that is unverified. Deserialization success alone is therefore an inadequate acceptance check."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 17,
+            "end": 17,
+            "quote": "The green latest compatibility result does not validate historical ID/reference coverage or monetary meaning. `BACKWARD_TRANSITIVE` settings cannot restore missing history, and a default `scale=6` cannot establish that old amounts were micro USD."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          11,
+          13,
+          16
+        ]
+      }
+    },
+    {
+      "id": "mutation-and-import-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 23 through 23, lines 24 through 24, lines 30 through 30, lines 34 through 34, lines 36 through 36",
+        "observation": "Gates consumers and ordinary registration. Rejects occupied ID and populated subject individual import, rejects populated full destination, and establishes mode mutability/scope and installed procedure before a clean isolated reconstruction.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "**No—the restored orders path is not ready for client admission.** Keep consumer effects paused and require ordinary automatic registration to be blocked before recovery proceeds. The supplied target still has auto-registration enabled."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 23,
+            "end": 23,
+            "quote": "| Import old Order at ID `42` over bootstrap | ID `42` is occupied by another schema; `orders-value` is already populated. The supplied subject-import prerequisites are unsatisfied. Importing Order alone also leaves `money` v1 missing. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "| Import the full inventory into the populated target, then immediately change mode | The supplied complete-migration contract requires an empty destination. This target is populated and conflicting. Its deployed version and mode-mutability setting are unknown; changing mode does not resolve those conflicts or prove completeness. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "1. **Contain and preserve.** Assign the recovery operator ownership of the consumer-admission and registration gates, including bootstrap and reconnecting producers. Preserve the archive, current target metadata and lookup captures, logical inventory, checksums, and recovery progress. Keep all archived record bytes unchanged."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 34,
+            "end": 34,
+            "quote": "3. **Use a clean, isolated destination.** Prefer a demonstrably empty registry destination with the intended default context, retaining the populated target as evidence. First establish server/client versions, mode mutability, mode scope, and an applicable migration procedure. Reconstruct the required mappings with explicit IDs and versions: `money` v1/ID `8` before Order v1/ID `42`, preserving schema types, references, compatibility settings, and the historical cents interpretation. Do not substitute latest versions."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 36,
+            "end": 36,
+            "quote": "4. **Reconcile before opening either gate.** Compare reconstructed metadata against the source manifest and the full retained-record dependency closure. Keep ordinary registration blocked through interruptions and any mode transition. Successful import completion or a mode change is not acceptance evidence."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          11,
+          13
+        ]
+      }
+    },
+    {
+      "id": "supported-versus-unknown",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 24 through 24, lines 26 through 26, lines 28 through 28, lines 32 through 32, lines 34 through 34, lines 38 through 38, lines 40 through 40, lines 54 through 54",
+        "observation": "Uses the supplied source inventory and documentary conditions as bounded evidence, keeps target/client/mode support unresolved, and refuses to treat inventory, successful import or missing raw metadata backup as proven registry recovery.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "| Import the full inventory into the populated target, then immediately change mode | The supplied complete-migration contract requires an empty destination. This target is populated and conflicting. Its deployed version and mode-mutability setting are unknown; changing mode does not resolve those conflicts or prove completeness. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 26,
+            "end": 26,
+            "quote": "These conclusions use the migration conditions stated in [request.md](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/project/request.md:22), without assuming that current guidance applies unchanged to the unknown target version."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 28,
+            "end": 28,
+            "quote": "A bounded recovery plan, **for later authorized execution**, is:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 32,
+            "end": 32,
+            "quote": "2. **Define the recovery boundary.** Initially cover only the 25 archived orders. Establish every embedded writer identifier and its recursive reference closure. The supplied logical inventory is a reconstruction candidate; without verified coverage or a raw registry metadata backup, it does not prove complete registry recovery. Also establish prior application effects, replay identity, and the earliest unfinished consumer position."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 34,
+            "end": 34,
+            "quote": "3. **Use a clean, isolated destination.** Prefer a demonstrably empty registry destination with the intended default context, retaining the populated target as evidence. First establish server/client versions, mode mutability, mode scope, and an applicable migration procedure. Reconstruct the required mappings with explicit IDs and versions: `money` v1/ID `8` before Order v1/ID `42`, preserving schema types, references, compatibility settings, and the historical cents interpretation. Do not substitute latest versions."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 38,
+            "end": 38,
+            "quote": "5. **Verify, then stage admission.** Read the bounded archive through the actual deployed client with cold caches and production-equivalent endpoint/context configuration, using isolated effects and no production checkpoint advancement. After every acceptance check passes, resume from reconciled progress with bounded concurrency and a maximum initial replay of those 25 records. Preserve required processing order and checkpoint only completed work. Stop on the first unresolved mapping, amount, or effect discrepancy."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 40,
+            "end": 40,
+            "quote": "The following checks are **proposed, unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 54,
+            "end": 54,
+            "quote": "Only read-only inspection and offline byte parsing were performed. All files remain unchanged; no broker, registry, client, migration command, or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          11,
+          13,
+          16
+        ]
+      }
+    },
+    {
+      "id": "complete-mapping-and-meaning",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13 through 13, lines 15 through 15, lines 30 through 30, lines 34 through 34, lines 36 through 36, lines 38 through 38, lines 44 through 44, lines 45 through 45",
+        "observation": "Preserves archive bytes and current target allocations, reconstructs original IDs/versions/types/definitions/reference closure/compatibility in isolation and requires actual lookup, A1 USD 1.00 and wrong context/missing reference controls.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 13,
+            "end": 13,
+            "quote": "These mappings are documented in the [inventory](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/project/recovery-inventory.json:8). Another context containing a correct ID `42` would help only with proven client routing; numeric identity alone is insufficient."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 15,
+            "end": 15,
+            "quote": "Offline byte inspection of the supplied sample confirms magic byte `00`, writer ID `42`, account `A1`, currency `USD`, and amount `100`: **USD 1.00 under the historical cents contract**, consuming the entire payload. Interpreting `100` as micro USD would produce USD `0.000100`, a 10,000-fold understatement. The Heartbeat schema can read the payload’s first value as `beat=2`, leaving eight bytes; whether the actual client rejects that is unverified. Deserialization success alone is therefore an inadequate acceptance check."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "1. **Contain and preserve.** Assign the recovery operator ownership of the consumer-admission and registration gates, including bootstrap and reconnecting producers. Preserve the archive, current target metadata and lookup captures, logical inventory, checksums, and recovery progress. Keep all archived record bytes unchanged."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 34,
+            "end": 34,
+            "quote": "3. **Use a clean, isolated destination.** Prefer a demonstrably empty registry destination with the intended default context, retaining the populated target as evidence. First establish server/client versions, mode mutability, mode scope, and an applicable migration procedure. Reconstruct the required mappings with explicit IDs and versions: `money` v1/ID `8` before Order v1/ID `42`, preserving schema types, references, compatibility settings, and the historical cents interpretation. Do not substitute latest versions."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 36,
+            "end": 36,
+            "quote": "4. **Reconcile before opening either gate.** Compare reconstructed metadata against the source manifest and the full retained-record dependency closure. Keep ordinary registration blocked through interruptions and any mode transition. Successful import completion or a mode change is not acceptance evidence."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 38,
+            "end": 38,
+            "quote": "5. **Verify, then stage admission.** Read the bounded archive through the actual deployed client with cold caches and production-equivalent endpoint/context configuration, using isolated effects and no production checkpoint advancement. After every acceptance check passes, resume from reconciled progress with bounded concurrency and a maximum initial replay of those 25 records. Preserve required processing order and checkpoint only completed work. Stop on the first unresolved mapping, amount, or effect discrepancy."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 44,
+            "end": 44,
+            "quote": "| Cold-cache decode of all 25 records, covering every writer/reference combination | Correct lookup authority and complete decoding; exact amounts match authoritative evidence. A1 at partition 0, offset 12 remains USD `1.00`. Other records need corresponding business-value evidence. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 45,
+            "end": 45,
+            "quote": "| Missing `money` v1; wrong endpoint/context; ID `42` mapped differently in another context | Admission remains closed; zero production effects and checkpoint advances; archive count/checksum unchanged. |"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          11,
+          13,
+          16
+        ]
+      }
+    },
+    {
+      "id": "evidence-and-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 through 3, lines 28 through 28, lines 30 through 30, lines 32 through 32, lines 40 through 40, lines 44 through 44, lines 46 through 46, lines 50 through 50, lines 52 through 52",
+        "observation": "Assigns the recovery operator ownership and preserves archive, current metadata, captures, source inventory/checksum/progress and missing backup proof. Explicitly keeps broader business and actual runtime acceptance outstanding.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 3,
+            "end": 3,
+            "quote": "The 25-record count and matching raw checksum establish business-topic preservation. They do not establish correct schema resolution, monetary interpretation, or safe application effects. Those checks remain unverified ([inventory](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/project/recovery-inventory.json:27))."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 28,
+            "end": 28,
+            "quote": "A bounded recovery plan, **for later authorized execution**, is:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "1. **Contain and preserve.** Assign the recovery operator ownership of the consumer-admission and registration gates, including bootstrap and reconnecting producers. Preserve the archive, current target metadata and lookup captures, logical inventory, checksums, and recovery progress. Keep all archived record bytes unchanged."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 32,
+            "end": 32,
+            "quote": "2. **Define the recovery boundary.** Initially cover only the 25 archived orders. Establish every embedded writer identifier and its recursive reference closure. The supplied logical inventory is a reconstruction candidate; without verified coverage or a raw registry metadata backup, it does not prove complete registry recovery. Also establish prior application effects, replay identity, and the earliest unfinished consumer position."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 40,
+            "end": 40,
+            "quote": "The following checks are **proposed, unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 44,
+            "end": 44,
+            "quote": "| Cold-cache decode of all 25 records, covering every writer/reference combination | Correct lookup authority and complete decoding; exact amounts match authoritative evidence. A1 at partition 0, offset 12 remains USD `1.00`. Other records need corresponding business-value evidence. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 46,
+            "end": 46,
+            "quote": "| Interrupt reconstruction after Money but before Order; attempt ordinary registration; restart | Ordinary registration remains blocked. Partial restoration never admits consumers. Resume only from verified manifest state; conflicts stop recovery. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 50,
+            "end": 50,
+            "quote": "The last two checks require an application effect/progress protocol that is absent from the supplied evidence. Account `A1` alone is not proof of a unique replay identity. No exactly-once effect guarantee is supported here."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 52,
+            "end": 52,
+            "quote": "Admission should require recorded evidence for metadata coverage, cold-client decoding, monetary reconciliation, and effect/checkpoint recovery. Monitor unexpected registrations, lookup/reference failures, amount discrepancies, and oldest unfinished work."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          11,
+          13,
+          16
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 15 through 15, lines 28 through 28, lines 40 through 40, lines 54 through 54",
+        "observation": "Labels only offline byte inspection performed and the remaining plans unexecuted, with no live readiness or exactly once claim. Sealed trace and unchanged input inventory corroborate scope.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 15,
+            "end": 15,
+            "quote": "Offline byte inspection of the supplied sample confirms magic byte `00`, writer ID `42`, account `A1`, currency `USD`, and amount `100`: **USD 1.00 under the historical cents contract**, consuming the entire payload. Interpreting `100` as micro USD would produce USD `0.000100`, a 10,000-fold understatement. The Heartbeat schema can read the payload’s first value as `beat=2`, leaving eight bytes; whether the actual client rejects that is unverified. Deserialization success alone is therefore an inadequate acceptance check."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 28,
+            "end": 28,
+            "quote": "A bounded recovery plan, **for later authorized execution**, is:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 40,
+            "end": 40,
+            "quote": "The following checks are **proposed, unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 54,
+            "end": 54,
+            "quote": "Only read-only inspection and offline byte parsing were performed. All files remain unchanged; no broker, registry, client, migration command, or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          11,
+          13,
+          16
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "failed-dependency-gate": "pass",
+    "mutation-and-import-boundary": "pass",
+    "supported-versus-unknown": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "3624a64269fb0ea1cb41b587c3360ca368c78f8b8c9edc8e029861e521078958",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 96.392,
+  "tool_calls": 6,
+  "token_usage": {
+    "input_tokens": 94772,
+    "cached_input_tokens": 70656,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 5186,
+    "reasoning_output_tokens": 2146
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/schema-registry-identity.md",
+        "sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/.agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'request.md' -g 'recovery-inventory.json' -g '\"'!node_modules'\"' -g '\"'!vendor'\"' .\"",
+        "exit_code": 0,
+        "output_sha256": "9993e22feedfac27ea3f4680e79c354cb6670e7ae125cde354c114ebf120ee2a"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/.agents/skills/messaging-reliability/references/schema-registry-identity.md /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-registry-restore-identity-gap-02/workspace/.agents/skills/messaging-reliability/references/ordering-and-replay.md'",
+        "exit_code": 0,
+        "output_sha256": "6b0bcc013c5b06911bfb91987013642518a69b281cd3d248f162474196379930"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc \"cat request.md recovery-inventory.json; rg --files -g '\"'!node_modules'\"' -g '\"'!vendor'\"' -g '\"'!'\"\\\\.git' .\"",
+        "exit_code": 0,
+        "output_sha256": "500a418ff4f2e39132e00e215f4f468801acba88f43a2b40dadccfece745b010"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc 'nl -ba request.md; nl -ba recovery-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "366389ff0dfaafdf40cadb1b11c29e9f19ffb5b0c896a64fb69baedc6e4ef11c"
+      },
+      {
+        "line": 16,
+        "item": "item_7",
+        "command": "/bin/zsh -lc \"python3 -B -c 'import json\nfrom decimal import Decimal\nfrom pathlib import Path\ninventory = json.loads(Path(\\\"recovery-inventory.json\\\").read_text())\nraw = bytes.fromhex(inventory[\\\"retained_sample\\\"][\\\"value_hex\\\"])\nposition = 5\n\ndef read_long():\n    global position\n    encoded = 0\n    shift = 0\n    while True:\n        byte = raw[position]\n        position += 1\n        encoded |= (byte & 127) << shift\n        if byte < 128:\n            return (encoded >> 1) \"'^ -(encoded & 1)\n        shift += 7\n\ndef read_string():\n    global position\n    length = read_long()\n    value = raw[position:position + length].decode(\"utf-8\")\n    position += length\n    return value\n\naccount = read_string()\ncurrency = read_string()\namount = read_long()\nprint(json.dumps({\"check\": \"offline byte inspection only; no registry or client used\", \"record_bytes\": len(raw), \"magic_byte\": raw[0], \"writer_id_big_endian\": int.from_bytes(raw[1:5], \"big\"), \"account\": account, \"currency\": currency, \"amount_minor\": amount, \"source_units\": \"USD cents\", \"amount_usd\": format(Decimal(amount) / 100, \".2f\"), \"remaining_bytes\": len(raw) - position}))\nposition = 5\nbeat = read_long()\nprint(json.dumps({\"hypothetical_heartbeat_first_field\": beat, \"remaining_bytes\": len(raw) - position, \"actual_client_acceptance\": \"not tested\"}))\nprint(json.dumps({\"hypothetical_amount_if_interpreted_as_micro_USD\": str(Decimal(amount) / 1000000), \"understatement_factor\": 10000}))'\"'\"",
+        "exit_code": 0,
+        "output_sha256": "983a662b9e09471fbcc35dfd098ce2796280b9dda8877574536aa48947de2a92"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "failed-dependency-gate",
+          "score": 2
+        },
+        {
+          "id": "mutation-and-import-boundary",
+          "score": 2
+        },
+        {
+          "id": "supported-versus-unknown",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

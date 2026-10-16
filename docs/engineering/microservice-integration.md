@@ -16,6 +16,9 @@ Invocation: automatic
 - The communication style has a use-case reason; required waiting or delayed completion is explicit.
 - A representative request/response or event defines meaningful fields and errors without exposing provider internals.
 - Affected consumer versions, compatibility, rollout stages, and incompatibility owners are identified.
+- For changes to business meaning or completion semantics, required consumers can observe the authoritative terminal outcome, including unsuccessful outcomes, and success effects are checked separately.
+- FieldMask changes identify the actual convention for an omitted mask, preservation and reset behavior, replacement risk, and supported symbolic paths. Checks cover the original serialized request's expected persisted state or rejection and compare the safe request, reset and replacement separately.
+- FieldMask symbolic path retirement uses observed legacy path or alias requests, supported client versions and a meaningful observation window, with a known legacy call validating the detector.
 - Relevant consumers exercise provider behavior, or the gaps are explicitly marked unverified; executed checks are reported.
 
 ## Where it fits

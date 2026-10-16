@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "original_author_seal_sha256": "10cdf53654822e4a77780431b9ecd30a483aff21fe7225933ba3da42e95f3ec1",
+  "case_id": "server-query-barrier",
+  "rubric_id": "bounded-results",
+  "severity": "critical",
+  "original_criterion": "Disallows not found strict success in the first two traces; can wait until 60 ms and return job-red queued within 80 ms under these traces. In unavailable, returns explicit UNAVAILABLE by 80 ms without resetting the total budget or falling back to stale success.",
+  "revised_criterion": "Disallows not found strict success at the two supplied stale returns. In ordered-wire, the matching query ACK received at 8 ms and contiguous prefix 41 application at 60 ms support a queued result captured at or after 60 ms within the 80 ms deadline. In recent-ping, application at 60 ms alone is not a query-related ordering proof: the gateway must request and establish a matching proof before successful capture. The trace supplies no completion time for that new proof, so UNAVAILABLE by 80 ms is permitted if it is absent. In unavailable, returns explicit UNAVAILABLE by 80 ms without restarting the total budget or falling back to stale success.",
+  "reason": "The recent-ping trace supplies state application at 60 ms but no query-related barrier ACK receipt or bound. C4 supplies ordering, not a deadline for that receipt. The original wording ambiguously suggested the first two traces both supported success at 60 ms.",
+  "change_class": "Explicit versioned correction of an unsupported success timing expectation, preserving proof requirements and the critical deadline gate.",
+  "raw_facts_changed": false,
+  "hidden_ack_assumed": false,
+  "new_ack_observation_added": false,
+  "unchanged_case_fields": "Every field except this one criterion string is byte-semantically identical to author r01. All source raw files and prompts are byte exact.",
+  "trial_status": "No responder or candidate trial occurred before or during this correction.",
+  "review_status": "Independent revised pretrial review pending."
+}

@@ -5,6 +5,36 @@ critical path, queue/pool wait and remaining deadline at each stage. Sequential
 stage durations can explain a trace; independently computed stage percentiles
 cannot be added to obtain an endpoint percentile.
 
+## Trace evidence and the causal path
+
+For a trace based diagnosis, establish the root operation, outcome and workload
+cohort, then check context propagation, instrumentation and collection coverage.
+A missing span leaves work unresolved until code, client timings or other evidence
+shows whether it happened. Inspect upstream sampling, exporter drops and collector
+loss before interpreting the trace as complete. A downstream sampling rule cannot
+recover spans an upstream stage never recorded or exported. For an OpenTelemetry
+tail sampler, verify the installed processor's buffering, decision cache and late
+span behavior, including eviction observations.
+
+Reconstruct required dependencies and joins from correlated request evidence.
+Separate parent inclusive duration from its own work, and required parallel work
+from detached work that does not gate the response. Use local durations and
+caller send/return observations to resolve ordering. Cross host wall clocks can
+make serial calls appear to overlap or children appear outside their parents.
+State clock uncertainty instead of turning a display correction into proof of
+causality. A candidate speeds the endpoint only while it shortens the limiting
+path. Recompute the path after the change because another branch may become
+limiting.
+
+Record the selection policy and observation window. Latency or error selected
+traces describe the retained cohort, so its p99 is not automatically the endpoint
+population p99. Use endpoint metrics recorded before trace sampling, or a
+documented statistically valid estimator, for population claims. Compare slow,
+timeout and successful request cohorts with the same timing boundary. A complete
+single trace explains that request, with its workload limits still explicit.
+
+## Distributed interventions
+
 For required parallel leaves, inspect the slowest required contribution and
 aggregation work. Include coordinator saturation, tenant/key skew, correlated
 dependencies and remote work continuing after the root stops waiting. Correlate

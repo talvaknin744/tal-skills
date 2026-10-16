@@ -1,0 +1,18 @@
+# Query freshness extension evaluation map, revision 2
+
+The original [distributed corpus](cases.json), raw fixtures, prompts, rubrics and historical results remain unchanged. The additive [query corpus](query-freshness-cases-r02.json) contains three review projects and one nontrigger. Give a responder only its selected inline prompt, raw project, discoverable frozen package and declared capabilities. Keep this map, correction metadata, rubrics and other cases outside its workspace.
+
+| Capability or boundary | Selected established regression | Additive case |
+| --- | --- | --- |
+| Query proof and application order are distinct from recent source contact | `replica-read-your-writes`, `primary-read-lost-update` | `server-query-barrier` |
+| Idle progress, shared confirmation work and bounded proof budget | `cache-fill-invalidation`, `lost-commit-response` | `idle-query-progress` |
+| Authority identity, reconnection and replacement snapshot readiness | `postgres-write-skew`, `lost-commit-response` | `authority-query-reconnect` |
+| Terminology in a local request does not expand scope | `sequential-file-transform` | `static-stream-labels` |
+
+The selected existing set contains all five concurrency positives and its original nontrigger. Report established behavior and new capability separately. Use three fresh normal discovery attempts per positive and one per nontrigger where the declared activation procedure applies. Preserve every attempt, actual body read, capability deviation and independently evidenced critical score. This map reports selections and authored input integrity, with no agent pass, causal improvement or production claim.
+
+The [original authored criterion version](history/query-freshness-original-r01.json) remains exact. The [explicit correction](history/query-freshness-answerability-correction-r02.json), [criterion diff](history/query-freshness-criterion-diff-r02.json) and [fixture path relocation](history/query-freshness-staging-path-diff-r02.json) record the only changes. The recent ping trace gives state application at 60 ms but no completion time for a matching query proof. The corrected critical criterion permits UNAVAILABLE within the original total deadline when proof is absent. It does not invent an ACK or remove stale success refusal. All other case fields and raw facts are preserved. Original `prompt_file` values remain provenance; the runner consumes the inline prompt and copies only the declared raw project.
+
+Author attribution identifies Netflix's [Consistent Caching Mechanism in Titus Gateway](https://netflixtechblog.com/consistent-caching-mechanism-in-titus-gateway-6cb89b9ce296) as motivation. FleetView names, ACK fields, authority domains, transport and application queues, pulse periods and numerical deadlines are synthetic supplied contracts. They are not portable vendor APIs or a general linearizability guarantee. The complete retained RSS prose informed authoring; rendered media, original page parity and live runtime behavior remain outside that source reading scope.
+
+The [corpus manifest](../company-blog-refresh/netflix-mechanisms-corpus-manifest-v1.json) binds exact author, pretrial, corpus, fixture and original input hashes. Use `company-blog-refresh-netflix-query-freshness` through the existing refresh staging helper. Its external `cases.json` alias preserves the versioned bytes without replacing the original repository corpus. Register definitions once per source view and use a fresh destination. Broad filesystem, network or inherited guidance access may remain unenforced on a host; report actual deviations rather than claiming case compliance. Unavailable host and unexecuted runtime coverage remain gaps.

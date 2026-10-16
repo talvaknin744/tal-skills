@@ -1,0 +1,338 @@
+{
+  "run_id": "source05-messaging-v2-registry-restore-identity-gap-02",
+  "run_evidence_sha256": "577fa16278a5497da3ca9697e8427c653208ddf19ec06ca1ddc8c06d96327fcb",
+  "final_workspace_tree_sha256": "b7101b2a8cbe902779eb9e5b126735aed2f5d96a2c89064373b910ab4d83199e",
+  "case_id": "v2-registry-restore-identity-gap",
+  "candidate_tree_sha256": "a1baf91a4be399ff0086d660739bd34f98209a28f37758cf12c93c6ba079f247",
+  "rubric_sha256": "f22af27f0009b789023d7fcec4c447db30a05211bb9d48f7d14b9441313d959f",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "failed-dependency-gate",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5 through 9",
+        "observation": "The answer rejects readiness despite checksum/count health and preserves original default-context Order42 with exact Moneyv1/ID8. Heartbeat42 and recreated Order1042 cannot repair unchanged wire records, and latest compatibility/defaults do not establish historic cents.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 9,
+            "quote": "`default context . → ID 42 → shop.Order → money version 1, ID 8 → USD cents`\n\nThe configured target instead resolves ID 42 to `ops.Heartbeat`, and its `money` version 1 lookup returns “Version not found.” Order ID 1042 references `money` version 2, so it does not restore the identity retained in the archived bytes. Target and client versions are also unknown, and the actual client lookup path remains unverified. These are explicit blockers in the [inventory](/tmp/tal-skills-schema-registry-native-2026-10-15-r02/trials/source05-messaging-v2-registry-restore-identity-gap-02/workspace/project/recovery-inventory.json:22).\n\nLocal inspection of the supplied sample confirms that its wire prefix carries ID 42 and its payload contains account `A1`, currency `USD`, and amount `100`. Under the original schema’s cents semantics, that is **$1.00**. Interpreting the same amount as micro USD produces **$0.0001**, 10,000 times too small. A successful deserialization or a reader default of `scale = 6` would not establish correct business meaning. The green latest compatibility result proves neither historical mapping coverage nor preservation of units."
+          }
+        ]
+      }
+    },
+    {
+      "id": "mutation-and-import-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13 through 14, lines 20 through 24",
+        "observation": "The answer holds admission and registration, identifies occupiedID and populated-subject violations of individual import and empty-destination whole migration. Actual server/client versions, mode mutability and scope prerequisites must be established before authorization, without overwrite or blind force-mode commands.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 13,
+            "end": 14,
+            "quote": "| Import the old Order at ID 42 over the bootstrap schema | **Reject as proposed.** ID 42 is occupied by another schema, `orders-value` is populated, and the required historical reference is absent. The supplied individual-import prerequisites are unmet. Changing that mapping could also invalidate any bootstrap records retaining ID 42. |\n| Import the full inventory into the populated target, then change mode immediately | **Reject as proposed.** The cited complete-migration contract requires an empty destination. The logical inventory is not a verified complete reconstruction. Unknown target version and mode mutability prevent establishing the mode prerequisites; an immediate transition could expose a partial restore to new registrations. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 24,
+            "quote": "1. **Maintain a recovery gate owned by the recovery lead.** Keep ordinary consumers, effects, and automatic registration fenced. Permit only designated diagnostic and restoration operations under a separately authorized procedure. Preserve the archived records, backup, and populated target evidence intact. Repair metadata while retaining the original record bytes.\n\n2. **Declare the recovery boundary and establish metadata coverage.** Initially bound acceptance to the restored 25 records, with a fixed partition/offset manifest. Identify every retained schema identifier and its recursive reference closure, and reconcile them against authoritative source metadata. The supplied two-schema inventory establishes the known Order/Money dependency; it does not prove whole-registry completeness. A raw metadata backup or independently verified reconstruction is still needed for any broader claim. Obtain business expectations for all admitted records; only A1’s ledger expectation is supplied here.\n\n3. **Prepare an isolated, empty destination using a supported restoration contract.** Preserve the default-context authority expected by these records. Before execution, establish the destination server version, exact client version, mode mutability, applicable global/subject mode scope, and import prerequisites. Restore `money` version 1 at ID 8 before `orders-value` version 1 at ID 42, including the exact reference and supplied `BACKWARD_TRANSITIVE` settings. Preserve IDs, versions, definitions, and required metadata throughout. Classify an orders-only reconstruction as scoped recovery; a complete migration requires proven complete coverage."
+          }
+        ]
+      }
+    },
+    {
+      "id": "supported-versus-unknown",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 9, lines 22 through 24",
+        "observation": "Supplied source identity and documentary conditions remain distinct from unknown target/client and mode support. The two-schema logical inventory is not complete raw metadata recovery, and installed product plus actual lookup evidence is required before a supported path or readiness claim.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 9,
+            "quote": "The configured target instead resolves ID 42 to `ops.Heartbeat`, and its `money` version 1 lookup returns “Version not found.” Order ID 1042 references `money` version 2, so it does not restore the identity retained in the archived bytes. Target and client versions are also unknown, and the actual client lookup path remains unverified. These are explicit blockers in the [inventory](/tmp/tal-skills-schema-registry-native-2026-10-15-r02/trials/source05-messaging-v2-registry-restore-identity-gap-02/workspace/project/recovery-inventory.json:22).\n\nLocal inspection of the supplied sample confirms that its wire prefix carries ID 42 and its payload contains account `A1`, currency `USD`, and amount `100`. Under the original schema’s cents semantics, that is **$1.00**. Interpreting the same amount as micro USD produces **$0.0001**, 10,000 times too small. A successful deserialization or a reader default of `scale = 6` would not establish correct business meaning. The green latest compatibility result proves neither historical mapping coverage nor preservation of units."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 24,
+            "quote": "2. **Declare the recovery boundary and establish metadata coverage.** Initially bound acceptance to the restored 25 records, with a fixed partition/offset manifest. Identify every retained schema identifier and its recursive reference closure, and reconcile them against authoritative source metadata. The supplied two-schema inventory establishes the known Order/Money dependency; it does not prove whole-registry completeness. A raw metadata backup or independently verified reconstruction is still needed for any broader claim. Obtain business expectations for all admitted records; only A1’s ledger expectation is supplied here.\n\n3. **Prepare an isolated, empty destination using a supported restoration contract.** Preserve the default-context authority expected by these records. Before execution, establish the destination server version, exact client version, mode mutability, applicable global/subject mode scope, and import prerequisites. Restore `money` version 1 at ID 8 before `orders-value` version 1 at ID 42, including the exact reference and supplied `BACKWARD_TRANSITIVE` settings. Preserve IDs, versions, definitions, and required metadata throughout. Classify an orders-only reconstruction as scoped recovery; a complete migration requires proven complete coverage."
+          }
+        ]
+      }
+    },
+    {
+      "id": "complete-mapping-and-meaning",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 24 through 26, lines 34 through 37",
+        "observation": "The isolated empty destination preserves original IDs, subject versions, exact Moneyv1 graph and BACKWARD_TRANSITIVE settings without damaging current allocations. Cold-cache actual client checks require A1/USD/1.00 and wrong-context/missing-version controls. Broader amounts remain unverified.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 26,
+            "quote": "3. **Prepare an isolated, empty destination using a supported restoration contract.** Preserve the default-context authority expected by these records. Before execution, establish the destination server version, exact client version, mode mutability, applicable global/subject mode scope, and import prerequisites. Restore `money` version 1 at ID 8 before `orders-value` version 1 at ID 42, including the exact reference and supplied `BACKWARD_TRANSITIVE` settings. Preserve IDs, versions, definitions, and required metadata throughout. Classify an orders-only reconstruction as scoped recovery; a complete migration requires proven complete coverage.\n\n4. **Verify through the actual deployed client before releasing the gate.** Use an isolated sink with production effects and checkpoints untouched. Run a finite pass over all 25 retained records, tracing the endpoint, context, identifier lookup, reference resolution, and decoded business values. Clear client caches so surviving cache entries cannot conceal missing metadata. Reconcile every order amount against its source expectation, including A1 = USD 1.00, and confirm the archive count and raw checksum remain unchanged."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 34,
+            "end": 37,
+            "quote": "| Cold client cache and destination restart | Historical IDs and references still resolve correctly; amounts remain unchanged. |\n| ID 42 also exists in another context | The actual client selects the intended authority and cannot silently use the other schema. |\n| `money` version 1 is absent | Acceptance fails closed; no substitution of version 2, effects, or checkpoint advancement. |\n| Restore stops after Money but before Order; automatic registration is attempted | Admission remains closed, ordinary registration is blocked, and partial progress remains recorded for supported recovery. |"
+          }
+        ]
+      }
+    },
+    {
+      "id": "evidence-and-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 through 22, lines 39 through 41",
+        "observation": "The recovery lead and application owner retain admission/registration responsibilities and archive/backup/populated-target evidence. Collision and missing-reference findings remain explicit. Actual decoding, effects and broader recovery acceptance stay proposed or unresolved rather than being inferred from topic health.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 22,
+            "quote": "1. **Maintain a recovery gate owned by the recovery lead.** Keep ordinary consumers, effects, and automatic registration fenced. Permit only designated diagnostic and restoration operations under a separately authorized procedure. Preserve the archived records, backup, and populated target evidence intact. Repair metadata while retaining the original record bytes.\n\n2. **Declare the recovery boundary and establish metadata coverage.** Initially bound acceptance to the restored 25 records, with a fixed partition/offset manifest. Identify every retained schema identifier and its recursive reference closure, and reconcile them against authoritative source metadata. The supplied two-schema inventory establishes the known Order/Money dependency; it does not prove whole-registry completeness. A raw metadata backup or independently verified reconstruction is still needed for any broader claim. Obtain business expectations for all admitted records; only A1’s ledger expectation is supplied here."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 39,
+            "end": 41,
+            "quote": "Track unresolved mappings, schema/reference lookup failures, amount mismatches, and the oldest blocked replay position. Admission remains blocked until those acceptance checks and effect-recovery evidence pass; no delivery or exactly-once guarantee is established by the supplied evidence.\n\nAll files remain unchanged. Only file inspection and local arithmetic on the supplied bytes were performed; no broker, registry, client, migration, or external request was run."
+          }
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 30 through 30, lines 41 through 41",
+        "observation": "Actual commands only read staged source and synthetic project data and calculate local sample bytes. Independently audited files remain unchanged with no external/client/service operation. The answer labels future checks unexecuted and claims no live recovery.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 30,
+            "quote": "The following additional checks are **proposed and unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 41,
+            "end": 41,
+            "quote": "All files remain unchanged. Only file inspection and local arithmetic on the supplied bytes were performed; no broker, registry, client, migration, or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          10,
+          11,
+          13,
+          15,
+          17,
+          19
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "failed-dependency-gate": "pass",
+    "mutation-and-import-boundary": "pass",
+    "supported-versus-unknown": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "9432693fc5f12e7c1c8fd21e06bc4cb44bdeb7615504fbd9a6e4c699fbbf4171",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 178.468,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 94428,
+    "cached_input_tokens": 70528,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 6045,
+    "reasoning_output_tokens": 3243
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "e0fea5dc6e57eb5bfc24aade29c1824d5802fad5b3c9cfb164229cd8b2e0bd98",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/schema-registry-identity.md",
+        "sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r02/trials/source05-messaging-v2-registry-restore-identity-gap-02/workspace/.agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "e0fea5dc6e57eb5bfc24aade29c1824d5802fad5b3c9cfb164229cd8b2e0bd98"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'request.md' -g 'recovery-inventory.json' -g '\"'!node_modules'\"' -g '\"'!vendor'\"' project\"",
+        "exit_code": 0,
+        "output_sha256": "59eabcf02fabe7167bd9510444a59c093cee5c288bb0020f6bf1b8fc9ad220eb"
+      },
+      {
+        "line": 10,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat project/request.md project/recovery-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "413076f2f762157801260111072cda585ab71face5ddf4101c27b7aa75e78fe3"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/schema-registry-identity.md .agents/skills/messaging-reliability/references/ordering-and-replay.md'",
+        "exit_code": 0,
+        "output_sha256": "6b0bcc013c5b06911bfb91987013642518a69b281cd3d248f162474196379930"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!node_modules'\"' -g '\"'!.git'\"' project\"",
+        "exit_code": 0,
+        "output_sha256": "da606329ee14c783caee2f6041c25bbe67782fe0c6a02cd5ab94545c9a1cff0c"
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g AGENTS.md -g '\"'!.git'\"' . /tmp/tal-skills-schema-registry-native-2026-10-15-r02/trials/source05-messaging-v2-registry-restore-identity-gap-02\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 17,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md; nl -ba project/recovery-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "366389ff0dfaafdf40cadb1b11c29e9f19ffb5b0c896a64fb69baedc6e4ef11c"
+      },
+      {
+        "line": 19,
+        "item": "item_8",
+        "command": "/bin/zsh -lc \"python3 -B -c 'import json\nfrom pathlib import Path\nfrom decimal import Decimal\ninventory = json.loads(Path(\\\"project/recovery-inventory.json\\\").read_text())\nsample = inventory[\\\"retained_sample\\\"]\nraw = bytes.fromhex(sample[\\\"value_hex\\\"])\npayload = raw[5:]\nposition = 0\n\ndef avro_long():\n    global position\n    result, shift = 0, 0\n    while True:\n        byte = payload[position]\n        position += 1\n        result |= (byte & 0x7f) << shift\n        if not byte & 0x80:\n            return (result >> 1) \"'^ -(result & 1)\n        shift += 7\n\ndef avro_string():\n    global position\n    length = avro_long()\n    result = payload[position:position + length].decode(\"utf-8\")\n    position += length\n    return result\n\naccount = avro_string()\ncurrency = avro_string()\namount = avro_long()\nprint(json.dumps({\n    \"check_kind\": \"local arithmetic on supplied hex; no registry, broker or client execution\",\n    \"record_bytes\": len(raw),\n    \"magic_byte\": raw[0],\n    \"embedded_schema_id_big_endian\": int.from_bytes(raw[1:5], \"big\"),\n    \"source_schema_interpretation\": {\"account\": account, \"currency\": currency, \"amount\": amount},\n    \"payload_bytes_consumed\": position,\n    \"payload_bytes_total\": len(payload),\n    \"USD_with_source_cents_semantics\": str(Decimal(amount) / Decimal(100)),\n    \"USD_if_reinterpreted_as_micro_USD\": str(Decimal(amount) / Decimal(1000000)),\n    \"sample_matches_source_ledger\": account == sample[\"source_ledger\"][\"account\"] and currency == sample[\"source_ledger\"][\"currency\"] and amount == sample[\"source_ledger\"][\"amount_minor\"]\n}, indent=2))'\"' \"",
+        "exit_code": 0,
+        "output_sha256": "5f24f8553bdaec9b0cc756fbf1b87b3333bb7450f3d54b52bbe0af92299545a5"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "failed-dependency-gate",
+          "score": 2
+        },
+        {
+          "id": "mutation-and-import-boundary",
+          "score": 2
+        },
+        {
+          "id": "supported-versus-unknown",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

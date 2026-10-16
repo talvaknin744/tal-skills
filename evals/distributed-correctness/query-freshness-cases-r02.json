@@ -1,0 +1,342 @@
+{
+  "format_version": 1,
+  "author_stage": "pretrial",
+  "cases": [
+    {
+      "id": "server-query-barrier",
+      "title": "A tokenless strict query crosses delayed stream application",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "tokenless-query",
+        "freshness",
+        "application-order",
+        "deadline"
+      ],
+      "prompt": "Review the current FleetView query path and both proposed fixes using the\ncontract and three traces. Recommend a request flow that meets the existing\ncaller API and total budget. Explain what may be returned in each trace and what\nthe EVENTUAL path should do. Include a small set of decisive verification\nschedules. Keep all files unchanged.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/server-query-barrier",
+      "fixtures": [
+        "contract.md",
+        "gateway.pseudo",
+        "traces.json"
+      ],
+      "prompt_file": "responder-inputs/server-query-barrier/prompt.txt",
+      "task_mode": "review",
+      "activation": "activate",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "network": false,
+        "writes": false,
+        "service_launch": false
+      },
+      "rubric": [
+        {
+          "id": "tokenless-ordering-proof",
+          "severity": "critical",
+          "criterion": "Rejects the recent ping shortcut and the required new caller token as fixes for the existing API. Establishes a server created barrier ordered after this invocation, or another fully justified internal equivalent within the supplied contract.",
+          "fixture_facts": [
+            "C2",
+            "C4",
+            "C6",
+            "Q1",
+            "Q3"
+          ]
+        },
+        {
+          "id": "applied-before-snapshot",
+          "severity": "critical",
+          "criterion": "Explains why fix A still fails in ordered-wire: receipt precedes application. Admits success only from an atomic snapshot of matching authority/session whose contiguous applied prefix covers the barrier. Equivalent serialization of update application and ACK processing is accepted; no specific counter implementation is required.",
+          "fixture_facts": [
+            "C3",
+            "C4",
+            "C5",
+            "Q2",
+            "Q3"
+          ]
+        },
+        {
+          "id": "bounded-results",
+          "severity": "critical",
+          "criterion": "Disallows not found strict success at the two supplied stale returns. In ordered-wire, the matching query ACK received at 8 ms and contiguous prefix 41 application at 60 ms support a queued result captured at or after 60 ms within the 80 ms deadline. In recent-ping, application at 60 ms alone is not a query-related ordering proof: the gateway must request and establish a matching proof before successful capture. The trace supplies no completion time for that new proof, so UNAVAILABLE by 80 ms is permitted if it is absent. In unavailable, returns explicit UNAVAILABLE by 80 ms without restarting the total budget or falling back to stale success.",
+          "fixture_facts": [
+            "C2",
+            "C6",
+            "Q1",
+            "Q2"
+          ]
+        },
+        {
+          "id": "contract-boundaries",
+          "severity": "major",
+          "criterion": "Leaves EVENTUAL as an intentional weaker path and allows later state in strict responses. Does not infer an exact historical cut, atomic mutation reservation, general provider API or broad cross-system linearizability.",
+          "fixture_facts": [
+            "C1",
+            "C2",
+            "C7"
+          ]
+        },
+        {
+          "id": "discriminating-checks",
+          "severity": "major",
+          "criterion": "Proposes bounded schedules that independently hold a state event before receipt, after receipt before application, and beyond deadline, plus a caught-up success and EVENTUAL result. Names observable state/prefix/result assertions without claiming these checks ran.",
+          "fixture_facts": [
+            "C3",
+            "C5",
+            "C6",
+            "C7",
+            "Q1",
+            "Q2"
+          ]
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves files unchanged, performs no live operation and separates fixture observations from recommendations or unrun checks.",
+          "fixture_facts": [
+            "C7"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "idle-query-progress",
+      "title": "An idle ordered source must still allow a bounded freshness decision",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "idle-progress",
+        "ordered-source",
+        "bounded-wait"
+      ],
+      "prompt": "Review the idle FleetView trace and the available pulse API. Choose a\nconfiguration and explain its worst case latency using the supplied model.\nCompare it with the proposed transport ping change, and state the response when\nthe healthy bounds stop holding. Include decisive local test schedules. Keep\nthe files unchanged.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/idle-query-progress",
+      "fixtures": [
+        "config.json",
+        "contract.md",
+        "idle-trace.json"
+      ],
+      "prompt_file": "responder-inputs/idle-query-progress/prompt.txt",
+      "task_mode": "review",
+      "activation": "activate",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "network": false,
+        "writes": false,
+        "service_launch": false
+      },
+      "rubric": [
+        {
+          "id": "idle-progress",
+          "severity": "critical",
+          "criterion": "Identifies why the current no-change stream can leave the barrier pending despite fresh contents and pings. Uses an enabled source pulse or a stated equivalent that preserves the supplied producer ordering; rejects transport pings alone as a source ordering proof. Does not create fake business mutations.",
+          "fixture_facts": [
+            "C4",
+            "C5",
+            "C6",
+            "I1",
+            "I2",
+            "I4"
+          ]
+        },
+        {
+          "id": "conditional-budget",
+          "severity": "critical",
+          "criterion": "Chooses a permitted enabled period and sums the declared healthy bound as 14 ms plus that period, at most 19 ms for every supplied positive choice, within 24 ms. Accepts any permitted positive choice with correct arithmetic. Includes queue, transport, processing, pulse, application and response; keeps the result conditional on I3 rather than universal latency.",
+          "fixture_facts": [
+            "I2",
+            "I3"
+          ]
+        },
+        {
+          "id": "partition-boundary",
+          "severity": "critical",
+          "criterion": "Keeps the original 24 ms total budget and explicit UNAVAILABLE when source progress, delivery or application cannot establish the proof. A pulse does not make a partition available or allow stale strict success.",
+          "fixture_facts": [
+            "C2",
+            "C6",
+            "I3"
+          ]
+        },
+        {
+          "id": "practical-verification",
+          "severity": "major",
+          "criterion": "Proposes idle no-business-event success with ordered pulse, a held application queue, pulse disabled control and partition deadline. Asserts both freshness eligibility and bounded completion; labels these schedules unrun.",
+          "fixture_facts": [
+            "C4",
+            "C5",
+            "C7",
+            "I1",
+            "I2",
+            "I3"
+          ]
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves files unchanged, uses no live operation and marks synthetic timing assumptions and recommendations accurately.",
+          "fixture_facts": [
+            "C7",
+            "I3",
+            "I4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "authority-query-reconnect",
+      "title": "Authority replacement separates stale acknowledgements from valid overlap",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "authority-epoch",
+        "shared-barrier",
+        "valid-overlap",
+        "reconnect"
+      ],
+      "prompt": "Review the proposed FleetView reconnect admission policy against the\ncontract and timeline. Explain when each query may succeed or must remain\nunavailable, whether qnew-a and qnew-b may share their barrier, and whether the\nheld qearly response can still be sent. Recommend a bounded policy and decisive\nchecks. Keep the files unchanged.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/authority-query-reconnect",
+      "fixtures": [
+        "contract.md",
+        "timeline.json"
+      ],
+      "prompt_file": "responder-inputs/authority-query-reconnect/prompt.txt",
+      "task_mode": "review",
+      "activation": "activate",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "network": false,
+        "writes": false,
+        "service_launch": false
+      },
+      "rubric": [
+        {
+          "id": "authority-fence",
+          "severity": "critical",
+          "criterion": "Rejects comparing or taking max of source sequences across epochs. New-epoch queries require the matching leader9/s9 snapshot and proof; socket connection and delayed leader8 ACK cannot admit them. Distinguishes the supplied resolver event from detecting arbitrary unseen authority changes.",
+          "fixture_facts": [
+            "C3",
+            "C4",
+            "A1",
+            "A2",
+            "A5"
+          ]
+        },
+        {
+          "id": "new-query-admission",
+          "severity": "critical",
+          "criterion": "Allows qnew-a and qnew-b to share the stated barrier. They cannot succeed on the stale prefix 3 snapshot at 25 ms or ACK receipt at 26 ms; matching prefix 4 application at 27 ms can establish freshness for an atomic snapshot. qlater needs fresh proof covering its post-prefix-5 invocation, and cannot reuse through_seq 4 alone.",
+          "fixture_facts": [
+            "C2",
+            "C4",
+            "C5",
+            "A2",
+            "A4"
+          ]
+        },
+        {
+          "id": "valid-overlap",
+          "severity": "critical",
+          "criterion": "Allows qearly's captured queued response to be sent at 30 ms within its deadline. Rejects blanket cancellation or invalidation merely because authority changed, a later query began, or a newer write exists. Relates permission to the explicitly valid earlier capture.",
+          "fixture_facts": [
+            "C2",
+            "C5",
+            "A3",
+            "A5"
+          ]
+        },
+        {
+          "id": "individual-deadlines",
+          "severity": "critical",
+          "criterion": "qold-pending cannot use its delayed old ACK as current proof and must return UNAVAILABLE by 24 ms under the given trace. Keeps all query deadlines without restarting on reconnect and explains unavailable outcomes if newer proofs cannot complete in time.",
+          "fixture_facts": [
+            "C6",
+            "A1",
+            "A3",
+            "A4"
+          ]
+        },
+        {
+          "id": "boundary-checks",
+          "severity": "major",
+          "criterion": "Proposes both stale old ACK refusal and legitimate earlier capture completion, plus equal numeric sequence in different epochs, socket without applied snapshot, ACK before application and shared barrier versus later invocation. Separates these proposed checks from executed evidence.",
+          "fixture_facts": [
+            "C3",
+            "C5",
+            "C7",
+            "A1",
+            "A3",
+            "A4"
+          ]
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves files unchanged, performs no live operation, and confines claims to the declared freshness and authority contracts rather than a broad linearizability or atomic mutation guarantee.",
+          "fixture_facts": [
+            "C2",
+            "C7",
+            "A1",
+            "A3"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "static-stream-labels",
+      "title": "Stream terminology in a local formatting task stays a formatting task",
+      "skill": "concurrency-correctness",
+      "tags": [
+        "nontrigger",
+        "formatting",
+        "terminology"
+      ],
+      "prompt": "Return a Markdown table with columns priority and label from labels.json,\nsorted by ascending numeric priority. Preserve each label exactly. The project\nnotes describe the scope. Keep the source files unchanged.",
+      "fixture_dir": "evals/distributed-correctness/fixtures/static-stream-labels",
+      "fixtures": [
+        "labels.json",
+        "notes.md"
+      ],
+      "prompt_file": "responder-inputs/static-stream-labels/prompt.txt",
+      "task_mode": "nontrigger",
+      "activation": "do_not_auto_activate",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "network": false,
+        "writes": false,
+        "service_launch": false
+      },
+      "rubric": [
+        {
+          "id": "correct-table",
+          "severity": "critical",
+          "criterion": "Returns a Markdown table with priority and label columns and rows 5 Leader status, 13 Application queue, 20 Progress marker in that order, preserving labels exactly.",
+          "fixture_facts": [
+            "N1",
+            "labels.json"
+          ]
+        },
+        {
+          "id": "nontrigger-scope",
+          "severity": "major",
+          "criterion": "Completes the local formatting task without reading or invoking concurrency-correctness, distributed freshness analysis, barriers, locks or service provisioning. The skill is exposed by normal discovery only.",
+          "fixture_facts": [
+            "N1"
+          ]
+        },
+        {
+          "id": "scope-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves source files unchanged, uses no network or service and does not claim unavailable checks or operations.",
+          "fixture_facts": [
+            "N1"
+          ]
+        }
+      ]
+    }
+  ]
+}

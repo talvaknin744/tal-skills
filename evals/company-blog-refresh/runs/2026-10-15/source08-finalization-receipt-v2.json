@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "scope": "Corrected pre-seal finalization checks, with earlier failed audit attempts preserved. This receipt does not predict the final interpreter exit; the verified freeze hash is printed only after all member checks.",
+  "supersedes_only_finalization_status_from": {
+    "external_receipt_sha256": "645d062603a8973f1c4561695b76bce180bfb5496034042e74d138b120f308bb",
+    "public_receipt_path": "evals/company-blog-refresh/runs/2026-10-15/source08-finalization-receipt-v1.json",
+    "public_receipt_sha256": "645d062603a8973f1c4561695b76bce180bfb5496034042e74d138b120f308bb",
+    "correction": "The prior receipt labels the second seal interpreter exit0 before completion. Its actual tool return is exit1, preserved here. No score, rubric, quote or native result changes."
+  },
+  "failed_finalization_attempts": [
+    {
+      "exit_code": 1,
+      "tool_chunk_id": "a59fa8",
+      "script": "seal-grader.py",
+      "exception": "AssertionError",
+      "line": 15,
+      "reason": "The independent seal helper assumed the previous608 deterministic test count. Actual npm validation returned exit0 with609 passes and zero failures. This is an audit helper assumption error, not a native score or repository validation failure.",
+      "all_15_numerical_scores_unchanged": true
+    },
+    {
+      "exit_code": 1,
+      "tool_chunk_id": "53f055",
+      "script": "seal-grader-v2.py",
+      "exception": "FileNotFoundError",
+      "reason": "An old source07 publication receipt filename remained in the adapted independent freeze helper. Its pre-seal receipt prematurely labeled this interpreter execution exit0; that claim is superseded by finalization-receipt-v2.json.",
+      "numerical_score_or_native_behavior_failure": false
+    }
+  ],
+  "repository_validation": {
+    "command": "npm run validate",
+    "exec_session_id": 62886,
+    "terminal_chunk_id": "7a9625",
+    "actual_exit_code": 0,
+    "tests": 609,
+    "passed": 609,
+    "failed": 0,
+    "stdout_sha256": "cf40d7eb31ec6ab5d9b1da0c8e519d9da850b6c12c98c800a38748b4d4e2f70a",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qualification": "Deterministic and packaging checks, separate from native behavioral results."
+  },
+  "native_scores": {
+    "runs": 15,
+    "passes": 15,
+    "partials": 0,
+    "critical_full_pass": 52,
+    "major_full_pass": 23,
+    "literal_quotes": 111,
+    "score_changes": false,
+    "unchanged_frozen_cli_score_checks": 15
+  },
+  "raw_native_seal_members_verified": 1348,
+  "prior_public_files_verified_unchanged": 66,
+  "source07_grader_members_verified_unchanged": 136,
+  "old_source03_freeze_members_unchanged": 42,
+  "original_public_score_copies_byte_identical": 15,
+  "case_compliance_established": false,
+  "current_claude_execution": "unexecuted",
+  "actual_generated_client_or_provider_execution": "unexecuted"
+}

@@ -1,0 +1,153 @@
+{
+  "run_id": "no-web-database-performance-cardinality-skew-01",
+  "run_evidence_sha256": "ab7be970a29a3303d9d16b841d20cac984299d5cea46f20734c56d7feb353830",
+  "final_workspace_tree_sha256": "aa5e5b5d5888babbd06e84de4619a9c73de642cfa920a6d17528d767c7aa063f",
+  "case_id": "cardinality-skew",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "cbccae39b87363b93946dec974f568f26e823e90cfd5065f6ab72859bdef7ec0",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "plan-reading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11 through 14",
+        "observation": "The answer identifies the 1200 fold outer underestimate, averages inner times/rows per loop over 120000 executions, and states \"Adding parent and child durations double-counts execution.\" It does not confuse nested inclusive timings with independent work."
+      }
+    },
+    {
+      "id": "parameter-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 3, 5 and 7",
+        "observation": "The answer checks stale statistics and tenant value skew, hot and cold complete plans and generic versus parameter specific behavior; proposes targeted ANALYZE first, then checks whether higher targets or supported correlated statistics are needed before an index or forced join change."
+      }
+    },
+    {
+      "id": "measurement-tradeoff",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 14, 17 and 19",
+        "observation": "The answer separates instrumented execution from client latency, preserves tenant filtering and ordering, budgets statistics sampling and read/write index costs, and identifies maintenance outside the review scope. It makes no observed improvement claim."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 21; evidence/run.json input_integrity; trace completed command events item_1 through item_6",
+        "observation": "The answer states \"No database commands were executed and no files were edited.\" Saved integrity confirms unchanged files. Observed commands only read local material and no external/delegation event appears."
+      }
+    }
+  ],
+  "critical_gates": {
+    "plan-reading": "pass",
+    "measurement-tradeoff": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Fresh retry with observed built in web disabled configuration; broader network and read isolation remain unverified."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "80baa1005d79c6ce67aa7f6d13918a6b46660c8cf46fcd03354b6c817fdcc9dc",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 78.273,
+  "tool_calls": 6,
+  "token_usage": {
+    "input_tokens": 45837,
+    "cached_input_tokens": 28544,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2126,
+    "reasoning_output_tokens": 1071
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "99336926f15b82be07fae0b549399b809e90e4d6e314211fa95d9b05ee14a945",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "override_placement": "After exec or app-server subcommand, before inherited invocation arguments.",
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "Captured loading and external events only; broader host isolation remains unverified."
+  },
+  "archive_stage": "r04",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-run-runtime-and-dependency-hash-match",
+        "status": "pass",
+        "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+        "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2"
+      },
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "plan-reading",
+              "score": 2
+            },
+            {
+              "id": "measurement-tradeoff",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

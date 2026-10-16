@@ -1,0 +1,163 @@
+{
+  "run_id": "regression-database-performance-cardinality-skew-01",
+  "run_evidence_sha256": "bfc40fbdca92e25b94118eeecf1eadab0c8209ce2fcef8c9922521b5a26a28fe",
+  "final_workspace_tree_sha256": "aa5e5b5d5888babbd06e84de4619a9c73de642cfa920a6d17528d767c7aa063f",
+  "case_id": "cardinality-skew",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "cbccae39b87363b93946dec974f568f26e823e90cfd5065f6ab72859bdef7ec0",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "plan-reading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 3",
+        "observation": "The answer identifies 100 estimated versus 120000 actual rows as a 1200 fold underestimate, interprets 1ms per loop across 120000 iterations as about 120 seconds of repeated inner work, and states \"Parent timings already include descendant work\" before rejecting double counting."
+      }
+    },
+    {
+      "id": "parameter-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5, 7 and 11",
+        "observation": "The answer checks stale statistics and most common tenant values, compares representative hot and cold plans including generic versus parameter specific plans, chooses targeted ANALYZE first and keeps a changed join or wider index benefit unproven."
+      }
+    },
+    {
+      "id": "measurement-tradeoff",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 7, 9, 11 and 13",
+        "observation": "The answer separates execution from client delivery, pool wait and result consumption; includes sampling overhead and index storage/write/WAL/visibility costs; preserves tenant semantics and deterministic ordering; and notes ANALYZE and data changing EXPLAIN execution are outside review scope."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 13; evidence/run.json input_integrity",
+        "observation": "The answer states \"No database commands were executed or files edited.\" Recorded files remain unchanged. The actual web capability breach is separately retained and prevents a compliant original conditions claim."
+      }
+    }
+  ],
+  "critical_gates": {
+    "plan-reading": "pass",
+    "measurement-tradeoff": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric only; host capability compliance remains separate.",
+    "capability_compliant_preservation_established": false
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "80baa1005d79c6ce67aa7f6d13918a6b46660c8cf46fcd03354b6c817fdcc9dc",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 142.41,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 166486,
+    "cached_input_tokens": 109696,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3408,
+    "reasoning_output_tokens": 1789
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [
+    "Review captured non-command tools against the declared capability contract; tool types alone do not establish their safety or scope."
+  ],
+  "observed_external_or_delegation_events": [
+    {
+      "id": "exec-2e9b5fc6-3693-42d4-8d90-f50e5e54f22e",
+      "type": "web_search"
+    },
+    {
+      "id": "exec-39be2f09-4faa-43b1-84c6-c77c66a7cae7",
+      "type": "web_search"
+    },
+    {
+      "id": "exec-302ae66f-98b1-479f-8016-4490a648fa0f",
+      "type": "web_search"
+    }
+  ],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate SKILL.md read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "Observed captured loading only; inherited guidance remains available."
+  },
+  "capability_observation": {
+    "observed_breach": true,
+    "declared_web": false,
+    "artifact": "evidence/trace.jsonl",
+    "locator": "completed web_search events at lines 15, 17 and 20",
+    "observation": "The responder retrieved and consulted PostgreSQL documentation. This attempt does not establish behavior under the original disabled web conditions."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "plan-reading",
+              "score": 2
+            },
+            {
+              "id": "measurement-tradeoff",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

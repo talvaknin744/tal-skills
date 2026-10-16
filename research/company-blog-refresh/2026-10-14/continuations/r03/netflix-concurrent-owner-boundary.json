@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "publisher_id": "netflix",
+  "phase": "r03",
+  "record_kind": "concurrent_network_owner_boundary",
+  "collector_sha256": "dd72cb77401d8111eff19d598453814ef44d6e08fbb793ce0d860ed0112932f7",
+  "source_sites": {
+    "unlock_lines": [
+      237,
+      316
+    ],
+    "request_method_line": 271,
+    "ingest_method_line": 352,
+    "unexpected_response_circuit_lines": [
+      357,
+      361
+    ]
+  },
+  "current_authorized_network_owners": [
+    "netflix-r03"
+  ],
+  "peer_collectors_launched": false,
+  "observed_boundary": "Unexpected non RSS HTTP 200 is classified and opens the circuit in ingest after request releases the shared lock. A concurrent owner cannot assume atomic classification of that response under the live protocol.",
+  "mitigating_timing_is_not_boundary_proof": "The start budget and repeated circuit checks delay another request, but timing does not establish atomic multi owner safety.",
+  "required_successor": "Use a new versioned collector after the current run stops or a reviewed clean checkpoint. Classify unexpected responses and persist the circuit while still holding the same shared lock. Preserve all current source and run identities.",
+  "required_verification": [
+    "Unexpected non RSS HTTP 200 creates the circuit before another owner can start a request.",
+    "HTTP 429 and source HTTP 403 stop every owner without retry.",
+    "Explicit challenge classification happens while the shared lock is held.",
+    "Retry After extends the shared not before time and does not automatically clear a circuit.",
+    "Normal RSS content that mentions challenge terminology remains usable."
+  ],
+  "checks_run": {
+    "source_boundary_review": true,
+    "concurrent_runtime_evaluation": false,
+    "successor_implemented": false
+  },
+  "independent_review_context": "Parent and quality_b reviewed this boundary. No concurrent owner runtime result is claimed."
+}

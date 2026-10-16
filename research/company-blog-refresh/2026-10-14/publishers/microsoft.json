@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "publisher_id": "microsoft",
+  "updated_at": "2026-10-14T19:11:49.516926+00:00",
+  "crawler_summary_sha256": "3c2137d66ba02e9906baa44f505473343920e69afb6132b6ece323f432d205d0",
+  "crawler_summary_path": "publishers/microsoft/summary.json",
+  "counters": {
+    "http_article_attempted_urls": 31,
+    "body_retrieved_urls": 31,
+    "transport_attempted_urls": 31,
+    "raw_http_200_received": 31,
+    "baseline_records": 31,
+    "live_discovered_urls": 31,
+    "known_urls": 31,
+    "processed_urls": 31,
+    "body_extracted": 31,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2
+  },
+  "article_status_counts": {
+    "body_extracted": 31
+  },
+  "discovery_scope": "Engineering@Microsoft sub-blog only. Excludes all other Microsoft DevBlogs collections.",
+  "terminal_status": {
+    "discovery": {
+      "reason": "rest_post_invalid_page_number",
+      "page": 2,
+      "url": "https://devblogs.microsoft.com/engineering-at-microsoft/wp-json/wp/v2/posts?per_page=100&_fields=link%2Ctitle%2Cdate%2Cmodified%2Cslug&page=2"
+    },
+    "body_frontier": "all known targets classified",
+    "lifetime_completeness": false
+  },
+  "gaps": [
+    "Scope is Engineering@Microsoft only. Other DevBlogs collections are excluded.",
+    "Earlier basic article requests and the public full content API probe returned HTTP 403. Later public article responses with normal research headers were readable; all outcomes remain recorded. No authentication or challenge was bypassed.",
+    "Requests conservatively use a ten second interval from the robots crawl delay signal. Host circuit deferrals retain unattempted transport outcomes explicitly.",
+    "The earlier surveyed flaky test candidate is absent from the current scoped inventory. Absence does not establish a removal reason.",
+    "The initial transport run was interrupted before an article job completed. In flight request receipts from that partial run may be unavailable; final completed public responses are retained separately."
+  ],
+  "read_articles": [
+    {
+      "url": "https://devblogs.microsoft.com/engineering-at-microsoft/common-annotated-security-keys/",
+      "reading_scope": "Complete substantive article, fixed signatures, checksums, token metadata and reserved test keys. The promised standard publication and cryptographic claims were not independently validated.",
+      "receipt_sha256": "512c457643166e8c552b98e8fccbe95734a1516549c4232bc7cefe0db182f176",
+      "evidence_sha256": "6954e7630b1794909bb3954019c9124f2fc9fa89997bb9ef30cd046754aba566",
+      "evidence_path": "infra-a/selected/microsoft-identifiable-keys.txt",
+      "retrieval_source": "public HTTP response followed by local article extraction"
+    },
+    {
+      "url": "https://devblogs.microsoft.com/engineering-at-microsoft/how-we-built-the-microsoft-learn-mcp-server/",
+      "reading_scope": "Complete substantive article and six operational lessons. SDK runtime, usage measurements, linked repository and MCP Interviewer were not executed.",
+      "receipt_sha256": "a6a6d4243a6b628c4577cf2ee182416bc57e44827aacb0b3bed697db8562e568",
+      "evidence_sha256": "d15fb370830ad21e76ef8e0c5d0650ed70f3f689280cb0c02c7c1dc558a4113e",
+      "evidence_path": "infra-a/selected/microsoft-mcp.txt",
+      "retrieval_source": "public HTTP response followed by local article extraction"
+    }
+  ],
+  "discovery_evidence": {
+    "path": "infra-a/microsoft-discovery.json",
+    "sha256": "40ccb08345a86406930d1747bc8e5077a48a983bf729398330e15d97b6c528e5",
+    "request_count": 2,
+    "transport_receipts": [
+      {
+        "url": "https://devblogs.microsoft.com/engineering-at-microsoft/wp-json/wp/v2/posts?per_page=100&_fields=link%2Ctitle%2Cdate%2Cmodified%2Cslug&page=1",
+        "status": 200,
+        "sha256": "a9e248eb769748404f717ce0a8c3bbcefd49ae718173b63e2f711561d78eacf4"
+      },
+      {
+        "url": "https://devblogs.microsoft.com/engineering-at-microsoft/wp-json/wp/v2/posts?per_page=100&_fields=link%2Ctitle%2Cdate%2Cmodified%2Cslug&page=2",
+        "status": 400,
+        "sha256": "b6714928c361e00376c3eda08eef1f4fcc3343bd71d9be2bde61ca1eee190c26"
+      }
+    ]
+  },
+  "robots_evidence": {
+    "path": "infra-a/robots-receipts.json",
+    "sha256": "1a40f5b9a9475655fa61f2783790bb5c1cf969f584ce676439d3ab8769e1360c",
+    "scope": "External public robots checks preceded initial body runs. Revised collector also checks robots on transport and redirects."
+  },
+  "all_article_bodies_read": false,
+  "verification": "No model behavior, runtime, CDN, lab or production experiment was executed by this research lane.",
+  "archive_exports": {
+    "article-state.jsonl": {
+      "path": "publishers/microsoft/article-state.jsonl",
+      "sha256": "3eac09a60956ecc04925ab0d2f957913340335372e8f7cd2adece84c08154ad3",
+      "bytes": 66297
+    },
+    "source-state.jsonl": {
+      "path": "publishers/microsoft/source-state.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  }
+}

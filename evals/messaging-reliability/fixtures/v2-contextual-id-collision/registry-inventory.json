@@ -1,0 +1,30 @@
+{
+  "scenario_kind": "synthetic retained lookup captures",
+  "source": {
+    "registry": "https://source.registry.example",
+    "product": "Confluent Platform Schema Registry",
+    "version": "8.0.0",
+    "context": ".wholesale",
+    "subject": "payments-value",
+    "subject_version": 1,
+    "schema_id": 7,
+    "schema_type": "AVRO",
+    "schema": {"type": "record", "name": "PaymentCents", "namespace": "shop", "fields": [{"name": "account", "type": "string"}, {"name": "amount", "type": "long"}]},
+    "references": [],
+    "business_unit": "USD cents"
+  },
+  "target": {
+    "registry": "https://target.registry.example",
+    "product": "Confluent Platform Schema Registry",
+    "version": "8.0.0",
+    "contexts": [
+      {"context": ".retail", "subject": "payments-value", "subject_version": 1, "schema_id": 7, "schema_type": "AVRO", "schema": {"type": "record", "name": "PaymentDollars", "namespace": "shop", "fields": [{"name": "account", "type": "string"}, {"name": "amount", "type": "long"}]}, "references": [], "business_unit": "whole USD", "latest_compatibility_result": true},
+      {"context": ".imported-wholesale", "subject": "payments-value", "subject_version": 1, "schema_id": 7, "schema_type": "AVRO", "schema": {"type": "record", "name": "PaymentCents", "namespace": "shop", "fields": [{"name": "account", "type": "string"}, {"name": "amount", "type": "long"}]}, "references": [], "business_unit": "USD cents", "actual_client_decode_verified": false}
+    ]
+  },
+  "clients": [
+    {"role": "source-consumer", "library": "io.confluent:kafka-avro-serializer", "version": "8.0.0", "registry_url": "https://source.registry.example/contexts/.wholesale", "reader_mode": "generic", "context_base_path_observed": true},
+    {"role": "retail-consumer", "library": "io.confluent:kafka-avro-serializer", "version": "8.0.0", "registry_url": "https://target.registry.example/contexts/.retail", "reader_mode": "generic", "context_base_path_observed": true},
+    {"role": "reporting-consumer", "library": "Rust reporting adapter", "version": null, "registry_url": "https://target.registry.example", "reader_mode": null, "context_base_path_observed": null}
+  ]
+}

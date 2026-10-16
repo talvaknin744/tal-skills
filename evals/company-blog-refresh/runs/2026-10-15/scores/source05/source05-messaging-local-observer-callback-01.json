@@ -1,0 +1,218 @@
+{
+  "run_id": "source05-messaging-local-observer-callback-01",
+  "run_evidence_sha256": "d83a8d6019de94ec51ed13ce6ddd88331057733d7be29ffff0f2f5d09931e35d",
+  "final_workspace_tree_sha256": "826dbbc74e79e9a37d9479ab4840678d5259eff02c40f367f9f3701f48cb2658",
+  "case_id": "local-observer-callback",
+  "candidate_tree_sha256": "a1baf91a4be399ff0086d660739bd34f98209a28f37758cf12c93c6ba079f247",
+  "rubric_sha256": "8cb69e2c5229a56bbeac76577257f4cbdc3547c82826aadcfd6da505d2e55464",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9 through 9",
+        "observation": "No messaging candidate body or reference is read and no messaging workflow starts. The trace does read inherited codebase-design guidance, which is retained as an isolation limit rather than treated as messaging activation. This one trial handles the local callback request.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "It’s sufficient for one owner and a local listener."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          12,
+          14
+        ]
+      }
+    },
+    {
+      "id": "local-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 6 through 6, lines 9 through 9",
+        "observation": "The answer recommends a direct synchronous listener call after the in-memory increment, with no broker, outbox or distributed retry design.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 6,
+            "end": 6,
+            "quote": "self.listener(self.value)"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "This synchronously notifies the existing listener after updating the counter, passing the new value."
+          }
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11 through 11",
+        "observation": "The independent inventory audit establishes unchanged source and fixture files. Actual commands only read local files and inherited guidance, with no external/delegation event and no unexecuted runtime claim.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 11,
+            "end": 11,
+            "quote": "All files remain unchanged; no external services were used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          12,
+          14
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "bounded-selection": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "1e8792c588317363bb38e1b6dca8bb1b2407a934f84e6991dfbdd41c2ba55548",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 34.616,
+  "tool_calls": 5,
+  "token_usage": {
+    "input_tokens": 45920,
+    "cached_input_tokens": 29440,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 621,
+    "reasoning_output_tokens": 185
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "no_body_read_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat <user-home>/.codex/skills/codebase-design/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+        "command_sha256": "23901a95ae3f46ecb856c0c14a1fda639899ca718e34382732d121dc4055bf07"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"rg --files project -g '\"'!node_modules'\"' -g '\"'!vendor'\"' -g '\"'!dist'\"'\"",
+        "exit_code": 0,
+        "output_sha256": "5c9878b036ddf49a6faa3ebae4541fede5b49dff04e8f3057d2b0ceb579b941a"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"' -g '\"'!dist'\"' .\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 12,
+        "item": "item_5",
+        "command": "/bin/zsh -lc 'nl -ba project/counter.py'",
+        "exit_code": 0,
+        "output_sha256": "f8f9d9acc99eb92ba23699f43239211d0282cf9b4bec7372f7b63c725ee973c7"
+      },
+      {
+        "line": 14,
+        "item": "item_6",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!node_modules'\"' -g '\"'!.git'\"' -g '\"'!vendor'\"' -g '\"'!dist'\"' .\"",
+        "exit_code": 0,
+        "output_sha256": "503edaa78f83dd90315cd0f9ab4ba2c9e0aaa2c2c925908c68e0b88a319062ee"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "bounded-selection",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  },
+  "public_redactions": {
+    "scope": "Only personal home prefixes in derived command observations are redacted. Literal answer quotes and sealed raw trace are unchanged.",
+    "fields": [
+      "independent_audit.commands[0].command"
+    ],
+    "original_score_sha256": "37439ede28ef6d3b7ce5624b9f2f675efbf9b5832b87147b9c660c33f65ec1ed",
+    "original_trace_reference": "evidence/trace.jsonl"
+  }
+}

@@ -15,6 +15,7 @@ Invocation: automatic
 - The path from publish through durable effect to acknowledgement/checkpoint names each owner and atomicity boundary.
 - Uncertain outcomes retain a logical operation identity and stored evidence for reconciliation or replay.
 - Ordering, identity, revision authority, and replay horizon are explicit; stale deltas are not discarded as if they were full state.
+- Registry dependent replay names the actual client lookup scope, preserves retained schema identifier and reference mappings, and verifies decoding and business invariants before affected registration or replay resumes.
 - Controlled failure schedules check durable effect count, retained progress/source state, and eventual disposition.
 - The supported delivery/effect guarantee and operational recurrence signal are stated with runtime, configuration, and evidence gaps.
 

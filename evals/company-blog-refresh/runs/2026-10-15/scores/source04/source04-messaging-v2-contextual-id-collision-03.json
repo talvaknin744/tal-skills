@@ -1,0 +1,362 @@
+{
+  "run_id": "source04-messaging-v2-contextual-id-collision-03",
+  "run_evidence_sha256": "050523b11f051dd792c323a609f2882fb802578375b32878e81fbcc90d43f160",
+  "final_workspace_tree_sha256": "5ebcc6611a6e2726b90e579f677ab1265168ffd2f0f2c98cef35263f16ea16ba",
+  "case_id": "v2-contextual-id-collision",
+  "candidate_tree_sha256": "e1c1a5f1300cbae8be83ea7f6e398c465d289cdae86837137f1277e1b5a82d2b",
+  "rubric_sha256": "87c987684ff68be6e8a5e93b53886321c129d3bac92a5289055b55a64917e7f0",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "qualified-wire-identity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 8 through 8, lines 10 through 11, lines 11 through 11",
+        "observation": "The answer distinguishes qualified source and target lookup identities, preserves the exact saved bytes and matching original mapping and rejects numericID or subject equality as global identity.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 8,
+            "end": 8,
+            "quote": "The retained envelope carries numeric ID `7`, without a registry or context. IDs and subjects are context-scoped, so `7` alone does not identify the source schema."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 10,
+            "end": 11,
+            "quote": "Source `.wholesale` → `shop.PaymentCents`"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 11,
+            "end": 11,
+            "quote": "Target `.retail` → `shop.PaymentDollars`"
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic-outcome",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5 through 5, lines 13 through 13",
+        "observation": "The answer identifies the100fold semantic mismatch despite successful generic decoding and correctly says the wrong interpretation was not an applied overpayment. It does not accept latest compatibility as evidence of historical meaning.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 5,
+            "quote": "it interprets this payment as **100.00 USD**, while the source ledger records **1.00 USD**."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 13,
+            "end": 13,
+            "quote": "successful decoding and a green latest compatibility check do not establish the correct currency units or historical lookup authority."
+          }
+        ]
+      }
+    },
+    {
+      "id": "bounded-admission",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 17 through 17, lines 21 through 21",
+        "observation": "The imported context is proposed only as an isolated validation candidate. Actual lookup and business interpretation gate replay, while unresolved reporting is held independently. The answer does not replace retail's occupied mapping or rewrite the wireID.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "neither replay nor reporting is ready to resume."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 17,
+            "end": 17,
+            "quote": "The replay owner should retain the pause until these acceptance checks pass:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 21,
+            "end": 21,
+            "quote": "Preserve the value bytes unchanged and verify retail’s existing schema and effects remain unchanged."
+          }
+        ]
+      }
+    },
+    {
+      "id": "client-and-version-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 22 through 22, lines 25 through 25",
+        "observation": "Known Java8.0 explicit routes from the supplied Confluent8.0 fixture are used as bounded capture evidence. Rust version and configuration/lookup remain unverified, with actual independent probes required and no assumed universal Java client behavior.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "Record the Rust adapter’s exact package/version, reader mode, effective context configuration and observed lookup path."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 25,
+            "quote": "The Java 8.0.0 captures and documentary context guidance cannot establish Rust behavior."
+          }
+        ]
+      }
+    },
+    {
+      "id": "validation-and-retention",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 15 through 15, lines 19 through 19, lines 20 through 20, lines 21 through 21",
+        "observation": "The answer preserves the supplied competing mapping and failed interpretation as evidence, identifies the current Avro writer mapping/version/reference set and demands both correct lookup and wrong-context rejection with1.00USD meaning. Wider historical coverage remains a proposed gate, not an executed archive-wide guarantee.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 15,
+            "end": 15,
+            "quote": "ID `7`, `payments-value` version `1`, `shop.PaymentCents`, and no references."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 19,
+            "end": 19,
+            "quote": "The competing retail ID must not contaminate cache resolution or become a fallback."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "verify the consuming business path interprets this as **USD, 100 minor units, 1.00 decimal**."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 21,
+            "end": 21,
+            "quote": "An unresolved or unexpected mapping must block processing."
+          }
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 27 through 27",
+        "observation": "The actual trace only reads the staged candidate and synthetic supplied evidence. Independent workspace hashes remain unchanged, no external event exists and the answer describes probes as future checks rather than completed replay validation.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 27,
+            "end": 27,
+            "quote": "All files remain unchanged; no broker, registry, client, migration or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          11,
+          13,
+          18,
+          19,
+          20
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "qualified-wire-identity": "pass",
+    "semantic-outcome": "pass",
+    "bounded-admission": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "f481ee26a006b469fcf8a13e968c47690f7af753eae1c55dda788c54fa505b9c",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 59.096,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 70304,
+    "cached_input_tokens": 47872,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2642,
+    "reasoning_output_tokens": 1246
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "93f9912a4e87f2d0a8d7c6d9c7c618c5c96183f6c2dc5f9fef8881474aedc630",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/schema-registry-identity.md",
+        "sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "93f9912a4e87f2d0a8d7c6d9c7c618c5c96183f6c2dc5f9fef8881474aedc630"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'request.md' -g 'registry-inventory.json' -g 'retained-record.json' -g '*proposal*' -g 'README*'\"",
+        "exit_code": 0,
+        "output_sha256": "edb7df6fdc443cb9d61a9daebc9c876712587b8eb0f78cb77da1c5be9cb14bdf"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/schema-registry-identity.md .agents/skills/messaging-reliability/references/ordering-and-replay.md'",
+        "exit_code": 0,
+        "output_sha256": "6b0bcc013c5b06911bfb91987013642518a69b281cd3d248f162474196379930"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat project/request.md project/registry-inventory.json project/retained-record.json'",
+        "exit_code": 0,
+        "output_sha256": "e95d529a5cead9c8f760fc0fe479e043273fabdd397d3dc8c45e8d098c7037ee"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g 'AGENTS.md' -g '\"'!'\"\\\\.git/**' . /tmp/tal-skills-schema-registry-native-2026-10-15-r01/trials/source04-messaging-v2-contextual-id-collision-03 2>/dev/null; rg --files project\"",
+        "exit_code": 0,
+        "output_sha256": "eef8084ac56ef5d79db446a4aa457057391d6ba750513ee54fe2c3a03aefbd09"
+      },
+      {
+        "line": 18,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/retained-record.json'",
+        "exit_code": 0,
+        "output_sha256": "e16ecf1dc91538af5b064c1d84e2b621ea90f448264b4b423018bcb826084f78"
+      },
+      {
+        "line": 19,
+        "item": "item_8",
+        "command": "/bin/zsh -lc 'nl -ba project/registry-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "2f624bf96e72270404d8f18ca996bf87e198f3250532134c94631c9653b49a22"
+      },
+      {
+        "line": 20,
+        "item": "item_9",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "bb716626d2da04e1e9fa9f36474aa169aae908e35852c24ef3a29a8438a79fba"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "qualified-wire-identity",
+          "score": 2
+        },
+        {
+          "id": "semantic-outcome",
+          "score": 2
+        },
+        {
+          "id": "bounded-admission",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

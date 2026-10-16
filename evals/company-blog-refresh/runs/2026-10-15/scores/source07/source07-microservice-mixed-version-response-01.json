@@ -1,0 +1,202 @@
+{
+  "run_id": "source07-microservice-mixed-version-response-01",
+  "run_evidence_sha256": "70fdef161641db2f032ea326fb2768fcfe55e8cfad478fd16b73cb0211ab1ca0",
+  "final_workspace_tree_sha256": "712704d7c7bab80d6b83d3c0cc4b022f27a0e3bb5513402e2157e910af16e22b",
+  "case_id": "mixed-version-response",
+  "candidate_tree_sha256": "1d09336bca338f757e89a375eb2243400ed0aeeb96b3a3de4a01eea590729c3e",
+  "rubric_sha256": "fd974f0e66e5a58f5bd326522b221f56a7ead4c8b52c8b821912d22d5fdfe8fc",
+  "reviewer": "independent-review-fieldmask-r01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_corpus": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "mixed-window",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+        "locator": "lines 3 to 10",
+        "observation": "Identifies both independently deployable server mismatches, mobile missing the required field, and both rollback directions.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 3 to 10",
+            "quote": "| Pricing response | Checkout v1 | Checkout v2 | Existing mobile |\n|---|---|---|---|\n| v1: `amount_cents` | Works | Cannot read amount | Works |\n| v2: `amount_minor` | Rejects response | Works | Required field missing |\n\n**Failure window.** From 10:00 until Checkout v2 is fully deployed, Checkout v1 rejects Pricing v2 responses. Rolling deployments can prolong or intermittently expose that mismatch. After 10:05, existing mobile clients still lack their required field. App review and clients remaining active for 60 days prevent a coordinated cutover.\n\nIndependent rollback reopens either mismatch: rolling Pricing back breaks Checkout v2; rolling Checkout back breaks it against Pricing v2. The paired tests in [change.md:5](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-mixed-version-response-01/workspace/project/change.md:5) cover only the compatible diagonal."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-mixed-version-response-01.json"
+        ]
+      }
+    },
+    {
+      "id": "compatible-sequence",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+        "locator": "lines 15 to 18",
+        "observation": "Uses dual fields and bridge readers that prefer the new amount and fall back to the old amount. Retains compatible deployment and rollback combinations before removal.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 15 to 18",
+            "quote": "2. **Deploy bridge consumers.** Checkout should prefer `amount_minor` and fall back to `amount_cents`. Release equivalent mobile support. These readers must work against Pricing v1 and validate required amount and currency data.\n3. **Expand Pricing.** Return both fields, derived consistently from the same quote. First verify that supported consumers tolerate the additional field; simply adding JSON properties does not prove compatibility. Existing mobile clients can continue using `amount_cents`.\n4. **Migrate and observe.** Move supported consumers onto the new field while retaining the legacy field. Keep bridge versions available for rollback. Delay any consumer that accepts only `amount_minor` until all provider instances and permitted provider rollback versions supply it.\n5. **Contract only after retirement criteria pass.** Remove `amount_cents` once legacy consumers and their rollback requirements have been retired. Checkout v1 must cease being an allowed rollback before this removal."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-mixed-version-response-01.json"
+        ]
+      }
+    },
+    {
+      "id": "removal-evidence",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+        "locator": "lines 22 to 28",
+        "observation": "Requires supported consumer inventory, observed legacy field use, trustworthy controls and the actual mobile lifetime. Explicitly treats missing telemetry as unresolved.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 22 to 28",
+            "quote": "- **Consumer coverage:** an inventory of supported Checkout and mobile versions, including infrequent and offline mobile clients. Start the mobile retirement horizon from the last possible legacy distribution or activation under the actual support policy\u2014not the 10:00 deployment. App review completion alone proves nothing about adoption.\n- **Actual field use:** telemetry identifying consumer versions and legacy-dependent behavior, including bridge fallback. A request count for `/quotes/{id}` cannot distinguish the two contracts, and returning both fields cannot reveal which field a client reads. Instrument clients where necessary.\n- **Trustworthy observation:** verify that a known legacy consumer triggers the legacy-use signal and a migrated control does not. Observe representative quote paths over an interval covering the supported client lifetime. Silence from clients that have not connected leaves compatibility unresolved.\n- **Deployment and rollback coverage:** every supported consumer works without `amount_cents`, and every permitted deployment/rollback combination remains compatible.\n- **Mixed-version verification:** exercise old readers against the expanded response, bridge readers against both response shapes, the final response against supported readers, and partial deployment/rollback scenarios.\n\nAssign an owner to each consumer migration and the retirement decision. Without client-version telemetry today, the proposal has no evidence-based removal gate; a scheduled date cannot substitute for one."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-mixed-version-response-01.json"
+        ]
+      }
+    },
+    {
+      "id": "matrix",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+        "locator": "lines 3 to 10, lines 15 to 17, lines 25 to 26",
+        "observation": "States concrete required field behavior for old, new and long lived mobile readers, then specifies expanded, bridge, final, mixed deployment and rollback verification.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 3 to 10",
+            "quote": "| Pricing response | Checkout v1 | Checkout v2 | Existing mobile |\n|---|---|---|---|\n| v1: `amount_cents` | Works | Cannot read amount | Works |\n| v2: `amount_minor` | Rejects response | Works | Required field missing |\n\n**Failure window.** From 10:00 until Checkout v2 is fully deployed, Checkout v1 rejects Pricing v2 responses. Rolling deployments can prolong or intermittently expose that mismatch. After 10:05, existing mobile clients still lack their required field. App review and clients remaining active for 60 days prevent a coordinated cutover.\n\nIndependent rollback reopens either mismatch: rolling Pricing back breaks Checkout v2; rolling Checkout back breaks it against Pricing v2. The paired tests in [change.md:5](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-mixed-version-response-01/workspace/project/change.md:5) cover only the compatible diagonal."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 15 to 17",
+            "quote": "2. **Deploy bridge consumers.** Checkout should prefer `amount_minor` and fall back to `amount_cents`. Release equivalent mobile support. These readers must work against Pricing v1 and validate required amount and currency data.\n3. **Expand Pricing.** Return both fields, derived consistently from the same quote. First verify that supported consumers tolerate the additional field; simply adding JSON properties does not prove compatibility. Existing mobile clients can continue using `amount_cents`.\n4. **Migrate and observe.** Move supported consumers onto the new field while retaining the legacy field. Keep bridge versions available for rollback. Delay any consumer that accepts only `amount_minor` until all provider instances and permitted provider rollback versions supply it."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 25 to 26",
+            "quote": "- **Deployment and rollback coverage:** every supported consumer works without `amount_cents`, and every permitted deployment/rollback combination remains compatible.\n- **Mixed-version verification:** exercise old readers against the expanded response, bridge readers against both response shapes, the final response against supported readers, and partial deployment/rollback scenarios."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-mixed-version-response-01.json"
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+        "locator": "lines 30 to 30",
+        "observation": "All supplied fixture bytes remain exact and workspace patch is empty. Five recorded commands only discover or read files. The answer explicitly distinguishes the proposed compatibility checks from tests run.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01/evidence/answer.md",
+            "locator": "lines 30 to 30",
+            "quote": "This review is based on the supplied document; no executable compatibility tests were supplied or run. Files remain unchanged."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-mixed-version-response-01.json"
+        ]
+      }
+    }
+  ],
+  "score_stage": "source07-fieldmask-r01",
+  "artifact_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-mixed-version-response-01",
+  "trial_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-mixed-version-response-01",
+  "candidate_commit": null,
+  "canonical_source_digest": "11dbdd432ab00b10bb6cdb58488cd801fb61b2503fad20a5e46335249870aa01",
+  "codex_source_digest": "7e26eb328307a0586d27ead276d751261db8d699ce1163f966f0b1133d3b6c4c",
+  "evaluation_suite": "company-blog-refresh-fieldmask-regression",
+  "fixture_tree_sha256": "a1c38f9ee192ae561a1b62a200850c008fc43b0e6402aab79efe134a117c50f2",
+  "case_prompt_sha256": "be5460a40cb457b34c59afb73b3a49252480d5788000b66023b77cbd05103eb4",
+  "freeze_sha256": "6cfd121f1c373f3ca55ac207000247919ffbf552840c91618975c412a6676241",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "claude_current_candidate": "unexecuted",
+  "observed_external_or_delegation_events": [],
+  "actual_service_client_compiler_install_network_execution_observed": false,
+  "actual_execution_observation": "Every recorded tool event for these reviewed packets is file discovery or reading. Proposed runtime checks remain unexecuted.",
+  "activation": {
+    "normal_discovery": true,
+    "metadata_observed": true,
+    "prefix_body_read_observation": {
+      "status": "body_read_observed",
+      "evidence_events": [
+        "item_1"
+      ],
+      "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+    },
+    "complete_entrypoint_read_events": [
+      {
+        "event_id": "item_1",
+        "trace_line": 5,
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-mixed-version-response-01/workspace/.agents/skills/microservice-integration/SKILL.md'",
+        "full_entrypoint_bytes_present": true,
+        "source_body_sha256": "bc236769bcb0b62faaea1cb276476ae74e41cc90961133105bc747c68b6af932"
+      }
+    ],
+    "explicit_invocation": false,
+    "note": "A complete recorded entrypoint read is separate from correctness. Absence of a recorded read does not prove hidden loading never occurred."
+  },
+  "critical_gates": {
+    "all_full_pass": true,
+    "zero_failures": true,
+    "results": [
+      {
+        "id": "mixed-window",
+        "score": 2
+      },
+      {
+        "id": "compatible-sequence",
+        "score": 2
+      },
+      {
+        "id": "read-only",
+        "score": 2
+      }
+    ]
+  },
+  "rubric_result": "pass",
+  "elapsed_seconds": 56.645,
+  "tool_calls": 5,
+  "token_usage": {
+    "input_tokens": 62871,
+    "cached_input_tokens": 31232,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2337,
+    "reasoning_output_tokens": 1114
+  },
+  "runtime_acceptance": "unexecuted",
+  "quote_audit": "All criterion quotes resolve literally to the preserved answer file."
+}

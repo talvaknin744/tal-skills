@@ -32,12 +32,13 @@ Skills turn failure scenarios into observable checks against system behavior.
 
 ## Reference
 
-Architecture is user-invoked; the other 34 skills are model-invoked from their descriptions.
+Architecture is user-invoked. The other 35 skills are model-invoked from their descriptions.
 
-### Engineering (22)
+### Engineering (23)
 
 - **[architecture](skills/engineering/architecture/SKILL.md)**: evidence-based system decisions
 - **[a2a-engineering](skills/engineering/a2a-engineering/SKILL.md)**: Agent2Agent interoperability
+- **[agent-evaluation](skills/engineering/agent-evaluation/SKILL.md)**: observable agent outcomes and reliable trial evidence
 - **[background-maintenance](skills/engineering/background-maintenance/SKILL.md)**: resource-bounded storage and index upkeep
 - **[code-and-docs-cleanup](skills/engineering/code-and-docs-cleanup/SKILL.md)**: behavior-preserving cleanup
 - **[concurrency-correctness](skills/engineering/concurrency-correctness/SKILL.md)**: correct concurrent histories
@@ -90,6 +91,11 @@ Architecture is user-invoked; the other 34 skills are model-invoked from their d
 ## How it's built
 
 The [research ledger](research/engineering-toolkit/README.md) records sources; [evals](evals/README.md) documents behavioral cases, scoring, and host limits. Repository validation covers packaging and generated artifacts, not production reliability or unavailable hosts.
+
+The [October 14 company blog refresh](research/company-blog-refresh/2026-10-14/README.md)
+records resumed discovery, body retrieval, source backed skill opportunities and
+the evaluation evidence for selected additions. Publisher access and historical
+coverage gaps remain explicit.
 
 ## Contributing
 

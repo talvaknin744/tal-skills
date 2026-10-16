@@ -26,7 +26,7 @@ test('Claude plugin manifest has package metadata and all supported skill packag
   assert.equal(plugin.repository, 'https://github.com/talvaknin744/tal-skills');
   assert.equal(plugin.license, 'MIT');
   assert.deepEqual(plugin.keywords, ['agent-skills', 'codex', 'claude-code', 'distributed-systems', 'backend', 'reliability']);
-  assert.equal(plugin.skills.length, 35);
+  assert.equal(plugin.skills.length, 36);
   assert.deepEqual([...plugin.skills].sort(), actualSkills);
   assert.ok(plugin.skills.every((skill) => !skill.startsWith('./skills/misc/')));
 

@@ -1,0 +1,139 @@
+{
+  "run_id": "final-agent-evaluation-pure-helper-assertion-01",
+  "run_evidence_sha256": "a7181a5d9ce522ccb17ebdb1c88bc05716d42f5f1561b4777e3498e8933efba3",
+  "final_workspace_tree_sha256": "b14bde2098a5e114d13ff7d88b1ea0953272898152de8ffb18baffa6b6a5a85d",
+  "case_id": "pure-helper-assertion",
+  "candidate_tree_sha256": "b7ca2295d82249968f739a4fd49ae7483af24e13fd7c3f45f1af98893ba07e24",
+  "rubric_sha256": "4f7887503f98527cbf7c3131df3910f164c44f1e121efd05e32eb1dfb124788c",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/trace.jsonl",
+        "locator": "completed command events item_1 at line 5 and item_2 at line 7; all observable events",
+        "observation": "The trace lists the local project and reads only formatter.py. No candidate body read, model trial or grading workflow is captured. This absence is scoped to observable events in this attempt."
+      }
+    },
+    {
+      "id": "focused-assertion",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 2",
+        "observation": "The answer gives only `assert format_order_number(7) == \"ORD0007\"`, matching the documented pure helper without a model judge, repeated trials, dependencies or harness."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json",
+        "locator": "input_integrity and observed_external_or_delegation_events; answer lines 1 through 3",
+        "observation": "Saved integrity records unchanged baseline and no forbidden changes, with no external/delegation events. The assertion response makes no execution or agent validation claim."
+      }
+    }
+  ],
+  "critical_gates": {
+    "bounded-selection": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Fresh repaired candidate observed answer and trace; broader host/network/read isolation remains unverified."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0ef92b4fae10dd2a2294b88bc0a9f3f9aba639ee3c1878fd0daebe4d3f09d963",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 16.11,
+  "tool_calls": 2,
+  "token_usage": {
+    "input_tokens": 42285,
+    "cached_input_tokens": 23552,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 111,
+    "reasoning_output_tokens": 0
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "9bae28f51d5da61ed36982645e6fb9b56c9939645b57acd74b10a68716059c3f",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "not_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "all observable events",
+      "observation": "No candidate body read is observed."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "Captured normal discovery only, separate from broader host confinement and causal improvement."
+  },
+  "archive_stage": "r05",
+  "stage_qualified_run_id": "r05/final-agent-evaluation-pure-helper-assertion-01",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-run-runtime-and-dependency-hash-match",
+        "status": "pass",
+        "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+        "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2"
+      },
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "bounded-selection",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

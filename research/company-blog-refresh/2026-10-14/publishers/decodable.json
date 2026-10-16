@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "publisher_id": "decodable",
+  "name": "Decodable",
+  "crawler_summary_sha256": "39da917dd8650fc615234d6bb3d3d02307b315ddd2800574b153ce23a6273406",
+  "crawler_summary_path": "publishers/decodable/summary.json",
+  "counters": {
+    "baseline_records": 146,
+    "known_urls": 146,
+    "processed_urls": 146,
+    "http_article_attempted_urls": 146,
+    "body_retrieved_urls": 146,
+    "body_extracted": 146,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2,
+    "substantive_research_read_articles": 2,
+    "short_extraction_audit_read_articles": 0
+  },
+  "article_status_counts": {
+    "body_extracted": 146
+  },
+  "excluded_collection_url_count": 0,
+  "http_attempt_semantics": "Unique collector requested URLs with kind article, including any subsequently excluded collection requests. Embedded feed bodies require no article HTTP request.",
+  "discovery_scope": "Public English article URLs under /blog/ on the Decodable company host. Category, author, pagination and documentation paths are excluded. Redis acquisition navigation is outside this publisher scope.",
+  "terminal_status": "publisher_exposed_discovery_terminal; all_known_frontier_urls_processed",
+  "terminal_evidence": "The finite sitemap parsed as 146 article URLs. The RSS feed exposes 100 items and remains a capped feed rather than a lifetime archive. HTML pagination reached ?aa1d3371_page=17 with no next link.",
+  "gaps": [
+    "Finite sitemaps and terminal listing pages establish exposed scope, not every deleted, private or unlisted historical article.",
+    "Automatic extraction is separate from deliberate reading; only the selected bodies below were read.",
+    "No source code, broker, stream engine, connector or benchmark was executed as part of this research.",
+    "The RSS feed exposes 100 entries while the sitemap exposes 146. Initial Webflow extraction failures are preserved; local re-extraction recovered article text without a new network claim."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.decodable.co/blog/aggregating-change-data-capture-events-based-on-transactional-boundaries",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "363f366669fd39b119ab85b4c73f5cff07e9e169438552cbb95181540199aaa2",
+      "evidence_path": "messaging-b-probes/c70ea361eee37ac517414dff4461f59b318417dc7ff885b3c66a4924cbd22ed1.article.html"
+    },
+    {
+      "url": "https://www.decodable.co/blog/schema-evolution-in-change-data-capture-pipelines",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "0a1b1f1b9d5f3d48177d749eae5979a66251d9e0d7658b7b7a9d0af377848f89",
+      "evidence_path": "messaging-b-probes/11177aba6132736d91d05c394cfdbfbd0a1ec8615e2681c2b22d5c5aa955208c.article.html"
+    }
+  ],
+  "improvement": {
+    "owning_skills": [
+      "stream-processing-design"
+    ],
+    "mechanism": "Extend stream-processing-design with completeness and commit-order checks for CDC transaction buffers. Transaction END markers, expected event counts per table, unique event identity and transaction order establish different facts. Completed later transactions may need to wait for earlier transactions. The destination still needs an atomic transaction. Schema evolution must also cover operator state, historical replay and sink schemas, independently of registry compatibility.",
+    "reading_and_contract_limits": "Both selected bodies were read completely. The transaction buffering implementation is experimental and was not executed. Large transactions can exceed broker message limits; a naive in-memory SMT has unbounded memory and no buffer fault tolerance. Debezium transaction metadata and DDL support depend on connector and configuration. Flink CDC synchronization modes and supported connectors need current version verification.",
+    "discriminating_case": "Deliver a later small transaction before an earlier large one completes, and duplicate one CDC row while its END marker expects two unique rows. Require unique completeness, source commit order, persisted recoverable buffering and atomic sink application. Repeat with a schema rename and historical event replay to expose registry versus state and sink compatibility."
+  },
+  "discovery_receipts": [
+    {
+      "url": "https://www.decodable.co/robots.txt",
+      "status": "fetched",
+      "sha256": "a81c9e8a76bb672caf7ac6146f92a13f0fc874690d48bf25d7fb7c3e6ca67830",
+      "object_path": "publishers/decodable/objects/source/a8/a81c9e8a76bb672caf7ac6146f92a13f0fc874690d48bf25d7fb7c3e6ca67830.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://www.decodable.co/sitemap.xml"
+      ],
+      "terminal_observation": "Robots sitemap declarations parsed"
+    },
+    {
+      "url": "https://www.decodable.co/blog",
+      "status": "fetched",
+      "sha256": "d42e99fe50e147b3f55abd6792dce7571d678c9d6742f2941ddc79a60abf5b2e",
+      "object_path": "publishers/decodable/objects/source/d4/d42e99fe50e147b3f55abd6792dce7571d678c9d6742f2941ddc79a60abf5b2e.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=2"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog/rss.xml",
+      "status": "fetched",
+      "sha256": "ae22a1535be0e7dd4e23890537d699538ceff61c99950ccdea6726dae106cb9c",
+      "object_path": "publishers/decodable/objects/source/ae/ae22a1535be0e7dd4e23890537d699538ceff61c99950ccdea6726dae106cb9c.bin",
+      "discovered_articles": 100,
+      "continuations": [],
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=10",
+      "status": "fetched",
+      "sha256": "84287e14d23afd3ef1149c2ad7df6b61ec9befdff10e1f5466c6e0695208b007",
+      "object_path": "publishers/decodable/objects/source/84/84287e14d23afd3ef1149c2ad7df6b61ec9befdff10e1f5466c6e0695208b007.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=11"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=11",
+      "status": "fetched",
+      "sha256": "67b7ca18615cdaa6cf5e3b4c04181d5b82de4f02bdbfb2646fd3e9830a844ff0",
+      "object_path": "publishers/decodable/objects/source/67/67b7ca18615cdaa6cf5e3b4c04181d5b82de4f02bdbfb2646fd3e9830a844ff0.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=12"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=12",
+      "status": "fetched",
+      "sha256": "b9709d56380dcb4636ccd2bb47ba0fc3acc3e8ca8d94438793cb528f173e9af3",
+      "object_path": "publishers/decodable/objects/source/b9/b9709d56380dcb4636ccd2bb47ba0fc3acc3e8ca8d94438793cb528f173e9af3.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=13"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=13",
+      "status": "fetched",
+      "sha256": "f4156073b1873aa184391b5a5468ba23d2393325a182d00c7aa31b8db8818f43",
+      "object_path": "publishers/decodable/objects/source/f4/f4156073b1873aa184391b5a5468ba23d2393325a182d00c7aa31b8db8818f43.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=14"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=14",
+      "status": "fetched",
+      "sha256": "01908dc819eefc5b460bab3ca8142e08378aa03bb8d2868906b9b442106ded9a",
+      "object_path": "publishers/decodable/objects/source/01/01908dc819eefc5b460bab3ca8142e08378aa03bb8d2868906b9b442106ded9a.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=15"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=15",
+      "status": "fetched",
+      "sha256": "3cd4ed2d0d57cbbeeacc6659c53c294b4c1c9bef89f175d552b52bfa06af5a45",
+      "object_path": "publishers/decodable/objects/source/3c/3cd4ed2d0d57cbbeeacc6659c53c294b4c1c9bef89f175d552b52bfa06af5a45.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=16"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=16",
+      "status": "fetched",
+      "sha256": "65073e7f23056112f0f5e5629cdca6dc77f2b852ca34ab97fe8fd0a1bfc5b003",
+      "object_path": "publishers/decodable/objects/source/65/65073e7f23056112f0f5e5629cdca6dc77f2b852ca34ab97fe8fd0a1bfc5b003.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=17"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=17",
+      "status": "fetched",
+      "sha256": "3f278c792303bf10f49aabfbcaa1b8440258ccf2e04bbd53f3d1c860ba6b7d89",
+      "object_path": "publishers/decodable/objects/source/3f/3f278c792303bf10f49aabfbcaa1b8440258ccf2e04bbd53f3d1c860ba6b7d89.bin",
+      "discovered_articles": 3,
+      "continuations": [],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=2",
+      "status": "fetched",
+      "sha256": "d1bbede563c98c990f5519bc55026094451c1b3b37629d7f413864bca44be2ef",
+      "object_path": "publishers/decodable/objects/source/d1/d1bbede563c98c990f5519bc55026094451c1b3b37629d7f413864bca44be2ef.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=3"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=3",
+      "status": "fetched",
+      "sha256": "9c24f37b6244304532b9199f1915e7c53b120334c8ea914cd8b0aede108e026d",
+      "object_path": "publishers/decodable/objects/source/9c/9c24f37b6244304532b9199f1915e7c53b120334c8ea914cd8b0aede108e026d.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=4"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=4",
+      "status": "fetched",
+      "sha256": "910a2f3185193aa4c262f264a4afe98705266ca7c1aaf7e2c896c6eb5814919a",
+      "object_path": "publishers/decodable/objects/source/91/910a2f3185193aa4c262f264a4afe98705266ca7c1aaf7e2c896c6eb5814919a.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=5"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=5",
+      "status": "fetched",
+      "sha256": "8ceb89e6703bf8ecc93d890d37e5ca2e595c751d9d13729c5b6954d711ceeea3",
+      "object_path": "publishers/decodable/objects/source/8c/8ceb89e6703bf8ecc93d890d37e5ca2e595c751d9d13729c5b6954d711ceeea3.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=6"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=6",
+      "status": "fetched",
+      "sha256": "64e6e98ce11e0c9875f7c03924836b4c5da665875d0fac24cc29f88afdb157f5",
+      "object_path": "publishers/decodable/objects/source/64/64e6e98ce11e0c9875f7c03924836b4c5da665875d0fac24cc29f88afdb157f5.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=7"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=7",
+      "status": "fetched",
+      "sha256": "0b3794fe137bb3d610f16ca2ab5bef5e4663164668be81fee5cbf7939ba7a110",
+      "object_path": "publishers/decodable/objects/source/0b/0b3794fe137bb3d610f16ca2ab5bef5e4663164668be81fee5cbf7939ba7a110.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=8"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=8",
+      "status": "fetched",
+      "sha256": "f987bc9bfdaba97e79ff5ebd8cccedd5eb65e728f6dc86df07e2a37648fee1ae",
+      "object_path": "publishers/decodable/objects/source/f9/f987bc9bfdaba97e79ff5ebd8cccedd5eb65e728f6dc86df07e2a37648fee1ae.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=9"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/blog?aa1d3371_page=9",
+      "status": "fetched",
+      "sha256": "26ef30c60f6d1fd6d045d79abdfe66a14cd6388d075bee69548d3586b16f48eb",
+      "object_path": "publishers/decodable/objects/source/26/26ef30c60f6d1fd6d045d79abdfe66a14cd6388d075bee69548d3586b16f48eb.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://www.decodable.co/blog?aa1d3371_page=10"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.decodable.co/sitemap.xml",
+      "status": "fetched",
+      "sha256": "ed015f849e2f8a56ae05d4da5e9ecccec72c4c67dc12b66f0e3b74b15dea4d5d",
+      "object_path": "publishers/decodable/objects/source/ed/ed015f849e2f8a56ae05d4da5e9ecccec72c4c67dc12b66f0e3b74b15dea4d5d.bin",
+      "discovered_articles": 146,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    }
+  ],
+  "discovery_failure_receipts": [
+    {
+      "url": "https://www.decodable.co/blog/feed",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://www.decodable.co/sitemap-index.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    }
+  ]
+}

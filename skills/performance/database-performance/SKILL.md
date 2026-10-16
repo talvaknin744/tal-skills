@@ -25,7 +25,8 @@ Example: separate pool acquisition and server execution for the same request cla
 ## 2. Locate the constraint
 
 Read [application and pool boundaries](references/application-and-pools.md) when
-ORM loading, resource ownership or connection queues matter. For PostgreSQL plans,
+ORM loading, resource ownership, connection queues or pool mode compatibility
+matter. For PostgreSQL plans,
 waits, statistics, memory or maintenance, read
 [PostgreSQL diagnosis](references/postgresql.md). On another engine, verify its
 corresponding primary contracts and obtain equivalent observations.

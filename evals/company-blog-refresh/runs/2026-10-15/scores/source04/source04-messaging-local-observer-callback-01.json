@@ -1,0 +1,191 @@
+{
+  "run_id": "source04-messaging-local-observer-callback-01",
+  "run_evidence_sha256": "09cd768e96d910ba53951e7f81dadc2af0c2f6578102b1e5ad62d0f8a87ce218",
+  "final_workspace_tree_sha256": "f53d3681ab9f4b688c75b18ec779b0ea8bd7d6999064647de241d2dd5e22bc91",
+  "case_id": "local-observer-callback",
+  "candidate_tree_sha256": "e1c1a5f1300cbae8be83ea7f6e398c465d289cdae86837137f1277e1b5a82d2b",
+  "rubric_sha256": "8cb69e2c5229a56bbeac76577257f4cbdc3547c82826aadcfd6da505d2e55464",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 7",
+        "observation": "The actual trace reads only the local project and instruction-file inventory. It contains no messaging skill body or reference read and starts no specialist workflow. This is the observed nontrigger result for this one trial only.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 7,
+            "quote": "This synchronously calls the local listener with the updated value immediately after incrementing."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9
+        ]
+      }
+    },
+    {
+      "id": "local-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4 through 4, lines 7 through 7",
+        "observation": "The answer recommends the direct listener invocation after incrementing under the supplied one-owner synchronous contract, without introducing a broker, outbox or distributed retries.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 4,
+            "end": 4,
+            "quote": "self.listener(self.value)"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 7,
+            "quote": "This synchronously calls the local listener with the updated value immediately after incrementing."
+          }
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 7",
+        "observation": "The independently audited workspace equals its baseline. All observed commands are local read or file inventory operations, and no external or delegation event exists. The answer makes no runtime verification claim.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 7,
+            "quote": "No files were changed or external services used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "bounded-selection": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "4ba4f48e3e8c47b9d0d099eebfec7aa8c987c1c7d963de1ca7186fb42b05f62d",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 20.398,
+  "tool_calls": 3,
+  "token_usage": {
+    "input_tokens": 42459,
+    "cached_input_tokens": 27776,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 502,
+    "reasoning_output_tokens": 234
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "no_body_read_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '*' project\"",
+        "exit_code": 0,
+        "output_sha256": "2434bc4134b3a6eb86ab8dd46dacfc4fc4419d1b07984264b45d059163f889b0"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc 'cat project/counter.py'",
+        "exit_code": 0,
+        "output_sha256": "7bc274373cb924a554202afc4bf46a8d46c48654c9dc25dd2efa17a08425c7f0"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '\"'!project/**'\"' .\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "bounded-selection",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

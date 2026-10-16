@@ -1,0 +1,162 @@
+{
+  "run_id": "final-agent-evaluation-refund-success-without-effect-01",
+  "run_evidence_sha256": "d990f2b600264a9ef057a646eefb0ab3427e90450fe3a96327b8b0e8cc5baf53",
+  "final_workspace_tree_sha256": "ce8cf7e3476ad3391459f9a9cf563b0b8bea96e830b6c43fdae746ed23477124",
+  "case_id": "refund-success-without-effect",
+  "candidate_tree_sha256": "b7ca2295d82249968f739a4fd49ae7483af24e13fd7c3f45f1af98893ba07e24",
+  "rubric_sha256": "5d3a5b8dc12d4070dcd3353d0ef26b450f1f201e0b19a742f95cb078aa2df9c4",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "final-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 7 through 17",
+        "observation": "The answer rejects success wording from authoritative zero refunds and balance 100 instead of 140, while ticket and prerequisites pass. It keeps invocation distinct: \"This establishes invocation, not the effect.\" The synchronous snapshot grounds confirmed failure."
+      }
+    },
+    {
+      "id": "independent-grading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 29",
+        "observation": "The answer independently gates customer/order IDs, exactly one newly processed 40 USD refund, balance 14000 cents, resolved ticket and protected before/after state, separately from prerequisites and factual reporting. It states \"Missing preservation coverage is unknown\" and requires every critical gate to pass."
+      }
+    },
+    {
+      "id": "oracle-sensitivity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 17, 27 and 31 through 35; trace completed item_9 at line 20",
+        "observation": "The answer holds response/trace constant for a passing valid state and wrong or missing refund controls, leaves cause unknown and permits alternate wording. It retains the supplied false positive in local controls and a future misleading acknowledgement case. It states \"The original phrase check still passed\" despite missing effect. The local core gates are explicitly narrower than the full evaluator."
+      }
+    },
+    {
+      "id": "repeatable-run-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 35",
+        "observation": "The future finite plan includes success plus identity, eligibility, amount, tool error and missing effect boundaries. It states \"Reset session and fixture state each time; capture immutable agent source, model/settings, host, harness, tools, fixture and grader identities, plus final answer, trace, independent final state and effort.\" Missing values stay unknown and future agent trials are distinguished from executed local controls."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 33 and 35; run input_integrity; all observable trace events",
+        "observation": "The answer labels the in-memory core gate checks executed while \"full preservation, prerequisite and reporting checks remain proposed and unexecuted\". It reports no model/external service, unchanged files and no reliability guarantee. Saved integrity and trace confirm only local reads/control execution, with no external/delegation events."
+      }
+    }
+  ],
+  "critical_gates": {
+    "final-state-oracle": "pass",
+    "independent-grading": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 10,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Fresh repaired candidate observed answer and trace; broader host/network/read isolation remains unverified."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0ef92b4fae10dd2a2294b88bc0a9f3f9aba639ee3c1878fd0daebe4d3f09d963",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 161.626,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 107114,
+    "cached_input_tokens": 65408,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 5968,
+    "reasoning_output_tokens": 2668
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "1a297d4a312f11357f8cf7689cd0c3e3aaa4ab9918b8254e30b042b68fb3dfa3",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "One captured normal discovery attempt, separate from broader host confinement or causal improvement."
+  },
+  "archive_stage": "r05",
+  "stage_qualified_run_id": "r05/final-agent-evaluation-refund-success-without-effect-01",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-run-runtime-and-dependency-hash-match",
+        "status": "pass",
+        "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+        "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2"
+      },
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "final-state-oracle",
+              "score": 2
+            },
+            {
+              "id": "independent-grading",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

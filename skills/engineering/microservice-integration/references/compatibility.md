@@ -6,7 +6,11 @@ Use this reference when changing an existing API, event, schema, or client libra
 
 Compare old and proposed contracts using actual supported consumers. Review field presence, optionality, types, units, meaning, defaults, validation, errors, ordering, and completion semantics where affected. Adding a required request field can break old callers; adding a response value can break an exhaustive enum reader. A schema comparison can catch structural changes, while behavioral checks are needed for meaning changes.
 
+When changing business meaning or completion semantics, identify which consumers require visibility of the terminal business outcome and the authoritative response, error, status or event that provides it. Verify that an unsuccessful outcome remains observable to those consumers through that contract. Check suppression of success effects separately from visibility of the unsuccessful outcome.
+
 Consumers should read the fields they depend on and tolerate compatible extensions. Keep validation of required business meaning intact: tolerance is not permission to guess missing identifiers or silently accept invalid values. Check the actual serializer and generated clients rather than treating a format name as proof of compatibility.
+
+For Protobuf FieldMask updates or symbolic mask path changes, read [fieldmask-updates.md](fieldmask-updates.md) to settle the provider's selection, reset and replacement semantics.
 
 ## Rollout
 

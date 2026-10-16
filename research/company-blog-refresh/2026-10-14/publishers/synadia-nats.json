@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "publisher_id": "synadia-nats",
+  "name": "Synadia and NATS",
+  "crawler_summary_sha256": "4b1dd21d0a95b775e8c6ccf95bcc184fffc2a6a34fd77430f5417ed0a46c0d5f",
+  "crawler_summary_path": "publishers/synadia-nats/summary.json",
+  "counters": {
+    "baseline_records": 297,
+    "known_urls": 298,
+    "processed_urls": 298,
+    "http_article_attempted_urls": 304,
+    "body_retrieved_urls": 298,
+    "body_extracted": 288,
+    "body_fetched_unextracted": 10,
+    "pending": 0,
+    "read_articles": 3,
+    "substantive_research_read_articles": 2,
+    "short_extraction_audit_read_articles": 1
+  },
+  "article_status_counts": {
+    "body_extracted": 288,
+    "body_fetched_unextracted": 10
+  },
+  "excluded_collection_url_count": 6,
+  "http_attempt_semantics": "Unique collector requested URLs with kind article, including any subsequently excluded collection requests. Embedded feed bodies require no article HTTP request.",
+  "discovery_scope": "Public English article URLs under the Synadia and NATS /blog/ paths. Series, category, tag, author, pagination, documentation and product paths are excluded.",
+  "terminal_status": "publisher_exposed_discovery_terminal; all_known_frontier_urls_processed",
+  "terminal_evidence": "Both declared finite sitemaps and exposed feeds parsed. Company archive has no declared next link. This establishes the exposed archive rather than every historical publication.",
+  "gaps": [
+    "Finite sitemaps and terminal listing pages establish exposed scope, not every deleted, private or unlisted historical article.",
+    "Automatic extraction is separate from deliberate reading; only the selected bodies below were read.",
+    "No source code, broker, stream engine, connector or benchmark was executed as part of this research.",
+    "10 responses were fetched but did not pass substantive body extraction. Their bytes and receipts remain archived.",
+    "Short video and webinar introductions may fail the automatic 120 word extraction threshold. Linked videos and repositories were not crawled or read as article bodies."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.synadia.com/blog/atomic-batch-publishing-nats-2-12",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "1f02f0cdae093e918d4a1a2bf8f2c014aeda43999575738764274f0f18616117",
+      "evidence_path": "messaging-b-probes/11737d460510849c587551a173580a1d1298e1f4c951f863104508744c059fa5.article.html"
+    },
+    {
+      "url": "https://www.synadia.com/blog/jetstream-atomic-publish-batch-ordering",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "1f9907fb35558b3667aafbd512677a961c83c1af7c5ed406d21896f01ad3674d",
+      "evidence_path": "messaging-b-probes/7b96c2e21ed861560eab14deac5792ed092f18bb4e562c7a06dd9bbfa38808e4.article.html"
+    },
+    {
+      "url": "https://nats.io/blog/hello-world-java-client",
+      "reading_scope": "Complete currently exposed short article body inspected during extraction audit. Linked video, repositories and documentation were not read or executed.",
+      "evidence_sha256": "185cb1391e9bfe430e29624fb9fc650c5fda0db1926b9918eef6754ce7169d4f",
+      "evidence_path": "publishers/synadia-nats/objects/article/18/185cb1391e9bfe430e29624fb9fc650c5fda0db1926b9918eef6754ce7169d4f.bin"
+    }
+  ],
+  "improvement": {
+    "owning_skills": [
+      "messaging-reliability"
+    ],
+    "mechanism": "Extend messaging-reliability with the atomic batch publication boundary. A successful single stream batch is committed in contiguous stream order, while consumer processing order and external effects still require their own guarantees. Chunk reconstruction needs identity, index, count and integrity metadata even when storage adjacency holds.",
+    "reading_and_contract_limits": "The two articles were read completely, including examples and limitations, but the NATS server, clients and sample commands were not executed. Minimum versions, opt-in stream configuration, batch size, inactivity timeout, retry behavior and commit acknowledgement loss need deployed-version verification. The older article overstates simultaneous consumer delivery; the newer ordering article explicitly separates stream storage and processing.",
+    "discriminating_case": "A batch commits, its acknowledgement is lost, and a subject-filtered consumer sees only a subset of chunks while another message is redelivered. Require reconciliation of the batch outcome and validation of complete logical payload identity. Do not infer processing order or business-effect atomicity from stream adjacency."
+  },
+  "discovery_receipts": [
+    {
+      "url": "https://www.synadia.com/robots.txt",
+      "status": "fetched",
+      "sha256": "77ef7a40c3b9ae038de17badbf4f4015d1fe1d1e4f99ee9cd376140924ccc96a",
+      "object_path": "publishers/synadia-nats/objects/source/77/77ef7a40c3b9ae038de17badbf4f4015d1fe1d1e4f99ee9cd376140924ccc96a.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://www.synadia.com/sitemap-index.xml"
+      ],
+      "terminal_observation": "Robots sitemap declarations parsed"
+    },
+    {
+      "url": "https://nats.io/blog/index.xml",
+      "status": "fetched",
+      "sha256": "aec88223a7d02ca824c284d89300a873f979be356764c3a641faf8a9fdc03bbc",
+      "object_path": "publishers/synadia-nats/objects/source/ae/aec88223a7d02ca824c284d89300a873f979be356764c3a641faf8a9fdc03bbc.bin",
+      "discovered_articles": 130,
+      "continuations": [],
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    },
+    {
+      "url": "https://nats.io/sitemap.xml",
+      "status": "fetched",
+      "sha256": "11b2a0049fad3d667d2e51002b8887bcdaacf4720c0219f46c40a68a7b761bf2",
+      "object_path": "publishers/synadia-nats/objects/source/11/11b2a0049fad3d667d2e51002b8887bcdaacf4720c0219f46c40a68a7b761bf2.bin",
+      "discovered_articles": 130,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://www.synadia.com/blog",
+      "status": "fetched",
+      "sha256": "071ce89c038189398e82a066a7591dcce58df909d118ba43fcdf989043c6b5a7",
+      "object_path": "publishers/synadia-nats/objects/source/07/071ce89c038189398e82a066a7591dcce58df909d118ba43fcdf989043c6b5a7.bin",
+      "discovered_articles": 113,
+      "continuations": [
+        "https://www.synadia.com/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://www.synadia.com/rss.xml",
+      "status": "fetched",
+      "sha256": "7badf40014cc348575c71882275d91e585bf7da505f309908726517a788b3a4d",
+      "object_path": "publishers/synadia-nats/objects/source/7b/7badf40014cc348575c71882275d91e585bf7da505f309908726517a788b3a4d.bin",
+      "discovered_articles": 168,
+      "continuations": [],
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    },
+    {
+      "url": "https://www.synadia.com/sitemap-0.xml",
+      "status": "fetched",
+      "sha256": "14a6b18cf46088a89fa9070830da9e3d07c41dce1e7b0007773c4563d1c670d8",
+      "object_path": "publishers/synadia-nats/objects/source/14/14a6b18cf46088a89fa9070830da9e3d07c41dce1e7b0007773c4563d1c670d8.bin",
+      "discovered_articles": 174,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://www.synadia.com/sitemap-index.xml",
+      "status": "fetched",
+      "sha256": "6de3ca8e5a7a6468ac88432d5c2922eece67b3aec94af6087fd4a3a73027f4ec",
+      "object_path": "publishers/synadia-nats/objects/source/6d/6de3ca8e5a7a6468ac88432d5c2922eece67b3aec94af6087fd4a3a73027f4ec.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://www.synadia.com/sitemap-0.xml"
+      ],
+      "terminal_observation": "Finite sitemap index parsed, all declared child sitemaps queued"
+    }
+  ],
+  "discovery_failure_receipts": [
+    {
+      "url": "https://www.synadia.com/blog/feed",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://www.synadia.com/blog/rss.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://www.synadia.com/sitemap.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "run_id": "source06-messaging-commit-before-ack-01",
+  "run_evidence_sha256": "ac9d7d6ed52ec52ac64e801bac99df392b8dd166e0e8e1a64a50a424fa2b83a6",
+  "final_workspace_tree_sha256": "6b0e990cd5d55be73008d3c6599996819a2fbba1296dda35c0956d41d9026e26",
+  "case_id": "commit-before-ack",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "41e332526f34adcc48e0a6f4ee6a6b968c2f274cfab0da8f7ebd8969dd1db725",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "durable-dedup",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 10, lines 19 through 19",
+        "observation": "The proposed durable logical identity and unique-claim transaction couple intent, debit and one outbox obligation. Duplicates after commit reuse the recorded outcome with replay-horizon retention and no second debit, while unstable delivery or order IDs are rejected.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 7,
+            "end": 10,
+            "quote": "1. Claim a **stable logical event ID** using a database unique constraint. Use `m-7` only if it survives redelivery, republication, and replay; a delivery tag or order ID is insufficient.\n2. Inside the **same transaction**, record the event’s intent, debit 50, and insert one durable notification intent.\n3. If another transaction already committed that identity, verify the intent matches and reuse its recorded outcome without another debit or notification intent.\n4. Acknowledge only after the transaction commits or the matching prior commit is established."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 19,
+            "end": 19,
+            "quote": "| Database | **Exactly one committed debit and one notification intent per logical event**, assuming transactional unique-key arbitration and identity retention covering every permitted replay. |"
+          }
+        ]
+      }
+    },
+    {
+      "id": "external-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20 through 23",
+        "observation": "The answer separates the database obligation from external at-least-once provider acceptance, preserves ambiguous/lost responses and duplicate-email policy and rejects one external email or customer delivery guarantees from an outbox.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 23,
+            "quote": "| External notification | **At-least-once provider acceptance**, conditional on eventual provider availability and continued recovery. Duplicate emails are possible when acceptance occurs before the worker durably records success, including a lost response. |\n| Customer inbox | Provider acceptance alone does **not** establish actual mailbox delivery. That requires the provider’s delivery contract or delivery evidence. |\n\nKeep the original notification identity and attempt history when acceptance is unknown. Reconcile if the provider offers usable evidence; otherwise retry under the explicitly accepted duplicate-notification policy. Neither a local flag nor the outbox can guarantee exactly one external email with this provider."
+          }
+        ]
+      }
+    },
+    {
+      "id": "fault-schedule",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 25 through 36",
+        "observation": "The clearly proposed table covers before/after database commit, ACK, dispatch, provider acceptance and durable send-result commit, with source disposition and explicit post-recovery debit/intent/acceptance counts. The concurrent schedule controls two contenders before the claim, covers winner commit and rollback and expects one debit/intent plus acknowledgement for completed deliveries. These are honestly unexecuted review checks, not claimed vendor tests.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 36,
+            "quote": "These are **proposed, unexecuted validation schedules**. Counts below are after recovery, with exactly one injected crash and otherwise successful operations:\n\n| Failure point | Recovery and source disposition | Debits / intents / provider acceptances |\n|---|---|---|\n| Before database commit | Roll back; broker redelivers; process and ACK. | 1 / 1 / 1 |\n| After commit, before ACK | Redeliver; find the committed identity; skip mutations and ACK. Outbox completes independently. | 1 / 1 / 1 |\n| After ACK, before dispatch | Broker source is removed; restart worker and send the retained intent. | 1 / 1 / 1 |\n| After dispatch begins, before provider acceptance | Recover the unfinished attempt and retry; source remains acknowledged. | 1 / 1 / 1 |\n| After acceptance, before success-record commit, including lost reply | Preserve uncertain status; retry under the duplicate policy; source remains acknowledged. | 1 / 1 / 2 |\n| After success-record commit, before worker exit | Restart; recognize recorded success and do not resend. | 1 / 1 / 1 |\n\nAlso test concurrency: pause consumers A and B immediately before claiming `m-7`; release A to claim it, then release B while A remains uncommitted. If A commits, B must resolve the conflict and reuse A’s outcome. If A rolls back, B may claim and perform the work. Either schedule must finish with one debit, one notification intent, and an ACK for each completed delivery."
+          }
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 25 through 25, lines 38 through 38",
+        "observation": "Actual trace commands only read staged source and supplied project files. Independent inventories are unchanged and no external event occurs. The answer labels its validation schedules unexecuted and leaves broker/client versions, durability settings and production behavior unresolved.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 25,
+            "quote": "These are **proposed, unexecuted validation schedules**. Counts below are after recovery, with exactly one injected crash and otherwise successful operations:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 38,
+            "end": 38,
+            "quote": "This was a static review; all files remain unchanged and no external services were used. Broker/client versions, durability settings, production database behavior, and replay horizon were not supplied. Validate these schedules against that stack before asserting the operational guarantee. Monitor the **oldest unfinished notification age** and **uncertain acceptance count**, with an assigned recovery owner."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          11,
+          13,
+          15,
+          18,
+          19
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "durable-dedup": "pass",
+    "external-boundary": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0dc43596383f0e05521dcde314fdff7d91acc5bdf52575d96f129ef0210dd627",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 94.125,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 63816,
+    "cached_input_tokens": 55552,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3398,
+    "reasoning_output_tokens": 1986
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+        "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g '\"'!*node_modules*'\"' -g '\"'!*vendor*'\"' -g '\"'!*.lock'\"' .\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/delivery-and-recovery.md'",
+        "exit_code": 0,
+        "output_sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g '\"'!.git/**'\"' -g '\"'!node_modules/**'\"' -g '\"'!vendor/**'\"' project\"",
+        "exit_code": 0,
+        "output_sha256": "2f8cba6fb0ceddb1531436dce468341babb83bca370b266ed5be6920db46f80f"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc pwd",
+        "exit_code": 0,
+        "output_sha256": "851b1c4a0d276b763b47eb58bfbd09d848c4eb74129d64d9d1ead86fa3fb7359"
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g AGENTS.md -g '\"'!.git/**'\"' /tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-commit-before-ack-01 /tmp/tal-skills-schema-registry-native-2026-10-15-r03 /tmp <user-home>/.agents 2>/dev/null\"",
+        "exit_code": 0,
+        "output_sha256": "8ff11cb9f8d14425cd365cb4a9107adf591fdc6a446496a9dc70885e65987ce2",
+        "command_sha256": "b9491bf9a22cb96bf0d026d65f111a539d4f33c9f9f509244c2a7ae956a6356a"
+      },
+      {
+        "line": 18,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "1bca87a86c51ea3c0510fe5a533f99b63e0565d0718ec91ddbc404e6104359a4"
+      },
+      {
+        "line": 19,
+        "item": "item_8",
+        "command": "/bin/zsh -lc 'nl -ba project/consumer.pseudo'",
+        "exit_code": 0,
+        "output_sha256": "5187833276b13800b45ac2e6c57918039f73a001ca4b84c0ec86b23d686bc185"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "durable-dedup",
+          "score": 2
+        },
+        {
+          "id": "external-boundary",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  },
+  "public_redactions": {
+    "scope": "Only personal home prefixes in derived command observations are redacted. Literal answer quotes and sealed raw trace are unchanged.",
+    "fields": [
+      "independent_audit.commands[5].command"
+    ],
+    "original_score_sha256": "49901112adbbbab4581362d79aef4aa31ff1b848a85ea8831d19ea7a788c851d",
+    "original_trace_reference": "evidence/trace.jsonl"
+  }
+}

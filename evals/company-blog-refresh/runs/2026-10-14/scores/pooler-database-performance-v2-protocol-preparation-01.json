@@ -1,0 +1,141 @@
+{
+  "run_id": "pooler-database-performance-v2-protocol-preparation-01",
+  "run_evidence_sha256": "cddfb4dfec9e9618ac6273a3952c8d8e8ad31c7889c6fc3a378f0916feaf0924",
+  "final_workspace_tree_sha256": "f50741eca6cfb396e44d1fbe2778d8a2536915ac6188d83091a5c90360019326",
+  "case_id": "v2-protocol-preparation",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "b9a7ec60744ba8d288ee04c45a869c9a5ede1c18cbd5647085a66871e638df6f",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "protocol-conditions",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 9 and 10",
+        "observation": "The answer separates cross transaction SQL PREPARE/EXECUTE from named Parse/Bind preparation and states \"PgBouncer 1.23.1 with effective `max_prepared_statements = 100` supports tracking named protocol statements across backend reassignment.\" It keeps driver compatibility untested and refuses to extend tracking to the legacy SQL path."
+      }
+    },
+    {
+      "id": "bounded-repair",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10, 14 and 16",
+        "observation": "The repair replaces only the legacy cross transaction SQL preparation with a parameterized SELECT preserving tenant and transaction semantics. If longer session lifetime is actually required, it proposes a narrowly scoped session connection within the existing fleet budget. It rejects blanket preparation disablement and pool doubling."
+      }
+    },
+    {
+      "id": "validation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3, 20 through 30 and 32",
+        "observation": "The answer requests the actual driver version, forced different backend assignments, schema migration compatibility, state isolation and cleanup, useful throughput, retries, assignment waits and the fleet budget. It states \"No migration compatibility has been established\" and keeps the entire latency increase causality unresolved."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 34; evidence/run.json input_integrity and observed_external_or_delegation_events; trace completed command events item_1 through item_8",
+        "observation": "The answer states \"No files were edited, database commands executed, or validation tests run.\" Saved input integrity confirms unchanged baseline and no forbidden changes; observed commands read local candidate, global guidance and fixture files, with no external or delegation events."
+      }
+    }
+  ],
+  "critical_gates": {
+    "protocol-conditions": "pass",
+    "bounded-repair": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed answer and trace only; declared capability isolation deviations remain."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "be20469d919d3fd29040c71486feb6530daead8c7622be1257878b2038b7f0ce",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 111.113,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 80413,
+    "cached_input_tokens": 63872,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3024,
+    "reasoning_output_tokens": 1447
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns the body."
+    },
+    "candidate_metadata_observed": true,
+    "other_observed_skill_body_reads": [
+      "diagnosing-bugs"
+    ],
+    "limitation": "A single case attempt is not a three attempt activation estimate, and other inherited guidance prevents attribution to the candidate alone."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "protocol-conditions",
+              "score": 2
+            },
+            {
+              "id": "bounded-repair",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

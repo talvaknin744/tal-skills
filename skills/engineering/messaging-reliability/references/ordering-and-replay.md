@@ -49,3 +49,8 @@ An outbox's event ID and aggregate routing key serve different purposes. Compact
 - **Verification:** replay old and new fixtures, including changed units, enum meaning, defaults, deletion, and missing values. Assert business outcomes and a recoverable path for unsupported records.
 
 Source: [Schema Registry compatibility modes](https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html).
+
+For retained records whose schema identifier resolves through a registry, read
+[schema registry identity](schema-registry-identity.md) when that registry,
+context, client lookup path or restored metadata changes. Historical reader
+compatibility and correct identifier resolution need separate evidence.

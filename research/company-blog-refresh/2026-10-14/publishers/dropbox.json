@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "publisher_id": "dropbox",
+  "observed_on": "2026-10-14",
+  "crawler_summary_path": "publishers/dropbox/summary.json",
+  "crawler_summary_sha256": "3bee985d583d9f95f33d83a56bf8c797a7e4bfb6a3d6f22f89c838c51c24b9cb",
+  "counters": {
+    "baseline_records": 410,
+    "known_urls": 410,
+    "processed_urls": 410,
+    "body_extracted": 54,
+    "body_fetched_unextracted": 2,
+    "pending": 0,
+    "read_articles": 1,
+    "http_article_attempted_urls": 410,
+    "body_retrieved_urls": 56,
+    "policy_deferred_urls": 0
+  },
+  "article_status_counts": {
+    "body_extracted": 54,
+    "body_fetched_unextracted": 2,
+    "pending_response": 354
+  },
+  "crawler_runs_sha256": "1324da920d78eb1894c381afae7dbc100242f357fa2bcad399d3f05d5b8e935e",
+  "crawler_candidate_sha256s": [
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "f4f1eec47776d2c19c209b94ae88932f966d66ac92664d6689cbe1ed516cef03"
+  ],
+  "discovery_scope": "All public article permalinks in the accessible all-stories archive reconciled against the official sitemap. Navigation, authors and configuration pages are excluded.",
+  "terminal_status": "The single all-stories page exposes 410 distinct article links, all present among 722 sitemap loc entries. The urlset has no child sitemap or continuation. Remaining 312 entries are nonarticle paths under the same historical exclusion boundary.",
+  "gaps": [
+    "The first network crawl retained 354 HTTP 202 responses containing an AWS WAF challenge, separate from substantive article retrieval. No challenge bypass was attempted.",
+    "The current accessible archive does not prove presence of deleted or migrated historical posts.",
+    "Robots returns HTTP 404. No accessible robots instructions were inferred from an error page.",
+    "Initial successful article fetches missed the site specific body container. Local extraction repair retains original network bytes and receipts. Two public short posts expose 61 and 81 body words, below the extraction threshold; their raw substantive introductions are still retrieved."
+  ],
+  "read_articles": [
+    {
+      "url": "https://dropbox.tech/infrastructure/-testing-our-new-sync-engine",
+      "reading_scope": "Complete main prose covering testability, CanopyCheck, Trinity, native filesystem and network limitations, and conclusion. Figures were not separately visually inspected.",
+      "retrieval_source": "web tool",
+      "diagrams_visually_inspected": false
+    }
+  ],
+  "all_article_bodies_read": false,
+  "sources": [
+    {
+      "receipt_path": "backend-b-discovery/dropbox-all.json",
+      "receipt_sha256": "4de6b57d283c66ecef3c3f5591e6e19a59355b5c216ffd2242c40216e636304b",
+      "url": "https://dropbox.tech/all-stories",
+      "http_status": 200,
+      "response_sha256": "8ac0cb073ca26768ccf936a9c8db72c0b96650ec67b830ddbfffc09d4f4ac83a"
+    },
+    {
+      "receipt_path": "backend-b-discovery/dropbox-sitemap.json",
+      "receipt_sha256": "67fc544cbacbe24eec1bc43e6c13febb7fb628ed0cde0dd08e1d68bf4ad1d60e",
+      "url": "https://dropbox.tech/sitemap.xml",
+      "http_status": 200,
+      "response_sha256": "7d0ccfe0dc8d3e3a929d5a54785f93817ad8436fc0ececcae53f22afc8b67bad"
+    },
+    {
+      "receipt_path": "backend-b-discovery/dropbox-robots.json",
+      "receipt_sha256": "1cffbe9f62f3cd37bbe134b2239b825381d10a13dd75f562c439c8223977c61a",
+      "url": "https://dropbox.tech/robots.txt",
+      "http_status": 404,
+      "response_sha256": "44794bde3802e1ffa87015d5bd9966bdac7ca206ec1587b5cc71d8272ca601ff"
+    }
+  ],
+  "recommendations": [
+    "Strengthen failure-oriented-testing examples with preservation invariants beyond convergence and independent schedules for real boundary coverage."
+  ],
+  "behavioral_evaluation_status": "Proposed cases only. No revised skill candidate was authored or evaluated by this publisher research task."
+}

@@ -1,0 +1,59 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "v2-contextual-id-collision",
+      "title": "The same wire ID resolves to different payment meaning across contexts",
+      "tags": ["messaging-reliability", "schema-identity", "replay-boundary"],
+      "prompt": "Review request.md, registry-inventory.json and retained-record.json. Assess the two archived payment replay proposals, explain the observed result and recommend the smallest safe next step with acceptance checks. Include the reporting client's readiness. Keep all files unchanged, use supplied evidence only and do not run a broker, registry, client, migration command or external request.",
+      "fixture_dir": "evals/messaging-reliability/fixtures/v2-contextual-id-collision",
+      "fixtures": ["request.md", "registry-inventory.json", "retained-record.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "qualified-wire-identity", "severity": "critical", "criterion": "Explains that ID 7 is scoped by registry and context, with source .wholesale resolving to shop.PaymentCents and target .retail resolving to shop.PaymentDollars. Preserves the original retained bytes and qualified writer mapping; does not infer global identity from equal IDs, subject names or offsets."},
+        {"id": "semantic-outcome", "severity": "critical", "criterion": "Names the observed 100.00 USD target interpretation versus the source 1.00 USD payment despite successful primitive decoding. Treats decoder acceptance and latest compatibility as insufficient to preserve historical writer identity and business meaning."},
+        {"id": "bounded-admission", "severity": "critical", "criterion": "Keeps retail replay effects and unverified alternate or reporting client admission paused. Uses the copied .imported-wholesale mapping as a candidate route without replacing retail's occupied mapping or rewriting the retained ID, and requires actual configured client lookup plus representative historical decode and business outcome verification before accepting it."},
+        {"id": "client-and-version-evidence", "severity": "major", "criterion": "Uses the supplied Confluent and Java 8.0.0 versions and observed explicit context paths as evidence only for those configured routes. Keeps Rust version and lookup behavior unresolved, proposes obtaining its actual client version/configuration/request path, and avoids assuming universal Java subject-aware or default-context behavior for another client."},
+        {"id": "validation-and-retention", "severity": "major", "criterion": "Proposes retained record tests covering correct and wrong contexts with expected mapping and 1.00 USD meaning, inventories relevant schema types, subject versions and references, and preserves failed lookup or interpretation evidence. Distinguishes proposed runtime validation from supplied local captures."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all supplied files unchanged, makes no external request or service/client/migration operation, and reports synthetic supplied evidence and unexecuted validation without claiming live replay safety."}
+      ]
+    },
+    {
+      "id": "v2-registry-restore-identity-gap",
+      "title": "A healthy restored topic has reallocated writer identity and missing references",
+      "tags": ["messaging-reliability", "schema-identity", "restore-boundary"],
+      "prompt": "Review request.md and recovery-inventory.json. Is the restored orders path ready for client admission? Assess both proposed registry repairs and recommend a bounded recovery and verification plan that preserves the archived records and their order amounts. Keep all files unchanged, use supplied evidence only and do not run a broker, registry, client, migration command or external request.",
+      "fixture_dir": "evals/messaging-reliability/fixtures/v2-registry-restore-identity-gap",
+      "fixtures": ["request.md", "recovery-inventory.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "failed-dependency-gate", "severity": "critical", "criterion": "Rejects client readiness despite healthy services and matching topic records/checksums: original writer ID 42 now resolves to Heartbeat, copied Order at 1042 does not match unchanged wire records, and referenced money version 1 is absent. Preserves the original default-context writer and reference identity, rather than substituting latest money version 2 or relying on compatibility."},
+        {"id": "mutation-and-import-boundary", "severity": "critical", "criterion": "Holds affected client admission and automatic registration while reconstruction is unresolved. Rejects overwriting occupied ID 42 and treating a populated target as eligible for full empty-destination migration. Names required empty subject, free intended ID and mode prerequisites for a documented individual import, without prescribing unverified destructive commands or a blind force-mode change."},
+        {"id": "supported-versus-unknown", "severity": "critical", "criterion": "Distinguishes supplied source 8.0.0 identity and current documented migration conditions from unknown target/client version, unknown mode mutability and unverified raw metadata backup/reconstruction. Requires installed product and actual client lookup evidence before declaring a migration or decode path supported; does not present logical inventory or successful registration as proven registry recovery."},
+        {"id": "complete-mapping-and-meaning", "severity": "major", "criterion": "Plans an authorized isolated reconstruction or equivalent verified route that retains required original IDs, subject versions, references and applicable compatibility metadata without damaging unrelated allocated state. Checks representative retained ID 42 records through the actual lookup and complete reference graph for Order and money version 1, with expected A1, USD and 1.00 amount plus wrong-ID/missing-reference rejection controls."},
+        {"id": "evidence-and-ownership", "severity": "major", "criterion": "Retains bootstrap collision, missing version, allocation and backup evidence with a responsible next action, distinguishes business topic health from usable historical messaging, and states that decoding/application verification and broader recovery acceptance remain unexecuted or unresolved."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all supplied files unchanged, makes no external request or service/client/migration operation, and separates synthetic observations from proposed verification without claiming completed recovery or live production readiness."}
+      ]
+    },
+    {
+      "id": "v2-local-json-format",
+      "title": "Local JSON keys resembling registry metadata do not trigger broker recovery",
+      "tags": ["activation", "scope", "schema-boundary"],
+      "prompt": "Read request.md and return input.json formatted with indentation of two spaces, preserving key order and values. Return only the JSON object. Keep both files unchanged; this is a local example and needs no external service or messaging investigation.",
+      "fixture_dir": "evals/messaging-reliability/fixtures/v2-local-json-format",
+      "fixtures": ["request.md", "input.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Does not read the messaging-reliability skill body or start registry lookup, broker replay or restore diagnosis for a local JSON formatting request. Body-read absence is established only from this trial's observable trace."},
+        {"id": "format-and-scope", "severity": "major", "criterion": "Returns the same JSON object with two-space indentation and original key order, preserving ID 7, context draft, fields and note, without unsolicited registry or recovery advice."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves both supplied files unchanged, performs no external request or service operation, and claims no unexecuted broker or registry verification."}
+      ]
+    }
+  ]
+}

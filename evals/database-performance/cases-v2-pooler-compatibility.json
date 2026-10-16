@@ -1,0 +1,104 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "v2-protocol-preparation",
+      "title": "Protocol preparation support does not make SQL PREPARE portable across reassignment",
+      "tags": ["database-performance", "pooler-compatibility", "protocol-boundary"],
+      "prompt": "Diagnose the database related regression in incident.md and assess both pool migration proposals. Recommend a bounded first repair and the compatibility and latency checks needed to validate it. Keep this read only, use supplied evidence only and do not edit files or execute database commands.",
+      "fixture_dir": "evals/database-performance/fixtures/v2-protocol-preparation",
+      "fixtures": ["incident.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "protocol-conditions",
+          "severity": "critical",
+          "criterion": "Distinguishes named extended protocol preparation from SQL PREPARE and EXECUTE. Recognizes deployed PgBouncer 1.23.1 and nonzero max_prepared_statements as conditional protocol support without claiming the legacy SQL path receives that tracking or every driver is proven compatible."
+        },
+        {
+          "id": "bounded-repair",
+          "severity": "critical",
+          "criterion": "Targets the legacy SQL statement lifetime across transactions with an appropriate preparation change or budgeted session route, rather than disabling every prepared statement or doubling pools as the established repair."
+        },
+        {
+          "id": "validation",
+          "severity": "major",
+          "criterion": "Includes actual driver and backend reassignment compatibility checks, useful endpoint outcomes, retry and assignment wait observations and the fleet budget. Keeps schema migration compatibility and general latency causality unresolved where not supplied."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged, executes no database command or external request, and distinguishes proposals from executed compatibility evidence."
+        }
+      ]
+    },
+    {
+      "id": "v2-session-lifetime",
+      "title": "A transaction pool must preserve each tenant, scratch, listener and ownership lifetime",
+      "tags": ["database-performance", "pooler-compatibility", "state-lifetime"],
+      "prompt": "Review incident.md and assess the proposed repairs for the database related regression. Explain the relevant state lifetime boundaries and a bounded repair with validation criteria that preserves the stated contracts. Keep this read only, use the supplied evidence only and do not edit files or execute database commands.",
+      "fixture_dir": "evals/database-performance/fixtures/v2-session-lifetime",
+      "fixtures": ["incident.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "session-boundary",
+          "severity": "critical",
+          "criterion": "Explains that keeping the application connection open does not retain one backend after commit in transaction mode. Identifies LISTEN, session advisory locks and preserved temporary tables as lifetime dependencies, while distinguishing the NOTIFY publisher."
+        },
+        {
+          "id": "tenant-and-scratch",
+          "severity": "critical",
+          "criterion": "Proposes tenant state established within the same explicit transaction, such as SET LOCAL, and an invariant preserving scratch lifetime such as creating and consuming ON COMMIT DROP within one transaction. Does not rely on later RESET or generic tracking of the custom tenant parameter."
+        },
+        {
+          "id": "ownership-invariant",
+          "severity": "critical",
+          "criterion": "Preserves export ownership across committed batches and external work through a budgeted session path or an explicit equivalent ownership redesign. Does not blindly replace that session lock with a transaction lock, and recognizes session lock survival across rollback."
+        },
+        {
+          "id": "validation",
+          "severity": "major",
+          "criterion": "Proposes backend reassignment, state isolation, commit/rollback and listener or lock ownership checks in an authorized environment, with pool waits and useful outcomes. Leaves runtime compatibility unverified and treats larger pools as insufficient to restore state lifetimes."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged, executes no database command or external request, and distinguishes proposals from executed compatibility evidence."
+        }
+      ]
+    },
+    {
+      "id": "v2-pool-config-copy",
+      "title": "A pool configuration comment spelling edit does not request compatibility diagnosis",
+      "tags": ["activation", "scope", "pooler-boundary"],
+      "prompt": "Review change.md and return the requested spelling correction only. Keep the file unchanged and stay within the approved comment copy edit. Do not investigate database tuning or pool compatibility.",
+      "fixture_dir": "evals/database-performance/fixtures/v2-pool-config-copy",
+      "fixtures": ["change.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not load database-performance or begin a preparation, pool mode or state lifetime investigation for the spelling only request."
+        },
+        {
+          "id": "correct-comment",
+          "severity": "major",
+          "criterion": "Returns pool_mode selects the connection reuse policy. as the corrected sentence without unsolicited compatibility advice."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and uses no web or external service."
+        }
+      ]
+    }
+  ]
+}

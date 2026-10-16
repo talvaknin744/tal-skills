@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "publisher_id": "pinterest",
+  "research_date": "2026-10-14",
+  "crawler_summary_path": "publishers/pinterest/summary.json",
+  "crawler_summary_sha256": "1e2863a4791db17e1e0924af71c1c903f1a35f1d1b299725b7d3ccae2c600ec2",
+  "crawler_snapshot_at": "2026-10-14T18:57:54.108513+00:00",
+  "counters": {
+    "baseline_records": 11,
+    "known_urls": 13,
+    "attempted_urls": 13,
+    "body_extracted": 10,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2,
+    "processed_urls": 13,
+    "http_article_attempted_urls": 3,
+    "body_retrieved_urls": 10,
+    "excluded_nonarticle": 0,
+    "scoped_article_urls": 13
+  },
+  "article_status_counts": {
+    "blocked": 3,
+    "body_extracted": 10
+  },
+  "discovery_scope": "Pinterest Engineering publication, its recent public RSS entries, historical verified inventory and selected linked articles. The global Medium sitemap is not a publication archive.",
+  "terminal_status": "Partial. Recent feed exposes ten entries and no declared archive continuation. Publication archive and article HTTP probes return 403. Global Medium child traversal was interrupted as outside publication scope, with all receipts retained.",
+  "gaps": [
+    "Historical archive discovery remains incomplete because publication archive access returned 403.",
+    "The recent feed is not evidence that every publication article is known.",
+    "Three known URLs remain blocked in direct HTTP body retrieval.",
+    "Selected TiDB prose was readable through the web reader even though the local HTTP snapshot is an access error; that failed snapshot is not article body evidence.",
+    "Incidental global Medium sitemap receipts are retained but do not count toward publication discovery completion."
+  ],
+  "all_article_bodies_read": false,
+  "read_articles": [
+    {
+      "url": "https://medium.com/pinterest-engineering/metrics-board-building-an-agent-ready-metrics-layer-2c8fefe68756",
+      "reading_scope": "Complete main prose and shown YAML through Impact and Acknowledgments. Read through web reader and retained RSS content. Diagram pixels, linked systems and runtime were not verified.",
+      "transport_status": "RSS content success, canonical HTTP 403",
+      "evidence_sha256": "b8f493b215afdbfa566acb5baed47203422e9462dcba1108677d876c4e12ca6a",
+      "prior_selected_reading": false
+    },
+    {
+      "url": "https://medium.com/pinterest-engineering/tidb-adoption-at-pinterest-1130ab787a10",
+      "reading_scope": "Complete main prose through Acknowledgements, including selection, deployment, CDC, restore, wins and limitations. Read through the web reader; direct local HTTP body access returned 403. Diagram pixels and runtime were not verified.",
+      "transport_status": 403,
+      "receipt_sha256": "269bd1aa54b1391916ac468772cd5a8f88bae5b9b072869fcf72b18aeeb7cd9a",
+      "evidence_limit": "Receipt hash identifies retained blocked attempt, not the readable web reader article body.",
+      "receipt_path": "publisher-probes/crawl-agents-b/readings/52504aa42db76b2975e8b02297a05d09f6baae3ae724434b3f461b47e7c7cf18.json",
+      "prior_selected_reading": true
+    }
+  ],
+  "recommendations": [
+    {
+      "target": "semantic-metrics-quality",
+      "kind": "candidate-new",
+      "finding": "Version each metric definition with ownership, temporal grain, SQL, dependencies and quality rules. Distinguish definition publication from computed data readiness, expose missing validation intervals, and provide discoverable certification and golden queries to analytics agents. Test the metric meaning and freshness instead of assuming a syntactically valid query is trustworthy.",
+      "url": "https://medium.com/pinterest-engineering/metrics-board-building-an-agent-ready-metrics-layer-2c8fefe68756",
+      "boundary": "Certification grades are an organizational policy, not a universal accuracy score. The platform adoption numbers are reported observations.",
+      "evaluations": [
+        "A metric is catalogued before its first computation.",
+        "Validation did not run during a reporting interval.",
+        "A renamed definition leaves a cached agent query stale.",
+        "Infrastructure request latency monitoring stays with existing operations guidance."
+      ]
+    },
+    {
+      "target": "recovery-validation",
+      "kind": "extend-existing",
+      "finding": "Test restore time and restored data independently from backup existence. Include standby configuration compatibility, full restore versus point-in-time recovery tradeoffs, and contention from backup or snapshot traffic. Tie any database comparison to representative shadow workloads and fault histories.",
+      "url": "https://medium.com/pinterest-engineering/tidb-adoption-at-pinterest-1130ab787a10",
+      "boundary": "The datastore evaluation occurred in 2022 and deployment observations were published in 2024. These are workload specific observations, not current vendor guarantees.",
+      "evaluations": [
+        "A successful backup cannot meet the restore objective.",
+        "Standby configuration differs from the source cluster.",
+        "Snapshot traffic breaches the online workload latency budget."
+      ]
+    }
+  ],
+  "external_evidence_namespace": "tal-skills-blog-crawl-2026-10-14",
+  "external_attempts_path": "publishers/pinterest/attempts.jsonl",
+  "external_discovery_path": "publishers/pinterest/discovery-events.jsonl",
+  "external_body_events_path": "publishers/pinterest/body-events.jsonl",
+  "external_reading_receipts_path": "publisher-probes/crawl-agents-b/readings/receipts.json",
+  "candidate_status": "Research recommendations only, behavior was not changed and behavioral evaluations were not executed by this publisher task.",
+  "terminal_proofs": [
+    {
+      "url": "https://medium.com/feed/pinterest-engineering",
+      "status": "fetched",
+      "sha256": "e8f6fd51981ee98f6464fbb282d536031c1193eb8d9ce308c21ccc5e43e7f2d1",
+      "bytes": 204648,
+      "discovered_articles": 10,
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    },
+    {
+      "url": "https://medium.com/pinterest-engineering/archive",
+      "status": "blocked",
+      "sha256": "9646cae48b62aeeca31210bc847911fe3f34fb42e0fbcd8a9dbda4deac3d33a9",
+      "bytes": 5732,
+      "discovered_articles": 0,
+      "terminal_observation": null
+    },
+    {
+      "url": "https://medium.com/feed/pinterest-engineering",
+      "status": "imported_source",
+      "sha256": "52855692cfbef810bfaf546b8a4919cadbdb36259065fae487c7009953e5077c",
+      "bytes": 204648,
+      "discovered_articles": 10,
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    }
+  ],
+  "attempted_urls_meaning": "Legacy alias for processed frontier dispositions, not unique HTTP article requests. See processed_urls, http_article_attempted_urls and body_retrieved_urls.",
+  "collector_runs_path": "publishers/pinterest/runs.jsonl",
+  "collector_candidates": [
+    {
+      "started_at": "2026-10-14T18:34:26.538019+00:00",
+      "collector_sha256": "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a"
+    },
+    {
+      "started_at": "2026-10-14T18:37:59.469361+00:00",
+      "collector_sha256": "801f667568f62abfad8e8f6dba0de5836058141cd8829b8fbf08886694396220"
+    },
+    {
+      "started_at": "2026-10-14T18:57:53.863176+00:00",
+      "collector_sha256": "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278"
+    }
+  ],
+  "new_unique_selected_article_count": 1,
+  "repeat_selected_article_count": 1,
+  "receipt_bindings_sha256": "86033fdcdcce3b680abd1a38611d74a6092a9fed3e3f19c8e0237ace6186e207"
+}

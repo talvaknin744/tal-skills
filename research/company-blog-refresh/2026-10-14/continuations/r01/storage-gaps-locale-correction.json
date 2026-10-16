@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "correction_id": "r01-storage-locale",
+  "date": "2026-10-14",
+  "supersedes_claims_in": "storage-gaps.json and storage-gaps.md, only metadata locale filtering and English aggregation claims",
+  "frozen_original_report_hashes": {
+    "storage-gaps.json": "9495509c4535c30b1d0f780901b54df856662669bc2859f82a4627e4508319d9",
+    "storage-gaps.md": "2b04bc3d8621514e74492890714261ea47294d6a30e8e8d5dfd0b0c750b316b8"
+  },
+  "correction": "The requested logical default metadata locale filter was not honored by the returned collection. The observed inventory is multilingual. It remains a published blog_post and URL route inventory, not an English article inventory.",
+  "requested_filter_observed": false,
+  "admitted_route_inventory": {
+    "record_count": 3246,
+    "observed_locale_counts": {
+      "": 81,
+      "de-de": 37,
+      "en": 2860,
+      "es": 53,
+      "fr-fr": 38,
+      "it": 1,
+      "it-it": 31,
+      "ja-jp": 4,
+      "ko": 1,
+      "ko-kr": 35,
+      "pt-br": 39,
+      "zh-cn": 62,
+      "zh-tw": 4
+    },
+    "metadata_locale_en": 2860,
+    "metadata_locale_empty_string": 81,
+    "explicit_other_locale": 305
+  },
+  "all_source_inventory": {
+    "record_count": 3266,
+    "observed_locale_counts": {
+      "": 81,
+      "de-de": 37,
+      "en": 2866,
+      "es": 53,
+      "fr": 1,
+      "fr-fr": 40,
+      "it": 1,
+      "it-it": 31,
+      "ja-jp": 4,
+      "ko": 1,
+      "ko-kr": 43,
+      "pt-br": 39,
+      "zh": 2,
+      "zh-cn": 63,
+      "zh-tw": 4
+    },
+    "metadata_locale_en": 2866,
+    "metadata_locale_empty_string": 81,
+    "explicit_other_locale": 319
+  },
+  "new_api_url_delta": {
+    "record_count": 2043,
+    "observed_locale_counts": {
+      "": 77,
+      "de-de": 36,
+      "en": 1673,
+      "es": 50,
+      "fr-fr": 36,
+      "it": 1,
+      "it-it": 30,
+      "ja-jp": 4,
+      "ko": 1,
+      "ko-kr": 33,
+      "pt-br": 38,
+      "zh-cn": 60,
+      "zh-tw": 4
+    },
+    "metadata_locale_en": 1673,
+    "metadata_locale_empty_string": 77,
+    "explicit_other_locale": 293
+  },
+  "new_api_body_strata": {
+    "metadata_locale_en": {
+      "record_count": 1673,
+      "nonempty_body_fields": 1668,
+      "substantive_text_screen": 1560,
+      "short_visible_text": 107,
+      "nonempty_markup_or_media_only": 1,
+      "empty_body_fields": 5
+    },
+    "metadata_locale_empty_string": {
+      "record_count": 77,
+      "nonempty_body_fields": 77,
+      "substantive_text_screen": 73,
+      "short_visible_text": 4,
+      "nonempty_markup_or_media_only": 0,
+      "empty_body_fields": 0
+    },
+    "explicit_other_locale": {
+      "record_count": 293,
+      "nonempty_body_fields": 293,
+      "substantive_text_screen": 266,
+      "short_visible_text": 27,
+      "nonempty_markup_or_media_only": 0,
+      "empty_body_fields": 0
+    }
+  },
+  "additional_publication_metadata": {
+    "new_default_route_urls": 16,
+    "source_publish_details_locale_counts": {
+      "en-us": 16
+    },
+    "new_default_route_page_responses": 15,
+    "source_publish_details_locale_counts_for_responses": {
+      "en-us": 15
+    },
+    "limits": "These are independent publication index metadata values. Prose language, distinct publication identity and complete article rendering are not verified."
+  },
+  "aggregation_rules": [
+    "Retain 2043 as new API URLs in the reviewed route scope, with the locale strata attached. Never label that total English article gains.",
+    "Report 1673 URLs with metadata locale en and 77 with an empty locale separately. Do not infer English for empty locale records.",
+    "Report 293 explicit other locale records separately, including 293 nonempty body fields and 266 passing substantive text screening.",
+    "The additional 16 default route publication metadata URLs and 15 page responses are sourced from en-us index metadata, and stay separate from the node API locale totals.",
+    "Metadata locale is not independent verification of prose language or distinct publication identity."
+  ],
+  "checks_run": {
+    "network_requests": 0,
+    "new_instruction_edits": false,
+    "locale_reconciliation_passed": true,
+    "frozen_r01_originals_unchanged": true,
+    "body_mapping_scope": "Exact body field mappings remain as captured. This correction stratifies their existing counters by observed locale; it does not claim an independent body mapping audit passed.",
+    "frozen_r01_source_artifacts_verified": 23
+  },
+  "evidence": {
+    "correction_archive_path": "storage-locale/locale-check.json",
+    "correction_archive_root_label": "external r01 corrections archive",
+    "sha256": "99148cfd7e7baf7c5607a2c6fc57dfba51ab53241958cd88f853e44b90a4852f",
+    "bytes": 3586,
+    "original_source_bindings": [
+      {
+        "archive_path": "mongodb/new-api-body-records.json",
+        "sha256": "fc2414ec9cc475b0ec4494ab712f1aebc3f9dc16c9c35cf576c567363cb442ff",
+        "bytes": 15801728
+      },
+      {
+        "archive_path": "mongodb/normalized-body-index.json",
+        "sha256": "fa0cbb8c0d19603cd2d569aa5f2a225576b3dc611ae81b0724d8cda4a387a6ab",
+        "bytes": 2493051
+      },
+      {
+        "archive_path": "mongodb/enumeration-receipts.json",
+        "sha256": "cd5753aeca23e56a20f8e62798f4a21917bdb484e7a7db3df05f219600b96ac6",
+        "bytes": 53563
+      },
+      {
+        "archive_path": "mongodb/contentstack-new-metadata.json",
+        "sha256": "c81af746b6753ff423aae6a3b3a1f3d07216d0cd45ed9d7034d4419a35c35732",
+        "bytes": 6781
+      },
+      {
+        "archive_path": "mongodb/canonical-followup-reviewed.json",
+        "sha256": "b34a88168d098de56e212dd81c443573075bac0981b0dda31e2f2d96952bd660",
+        "bytes": 45381
+      }
+    ],
+    "frozen_source_confirmation": {
+      "correction_archive_path": "storage-locale/frozen-source-confirmation.json",
+      "sha256": "bfe9c87e95e9c1f0c6354ce69b72d0111b5f7d31e096eac3e539a43a5749bfbe",
+      "bytes": 1189
+    }
+  },
+  "all_article_bodies_read": false
+}

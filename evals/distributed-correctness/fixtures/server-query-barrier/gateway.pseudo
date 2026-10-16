@@ -1,0 +1,5 @@
+query(mode, query_ref, deadline):
+  if mode == EVENTUAL: return cache.read_snapshot()
+  if now() - last_transport_ping < 10ms: return cache.read_snapshot()
+  ack = await RequestBarrier(query_ref, epoch, stream_id)
+  return cache.read_snapshot()

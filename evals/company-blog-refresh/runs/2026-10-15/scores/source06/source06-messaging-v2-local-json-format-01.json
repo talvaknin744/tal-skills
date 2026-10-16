@@ -1,0 +1,181 @@
+{
+  "run_id": "source06-messaging-v2-local-json-format-01",
+  "run_evidence_sha256": "f95f418974be7a4751608774c65126bf5afe8a1b10d790ed8ada60ad2b94e345",
+  "final_workspace_tree_sha256": "c99c45f025bb49df67502a030d74d9ad67aa8ad8d077481d0b46dc935565f27d",
+  "case_id": "v2-local-json-format",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "2bbcd6f3457e7ce1b33426b0ed2508628c531015f096e31776c17aa033d6f3f9",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 11",
+        "observation": "The observable trace reads only the local input and request. No messaging skill body or registry/broker recovery diagnosis is observed.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 11,
+            "quote": "{\n  \"schema\": {\n    \"id\": 7,\n    \"context\": \"draft\",\n    \"fields\": [\n      \"title\",\n      \"author\"\n    ]\n  },\n  \"note\": \"local example\"\n}"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "id": "format-and-scope",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 11",
+        "observation": "Returns exactly the input object with two space indentation, unchanged key order and values, and no unsolicited messaging advice. Independently checked byte equality to JSON.stringify(input,null,2) plus newline.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 11,
+            "quote": "{\n  \"schema\": {\n    \"id\": 7,\n    \"context\": \"draft\",\n    \"fields\": [\n      \"title\",\n      \"author\"\n    ]\n  },\n  \"note\": \"local example\"\n}"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 11",
+        "observation": "Actual sealed workspace matches the baseline, trace contains only supplied file reads and answer makes no unexecuted service claims.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 11,
+            "quote": "{\n  \"schema\": {\n    \"id\": 7,\n    \"context\": \"draft\",\n    \"fields\": [\n      \"title\",\n      \"author\"\n    ]\n  },\n  \"note\": \"local example\"\n}"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          6,
+          7
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "nontrigger": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "3624a64269fb0ea1cb41b587c3360ca368c78f8b8c9edc8e029861e521078958",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 9.354,
+  "tool_calls": 2,
+  "token_usage": {
+    "input_tokens": 28323,
+    "cached_input_tokens": 13824,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 243,
+    "reasoning_output_tokens": 0
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "no_body_read_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 6,
+        "item": "item_2",
+        "command": "/bin/zsh -lc 'cat input.json'",
+        "exit_code": 0,
+        "output_sha256": "63c54b0e2fdbe125b1863477a23abd696495a293afc95f4dfe5b1dd5f06f9710"
+      },
+      {
+        "line": 7,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat request.md'",
+        "exit_code": 0,
+        "output_sha256": "53c0961f4dbfe7079628078bee797be079c962753db7d72863f74f631e2ca5b4"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "nontrigger",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

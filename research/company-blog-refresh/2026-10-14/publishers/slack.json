@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "publisher_id": "slack",
+  "observed_on": "2026-10-14",
+  "crawler_summary_path": "publishers/slack/summary.json",
+  "crawler_summary_sha256": "673aedb48f91dad5e5a88e690c151e7d4e37cc352d1b77fa97c95b1a28e88f8e",
+  "counters": {
+    "baseline_records": 194,
+    "known_urls": 194,
+    "processed_urls": 194,
+    "body_extracted": 194,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2,
+    "http_article_attempted_urls": 194,
+    "body_retrieved_urls": 194,
+    "policy_deferred_urls": 0
+  },
+  "article_status_counts": {
+    "body_extracted": 194
+  },
+  "crawler_runs_sha256": "2b96d1cc8ad61c849c705810554d1feb3f3f4dbb84f10d926d48288396cf91c8",
+  "crawler_candidate_sha256s": [
+    "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698",
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "f4f1eec47776d2c19c209b94ae88932f966d66ac92664d6689cbe1ed516cef03"
+  ],
+  "discovery_scope": "Current public published WordPress post inventory. Private, deleted and unlisted historical content is outside the observable boundary.",
+  "terminal_status": "Observed 194 distinct post links across pages 1 and 2. Both responses report total 194 and two pages. Page 3 returns HTTP 400 with rest_post_invalid_page_number. This establishes current public API enumeration, not lifetime history.",
+  "gaps": [
+    "The historical sitemap remained unavailable. The refreshed public posts API supplies the metadata boundary.",
+    "A first body attempt exposed a collector redirect bug. Slash normalization repeatedly requested the same WordPress redirect. Failed attempts remain retained, and successful retries do not erase them."
+  ],
+  "read_articles": [
+    {
+      "url": "https://slack.engineering/agentic-testing-where-agents-fit-in-the-e2e-testing-stack/",
+      "reading_scope": "Complete main prose including setup, experiment matrix, reliability, cost and capability limitations. Tables were read as text; diagrams were not separately visually inspected.",
+      "retrieval_source": "web tool",
+      "diagrams_visually_inspected": false
+    },
+    {
+      "url": "https://slack.engineering/deploy-safety/",
+      "reading_scope": "Complete main prose from defining the problem through acknowledgements. Figures were not separately visually inspected.",
+      "retrieval_source": "web tool",
+      "diagrams_visually_inspected": false
+    }
+  ],
+  "all_article_bodies_read": false,
+  "sources": [
+    {
+      "receipt_path": "backend-b-discovery/slack-posts.json",
+      "receipt_sha256": "c84e1635be84a1561abcc51719d17fd5b81c82444f9a0a7977d5bf8a1b0d4476",
+      "url": "https://slack.engineering/wp-json/wp/v2/posts?per_page=100&page=1&_fields=id,date,modified,link,title",
+      "http_status": 200,
+      "response_sha256": "16e4793d3148df37a52a265b30a4a6f0cb3e3733b530210e32f6b41c71229c77"
+    },
+    {
+      "receipt_path": "backend-b-discovery/slack-posts-2.json",
+      "receipt_sha256": "39e3e3d2dfa8dd69a524e3474cc18e3aa47af21891ede1b60f1ebab7ce913f37",
+      "url": "https://slack.engineering/wp-json/wp/v2/posts?per_page=100&page=2&_fields=id,date,modified,link,title",
+      "http_status": 200,
+      "response_sha256": "86358dcd31dfc36cdcba0958c95404f595e3b19103010522e541fe1e64888b87"
+    },
+    {
+      "receipt_path": "backend-b-discovery/slack-terminal.json",
+      "receipt_sha256": "1c1d6a39f8be699dec55d210a9ce0e9855c7b3c547d476bd63800e40ee193eda",
+      "url": "https://slack.engineering/wp-json/wp/v2/posts?per_page=100&page=3&_fields=id,date,modified,link,title",
+      "http_status": 400,
+      "response_sha256": "b6714928c361e00376c3eda08eef1f4fcc3343bd71d9be2bde61ca1eee190c26"
+    },
+    {
+      "receipt_path": "backend-b-discovery/slack-robots.json",
+      "receipt_sha256": "1432b1bc32afc50cb8b4553b1c40e69380a5f127e025cb27fc51edc1d35c48b9",
+      "url": "https://slack.engineering/robots.txt",
+      "http_status": 200,
+      "response_sha256": "9311bab30d8b5d05f5fa5563a251b8c96b8470873bb77c62d3d17c146d7acab7"
+    }
+  ],
+  "recommendations": [
+    "Strengthen infrastructure-change-safety rollout evidence with measured customer impact, detector sensitivity and automatic rollback readiness."
+  ],
+  "behavioral_evaluation_status": "Proposed cases only. No revised skill candidate was authored or evaluated by this publisher research task."
+}

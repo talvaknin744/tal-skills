@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "additive_runner_edit_scope_metadata_correction",
+  "original_corpus_path": "evals/distributed-correctness/cases.json",
+  "original_corpus_sha256": "836a5ba3abd3d9fb79c1255f261dff81c818bc7fa3fe639f79e3510e06492b1e",
+  "case_id": "cache-fill-invalidation",
+  "original_case_sha256": "1107c6993d88934af1f3f7a55fc84ab98be5858c0c57a79d4300252122f4d2da",
+  "corrected_corpus_path": "evals/distributed-correctness/cache-fill-invalidation-cases-r02.json",
+  "corrected_corpus_sha256": "dbe77294cd5f3dfe6439e76bd090355457599202b075a1ecc78bb03b73ef5ef7",
+  "corrected_corpus_bytes": 2829,
+  "exact_only_case_field_added": {
+    "editable_files": [
+      "service.mjs"
+    ]
+  },
+  "verification_argv_added": false,
+  "prompt_rubric_capabilities_activation_case_ID_fixture_paths_and_bytes_changed": false,
+  "original_fixture_dir": "evals/distributed-correctness/fixtures/cache-fill-invalidation",
+  "fixtures": [
+    {
+      "path": "evals/distributed-correctness/fixtures/cache-fill-invalidation/model.mjs",
+      "fixture_relative_path": "model.mjs",
+      "sha256": "d5bd82f94c209c710c3a287d0626eb347cb9c80d9b87c3ed91adf57a7fe97bf2",
+      "bytes": 2029,
+      "mode": 420
+    },
+    {
+      "path": "evals/distributed-correctness/fixtures/cache-fill-invalidation/requirements.md",
+      "fixture_relative_path": "requirements.md",
+      "sha256": "d50283cd3ffeea2b15721e3a23416c91679cf4b1fa0fa5d3fbec24d801973989",
+      "bytes": 2110,
+      "mode": 420
+    },
+    {
+      "path": "evals/distributed-correctness/fixtures/cache-fill-invalidation/service.mjs",
+      "fixture_relative_path": "service.mjs",
+      "sha256": "3b3076ca1efa90144db12ab3cb54642669c7ab775b44c3bf123a2740f923541d",
+      "bytes": 468,
+      "mode": 420
+    },
+    {
+      "path": "evals/distributed-correctness/fixtures/cache-fill-invalidation/verify.mjs",
+      "fixture_relative_path": "verify.mjs",
+      "sha256": "012d69a6aca4e76c31ce53f75d9f87479750d8f7baeff8d127f9a8279ccad333",
+      "bytes": 2816,
+      "mode": 420
+    }
+  ],
+  "suite_definition": {
+    "company-blog-refresh-netflix-cache-edit-scope": {
+      "concurrency-correctness": [
+        "skills/engineering/concurrency-correctness",
+        "evals/distributed-correctness/cache-fill-invalidation-cases-r02.json"
+      ]
+    }
+  },
+  "runner_behavior_boundary": "Use an external supplemental suite. The existing worker-rollout-regression legacy adapter injects verification_argv and therefore is not the route for this correction.",
+  "claimed_result": "Metadata authorship and raw input identity only. No responder verification, protected replay, native run, source change or behavior pass.",
+  "proposed_gate_entry_points": [
+    "scripts/evals/lib.mjs: prepareTrial",
+    "scripts/evals/lib.mjs: verifyTrial",
+    "scripts/evals/lib.mjs: loadCase"
+  ],
+  "candidate_prose_or_native_outputs_read": false,
+  "canonical_changes": false,
+  "model_calls": 0,
+  "HTTP_requests": 0
+}

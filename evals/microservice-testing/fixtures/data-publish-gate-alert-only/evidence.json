@@ -1,0 +1,380 @@
+{
+  "proposed_claim": "The team deliberately emptied streams for harbor in the final serving artifact. A dashboard alarm fired and a completed block callback was persisted. The team says this proves the data release gate works and wants to reuse it. The local publishing attempt and active pointer are retained. Review the claim and define the smallest useful verification of the publishing workflow.",
+  "source_validation": {
+    "raw_feed_path": "artifacts/raw-feed.json",
+    "raw_feed_sha256": "6418e069f37465e2b11bef3e72449739c38c7abd0c86cfa305e0213cc536ad5d",
+    "schema_check": "pass",
+    "code_deployed": false,
+    "configuration_changed": false
+  },
+  "artifact_bindings": {
+    "baseline": {
+      "path": "artifacts/baseline.json",
+      "version": "catalog-40",
+      "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+    },
+    "candidate": {
+      "path": "artifacts/candidate.json",
+      "version": "catalog-42",
+      "sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5"
+    }
+  },
+  "experiments": [
+    {
+      "experiment_id": "e-seeded-bad",
+      "binary": "catalog-api-12",
+      "config": "cfg-9",
+      "baseline": {
+        "intended": {
+          "path": "artifacts/baseline.json",
+          "version": "catalog-40",
+          "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+        },
+        "observed": {
+          "path": "artifacts/baseline.json",
+          "version": "catalog-40",
+          "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+        },
+        "healthy": true,
+        "tenant_versions": {
+          "web": "catalog-40",
+          "tv": "catalog-40"
+        }
+      },
+      "candidate": {
+        "intended": {
+          "path": "artifacts/candidate.json",
+          "version": "catalog-42",
+          "sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5"
+        },
+        "observed": {
+          "path": "artifacts/candidate.json",
+          "version": "catalog-42",
+          "sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5"
+        },
+        "healthy": true,
+        "tenant_versions": {
+          "web": "catalog-42",
+          "tv": "catalog-42"
+        }
+      }
+    }
+  ],
+  "journeys": [
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-baseline-web-harbor",
+      "assigned_arm": "baseline",
+      "client": "web",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-baseline-web-orchard",
+      "assigned_arm": "baseline",
+      "client": "web",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-baseline-tv-harbor",
+      "assigned_arm": "baseline",
+      "client": "tv",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-baseline-tv-orchard",
+      "assigned_arm": "baseline",
+      "client": "tv",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-candidate-web-harbor",
+      "assigned_arm": "candidate",
+      "client": "web",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": []
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": false
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-candidate-web-orchard",
+      "assigned_arm": "candidate",
+      "client": "web",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-candidate-tv-harbor",
+      "assigned_arm": "candidate",
+      "client": "tv",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": []
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": false
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-seeded-bad",
+      "session_id": "e-seeded-bad-candidate-tv-orchard",
+      "assigned_arm": "candidate",
+      "client": "tv",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-42",
+          "artifact_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    }
+  ],
+  "callback_records": [
+    {
+      "experiment_id": "e-seeded-bad",
+      "candidate_version": "catalog-42",
+      "candidate_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5",
+      "decision": "block",
+      "completed": true,
+      "callback_http_status": 200
+    }
+  ],
+  "publication_attempts": [
+    {
+      "request": {
+        "experiment_id": "e-seeded-bad",
+        "candidate_version": "catalog-42",
+        "candidate_sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5"
+      },
+      "http_status": 200,
+      "active_catalog_before": {
+        "path": "artifacts/baseline.json",
+        "version": "catalog-40",
+        "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+      },
+      "active_catalog_after": {
+        "path": "artifacts/candidate.json",
+        "version": "catalog-42",
+        "sha256": "d78ba3757b61b3c21fbd90a15e385ef6c6809dc9b3bf8db4da2a433df3b5d5e5"
+      }
+    }
+  ],
+  "record_scope": "Authored deterministic local observations. No production experiment or real external API request."
+}

@@ -1,0 +1,125 @@
+{
+  "run_id": "regression-performance-diagnosis-format-only-01",
+  "run_evidence_sha256": "dc059f64caac4a206ead31e411c69dacc0893c67f817b83d704af4c64ede5b76",
+  "final_workspace_tree_sha256": "1f1cc3eb57f24d3142e88ee699256c4149cd9aa9bbbcf7815230122bc6395734",
+  "case_id": "format-only",
+  "candidate_tree_sha256": "ae7e7685c31e2d1d6cfe3d92a0b0eace36f59a12e8a4cd5b18796839f0f0f17d",
+  "rubric_sha256": "85b1aa2b9cd27d827e6acb5a7d71244b9c9ee58d71b79cdaf780b87e8b88c073",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1; evidence/trace.jsonl all observable events",
+        "observation": "The answer is exactly \"Request latency (ms)\". The complete observable trace reads only the supplied change file, with optional local file discovery, and no candidate body read, profiling, sampling or compatibility investigation."
+      }
+    },
+    {
+      "id": "correct-label",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 1",
+        "observation": "The complete answer is \"Request latency (ms)\", matching the supplied wording contract without added advice."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json",
+        "locator": "input_integrity; observed_external_or_delegation_events; evidence/workspace-changes.json changes",
+        "observation": "The saved run records unchanged baseline, allowed changes only, no forbidden changes and no external or delegation event. Observable commands read only local files; the final response makes no execution claim."
+      }
+    }
+  ],
+  "critical_gates": {
+    "nontrigger": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric only; capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "80baa1005d79c6ce67aa7f6d13918a6b46660c8cf46fcd03354b6c817fdcc9dc",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 15.276,
+  "tool_calls": 1,
+  "token_usage": {
+    "input_tokens": 33022,
+    "cached_input_tokens": 24320,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 101,
+    "reasoning_output_tokens": 0
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "not_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "all observable events",
+      "observation": "No matching candidate body read or broader investigation is observed in this attempt."
+    },
+    "candidate_metadata_observed": true,
+    "limitation": "Observed loading only; no hidden injection or population activation guarantee is inferred."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "nontrigger",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

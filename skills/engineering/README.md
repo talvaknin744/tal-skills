@@ -9,6 +9,7 @@ Promoted, self-contained skills for this concern.
 ## Model-invoked
 
 - [a2a-engineering](./a2a-engineering/SKILL.md): Build or review Agent2Agent clients and servers for discovery, continuation, streaming, or cancellation; use for protocol work, with graceful-draining for deployment handoff.
+- [agent-evaluation](./agent-evaluation/SKILL.md): Evaluate tool using agents through observed outcomes, side effects, repeated trials and independent grading. Use for agent harnesses and comparison evidence. Ordinary software regression tests retain their existing route.
 - [background-maintenance](./background-maintenance/SKILL.md): Design or review compaction, reclamation, rebalancing, backfills, or index work; use for foreground resource pressure, with capacity-planning for broad sizing.
 - [code-and-docs-cleanup](./code-and-docs-cleanup/SKILL.md): Clean up code or documentation through refactoring, unused-code removal, or stale-instruction repair; use for evidenced preservation, with failure-oriented-testing for adverse schedules.
 - [concurrency-correctness](./concurrency-correctness/SKILL.md): Diagnose, design, or fix races involving lost updates, write skew, stale cache fills, or obsolete owners; use for violated contracts, with failure-oriented-testing for schedule design.

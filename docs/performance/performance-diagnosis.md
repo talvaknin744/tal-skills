@@ -17,6 +17,7 @@ Invocation: automatic
 - The smallest proposed change has a causal rationale, expected signal, tradeoff, and stop condition.
 - A matched comparison reports useful throughput, outcome-specific latency, resource waits, downstream work, and correctness.
 - The conclusion distinguishes a supported cause and observed effect from recommendations and untested conditions.
+- Trace conclusions account for sampling, missing spans, required dependencies and clock uncertainty, and keep selected trace percentiles within their cohort.
 
 ## Where it fits
 
@@ -39,3 +40,11 @@ This skill is the diagnostic entry point for backend performance questions. Use 
 - [SRE monitoring](https://sre.google/sre-book/monitoring-distributed-systems/):
   user impact and separate error latency. Distributed-path verification is an
   application requirement, not a guarantee from a topology or profiling tool.
+- [OpenTelemetry sampling](https://opentelemetry.io/docs/concepts/sampling/) and
+  [tail sampling processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md):
+  decision timing, finite collector state and late spans. Verify the deployed
+  implementation rather than treating mutable documentation as its configuration.
+- Uber: [CRISP critical path analysis](https://www.uber.com/us/en/blog/crisp-critical-path-analysis-for-microservice-architectures/),
+  2021-11-18: dependency paths, inclusive time and clock uncertainty.
+- [Grafana tail sampling](https://grafana.com/docs/opentelemetry/collector/sampling/tail/):
+  metrics before trace sampling and population measurement boundaries.

@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "publisher_id": "snowflake",
+  "research_date": "2026-10-14",
+  "crawler_summary_path": "publishers/snowflake/summary.json",
+  "crawler_summary_sha256": "a5156207871143984e13f0e93e9cf2f6be9aedd80c636bd7425489293db494e2",
+  "crawler_snapshot_at": "2026-10-14T18:58:30.690341+00:00",
+  "counters": {
+    "baseline_records": 265,
+    "known_urls": 283,
+    "attempted_urls": 283,
+    "body_extracted": 277,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2,
+    "processed_urls": 283,
+    "http_article_attempted_urls": 283,
+    "body_retrieved_urls": 277,
+    "excluded_nonarticle": 6,
+    "scoped_article_urls": 277
+  },
+  "article_status_counts": {
+    "body_extracted": 277,
+    "excluded_nonarticle": 6
+  },
+  "discovery_scope": "Public English engineering blog articles listed by the global AEM sitemap under /en/blog/engineering/. General corporate and product marketing posts, translations, attachments and resource pages are outside the article scope.",
+  "terminal_status": "Global AEM sitemap retrieved as a finite URL set. Its engineering entries define the fresh discovery scope. Every known article URL has a recorded attempt.",
+  "gaps": [
+    "No lifetime completeness claim for deleted, private or unlisted articles.",
+    "Several legacy WordPress or speculative feed endpoints failed, while the scoped AEM sitemap succeeded.",
+    "The initial collector failed 25 article requests through a trailing slash redirect loop. Revised transport replayed every URL successfully, and all prior attempts remain retained."
+  ],
+  "all_article_bodies_read": false,
+  "read_articles": [
+    {
+      "url": "https://www.snowflake.com/en/blog/engineering/cortex-agents-unified-data-intelligence/",
+      "reading_scope": "Complete main prose, shown semantic YAML, routing stages and governance section through Conclusion. Diagram pixels, linked current SDK and runtime were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "53116bb45fb4c42aa98d0ac63d944fee3bf6fc70db2179edb99f56a7d1f4a6cd",
+      "prior_selected_reading": false
+    },
+    {
+      "url": "https://www.snowflake.com/en/blog/engineering/next-gen-snowpipe-streaming-architecture/",
+      "reading_scope": "Complete main prose through Get started, architecture stages, comparison results and benchmark qualification. Diagram pixels and runtime were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "2413e55e5113efb70d84801641872be8ddb1fd4416695c4a010e55375f97bdf6",
+      "prior_selected_reading": false
+    }
+  ],
+  "recommendations": [
+    {
+      "target": "semantic-metrics-quality",
+      "kind": "candidate-new",
+      "finding": "Give data tools a semantic specification for measures, dimensions, relations, filters and business synonyms. For many models, prune representations, retrieve likely models, then choose among them. Validate source selection separately from SQL correctness and answer grounding, while enforcing the caller access boundary.",
+      "url": "https://www.snowflake.com/en/blog/engineering/cortex-agents-unified-data-intelligence/",
+      "boundary": "The April 2025 preview status is historical. Current SDK behavior and security guarantees require current documentation and an executed target.",
+      "evaluations": [
+        "The right metric exists in a domain with an ambiguous synonym.",
+        "Top candidate retrieval misses the required model.",
+        "A caller cannot access a selected data source.",
+        "A small fixed API tool requires no semantic model router."
+      ]
+    },
+    {
+      "target": "stream-processing-design",
+      "kind": "extend-existing",
+      "finding": "Measure freshness through queryable and suitably organized data, rather than ending the clock at request acceptance. Model preclustering or minibatch delay as an explicit tradeoff against read cost, and include client transport, buffering and cross-zone costs in the experiment.",
+      "url": "https://www.snowflake.com/en/blog/engineering/next-gen-snowpipe-streaming-architecture/",
+      "boundary": "The architecture report is not a durability proof. Its TPC derived results are explicitly unofficial and not certified.",
+      "evaluations": [
+        "Fast request acceptance hides delayed query visibility.",
+        "Preclustering improves query cost while breaching the freshness objective.",
+        "A static batch export does not require continuous ingestion advice."
+      ]
+    }
+  ],
+  "external_evidence_namespace": "tal-skills-blog-crawl-2026-10-14",
+  "external_attempts_path": "publishers/snowflake/attempts.jsonl",
+  "external_discovery_path": "publishers/snowflake/discovery-events.jsonl",
+  "external_body_events_path": "publishers/snowflake/body-events.jsonl",
+  "external_reading_receipts_path": "publisher-probes/crawl-agents-b/readings/receipts.json",
+  "candidate_status": "Research recommendations only, behavior was not changed and behavioral evaluations were not executed by this publisher task.",
+  "terminal_proofs": [
+    {
+      "url": "https://www.snowflake.com/content/snowflake-site/global.sitemap.xml",
+      "status": "fetched",
+      "sha256": "097b56328440687e0ee95ec40956d4f72a2a591d97bdcfc036fdc29cebfb8794",
+      "bytes": 6571905,
+      "discovered_articles": 283,
+      "terminal_observation": "Finite sitemap urlset parsed"
+    }
+  ],
+  "attempted_urls_meaning": "Legacy alias for processed frontier dispositions, not unique HTTP article requests. See processed_urls, http_article_attempted_urls and body_retrieved_urls.",
+  "collector_runs_path": "publishers/snowflake/runs.jsonl",
+  "collector_candidates": [
+    {
+      "started_at": "2026-10-14T18:34:26.520333+00:00",
+      "collector_sha256": "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a"
+    },
+    {
+      "started_at": "2026-10-14T18:43:55.996543+00:00",
+      "collector_sha256": "a902e53e60ae71aee0fe81a62a899aea55bebd0c29814b23e8aca01e533a5350"
+    },
+    {
+      "started_at": "2026-10-14T18:56:38.210318+00:00",
+      "collector_sha256": "15448913fe76432a8357f78c061c6a64c35a71facb66d17df2aed1eea569980d"
+    },
+    {
+      "started_at": "2026-10-14T18:57:15.449644+00:00",
+      "collector_sha256": "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278"
+    },
+    {
+      "started_at": "2026-10-14T18:58:30.529497+00:00",
+      "collector_sha256": "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278"
+    }
+  ],
+  "new_unique_selected_article_count": 2,
+  "repeat_selected_article_count": 0,
+  "receipt_bindings_sha256": null,
+  "scope_classification": {
+    "excluded_nonarticle_urls": 6,
+    "paths": [
+      "core-platform",
+      "data-engineering",
+      "gen-ai",
+      "machine-learning",
+      "data-science",
+      "open-source"
+    ],
+    "meaning": "Engineering category navigation stays preserved as excluded_nonarticle and is removed from article body counts."
+  },
+  "extraction_repair": "Joining split content and recognizing a single Snowflake text container recovered all 277 scoped article bodies locally."
+}

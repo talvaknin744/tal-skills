@@ -1,0 +1,153 @@
+{
+  "run_id": "trace-performance-diagnosis-v2-selected-incomplete-traces-01",
+  "run_evidence_sha256": "845fc4ecd39c1cb102df79e05d20766a744d3da267a7fd9379f9448709c6184c",
+  "final_workspace_tree_sha256": "0d23c3f8e0b07d999c73c5ce594c53c3ddb3603d3bfba7db65f0202235d11f85",
+  "case_id": "v2-selected-incomplete-traces",
+  "candidate_tree_sha256": "ae7e7685c31e2d1d6cfe3d92a0b0eace36f59a12e8a4cd5b18796839f0f0f17d",
+  "rubric_sha256": "4eb0bc4c6a593992bbeae0f5387fa0b9121b28b9b47a2503620c83bbf489ff4e",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "absence-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 12, 14 and 19",
+        "observation": "The answer uses application and Collector records to reject absent database work, states \"Cancellation, connection release and reuse are unknown\", and correlates decision/cache removal, late span processing and export records. It distinguishes recorded early eviction from whether T88 itself was evicted."
+      }
+    },
+    {
+      "id": "upstream-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 8",
+        "observation": "The answer states \"The 2% gateway root decision limits what reaches the Collector; child SDKs honor it. Tail sampling cannot recover upstream omissions.\" It includes export drops and early evictions and rejects a complete retention guarantee."
+      }
+    },
+    {
+      "id": "population-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 3, 9 and 18",
+        "observation": "The answer states \"880 ms is the measured success p99; 1,700 ms is the p99 of retained, selectively sampled traces.\" It retains 2000 timeouts, explicitly limits the 4 percent denominator to completed outcomes and requests aligned success and timeout histogram buckets for a combined outcome percentile."
+      }
+    },
+    {
+      "id": "bounded-check",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10, 12, 18 through 21",
+        "observation": "The answer says \"Pricing has not been established as the exclusive cause.\" It proposes correcting the report and reconstructing T88 from existing records with deployed version/configuration; missing records keep attribution unresolved and one request does not establish a population cause."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 21; evidence/run.json input_integrity and observed_external_or_delegation_events; trace completed command events item_1 through item_9",
+        "observation": "The answer states \"No files were edited or runtime tests performed.\" Saved integrity confirms baseline unchanged and no forbidden changes. All observed commands read local material; external and delegation events are empty."
+      }
+    }
+  ],
+  "critical_gates": {
+    "absence-boundary": "pass",
+    "upstream-boundary": "pass",
+    "population-boundary": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 10,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed answer and trace only; declared capability isolation deviations remain."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "a71f25958b75f64a74af965e374a5b4133841b2946f0dfe473e77a7190b8dadb",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 116.226,
+  "tool_calls": 9,
+  "token_usage": {
+    "input_tokens": 74367,
+    "cached_input_tokens": 55936,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2770,
+    "reasoning_output_tokens": 1550
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns the body."
+    },
+    "candidate_metadata_observed": true,
+    "other_observed_skill_body_reads": [],
+    "limitation": "A single case attempt is not a three attempt activation estimate, and other inherited guidance prevents attribution to the candidate alone."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "absence-boundary",
+              "score": 2
+            },
+            {
+              "id": "upstream-boundary",
+              "score": 2
+            },
+            {
+              "id": "population-boundary",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

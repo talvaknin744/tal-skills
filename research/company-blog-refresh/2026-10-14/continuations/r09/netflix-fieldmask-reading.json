@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "publisher_id": "netflix",
+  "kind": "additive_deliberate_reading_and_contract_comparison",
+  "external_evidence_root": "/tmp/tal-skills-blog-crawl-netflix-v2-reading-2026-10-15-r01",
+  "external_evidence_inventory_path": "evidence-inventory.json",
+  "external_evidence_inventory_sha256": "d469cf6fd00eb2826496cfdccabc9ce023aef7b6ca3080d4ae79a19c4ae3cee7",
+  "read_events_sha256": "cf41b6f6889dc1fcffd5f8895e810215b2769ff21f8a46a913b41852ba5b58c8",
+  "repository_note_sha256": "74306003ed374454521c7aed238db9d1f68d9745ec5bf4b4df79e35c71d06403",
+  "counts": {
+    "deliberately_read_articles": 4,
+    "fieldmask_articles": 2,
+    "broader_historical_articles": 2,
+    "new_medium_http_requests": 0,
+    "new_article_http_requests": 0,
+    "instruction_edits": 0,
+    "evaluation_cases_authored": 0,
+    "model_trials_run": 0
+  },
+  "read_articles": [
+    {
+      "url": "https://netflixtechblog.com/practical-api-design-at-netflix-part-2-protobuf-fieldmask-for-mutation-operations-2e75e1d230e4",
+      "post_id": "2e75e1d230e4",
+      "reading_scope": "Full retained extracted RSS text, including all extracted prose and inline code; externally embedded code, images and rendered article parity were not examined.",
+      "evidence_sha256": "5aed526b77523134857cff9781c9f64cadf4cf90f902896c0444790c3cc301cd",
+      "receipt_sha256": "d650f43eb2bf4c8634bdd7b5846a4614a15444b310e04f072150369a1b685c10"
+    },
+    {
+      "url": "https://netflixtechblog.com/practical-api-design-at-netflix-part-1-using-protobuf-fieldmask-35cfdc606518",
+      "post_id": "35cfdc606518",
+      "reading_scope": "Full retained extracted RSS text, including all extracted prose and inline code; externally embedded code, images and rendered article parity were not examined.",
+      "evidence_sha256": "9d599a058bcc819aeaf27ba4bc42f0fe5f71ae4e39b138e6b305e654ca2cd9c6",
+      "receipt_sha256": "d959b33ed8d3d03d6706c7f9cec7cb63b861492d6e0ef646c6cf094548b00c7c"
+    },
+    {
+      "url": "https://netflixtechblog.com/abac-on-spicedb-enabling-netflixs-complex-identity-types-c118f374fa89",
+      "post_id": "c118f374fa89",
+      "reading_scope": "Full retained extracted RSS text, including all extracted prose and inline code; externally embedded code, images and rendered article parity were not examined.",
+      "evidence_sha256": "b4d39d6904fc4aaedc3d7a01ec73125095d7552ee1394f78246e0a6b82d1e1a5",
+      "receipt_sha256": "525c7c0e573b03441313239e1ef99ae4fc6d70ea83fe4f9ad0cce8af374ed62d"
+    },
+    {
+      "url": "https://netflixtechblog.com/achieving-observability-in-async-workflows-cd89b923c784",
+      "post_id": "cd89b923c784",
+      "reading_scope": "Full retained extracted RSS text, including all extracted prose and inline code; externally embedded code, images and rendered article parity were not examined.",
+      "evidence_sha256": "cef6a4f9d469620eed3caaee5670b59748b37d9801c004d708322f0f0cfeb7c8",
+      "receipt_sha256": "4d5f2e676e2e23433e89756494ea9c674dcd90a8d3d9652f321548a0a9343dd3"
+    }
+  ],
+  "current_contract_sources": [
+    {
+      "url": "https://protobuf.dev/reference/protobuf/google.protobuf/#field-mask",
+      "retrieval_source": "web tool",
+      "provider_representation_path": "google-protobuf-fieldmask-web-tool.txt",
+      "provider_representation_sha256": "e57909e9cd147b820fc06779c3f14c0df63249138af6112909bcfc4052e1a76e"
+    },
+    {
+      "url": "https://google.aip.dev/134",
+      "retrieval_source": "web tool",
+      "provider_representation_path": "google-aip-134-web-tool.txt",
+      "provider_representation_sha256": "46d76a1ade4dc0785352e18e4e3207e442de100e915bb71b3192b39f557cc023"
+    },
+    {
+      "url": "https://google.aip.dev/161",
+      "retrieval_source": "web tool",
+      "provider_representation_path": "google-aip-161-web-tool.txt",
+      "provider_representation_sha256": "89602d05f5f61196acec7c5df982eab30b368cfe23ae14af8c586b0739986816"
+    }
+  ],
+  "existing_package": {
+    "canonical_skill": "microservice-integration",
+    "compatibility_reference": "skills/engineering/microservice-integration/references/compatibility.md",
+    "reference_sha256": "0a83889b82e6269d521d333775a3a7cf8ff8da7517c7f703fd3f01af7cd9deb0",
+    "cases_path": "evals/microservice-integration/cases.json",
+    "cases_sha256": "5bf3213ebaf76aedade8044c37d3f23898763e2f3c32330559591fdc1cd98a6f",
+    "existing_case_ids": [
+      "mixed-version-response",
+      "event-meaning-drift",
+      "local-json-pretty-print-nontrigger"
+    ],
+    "fieldmask_specific_guidance_or_case_found": false,
+    "search_scope": "Canonical microservice-integration package and evaluation tree, case insensitive FieldMask and field mask patterns."
+  },
+  "proposed_addition": "Inspect the actual mask dialect, preservation versus reset, and field-name paths, then validate supported old clients against new fields and renamed paths. Generic compatibility is already covered.",
+  "dialect_boundary": "Historical Netflix and the Protobuf reference describe absent mask replacement risk; current AIP 134 specifies populated-field inference on omission and explicit wildcard full replacement. Do not impose one dialect on another.",
+  "future_evaluation_scenarios_only": [
+    "Old client partial update preserves a later-added field.",
+    "Explicit default reset differs from an unselected field.",
+    "Old and new symbolic paths through a rename are checked.",
+    "AIP 134 omitted mask convention is recognized without unconditional rejection.",
+    "Existing generic compatibility and local formatting nontrigger cases remain unchanged."
+  ],
+  "limitations": [
+    "No canonical guidance, evaluation or behavioral claim changed.",
+    "No current runtime, embedded external code, rendered media or blocked page parity checked.",
+    "Web tool provider representations are retained, not raw origin HTTP bytes.",
+    "Separate reading evidence does not rewrite the live collector zero deliberate read counter or historical reports.",
+    "SpiceDB and async observability observations remain historical leads, with no current API verification."
+  ]
+}

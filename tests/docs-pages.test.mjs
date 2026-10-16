@@ -12,7 +12,7 @@ test('every promoted skill has a matching public docs page linked to its canonic
   const promoted = buckets.flatMap((bucket) => fs.readdirSync(path.join(root, 'skills', bucket), { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(root, 'skills', bucket, entry.name, 'SKILL.md')))
     .map((entry) => ({ bucket, name: entry.name })));
-  assert.equal(promoted.length, 35);
+  assert.equal(promoted.length, 36);
 
   for (const { bucket, name } of promoted) {
     const page = path.join(root, 'docs', bucket, `${name}.md`);

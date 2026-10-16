@@ -1,0 +1,705 @@
+{
+  "proposed_claim": "Both saved reports show successful playback for every session, and their summary recommends catalog-41. Experiment e-old-baseline used the older baseline shown below. Experiment e-mixed has tenant and step identity observations below. No publishing attempt ran. Decide what either comparison establishes about this candidate and what a minimally corrected comparison would need.",
+  "source_validation": {
+    "raw_feed_path": "artifacts/raw-feed.json",
+    "raw_feed_sha256": "6418e069f37465e2b11bef3e72449739c38c7abd0c86cfa305e0213cc536ad5d",
+    "schema_check": "pass",
+    "code_deployed": false,
+    "configuration_changed": false
+  },
+  "artifact_bindings": {
+    "baseline": {
+      "path": "artifacts/baseline.json",
+      "version": "catalog-40",
+      "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+    },
+    "candidate": {
+      "path": "artifacts/candidate.json",
+      "version": "catalog-41",
+      "sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0"
+    },
+    "older_baseline": {
+      "path": "artifacts/older_baseline.json",
+      "version": "catalog-39",
+      "sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d"
+    }
+  },
+  "experiments": [
+    {
+      "experiment_id": "e-old-baseline",
+      "binary": "catalog-api-12",
+      "config": "cfg-9",
+      "baseline": {
+        "intended": {
+          "path": "artifacts/baseline.json",
+          "version": "catalog-40",
+          "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+        },
+        "observed": {
+          "path": "artifacts/older_baseline.json",
+          "version": "catalog-39",
+          "sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d"
+        },
+        "healthy": false,
+        "tenant_versions": {
+          "web": "catalog-39",
+          "tv": "catalog-39"
+        }
+      },
+      "candidate": {
+        "intended": {
+          "path": "artifacts/candidate.json",
+          "version": "catalog-41",
+          "sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0"
+        },
+        "observed": {
+          "path": "artifacts/candidate.json",
+          "version": "catalog-41",
+          "sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0"
+        },
+        "healthy": true,
+        "tenant_versions": {
+          "web": "catalog-41",
+          "tv": "catalog-41"
+        }
+      }
+    },
+    {
+      "experiment_id": "e-mixed",
+      "binary": "catalog-api-12",
+      "config": "cfg-9",
+      "baseline": {
+        "intended": {
+          "path": "artifacts/baseline.json",
+          "version": "catalog-40",
+          "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+        },
+        "observed": {
+          "path": "artifacts/baseline.json",
+          "version": "catalog-40",
+          "sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2"
+        },
+        "healthy": true,
+        "tenant_versions": {
+          "web": "catalog-40",
+          "tv": "catalog-40"
+        }
+      },
+      "candidate": {
+        "intended": {
+          "path": "artifacts/candidate.json",
+          "version": "catalog-41",
+          "sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0"
+        },
+        "observed": {
+          "path": "artifacts/candidate.json",
+          "version": "catalog-41",
+          "sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0"
+        },
+        "healthy": true,
+        "tenant_versions": {
+          "web": "catalog-40",
+          "tv": "catalog-41"
+        }
+      }
+    }
+  ],
+  "journeys": [
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-baseline-web-harbor",
+      "assigned_arm": "baseline",
+      "client": "web",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-baseline-web-orchard",
+      "assigned_arm": "baseline",
+      "client": "web",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-baseline-tv-harbor",
+      "assigned_arm": "baseline",
+      "client": "tv",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-baseline-tv-orchard",
+      "assigned_arm": "baseline",
+      "client": "tv",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-39",
+          "artifact_sha256": "ec0c214957044f793348b45f065ed4f9d12562124d7723e8dabb733982e3875d",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-candidate-web-harbor",
+      "assigned_arm": "candidate",
+      "client": "web",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-candidate-web-orchard",
+      "assigned_arm": "candidate",
+      "client": "web",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-candidate-tv-harbor",
+      "assigned_arm": "candidate",
+      "client": "tv",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-old-baseline",
+      "session_id": "e-old-baseline-candidate-tv-orchard",
+      "assigned_arm": "candidate",
+      "client": "tv",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-baseline-web-harbor",
+      "assigned_arm": "baseline",
+      "client": "web",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-baseline-web-orchard",
+      "assigned_arm": "baseline",
+      "client": "web",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-baseline-tv-harbor",
+      "assigned_arm": "baseline",
+      "client": "tv",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-baseline-tv-orchard",
+      "assigned_arm": "baseline",
+      "client": "tv",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-candidate-web-harbor",
+      "assigned_arm": "candidate",
+      "client": "web",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-candidate-web-orchard",
+      "assigned_arm": "candidate",
+      "client": "web",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "baseline",
+          "artifact_version": "catalog-40",
+          "artifact_sha256": "3fe734169d20e40de25dac62037eb90aeff75321e3864d2792da0b4f10b0aca2",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-candidate-tv-harbor",
+      "assigned_arm": "candidate",
+      "client": "tv",
+      "title_id": "harbor",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "harbor-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    },
+    {
+      "experiment_id": "e-mixed",
+      "session_id": "e-mixed-candidate-tv-orchard",
+      "assigned_arm": "candidate",
+      "client": "tv",
+      "title_id": "orchard",
+      "entitled": true,
+      "steps": [
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "browse",
+          "title_present": true
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "manifest",
+          "streams": [
+            "orchard-main"
+          ]
+        },
+        {
+          "observed_arm": "candidate",
+          "artifact_version": "catalog-41",
+          "artifact_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+          "http_status": 200,
+          "stage": "playback_start",
+          "playback_started": true
+        }
+      ]
+    }
+  ],
+  "callback_records": [
+    {
+      "experiment_id": "e-old-baseline",
+      "candidate_version": "catalog-41",
+      "candidate_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+      "decision": "approve",
+      "completed": true,
+      "callback_http_status": 200
+    },
+    {
+      "experiment_id": "e-mixed",
+      "candidate_version": "catalog-41",
+      "candidate_sha256": "d9b2aff2c1ecde7a4ed7b30a63534d3a78726fb13eae31b88a331387c24b1fc0",
+      "decision": "approve",
+      "completed": true,
+      "callback_http_status": 200
+    }
+  ],
+  "publication_attempts": [],
+  "record_scope": "Authored deterministic local observations. No production experiment or real external API request."
+}

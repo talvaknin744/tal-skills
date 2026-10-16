@@ -1,0 +1,104 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "v2-correlated-trace",
+      "title": "Required joins and local timings establish one request's critical path",
+      "tags": ["performance-diagnosis", "trace-evidence", "causal-path"],
+      "prompt": "Review incident.md and assess the proposed latency interventions. Explain the supported critical path, one bounded next step and the measurement limits. Use the supplied evidence only, keep the review read only and do not edit files.",
+      "fixture_dir": "evals/performance-diagnosis/fixtures/v2-correlated-trace",
+      "fixtures": ["incident.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "required-path",
+          "severity": "critical",
+          "criterion": "Uses correlated gateway timings and the required join to identify pricing as the limiting current fanout branch. Separates detached analytics and nested inventory database work from the current endpoint critical path."
+        },
+        {
+          "id": "timing-boundary",
+          "severity": "critical",
+          "criterion": "Avoids summing inclusive root and child spans or independently calculated p99 values. Explains that unknown cross host clock offset prevents inferring order or extra latency from the pricing server's UTC placement."
+        },
+        {
+          "id": "path-shift",
+          "severity": "major",
+          "criterion": "Proposes a price freshness preserving pricing investigation or bounded comparison, recognizes that a sufficient pricing speedup can make inventory limiting, and keeps one trace separate from an endpoint population improvement claim."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged, uses no web or external service, and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "v2-selected-incomplete-traces",
+      "title": "Upstream drops and tail selection limit trace absence and percentile claims",
+      "tags": ["performance-diagnosis", "trace-evidence", "sampling-boundary"],
+      "prompt": "Review incident.md and assess the incident and release note claims. State what the telemetry supports, what remains unresolved and a bounded evidence repair or discriminating check. Keep this read only, use the supplied evidence only and do not edit files.",
+      "fixture_dir": "evals/performance-diagnosis/fixtures/v2-selected-incomplete-traces",
+      "fixtures": ["incident.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "absence-boundary",
+          "severity": "critical",
+          "criterion": "Treats the missing database child as incomplete evidence rather than proof of absent work, uses the application call log, and leaves completion, cancellation and connection reuse unresolved. Includes the observed exporter or collector losses in the evidence repair."
+        },
+        {
+          "id": "upstream-boundary",
+          "severity": "critical",
+          "criterion": "Explains that the tail rule sees only spans exported after the 2 percent root decision and cannot retain slow requests never recorded or exported upstream. Does not promise every error or slow endpoint request is captured."
+        },
+        {
+          "id": "population-boundary",
+          "severity": "critical",
+          "criterion": "Separates the latency and error selected retained trace p99 from endpoint population measurements. Uses the independently recorded histogram's stated success outcome boundary without treating 880 ms as a combined all outcome percentile or ignoring timeout coverage."
+        },
+        {
+          "id": "bounded-check",
+          "severity": "major",
+          "criterion": "Requests installed collector behavior, coverage or sampling policy and correlated slow/timeout evidence as appropriate, without blaming pricing exclusively or prescribing a production sampling change as already verified."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged, uses no web or external service, and distinguishes proposed checks from executed runtime evidence."
+        }
+      ]
+    },
+    {
+      "id": "v2-trace-label-only",
+      "title": "A trace label spelling correction does not request trace evidence diagnosis",
+      "tags": ["activation", "scope", "trace-boundary"],
+      "prompt": "Review change.md and return the requested spelling correction only. Keep the file unchanged and stay within the approved copy edit. Do not investigate latency or trace evidence.",
+      "fixture_dir": "evals/performance-diagnosis/fixtures/v2-trace-label-only",
+      "fixtures": ["change.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not load performance-diagnosis or begin a sampling, instrumentation or critical path investigation for the spelling only request."
+        },
+        {
+          "id": "correct-label",
+          "severity": "major",
+          "criterion": "Returns Trace duration (ms) as the corrected label without an unsolicited telemetry review."
+        },
+        {
+          "id": "read-only",
+          "severity": "critical",
+          "criterion": "Leaves the supplied fixture unchanged and uses no web or external service."
+        }
+      ]
+    }
+  ]
+}

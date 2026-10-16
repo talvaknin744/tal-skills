@@ -17,6 +17,8 @@ Invocation: automatic
 - The correction sits the correction at the smallest authoritative boundary and explain why weaker coordination cannot prevent the history.
 - Controlled schedules and independent observations demonstrate the invariant; remaining unverified guarantees are reported.
 
+- When fresh queries use a stream barrier created by the server, evidence covers applied updates, the query boundary, authority continuity and bounded failure, with valid shared confirmations preserved.
+
 ## Where it fits
 
 Compose with idempotency when retry identity and duplicate effects dominate, or graceful-draining when ownership changes during shutdown.

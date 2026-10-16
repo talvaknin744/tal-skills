@@ -1,0 +1,207 @@
+{
+  "run_id": "source07-microservice-event-meaning-drift-01",
+  "run_evidence_sha256": "069d93a6a15f15e8fba1bc0fe9d31d0599566e3fdf662012cd5406e50f17e6b4",
+  "final_workspace_tree_sha256": "04802f30871e6bc11ca9713936f8d0f58fa5e06486818809af72d829c63f227c",
+  "case_id": "event-meaning-drift",
+  "candidate_tree_sha256": "1d09336bca338f757e89a375eb2243400ed0aeeb96b3a3de4a01eea590729c3e",
+  "rubric_sha256": "c689c5767cbe00c8b5b6d9ad3ddf8771675fac4e3011ab3b63c778b33acee4cc",
+  "reviewer": "independent-review-fieldmask-r01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_corpus": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "semantic-break",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+        "locator": "lines 1 to 10",
+        "observation": "Explains fulfillment releasing goods on authorization despite later capture failure and why payload parsing tolerance does not preserve the captured funds fact.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 1 to 10",
+            "quote": "**The proposal is a breaking behavioral change, despite preserving the payload shape.** `PaymentCompleted` currently promises captured funds, and Fulfillment relies on that promise ([design.md:3](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-event-meaning-drift-01/workspace/project/design.md:3)). Publishing it after authorization changes the fact being announced. A code comment and an optional field cannot preserve that contract.\n\nUnder the proposal, consumers would interpret events as follows:\n\n| Consumer or input | Interpretation and consequence |\n|---|---|\n| Current Fulfillment receives authorization-time `PaymentCompleted` | Ignores `capture_status`, assumes capture succeeded, and releases goods. A later capture failure leaves goods released without captured funds. |\n| Existing Analytics replays the mixed stream | Any logic relying on the documented event meaning treats both historical captures and new authorizations as completed payments. Its exact calculations are unspecified. |\n| Updated consumer reads historical events without `capture_status` | Historical `PaymentCompleted` means captured. Defaulting missing status to pending would incorrectly reclassify those payments. |\n| Updated consumer reads new events with `capture_status: \"pending\"` | Can recognize authorization, but now needs special interpretation for an event whose name and original contract assert completion. This does not protect deployed consumers. |"
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-event-meaning-drift-01.json"
+        ]
+      }
+    },
+    {
+      "id": "distinct-facts",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+        "locator": "lines 16 to 19",
+        "observation": "Preserves the captured meaning of PaymentCompleted and introduces a separate authorization fact rather than relying on unknown optional fields.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 16 to 19",
+            "quote": "1. **Preserve `PaymentCompleted` as a captured-funds fact.** Billing emits it only after authoritative capture confirmation. Pending or failed capture must not produce it. Keep existing field meanings, including `amount_cents` as the captured amount.\n2. **Introduce `PaymentAuthorized` for successful authorization.** It can carry `payment_id`, `order_id`, `amount_cents`, and `currency`, with its contract explicitly defining the amount as authorized. Capture may subsequently succeed or fail. Route this event so existing Fulfillment continues receiving only the event types it understands.\n3. **Represent subsequent outcomes as separate facts.** Successful capture produces the existing `PaymentCompleted`; introduce a distinct capture-failure event if consumers need that outcome. An authorization event remains a historical authorization fact after capture succeeds.\n4. **Specify replay interpretation explicitly.** Legacy `PaymentCompleted` without `capture_status` means captured. If that field is added to this event, its value must agree with the captured-funds promise; `pending` is invalid. Keep events self-contained enough to interpret historical outcomes without fetching today\u2019s payment state."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-event-meaning-drift-01.json"
+        ]
+      }
+    },
+    {
+      "id": "replay-semantics",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+        "locator": "lines 9 to 9, lines 19 to 19, lines 29 to 31",
+        "observation": "Keeps historical missing status events as captured, retains replay meaning and covers the stated 90 day replay horizon.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 9 to 9",
+            "quote": "| Updated consumer reads historical events without `capture_status` | Historical `PaymentCompleted` means captured. Defaulting missing status to pending would incorrectly reclassify those payments. |"
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 19 to 19",
+            "quote": "4. **Specify replay interpretation explicitly.** Legacy `PaymentCompleted` without `capture_status` means captured. If that field is added to this event, its value must agree with the captured-funds promise; `pending` is invalid. Keep events self-contained enough to interpret historical outcomes without fetching today\u2019s payment state."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 29 to 31",
+            "quote": "- **Replay behavior:** replay legacy events without status, new authorization and capture events, and histories spanning the rollout boundary. Confirm Analytics distinguishes authorized from captured amounts and preserves historical results.\n- **Release compatibility:** check old and updated consumer versions against old and new publishers, including serializers, event filters, mixed deployments, rollback, and unsupported event types or versions.\n- **Migration evidence:** retain legacy decoding throughout the 90-day replay window and any longer buffered-message or rollback requirements. Retire it only when consumer migration and remaining replay inputs justify removal."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-event-meaning-drift-01.json"
+        ]
+      }
+    },
+    {
+      "id": "consumer-checks",
+      "severity": "major",
+      "score": 1,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+        "locator": "lines 18 to 18, lines 27 to 29",
+        "observation": "Provides no release on authorization or failure and historical replay checks. It recognizes a distinct capture failure event conditionally, but the validation list does not require an assertion that a failed capture outcome itself remains observable. The stated failed capture check establishes absence of PaymentCompleted, which alone does not establish failure observability.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 18 to 18",
+            "quote": "3. **Represent subsequent outcomes as separate facts.** Successful capture produces the existing `PaymentCompleted`; introduce a distinct capture-failure event if consumers need that outcome. An authorization event remains a historical authorization fact after capture succeeds."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 27 to 29",
+            "quote": "- **Provider behavior:** authorization alone emits no `PaymentCompleted`; delayed capture postpones it; failed capture never produces it; successful capture preserves identifiers, amount, and currency semantics.\n- **Consumer behavior:** exercise the deployed Fulfillment version against the proposed routing and payloads. Confirm no release on authorization or failure, and release on confirmed capture.\n- **Replay behavior:** replay legacy events without status, new authorization and capture events, and histories spanning the rollout boundary. Confirm Analytics distinguishes authorized from captured amounts and preserves historical results."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-event-meaning-drift-01.json"
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+        "locator": "lines 33 to 33",
+        "observation": "The actual fixture is unchanged and patch is empty. Five recorded tools read or discover files; proposed compatibility and replay checks are explicitly not executed.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01/evidence/answer.md",
+            "locator": "lines 33 to 33",
+            "quote": "The supplied project contains only the design document, so these checks remain required validation; executable compatibility has not been demonstrated. No files were changed or tests run."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-event-meaning-drift-01.json"
+        ]
+      }
+    }
+  ],
+  "score_stage": "source07-fieldmask-r01",
+  "artifact_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-event-meaning-drift-01",
+  "trial_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-event-meaning-drift-01",
+  "candidate_commit": null,
+  "canonical_source_digest": "11dbdd432ab00b10bb6cdb58488cd801fb61b2503fad20a5e46335249870aa01",
+  "codex_source_digest": "7e26eb328307a0586d27ead276d751261db8d699ce1163f966f0b1133d3b6c4c",
+  "evaluation_suite": "company-blog-refresh-fieldmask-regression",
+  "fixture_tree_sha256": "0e0d7780673db943e909b23e4b3c91a98ac4c61092f02d2850238abc48fae17a",
+  "case_prompt_sha256": "a95657914eda3dbca7b4459d31e1cc0d66c546f11f6c869cff3d98597f3aa99d",
+  "freeze_sha256": "6cfd121f1c373f3ca55ac207000247919ffbf552840c91618975c412a6676241",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "claude_current_candidate": "unexecuted",
+  "observed_external_or_delegation_events": [],
+  "actual_service_client_compiler_install_network_execution_observed": false,
+  "actual_execution_observation": "Every recorded tool event for these reviewed packets is file discovery or reading. Proposed runtime checks remain unexecuted.",
+  "activation": {
+    "normal_discovery": true,
+    "metadata_observed": true,
+    "prefix_body_read_observation": {
+      "status": "body_read_observed",
+      "evidence_events": [
+        "item_1"
+      ],
+      "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+    },
+    "complete_entrypoint_read_events": [
+      {
+        "event_id": "item_1",
+        "trace_line": 5,
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-event-meaning-drift-01/workspace/.agents/skills/microservice-integration/SKILL.md'",
+        "full_entrypoint_bytes_present": true,
+        "source_body_sha256": "bc236769bcb0b62faaea1cb276476ae74e41cc90961133105bc747c68b6af932"
+      }
+    ],
+    "explicit_invocation": false,
+    "note": "A complete recorded entrypoint read is separate from correctness. Absence of a recorded read does not prove hidden loading never occurred."
+  },
+  "critical_gates": {
+    "all_full_pass": true,
+    "zero_failures": true,
+    "results": [
+      {
+        "id": "semantic-break",
+        "score": 2
+      },
+      {
+        "id": "distinct-facts",
+        "score": 2
+      },
+      {
+        "id": "read-only",
+        "score": 2
+      }
+    ]
+  },
+  "rubric_result": "partial",
+  "elapsed_seconds": 64.599,
+  "tool_calls": 5,
+  "token_usage": {
+    "input_tokens": 63612,
+    "cached_input_tokens": 30464,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2226,
+    "reasoning_output_tokens": 988
+  },
+  "runtime_acceptance": "unexecuted",
+  "quote_audit": "All criterion quotes resolve literally to the preserved answer file."
+}

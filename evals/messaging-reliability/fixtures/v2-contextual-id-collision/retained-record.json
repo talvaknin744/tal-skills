@@ -1,0 +1,16 @@
+{
+  "source_cluster": "wholesale-cluster-A",
+  "source_topic": "payments",
+  "source_partition": 0,
+  "source_offset": 31,
+  "key": "A7",
+  "value_hex": "0000000007044137c801",
+  "envelope": {"format": "Confluent Avro ID envelope", "magic_byte": 0, "schema_id": 7, "registry_and_context_in_wire": false},
+  "ledger_observation": {"account": "A7", "currency": "USD", "amount_minor": 100, "amount_decimal": "1.00"},
+  "lookup_captures": [
+    {"client": "source-consumer", "cache_state": "empty before sample", "request": "GET https://source.registry.example/contexts/.wholesale/schemas/ids/7", "returned_fullname": "shop.PaymentCents", "decoded_fields": {"account": "A7", "amount": 100}, "decoder_exception": null, "business_effect_usd": "1.00"},
+    {"client": "retail-consumer", "cache_state": "empty before sample", "request": "GET https://target.registry.example/contexts/.retail/schemas/ids/7", "returned_fullname": "shop.PaymentDollars", "decoded_fields": {"account": "A7", "amount": 100}, "decoder_exception": null, "business_effect_usd": "100.00"}
+  ],
+  "target_effect_applied": false,
+  "alternate_context_client_probe": null
+}

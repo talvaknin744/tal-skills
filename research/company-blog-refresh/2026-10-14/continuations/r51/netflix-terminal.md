@@ -1,0 +1,13 @@
+# Netflix exact five terminal audit
+
+The closed five route run and actual retirement evidence pass independent artifact review, 20/20. Five one attempt HTTP 200 RSS responses reconcile with owned markers, both SQLite databases and the carried request budget. The minimum owned start interval is 60.059085845947266 seconds. Source 329f44fb and queue 1447d010 remain exact.
+
+Four Japanese feeds have exact scoped Netflix items. The literal legacy handle is empty and displays Stories by James E. Johnson on Medium; its present Netflix affiliation is unproved. Five fetched statuses therefore establish five transport outcomes, with four positive publication-scoped responses. No ownership, new availability or lifetime credit is assigned to the empty handle.
+
+Four body occurrences repeat the same 42,221 byte encoded field for one existing ID. Local totals remain 596 IDs, 579 body-presence IDs and 17 missing IDs, with the original 577 extracted and 2 fetched-unextracted classes unchanged. New unique IDs, bodies, aliases, readings and article HTTP requests are 0. Full-story completeness and global composition remain unproved.
+
+Actual root session 2918 completed with integer exit 0, chunk de786d. Native startup PID 64419/source/argv and five owned request/marker identities corroborate that association. Startup 18:53:13+00:00 has native second precision. Finish 18:58:20+00:00 is the completion-observation upper bound. The earlier compound native/cat probe exit 1 is retained separately and is not the collector exit. Root's captured locked observation records all four retired PIDs absent, both guards absent and carried budget d9e2c4ae. No new process or shared-phase observation was made by the auditor.
+
+These facts qualify a stronger fourth retired-row input for the exact Air 63ea contract. They do not approve actual Airbnb physical copies, configuration, admission or launch. The source checks two pinned JSON paths and typed session/exit pointers, and its known canonical alias and tool-origin limits remain. Independent qualification binds five real regular files, distinct original inodes, root invocation/completion, native startup and durable request facts. Fresh locked source/record/proof/absence/budget/guard/transport checks and root authorization remain required.
+
+The audit uses private copies of three closed sealed leaves, with 142 reconciliation assertions and 9 selected source artifact-predicate cases. No HTTP, collector import/run, admission object or repository write occurred. The exact hashes, source references, original failed writer-channel check and remaining limits are in the companion JSON. No reachable-feed, lifetime, provider-export or production completeness claim is made.

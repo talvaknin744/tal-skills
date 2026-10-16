@@ -1,0 +1,76 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "v3-fieldmask-old-partial-update",
+      "title": "An old campaign rename erases a later spending field under the actual provider dialect",
+      "tags": ["api-compatibility", "fieldmask", "unknown-field-preservation"],
+      "prompt": "Review the Campaigns API update incident in request.md, contract.json and incident.json. Assess the proposed repair, give safe rename and intentional reset requests with their resulting stored resource values, and describe compatibility checks for supported clients. Keep every file unchanged, use supplied evidence only and do not execute a service, client, compiler, package install or external request. Distinguish supplied observations from proposed unrun checks.",
+      "fixture_dir": "evals/microservice-integration/fixtures/v3-fieldmask-old-partial-update",
+      "fixtures": ["request.md", "contract.json", "incident.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "unknown-field-loss", "severity": "critical", "criterion": "Explains the captured Summer rename clears Approved description and resets the stored spending limit from 25000000 to 0 under this provider's omitted-mask rule. Identifies an actual breaking loss of stored state unknown to the old client rather than declaring addition of a field automatically safe."},
+        {"id": "safe-partial-outcome", "severity": "critical", "criterion": "Gives a concrete rename that selects only displayName and yields campaigns/C7, Summer, Approved and spendLimitMicros 25000000. Keeps unselected description and newly stored spending limit unchanged without requiring the old client to reconstruct or echo the unknown field."},
+        {"id": "intentional-reset", "severity": "critical", "criterion": "Gives an explicit description-only reset to its empty default from the original before state, yielding Spring, empty description and unchanged spending limit 25000000. Distinguishes omitted unselected fields from intentionally selected reset fields and uses the declared ProtoJSON mask representation or explicitly equivalent Protobuf paths."},
+        {"id": "consumer-coexistence", "severity": "major", "criterion": "Rejects immediate blanket denial as a transparent compatible repair while old clients remain supported. Proposes a bounded client, adapter or version coexistence path, or labels a required-mask transition as an intentional breaking migration with owner and retirement evidence. Keeps the remedy specific to this custom provider, not a universal rule for every API."},
+        {"id": "validation", "severity": "major", "criterion": "Proposes concrete old/new client and provider checks for preserved new state, intentional reset, omitted mask loss and unsupported path rejection, including actual generated serialization and persisted outcomes. Does not claim the supplied scenario or local state arithmetic proves runtime compatibility."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all fixtures unchanged, executes no service/client/compiler/install/network operation and clearly separates synthetic supplied observations, proposed schedules and unexecuted provider behavior."}
+      ]
+    },
+    {
+      "id": "v3-aip134-omitted-mask",
+      "title": "An AIP 134 omitted mask selects nonempty fields while wildcard replaces all mutable fields",
+      "tags": ["api-compatibility", "fieldmask", "changed-boundary"],
+      "prompt": "Review the Books resource API contract and proposal in request.md, contract.json and requests.json. Give the resulting resource for each independent request, assess whether rejecting omitted masks preserves this API's contract, and recommend focused compatibility verification. Keep every file unchanged, use supplied evidence only and do not execute a service, client, compiler, package install or external request. Distinguish unrun schedules from supplied facts.",
+      "fixture_dir": "evals/microservice-integration/fixtures/v3-aip134-omitted-mask",
+      "fixtures": ["request.md", "contract.json", "requests.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "omitted-mask-boundary", "severity": "critical", "criterion": "Uses the declared AIP 134 contract rather than importing the general Protobuf omitted-all rule. The omitted request changes title to New while author remains Lin and the old client's unknown rating remains 5; the empty author value is not selected by this implied mask."},
+        {"id": "reset-and-replacement", "severity": "critical", "criterion": "Computes explicit author reset as title Old, author empty and rating 5, and wildcard replacement as title New, author empty and rating 0. Preserves resource identity and distinguishes all three request effects from each other."},
+        {"id": "optional-mask-contract", "severity": "critical", "criterion": "Rejects a universal mandatory-mask rule and blanket denial of this valid omitted request as preservation of the existing contract. Can recommend explicit masks for deliberate resets or safety while keeping omission valid under this provider's optional-mask dialect and recognizing wildcard risk to unknown fields."},
+        {"id": "actual-client-verification", "severity": "major", "criterion": "Specifies focused provider/generated-client checks for nonempty presence, empty/default serialization, explicit reset, wildcard loss and retained unknown fields across supported versions. Makes actual provider behavior and any future dialect change explicit rather than inferring the contract from the FieldMask type alone."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all fixtures unchanged, executes no service/client/compiler/install/network operation and labels proposed validation as unrun, without claiming live provider or generated client acceptance."}
+      ]
+    },
+    {
+      "id": "v3-fieldmask-symbolic-rename",
+      "title": "A retained binary field number does not preserve an existing symbolic mask path",
+      "tags": ["api-compatibility", "fieldmask", "symbolic-path-boundary"],
+      "prompt": "Review the Profile RPC release in request.md, both proto descriptors and retained-request.json. Assess the wire-compatible rename claim, propose compatibility for supported old and new clients, and state the expected results for old, new and unknown mask paths. Keep every file unchanged, use supplied evidence only and do not execute a service, client, compiler, package install or external request. Explain which validation remains proposed.",
+      "fixture_dir": "evals/microservice-integration/fixtures/v3-fieldmask-symbolic-rename",
+      "fixtures": ["request.md", "profile-v1.proto", "profile-v2.proto", "retained-request.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "symbolic-break", "severity": "critical", "criterion": "Distinguishes successful binary decoding at retained tag 7 from the old textual display_name mask path rejected by v2 after rename to display_label. Recognizes this as a breaking supported-client boundary despite unchanged field number and preserves the supplied failed observation."},
+        {"id": "explicit-coexistence", "severity": "critical", "criterion": "Proposes an explicit legacy path translation, old descriptor or version coexistence strategy that makes the supported old request update display_label to Lea and keeps bio Keep. Does not assume numeric tags or automatic Protobuf aliases make old mask strings valid, nor silently ignore the selected old path as successful."},
+        {"id": "path-results-and-rejection", "severity": "critical", "criterion": "States the equivalent new display_label path must produce Lea with bio Keep, while genuinely unknown display_colour is rejected without changing the original profile. Separates current old-path rejection from the proposed repaired old-path result and avoids indiscriminately mapping unknown paths."},
+        {"id": "validation-and-retirement", "severity": "major", "criterion": "Includes actual binary client and mask-validator old/new combinations, invalid-path failure sensitivity, observed legacy path usage and the six-month supported client horizon before retiring compatibility. Keeps this existing RPC contract distinct from a recommendation to add deprecated Google read_mask fields."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves all fixtures unchanged, executes no service/client/compiler/install/network operation and separates supplied binary/path observations from proposed runtime checks or a completed deployment."}
+      ]
+    },
+    {
+      "id": "v3-fieldmask-wording-only",
+      "title": "A local FieldMask spelling correction does not request API compatibility work",
+      "tags": ["activation", "scope", "wording-only"],
+      "prompt": "Read notes.md and return only the requested spelling correction. Keep the file unchanged and stay within the local wording task. No API, schema, service or client contract is changing.",
+      "fixture_dir": "evals/microservice-integration/fixtures/v3-fieldmask-wording-only",
+      "fixtures": ["notes.md"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "nontrigger", "severity": "critical", "criterion": "Does not load microservice-integration or begin field mask, compatibility, provider dialect or migration work for the local spelling-only request. Absence of a body read is an observed trace property for this trial."},
+        {"id": "exact-copy", "severity": "major", "criterion": "Returns only FieldMask formatting keeps examples readable. with the typo corrected, without unsolicited technical advice or changes to the sentence's meaning."},
+        {"id": "read-only", "severity": "critical", "criterion": "Leaves the fixture unchanged and performs no external request or service, client, compiler or package operation."}
+      ]
+    }
+  ]
+}

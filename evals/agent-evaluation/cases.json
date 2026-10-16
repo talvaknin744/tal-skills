@@ -1,0 +1,58 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "refund-success-without-effect",
+      "title": "The answer says refunded but authoritative state has no effect",
+      "tags": ["correctness", "failure-boundary"],
+      "prompt": "Review the refund assistant evaluation in contract.md, trial.json and final-state.json. Is the release check measuring task success? Propose a concrete replacement evaluation, explain which observed parts passed or failed and what remains unknown, and describe how to show that the evaluator rejects an incorrect refund state. Keep all files unchanged and use only the supplied local evidence; do not run a model or contact external services.",
+      "fixture_dir": "evals/agent-evaluation/fixtures/refund-success-without-effect",
+      "fixtures": ["contract.md", "trial.json", "final-state.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "final-state-oracle", "severity": "critical", "criterion": "Rejects overall success: no refund exists and balance remains 100 instead of 140, although ticket resolution and the response phrase passed. Grounds the conclusion in the authoritative postrun snapshot rather than trusting the tool acknowledgement."},
+        {"id": "independent-grading", "severity": "critical", "criterion": "Specifies deterministic checks for correct customer and order, exactly one processed 40 USD refund, expected balance, resolved ticket and unrelated-state preservation. Separates final task state, observable policy/tool compliance, response truthfulness and optional communication quality; missing evidence remains unknown and cannot satisfy a required gate."},
+        {"id": "oracle-sensitivity", "severity": "major", "criterion": "Describes a valid passing control plus a wrong or missing refund state that fails the same state oracle, with concrete expected observations. Preserves the supplied false-positive trial, recognizes cause is unresolved, and does not require one exact tool sequence when another authorized path meets the contract."},
+        {"id": "repeatable-run-contract", "severity": "major", "criterion": "Proposes fresh isolated fixture state and session per trial, binds source/model/harness/tool/fixture/grader identities and settings, captures answer/observable trace/final state, and includes relevant successful and refusal/failure boundary tasks. Distinguishes a proposed repeated trial from an executed result."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Leaves supplied files unchanged, performs no external operation or model execution, and reports the review as local evidence with proposed checks unexecuted. Does not claim live refunds, hidden reasoning inspection, benchmark generality or a completed production validation."}
+      ]
+    },
+    {
+      "id": "biased-repeated-trial-report",
+      "title": "Cheap repeated attempts do not establish reliable outcomes",
+      "tags": ["correctness", "comparison", "failure-boundary"],
+      "prompt": "Assess the launch claim in launch-notes.md using trials.json and judge-config.json. Compare outcome reliability and cost fairly, explain what three tries establish, and propose the next evaluation for the revised refund assistant and its planned partial refunds. Identify grading or trial setup problems and say whether the stated release gate is met. Keep all files unchanged; these are supplied results to review, not authorization or budget for new model runs or external services.",
+      "fixture_dir": "evals/agent-evaluation/fixtures/biased-repeated-trial-report",
+      "fixtures": ["launch-notes.md", "trials.json", "judge-config.json"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {"id": "fair-counts-and-gates", "severity": "critical", "criterion": "Uses six comparable clean trials per candidate: baseline has five passes and one failure, revised has three confirmed passes, two failures and one unknown. Reports r7 separately as retained contaminated unmatched evidence. Keeps r6 unknown rather than claiming success, names the revised refusal boundary regression, and rejects the stated release gate."},
+        {"id": "repetition-meaning", "severity": "critical", "criterion": "Distinguishes at least one verified success in each three-try task group from all three succeeding. Both candidates have at least one success for both tasks; only baseline ineligible-refund has three confirmed successes. Explains that repeated fresh trials measure variation and this small sample establishes neither a statistically supported improvement nor production reliability."},
+        {"id": "judge-independence", "severity": "critical", "criterion": "Identifies candidate-label preference, author grading, one combined judgment and confident-response completion as unreliable grading inputs. Proposes criterion-level scores grounded in supplied state/trace evidence, an unknown outcome when state is absent, blind candidate labels for comparison and independent human calibration or adjudication of disagreements."},
+        {"id": "cost-with-denominators", "severity": "major", "criterion": "Compares the same six attempted tasks and includes failed/unknown attempts: baseline costs 0.060 USD and revised 0.036 USD, a 40 percent reduction rather than half; each costs 0.012 USD per confirmed success. Reports measured latency or cost separately from correctness and avoids counting contaminated zero-cost r7 or inferring unavailable token metrics."},
+        {"id": "preservation-and-new-capability", "severity": "major", "criterion": "Keeps existing eligible and ineligible cases unchanged for revised-candidate regression, proposes separate partial-refund capability and rejection cases before measuring the feature, binds complete candidate/environment identities and matched conditions, and starts each future trial with a clean session/state. Retains failed and unknown records and states new trials are unexecuted."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Leaves supplied files unchanged, performs no model run or external operation, bases conclusions on supplied artifacts and distinguishes observed local results from proposed evaluation and untested hosts or production behavior."}
+      ]
+    },
+    {
+      "id": "pure-helper-assertion",
+      "title": "A deterministic formatter assertion needs ordinary software testing",
+      "tags": ["scope", "activation"],
+      "prompt": "Give one assertion for format_order_number(7) using the documented contract in formatter.py. This is an ordinary pure Python helper, with no model, tool agent, state or I/O. Keep all files unchanged and use no external services.",
+      "fixture_dir": "evals/agent-evaluation/fixtures/pure-helper-assertion",
+      "fixtures": ["formatter.py"],
+      "capabilities": {"web": false, "subagents": false, "commands": true},
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {"id": "bounded-selection", "severity": "critical", "criterion": "Answers the ordinary pure-helper request without reading the agent-evaluation body or launching an AI agent trial or grading workflow. Body-read absence is checked from the observable trace for this attempt only."},
+        {"id": "focused-assertion", "severity": "major", "criterion": "Gives assert format_order_number(7) == \"ORD0007\" or an equivalent assertion and avoids model judges, repeated trials, unrelated dependencies or an evaluation harness."},
+        {"id": "scope-and-evidence", "severity": "critical", "criterion": "Leaves supplied files unchanged, performs no external operation, and does not claim execution or agent behavior validation beyond what the observed trace supports."}
+      ]
+    }
+  ]
+}

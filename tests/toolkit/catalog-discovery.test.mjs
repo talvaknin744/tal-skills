@@ -8,9 +8,9 @@ import { createFixture } from './fixtures.mjs';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
-test('catalog exposes all 49 public packages, including the Temporal integration packages', () => {
+test('catalog exposes all 50 public packages, including the Temporal integration packages', () => {
   const catalog = loadCatalog(repositoryRoot);
-  assert.equal(catalog.skills.size, 49);
+  assert.equal(catalog.skills.size, 50);
   for (const name of ['temporal-cloud-setup', 'temporal-cloud', 'temporal-developer', 'temporal-ops', 'temporal-observability', 'temporal-serverless', 'temporal-workertuning', 'temporal-workflow-design-critic']) {
     assert.ok(catalog.skills.has(name), `missing selectable skill ${name}`);
     const bundle = generateBundle(catalog, { host: 'codex', skills: [name] });

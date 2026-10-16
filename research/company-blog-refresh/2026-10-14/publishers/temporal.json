@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "publisher_id": "temporal",
+  "candidate_identity": "2026-10-14-company-blog-refresh",
+  "crawler_summary_sha256": "e6c794b4044855789e39d3b01a0449cf0cc479c318c3a40e566b260c9a310243",
+  "crawler_summary_path": "publishers/temporal/summary.json",
+  "crawler_script_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698",
+  "last_collector_invocation": {
+    "started_at": "2026-10-14T18:46:46.326202+00:00",
+    "config": {
+      "publisher_id": "temporal",
+      "baseline_inventory_sha256": "cfeb6771e0e282bfb2a1ccf1e2d1fbf69e6e26c64a05613ddb849df20ecf4d89",
+      "baseline_coverage_sha256": "c309a6c5f2b810ba6d48204810e8bad5730f91fa62fc735f941dafcfc5e46660",
+      "baseline_record_count": 433,
+      "scope": "Official English blog article paths under /blog/; company and NATS project grouped for Synadia/NATS; Confluent developer blog included. Category/tag/author/pagination/feed and documentation paths excluded.",
+      "fresh_discovery_include_prefixes": [
+        "https://temporal.io/blog/"
+      ],
+      "timeout_seconds": 30,
+      "retries": 2,
+      "per_host_concurrency": 3,
+      "per_host_request_interval_seconds": 0.35,
+      "source_url_overrides": [],
+      "no_article_count_cap": true,
+      "excluded_nonarticle_patterns": [],
+      "no_default_sources": false
+    },
+    "collector_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698"
+  },
+  "collector_identity_semantics": "SHA256 of collector recorded by this publisher latest actual invocation. Prior invocations remain in runs.jsonl.",
+  "counters": {
+    "baseline_records": 433,
+    "known_urls": 441,
+    "processed_urls": 441,
+    "http_article_attempted_urls": 441,
+    "body_retrieved_urls": 441,
+    "body_extracted": 441,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2
+  },
+  "current_discovered_urls": 441,
+  "fresh_union_urls": 441,
+  "new_urls_since_baseline": 8,
+  "current_status_counts": {
+    "body_extracted": 441
+  },
+  "distinct_final_retrieved_body_urls": 441,
+  "same_scope_redirect_targets": [],
+  "body_count_semantics": "Known URL dispositions with successful in-scope body responses. Same-scope redirects can share a final article or replace historical content.",
+  "all_article_bodies_read": false,
+  "unresolved_article_records": [],
+  "discovery_scope": {
+    "allowed_hosts": [
+      "temporal.io"
+    ],
+    "include_path_prefix": "/blog/",
+    "excluded_path_segments": [
+      "tags",
+      "tag",
+      "categories",
+      "category",
+      "author",
+      "authors",
+      "page",
+      "series",
+      "tutorial",
+      "data-engineering",
+      "data-basics",
+      "ai-llm",
+      "data-insights",
+      "podcasts",
+      "archive",
+      "feed"
+    ],
+    "excluded_numeric_archive_paths": true,
+    "excluded_feed_and_payload_paths": true,
+    "language_boundary": "Official English article paths only. Language-prefixed paths excluded by /blog/ filter.",
+    "baseline_policy": "Union current discoveries with every retained baseline article URL."
+  },
+  "discovery_receipt_path": "messaging-a-discovery/temporal/discovery.json",
+  "discovery_receipt_sha256": "550f6d9e55d56d4649d8fdec6b4d8c52616b1fb60a4ea8ffab7254c550d13ed3",
+  "discovery_script_path": "messaging-a-discover.py",
+  "discovery_script_sha256": "542022a03447a6e04ca8d1e09566dc3fdbc0e1e72bdc39888d0595fa1b603c00",
+  "collection_page_count": 3,
+  "terminal_status": "exposed_discovery_terminal; all_known_frontier_processed",
+  "terminal_evidence": [
+    {
+      "url": "https://temporal.io/sitemap.xml",
+      "kind": "sitemap",
+      "status": 200,
+      "sha256": "c9839bba3661af555d34f5bef3d79901ab7d63b1bc2dc89e01f28f9b79783bc3",
+      "terminal_reason": "finite_urlset_exhausted"
+    },
+    {
+      "url": "https://temporal.io/blog/feed.xml",
+      "kind": "feed",
+      "status": 200,
+      "sha256": "cab5a013122c047d96ec3a24c7c8d3d7f741e7fd66d8bfc3524e3865235b378c",
+      "terminal_reason": "finite_feed_exhausted"
+    },
+    {
+      "url": "https://temporal.io/blog",
+      "kind": "archive",
+      "status": 200,
+      "sha256": "fe74eace1b67c6b3b3331d15922ee0e220c251c41d80ddaa4fd6f0f1682dd006",
+      "terminal_reason": "no_next_link_observed"
+    }
+  ],
+  "gaps": [
+    "Discovery establishes exposed current publisher collections, not every article ever published. Deleted, private and unlisted articles remain outside this proof.",
+    "Automatic extraction is separate from deliberate reading. All unread article bodies remain a reading coverage gap.",
+    "The shared crawler used bodies-only mode. Its discovery_complete field is false; publisher-specific terminal discovery is bound separately in this receipt.",
+    "Initial sitemap probes hit an unavailable BeautifulSoup XML parser. The raw responses and failed probe records were retained, and subsequent ElementTree discovery parsed them successfully."
+  ],
+  "read_articles": [
+    {
+      "url": "https://temporal.io/blog/bridging-pub-sub-to-temporal-with-standalone-activities",
+      "reading_scope": "Complete substantive textual article body, code and captions. Embedded image pixels were not inspected. Code was not executed.",
+      "evidence_sha256": "b97298d5590d27fdc763e03a54af2c8885f6ad248a499858e966af1552f83570",
+      "evidence_path": "messaging-a-probes/d350053a71918f983173bf31ccfabb7fac595cdf3956bbf8840f8ce109c6a020.raw"
+    },
+    {
+      "url": "https://temporal.io/blog/standalone-activities-durable-job-processing-now-in-public-preview",
+      "reading_scope": "Complete substantive textual article body, code and captions. Embedded image pixels were not inspected. Code was not executed.",
+      "evidence_sha256": "325adf850bdd4960bbc97dc357200909fc5a4399f397fc66055c59a0fa6e924a",
+      "evidence_path": "messaging-a-probes/de783b7886387ab3c373fb819a9f435d9adf608bc0cbee744b5a67967b882eff.raw"
+    }
+  ],
+  "reading_count_semantics": "Distinct blog article bodies deliberately read in this refresh. Current documentation cross-checks are separate.",
+  "final_redirect_review_path": "messaging-a-redirect-review.json",
+  "final_redirect_review_sha256": "116944466bee7a155ad48f14f2edeb69532e01fbe85ccdac46d54a5ead7a8aad",
+  "checks_actually_run": [
+    "Recovered baseline union",
+    "All discovery raw response SHA256 bindings verified",
+    "Fresh finite sitemap and feed parsing",
+    "Exposed archive next-link traversal without an article or page cap",
+    "Structured listing exhaustion where present",
+    "Shared crawler body attempts and extracted text receipts",
+    "Hash verified cache reextraction",
+    "Selected complete textual article readings",
+    "Final body URL scope review for every successful body record"
+  ],
+  "preserved_attempts": {
+    "initial_probe_results_path": "messaging-a-probes/probes.json",
+    "initial_probe_results_sha256": "8bfe47868f72947f11c075175558f3e8895d3a6619e6b64dbfeffe5edeb2b544",
+    "initial_probe_errors": [
+      {
+        "url": "https://temporal.io/sitemap.xml",
+        "error": "Couldn't find a tree builder with the features you requested: xml. Do you need to install a parser library?"
+      }
+    ],
+    "initial_body_invocation_note": "The first four publisher runs supplied a JSON URL list to a newline-only CLI and therefore traversed baseline records. A corrected newline list resumed every fresh URL. Original stdout and append-only request events remain external.",
+    "body_invocation_logs": [
+      {
+        "path": "messaging-a-discovery/temporal/crawler-final-reextract.stdout",
+        "sha256": "e6c794b4044855789e39d3b01a0449cf0cc479c318c3a40e566b260c9a310243"
+      },
+      {
+        "path": "messaging-a-discovery/temporal/crawler-resume.stdout",
+        "sha256": "c5e3d6516a2ffb4d507a12d30106214f0a5203d90a1f3179c2895e193e21f29b"
+      },
+      {
+        "path": "messaging-a-discovery/temporal/crawler.stdout",
+        "sha256": "adc5b294bd5bf24f701e7069b0f38488e8f5fabacaeba5207435ab8d2a2ff258"
+      }
+    ]
+  },
+  "behavioral_checks_executed": [],
+  "independent_scores": null,
+  "host_coverage": "No supported-host behavior evaluation or production broker guarantee was executed in this publisher research."
+}

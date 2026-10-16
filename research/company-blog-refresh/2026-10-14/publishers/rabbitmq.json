@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "publisher_id": "rabbitmq",
+  "candidate_identity": "2026-10-14-company-blog-refresh",
+  "crawler_summary_sha256": "90904886816b2800ef75d559125cee4bafb38441de16edf2d04384ad6533d1e3",
+  "crawler_summary_path": "publishers/rabbitmq/summary.json",
+  "crawler_script_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698",
+  "last_collector_invocation": {
+    "started_at": "2026-10-14T18:46:46.325126+00:00",
+    "config": {
+      "publisher_id": "rabbitmq",
+      "baseline_inventory_sha256": "cfeb6771e0e282bfb2a1ccf1e2d1fbf69e6e26c64a05613ddb849df20ecf4d89",
+      "baseline_coverage_sha256": "c309a6c5f2b810ba6d48204810e8bad5730f91fa62fc735f941dafcfc5e46660",
+      "baseline_record_count": 181,
+      "scope": "Official English blog article paths under /blog/; company and NATS project grouped for Synadia/NATS; Confluent developer blog included. Category/tag/author/pagination/feed and documentation paths excluded.",
+      "fresh_discovery_include_prefixes": [
+        "https://www.rabbitmq.com/blog/"
+      ],
+      "timeout_seconds": 30,
+      "retries": 2,
+      "per_host_concurrency": 3,
+      "per_host_request_interval_seconds": 0.35,
+      "source_url_overrides": [],
+      "no_article_count_cap": true,
+      "excluded_nonarticle_patterns": [],
+      "no_default_sources": false
+    },
+    "collector_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698"
+  },
+  "collector_identity_semantics": "SHA256 of collector recorded by this publisher latest actual invocation. Prior invocations remain in runs.jsonl.",
+  "counters": {
+    "baseline_records": 181,
+    "known_urls": 181,
+    "processed_urls": 181,
+    "http_article_attempted_urls": 181,
+    "body_retrieved_urls": 181,
+    "body_extracted": 169,
+    "body_fetched_unextracted": 12,
+    "pending": 0,
+    "read_articles": 2
+  },
+  "current_discovered_urls": 181,
+  "fresh_union_urls": 181,
+  "new_urls_since_baseline": 0,
+  "current_status_counts": {
+    "body_extracted": 169,
+    "body_fetched_unextracted": 12
+  },
+  "distinct_final_retrieved_body_urls": 181,
+  "same_scope_redirect_targets": [],
+  "body_count_semantics": "Known URL dispositions with successful in-scope body responses. Same-scope redirects can share a final article or replace historical content.",
+  "all_article_bodies_read": false,
+  "unresolved_article_records": [],
+  "discovery_scope": {
+    "allowed_hosts": [
+      "www.rabbitmq.com"
+    ],
+    "include_path_prefix": "/blog/",
+    "excluded_path_segments": [
+      "tags",
+      "tag",
+      "categories",
+      "category",
+      "author",
+      "authors",
+      "page",
+      "series",
+      "tutorial",
+      "data-engineering",
+      "data-basics",
+      "ai-llm",
+      "data-insights",
+      "podcasts",
+      "archive",
+      "feed"
+    ],
+    "excluded_numeric_archive_paths": true,
+    "excluded_feed_and_payload_paths": true,
+    "language_boundary": "Official English article paths only. Language-prefixed paths excluded by /blog/ filter.",
+    "baseline_policy": "Union current discoveries with every retained baseline article URL."
+  },
+  "discovery_receipt_path": "messaging-a-discovery/rabbitmq/discovery.json",
+  "discovery_receipt_sha256": "ff25e3a89583579189c63fa20d5cdfa25e8fe26b12571df12c8bc4404323cb00",
+  "discovery_script_path": "messaging-a-discover.py",
+  "discovery_script_sha256": "542022a03447a6e04ca8d1e09566dc3fdbc0e1e72bdc39888d0595fa1b603c00",
+  "collection_page_count": 22,
+  "terminal_status": "exposed_discovery_terminal; all_known_frontier_processed",
+  "terminal_evidence": [
+    {
+      "url": "https://www.rabbitmq.com/sitemap.xml",
+      "kind": "sitemap",
+      "status": 200,
+      "sha256": "28c67db99fd9a0decf8832f0fb09596551a72f32d9ca8b698d4a0cf25b8e4292",
+      "terminal_reason": "finite_urlset_exhausted"
+    },
+    {
+      "url": "https://www.rabbitmq.com/blog/rss.xml",
+      "kind": "feed",
+      "status": 200,
+      "sha256": "bec8f7a3b3d107b5ba4ffe451e1404ed83c0bd5e0a36d66b5ec190735f539acd",
+      "terminal_reason": "finite_feed_exhausted"
+    },
+    {
+      "url": "https://www.rabbitmq.com/blog/archive",
+      "kind": "archive",
+      "status": 200,
+      "sha256": "a2945ac980efc2dcca3ede89eda139588abc82dc849de1e4c21bdac1e09e02b9",
+      "terminal_reason": "no_next_link_observed"
+    },
+    {
+      "url": "https://www.rabbitmq.com/blog/page/19",
+      "kind": "archive",
+      "status": 200,
+      "sha256": "59dc188fc542d95327326b2c28f5e4e5a95cdb12b24f2f246fff476ae02f27b0",
+      "terminal_reason": "no_next_link_observed"
+    }
+  ],
+  "gaps": [
+    "Discovery establishes exposed current publisher collections, not every article ever published. Deleted, private and unlisted articles remain outside this proof.",
+    "Automatic extraction is separate from deliberate reading. All unread article bodies remain a reading coverage gap.",
+    "The shared crawler used bodies-only mode. Its discovery_complete field is false; publisher-specific terminal discovery is bound separately in this receipt.",
+    "12 successful responses did not pass the shared substantive extraction threshold. Raw responses remain preserved.",
+    "Initial sitemap probes hit an unavailable BeautifulSoup XML parser. The raw responses and failed probe records were retained, and subsequent ElementTree discovery parsed them successfully.",
+    "The public robots.txt endpoint returned HTTP 404. Sitemap and blog archive discovery remained accessible."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.rabbitmq.com/blog/2024/08/28/quorum-queues-in-4.0",
+      "reading_scope": "Complete substantive textual article body, code and captions. Embedded image pixels were not inspected. Code was not executed.",
+      "evidence_sha256": "962e476c0e90b4490ec16c4a42821ed67e7bf44661317dba8325b89e5e631bd1",
+      "evidence_path": "messaging-a-probes/f2b207d62a4aed8bfe5aca406d9403945f7deed7d935ae05ea96ea48e7c20169.raw"
+    },
+    {
+      "url": "https://www.rabbitmq.com/blog/2025/09/26/stream-delivery-optimization",
+      "reading_scope": "Complete substantive textual article body, code and captions. Embedded image pixels were not inspected. Code was not executed.",
+      "evidence_sha256": "389d3b7abdc9b61ace19c33431aee15cbdaf071d7987211c787d142ee61da22a",
+      "evidence_path": "messaging-a-probes/8f493b0a65344c26387febd665c7c34e4f4e7eca3403503a00a49a68d306d67d.raw"
+    }
+  ],
+  "reading_count_semantics": "Distinct blog article bodies deliberately read in this refresh. Current documentation cross-checks are separate.",
+  "final_redirect_review_path": "messaging-a-redirect-review.json",
+  "final_redirect_review_sha256": "116944466bee7a155ad48f14f2edeb69532e01fbe85ccdac46d54a5ead7a8aad",
+  "checks_actually_run": [
+    "Recovered baseline union",
+    "All discovery raw response SHA256 bindings verified",
+    "Fresh finite sitemap and feed parsing",
+    "Exposed archive next-link traversal without an article or page cap",
+    "Structured listing exhaustion where present",
+    "Shared crawler body attempts and extracted text receipts",
+    "Hash verified cache reextraction",
+    "Selected complete textual article readings",
+    "Final body URL scope review for every successful body record"
+  ],
+  "preserved_attempts": {
+    "initial_probe_results_path": "messaging-a-probes/probes.json",
+    "initial_probe_results_sha256": "8bfe47868f72947f11c075175558f3e8895d3a6619e6b64dbfeffe5edeb2b544",
+    "initial_probe_errors": [
+      {
+        "url": "https://www.rabbitmq.com/robots.txt",
+        "final_url": "https://www.rabbitmq.com/robots.txt",
+        "status": 404,
+        "bytes": 12964,
+        "sha256": "2ce2897b36b24d64694778ce8481b3fb494898091a8f7c739ac6133422133643",
+        "raw": "796ad04f456d254c2644c6a107485e2dde61960e883b3ceaa66e3edafac99c25.raw",
+        "robots_sitemaps": []
+      },
+      {
+        "url": "https://www.rabbitmq.com/sitemap.xml",
+        "error": "Couldn't find a tree builder with the features you requested: xml. Do you need to install a parser library?"
+      }
+    ],
+    "initial_body_invocation_note": "The first four publisher runs supplied a JSON URL list to a newline-only CLI and therefore traversed baseline records. A corrected newline list resumed every fresh URL. Original stdout and append-only request events remain external.",
+    "body_invocation_logs": [
+      {
+        "path": "messaging-a-discovery/rabbitmq/crawler-reextract.stdout",
+        "sha256": "417baddef87aa3f7bc64f9270e8603234253ba0cb0dc172dd6aab69e474fd6ac"
+      },
+      {
+        "path": "messaging-a-discovery/rabbitmq/crawler-final-reextract.stdout",
+        "sha256": "90904886816b2800ef75d559125cee4bafb38441de16edf2d04384ad6533d1e3"
+      },
+      {
+        "path": "messaging-a-discovery/rabbitmq/crawler-resume.stdout",
+        "sha256": "2cfc173245ab9589bf7ca07a97c5f29d820dd0e785670a55c408808aec7da5ff"
+      },
+      {
+        "path": "messaging-a-discovery/rabbitmq/crawler.stdout",
+        "sha256": "8ead371470bef82bff0bac311ecba020c1efd5db7e462bed0fd8ceb7f4bca721"
+      }
+    ]
+  },
+  "behavioral_checks_executed": [],
+  "independent_scores": null,
+  "host_coverage": "No supported-host behavior evaluation or production broker guarantee was executed in this publisher research."
+}

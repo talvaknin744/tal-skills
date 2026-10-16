@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "publisher_id": "spotify",
+  "observed_on": "2026-10-14",
+  "crawler_summary_path": "publishers/spotify/summary.json",
+  "crawler_summary_sha256": "3f6ed47de9eedcc6b31f4b4821b69664e17f11464d37a68a50261cfb710653fa",
+  "counters": {
+    "baseline_records": 288,
+    "known_urls": 289,
+    "processed_urls": 289,
+    "body_extracted": 278,
+    "body_fetched_unextracted": 11,
+    "pending": 0,
+    "read_articles": 1,
+    "http_article_attempted_urls": 289,
+    "body_retrieved_urls": 289,
+    "policy_deferred_urls": 0
+  },
+  "article_status_counts": {
+    "body_extracted": 278,
+    "body_fetched_unextracted": 11
+  },
+  "crawler_runs_sha256": "783ec5e7634f8d342aac8d50a20aad441230400eb54505aa1fb5e9dc8db6b72d",
+  "crawler_candidate_sha256s": [
+    "64479dacfb1a9984dbf996f4a07a555f4709ac75a070e47a7e15b24b690a04d1",
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "f4f1eec47776d2c19c209b94ae88932f966d66ac92664d6689cbe1ed516cef03"
+  ],
+  "discovery_scope": "Current public engineering blog inventory and article paths. API creation and archive dates do not independently prove every publication date.",
+  "terminal_status": "The initial API inventory has 289 records across offsets 0, 100 and 200. Offset 300 returns an empty successful response. The nonempty responses report 289, while the terminal empty response reports zero, as in the earlier collector behavior.",
+  "gaps": [
+    "The robots response was reviewed after the initial API discovery probe and disallows /api/. No further API requests were made after observing this rule; article paths remain the body crawl scope. This timing and access policy limit is retained.",
+    "Archive URL dates and API createdAt values remain unverified publication dates unless article or feed evidence independently establishes publication.",
+    "Initial successful body fetches missed the actual HTML article container. Local extraction repair preserved original receipts without refetching article content. Eleven multimedia teaser pages expose only 16 to 82 body words, below the extraction threshold; linked audio and video were not transcribed."
+  ],
+  "read_articles": [
+    {
+      "url": "https://engineering.atspotify.com/2026/9/ai-changed-how-spotify-builds-what-we-learned-and-fixed-about-quality-at-higher-velocity",
+      "reading_scope": "Complete main prose across content processing, fleet updates, compute shortages, mobile quality, evidence and lessons. Linked incident reports and research were not additionally read.",
+      "retrieval_source": "web tool",
+      "diagrams_visually_inspected": false
+    }
+  ],
+  "all_article_bodies_read": false,
+  "sources": [
+    {
+      "receipt_path": "backend-b-discovery/spotify-entries.json",
+      "receipt_sha256": "6ca96d965ae0c70edf6ce1f365f0225eff50e795a846eb2b46ea2c7c286d5c59",
+      "url": "https://engineering.atspotify.com/api/entries?content_type=blogPost&order=-sys.createdAt&limit=100&skip=0&select=sys.id,sys.createdAt,sys.updatedAt,fields.title,fields.slug,fields.created_at",
+      "http_status": 200,
+      "response_sha256": "68e27beb826a81ea46b976130f89807f73b32517d78ff8eeeafa3507738ae1c6"
+    },
+    {
+      "receipt_path": "backend-b-discovery/spotify-entries-100.json",
+      "receipt_sha256": "cdf9ce5741bd7a1574bbdb04ad56dacfa1efc55b40483dc80b433b898df9bdf4",
+      "url": "https://engineering.atspotify.com/api/entries?content_type=blogPost&order=-sys.createdAt&limit=100&skip=100&select=sys.id,sys.createdAt,sys.updatedAt,fields.title,fields.slug,fields.created_at",
+      "http_status": 200,
+      "response_sha256": "d2fc97d18fa017de0009c9f13101ad314764a677ce55214434dbad70b89a0a4e"
+    },
+    {
+      "receipt_path": "backend-b-discovery/spotify-entries-200.json",
+      "receipt_sha256": "a9f8b8cce97a5d10e042c9d9b0dae55696ebd4ab6d207b54bba1e8dc778faa4e",
+      "url": "https://engineering.atspotify.com/api/entries?content_type=blogPost&order=-sys.createdAt&limit=100&skip=200&select=sys.id,sys.createdAt,sys.updatedAt,fields.title,fields.slug,fields.created_at",
+      "http_status": 200,
+      "response_sha256": "b992afe85a3617579570310a6d3341f5039249ec171bdb28459bc97793de1c94"
+    },
+    {
+      "receipt_path": "backend-b-discovery/spotify-entries-300.json",
+      "receipt_sha256": "4615a56d8ba9c1a11bc1e7b6ddf5b7b6538f57864c9edd82dda20d86ae442fcb",
+      "url": "https://engineering.atspotify.com/api/entries?content_type=blogPost&order=-sys.createdAt&limit=100&skip=300&select=sys.id,sys.createdAt,sys.updatedAt,fields.title,fields.slug,fields.created_at",
+      "http_status": 200,
+      "response_sha256": "744808f9f79ff2589fd4e7d1de5e661060f1b998ff43ea514d06e64ebd4c7619"
+    },
+    {
+      "receipt_path": "backend-b-discovery/spotify-robots.json",
+      "receipt_sha256": "6c23b814da48a049b1a467bdcd660e7115b8299cc395641dcf542b4fc2b5c5d4",
+      "url": "https://engineering.atspotify.com/robots.txt",
+      "http_status": 200,
+      "response_sha256": "ebedbf7bad19f0f364aa2c2a9b3362c295cca53877c3e6b80ddf9862228e96bf"
+    }
+  ],
+  "recommendations": [
+    "Strengthen microservice-operations and overload-control with asynchronous business completion monitoring and capacity constrained failover checks.",
+    "Bind automated fleet change rate to verification, rollback and owner availability."
+  ],
+  "behavioral_evaluation_status": "Proposed cases only. No revised skill candidate was authored or evaluated by this publisher research task."
+}

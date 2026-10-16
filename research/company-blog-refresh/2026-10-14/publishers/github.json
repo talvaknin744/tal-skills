@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "publisher_id": "github",
+  "crawler_summary_sha256": "007f69c38b5f5db7134e9f381075a21eabf7cb3fc7bc03529fc6f720335acdf2",
+  "crawler_summary_path": "publishers/github/summary.json",
+  "crawler_identity_sha256": [
+    "801f667568f62abfad8e8f6dba0de5836058141cd8829b8fbf08886694396220",
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "c06444e843c1dd67388183a9252f6553d9f6cb8b5fb66d4af28a171155080bfe",
+    "d6c2a0b647891cb603c32dda46436790a7c4bdb4f76f5f3bf34700b863f1e3fc"
+  ],
+  "discovery_record_sha256": "806c231151d34c8698939b12c87b279f32694bb3db2fe67df53d0bd5b4f53fc5",
+  "discovery_record_path": "backend-discovery/github-discovery.json",
+  "baseline_inventory_sha256": "32446c95508baf64645d04479d0d3daedb7792a3b7103def8fd4824c251e58e8",
+  "baseline_coverage_sha256": "0ad548e9e299127046ca9cc27813e84e5cef5e2048aa808300f0c7de5461e7f6",
+  "counters": {
+    "baseline_records": 175,
+    "known_urls": 176,
+    "processed_urls": 176,
+    "http_article_attempted_urls": 0,
+    "body_retrieved_urls": 176,
+    "body_extracted": 176,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2
+  },
+  "article_status_counts": {
+    "body_extracted": 176
+  },
+  "all_article_bodies_read": false,
+  "discovery_scope": "Official English Engineering category 72 and its five direct child categories, enumerated through both declared WordPress API pages.",
+  "terminal_status": "Two official API pages contain 100 and 76 records. The `X-WP-Total` header is 176 and `X-WP-TotalPages` is 2. Categories API supplies five children of category 72.",
+  "terminal_evidence": [
+    {
+      "url": "https://github.blog/wp-json/wp/v2/categories?per_page=100",
+      "final_url": "https://github.blog/wp-json/wp/v2/categories?per_page=100",
+      "status": 200,
+      "sha256": "4579844d4e35b367d02f7458bbd6667f1e42b61a0ef8db3b66f998c73086c3f4",
+      "bytes": 261152,
+      "category_ids": [
+        72,
+        3307,
+        3308,
+        3309,
+        3310,
+        3312
+      ]
+    },
+    {
+      "url": "https://github.blog/wp-json/wp/v2/posts?categories=72,3307,3308,3309,3310,3312&per_page=100&page=1",
+      "final_url": "https://github.blog/wp-json/wp/v2/posts?categories=72,3307,3308,3309,3310,3312&per_page=100&page=1",
+      "status": 200,
+      "sha256": "1929cdcb1092c485ea8c99e1e263aa5e12c14776226bc99279ca19dd04ecb079",
+      "bytes": 3942769,
+      "records": 100,
+      "total": 176,
+      "total_pages": 2
+    },
+    {
+      "url": "https://github.blog/wp-json/wp/v2/posts?categories=72,3307,3308,3309,3310,3312&per_page=100&page=2",
+      "final_url": "https://github.blog/wp-json/wp/v2/posts?categories=72,3307,3308,3309,3310,3312&per_page=100&page=2",
+      "status": 200,
+      "sha256": "0a412d12d83da1af8432ccd2261311256643d75809d6cb9466e4e121bfb1889f",
+      "bytes": 2391837,
+      "terminal": "Last reported API page consumed",
+      "records": 76,
+      "total": 176,
+      "total_pages": 2
+    }
+  ],
+  "gaps": [
+    "Engineering category and direct children are exhausted by official API totals. Unlisted or removed posts cannot be established. English category membership is the scope filter.",
+    "Full body evidence is imported from two public official API responses. Import receipt objects point to embedded body hashes; original HTTP 200 response receipts are retained separately.",
+    "The first import attempt failed because query equals signs confused the argument parser. That partial attempt remains in the crawl log.",
+    "Early collector run hashes were recorded without an exact source snapshot. Later cache finalization archives executed collector source, while early implementation reconstruction remains a gap."
+  ],
+  "read_articles": [
+    {
+      "url": "https://github.blog/engineering/architecture-optimization/building-git-infrastructure-for-agent-scale-development",
+      "reading_scope": "Full article prose from official WordPress content payload and web extraction.",
+      "evidence_sha256": "ad275aa0412a32f12453386cf68e319cfe23892cbdb2f292200dd89161faef9f",
+      "evidence_path": "publishers/github/objects/embedded/ad/ad275aa0412a32f12453386cf68e319cfe23892cbdb2f292200dd89161faef9f.bin"
+    },
+    {
+      "url": "https://github.blog/engineering/infrastructure/context-aware-mysql-pools-via-haproxy",
+      "reading_scope": "Full article prose and inline configuration from official WordPress content payload.",
+      "evidence_sha256": "f59a7614e680015fa2ab4a8bd30ab87b29793bdaa1dd7067d8d8545961637e75",
+      "evidence_path": "publishers/github/objects/embedded/f5/f59a7614e680015fa2ab4a8bd30ab87b29793bdaa1dd7067d8d8545961637e75.bin"
+    }
+  ],
+  "publication_ready_behavior_claim": false,
+  "archive_inventory_path": "backend-discovery/github.archive-inventory.json",
+  "archive_inventory_sha256": "d2e9ba4c44b7b13de77f3863e77984f7a1aec88fdb1c8604ede263f26d963846",
+  "archive_file_count": 209,
+  "archive_total_bytes": 26304993
+}

@@ -1,0 +1,464 @@
+{
+  "run_id": "source06-messaging-v2-contextual-id-collision-03",
+  "run_evidence_sha256": "60c3e4a9db40d42d2f078f94e72811591ca3236a057701bbb8fd833d4988a215",
+  "final_workspace_tree_sha256": "dc5c13a2bbeb4ddf3a9713d07dfee1eeb2ea0471120df48a9fe51e5f7549d476",
+  "case_id": "v2-contextual-id-collision",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "87c987684ff68be6e8a5e93b53886321c129d3bac92a5289055b55a64917e7f0",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "qualified-wire-identity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5 through 5, lines 10 through 10, lines 14 through 14",
+        "observation": "Qualifies the numeric ID by lookup authority, distinguishes wholesale PaymentCents and retail PaymentDollars and preserves retained bytes and retail state.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 5,
+            "quote": "The wire envelope carries numeric ID `7`, without a registry or context. Its meaning therefore depends on the client’s lookup authority. The observed Java 8.0.0 requests resolve it to `shop.PaymentCents` in source `.wholesale`, and to `shop.PaymentDollars` in target `.retail`. Both schemas have the same primitive field layout, which explains successful decoding despite the different business meaning. Currency and units come from the application contract."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 10,
+            "end": 10,
+            "quote": "| Route replay through `.imported-wholesale` | **Plausible, unverified.** Its inventory preserves ID `7`, `payments-value` version `1`, the exact `PaymentCents` Avro schema, and empty references. However, actual decoding through that client route has not been attempted. Correct schema resolution must also be paired with cents-aware business processing. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 14,
+            "quote": "The smallest safe next step is an **effects-disabled, single-record probe through the actual Java replay client**, explicitly configured for `https://target.registry.example/contexts/.imported-wholesale`. The replay owner should keep affected processing paused and make the probe read-only, with schema registration disabled. The supplied evidence gives no reason to rewrite bytes, re-import schemas, or modify retail mappings."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          11,
+          13
+        ]
+      }
+    },
+    {
+      "id": "semantic-outcome",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 through 3, lines 5 through 5, lines 9 through 9",
+        "observation": "Explains the primitive decode versus cents/dollars semantic mismatch, USD 1.00 versus USD 100.00 and the insufficiency of ID and compatibility checks, without inventing an applied overpayment.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 3,
+            "end": 3,
+            "quote": "The supplied synthetic captures show a silent semantic error. Both decoders return `account=A7, amount=100` without an exception, but the source interprets this as **USD 1.00**, while retail interprets it as **USD 100.00**. The source ledger confirms USD 1.00. No target effect has been applied, so the evidence shows an unsafe interpretation, not an executed overpayment. See [retained-record.json](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/project/retained-record.json:7)."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 5,
+            "quote": "The wire envelope carries numeric ID `7`, without a registry or context. Its meaning therefore depends on the client’s lookup authority. The observed Java 8.0.0 requests resolve it to `shop.PaymentCents` in source `.wholesale`, and to `shop.PaymentDollars` in target `.retail`. Both schemas have the same primitive field layout, which explains successful decoding despite the different business meaning. Currency and units come from the application contract."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "| Use retail consumer unchanged | **Unsafe.** ID existence, the green latest compatibility result, and successful decoding do not establish the correct writer schema or preserve cents semantics. This route produces a 100-fold amount error for the supplied record. |"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          17
+        ]
+      }
+    },
+    {
+      "id": "bounded-admission",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 10 through 10, lines 14 through 14, lines 20 through 20, lines 21 through 21, lines 22 through 22, lines 23 through 23",
+        "observation": "Keeps the replay and reporting gate, uses the imported schema as a candidate only, disables effects and registration, and requires actual route and business outcome before any acceptance.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "**Reject the unchanged retail-consumer proposal. The imported-context proposal is the smallest viable route, but it is not ready for replay. The Rust reporting client is also not ready.**"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 10,
+            "end": 10,
+            "quote": "| Route replay through `.imported-wholesale` | **Plausible, unverified.** Its inventory preserves ID `7`, `payments-value` version `1`, the exact `PaymentCents` Avro schema, and empty references. However, actual decoding through that client route has not been attempted. Correct schema resolution must also be paired with cents-aware business processing. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 14,
+            "end": 14,
+            "quote": "The smallest safe next step is an **effects-disabled, single-record probe through the actual Java replay client**, explicitly configured for `https://target.registry.example/contexts/.imported-wholesale`. The replay owner should keep affected processing paused and make the probe read-only, with schema registration disabled. The supplied evidence gives no reason to rewrite bytes, re-import schemas, or modify retail mappings."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "| Start the replay client with an empty schema cache; decode the exact saved bytes | Observed lookup reaches `/contexts/.imported-wholesale/schemas/ids/7` and returns the supplied `shop.PaymentCents` definition. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 21,
+            "end": 21,
+            "quote": "| Exercise the business interpretation with writes suppressed | `A7`, raw amount `100`, currency `USD`, monetary amount **1.00**; zero durable payment effects and no replay-progress advancement. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "| Check context and cache isolation, including restart | Retail ID `7` remains `PaymentDollars`; imported ID `7` remains `PaymentCents`. A wrong-context or unavailable lookup blocks replay without changing schemas, effects, or progress. Successful deserialization alone must not pass acceptance. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 23,
+            "end": 23,
+            "quote": "| Validate the Rust reporting client independently | Record its package/version, reader mode, effective context configuration and empty-cache lookup. The same fixture must resolve through the imported context and report **USD 1.00**. |"
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "id": "client-and-version-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5 through 5, lines 12 through 12, lines 23 through 23, lines 25 through 25",
+        "observation": "Uses Java 8.0.0 explicit observed routes as local evidence and requires Rust package/version, reader, effective context and actual lookup proof rather than inheriting Java behavior.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 5,
+            "quote": "The wire envelope carries numeric ID `7`, without a registry or context. Its meaning therefore depends on the client’s lookup authority. The observed Java 8.0.0 requests resolve it to `shop.PaymentCents` in source `.wholesale`, and to `shop.PaymentDollars` in target `.retail`. Both schemas have the same primitive field layout, which explains successful decoding despite the different business meaning. Currency and units come from the application contract."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 12,
+            "end": 12,
+            "quote": "These mappings and client versions are supplied in [registry-inventory.json](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/project/registry-inventory.json:20)."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 23,
+            "end": 23,
+            "quote": "| Validate the Rust reporting client independently | Record its package/version, reader mode, effective context configuration and empty-cache lookup. The same fixture must resolve through the imported context and report **USD 1.00**. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 25,
+            "end": 25,
+            "quote": "The Rust client’s bare target-registry URL and unspecified version do not establish its lookup behavior. Java’s observed context handling cannot be inherited by assumption, and the documentary guidance in [request.md](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/project/request.md:21) does not prove Rust support."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "id": "validation-and-retention",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10 through 10, lines 16 through 16, lines 20 through 20, lines 21 through 21, lines 22 through 22, lines 23 through 23, lines 27 through 27",
+        "observation": "Specifies original bytes and definition, source subject/version and Avro/no reference identity, USD 1.00 and zero effect/progress outcomes, wrong and unavailable context rejection, and archive ID/version/reference coverage with preserved failure evidence.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 10,
+            "end": 10,
+            "quote": "| Route replay through `.imported-wholesale` | **Plausible, unverified.** Its inventory preserves ID `7`, `payments-value` version `1`, the exact `PaymentCents` Avro schema, and empty references. However, actual decoding through that client route has not been attempted. Correct schema resolution must also be paired with cents-aware business processing. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 16,
+            "end": 16,
+            "quote": "The following acceptance checks are **proposed and unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 20,
+            "end": 20,
+            "quote": "| Start the replay client with an empty schema cache; decode the exact saved bytes | Observed lookup reaches `/contexts/.imported-wholesale/schemas/ids/7` and returns the supplied `shop.PaymentCents` definition. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 21,
+            "end": 21,
+            "quote": "| Exercise the business interpretation with writes suppressed | `A7`, raw amount `100`, currency `USD`, monetary amount **1.00**; zero durable payment effects and no replay-progress advancement. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "| Check context and cache isolation, including restart | Retail ID `7` remains `PaymentDollars`; imported ID `7` remains `PaymentCents`. A wrong-context or unavailable lookup blocks replay without changing schemas, effects, or progress. Successful deserialization alone must not pass acceptance. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 23,
+            "end": 23,
+            "quote": "| Validate the Rust reporting client independently | Record its package/version, reader mode, effective context configuration and empty-cache lookup. The same fixture must resolve through the imported context and report **USD 1.00**. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 27,
+            "end": 27,
+            "quote": "Passing this fixture would establish readiness only for the supplied mapping. Broader archived replay requires coverage of its retained schema IDs, versions and references; that coverage is absent here. Keep unresolved records visible with their source coordinates and lookup/business-validation failure, owned by the replay owner."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          13,
+          17,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 through 3, lines 16 through 16, lines 29 through 29",
+        "observation": "Labels synthetic captures and proposed checks honestly; sealed inputs and trace show unchanged files and no broker, registry, client, migration or external request.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 3,
+            "end": 3,
+            "quote": "The supplied synthetic captures show a silent semantic error. Both decoders return `account=A7, amount=100` without an exception, but the source interprets this as **USD 1.00**, while retail interprets it as **USD 100.00**. The source ledger confirms USD 1.00. No target effect has been applied, so the evidence shows an unsafe interpretation, not an executed overpayment. See [retained-record.json](/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/project/retained-record.json:7)."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 16,
+            "end": 16,
+            "quote": "The following acceptance checks are **proposed and unexecuted**:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 29,
+            "end": 29,
+            "quote": "All files remain unchanged. No broker, registry, client, migration command or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          11,
+          13,
+          17,
+          18,
+          19
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "qualified-wire-identity": "pass",
+    "semantic-outcome": "pass",
+    "bounded-admission": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "3624a64269fb0ea1cb41b587c3360ca368c78f8b8c9edc8e029861e521078958",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 66.373,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 71107,
+    "cached_input_tokens": 48512,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3049,
+    "reasoning_output_tokens": 1475
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/schema-registry-identity.md",
+        "sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/.agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "61380e7d0acd128e2f323946852c57f6f8eeb99c6101254b4fdaa2ab11ed33a7"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'request.md' -g 'registry-inventory.json' -g 'retained-record.json' -g '*proposal*' -g '*README*' -g '*report*' -g '*client*' project .agents\"",
+        "exit_code": 0,
+        "output_sha256": "453b295bb098d269c575db72054032e9f9f7efa22b952741325ec7643ad11d9b"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g '\"'!project/**'\"' -g '\"'!.git/**'\"' . /tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/.agents/skills/messaging-reliability/references/schema-registry-identity.md /private/tmp/tal-skills-schema-registry-native-2026-10-15-r03/trials/source06-messaging-v2-contextual-id-collision-03/workspace/.agents/skills/messaging-reliability/references/ordering-and-replay.md'",
+        "exit_code": 0,
+        "output_sha256": "6b0bcc013c5b06911bfb91987013642518a69b281cd3d248f162474196379930"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc 'rg --files project && cat project/request.md project/registry-inventory.json project/retained-record.json'",
+        "exit_code": 0,
+        "output_sha256": "f83f227eeb66902fe857227fcad1a2265e20e351e7fef2dabf00b8424a2dd7cf"
+      },
+      {
+        "line": 17,
+        "item": "item_6",
+        "command": "/bin/zsh -lc 'nl -ba project/retained-record.json'",
+        "exit_code": 0,
+        "output_sha256": "e16ecf1dc91538af5b064c1d84e2b621ea90f448264b4b423018bcb826084f78"
+      },
+      {
+        "line": 18,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md'",
+        "exit_code": 0,
+        "output_sha256": "bb716626d2da04e1e9fa9f36474aa169aae908e35852c24ef3a29a8438a79fba"
+      },
+      {
+        "line": 19,
+        "item": "item_8",
+        "command": "/bin/zsh -lc 'nl -ba project/registry-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "2f624bf96e72270404d8f18ca996bf87e198f3250532134c94631c9653b49a22"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "qualified-wire-identity",
+          "score": 2
+        },
+        {
+          "id": "semantic-outcome",
+          "score": 2
+        },
+        {
+          "id": "bounded-admission",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  }
+}

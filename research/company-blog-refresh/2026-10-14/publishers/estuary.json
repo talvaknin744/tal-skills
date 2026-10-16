@@ -1,0 +1,477 @@
+{
+  "schema_version": 1,
+  "publisher_id": "estuary",
+  "name": "Estuary",
+  "crawler_summary_sha256": "da57205a245ff601829ec08bf4f4b74da7a5c2981818bfb497ad52c7257dfced",
+  "crawler_summary_path": "publishers/estuary/summary.json",
+  "counters": {
+    "baseline_records": 773,
+    "known_urls": 775,
+    "processed_urls": 775,
+    "http_article_attempted_urls": 775,
+    "body_retrieved_urls": 775,
+    "body_extracted": 775,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2,
+    "substantive_research_read_articles": 2,
+    "short_extraction_audit_read_articles": 0
+  },
+  "article_status_counts": {
+    "body_extracted": 775
+  },
+  "excluded_collection_url_count": 49,
+  "http_attempt_semantics": "Unique collector requested URLs with kind article, including any subsequently excluded collection requests. Embedded feed bodies require no article HTTP request.",
+  "discovery_scope": "Public English article URLs under /blog/. Numeric archive pages and the five exposed category collection roots are excluded, as are integration, documentation and product paths.",
+  "terminal_status": "publisher_exposed_discovery_terminal; all_known_frontier_urls_processed",
+  "terminal_evidence": "Declared sitemap index, its finite URL sets and the exposed RSS feed parsed. Main HTML pagination reached /blog/26 with no next page link. Category pagination URLs are collection pages and were journaled separately. This establishes publisher-exposed scope.",
+  "gaps": [
+    "Finite sitemaps and terminal listing pages establish exposed scope, not every deleted, private or unlisted historical article.",
+    "Automatic extraction is separate from deliberate reading; only the selected bodies below were read.",
+    "No source code, broker, stream engine, connector or benchmark was executed as part of this research."
+  ],
+  "read_articles": [
+    {
+      "url": "https://estuary.dev/blog/postgres-cdc-backfill/",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "3c42f42d6b7c97c58fb7e07745cf12f9c1ec55ecfd9489d7b399131a5676a8c1",
+      "evidence_path": "messaging-b-probes/d7ea63ab1737f922beaac1f136815a83ad93cb2bb12277165983ec8695e51e0f.article.html"
+    },
+    {
+      "url": "https://estuary.dev/blog/transactional-consistency-matters/",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "34f6a2dbc37aa900a1c8bb129a7c5d0a2d541d77a727a37b0f26c023060aab97",
+      "evidence_path": "messaging-b-probes/8a44770433947348e659b664bb78ef1ed9884c31f9c0cf226675ea782e733691.article.html"
+    }
+  ],
+  "improvement": {
+    "owning_skills": [
+      "stream-processing-design"
+    ],
+    "mechanism": "Extend stream-processing-design state and history guidance with the concurrent snapshot and CDC recovery tuple: snapshot cursor, source log position, durable checkpoint, replication slot and required retained log. Reconcile snapshot rows against overlapping changes at a defined fence. Budget source log retention by write rate, maximum acknowledgement interval and lag, while diagnosing old open transactions separately.",
+    "reading_and_contract_limits": "Both selected article bodies were read completely. Connector documentation and runtime examples were not executed or independently verified against a deployed version. XID-limited recovery misses deletes, physical row identifiers weaken guarantees, read-only low-traffic capture may need a published heartbeat, and Only Changes cannot supply prior history to a later destination.",
+    "discriminating_case": "Interrupt a backfill at 80 percent, then delete a row and invalidate its replication slot during the outage. With the recovery tuple intact, resume from the durable checkpoint. With required WAL missing, require a new log position and reconciliation; reject restart-only or XID-only recovery as proof that deletes are correct."
+  },
+  "discovery_receipts": [
+    {
+      "url": "https://estuary.dev/robots.txt",
+      "status": "fetched",
+      "sha256": "cfa335a246045700582d63e510b3a8555bd3b12a039fb5b5c5f0a45bfd67db65",
+      "object_path": "publishers/estuary/objects/source/cf/cfa335a246045700582d63e510b3a8555bd3b12a039fb5b5c5f0a45bfd67db65.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "Robots sitemap declarations parsed"
+    },
+    {
+      "url": "https://estuary.dev/blog",
+      "status": "fetched",
+      "sha256": "671d05c9f9d0ab0c129a2816c337ae5b45ac4651d281526d243023653b678353",
+      "object_path": "publishers/estuary/objects/source/67/671d05c9f9d0ab0c129a2816c337ae5b45ac4651d281526d243023653b678353.bin",
+      "discovered_articles": 36,
+      "continuations": [
+        "https://estuary.dev/blog/2",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/",
+      "status": "fetched",
+      "sha256": "671d05c9f9d0ab0c129a2816c337ae5b45ac4651d281526d243023653b678353",
+      "object_path": "publishers/estuary/objects/source/67/671d05c9f9d0ab0c129a2816c337ae5b45ac4651d281526d243023653b678353.bin",
+      "discovered_articles": 36,
+      "continuations": [
+        "https://estuary.dev/blog/2",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/2",
+      "status": "fetched",
+      "sha256": "e0f0254523669c58f204156a129ca2a1f1487381aa2a5f5b69cb32d0bda1c153",
+      "object_path": "publishers/estuary/objects/source/e0/e0f0254523669c58f204156a129ca2a1f1487381aa2a5f5b69cb32d0bda1c153.bin",
+      "discovered_articles": 37,
+      "continuations": [
+        "https://estuary.dev/blog/3",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/rss.xml",
+      "status": "fetched",
+      "sha256": "09d1939aa34cacd867ed2e3cce7f6abb045aea3718e1b7e2d7cd291b2415d037",
+      "object_path": "publishers/estuary/objects/source/09/09d1939aa34cacd867ed2e3cce7f6abb045aea3718e1b7e2d7cd291b2415d037.bin",
+      "discovered_articles": 775,
+      "continuations": [],
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    },
+    {
+      "url": "https://estuary.dev/integrations-sitemap-0.xml",
+      "status": "fetched",
+      "sha256": "4400b9e9f553a16d85e9573c00af09211c692228e8a11d89e6aecb679e97abd2",
+      "object_path": "publishers/estuary/objects/source/44/4400b9e9f553a16d85e9573c00af09211c692228e8a11d89e6aecb679e97abd2.bin",
+      "discovered_articles": 0,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://estuary.dev/sitemap-0.xml",
+      "status": "fetched",
+      "sha256": "e237405806ee3ae233d2c6978727e49b6f73611613fb6cc4cb4ab7f455c805c6",
+      "object_path": "publishers/estuary/objects/source/e2/e237405806ee3ae233d2c6978727e49b6f73611613fb6cc4cb4ab7f455c805c6.bin",
+      "discovered_articles": 821,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://estuary.dev/sitemap-index.xml",
+      "status": "fetched",
+      "sha256": "7e4ed23dadcb3fb7b3204a7667891a5888cdf3b272c23dbb639ae613fa6d2a14",
+      "object_path": "publishers/estuary/objects/source/7e/7e4ed23dadcb3fb7b3204a7667891a5888cdf3b272c23dbb639ae613fa6d2a14.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://estuary.dev/integrations-sitemap-0.xml",
+        "https://estuary.dev/sitemap-0.xml"
+      ],
+      "terminal_observation": "Finite sitemap index parsed, all declared child sitemaps queued"
+    },
+    {
+      "url": "https://estuary.dev/sitemap.xml",
+      "status": "fetched",
+      "sha256": "7e4ed23dadcb3fb7b3204a7667891a5888cdf3b272c23dbb639ae613fa6d2a14",
+      "object_path": "publishers/estuary/objects/source/7e/7e4ed23dadcb3fb7b3204a7667891a5888cdf3b272c23dbb639ae613fa6d2a14.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://estuary.dev/integrations-sitemap-0.xml",
+        "https://estuary.dev/sitemap-0.xml"
+      ],
+      "terminal_observation": "Finite sitemap index parsed, all declared child sitemaps queued"
+    },
+    {
+      "url": "https://estuary.dev/blog/3",
+      "status": "fetched",
+      "sha256": "6ffd0d52f6d4474eae5a086abb144bbeac6ca5163b30d416d0a98672289a0bdb",
+      "object_path": "publishers/estuary/objects/source/6f/6ffd0d52f6d4474eae5a086abb144bbeac6ca5163b30d416d0a98672289a0bdb.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/4",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/4",
+      "status": "fetched",
+      "sha256": "82fb8b6adc56afe7a23575203cb164efb2d91ac669c8254baa34fe7ed8702848",
+      "object_path": "publishers/estuary/objects/source/82/82fb8b6adc56afe7a23575203cb164efb2d91ac669c8254baa34fe7ed8702848.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/5",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/5",
+      "status": "fetched",
+      "sha256": "2d83348c4a4929a94f5a2d61199aff3ade2aeb69b768b53a8732fb1f98c7a086",
+      "object_path": "publishers/estuary/objects/source/2d/2d83348c4a4929a94f5a2d61199aff3ade2aeb69b768b53a8732fb1f98c7a086.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/6",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/6",
+      "status": "fetched",
+      "sha256": "d89f63eb8900152c277ddb0fe28056092993d150eacfb6f75c861778e3be2b7f",
+      "object_path": "publishers/estuary/objects/source/d8/d89f63eb8900152c277ddb0fe28056092993d150eacfb6f75c861778e3be2b7f.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/7",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/7",
+      "status": "fetched",
+      "sha256": "11eb1a30b22c755b30a046f038b5ff3d807bcf529ca6a2bd8477dd4884fb86ab",
+      "object_path": "publishers/estuary/objects/source/11/11eb1a30b22c755b30a046f038b5ff3d807bcf529ca6a2bd8477dd4884fb86ab.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/8",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/8",
+      "status": "fetched",
+      "sha256": "0ce716908a72a01a39595979614fa53e8d3d7752065302516be34ddcabfa2317",
+      "object_path": "publishers/estuary/objects/source/0c/0ce716908a72a01a39595979614fa53e8d3d7752065302516be34ddcabfa2317.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/9",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/9",
+      "status": "fetched",
+      "sha256": "a4ba7e16e23062fd207c1eb2169b3a3f7438d70afebc797f7016ebdfe5949578",
+      "object_path": "publishers/estuary/objects/source/a4/a4ba7e16e23062fd207c1eb2169b3a3f7438d70afebc797f7016ebdfe5949578.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/10",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/10",
+      "status": "fetched",
+      "sha256": "18416247964a76b9663430a91b6691373916f7d3fec1cdd4a2b5dfb5f41a5de5",
+      "object_path": "publishers/estuary/objects/source/18/18416247964a76b9663430a91b6691373916f7d3fec1cdd4a2b5dfb5f41a5de5.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/11",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/11",
+      "status": "fetched",
+      "sha256": "95dbd2673d02a8ec5d2f5eaa9d1b8484266b8e76d22e6ab6896c578287bf04f9",
+      "object_path": "publishers/estuary/objects/source/95/95dbd2673d02a8ec5d2f5eaa9d1b8484266b8e76d22e6ab6896c578287bf04f9.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/12",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/12",
+      "status": "fetched",
+      "sha256": "0da0d38e668db5918d69981a55ed99cef2d72dc3ca5ed792577c6c561aaca2e0",
+      "object_path": "publishers/estuary/objects/source/0d/0da0d38e668db5918d69981a55ed99cef2d72dc3ca5ed792577c6c561aaca2e0.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/13",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/13",
+      "status": "fetched",
+      "sha256": "c5a84829f8884773b0dee469d72be23d6569dcb310579bd96d9cc1f235afb3e7",
+      "object_path": "publishers/estuary/objects/source/c5/c5a84829f8884773b0dee469d72be23d6569dcb310579bd96d9cc1f235afb3e7.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/14",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/14",
+      "status": "fetched",
+      "sha256": "f1a207c0df06fd18fb07a9ff27177a18329a48f676cf4514270c78e02edc6296",
+      "object_path": "publishers/estuary/objects/source/f1/f1a207c0df06fd18fb07a9ff27177a18329a48f676cf4514270c78e02edc6296.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/15",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/15",
+      "status": "fetched",
+      "sha256": "20629b13801c18634d7d3422e5305ced24c497b8cb65498d4470f383bff95b1f",
+      "object_path": "publishers/estuary/objects/source/20/20629b13801c18634d7d3422e5305ced24c497b8cb65498d4470f383bff95b1f.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/16",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/16",
+      "status": "fetched",
+      "sha256": "f03064cec26bb451433104c55888ace0ff5e7a5603b9ec881b458f19388aafb9",
+      "object_path": "publishers/estuary/objects/source/f0/f03064cec26bb451433104c55888ace0ff5e7a5603b9ec881b458f19388aafb9.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/17",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/17",
+      "status": "fetched",
+      "sha256": "c615627ecfd499681f32953c07ff37214c9d08ece07b7b62ce1e3b6171817132",
+      "object_path": "publishers/estuary/objects/source/c6/c615627ecfd499681f32953c07ff37214c9d08ece07b7b62ce1e3b6171817132.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/18",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/18",
+      "status": "fetched",
+      "sha256": "1ebb592fa8a972610101c604e72b3fc15df379635556355cfc692574830fa709",
+      "object_path": "publishers/estuary/objects/source/1e/1ebb592fa8a972610101c604e72b3fc15df379635556355cfc692574830fa709.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/19",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/19",
+      "status": "fetched",
+      "sha256": "97ff0d92ea01f674e067400201cec76ffbade1b881dbd342545fe4fce51c55a6",
+      "object_path": "publishers/estuary/objects/source/97/97ff0d92ea01f674e067400201cec76ffbade1b881dbd342545fe4fce51c55a6.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/20",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/20",
+      "status": "fetched",
+      "sha256": "29b6435bb1d9eb1565f1827dbf8910fc6d86b2f05a94a793475c9720f859c636",
+      "object_path": "publishers/estuary/objects/source/29/29b6435bb1d9eb1565f1827dbf8910fc6d86b2f05a94a793475c9720f859c636.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/21",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/21",
+      "status": "fetched",
+      "sha256": "a7ecac4f20a086450b41e17eb32283ab2d9d63bab0e09d76584ca2fb9d4d2a54",
+      "object_path": "publishers/estuary/objects/source/a7/a7ecac4f20a086450b41e17eb32283ab2d9d63bab0e09d76584ca2fb9d4d2a54.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/22",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/22",
+      "status": "fetched",
+      "sha256": "cdcbee0abd8e98ab272cee013641e2513d8b165a1a92aa5e287a960d88539006",
+      "object_path": "publishers/estuary/objects/source/cd/cdcbee0abd8e98ab272cee013641e2513d8b165a1a92aa5e287a960d88539006.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/23",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/23",
+      "status": "fetched",
+      "sha256": "6e80e6fc87bfeeb8bd933ccfa3cd3d23e09e9b5e40c5f59af3d80491011ff08c",
+      "object_path": "publishers/estuary/objects/source/6e/6e80e6fc87bfeeb8bd933ccfa3cd3d23e09e9b5e40c5f59af3d80491011ff08c.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/24",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/24",
+      "status": "fetched",
+      "sha256": "220a2d8677e784207867bd8517d8c43d82541e7f2a4d7e17e9396be13976c739",
+      "object_path": "publishers/estuary/objects/source/22/220a2d8677e784207867bd8517d8c43d82541e7f2a4d7e17e9396be13976c739.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/25",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/25",
+      "status": "fetched",
+      "sha256": "98eb9f49599d956a0093ffe662235089fa611ba2ec4ab496755bc306b179a352",
+      "object_path": "publishers/estuary/objects/source/98/98eb9f49599d956a0093ffe662235089fa611ba2ec4ab496755bc306b179a352.bin",
+      "discovered_articles": 38,
+      "continuations": [
+        "https://estuary.dev/blog/26",
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://estuary.dev/blog/26",
+      "status": "fetched",
+      "sha256": "4f98e0c3d4a52fa8b3fcfe3ac61277186cb0a10fb4ae40bab6bf50d2e5587947",
+      "object_path": "publishers/estuary/objects/source/4f/4f98e0c3d4a52fa8b3fcfe3ac61277186cb0a10fb4ae40bab6bf50d2e5587947.bin",
+      "discovered_articles": 32,
+      "continuations": [
+        "https://estuary.dev/blog/rss.xml",
+        "https://estuary.dev/sitemap-index.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    }
+  ],
+  "discovery_failure_receipts": [
+    {
+      "url": "https://estuary.dev/blog/feed",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    }
+  ]
+}

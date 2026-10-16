@@ -1,0 +1,153 @@
+{
+  "run_id": "pooler-database-performance-v2-session-lifetime-01",
+  "run_evidence_sha256": "d4822a3c6514a32b67ccaf3a201c2372f5e93009ba27bfaa8ed58bb4fbc7bc94",
+  "final_workspace_tree_sha256": "e2b5bcc7a010e51f6746058338e0e5338e8ba5ac506cbd33e8e87a485c842f5d",
+  "case_id": "v2-session-lifetime",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "b9d12f8adc03d9c801ea82f3191679ae9b4737f8cc8758b0445800da8ce137d0",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "session-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 3 and 9 through 13",
+        "observation": "The answer states \"Keeping the application connection open therefore preserves neither backend identity nor backend session state across transactions.\" It separately handles temporary state, advisory ownership, LISTEN subscriptions and NOTIFY publishers."
+      }
+    },
+    {
+      "id": "tenant-and-scratch",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 9, 10, 15 and 20",
+        "observation": "The answer establishes app.tenant_id using SET LOCAL before every tenant statement in each explicit transaction, repeated on retries; creates and consumes ON COMMIT DROP scratch state in the same transaction; and rejects later RESET or unreported custom parameter tracking."
+      }
+    },
+    {
+      "id": "ownership-invariant",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11, 19 and 24",
+        "observation": "The answer retains session advisory lock 9 across committed batches, external work and failed batch rollback on a dedicated or budgeted session connection. It rejects blindly shortening it to a transaction lock and states \"A recoverable batch failure must retain the session lock.\""
+      }
+    },
+    {
+      "id": "validation",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 22, 26 and 28 through 36",
+        "observation": "The answer requires deliberately frequent backend reuse, alternating tenant isolation, commit/rollback/cancellation/retry, competing lock acquisition and listener delivery/reconnection checks, with useful throughput and pool waits within a connection budget. Larger pools do not restore lifetime contracts and all validation remains proposed."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 36; evidence/run.json input_integrity and observed_external_or_delegation_events",
+        "observation": "The answer states \"No database commands or edits were performed; the validation above remains proposed\". Saved integrity records unchanged files and no external or delegation events; observable commands only read local artifacts."
+      }
+    }
+  ],
+  "critical_gates": {
+    "session-boundary": "pass",
+    "tenant-and-scratch": "pass",
+    "ownership-invariant": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 10,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric only; capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "be20469d919d3fd29040c71486feb6530daead8c7622be1257878b2038b7f0ce",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 119.162,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 72852,
+    "cached_input_tokens": 49664,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3213,
+    "reasoning_output_tokens": 1622
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 7, completed item_2",
+      "observation": "Successful candidate entrypoint read returns the body."
+    },
+    "candidate_metadata_observed": true,
+    "limitation": "Observed loading only; no hidden injection or population activation guarantee is inferred."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "session-boundary",
+              "score": 2
+            },
+            {
+              "id": "tenant-and-scratch",
+              "score": 2
+            },
+            {
+              "id": "ownership-invariant",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

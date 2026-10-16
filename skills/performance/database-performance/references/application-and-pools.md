@@ -22,6 +22,9 @@ If PgBouncer is present, inspect its actual version/mode and client waiting,
 server assignment, query and transaction observations. Assignment wait counters
 and completed averages do not represent every client still queued. Keep those
 boundaries separate from driver acquisition and server execution.
+For a PgBouncer mode change or session state failure, read
+[PgBouncer compatibility](pgbouncer-compatibility.md) before treating more pool
+capacity or disabled preparation as the repair.
 
 For cancellation, determine which query/transaction actually stops, what effect
 remains uncertain, and when the connection becomes reusable. Validate cleanup and

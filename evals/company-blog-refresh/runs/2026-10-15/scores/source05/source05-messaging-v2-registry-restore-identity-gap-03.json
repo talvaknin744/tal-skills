@@ -1,0 +1,371 @@
+{
+  "run_id": "source05-messaging-v2-registry-restore-identity-gap-03",
+  "run_evidence_sha256": "d3cd504d1f559112c134710dbbe49eb5019d08207be3ac1b3f20ddc3f5aee3cd",
+  "final_workspace_tree_sha256": "b7101b2a8cbe902779eb9e5b126735aed2f5d96a2c89064373b910ab4d83199e",
+  "case_id": "v2-registry-restore-identity-gap",
+  "candidate_tree_sha256": "a1baf91a4be399ff0086d660739bd34f98209a28f37758cf12c93c6ba079f247",
+  "rubric_sha256": "f22af27f0009b789023d7fcec4c447db30a05211bb9d48f7d14b9441313d959f",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "failed-dependency-gate",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 5 through 7, lines 11 through 13",
+        "observation": "The answer rejects readiness despite topic health, preserving original default-context Order42 and exact missing Moneyv1/ID8. It rejects recreated Order1042, latest reference substitution and green compatibility as historic identity or cents proof.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 5,
+            "end": 7,
+            "quote": "- In the default context `.`, archived ID **42** should identify `shop.Order`; the captured target lookup returns **`ops.Heartbeat`**.\n- Order requires `shop.Money` through **`money` version 1, ID 8**, expressing USD cents. That version is missing.\n- Recreated Order **1042** references `money` version 2, whose units are micro USD. Neither the new ID nor `latest` repairs records that still contain ID 42."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 11,
+            "end": 13,
+            "quote": "Offline inspection of the supplied sample bytes confirms writer ID **42**, account **A1**, currency **USD**, and amount **100**, with no trailing bytes under the historical layout. In cents, that is **$1.00**. Interpreting 100 as micro USD would yield **$0.0001**, a 10,000-fold understatement. This check used the supplied historical layout; actual client decoding remains unverified.\n\nA green compatibility result cannot establish historical ID resolution, restore missing reference versions, or validate business units. The target registry and client versions and actual client lookup behavior are also unrecorded."
+          }
+        ]
+      }
+    },
+    {
+      "id": "mutation-and-import-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 19 through 20, lines 26 through 30",
+        "observation": "The answer holds consumers and bootstrap registration, identifies free-ID and empty-subject requirements by their concrete violations and whole migration empty-destination condition. Installed version/mode/mutability prerequisites are gated before supported future operations without destructive overwrite or blind mode changes.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 19,
+            "end": 20,
+            "quote": "| Import historical Order at ID 42 over bootstrap | ID 42 is occupied by another schema, and `orders-value` is already populated. Both violate the supplied individual-import preconditions. Importing Order alone also leaves `money` v1 missing. Overwriting the mapping could invalidate bootstrap records. |\n| Import the full inventory into the populated target, then immediately change mode | The supplied whole-registry migration contract requires an empty destination. This target is populated, mode mutability and deployed version are unknown, and inventory completeness is unproved. Changing mode does not establish a complete or usable restore. |"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 26,
+            "end": 30,
+            "quote": "1. **Maintain and assign the gates.** The incident lead should own consumer admission; the producer owner should gate automatic registration, including the bootstrap producer. Permit only explicitly scoped recovery and verification activity after separate authorization. Preserve the populated registry, lookup captures, inventory, and archived topic as evidence.\n\n2. **Define the recovery boundary as these 25 archived records.** Establish every retained writer ID and its recursive reference closure. The supplied inventory identifies Order 42 and Money 8, but does not prove coverage of the entire archive or registry. A raw metadata backup is unavailable; a verified logical reconstruction may support this bounded path, but cannot yet be called a complete registry restore.\n\n3. **Prepare an isolated, empty replacement registry.** Verify its deployed version, supported migration procedure, mode prerequisites and mutability before selecting operations. Reconstruct the historical mappings in the client’s intended default context: `money` v1/ID 8 first, then `orders-value` v1/ID 42 referencing it. Preserve exact schema definitions, subject versions, references and source compatibility settings. Retain the populated target separately. Do not rewrite archived IDs, substitute Money v2, or delete conflicting evidence."
+          }
+        ]
+      }
+    },
+    {
+      "id": "supported-versus-unknown",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 13 through 13, lines 28 through 30, lines 40 through 40",
+        "observation": "Supplied source identity and current documentary conditions remain bounded evidence. Unknown target/client versions, actual lookup, mode mutability and complete metadata reconstruction are explicitly unresolved. Inventory or registration is not treated as supported recovered registry behavior.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 13,
+            "end": 13,
+            "quote": "A green compatibility result cannot establish historical ID resolution, restore missing reference versions, or validate business units. The target registry and client versions and actual client lookup behavior are also unrecorded."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 28,
+            "end": 30,
+            "quote": "2. **Define the recovery boundary as these 25 archived records.** Establish every retained writer ID and its recursive reference closure. The supplied inventory identifies Order 42 and Money 8, but does not prove coverage of the entire archive or registry. A raw metadata backup is unavailable; a verified logical reconstruction may support this bounded path, but cannot yet be called a complete registry restore.\n\n3. **Prepare an isolated, empty replacement registry.** Verify its deployed version, supported migration procedure, mode prerequisites and mutability before selecting operations. Reconstruct the historical mappings in the client’s intended default context: `money` v1/ID 8 first, then `orders-value` v1/ID 42 referencing it. Preserve exact schema definitions, subject versions, references and source compatibility settings. Retain the populated target separately. Do not rewrite archived IDs, substitute Money v2, or delete conflicting evidence."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 40,
+            "end": 40,
+            "quote": "All files remain unchanged. Only local reads and offline byte inspection were performed; no broker, registry, client, migration command or external request was run."
+          }
+        ]
+      }
+    },
+    {
+      "id": "complete-mapping-and-meaning",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 30 through 34",
+        "observation": "The isolated empty registry preserves populated state, original Money8/Order42 and version1 references plus compatibility metadata. Actual cold-cache lookups and retained records must yield A1/USD/1.00, with wrong-ID/context/missing-reference and interrupted-restore controls. Other amounts still need authoritative evidence.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 30,
+            "end": 34,
+            "quote": "3. **Prepare an isolated, empty replacement registry.** Verify its deployed version, supported migration procedure, mode prerequisites and mutability before selecting operations. Reconstruct the historical mappings in the client’s intended default context: `money` v1/ID 8 first, then `orders-value` v1/ID 42 referencing it. Preserve exact schema definitions, subject versions, references and source compatibility settings. Retain the populated target separately. Do not rewrite archived IDs, substitute Money v2, or delete conflicting evidence.\n\n4. **Verify metadata before admitting ordinary clients.** Reconcile the reconstructed mappings against source evidence. Confirm that the actual endpoint/context resolves 42 to historical Order and its reference to Money v1. An interrupted or partial reconstruction must leave admission and registration gated; import completion or a mode change alone is insufficient.\n\n5. **Verify decoding and amounts without production effects.** Using the deployed client version and configuration, begin with a cold cache and the supplied sample, then cover all 25 records and every schema era. Require A1 to produce `100` cents and **$1.00**. Reconcile every other amount against authoritative historical expectations; only A1’s ledger expectation is supplied here. Recheck unchanged record count and raw checksums. Include negative checks for an occupied ID, missing reference, wrong context and interrupted restoration; each must prevent admission."
+          }
+        ]
+      }
+    },
+    {
+      "id": "evidence-and-ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 26 through 28, lines 38 through 40",
+        "observation": "Incident, producer and application ownership and bounded recovery actions are assigned. Lookup failures, populated allocations, missing backup and failed evidence remain preserved. Actual decode/effects and broader acceptance remain unverified, distinct from supplied topic integrity.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 26,
+            "end": 28,
+            "quote": "1. **Maintain and assign the gates.** The incident lead should own consumer admission; the producer owner should gate automatic registration, including the bootstrap producer. Permit only explicitly scoped recovery and verification activity after separate authorization. Preserve the populated registry, lookup captures, inventory, and archived topic as evidence.\n\n2. **Define the recovery boundary as these 25 archived records.** Establish every retained writer ID and its recursive reference closure. The supplied inventory identifies Order 42 and Money 8, but does not prove coverage of the entire archive or registry. A raw metadata backup is unavailable; a verified logical reconstruction may support this bounded path, but cannot yet be called a complete registry restore."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 38,
+            "end": 40,
+            "quote": "Admission requires complete mapping coverage for the declared archive, successful cold-cache client decoding, correct amounts, and demonstrated safe effect handling. Monitor lookup failures, missing references, amount mismatches and oldest unfinished work; any failure should reclose the gate.\n\nAll files remain unchanged. Only local reads and offline byte inspection were performed; no broker, registry, client, migration command or external request was run."
+          }
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11 through 11, lines 40 through 40",
+        "observation": "The trace contains local reads and offline byte inspection only, with no real broker/registry/client/migration or external event. The independently verified workspace remains unchanged and proposed checks are not reported as executed recovery.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 11,
+            "end": 11,
+            "quote": "Offline inspection of the supplied sample bytes confirms writer ID **42**, account **A1**, currency **USD**, and amount **100**, with no trailing bytes under the historical layout. In cents, that is **$1.00**. Interpreting 100 as micro USD would yield **$0.0001**, a 10,000-fold understatement. This check used the supplied historical layout; actual client decoding remains unverified."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 40,
+            "end": 40,
+            "quote": "All files remain unchanged. Only local reads and offline byte inspection were performed; no broker, registry, client, migration command or external request was run."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          8,
+          9,
+          11,
+          13,
+          15,
+          17,
+          20
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "failed-dependency-gate": "pass",
+    "mutation-and-import-boundary": "pass",
+    "supported-versus-unknown": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 12,
+    "all_criteria_maximum": 12,
+    "major_weighted_points": 8,
+    "major_weighted_maximum": 8,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "9432693fc5f12e7c1c8fd21e06bc4cb44bdeb7615504fbd9a6e4c699fbbf4171",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 74.866,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 121139,
+    "cached_input_tokens": 94208,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3762,
+    "reasoning_output_tokens": 1168
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 8,
+        "item": "item_2",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "e0fea5dc6e57eb5bfc24aade29c1824d5802fad5b3c9cfb164229cd8b2e0bd98",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "file": ".agents/skills/messaging-reliability/references/schema-registry-identity.md",
+        "sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "file": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+        "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "file": ".agents/skills/messaging-reliability/references/sources.md",
+        "sha256": "93cac378e1fae242421efccadfe115d2c5662d408d66bf148d724266a8d8d0f0",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'request.md' -g 'recovery-inventory.json' -g 'SKILL.md' -g '*' project .agents/skills/messaging-reliability <user-home>/.agents/skills/messaging-reliability\"",
+        "exit_code": 2,
+        "output_sha256": "1455962546b5bfd9ca29e4e4744119b20a2901243d2575d82eef6212a016e6e8",
+        "command_sha256": "1ae33833151355c1a1d26d90a7b0a79e1d584cee87bd16e7cbebe4115f89bc2b"
+      },
+      {
+        "line": 8,
+        "item": "item_2",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "e0fea5dc6e57eb5bfc24aade29c1824d5802fad5b3c9cfb164229cd8b2e0bd98"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat project/request.md && cat project/recovery-inventory.json'",
+        "exit_code": 0,
+        "output_sha256": "413076f2f762157801260111072cda585ab71face5ddf4101c27b7aa75e78fe3"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc \"rg --files --hidden -g AGENTS.md -g '\"'!**/.git/**'\"' . /tmp/tal-skills-schema-registry-native-2026-10-15-r02/trials/source05-messaging-v2-registry-restore-identity-gap-03 2>/dev/null\"",
+        "exit_code": 1,
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/schema-registry-identity.md'",
+        "exit_code": 0,
+        "output_sha256": "e1d2777f81a3ca6e5b8f65f8855c423b39eb2ea88e79a552159f8b98bbc599c4"
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/ordering-and-replay.md && cat .agents/skills/messaging-reliability/references/delivery-and-recovery.md && cat .agents/skills/messaging-reliability/references/sources.md'",
+        "exit_code": 0,
+        "output_sha256": "1a81b1d934ebd55b7e60a25ca6bc37d2059e98e35242f6a15d6c81f16706768a"
+      },
+      {
+        "line": 17,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md && nl -ba project/recovery-inventory.json && rg --files --hidden project'",
+        "exit_code": 0,
+        "output_sha256": "6f2627a958b1d7bb180bead8d4dfc737fc5fca805cfdb3a49f587b6e3a844734"
+      },
+      {
+        "line": 20,
+        "item": "item_9",
+        "command": "/bin/zsh -lc \"python3 -B -c 'import json\nfrom decimal import Decimal\nfrom pathlib import Path\ninv = json.loads(Path(\\\"project/recovery-inventory.json\\\").read_text())\nbuf = bytes.fromhex(inv[\\\"retained_sample\\\"][\\\"value_hex\\\"])\npos = 5\n\ndef read_long():\n    global pos\n    value = shift = 0\n    while True:\n        b = buf[pos]\n        pos += 1\n        value |= (b & 127) << shift\n        if b < 128:\n            return (value >> 1) \"'^ -(value & 1)\n        shift += 7\n\ndef read_string():\n    global pos\n    n = read_long()\n    assert n >= 0\n    value = buf[pos:pos+n].decode(\"utf-8\")\n    assert len(buf[pos:pos+n]) == n\n    pos += n\n    return value\n\naccount = read_string()\ncurrency = read_string()\namount = read_long()\nledger = inv[\"retained_sample\"][\"source_ledger\"]\nassert buf[0] == 0 and int.from_bytes(buf[1:5], \"big\") == 42\nassert pos == len(buf)\nassert (account, currency, amount) == (ledger[\"account\"], ledger[\"currency\"], ledger[\"amount_minor\"])\nassert Decimal(amount) / 100 == Decimal(ledger[\"amount_decimal\"])\nprint(json.dumps({\"check\": \"offline byte inspection using supplied historical layout; no SDK or service\", \"magic\": buf[0], \"schema_id\": int.from_bytes(buf[1:5], \"big\"), \"account\": account, \"currency\": currency, \"amount_long\": amount, \"historical_usd\": str(Decimal(amount) / 100), \"if_misinterpreted_as_micro_usd\": str(Decimal(amount) / 1000000), \"trailing_bytes\": len(buf)-pos}))\n'\"'\"",
+        "exit_code": 0,
+        "output_sha256": "9ebb7091ba9267f4fdf4c694a68438da1e3959c01b3450e803ee9bc0ca449208"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "failed-dependency-gate",
+          "score": 2
+        },
+        {
+          "id": "mutation-and-import-boundary",
+          "score": 2
+        },
+        {
+          "id": "supported-versus-unknown",
+          "score": 2
+        },
+        {
+          "id": "read-only",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  },
+  "public_redactions": {
+    "scope": "Only personal home prefixes in derived command observations are redacted. Literal answer quotes and sealed raw trace are unchanged.",
+    "fields": [
+      "independent_audit.commands[0].command"
+    ],
+    "original_score_sha256": "c0a5c10e30f657f70b522ce6ba2b3e7e2e3e81fa4fd9597a9ea2b73f934a002d",
+    "original_trace_reference": "evidence/trace.jsonl"
+  }
+}

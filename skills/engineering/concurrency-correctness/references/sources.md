@@ -52,3 +52,9 @@ They require the target authority's actual identity, conditional-write and
 snapshot semantics. Earlier finite research examples demonstrate their supplied
 models, not this package's correctness in a real cache/database. No model trial
 or production validation was run for these reference additions.
+
+## Freshness barriers created by the server
+
+Netflix, [Consistent caching mechanism in Titus Gateway](https://netflixtechblog.com/consistent-caching-mechanism-in-titus-gateway-6cb89b9ce296), published 2022-11-03. Complete retained publisher RSS prose was read on 2026-10-15, including the ordered keepalive acknowledgement, logical ordering within a process, idle progress, shared confirmations and leader reconnection. The example concerns active state under one elected coordinator, rejects active reads and writes while reconnecting, and replaces cache state from the new leader snapshot.
+
+Applied prefix proof, current authority correspondence and bounded fallback in [replica-reads.md](replica-reads.md) are independently authored obligations. The article does not specify portable generation fields or an ACK API. Images, linked code and documentation, rendered page parity and reported performance were not verified. An existing supported read protocol may already satisfy the contract.

@@ -1,0 +1,160 @@
+{
+  "run_id": "final-agent-evaluation-refund-success-without-effect-01",
+  "run_evidence_sha256": "45d7ce19f9a248b7fbe9e2f081698b3790bb4f2a9848db5d6624ecf8126359d0",
+  "final_workspace_tree_sha256": "697a99df8fabd569973b1737be07cbea8cee64287cfccfcc3c32ce91a62b589e",
+  "case_id": "refund-success-without-effect",
+  "candidate_tree_sha256": "650872c043064bb5c7a4392cd68bafaa1e0ea4247ed61b86e4a9641f19d179cf",
+  "rubric_sha256": "5d3a5b8dc12d4070dcd3353d0ef26b450f1f201e0b19a742f95cb078aa2df9c4",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "final-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 10 through 19",
+        "observation": "The answer calls the release check a false positive, rejects missing processed refund and balance 100 instead of 140 from authoritative state, while ticket and wording gates pass. It states \"the missing effect is an established failure for this trial.\""
+      }
+    },
+    {
+      "id": "independent-grading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 17 and 23 through 36",
+        "observation": "The answer separately grades identity/eligibility/invocation, refund and balance state, ticket and unrelated state, and response accuracy. It requires exactly one processed 40 USD refund for C72/O72 and complete noninterference evidence, with unknown evidence unable to pass. Deterministic state gates and effort remain separate; no unnecessary communication judge is required."
+      }
+    },
+    {
+      "id": "oracle-sensitivity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 19, 25 and 38 through 47; evidence/trace.jsonl completed item_9 at line 20",
+        "observation": "The answer preserves supplied wording and acknowledgements while contrasting a correct processed refund/balance 140 control with missing effect/balance 100. It names corresponding failed gates and missing evidence unknown, allows alternative call sequences and leaves disagreement cause unresolved. The trace confirms fourteen local controls and zero agent trials, with prototype success distinguished from agent success."
+      }
+    },
+    {
+      "id": "repeatable-run-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 23, 38 through 47",
+        "observation": "The answer proposes \"Bind the trace and independent final snapshot to the same trial and fixture\" and captures before/after state for local controls, but omits fresh isolated state and session per future agent trial, complete source/model/harness/tool/grader identities and settings, and successful versus refusal boundary agent tasks. Local state controls do not establish a future comparable trial contract."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 45 through 47; evidence/run.json input_integrity; trace completed command events item_1 through item_7 and item_9",
+        "observation": "The answer states \"The full integrated evaluator, future agent performance and general release reliability remain untested.\" It truthfully reports local in-memory checks, unchanged files and \"no model or external service was used.\" Saved integrity is unchanged and no external/delegation event appears."
+      }
+    }
+  ],
+  "critical_gates": {
+    "final-state-oracle": "pass",
+    "independent-grading": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "partial",
+    "all_criteria_points": 9,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 6,
+    "major_weighted_maximum": 8,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Final frozen agent candidate observed answer and trace; local controls do not close the future comparable agent trial contract.",
+    "remaining_gap": "Fresh state/session and complete future candidate/harness/tool/grader identity and boundary task contract omitted."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "3d27f1a8424e6d0f4d481fdca1390b58a343599059fbf3a0f8118791d47d2b24",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 197.783,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 85404,
+    "cached_input_tokens": 49920,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 6215,
+    "reasoning_output_tokens": 2584
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "384f86a8f322069d2d630a7b85a03546101345012113fb72dc83ca741fd731f4",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "override_placement": "After exec or app-server subcommand, before inherited invocation arguments.",
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "First final candidate observation only; three fresh positive attempts are required for activation acceptance."
+  },
+  "archive_stage": "r04",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-run-runtime-and-dependency-hash-match",
+        "status": "pass",
+        "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+        "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2"
+      },
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "partial",
+          "critical_scores": [
+            {
+              "id": "final-state-oracle",
+              "score": 2
+            },
+            {
+              "id": "independent-grading",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "publisher_id": "datadog",
+  "research_date": "2026-10-14",
+  "crawler_summary_sha256": "24c3365ff865c035e69f530444f6f506ac5358d584045e61d1e6baee162564ce",
+  "crawler_summary_path": "publishers/datadog/summary.json",
+  "external_archive_root": "/tmp/tal-skills-blog-crawl-2026-10-14",
+  "counters": {
+    "baseline_records": 102,
+    "known_urls": 102,
+    "processed_urls": 102,
+    "http_article_attempted_urls": 102,
+    "http_2xx_response_urls": 102,
+    "body_retrieved_urls": 101,
+    "body_extracted": 101,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2
+  },
+  "discovery_scope": "English /blog/engineering/{article} routes only. Exclude general Monitor, AI and security collections.",
+  "terminal_status": "declared_frontier_all_known_urls_attempted",
+  "all_article_bodies_read": false,
+  "discovery_terminal_proofs": [
+    {
+      "kind": "sitemap",
+      "url": "https://www.datadoghq.com/en/sitemap.xml",
+      "reason": "all declared sitemap children exhausted",
+      "pages": 1
+    },
+    {
+      "kind": "feed",
+      "url": "https://www.datadoghq.com/blog/engineering/index.xml",
+      "reason": "complete feed document parsed, feed is bounded by publisher and does not prove historical completeness"
+    },
+    {
+      "kind": "archive",
+      "url": "https://www.datadoghq.com/blog/engineering/",
+      "page": 1,
+      "sha256": "0db622599173a003f6dbaa33fd6b2f3bb165ddde5b4e458f5cad37a39511cc47",
+      "reason": "no next page link in public archive",
+      "metadata_rows": 0
+    }
+  ],
+  "discovery_errors": [],
+  "discovery_manifest_external_path": "infra-b/datadog/discovery.json",
+  "discovery_manifest_sha256": "9d1688eb5050e7026914679cb489007aee4a4ff1fb1c758439f1f01241cef20f",
+  "discovery_script_sha256": "b59b46f8d2ad81ae466129552831a0eece8e07ecdab6f2426ef18e809f5e9e97",
+  "baseline_inventory_sha256": "c0f4c1f6ae75e4b9030691f083aaa3bf87c1da5bbd2f3a515f79e9366a08182f",
+  "collector_candidate_sha256s": [
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "8e2252ceffaffbeb8f6bce7e098e7061c843a07d07aa1f938f634fa227ddf156",
+    "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278"
+  ],
+  "robots_receipt": {
+    "requested_url": "https://www.datadoghq.com/robots.txt",
+    "url": "https://www.datadoghq.com/robots.txt",
+    "fetched_at": "2026-10-14T18:35:06.289711+00:00",
+    "http_status": 200,
+    "content_type": "text/plain",
+    "bytes": 525,
+    "sha256": "31eeea994b43f6d7f90690150759601a19c7a76f19827a51b18c89c6cbb1076b",
+    "object_path": "objects/source/31/31eeea994b43f6d7f90690150759601a19c7a76f19827a51b18c89c6cbb1076b.bin",
+    "seconds": 0.038,
+    "kind": "source",
+    "attempt": 1,
+    "redirect_hop": 0,
+    "status": "fetched",
+    "headers": {
+      "Last-Modified": "Thu, 08 Jan 2026 19:58:51 GMT",
+      "ETag": "\"5778767fb8f0248b68bc75919e68a4b7\""
+    }
+  },
+  "gaps": [
+    "Current unresolved article status counts: {\"redirected_outside_scope\": 1}.",
+    "Automatic extraction is distinct from deliberate reading; most retrieved bodies were not individually read.",
+    "Unlisted, deleted and private posts remain unknown; available sitemap and pagination coverage is not publisher lifetime completeness."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.datadoghq.com/blog/engineering/scaling-config-delivery-containers",
+      "reading_scope": "Complete substantive article body, snapshot and Kafka update design, startup conditions and fallback limitations.",
+      "evidence_sha256": "6116ae37e6c688ce073b5e404b19d8a719a6863da916e68a3d21d5d243d4f3fb",
+      "extracted_text_sha256": "658b0ffb56fa192220aca1e1be75fa926feff1a10a4bd09153da9d1816c07922"
+    },
+    {
+      "url": "https://www.datadoghq.com/blog/engineering/2023-03-08-deep-dive-into-incident-response",
+      "reading_scope": "Monitoring and early incident response through the sustained response handoff section, excluding later communications and tooling sections.",
+      "retrieval_source": "web tool",
+      "evidence_sha256": "f8fb3ac6e6b2ed118386ffab58885e803cdba29741be22b857429c8a720adb4b",
+      "extracted_text_sha256": "b922694e4e1500a1ae0b6d846f5e83296dca1ef989d53847264f7b5cd1185f7e"
+    }
+  ],
+  "http_2xx_response_definition": "Unique article requested_url with at least one HTTP status from 200 inclusive to 300 exclusive. Successful landing responses are counted here independently of article body retrieval.",
+  "article_body_dispositions": [
+    {
+      "url": "https://www.datadoghq.com/blog/engineering/dirty-pipe-container-escape-poc",
+      "status": "redirected_outside_scope",
+      "final_response_url": "https://securitylabs.datadoghq.com/articles/dirty-pipe-container-escape-poc/",
+      "response_sha256": "f3c81c6f0cf1ec464da6dd5b2a378b4408e112b513b2769005a4bd07055b630e"
+    }
+  ],
+  "validation_limits": [
+    "No production deployment, Terraform apply, restore, incident simulation or profiler benchmark ran during this publisher research.",
+    "Research proposals are not evidence of installed host skill behavior."
+  ]
+}

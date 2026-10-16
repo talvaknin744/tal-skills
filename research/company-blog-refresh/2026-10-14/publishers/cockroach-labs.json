@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "publisher_id": "cockroach-labs",
+  "publisher_name": "Cockroach Labs",
+  "crawler_summary_sha256": "4df03a4e5d7d24a5b0a6872e12bcf8b5da4eaa99252fb08f172b1115c30b7b21",
+  "crawler_summary_path": "publishers/cockroach-labs/summary.json",
+  "counters": {
+    "baseline_records": 901,
+    "known_urls": 908,
+    "processed_urls": 908,
+    "http_article_attempted_urls": 908,
+    "body_retrieved_urls": 904,
+    "body_extracted": 904,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "article_scope_count": 905,
+    "excluded_nonarticle_count": 3,
+    "read_articles": 1
+  },
+  "article_status_counts": {
+    "body_extracted": 904,
+    "excluded_nonarticle": 3,
+    "not_found": 1
+  },
+  "discovery_scope": "Official blog sitemap, complete ordinary archive pagination and verified historical inventory. Blog root and engineering or culture category landing pages are distinct from article bodies.",
+  "terminal_status": "exposed_collection_terminal_with_body_limits",
+  "source_urls": [
+    "https://www.cockroachlabs.com/sitemap.xml",
+    "https://www.cockroachlabs.com/blog/?page=91",
+    "https://www.cockroachlabs.com/blog/?page=92",
+    "https://www.cockroachlabs.com/blog/?page=93"
+  ],
+  "gaps": [
+    "Sitemap and ordinary archive can disagree. Retain their union and every currently failing historical URL.",
+    "Completion applies to exposed sitemap and archive pages, rather than deleted or unpublished history."
+  ],
+  "read_articles": [
+    {
+      "url": "https://www.cockroachlabs.com/blog/disaster-recovery-physical-cluster-replication/",
+      "reading_scope": "Substantive textual article explanation read through the official web page. Figures are not used as unique evidence.",
+      "retrieval_source": "web tool",
+      "contract_verification_limits": "The source is a historical implementation account. No CockroachDB cluster, retention configuration, current activation command or model was executed. The MVCC cleanup mechanism is product specific and is not a procedure to copy to an unrelated database."
+    }
+  ],
+  "evidence": [
+    {
+      "archive_path": "storage-a-discovery/cockroach-labs/requests.json",
+      "sha256": "ab485db93706bcef4f5c97471e8286a1f31ba6c2444e0d0e195b4d20fbbe874e"
+    },
+    {
+      "archive_path": "storage-a-discovery/cockroach-labs/inventory.json",
+      "sha256": "1ffaa853883f729f60e99c8a1f3ab4a9f7a594b7d26c7515db300f015074791b"
+    },
+    {
+      "archive_path": "storage-a-probes/cockroach-labs-excluded-navigation.json",
+      "sha256": "dfd225bc1b6854476f303e25820f5b7bd876e9c836e8e5aee4ca9b56795eb24b"
+    },
+    {
+      "archive_path": "storage-a-probes/cockroach-labs-unresolved-articles.json",
+      "sha256": "87132b657d5f1468a3c52428d0c7353f48b13e95e1b354af7d6297173c392e56"
+    },
+    {
+      "archive_path": "storage-a-probes/cockroach-labs-unresolved-articles-final.json",
+      "sha256": "87132b657d5f1468a3c52428d0c7353f48b13e95e1b354af7d6297173c392e56"
+    }
+  ],
+  "recommendation": {
+    "mechanism": "The article allows replication partitions to advance independently, records the minimum fully applied timestamp and removes newer MVCC changes before activating a consistent standby. A partition checkpoint alone can therefore coexist with a partially applied transaction. The narrow owning reference is `recovery-validation/references/recovered-history.md`: establish a globally complete cut and any supported activation cleanup before admitting the recovered service.",
+    "proposed_check": "Proposed, unexecuted: debit and credit changes replicate in different partitions, one advances and the other stalls. Recovery activation must expose both effects or neither at the selected complete cut, then test interruption during activation.",
+    "disposition": "Research candidate only. No skill instructions or behavioral evaluation were changed by this publisher report."
+  },
+  "all_article_bodies_read": false,
+  "automatic_extraction_limits": "Extraction does not verify article identity or complete semantics; main container text can retain ancillary prose. Deliberate reading is recorded independently.",
+  "collector_identities": [
+    "c06444e843c1dd67388183a9252f6553d9f6cb8b5fb66d4af28a171155080bfe",
+    "f4f1eec47776d2c19c209b94ae88932f966d66ac92664d6689cbe1ed516cef03"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "source": {
+    "registry": "https://original.registry.example",
+    "product": "Confluent Platform Schema Registry",
+    "version": "8.0.0",
+    "context": ".",
+    "schemas": [
+      {"subject": "orders-value", "version": 1, "id": 42, "schema_type": "AVRO", "schema": {"type": "record", "name": "Order", "namespace": "shop", "fields": [{"name": "account", "type": "string"}, {"name": "money", "type": "shop.Money"}]}, "references": [{"name": "shop.Money", "subject": "money", "version": 1}]},
+      {"subject": "money", "version": 1, "id": 8, "schema_type": "AVRO", "schema": {"type": "record", "name": "Money", "namespace": "shop", "fields": [{"name": "currency", "type": "string"}, {"name": "amount", "type": "long"}]}, "references": [], "business_unit": "USD cents"}
+    ],
+    "compatibility": {"orders-value": "BACKWARD_TRANSITIVE", "money": "BACKWARD_TRANSITIVE"},
+    "backup": {"logical_inventory_available": true, "raw_metadata_log_available": false, "reconstruction_verified": false}
+  },
+  "target": {
+    "registry": "https://restore.registry.example",
+    "product": "Confluent Platform Schema Registry",
+    "version": null,
+    "context": ".",
+    "http_health": "healthy",
+    "global_mode": "READWRITE",
+    "mode_mutability": null,
+    "schemas": [
+      {"subject": "bootstrap-value", "version": 1, "id": 42, "schema_type": "AVRO", "schema": {"type": "record", "name": "Heartbeat", "namespace": "ops", "fields": [{"name": "beat", "type": "long"}]}, "references": []},
+      {"subject": "orders-value", "version": 1, "id": 1042, "schema_type": "AVRO", "schema": {"type": "record", "name": "Order", "namespace": "shop", "fields": [{"name": "account", "type": "string"}, {"name": "money", "type": "shop.Money"}]}, "references": [{"name": "shop.Money", "subject": "money", "version": 2}]},
+      {"subject": "money", "version": 2, "id": 9, "schema_type": "AVRO", "schema": {"type": "record", "name": "Money", "namespace": "shop", "fields": [{"name": "currency", "type": "string"}, {"name": "amount", "type": "long"}, {"name": "scale", "type": "int", "default": 6}]}, "references": [], "business_unit": "micro USD"}
+    ],
+    "lookup_captures": [
+      {"request": "GET https://restore.registry.example/schemas/ids/42", "returned_fullname": "ops.Heartbeat"},
+      {"request": "GET https://restore.registry.example/subjects/money/versions/1", "error_code": 40402, "message": "Version not found"},
+      {"request": "GET https://restore.registry.example/subjects/orders-value/versions/latest", "returned_id": 1042}
+    ],
+    "latest_compatibility_result": true,
+    "auto_registration_enabled": true,
+    "consumer_admission": "paused",
+    "client": {"library": "restored Avro consumer", "version": null, "registry_url": "https://restore.registry.example", "actual_retained_decode_verified": false}
+  },
+  "business_topic_check": {"topic": "orders", "backup_records": 25, "restored_records": 25, "raw_checksums_equal": true},
+  "retained_sample": {"topic": "orders", "partition": 0, "offset": 12, "value_hex": "000000002a04413106555344c801", "source_writer_id": 42, "source_subject_version": 1, "source_reference_subject": "money", "source_reference_version": 1, "source_ledger": {"account": "A1", "currency": "USD", "amount_minor": 100, "amount_decimal": "1.00"}}
+}

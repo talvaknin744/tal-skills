@@ -1,0 +1,144 @@
+{
+  "run_id": "trace-performance-diagnosis-v2-correlated-trace-01",
+  "run_evidence_sha256": "a485244998427b2d1159ae5009f4fcf4720ad711ad5c1fc38a1be7b4db3172c2",
+  "final_workspace_tree_sha256": "bdf07e2882940cfbcee818033201b433af097cfea07bb7b3da7c405b3c31fbb7",
+  "case_id": "v2-correlated-trace",
+  "candidate_tree_sha256": "ae7e7685c31e2d1d6cfe3d92a0b0eace36f59a12e8a4cd5b18796839f0f0f17d",
+  "rubric_sha256": "7d7aca1397cfaf2bc5ea7102a6faa18ebcd6d52e7d18415f05997be62fd4b0fd",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "required-path",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 11 through 14",
+        "observation": "The answer states \"Pricing gates T31’s checkout response.\" It excludes detached analytics because \"checkout neither awaits analytics nor consumes its result\", and rejects nested duration summation because \"the database is nested inside inventory, and inventory overlaps pricing.\""
+      }
+    },
+    {
+      "id": "timing-boundary",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11, 22 and 24",
+        "observation": "The answer rejects inclusive root summation, states \"Pricing’s server UTC interval cannot establish cross-host ordering because its clock offset is unknown\", and states \"Neither adding nor taking the maximum of those percentiles reconstructs endpoint p99.\""
+      }
+    },
+    {
+      "id": "path-shift",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 14, 18 and 23 through 26",
+        "observation": "The conditional pricing comparison makes inventory the new gate and predicts \"Checkout becomes **1020 ms**, saving **180 ms (15%)**.\" The acceptance rule states \"Proceed only if correctness and freshness hold and useful completions do not fall\". The answer restricts the trace to T31 and states \"every speedup above is a conditional calculation.\""
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/run.json",
+        "locator": "input_integrity, observed_external_or_delegation_events; evidence/answer.md line 18; evidence/workspace-changes.json lines 2 and 3; evidence/trace.jsonl completed command events item_1 through item_6 and item_8",
+        "observation": "The saved inventory records \"baseline_unchanged\": true and \"allowed_changes_only\": true, with empty changes, forbidden changes and observed external or delegation events. Observable commands read only local files. The answer states \"This review did not execute that comparison.\""
+      }
+    }
+  ],
+  "critical_gates": {
+    "required-path": "pass",
+    "timing-boundary": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed answer and trace only; declared capability isolation deviations remain."
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 6, completed item_2",
+      "observation": "Successful cat of candidate SKILL.md returns its instruction body."
+    },
+    "candidate_metadata_observed": false,
+    "catalog_exposure_limitation": "Metadata initialization timed out. One observed body read does not satisfy a three attempt activation threshold."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "a71f25958b75f64a74af965e374a5b4133841b2946f0dfe473e77a7190b8dadb",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": null,
+  "model_settings": null,
+  "host_version": null,
+  "elapsed_seconds": 136.579,
+  "tool_calls": 7,
+  "token_usage": {
+    "input_tokens": 95608,
+    "cached_input_tokens": 53376,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2646,
+    "reasoning_output_tokens": 1206
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [
+    "Host version unavailable: Command failed: /Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex --version\n",
+    "Native preflight did not confirm the staged candidate description; selection results lack verified catalog exposure."
+  ],
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "frozen-view-direct",
+        "status": "failed",
+        "cause": "Frozen source view had no installed yaml dependency. No score or sealed trial artifacts changed."
+      },
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "required-path",
+              "score": 2
+            },
+            {
+              "id": "timing-boundary",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

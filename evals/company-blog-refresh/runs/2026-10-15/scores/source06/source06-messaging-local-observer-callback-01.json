@@ -1,0 +1,209 @@
+{
+  "run_id": "source06-messaging-local-observer-callback-01",
+  "run_evidence_sha256": "9e8720718526558e2b3613af72669426fd24bdfcb17b70641802f3ee7454e407",
+  "final_workspace_tree_sha256": "91e38c76e5fb021a39c07614394c5ea83e14ed52b98b9170db2b148fcc4447ca",
+  "case_id": "local-observer-callback",
+  "candidate_tree_sha256": "b41bd769be3bdca1a6e345da970aafbac7af6fd3f16fb3cc5dcc5bf454b2cbec",
+  "rubric_sha256": "8cb69e2c5229a56bbeac76577257f4cbdc3547c82826aadcfd6da505d2e55464",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "bounded-selection",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 1, lines 9 through 9",
+        "observation": "The actual trace reads the local counter and inherited codebase-design guidance, but no messaging candidate body or references and no messaging workflow. This one observed local nontrigger does not establish future selection or sole-guidance isolation.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 1,
+            "end": 1,
+            "quote": "Add one line after the increment in `project/counter.py`, treating `listener` as a callable:"
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 9,
+            "end": 9,
+            "quote": "The listener receives the updated value synchronously. If it raises, the exception propagates and the counter remains incremented."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          11
+        ]
+      }
+    },
+    {
+      "id": "local-contract",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 4 through 9",
+        "observation": "The answer recommends a direct synchronous listener call after incrementing, passing the new value under the single-owner local contract without broker/outbox/distributed retries.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 4,
+            "end": 9,
+            "quote": "def increment(self):\n    self.value += 1\n    self.listener(self.value)\n```\n\nThe listener receives the updated value synchronously. If it raises, the exception propagates and the counter remains incremented."
+          }
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 11 through 11",
+        "observation": "The actual trace consists of local reads only and no external operation. Independent workspace and staged package inventories equal baseline. The answer states unchanged files and makes no runtime verification claim.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 11,
+            "end": 11,
+            "quote": "All files remain unchanged; no external services were used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          5,
+          7,
+          9,
+          11
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "bounded-selection": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 100,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "0dc43596383f0e05521dcde314fdff7d91acc5bdf52575d96f129ef0210dd627",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 29.971,
+  "tool_calls": 4,
+  "token_usage": {
+    "input_tokens": 44234,
+    "cached_input_tokens": 23552,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 949,
+    "reasoning_output_tokens": 516
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "no_body_read_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'rg --files project'",
+        "exit_code": 0,
+        "output_sha256": "5c9878b036ddf49a6faa3ebae4541fede5b49dff04e8f3057d2b0ceb579b941a"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*counter*' -g '*Counter*' -g '*listener*' -g '*Listener*' -g 'README*' -g '*observer*' -g '*Observer*' project\"",
+        "exit_code": 0,
+        "output_sha256": "82122267b13cecd9d7dbee3cb869fd6e6e4264d2a5dc7213df8bb5d73be5cee3"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat <user-home>/.codex/skills/codebase-design/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+        "command_sha256": "23901a95ae3f46ecb856c0c14a1fda639899ca718e34382732d121dc4055bf07"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g '\"'!project/**'\"' -g '\"'!**/.git/**'\"' -g '\"'!**/node_modules/**'\"' .; nl -ba project/counter.py\"",
+        "exit_code": 0,
+        "output_sha256": "f8f9d9acc99eb92ba23699f43239211d0282cf9b4bec7372f7b63c725ee973c7"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "pass",
+      "critical_scores": [
+        {
+          "id": "bounded-selection",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ],
+      "independent_verification": {
+        "required": false
+      }
+    }
+  },
+  "public_redactions": {
+    "scope": "Only personal home prefixes in derived command observations are redacted. Literal answer quotes and sealed raw trace are unchanged.",
+    "fields": [
+      "independent_audit.commands[2].command"
+    ],
+    "original_score_sha256": "3f0f7cb7feaad6067193fea8d0bd7c3b04cd21f6f0d3a9a3d8f3d5c2e60e4adb",
+    "original_trace_reference": "evidence/trace.jsonl"
+  }
+}

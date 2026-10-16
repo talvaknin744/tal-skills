@@ -20,3 +20,26 @@ Checked 2026-09-29. These are conditional engineering references, not claims tha
 | [Trigger.dev regional incident](https://trigger.dev/blog/incident-report-jun-22-2026) (displayed 2026-06-22; incident continued June 23), [run states](https://trigger.dev/docs/runs), and [queues](https://trigger.dev/docs/queue-concurrency) | Complete incident and relevant current state/concurrency/TTL sections. Pre-execution reservations motivate a failure schedule; planned mitigations are not evidence of shipped behavior. No scheduler or capacity test was executed. |
 
 Research also read Temporal's [automated worker versioning example](https://temporal.io/blog/automated-worker-versioning-with-github-actions) (2026-09-09) and current [Worker Versioning documentation](https://docs.temporal.io/production-deployment/worker-deployments/worker-versioning). Those operational decisions belong in deployment/Temporal skills: keeping compatible pinned workers and recovering already-pinned executions are distinct from changing traffic for new runs.
+
+## Schema registry identity
+
+Rechecked 2026-10-15 against current official Confluent documentation. These
+pages are mutable contracts, the deployed registry, client and serializer versions
+govern an implementation. No registry, import, restore or SDK decoding was executed.
+The conditional reference's admission and business invariant checks are authored
+synthesis, not outcomes reported by these sources.
+
+| Source | Material read and limits |
+| --- | --- |
+| [Schema contexts](https://docs.confluent.io/platform/current/schema-registry/schema-contexts-cp.html) and [client FAQ](https://docs.confluent.io/platform/current/schema-registry/faqs-cp.html) | Context ID and subject scope, qualified subjects, explicit context paths and client lookup differences. Client support must be checked on the installed version, the FAQ is not a universal language capability matrix |
+| [Registry deployment](https://docs.confluent.io/platform/current/schema-registry/installation/deployment.html) | Kafka metadata source and backup/restore sections, including subject/version, ID metadata, compatibility and raw byte backup. Tutorial commands and production recovery were not executed |
+| [Schema migration](https://docs.confluent.io/platform/current/schema-registry/installation/migrate.html) and [API reference](https://docs.confluent.io/platform/current/schema-registry/develop/api.html) | Whole registry versus subject import preconditions, ID preservation and collisions, mode scope and schema references. Full manuals were not read, no force mode or merge procedure is prescribed |
+| [Serialization formats](https://docs.confluent.io/platform/current/schema-registry/fundamentals/serdes-develop/index.html) | Payload ID, header GUID and header preservation limits. The guide distinguishes Confluent Platform versions, this package does not upgrade the selected format or assert support for a particular client |
+
+The original Confluent [registry pitfalls article](https://www.confluent.io/blog/17-ways-to-mess-up-self-managed-schema-registry/)
+(2019) and [data sharing article](https://www.confluent.io/blog/data-sharing-patterns-with-confluent-schema-registry/)
+(2021) were read as complete available recovered text in the 2026-10-14
+continuation research. They motivate retained ID authority and collision checks.
+Their topology advice, preview labels and historical configuration defaults are
+separate from current implementation contracts. Original publication data and
+reading receipts remain preserved, diagrams and runtime claims were not reproduced.

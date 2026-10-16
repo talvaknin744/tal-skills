@@ -1,0 +1,152 @@
+{
+  "run_id": "final-agent-evaluation-refund-success-without-effect-02",
+  "run_evidence_sha256": "3834b9b825b4c984e4d2440f74e4ad565d9d5d3ec4b356bac6897d6c682d2565",
+  "final_workspace_tree_sha256": "697a99df8fabd569973b1737be07cbea8cee64287cfccfcc3c32ce91a62b589e",
+  "case_id": "refund-success-without-effect",
+  "candidate_tree_sha256": "650872c043064bb5c7a4392cd68bafaa1e0ea4247ed61b86e4a9641f19d179cf",
+  "rubric_sha256": "5d3a5b8dc12d4070dcd3353d0ef26b450f1f201e0b19a742f95cb078aa2df9c4",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "final-state-oracle",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 and 10 through 18",
+        "observation": "The answer rejects a false positive from synchronous authoritative state: no processed refund and balance 100 instead of 140, while ticket, prerequisites and response phrase pass. Acknowledgement and refund ID are treated as reports, not achieved effects."
+      }
+    },
+    {
+      "id": "independent-grading",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7 through 16 and 20 through 29",
+        "observation": "The replacement checks correct IDs, exactly one processed 40 USD refund, balance 140, resolved T72 and complete collateral state, separately from prerequisites and factual reporting. It states \"Missing coverage is `UNKNOWN`\" and \"Do not average successful tool calls against a failed refund.\""
+      }
+    },
+    {
+      "id": "oracle-sensitivity",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 23 and 31 through 45; trace completed item_11 at line 24",
+        "observation": "The answer preserves refund-001, permits valid tool paths and leaves cause unresolved. It contrasts a correct state control, unchanged phrase with missing/wrong state, a valid control without keywords, and absent evidence unknown. The trace reports twenty local assertions passed with agent_trials_run zero and files_written zero."
+      }
+    },
+    {
+      "id": "repeatable-run-contract",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 20, 22 and 43 through 45",
+        "observation": "The answer recognizes a versioned evaluator, evidence binding and retaining the regression, but omits clean state and fresh session per future trial, full source/model/harness/tool/grader identities and settings, and future successful/refusal agent task families. The local state/process controls do not replace comparable agent trial conditions."
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 31, 43 and 45; run input_integrity and trace completed item_11",
+        "observation": "The answer distinguishes the constructed evaluator control from an observed agent success and states \"No model or external service was used\". The trace confirms local control execution only, unchanged files and no external/delegation event; broader reliability remains unknown."
+      }
+    }
+  ],
+  "critical_gates": {
+    "final-state-oracle": "pass",
+    "independent-grading": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "partial",
+    "all_criteria_points": 9,
+    "all_criteria_maximum": 10,
+    "major_weighted_points": 6,
+    "major_weighted_maximum": 8,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "remaining_gap": "Future comparable agent trial state/session and complete identities/settings and task boundaries omitted."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "3d27f1a8424e6d0f4d481fdca1390b58a343599059fbf3a0f8118791d47d2b24",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 291.613,
+  "tool_calls": 10,
+  "token_usage": {
+    "input_tokens": 110162,
+    "cached_input_tokens": 71168,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 9077,
+    "reasoning_output_tokens": 3703
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "host_adjustment": {
+    "artifact": "evidence/host-adjustment.json",
+    "sha256": "77ff3818604a7338511bd6ed373dcafa6f1088a0154413fbf998a70ad1733e3d",
+    "wrapper_sha256": "62645780d053ca8859c30a65a48656ed3ffeeb6a8ae2d67e4a9391baf0824140",
+    "binary_file_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+    "effective_config_override": {
+      "web_search": "disabled"
+    },
+    "builtin_web_disabled_metadata_observed": true,
+    "other_network_tools_confined": false,
+    "filesystem_read_isolation": false
+  },
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 5, completed item_1",
+      "observation": "Successful candidate entrypoint read returns its body."
+    },
+    "other_observed_skill_body_reads": [],
+    "limitation": "One captured normal discovery attempt; correctness and broader host confinement remain separate."
+  },
+  "archive_stage": "r04",
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "sealed-score-binding",
+        "status": "pass",
+        "result": {
+          "rubric_result": "partial",
+          "critical_scores": [
+            {
+              "id": "final-state-oracle",
+              "score": 2
+            },
+            {
+              "id": "independent-grading",
+              "score": 2
+            },
+            {
+              "id": "scope-and-evidence",
+              "score": 2
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

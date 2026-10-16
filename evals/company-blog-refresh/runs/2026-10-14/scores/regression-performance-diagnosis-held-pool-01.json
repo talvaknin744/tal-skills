@@ -1,0 +1,141 @@
+{
+  "run_id": "regression-performance-diagnosis-held-pool-01",
+  "run_evidence_sha256": "6f5d4d4bf41989a71faca51a4758f17e86b8ceed9fea392567353175617ca545",
+  "final_workspace_tree_sha256": "04a70e5e47701162c91292f54450e284dc78255d771722b11f2da8c08685cbc4",
+  "case_id": "held-pool",
+  "candidate_tree_sha256": "ae7e7685c31e2d1d6cfe3d92a0b0eace36f59a12e8a4cd5b18796839f0f0f17d",
+  "rubric_sha256": "e19899f538567438ff5b1118ee08bfde6fa6e2e844bf3e8c46e18c22a6f45b68",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "constraint",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1, 5 through 8",
+        "observation": "The answer identifies database connection availability, relates \"950 ms\" acquisition wait to borrowed pool occupancy and \"220 ms of enrichment\" while holding a connection, and says \"only the incident interval and one representative trace are supplied.\" Sampled absence of lock waits and low average CPU remain bounded evidence."
+      }
+    },
+    {
+      "id": "ownership",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 10, 12 and 14",
+        "observation": "The answer rejects four pools of 50 because \"Four pools of 50 would demand 200\" against 80 available service connections. It moves display enrichment after commit/release while retaining price and eligibility in the transaction with isolation, atomicity and response behavior preserved."
+      }
+    },
+    {
+      "id": "measurement",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 7, 18 through 23",
+        "observation": "The answer separates 400 offered requests/s from about 300 useful completions/s, then proposes matched arrivals and request mix, repeated runs, acquisition/hold distributions, endpoint outcomes, backlog and correctness checks. It monitors database query load and shipping work and provides stop conditions."
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 25; evidence/run.json input_integrity; trace completed command events item_1 through item_9",
+        "observation": "The answer states \"No files were changed or experiments run; the improvement remains unvalidated.\" Saved baseline and candidate integrity remain unchanged and observed commands read files only."
+      }
+    }
+  ],
+  "critical_gates": {
+    "constraint": "pass",
+    "ownership": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 8,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed answer and trace only; declared capability isolation deviations remain."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "80baa1005d79c6ce67aa7f6d13918a6b46660c8cf46fcd03354b6c817fdcc9dc",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 105.888,
+  "tool_calls": 9,
+  "token_usage": {
+    "input_tokens": 80535,
+    "cached_input_tokens": 56704,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2656,
+    "reasoning_output_tokens": 1334
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "line 6, completed item_1",
+      "observation": "Successful candidate entrypoint read returns the body."
+    },
+    "candidate_metadata_observed": true,
+    "other_observed_skill_body_reads": [
+      "diagnosing-bugs"
+    ],
+    "limitation": "A single case attempt is not a three attempt activation estimate, and other inherited guidance prevents attribution to the candidate alone."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "constraint",
+              "score": 2
+            },
+            {
+              "id": "ownership",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

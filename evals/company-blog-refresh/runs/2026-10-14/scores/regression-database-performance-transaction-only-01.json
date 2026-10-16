@@ -1,0 +1,129 @@
+{
+  "run_id": "regression-database-performance-transaction-only-01",
+  "run_evidence_sha256": "6df4eb5cf9e91535fd23a77dc51bf7bf89af7ba6a733534d93c82dd948651372",
+  "final_workspace_tree_sha256": "8a02bc79bd055e5668eaf0a881c004ac4fbf638d1415a1d2307cf843aaf122a9",
+  "case_id": "transaction-only",
+  "candidate_tree_sha256": "e67edaf3515abb7272a6ebb7915bc4d4b4bad4b538e66f195341ed570b4f067e",
+  "rubric_sha256": "0af3e13f671d9e3f8812ff17159a9da1b08fbe5ed759c251431a8b54a861fda3",
+  "reviewer": "independent-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "nontrigger",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 through 13; evidence/trace.jsonl all observable events",
+        "observation": "The response uses idempotency and concurrency reasoning for the check then insert race, without query tuning. No database-performance candidate body read appears in the captured trace; inherited code-review and diagnosing-bugs guidance was read instead."
+      }
+    },
+    {
+      "id": "bounded-repair",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 1 and 5 through 11",
+        "observation": "The answer proposes a complete nonnull tenant scoped unique order identity, atomic create or get on that specific conflict while preserving unrelated errors, and returning the original invoice after a lost response retry. It states \"Both scenarios should leave exactly one invoice and return its same identity.\""
+      }
+    },
+    {
+      "id": "read-only",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "line 13; evidence/run.json input_integrity and observed_external_or_delegation_events",
+        "observation": "The answer labels this a proposed repair with \"No files were changed.\" Recorded integrity is unchanged and all captured commands read local files; no external or delegation event was observed."
+      }
+    }
+  ],
+  "critical_gates": {
+    "nontrigger": "pass",
+    "read-only": "pass"
+  },
+  "result": {
+    "rubric_result": "pass",
+    "all_criteria_points": 6,
+    "all_criteria_maximum": 6,
+    "major_weighted_points": 4,
+    "major_weighted_maximum": 4,
+    "critical_acceptance_met": true,
+    "case_compliant": false,
+    "scope": "Observed rubric only; host capability compliance remains separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "80baa1005d79c6ce67aa7f6d13918a6b46660c8cf46fcd03354b6c817fdcc9dc",
+  "runner_tree_sha256": "d3fcfafa58b2585ce28911da987351ef6fa82111146513319d545c8e3933b188",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 59.431,
+  "tool_calls": 5,
+  "token_usage": {
+    "input_tokens": 55740,
+    "cached_input_tokens": 34432,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 1651,
+    "reasoning_output_tokens": 989
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "not_observed",
+    "body_reads": 0,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "evidence": {
+      "artifact": "evidence/trace.jsonl",
+      "locator": "all observable events",
+      "observation": "No database-performance body read is observed."
+    },
+    "other_observed_skill_body_reads": [
+      "code-review",
+      "diagnosing-bugs"
+    ],
+    "limitation": "Observed captured loading only; inherited guidance remains available."
+  },
+  "score_checks": {
+    "status": "pass",
+    "attempts": [
+      {
+        "id": "byte-equivalent-workspace-runner",
+        "status": "pass",
+        "byte_equivalence_checked": [
+          "scripts/evals/company-blog-refresh.mjs",
+          "scripts/evals/lib.mjs",
+          "scripts/evals/cli.mjs",
+          "package.json",
+          "package-lock.json"
+        ],
+        "result": {
+          "rubric_result": "pass",
+          "critical_scores": [
+            {
+              "id": "nontrigger",
+              "score": 2
+            },
+            {
+              "id": "read-only",
+              "score": 2
+            }
+          ],
+          "independent_verification": {
+            "required": false
+          }
+        }
+      }
+    ]
+  }
+}

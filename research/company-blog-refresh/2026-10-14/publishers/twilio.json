@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "publisher_id": "twilio",
+  "research_date": "2026-10-14",
+  "crawler_summary_path": "publishers/twilio/summary.json",
+  "crawler_summary_sha256": "bb84a7a8e957ca9b4bfdd1761172ad7519ec826a51b35c4b2ef8eb495642a8ff",
+  "crawler_snapshot_at": "2026-10-14T19:13:28.635456+00:00",
+  "counters": {
+    "baseline_records": 3719,
+    "known_urls": 3749,
+    "attempted_urls": 3749,
+    "body_extracted": 3728,
+    "body_fetched_unextracted": 1,
+    "pending": 0,
+    "read_articles": 2,
+    "processed_urls": 3749,
+    "http_article_attempted_urls": 3749,
+    "body_retrieved_urls": 3729,
+    "excluded_nonarticle": 11,
+    "scoped_article_urls": 3738
+  },
+  "article_status_counts": {
+    "body_extracted": 3728,
+    "body_fetched_unextracted": 1,
+    "excluded_nonarticle": 11,
+    "not_found": 1,
+    "redirected_outside_scope": 7,
+    "redirected_to_collection": 1
+  },
+  "discovery_scope": "Public English company blog article URLs under /en-us/blog/, including developer articles. Other language site maps are inspected only as metadata sources and do not expand the article scope.",
+  "terminal_status": "The English sitemap is a finite URL set and was retrieved. Generic declared source traversal ended. Every known article URL has a recorded attempt.",
+  "gaps": [
+    "Sitemap discovery does not prove lifetime completeness for deleted, private or unlisted articles.",
+    "Speculative developer feed and RSS URLs returned 404.",
+    "Historic article product status and retry limits need current documentation before implementation.",
+    "Eleven archive, category, author, search and tag navigation URLs remain preserved as excluded_nonarticle dispositions, without article body credit.",
+    "Nine scoped historical article URLs remain without current article bodies: one HTTP 404, seven redirects outside blog scope, and one redirect to a developer hub collection.",
+    "One successful Article schema page has no credible substantive extracted body. Its raw response remains retained."
+  ],
+  "all_article_bodies_read": false,
+  "read_articles": [
+    {
+      "url": "https://www.twilio.com/en-us/blog/developers/twilio-manages-mysql-clusters-scale",
+      "reading_scope": "Complete main prose through MySQL Deployments Wins, including pivot sequence and request polling stages. Diagram pixels and internal runtime were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "873988b2f511c5e6468512d4cbcdf4b8c2492b0f831a998f1a61142a2307428f",
+      "prior_selected_reading": false
+    },
+    {
+      "url": "https://www.twilio.com/en-us/blog/twilio-event-streams-webhook-sink",
+      "reading_scope": "Complete main prose through product roadmap and author paragraph. Linked CloudEvents specification and current product runtime were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "98a2d91aa7306066f1af446418cf2c1d7adae76b94bbc097735873ca91a7c6ea",
+      "prior_selected_reading": false
+    }
+  ],
+  "recommendations": [
+    {
+      "target": "infrastructure-change-safety",
+      "kind": "extend-existing",
+      "finding": "Model a database pivot as prepare, restore, catch up, validate readiness, switch primary and verify convergence. Make shard and environment progress visible, so an interrupted automation resumes from durable observed state rather than repeating the whole sequence. Validate replication lag and availability zone placement before switching.",
+      "url": "https://www.twilio.com/en-us/blog/developers/twilio-manages-mysql-clusters-scale",
+      "boundary": "This 2018 architecture account describes Twilio internal tools. It does not establish current MySQL tooling or safe failover for an unspecified deployment.",
+      "evaluations": [
+        "The catch-up step is incomplete when a pivot is requested.",
+        "A pivot succeeds but its response is lost.",
+        "One shard switches and another fails.",
+        "A stateless service configuration edit does not require database pivot stages."
+      ]
+    },
+    {
+      "target": "messaging-reliability",
+      "kind": "extend-existing",
+      "finding": "Treat webhook event arrays as independently recoverable events with identity, schema version and sink progress. Distinguish transport receipt from durable downstream effects, and preserve uncertainty when acknowledgement is lost. Bound recovery by the actual retained delivery horizon, not the historical blog promise.",
+      "url": "https://www.twilio.com/en-us/blog/twilio-event-streams-webhook-sink",
+      "boundary": "The 2021 post described a private beta with a specific retry horizon. Its product limits must be reverified in current documentation.",
+      "evaluations": [
+        "An array has one invalid event after another event commits.",
+        "Acknowledgement is lost after a durable event effect.",
+        "Redelivery arrives outside retained deduplication history.",
+        "An in-process callback stays outside messaging-reliability."
+      ]
+    }
+  ],
+  "external_evidence_namespace": "tal-skills-blog-crawl-2026-10-14",
+  "external_attempts_path": "publishers/twilio/attempts.jsonl",
+  "external_discovery_path": "publishers/twilio/discovery-events.jsonl",
+  "external_body_events_path": "publishers/twilio/body-events.jsonl",
+  "external_reading_receipts_path": "publisher-probes/crawl-agents-b/readings/receipts.json",
+  "candidate_status": "Research recommendations only, behavior was not changed and behavioral evaluations were not executed by this publisher task.",
+  "terminal_proofs": [
+    {
+      "url": "https://www.twilio.com/en-us.sitemap.xml",
+      "status": "fetched",
+      "sha256": "a077b14c9ec2d21cca3f0d199966ad11b6508605e45a47a8a25271d1821bdb16",
+      "bytes": 2023723,
+      "discovered_articles": 3749,
+      "terminal_observation": "Finite sitemap urlset parsed"
+    }
+  ],
+  "attempted_urls_meaning": "Legacy alias for processed frontier dispositions, not unique HTTP article requests. See processed_urls, http_article_attempted_urls and body_retrieved_urls.",
+  "collector_runs_path": "publishers/twilio/runs.jsonl",
+  "collector_candidates": [
+    {
+      "started_at": "2026-10-14T18:34:26.532957+00:00",
+      "collector_sha256": "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a"
+    },
+    {
+      "started_at": "2026-10-14T19:02:54.193734+00:00",
+      "collector_sha256": "cfb9c403bdc408a5ab75672739ae4b5b143dff541d8a7acfc19947f0ffbb1c30"
+    },
+    {
+      "started_at": "2026-10-14T19:12:38.721488+00:00",
+      "collector_sha256": "62f19fc622491ddcff088c1a6c345eefc416bab4b3da194f9428c134b0dcb50b"
+    },
+    {
+      "started_at": "2026-10-14T19:13:07.537544+00:00",
+      "collector_sha256": "62f19fc622491ddcff088c1a6c345eefc416bab4b3da194f9428c134b0dcb50b",
+      "runner_sha256": "0fea2c91246d9d90d48f375faaade0351207fe6e9f5a5453d25815db8cfcccbd"
+    },
+    {
+      "started_at": "2026-10-14T19:13:27.928500+00:00",
+      "collector_sha256": "62f19fc622491ddcff088c1a6c345eefc416bab4b3da194f9428c134b0dcb50b"
+    }
+  ],
+  "new_unique_selected_article_count": 2,
+  "repeat_selected_article_count": 0,
+  "scope_classification": {
+    "excluded_nonarticle_urls": 11,
+    "paths": [
+      "archive",
+      "archive/2008",
+      "archive/2009",
+      "search-results",
+      "authors",
+      "tag",
+      "insights/cx",
+      "insights/ai",
+      "insights/cloud-comms",
+      "insights/compliance",
+      "company/leadership-updates"
+    ],
+    "meaning": "These reviewed navigation pages remain in the historical frontier and append-only event ledger, and contribute no article body counts."
+  },
+  "cached_archive_boundary_repair": {
+    "report_path": "publisher-probes/crawl-agents-b/twilio-archive-repair.json",
+    "report_sha256": "6fe8c3e2d9958d2fc98612fab4f42610a48bf749acb97e07bc4b8656a14a1785",
+    "pre_correction_exports_path": "publisher-probes/crawl-agents-b/twilio-pre-correction",
+    "network_requests": 0,
+    "meaning": "Three genuine archive/year/article redirects recovered from retained primary payloads after a focused classifier correction. Bare archive/year indexes remain excluded."
+  },
+  "receipt_bindings_sha256": null
+}

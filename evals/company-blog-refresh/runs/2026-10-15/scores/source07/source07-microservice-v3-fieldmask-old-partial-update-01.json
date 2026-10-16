@@ -1,0 +1,226 @@
+{
+  "run_id": "source07-microservice-v3-fieldmask-old-partial-update-01",
+  "run_evidence_sha256": "c42288cf7fec01c225cecd2289d9b8c4e2805ed39de540d970a24c6ae5f4d08c",
+  "final_workspace_tree_sha256": "469bab6cb722c62c5b16e95707e82702391c5111644263e781bb1d434719346e",
+  "case_id": "v3-fieldmask-old-partial-update",
+  "candidate_tree_sha256": "1d09336bca338f757e89a375eb2243400ed0aeeb96b3a3de4a01eea590729c3e",
+  "rubric_sha256": "3bd2446cfbe8d8971ca807cebf33fd3a6c9dcbc9cad34c7f83b2943f3c8da353",
+  "reviewer": "independent-review-fieldmask-r01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_corpus": false,
+    "authored_response": false
+  },
+  "criteria": [
+    {
+      "id": "unknown-field-loss",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+        "locator": "lines 1 to 5",
+        "observation": "Identifies the supplied destructive omitted mask update and both default resets under this custom provider, with the new stored limit lost despite being unknown to the supported old client.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 1 to 5",
+            "quote": "**The proposed repair prevents destructive maskless updates, but immediately breaks supported v1 clients.** Requiring masks is permissible under this custom contract; imposing that requirement without an adapter or migration conflicts with the six-month support commitment.\n\nThe supplied [incident record](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/incident.json) shows a rename request without `updateMask`, followed by description becoming `\"\"` and spending limit becoming `\"0\"`. Under [contract.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/contract.json), omission selects **all mutable fields**, and selected scalars absent from the normalized message receive their defaults. The recorded outcome therefore matches the contract. This is supplied evidence, not a reproduced test.\n\nFor the repair, maintain a supported v1 route or adapter that translates explicit operation intent into a narrow mask. For the captured rename, select only `displayName`. Selecting every v1-known field would still reset the omitted description. The reset operation must communicate its intent reliably through the old client\u2019s serialization; an adapter cannot recover intent that was lost. Deploy compatibility support before enforcing masks, migrate consumers during the support window, and retire the legacy route only after the commitment and migration criteria are satisfied."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-fieldmask-old-partial-update-01.json"
+        ]
+      }
+    },
+    {
+      "id": "safe-partial-outcome",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+        "locator": "lines 9 to 29",
+        "observation": "Provides the ProtoJSON displayName only mask and resulting Summer campaign with Approved description and stored limit 25000000 preserved. Does not require unknown field echoing.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 9 to 29",
+            "quote": "ProtoJSON represents `updateMask` as a string containing paths relative to `campaign`, using lower camel case:\n\n```json\n{\n  \"campaign\": {\n    \"name\": \"campaigns/C7\",\n    \"displayName\": \"Summer\"\n  },\n  \"updateMask\": \"displayName\"\n}\n```\n\nPredicted stored resource from the original before state:\n\n```json\n{\n  \"name\": \"campaigns/C7\",\n  \"displayName\": \"Summer\",\n  \"description\": \"Approved\",\n  \"spendLimitMicros\": \"25000000\"\n}"
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-fieldmask-old-partial-update-01.json"
+        ]
+      }
+    },
+    {
+      "id": "intentional-reset",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+        "locator": "lines 34 to 57",
+        "observation": "Starts separately from the original state, selects description and gives Spring, empty description and unchanged limit 25000000. Distinguishes selected reset from unselected omission.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 34 to 57",
+            "quote": "This starts independently from the original before state:\n\n```json\n{\n  \"campaign\": {\n    \"name\": \"campaigns/C7\",\n    \"description\": \"\"\n  },\n  \"updateMask\": \"description\"\n}\n```\n\nPredicted stored resource:\n\n```json\n{\n  \"name\": \"campaigns/C7\",\n  \"displayName\": \"Spring\",\n  \"description\": \"\",\n  \"spendLimitMicros\": \"25000000\"\n}\n```\n\nHere, selection plus the default value expresses reset. Under this contract, a selected description omitted from the normalized message also resets to `\"\"`. An omitted description outside the mask is preserved."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-fieldmask-old-partial-update-01.json"
+        ]
+      }
+    },
+    {
+      "id": "consumer-coexistence",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+        "locator": "lines 1 to 5, lines 74 to 74",
+        "observation": "Rejects immediate mask enforcement as compatible with six month support and describes an intent preserving old route or adapter before enforcement and retirement. Keeps expectations specific to the documented interface.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 1 to 5",
+            "quote": "**The proposed repair prevents destructive maskless updates, but immediately breaks supported v1 clients.** Requiring masks is permissible under this custom contract; imposing that requirement without an adapter or migration conflicts with the six-month support commitment.\n\nThe supplied [incident record](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/incident.json) shows a rename request without `updateMask`, followed by description becoming `\"\"` and spending limit becoming `\"0\"`. Under [contract.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/contract.json), omission selects **all mutable fields**, and selected scalars absent from the normalized message receive their defaults. The recorded outcome therefore matches the contract. This is supplied evidence, not a reproduced test.\n\nFor the repair, maintain a supported v1 route or adapter that translates explicit operation intent into a narrow mask. For the captured rename, select only `displayName`. Selecting every v1-known field would still reset the omitted description. The reset operation must communicate its intent reliably through the old client\u2019s serialization; an adapter cannot recover intent that was lost. Deploy compatibility support before enforcing masks, migrate consumers during the support window, and retire the legacy route only after the commitment and migration criteria are satisfied."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 74 to 74",
+            "quote": "Also inspect generated-client handling of the newer response field and mask encoding; ProtoJSON alone does not establish compatibility. Empty-mask behavior is not specified in the supplied contract, so define and validate it separately rather than treating it as omission. Keep omitted-mask expectations specific to each documented interface if the repaired interface changes them."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-fieldmask-old-partial-update-01.json"
+        ]
+      }
+    },
+    {
+      "id": "validation",
+      "severity": "major",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+        "locator": "lines 59 to 74",
+        "observation": "Specifies actual generated serialization, normalized masks, persisted resource outcomes, old and new rename/reset, omission/all field effects and unknown path failure. These are explicitly proposed checks.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 59 to 74",
+            "quote": "**Compatibility checks \u2014 proposed, not executed**\n\nUse actual supported generated clients and provider versions, recording the emitted JSON, normalized request, selected paths, response/error, and persisted resource.\n\n| Check | Required outcome |\n|---|---|\n| Unmodified v1 captured rename through the compatibility route | Rename succeeds; description and spending limit remain unchanged. |\n| v1 intentional reset through its supported operation | Description clears; display name and spending limit remain unchanged. Verify reset intent survives serialization. |\n| New client masked rename and reset | Produce the two stored resources above, including when the serializer omits the default description value. |\n| New client updates `spendLimitMicros` only | Store the requested limit; preserve display name and description. Verify its supplied string representation. |\n| Payload includes values outside the mask | Preserve stored values for every unselected field. |\n| Omitted mask and explicit all-field selection | Verify the documented replacement effects. Explicit selection is `\"displayName,description,spendLimitMicros\"`; absent selected scalars reset. |\n| Unknown mask path | Reject before mutation; verify the entire stored resource remains unchanged. |\n| Supported rollout and rollback combinations | Old and new clients retain their required operations against every provider/adapter combination intended to coexist. |\n\nAlso inspect generated-client handling of the newer response field and mask encoding; ProtoJSON alone does not establish compatibility. Empty-mask behavior is not specified in the supplied contract, so define and validate it separately rather than treating it as omission. Keep omitted-mask expectations specific to each documented interface if the repaired interface changes them."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-fieldmask-old-partial-update-01.json"
+        ]
+      }
+    },
+    {
+      "id": "read-only",
+      "severity": "critical",
+      "score": 2,
+      "evidence": {
+        "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+        "locator": "lines 3 to 3, lines 76 to 76",
+        "observation": "Every fixture remains unchanged and patch is empty. Recorded tools read or discover files only, including one retained discovery command exit 1. The supplied incident and predicted states are not claimed as executed client or provider behavior.",
+        "quotes": [
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 3 to 3",
+            "quote": "The supplied [incident record](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/incident.json) shows a rename request without `updateMask`, followed by description becoming `\"\"` and spending limit becoming `\"0\"`. Under [contract.json](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/contract.json), omission selects **all mutable fields**, and selected scalars absent from the normalized message receive their defaults. The recorded outcome therefore matches the contract. This is supplied evidence, not a reproduced test."
+          },
+          {
+            "artifact": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01/evidence/answer.md",
+            "locator": "lines 76 to 76",
+            "quote": "[request.md](/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/project/request.md) and the incident explicitly leave actual generated-client/provider verification unexecuted. Compatibility remains unverified. All files were kept unchanged; no service, client, compiler, package installation, or external request was executed."
+          }
+        ],
+        "supporting_artifacts": [
+          "/tmp/tal-skills-fieldmask-independent-grading-2026-10-15-r01/packet-verifications/source07-microservice-v3-fieldmask-old-partial-update-01.json"
+        ]
+      }
+    }
+  ],
+  "score_stage": "source07-fieldmask-r01",
+  "artifact_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/grading/source07-microservice-v3-fieldmask-old-partial-update-01",
+  "trial_root": "/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01",
+  "candidate_commit": null,
+  "canonical_source_digest": "11dbdd432ab00b10bb6cdb58488cd801fb61b2503fad20a5e46335249870aa01",
+  "codex_source_digest": "7e26eb328307a0586d27ead276d751261db8d699ce1163f966f0b1133d3b6c4c",
+  "evaluation_suite": "company-blog-refresh-fieldmask",
+  "fixture_tree_sha256": "dc865d710c5701dfca2db0b9a819ea65028bd77d985bbeceaeedd909392e5671",
+  "case_prompt_sha256": "10a782648b20825886d7605e90ebba61e9e008ecd886ad56d9fc35a73830a798",
+  "freeze_sha256": "cdf4762e7c184220c8e8ed89fba493306c4a9b1c56e0e598258210f7fa2cef32",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "case_compliant": false,
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "claude_current_candidate": "unexecuted",
+  "observed_external_or_delegation_events": [],
+  "actual_service_client_compiler_install_network_execution_observed": false,
+  "actual_execution_observation": "Every recorded tool event for these reviewed packets is file discovery or reading. Proposed runtime checks remain unexecuted.",
+  "activation": {
+    "normal_discovery": true,
+    "metadata_observed": true,
+    "prefix_body_read_observation": {
+      "status": "body_read_observed",
+      "evidence_events": [
+        "item_1"
+      ],
+      "note": "Successful recorded command names the candidate entrypoint and returns its source body prefix; this is not a proof that every reference was read."
+    },
+    "complete_entrypoint_read_events": [
+      {
+        "event_id": "item_1",
+        "trace_line": 5,
+        "command": "/bin/zsh -lc 'cat /private/tmp/tal-skills-fieldmask-native-2026-10-15-r01/trials/source07-microservice-v3-fieldmask-old-partial-update-01/workspace/.agents/skills/microservice-integration/SKILL.md'",
+        "full_entrypoint_bytes_present": true,
+        "source_body_sha256": "bc236769bcb0b62faaea1cb276476ae74e41cc90961133105bc747c68b6af932"
+      }
+    ],
+    "explicit_invocation": false,
+    "note": "A complete recorded entrypoint read is separate from correctness. Absence of a recorded read does not prove hidden loading never occurred."
+  },
+  "critical_gates": {
+    "all_full_pass": true,
+    "zero_failures": true,
+    "results": [
+      {
+        "id": "unknown-field-loss",
+        "score": 2
+      },
+      {
+        "id": "safe-partial-outcome",
+        "score": 2
+      },
+      {
+        "id": "intentional-reset",
+        "score": 2
+      },
+      {
+        "id": "read-only",
+        "score": 2
+      }
+    ]
+  },
+  "rubric_result": "pass",
+  "elapsed_seconds": 62.56,
+  "tool_calls": 6,
+  "token_usage": {
+    "input_tokens": 64388,
+    "cached_input_tokens": 45952,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2557,
+    "reasoning_output_tokens": 1034
+  },
+  "runtime_acceptance": "unexecuted",
+  "quote_audit": "All criterion quotes resolve literally to the preserved answer file."
+}

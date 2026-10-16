@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "publisher_id": "risingwave",
+  "name": "RisingWave",
+  "crawler_summary_sha256": "ce466d2168fa0a0fdfc748edb44ad2fabc22099799f88c04082099a7e4771192",
+  "crawler_summary_path": "publishers/risingwave/summary.json",
+  "counters": {
+    "baseline_records": 2125,
+    "known_urls": 2125,
+    "processed_urls": 2125,
+    "http_article_attempted_urls": 2125,
+    "body_retrieved_urls": 2125,
+    "body_extracted": 2124,
+    "body_fetched_unextracted": 1,
+    "pending": 0,
+    "read_articles": 3,
+    "substantive_research_read_articles": 2,
+    "short_extraction_audit_read_articles": 1
+  },
+  "article_status_counts": {
+    "body_extracted": 2124,
+    "body_fetched_unextracted": 1
+  },
+  "excluded_collection_url_count": 0,
+  "http_attempt_semantics": "Unique collector requested URLs with kind article, including any subsequently excluded collection requests. Embedded feed bodies require no article HTTP request.",
+  "discovery_scope": "Public English article URLs under /blog/, including all sitemap-listed articles that are absent from the current dated embedded listing. Documentation, product and collection paths are excluded.",
+  "terminal_status": "publisher_exposed_discovery_terminal; all_known_frontier_urls_processed",
+  "terminal_evidence": "Both child sitemap URL sets parsed, each exposing 2,125 unique blog article paths. The complete embedded blogs array was independently parsed as 285 entries, all already present in the verified baseline. No declared next link or hidden cursor was observed in that array. The broader sitemap union remains the crawl frontier.",
+  "gaps": [
+    "Finite sitemaps and terminal listing pages establish exposed scope, not every deleted, private or unlisted historical article.",
+    "Automatic extraction is separate from deliberate reading; only the selected bodies below were read.",
+    "No source code, broker, stream engine, connector or benchmark was executed as part of this research.",
+    "1 responses were fetched but did not pass substantive body extraction. Their bytes and receipts remain archived.",
+    "The current 285 entry dated listing omits 1,840 additional sitemap URLs. Missing publication dates remain unknown; sitemap lastmod is not a publication timestamp."
+  ],
+  "read_articles": [
+    {
+      "url": "https://risingwave.com/blog/backfilling-in-risingwave-from-historical-initialization-to-continuous-streaming/",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "5349ee34d89745e22e9c70db3b5219995ed0ef6f00ec8a2fefeda31f7f3145ad",
+      "evidence_path": "messaging-b-probes/d0ccde3b32b1e97f519ceec89f4c2040ad7cde2f64af46e856e85a25ce26b578.article.html"
+    },
+    {
+      "url": "https://risingwave.com/blog/atomic-cdc-transactions-in-risingwave/",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "a6c4b0c41a34621e7e892b151148c268c04efa34bffd7737bf379fc5b13e0984",
+      "evidence_path": "messaging-b-probes/1bf8cd06391f51a3299873ff4dcd1c789d9cda985cc2dfedc234a250962c5c2c.article.html"
+    },
+    {
+      "url": "https://risingwave.com/blog/real-time-pricing-engine-streaming-sql",
+      "reading_scope": "Complete currently exposed short article body inspected during extraction audit. Linked video, repositories and documentation were not read or executed.",
+      "evidence_sha256": "42145c0e6033922848934f261b162181af64429acf6357c21c73ee54a051437b",
+      "evidence_path": "publishers/risingwave/objects/article/42/42145c0e6033922848934f261b162181af64429acf6357c21c73ee54a051437b.bin"
+    }
+  ],
+  "improvement": {
+    "owning_skills": [
+      "stream-processing-design"
+    ],
+    "mechanism": "Extend stream-processing-design with source transaction domains and resource ownership during backfill. Individually consistent sources can expose a partial multi-table transaction unless capture, progress and visible output coordinate across the transaction domain. Historical relation initialization differs from external CDC backfill. Separate backfill compute still competes for shared source, storage and compaction capacity.",
+    "reading_and_contract_limits": "Both selected bodies were read completely. The atomic CDC article contains inconsistent statements about whether barriers advance without buffered data or wait for transaction completion, so the specific implementation remains unresolved without code or deployed-version documentation. The backfill article describes default changes, deprecations, preview features and Cloud-only behavior, which are not installation or runtime guarantees.",
+    "discriminating_case": "A transaction updates order, payment and inventory tables captured through independent sources while a barrier advances between events. Require an explicit atomic visible-output domain rather than assuming per-source exactly-once proves cross-table atomicity. During snapshot backfill, isolate compute while injecting compaction pressure and a restart; verify both state recovery and the shared resource budget."
+  },
+  "discovery_receipts": [
+    {
+      "url": "https://risingwave.com/robots.txt",
+      "status": "fetched",
+      "sha256": "0e764104f9fd4c61bb4f617db5443b29e4d176fa440939e245a9f1dd2b9635e7",
+      "object_path": "publishers/risingwave/objects/source/0e/0e764104f9fd4c61bb4f617db5443b29e4d176fa440939e245a9f1dd2b9635e7.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://risingwave.com/sitemap.xml"
+      ],
+      "terminal_observation": "Robots sitemap declarations parsed"
+    },
+    {
+      "url": "https://risingwave.com/blog-sitemap.xml",
+      "status": "fetched",
+      "sha256": "ef2a30b8880f3eace7136c25ef166028d4f11196a979a8eec7304c1a2d47b0eb",
+      "object_path": "publishers/risingwave/objects/source/ef/ef2a30b8880f3eace7136c25ef166028d4f11196a979a8eec7304c1a2d47b0eb.bin",
+      "discovered_articles": 2125,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://risingwave.com/blog/",
+      "status": "fetched",
+      "sha256": "602277e42b3ac2310748791e192ce1a58091a39c3943f6ce034bf7e83b3ef395",
+      "object_path": "publishers/risingwave/objects/source/60/602277e42b3ac2310748791e192ce1a58091a39c3943f6ce034bf7e83b3ef395.bin",
+      "discovered_articles": 0,
+      "continuations": [],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://risingwave.com/sitemap-0.xml",
+      "status": "fetched",
+      "sha256": "9af649fedeed70d1de01562e59d0486f434f7628e0a66705cc00cc2b2a4d5a3b",
+      "object_path": "publishers/risingwave/objects/source/9a/9af649fedeed70d1de01562e59d0486f434f7628e0a66705cc00cc2b2a4d5a3b.bin",
+      "discovered_articles": 2125,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://risingwave.com/sitemap.xml",
+      "status": "fetched",
+      "sha256": "702429649ba45707adf4389b0d6bb441c6bb43c6cf88edd8dfa42353342af8ab",
+      "object_path": "publishers/risingwave/objects/source/70/702429649ba45707adf4389b0d6bb441c6bb43c6cf88edd8dfa42353342af8ab.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://risingwave.com/blog-sitemap.xml",
+        "https://risingwave.com/sitemap-0.xml"
+      ],
+      "terminal_observation": "Finite sitemap index parsed, all declared child sitemaps queued"
+    }
+  ],
+  "discovery_failure_receipts": [
+    {
+      "url": "https://risingwave.com/blog",
+      "status": "failed",
+      "http_status": 301,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://risingwave.com/blog/feed",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://risingwave.com/blog/rss.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://risingwave.com/sitemap-index.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    }
+  ]
+}

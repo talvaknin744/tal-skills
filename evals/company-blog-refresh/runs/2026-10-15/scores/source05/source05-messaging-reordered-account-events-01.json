@@ -1,0 +1,306 @@
+{
+  "run_id": "source05-messaging-reordered-account-events-01",
+  "run_evidence_sha256": "734471ddf438b70b1eaa04d389ca8fa2994011662d7d75ff93c23bc6f40c1e18",
+  "final_workspace_tree_sha256": "5385ab0786919595c8606c4e922dbf82785408dbe80fac4c790d21427a9b7729",
+  "case_id": "reordered-account-events",
+  "candidate_tree_sha256": "a1baf91a4be399ff0086d660739bd34f98209a28f37758cf12c93c6ba079f247",
+  "rubric_sha256": "6a39d2c81da07de17cbf8e2db60c209a9ace3d938d11ca798171978599a7c2f1",
+  "reviewer": "independent-messaging-review-01",
+  "independence": {
+    "authored_candidate": false,
+    "authored_response": false,
+    "authored_corpus": false
+  },
+  "criteria": [
+    {
+      "id": "reordering",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 15 through 15, lines 15 through 15, lines 22 through 22",
+        "observation": "The answer scopes the durable watermark to each account and the supplied immutable snapshot semantics, explains the original11/silver state and preserves12/gold after the delayed11 under the repaired contract.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 15,
+            "end": 15,
+            "quote": "Atomically apply a snapshot only when its revision exceeds the stored revision for that `account_id`."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 15,
+            "end": 15,
+            "quote": "Complete snapshots can safely skip intermediate revisions."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 22,
+            "end": 22,
+            "quote": "this contract produces **gold/revision 12, one audit for e12, and three acknowledgements**."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dedup-effect",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 16 through 16, lines 16 through 16",
+        "observation": "The proposed durable revision arbitration gates account and audit in one transaction and gives duplicate/old revisions no second effect. The saved model checks sequential duplicates and commit followed by lost acknowledgement, with the actual concurrency test gap scored separately.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 16,
+            "end": 16,
+            "quote": "A conditional upsert or row lock must arbitrate competing deliveries. Only a newly applied snapshot inserts an audit."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 16,
+            "end": 16,
+            "quote": "A separate read followed by an unconditional write is unsafe under concurrency."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          20
+        ]
+      }
+    },
+    {
+      "id": "poison-and-checks",
+      "score": 1,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 18 through 18, lines 24 through 24",
+        "observation": "Bounded malformed handling, duplicate/reordered delivery, commit-before-ACK and rollback checks have concrete local state/effect counts. The saved Python model is sequential. The proposed overlap check gives no specific contenders, controlled interleaving or expected state/audit counts for its concurrency schedule. General arbitration advice does not complete that separate check criterion.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 18,
+            "end": 18,
+            "quote": "store the original payload and failure reason in local quarantine, then acknowledge after that record commits."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "The next check should overlap duplicate and reordered deliveries at the database mutation boundary and verify atomic arbitration."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          20
+        ]
+      }
+    },
+    {
+      "id": "scope-and-evidence",
+      "score": 2,
+      "evidence": {
+        "artifact": "evidence/answer.md",
+        "locator": "lines 24 through 24, lines 26 through 26",
+        "observation": "The actual read-only Python model uses in-process dictionaries and rollback copies, not a broker or production database. The answer scopes executed results honestly. Independent inventory comparison establishes unchanged files, with no external/delegation event.",
+        "quotes": [
+          {
+            "artifact": "evidence/answer.md",
+            "start": 24,
+            "end": 24,
+            "quote": "Actual database concurrency and broker behavior remain unverified because their implementations and configuration weren’t supplied."
+          },
+          {
+            "artifact": "evidence/answer.md",
+            "start": 26,
+            "end": 26,
+            "quote": "All files remained unchanged; no external services were used."
+          }
+        ],
+        "trace_artifact": "evidence/trace.jsonl",
+        "trace_lines": [
+          20
+        ]
+      }
+    }
+  ],
+  "critical_gates": {
+    "reordering": "pass",
+    "dedup-effect": "pass",
+    "scope-and-evidence": "pass"
+  },
+  "result": {
+    "rubric_result": "partial",
+    "all_criteria_points": 7,
+    "all_criteria_maximum": 8,
+    "major_weighted_points": 2,
+    "major_weighted_maximum": 4,
+    "weighted_noncritical_percent": 50,
+    "critical_acceptance_met": true,
+    "governing_acceptance_met": false,
+    "case_compliant": false,
+    "scope": "Observed rubric and governing gates only. Capability compliance and host limits remain separate."
+  },
+  "candidate_commit": null,
+  "freeze_sha256": "1e8792c588317363bb38e1b6dca8bb1b2407a934f84e6991dfbdd41c2ba55548",
+  "runner_tree_sha256": "85207f7127f58acf2c26bae0d518a2e9d37258ab1f551cc9fa73c8aa61b41293",
+  "dependencies_tree_sha256": "4274d917d9ac66de01e9ae6abb2cf250ba2b0b3ec68a62820e488c81977a40f2",
+  "model": "gpt-6.1-sol",
+  "model_settings": {
+    "reasoning_effort": "xhigh"
+  },
+  "model_selection": "Inherited; no model or reasoning override passed.",
+  "host_version": "codex-cli 0.160.1",
+  "elapsed_seconds": 129.7,
+  "tool_calls": 8,
+  "token_usage": {
+    "input_tokens": 109630,
+    "cached_input_tokens": 86400,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 5234,
+    "reasoning_output_tokens": 1730
+  },
+  "capability_deviations": [
+    "Filesystem read access is not confined to the trial directory; withheld rubrics are not protected by a filesystem jail.",
+    "User, system and plugin skills and tools are inherited, so the candidate is not the sole available guidance.",
+    "The no-web/external-service restriction is instructed; this runner does not disable every inherited network-capable tool."
+  ],
+  "limitations": [],
+  "observed_external_or_delegation_events": [],
+  "activation_observation": {
+    "status": "body_read_observed",
+    "body_reads": 1,
+    "normal_discovery_attempts": 1,
+    "candidate_metadata_observed": true,
+    "source_reads": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "file": ".agents/skills/messaging-reliability/SKILL.md",
+        "sha256": "e0fea5dc6e57eb5bfc24aade29c1824d5802fad5b3c9cfb164229cd8b2e0bd98",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/delivery-and-recovery.md",
+        "sha256": "acb3a837bb3881d394ae56283a63ff1f42954c98d9713b8051673133916865f5",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "file": ".agents/skills/messaging-reliability/references/ordering-and-replay.md",
+        "sha256": "77c120171ae381c785a224693b1ddb1be24531ea50ecf69c98311a0e288522db",
+        "full_source_bytes_in_output": true,
+        "source_prefix_in_output": true,
+        "read_observed": true
+      }
+    ],
+    "limitation": "Observed commands resolve staged source bytes. This does not establish hidden injection or future selection."
+  },
+  "independent_audit": {
+    "sealed_evidence_verified": true,
+    "packet_equals_sealed_evidence": true,
+    "workspace_matches_unchanged_baseline": true,
+    "staged_package_matches_expected": true,
+    "candidate_metadata_realpath_matches": true,
+    "command_trace_reviewed": true,
+    "commands": [
+      {
+        "line": 5,
+        "item": "item_1",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/SKILL.md'",
+        "exit_code": 0,
+        "output_sha256": "e0fea5dc6e57eb5bfc24aade29c1824d5802fad5b3c9cfb164229cd8b2e0bd98"
+      },
+      {
+        "line": 7,
+        "item": "item_2",
+        "command": "/bin/zsh -lc \"rg --files -g 'AGENTS.md' -g 'consumer.py' -g '*history*' -g '*broker*' -g 'README*' -g '*test*' -g '*event*' project\"",
+        "exit_code": 0,
+        "output_sha256": "b27056c05925ddc38f4732c4f714dfc6667c83d0e69a5404d8c99560a245df1c"
+      },
+      {
+        "line": 9,
+        "item": "item_3",
+        "command": "/bin/zsh -lc 'cat .agents/skills/messaging-reliability/references/delivery-and-recovery.md .agents/skills/messaging-reliability/references/ordering-and-replay.md'",
+        "exit_code": 0,
+        "output_sha256": "d1146ba0b6365aaefb79d01b8ae2f6754e88805f55f33bbaad1b20b3e0025939"
+      },
+      {
+        "line": 11,
+        "item": "item_4",
+        "command": "/bin/zsh -lc 'cat project/consumer.py'",
+        "exit_code": 0,
+        "output_sha256": "148266eaf3d584a9c56fe6726c94b617b1d8367d869dd887c4f48c8cd87cd8b2"
+      },
+      {
+        "line": 13,
+        "item": "item_5",
+        "command": "/bin/zsh -lc 'rg --files -uu project'",
+        "exit_code": 0,
+        "output_sha256": "e43146076e59fe3e6e64b7a9fa3ad9f6ba54c4e10680ce6b59c45d957f1b789b"
+      },
+      {
+        "line": 15,
+        "item": "item_6",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g AGENTS.md -g '\"'!node_modules'\"' -g '\"'!vendor'\"' . /tmp/tal-skills-schema-registry-native-2026-10-15-r02/trials/source05-messaging-reordered-account-events-01 /tmp/tal-skills-schema-registry-native-2026-10-15-r02 /tmp <user-home>/.codex/skills/.system 2>/dev/null\"",
+        "exit_code": 0,
+        "output_sha256": "501718da3fd51581dfb15d48b0790093ec691b2f148cf53e8fcc675496352a97",
+        "command_sha256": "d20fa20952f497c1f533445bba619e1039e3cd79625390d0b017497beea1585d"
+      },
+      {
+        "line": 17,
+        "item": "item_7",
+        "command": "/bin/zsh -lc 'nl -ba project/request.md; nl -ba project/consumer.py'",
+        "exit_code": 0,
+        "output_sha256": "461efb1d45882b4a19e2ff43b61f87cd837e32bbdf4205c8cf2d8886907e18b8"
+      },
+      {
+        "line": 20,
+        "item": "item_9",
+        "command": "/bin/zsh -lc \"python3 -B -c '\nimport copy\nimport platform\nimport runpy\nfrom contextlib import contextmanager\n\nconsume = runpy.run_path('\\\\''project/consumer.py'\\\\'')['\\\\''consume'\\\\'']\n\nclass DB:\n    def __init__(self):\n        self.accounts = {}\n        self.audits = []\n        self.quarantine = []\n    @contextmanager\n    def transaction(self):\n        saved = copy.deepcopy((self.accounts, self.audits, self.quarantine))\n        try:\n            yield\n        except BaseException:\n            self.accounts, self.audits, self.quarantine = saved\n            raise\n    def set_account(self, key, revision, tier):\n        self.accounts[key] = {'\\\\''revision'\\\\'': revision, '\\\\''tier'\\\\'': tier}\n    def insert_audit(self, event_id):\n        self.audits.append(event_id)\n    def apply_if_newer(self, event):\n        current = self.accounts.get(event['\\\\''account_id'\\\\''])\n        if current is not None and event['\\\\''revision'\\\\''] <= current['\\\\''revision'\\\\'']:\n            return False\n        self.set_account(event['\\\\''account_id'\\\\''], event['\\\\''revision'\\\\''], event['\\\\''tier'\\\\''])\n        return True\n\nclass Delivery:\n    def __init__(self, fail=False):\n        self.fail = fail\n        self.acked = False\n    def ack(self):\n        if self.fail:\n            raise ConnectionError('\\\\''injected lost acknowledgement after commit'\\\\'')\n        self.acked = True\n\ndef proposed(event, db, delivery):\n    required = ('\\\\''event_id'\\\\'', '\\\\''account_id'\\\\'', '\\\\''revision'\\\\'', '\\\\''tier'\\\\'')\n    if not all(key in event for key in required):\n        with db.transaction():\n            db.quarantine.append(copy.deepcopy(event))\n    else:\n        with db.transaction():\n            if db.apply_if_newer(event):\n                db.insert_audit(event['\\\\''event_id'\\\\''])\n    delivery.ack()\n\ne12 = {'\\\\''event_id'\\\\'': '\\\\''e12'\\\\'', '\\\\''account_id'\\\\'': '\\\\''a'\\\\'', '\\\\''revision'\\\\'': 12, '\\\\''tier'\\\\'': '\\\\''gold'\\\\''}\ne11 = {'\\\\''event_id'\\\\'': '\\\\''e11'\\\\'', '\\\\''account_id'\\\\'': '\\\\''a'\\\\'', '\\\\''revision'\\\\'': 11, '\\\\''tier'\\\\'': '\\\\''silver'\\\\''}\nhistory = [e12, e12, e11]\nprint('\\\\''Runtime:'\\\\'', platform.python_version())\nfor label, handler in [('\\\\''supplied consumer'\\\\'', consume), ('\\\\''proposed atomic guard model'\\\\'', proposed)]:\n    db = DB()\n    deliveries = [Delivery() for _ in history]\n    for event, delivery in zip(history, deliveries):\n        handler(event, db, delivery)\n    expected = {'\\\\''revision'\\\\'': 11, '\\\\''tier'\\\\'': '\\\\''silver'\\\\''} if handler is consume else {'\\\\''revision'\\\\'': 12, '\\\\''tier'\\\\'': '\\\\''gold'\\\\''}\n    assert db.accounts['\\\\''a'\\\\''] == expected\n    assert db.audits == (['\\\\''e12'\\\\'', '\\\\''e12'\\\\'', '\\\\''e11'\\\\''] if handler is consume else ['\\\\''e12'\\\\''])\n    print(label, {'\\\\''account'\\\\'': db.accounts['\\\\''a'\\\\''], '\\\\''audits'\\\\'': db.audits, '\\\\''acknowledgements'\\\\'': sum(d.acked for d in deliveries)})\n\nfor label, handler in [('\\\\''supplied consumer'\\\\'', consume), ('\\\\''proposed atomic guard model'\\\\'', proposed)]:\n    db = DB()\n    try:\n        handler(e12, db, Delivery(fail=True))\n    except ConnectionError:\n        pass\n    assert db.accounts['\\\\''a'\\\\''] == {'\\\\''revision'\\\\'': 12, '\\\\''tier'\\\\'': '\\\\''gold'\\\\''}\n    retry = Delivery()\n    handler(e12, db, retry)\n    assert db.audits == (['\\\\''e12'\\\\'', '\\\\''e12'\\\\''] if handler is consume else ['\\\\''e12'\\\\''])\n    print(label + '\\\\'' after commit/ack failure and redelivery'\\\\'', {'\\\\''account'\\\\'': db.accounts['\\\\''a'\\\\''], '\\\\''audits'\\\\'': db.audits, '\\\\''acknowledgements'\\\\'': int(retry.acked)})\n\nmalformed = {'\\\\''event_id'\\\\'': '\\\\''bad'\\\\'', '\\\\''account_id'\\\\'': '\\\\''a'\\\\'', '\\\\''revision'\\\\'': 13}\nfor label, handler in [('\\\\''supplied consumer'\\\\'', consume), ('\\\\''proposed atomic guard model'\\\\'', proposed)]:\n    db = DB()\n    delivery = Delivery()\n    error = None\n    try:\n        handler(malformed, db, delivery)\n    except KeyError as exc:\n        error = str(exc)\n    assert not db.accounts and not db.audits\n    assert delivery.acked == (handler is proposed)\n    assert len(db.quarantine) == (1 if handler is proposed else 0)\n    print(label + '\\\\'' malformed record'\\\\'', {'\\\\''error'\\\\'': error, '\\\\''quarantine_records'\\\\'': len(db.quarantine), '\\\\''acknowledgements'\\\\'': int(delivery.acked)})\n\nclass FailingAuditDB(DB):\n    def insert_audit(self, event_id):\n        raise RuntimeError('\\\\''injected audit failure'\\\\'')\nfor label, handler in [('\\\\''supplied consumer'\\\\'', consume), ('\\\\''proposed atomic guard model'\\\\'', proposed)]:\n    db = FailingAuditDB()\n    delivery = Delivery()\n    try:\n        handler(e12, db, delivery)\n    except RuntimeError:\n        pass\n    assert not db.accounts and not db.audits and not delivery.acked\n    print(label + '\\\\'' audit failure'\\\\'', {'\\\\''accounts'\\\\'': db.accounts, '\\\\''audits'\\\\'': db.audits, '\\\\''acknowledgements'\\\\'': 0})\nprint('\\\\''Model checks passed; no broker, database, or concurrency integration was exercised.'\\\\'')\n'\"",
+        "exit_code": 0,
+        "output_sha256": "7756c790561bb9b6273bfd28eec98a7e964d31462a557d85b19250f25db40d74"
+      }
+    ],
+    "external_events": [],
+    "no_model_or_reasoning_override_observed": true,
+    "sandbox_enforcement_verified": false,
+    "filesystem_read_isolation": false,
+    "mcp_and_shell_network_isolation_verified": false
+  },
+  "score_checks": {
+    "status": "pass",
+    "entrypoint": "frozen source view company-blog-refresh.mjs",
+    "result": {
+      "rubric_result": "partial",
+      "critical_scores": [
+        {
+          "id": "reordering",
+          "score": 2
+        },
+        {
+          "id": "dedup-effect",
+          "score": 2
+        },
+        {
+          "id": "scope-and-evidence",
+          "score": 2
+        }
+      ]
+    }
+  },
+  "public_redactions": {
+    "scope": "Only personal home prefixes in derived command observations are redacted. Literal answer quotes and sealed raw trace are unchanged.",
+    "fields": [
+      "independent_audit.commands[5].command"
+    ],
+    "original_score_sha256": "95ec5d92fec8d3bfd9780be4c94d64a334ab032b2c0911c4a6659787bd922aa2",
+    "original_trace_reference": "evidence/trace.jsonl"
+  }
+}

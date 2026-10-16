@@ -37,8 +37,8 @@ test('every wired skill handoff paragraph has one standalone unavailable-sibling
     wiredSkills++;
     paragraphs += assertFallbackCoverage(body);
   }
-  assert.equal(wiredSkills, 21);
-  assert.equal(paragraphs, 26);
+  assert.equal(wiredSkills, 22);
+  assert.equal(paragraphs, 28);
 });
 
 test('coverage assertion rejects a removed fallback in any handoff paragraph', () => {

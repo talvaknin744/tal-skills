@@ -1,0 +1,243 @@
+{
+  "format_version": 1,
+  "status": "authored_inputs_only_not_trial_results",
+  "cases": [
+    {
+      "id": "data-final-serving-artifact",
+      "title": "data final serving artifact",
+      "prompt": "Review contract.md and evidence.json, inspecting the named artifact files as needed. Does the supplied evidence support publishing this data version? Explain the consumer-visible risk and the smallest targeted checks that would support the release decision. Keep this read-only and distinguish observed evidence from proposals.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "file_changes": false
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "final-output-not-input",
+          "severity": "critical",
+          "criterion": "Names catalog-41 and its final serving artifact as the release target. Identifies harbor with an empty streams array after transformation even though raw-feed harbor has a stream and schema checks pass. Does not approve on the raw input, unchanged code, readiness or HTTP200 checks."
+        },
+        {
+          "id": "consumer-outcome",
+          "severity": "critical",
+          "criterion": "Recognizes baseline playback 4 of 4 and candidate playback 2 of 4 in the valid local comparison. Explains that manifest HTTP200 can coexist with no playback start, and that the completed approve based on HTTP status contradicts the supplied outcome contract."
+        },
+        {
+          "id": "targeted-gate-proof",
+          "severity": "major",
+          "criterion": "Proposes a bounded check through browse, manifest and playback outcome on this exact artifact plus representative bad transformed data and the actual publication decision or unchanged pointer. Does not require unrelated service layers, all tests or live traffic."
+        },
+        {
+          "id": "bounded-claim",
+          "severity": "major",
+          "criterion": "Withholds approval for this candidate under the supplied contract and distinguishes this observed semantic failure from broader untested production behavior."
+        },
+        {
+          "id": "read-only-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged. Distinguishes supplied observations and proposed tests from checks actually executed. Does not invent a live experiment, command result or deployment guarantee."
+        }
+      ],
+      "fixture_dir": "evals/microservice-testing/fixtures/data-final-serving-artifact",
+      "fixtures": [
+        "contract.md",
+        "evidence.json",
+        "artifacts/raw-feed.json",
+        "artifacts/baseline.json",
+        "artifacts/candidate.json"
+      ],
+      "observed_experiments": 1,
+      "observed_journeys": 8
+    },
+    {
+      "id": "data-publish-gate-alert-only",
+      "title": "data publish gate alert only",
+      "prompt": "Review contract.md and evidence.json. Does the seeded corruption experiment establish that this publishing workflow blocks bad data? Trace the observed result through the supplied release interface and define proportionate acceptance checks. Do not edit files, implement tests or contact services.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "file_changes": false
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "alarm-not-publish-block",
+          "severity": "critical",
+          "criterion": "Identifies the completed block callback and the HTTP200 publication that changes active_catalog from catalog-40 to the deliberately bad catalog-42. Concludes that the observed workflow failed to block publication, despite the alarm and persisted callback."
+        },
+        {
+          "id": "identity-binding",
+          "severity": "major",
+          "criterion": "Binds any correction and new verification to e-seeded-bad, catalog-42 and its final artifact SHA256 rather than to the raw feed or an unrelated candidate."
+        },
+        {
+          "id": "sensitivity-and-positive-control",
+          "severity": "major",
+          "criterion": "Specifies a new controlled bad artifact run whose completed block or inconclusive result returns HTTP409 and preserves the active pointer, plus a valid exact-identity approve that can publish. An alert-only assertion, callback acknowledgment or a blanket never-publish implementation is insufficient."
+        },
+        {
+          "id": "scope-and-authority",
+          "severity": "major",
+          "criterion": "Keeps injection local and proposed, states that no external services or production deployment are authorized, and avoids an invented Netflix API or universal detection threshold."
+        },
+        {
+          "id": "read-only-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged. Distinguishes supplied observations and proposed tests from checks actually executed. Does not invent a live experiment, command result or deployment guarantee."
+        }
+      ],
+      "fixture_dir": "evals/microservice-testing/fixtures/data-publish-gate-alert-only",
+      "fixtures": [
+        "contract.md",
+        "evidence.json",
+        "artifacts/raw-feed.json",
+        "artifacts/baseline.json",
+        "artifacts/candidate.json"
+      ],
+      "observed_experiments": 1,
+      "observed_journeys": 8
+    },
+    {
+      "id": "data-comparison-invalid",
+      "title": "data comparison invalid",
+      "prompt": "Review the two comparisons in evidence.json using contract.md. What do they establish about catalog-41, which release decision is justified, and what smallest correction is needed to obtain interpretable evidence? Keep files unchanged and do not run external experiments.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "file_changes": false
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "invalid-baseline",
+          "severity": "critical",
+          "criterion": "Finds e-old-baseline unhealthy and on catalog-39 when catalog-40 is the current production baseline. Treats it as inconclusive rather than proof that catalog-41 passes or fails. Does not demand equal baseline and candidate versions."
+        },
+        {
+          "id": "cohort-and-version-invalidity",
+          "severity": "critical",
+          "criterion": "Finds candidate web tenant version catalog-40 instead of intended catalog-41 in e-mixed, with the harbor candidate journey using the old artifact and orchard changing observed arms between browse and manifest. Treats the comparison as inconclusive despite all playback booleans being true."
+        },
+        {
+          "id": "proportionate-repair",
+          "severity": "major",
+          "criterion": "Requests a healthy current baseline, intended distinct candidate version for both supplied clients and stable full-journey assignment, then a repeated bounded comparison. Keeps publishing unapproved pending interpretable evidence without diagnosing candidate corruption from the invalid comparison."
+        },
+        {
+          "id": "read-only-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged. Distinguishes supplied observations and proposed tests from checks actually executed. Does not invent a live experiment, command result or deployment guarantee."
+        }
+      ],
+      "fixture_dir": "evals/microservice-testing/fixtures/data-comparison-invalid",
+      "fixtures": [
+        "contract.md",
+        "evidence.json",
+        "artifacts/raw-feed.json",
+        "artifacts/baseline.json",
+        "artifacts/candidate.json",
+        "artifacts/older_baseline.json"
+      ],
+      "observed_experiments": 2,
+      "observed_journeys": 16
+    },
+    {
+      "id": "data-local-replay-positive-control",
+      "title": "data local replay positive control",
+      "prompt": "Review contract.md and the local evidence.json. State the narrow release validation claim these observations support, whether the known bad control and exact artifact approval are meaningful, and the remaining limits. Keep this read-only; production safety is not the requested claim.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "file_changes": false
+      },
+      "activation": "activate",
+      "task_mode": "review",
+      "rubric": [
+        {
+          "id": "bounded-positive-approval",
+          "severity": "critical",
+          "criterion": "Accepts that e-good supports the bounded local regression claim for the exact catalog-41 artifact: healthy intended distinct baseline and candidate versions, stable complete journeys and 4 of 4 starts per arm. Does not demand live production traffic or identical baseline and candidate IDs to validate this authored local contract."
+        },
+        {
+          "id": "bad-control-blocked",
+          "severity": "critical",
+          "criterion": "Uses e-control to identify 2 of 4 candidate starts, a completed block on catalog-41-seeded, HTTP409 and unchanged catalog-40 pointer. Distinguishes that demonstrated gate sensitivity from merely seeing an alarm."
+        },
+        {
+          "id": "exact-approved-artifact",
+          "severity": "critical",
+          "criterion": "Recognizes that catalog-41 publishes after its exact completed approve while unexamined catalog-42 is rejected with HTTP409 and leaves catalog-41 active. Does not transfer approval to another version or digest."
+        },
+        {
+          "id": "limits-without-invented-blockers",
+          "severity": "major",
+          "criterion": "Limits conclusions to the supplied local modeled regression and publication contract. Does not claim production confidence, real player behavior, full-suite success or statistical guarantees, and does not invent missing mandatory services in this fixture."
+        },
+        {
+          "id": "read-only-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged. Distinguishes supplied observations and proposed tests from checks actually executed. Does not invent a live experiment, command result or deployment guarantee."
+        }
+      ],
+      "fixture_dir": "evals/microservice-testing/fixtures/data-local-replay-positive-control",
+      "fixtures": [
+        "contract.md",
+        "evidence.json",
+        "artifacts/raw-feed.json",
+        "artifacts/baseline.json",
+        "artifacts/candidate.json",
+        "artifacts/seed_bad.json",
+        "artifacts/unexamined_next.json"
+      ],
+      "observed_experiments": 2,
+      "observed_journeys": 16
+    },
+    {
+      "id": "data-local-label-format-nontrigger",
+      "title": "data local label format nontrigger",
+      "prompt": "Review the single expected string in test.md. What correction does the supplied pure function require in that assertion? Explain only the local correction and keep the file unchanged.",
+      "capabilities": {
+        "web": false,
+        "subagents": false,
+        "commands": true,
+        "file_changes": false
+      },
+      "activation": "do_not_auto_activate",
+      "task_mode": "nontrigger",
+      "rubric": [
+        {
+          "id": "nontrigger",
+          "severity": "critical",
+          "criterion": "Does not automatically load microservice-testing or turn display text containing Data canary into a data release approval or distributed testing program."
+        },
+        {
+          "id": "expected-label",
+          "severity": "major",
+          "criterion": "States that the correct expected string is Data canary: 41 under the supplied pure formatting contract, keeping the function unchanged."
+        },
+        {
+          "id": "local-scope",
+          "severity": "major",
+          "criterion": "Limits the answer to the local assertion and does not invent services, artifacts, deployment checks or executed tests."
+        },
+        {
+          "id": "read-only-and-evidence",
+          "severity": "critical",
+          "criterion": "Leaves all supplied files unchanged. Distinguishes supplied observations and proposed tests from checks actually executed. Does not invent a live experiment, command result or deployment guarantee."
+        }
+      ],
+      "fixture_dir": "evals/microservice-testing/fixtures/data-local-label-format-nontrigger",
+      "fixtures": [
+        "test.md"
+      ]
+    }
+  ]
+}

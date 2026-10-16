@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "publisher_id": "databricks",
+  "research_date": "2026-10-14",
+  "crawler_summary_path": "publishers/databricks/summary.json",
+  "crawler_summary_sha256": "ce5589443a4ed1e0c7681a04cd6f67193a3410d947d42c14082a636c2971b89f",
+  "crawler_snapshot_at": "2026-10-14T18:57:54.239685+00:00",
+  "counters": {
+    "baseline_records": 3435,
+    "known_urls": 3472,
+    "attempted_urls": 3472,
+    "body_extracted": 2962,
+    "body_fetched_unextracted": 2,
+    "pending": 0,
+    "read_articles": 3,
+    "processed_urls": 3472,
+    "http_article_attempted_urls": 3472,
+    "body_retrieved_urls": 2964,
+    "excluded_nonarticle": 1,
+    "scoped_article_urls": 3471
+  },
+  "article_status_counts": {
+    "body_extracted": 2962,
+    "body_fetched_unextracted": 2,
+    "excluded_nonarticle": 1,
+    "not_found": 506,
+    "redirected_to_collection": 1
+  },
+  "discovery_scope": "Public English company blog articles under /blog/, including the current and legacy blog sitemap leaves. Other languages, careers, events and marketing pages are outside the article scope.",
+  "terminal_status": "Declared current and legacy blog sitemap leaves retrieved to terminal. Generic navigation finished, independently selected sitemap scope is complete for listed public URLs. Every known article URL has a recorded attempt.",
+  "gaps": [
+    "Listed URLs do not establish lifetime completeness for deleted, private or unlisted articles.",
+    "The initial extractor missed the article content container. Local reextraction of retained payloads recovered 2962 substantive extraction candidates without repeating HTTP requests.",
+    "Five hundred six known article URLs returned HTTP 404, and one redirected to a collection page. All receipts remain retained; complete body retrieval is not established.",
+    "Two genuine short posts remain below the automatic extraction threshold. Their complete raw payloads are retained."
+  ],
+  "all_article_bodies_read": false,
+  "read_articles": [
+    {
+      "url": "https://www.databricks.com/blog/introducing-consort-test-driven-development-branching-database",
+      "reading_scope": "Complete authored main prose through final contributor paragraph, shown workflow and examples. Images, linked project code and runtime were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "e347e62b94eb42d3ede5a3e554c2984bf3763f456127b5e834653f1bcb72ca53",
+      "prior_selected_reading": false
+    },
+    {
+      "url": "https://www.databricks.com/blog/multi-agent-supervisor-architecture-orchestrating-enterprise-ai-scale",
+      "reading_scope": "Complete authored main prose through future architecture section. Architecture diagram pixels, linked notebooks and deployed target were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "317cc3a722e61669699d6c1e5d0fc4565b6ee18657b98dc9fff6534a759127ba",
+      "prior_selected_reading": false
+    },
+    {
+      "url": "https://www.databricks.com/blog/debunking-8-data-layout-myths-why-liquid-clustering-outperforms-partitioning",
+      "reading_scope": "Complete main prose, all eight myths, customer comparisons and final setup section. Image pixels, omitted embedded code and product runtime were not verified.",
+      "transport_status": 200,
+      "evidence_sha256": "255a8c21c3b39299b1960ddfef58e2c90a98e8436729b30139d18e751a29d8bd",
+      "prior_selected_reading": false
+    }
+  ],
+  "recommendations": [
+    {
+      "target": "failure-oriented-testing",
+      "kind": "extend-existing",
+      "finding": "Add isolated real database branch experiments as an option when the risky behavior depends on native constraints, migrations or concurrency. Pair the code revision, schema migration revision and branch identity, bound destructive scope, and verify cleanup. Keep an independent oracle and retain doubles for boundaries that do not require the database.",
+      "url": "https://www.databricks.com/blog/introducing-consort-test-driven-development-branching-database",
+      "boundary": "The community project has no platform SLA. Its claim that branching removes all reasons for mocks is not adopted.",
+      "evaluations": [
+        "A migration fails on a real branch while a fake passes.",
+        "Two code branches retain isolated schemas and clean up resources.",
+        "A pure function change keeps ordinary testing without database provisioning."
+      ]
+    },
+    {
+      "target": "semantic-metrics-quality",
+      "kind": "candidate-new",
+      "finding": "Treat natural language analytics as a semantic contract: business terms, joins, curated examples, data permissions and ownership need explicit metadata. Evaluate routing separately from the correctness of the selected query and answer, including stale metadata and unavailable specialists.",
+      "url": "https://www.databricks.com/blog/multi-agent-supervisor-architecture-orchestrating-enterprise-ai-scale",
+      "boundary": "This is a customer implementation account. Its governance claims and future roadmap do not establish a general security or production guarantee.",
+      "evaluations": [
+        "A question has plausible matches in two domains.",
+        "A tool is unavailable and the answer preserves the unresolved part.",
+        "A simple API tool does not require a multiagent architecture."
+      ]
+    },
+    {
+      "target": "lakehouse-layout-performance",
+      "kind": "candidate-new",
+      "finding": "A separate storage layout capability could compare workload predicates, file statistics, file size, pruning, write amplification and maintenance cost across partitioning and clustering. Measure reads and writes together. Keep it distinct from the existing in-memory Go and Python data layout skill.",
+      "url": "https://www.databricks.com/blog/debunking-8-data-layout-myths-why-liquid-clustering-outperforms-partitioning",
+      "boundary": "The article is vendor authored. Benchmark gains and product maturity are workload and version specific.",
+      "evaluations": [
+        "A date-only partition design performs poorly on identifier lookups.",
+        "Read improvement increases maintenance cost beyond the agreed budget.",
+        "An in-memory false sharing request stays with data-layout-performance."
+      ]
+    }
+  ],
+  "external_evidence_namespace": "tal-skills-blog-crawl-2026-10-14",
+  "external_attempts_path": "publishers/databricks/attempts.jsonl",
+  "external_discovery_path": "publishers/databricks/discovery-events.jsonl",
+  "external_body_events_path": "publishers/databricks/body-events.jsonl",
+  "external_reading_receipts_path": "publisher-probes/crawl-agents-b/readings/receipts.json",
+  "candidate_status": "Research recommendations only, behavior was not changed and behavioral evaluations were not executed by this publisher task.",
+  "terminal_proofs": [
+    {
+      "url": "https://www.databricks.com/blog-legacy-assets/sitemap/sitemap-0.xml",
+      "status": "fetched",
+      "sha256": "024a69eec5bee64300e4f550a5f3c3b144eda6954f9590196b8fca3628468aa7",
+      "bytes": 331071,
+      "discovered_articles": 1880,
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://www.databricks.com/en-blog-assets/sitemap/sitemap-0.xml",
+      "status": "fetched",
+      "sha256": "132a066fe3eb91e9e8c9a41647eb41846f1841b614928c9adf80b50a3d5d2f69",
+      "bytes": 611504,
+      "discovered_articles": 1589,
+      "terminal_observation": "Finite sitemap urlset parsed"
+    }
+  ],
+  "attempted_urls_meaning": "Legacy alias for processed frontier dispositions, not unique HTTP article requests. See processed_urls, http_article_attempted_urls and body_retrieved_urls.",
+  "collector_runs_path": "publishers/databricks/runs.jsonl",
+  "collector_candidates": [
+    {
+      "started_at": "2026-10-14T18:34:26.534867+00:00",
+      "collector_sha256": "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a"
+    },
+    {
+      "started_at": "2026-10-14T18:46:55.391862+00:00",
+      "collector_sha256": "0c096ee6dc4564f33fd8b66d3bc7e0df1ab5e71dceec9ba2641adf7e788a1698"
+    },
+    {
+      "started_at": "2026-10-14T18:56:45.620748+00:00",
+      "collector_sha256": "15448913fe76432a8357f78c061c6a64c35a71facb66d17df2aed1eea569980d"
+    },
+    {
+      "started_at": "2026-10-14T18:57:53.830014+00:00",
+      "collector_sha256": "cbd83b3683af54c32eb13911ec1cacbd71f5e57959851d29b4cc2da006540278"
+    }
+  ],
+  "new_unique_selected_article_count": 3,
+  "repeat_selected_article_count": 0,
+  "receipt_bindings_sha256": null,
+  "scope_classification": {
+    "excluded_nonarticle_urls": 1,
+    "paths": [
+      "/blog/archive/2013"
+    ],
+    "meaning": "Archive navigation is preserved in an excluded_nonarticle disposition and does not count as a body."
+  }
+}

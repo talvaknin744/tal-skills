@@ -1,0 +1,14 @@
+{
+  "trial_id": "refund-001",
+  "candidate": {"agent_source": "refund-agent-v7", "model": "fixture-model-1", "harness": "refund-harness-v2", "fixture": "eligible-order-v1", "tools": "refund-tools-v1", "grader": "phrase-grader-v1"},
+  "initial_state": {"customer_id": "C72", "order_id": "O72", "balance_usd": 100, "refunds": [], "ticket_id": "T72", "ticket_status": "open"},
+  "events": [
+    {"tool": "verify_identity", "arguments": {"customer_id": "C72"}, "response": {"verified": true}},
+    {"tool": "fetch_order", "arguments": {"customer_id": "C72", "order_id": "O72"}, "response": {"eligible": true, "maximum_refund_usd": 40}},
+    {"tool": "process_refund", "arguments": {"customer_id": "C72", "order_id": "O72", "amount_usd": 40}, "response": {"status": "processed", "refund_id": "R72"}},
+    {"tool": "close_ticket", "arguments": {"ticket_id": "T72"}, "response": {"status": "resolved"}}
+  ],
+  "final_response": "I refunded 40 USD for O72 and resolved ticket T72.",
+  "metrics": {"elapsed_seconds": 12, "tool_calls": 4, "input_tokens": 1200, "output_tokens": 150, "cost_usd": 0.01},
+  "grader_output": {"phrase_match": true, "overall_pass": true}
+}

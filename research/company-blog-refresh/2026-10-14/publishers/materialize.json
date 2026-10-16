@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "publisher_id": "materialize",
+  "name": "Materialize",
+  "crawler_summary_sha256": "1e61fcc5f562cdf2854a83795731497dd4e1db38f53a1fc40738cf1f24247bbd",
+  "crawler_summary_path": "publishers/materialize/summary.json",
+  "counters": {
+    "baseline_records": 180,
+    "known_urls": 181,
+    "processed_urls": 181,
+    "http_article_attempted_urls": 20,
+    "body_retrieved_urls": 161,
+    "body_extracted": 161,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 3,
+    "substantive_research_read_articles": 3,
+    "short_extraction_audit_read_articles": 0
+  },
+  "article_status_counts": {
+    "body_extracted": 161,
+    "redirected_to_collection": 20
+  },
+  "excluded_collection_url_count": 3,
+  "http_attempt_semantics": "Unique collector requested URLs with kind article, including any subsequently excluded collection requests. Embedded feed bodies require no article HTTP request.",
+  "discovery_scope": "Public English article URLs under /blog/. Numeric archive pages, documentation, product and resource paths are excluded. Verified historical URLs are retained even when the current site redirects them to the archive.",
+  "terminal_status": "publisher_exposed_discovery_terminal; all_known_frontier_urls_processed; historical_redirect_body_gaps",
+  "terminal_evidence": "The finite sitemap and complete exposed RSS feed parsed. Current HTML pagination reaches /blog/21 with no next page. Historical /blog/22 and /blog/23 now return 404. This establishes the exposed archive; archived historical URLs remain part of the recovery frontier.",
+  "gaps": [
+    "Finite sitemaps and terminal listing pages establish exposed scope, not every deleted, private or unlisted historical article.",
+    "Automatic extraction is separate from deliberate reading; only the selected bodies below were read.",
+    "No source code, broker, stream engine, connector or benchmark was executed as part of this research.",
+    "Twenty verified historical article URLs now redirect to /blog/ and provide no article body. They remain explicit access gaps, with their redirect receipts preserved."
+  ],
+  "read_articles": [
+    {
+      "url": "https://materialize.com/blog/transaction-processing-in-the-data-plane/",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "4c3a79c8b47fda9d5a8e8f6ec56deffc6af1d6b151f696a6faa6f0cf7dc2caa2",
+      "evidence_path": "messaging-b-probes/b4706de5ac0ffb8417a3a9933a02ad1f5cad2e1f47dd1ae46dc4bdb6f19098ce.article.html"
+    },
+    {
+      "url": "https://materialize.com/blog/replica-expiration/",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "e872e54b4692baed19b5fe960d97035ed8e6ebb943fcf282e6cedac80e54fcb1",
+      "evidence_path": "messaging-b-probes/2cc289939f4c23309c4ccabdf0d8fdfe58bfea5468bd42a0cac0e2d8f51de857.article.html"
+    },
+    {
+      "url": "https://materialize.com/blog/building-a-linearizable-log-on-read-committed",
+      "reading_scope": "Complete substantive article body, examples and limitations; no code execution.",
+      "evidence_sha256": "ae2cf81cf9b116a35ebfc350d5fef8bfda5d4d17424217836f2433eaf2ccb37f",
+      "evidence_path": "publishers/materialize/objects/embedded/ae/ae2cf81cf9b116a35ebfc350d5fef8bfda5d4d17424217836f2433eaf2ccb37f.bin"
+    }
+  ],
+  "improvement": {
+    "owning_skills": [
+      "stream-processing-design",
+      "database-performance",
+      "concurrency-correctness",
+      "infrastructure-change-safety"
+    ],
+    "mechanism": "Extend stream-processing-design retained-state analysis to count future additions and retractions, not only visible rows. A replica expiration optimization may discard future work only when the system prevents that work from becoming definite before a scheduled rebuild. Extend database-performance cleanup review to validate NULL semantics, stable delete keys, maintained indexes and total completed goodput including maintenance. The newest log design also shows that final protocol correctness does not establish correctness during mixed old and new client or isolation mode rollouts. Coordinate predecessor locking against truncation, initialization identity, client fencing and staged isolation switches under the actual storage invariant.",
+    "reading_and_contract_limits": "The replica expiration article, complete transaction processing article including its correction appendix, and newly discovered linearizable log article including rollout and results were read. Their code and reported benchmarks were not executed. The transaction design is explicitly educational. The newest log article reports a Lean 4 proof and database benchmark, neither independently executed here. Its product rollout flag defaults off and applies after upgrading and fencing old clients, as described for version 26.33 or later; it is not a general instruction to lower isolation. Replica expiration depends on supported object types, wall-clock mapping and scheduled restarts; its article excludes self-managed deployments. The transaction appendix corrects earlier whole-row NULL deletion and performance accounting mistakes.",
+    "discriminating_case": "Use a temporal result with a far-future retraction and restart beyond its proposed retention horizon; require proof that omitted updates cannot become visible before rebuild. Separately, clean up transaction rows containing NULL values, and require stable identity deletion plus an independently expected retained-state result. A lower visible row count or stage rate alone is insufficient."
+  },
+  "discovery_receipts": [
+    {
+      "url": "https://materialize.com/robots.txt",
+      "status": "fetched",
+      "sha256": "76e6b31af676ac699a399a5f511c6291bdc5e4900fccaa4f4360a49bf2ede66f",
+      "object_path": "publishers/materialize/objects/source/76/76e6b31af676ac699a399a5f511c6291bdc5e4900fccaa4f4360a49bf2ede66f.bin",
+      "discovered_articles": 0,
+      "continuations": [
+        "https://materialize.com/docs/sitemap.xml",
+        "https://materialize.com/sitemap.xml"
+      ],
+      "terminal_observation": "Robots sitemap declarations parsed"
+    },
+    {
+      "url": "https://materialize.com/blog/",
+      "status": "fetched",
+      "sha256": "80d09984200fda125ec581a9dcbff13b8ed6876a239f02eda52e7e86a45e96a1",
+      "object_path": "publishers/materialize/objects/source/80/80d09984200fda125ec581a9dcbff13b8ed6876a239f02eda52e7e86a45e96a1.bin",
+      "discovered_articles": 11,
+      "continuations": [
+        "https://materialize.com/blog/2/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/10/",
+      "status": "fetched",
+      "sha256": "d7b16a6255a14482f85f37872b89a55c1236fbae4b5485effb3579d441caf6b0",
+      "object_path": "publishers/materialize/objects/source/d7/d7b16a6255a14482f85f37872b89a55c1236fbae4b5485effb3579d441caf6b0.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/11/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/11/",
+      "status": "fetched",
+      "sha256": "8dd0f907ae993d7bfb78c8ba1418a8b774f05701655fa7c29416d103aa88b89a",
+      "object_path": "publishers/materialize/objects/source/8d/8dd0f907ae993d7bfb78c8ba1418a8b774f05701655fa7c29416d103aa88b89a.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/12/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/12/",
+      "status": "fetched",
+      "sha256": "dd2ac32d5144a38301cdc8dc895f8e3ff940c25ab2ebe8873952e5bc26acb49c",
+      "object_path": "publishers/materialize/objects/source/dd/dd2ac32d5144a38301cdc8dc895f8e3ff940c25ab2ebe8873952e5bc26acb49c.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/13/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/13/",
+      "status": "fetched",
+      "sha256": "6981325a10bbb775548aa99921dd64abb86e37444565deb6c62849fc4692423e",
+      "object_path": "publishers/materialize/objects/source/69/6981325a10bbb775548aa99921dd64abb86e37444565deb6c62849fc4692423e.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/14/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/14/",
+      "status": "fetched",
+      "sha256": "c2b067dc8b5c8882a4c7b84d49295e87367420775fb27cbf31171a8d5d8c8d79",
+      "object_path": "publishers/materialize/objects/source/c2/c2b067dc8b5c8882a4c7b84d49295e87367420775fb27cbf31171a8d5d8c8d79.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/15/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/15/",
+      "status": "fetched",
+      "sha256": "c07eddc3055c1465054bcfc5e1643127690b11db5f78ca8d7eeaed91862ed0b3",
+      "object_path": "publishers/materialize/objects/source/c0/c07eddc3055c1465054bcfc5e1643127690b11db5f78ca8d7eeaed91862ed0b3.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/16/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/16/",
+      "status": "fetched",
+      "sha256": "ec68bf6a03c675e429f9f362b8cb0eadfcd54a8ded93b5e44c403f68052c8cb4",
+      "object_path": "publishers/materialize/objects/source/ec/ec68bf6a03c675e429f9f362b8cb0eadfcd54a8ded93b5e44c403f68052c8cb4.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/17/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/17/",
+      "status": "fetched",
+      "sha256": "55f2173028ea6c9d720ee67bcb363100890bb59fa4fe7964061b4a88adfe33ac",
+      "object_path": "publishers/materialize/objects/source/55/55f2173028ea6c9d720ee67bcb363100890bb59fa4fe7964061b4a88adfe33ac.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/18/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/18/",
+      "status": "fetched",
+      "sha256": "dc77849b589952b72ead7a9bd016e4a822f0134193ab9d87603deb3145b288e6",
+      "object_path": "publishers/materialize/objects/source/dc/dc77849b589952b72ead7a9bd016e4a822f0134193ab9d87603deb3145b288e6.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/19/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/19/",
+      "status": "fetched",
+      "sha256": "86c159bcb355d2dd2ea5691bb3bfcae826570adc089315f9e087b52cf80a05c6",
+      "object_path": "publishers/materialize/objects/source/86/86c159bcb355d2dd2ea5691bb3bfcae826570adc089315f9e087b52cf80a05c6.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/20/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/20/",
+      "status": "fetched",
+      "sha256": "a9cf7a36133fdb363dcd732794d14347985169366748e7d1125d7e95369136ae",
+      "object_path": "publishers/materialize/objects/source/a9/a9cf7a36133fdb363dcd732794d14347985169366748e7d1125d7e95369136ae.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/21/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/4/",
+      "status": "fetched",
+      "sha256": "858607158935e06d6cd6614b9f8839aea03d460269fdd679dbd07eae18ccc498",
+      "object_path": "publishers/materialize/objects/source/85/858607158935e06d6cd6614b9f8839aea03d460269fdd679dbd07eae18ccc498.bin",
+      "discovered_articles": 11,
+      "continuations": [
+        "https://materialize.com/blog/5/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/5/",
+      "status": "fetched",
+      "sha256": "ee8095cb6df9119a6220a7ff3aae8a481f81aa446a553e5ec81e98095f1158a1",
+      "object_path": "publishers/materialize/objects/source/ee/ee8095cb6df9119a6220a7ff3aae8a481f81aa446a553e5ec81e98095f1158a1.bin",
+      "discovered_articles": 10,
+      "continuations": [
+        "https://materialize.com/blog/6/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/6/",
+      "status": "fetched",
+      "sha256": "b393fda36824a6e03dc56d0895d6f6e0900be863f2df2a7cb2640361840c3453",
+      "object_path": "publishers/materialize/objects/source/b3/b393fda36824a6e03dc56d0895d6f6e0900be863f2df2a7cb2640361840c3453.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/7/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/7/",
+      "status": "fetched",
+      "sha256": "ca9484cacfaea392b155096aacd356900b09b476d4febdd0a8d5b0d0c267107e",
+      "object_path": "publishers/materialize/objects/source/ca/ca9484cacfaea392b155096aacd356900b09b476d4febdd0a8d5b0d0c267107e.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/8/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/8/",
+      "status": "fetched",
+      "sha256": "05d2fc033d892ba99e53bf1d5bca16d547b7295b58b18c9b6becf04a10c6f406",
+      "object_path": "publishers/materialize/objects/source/05/05d2fc033d892ba99e53bf1d5bca16d547b7295b58b18c9b6becf04a10c6f406.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/9/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/9/",
+      "status": "fetched",
+      "sha256": "2c639c19bcaaaebf7a5e6814788618f35a840bae65b2fe9ad72ddb45f7ba1519",
+      "object_path": "publishers/materialize/objects/source/2c/2c639c19bcaaaebf7a5e6814788618f35a840bae65b2fe9ad72ddb45f7ba1519.bin",
+      "discovered_articles": 9,
+      "continuations": [
+        "https://materialize.com/blog/10/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/rss.xml",
+      "status": "fetched",
+      "sha256": "9b9dd5e372828aad76e3b9b73de786c58af4a0071a9da7a4b5bf38d6bf4470e3",
+      "object_path": "publishers/materialize/objects/source/9b/9b9dd5e372828aad76e3b9b73de786c58af4a0071a9da7a4b5bf38d6bf4470e3.bin",
+      "discovered_articles": 161,
+      "continuations": [],
+      "terminal_observation": "Feed parsed, retained next links; finite recent feed does not establish historical completeness"
+    },
+    {
+      "url": "https://materialize.com/sitemap.xml",
+      "status": "fetched",
+      "sha256": "2120dced4d4c0313154c36a32bd9a0103e842e7f076565521c106750be288bde",
+      "object_path": "publishers/materialize/objects/source/21/2120dced4d4c0313154c36a32bd9a0103e842e7f076565521c106750be288bde.bin",
+      "discovered_articles": 162,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://materialize.com/docs/sitemap.xml",
+      "status": "fetched",
+      "sha256": "0e4e2417a6d37b881d415450d8505fb6e3d02eff412598b9faeb1ba9fb1f1d9e",
+      "object_path": "publishers/materialize/objects/source/0e/0e4e2417a6d37b881d415450d8505fb6e3d02eff412598b9faeb1ba9fb1f1d9e.bin",
+      "discovered_articles": 0,
+      "continuations": [],
+      "terminal_observation": "Finite sitemap urlset parsed"
+    },
+    {
+      "url": "https://materialize.com/blog/2/",
+      "status": "fetched",
+      "sha256": "a87bf00b223849266984e80c5adc41352a67215bdea5fdc03644cd235112a623",
+      "object_path": "publishers/materialize/objects/source/a8/a87bf00b223849266984e80c5adc41352a67215bdea5fdc03644cd235112a623.bin",
+      "discovered_articles": 11,
+      "continuations": [
+        "https://materialize.com/blog/3/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/21/",
+      "status": "fetched",
+      "sha256": "24d0e0991a60d8531181fbbbc5af0b06dc5c7d0f8557ad7aadde7e0fa1bce525",
+      "object_path": "publishers/materialize/objects/source/24/24d0e0991a60d8531181fbbbc5af0b06dc5c7d0f8557ad7aadde7e0fa1bce525.bin",
+      "discovered_articles": 2,
+      "continuations": [
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    },
+    {
+      "url": "https://materialize.com/blog/3/",
+      "status": "fetched",
+      "sha256": "dd9391f05d758f1a6e930ae47a1d6ad2ed10176814e985557520ff7f8cf54178",
+      "object_path": "publishers/materialize/objects/source/dd/dd9391f05d758f1a6e930ae47a1d6ad2ed10176814e985557520ff7f8cf54178.bin",
+      "discovered_articles": 11,
+      "continuations": [
+        "https://materialize.com/blog/4/",
+        "https://materialize.com/rss.xml"
+      ],
+      "terminal_observation": "No declared continuation found, independent pagination review remains required"
+    }
+  ],
+  "discovery_failure_receipts": [
+    {
+      "url": "https://materialize.com/blog",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/10",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/11",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/12",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/13",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/14",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/15",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/16",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/17",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/18",
+      "status": "failed",
+      "http_status": 302,
+      "error": "Redirect limit reached"
+    },
+    {
+      "url": "https://materialize.com/blog/22/",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://materialize.com/blog/23/",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://materialize.com/blog/feed",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://materialize.com/blog/rss.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    },
+    {
+      "url": "https://materialize.com/sitemap-index.xml",
+      "status": "not_found",
+      "http_status": 404,
+      "error": null
+    }
+  ]
+}

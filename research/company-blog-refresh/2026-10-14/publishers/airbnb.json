@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "publisher_id": "airbnb",
+  "observed_on": "2026-10-14",
+  "crawler_summary_path": "publishers/airbnb/summary.json",
+  "crawler_summary_sha256": "8cf63803769995b0fc550868cdbd57da98eb041768142d6583d75fadfdfa7ce9",
+  "counters": {
+    "baseline_records": 71,
+    "known_urls": 121,
+    "processed_urls": 121,
+    "body_extracted": 58,
+    "body_fetched_unextracted": 0,
+    "pending": 0,
+    "read_articles": 2,
+    "http_article_attempted_urls": 53,
+    "body_retrieved_urls": 58,
+    "policy_deferred_urls": 58
+  },
+  "article_status_counts": {
+    "blocked": 5,
+    "body_extracted": 58,
+    "host_blocked_deferred": 58
+  },
+  "crawler_runs_sha256": "9e6f320a4fc06bc91891ab13f16bad97bedc3d510226a5bdfa5bf8e37e2d562a",
+  "crawler_candidate_sha256s": [
+    "7ec85e221895a569e4578d56df924d4cc832eb368f7882044ac70c7427966792",
+    "a72b07a4ccced73b27bac0e162aae45cb3297a844dfd4118c4371990dc57dd0a",
+    "f4f1eec47776d2c19c209b94ae88932f966d66ac92664d6689cbe1ed516cef03"
+  ],
+  "discovery_scope": "Current airbnb.tech public posts plus the preserved Medium publication URL frontier and current publication feed. The current site and the legacy publication remain separate archive boundaries.",
+  "terminal_status": "Current airbnb.tech posts API reports 48 posts and one page. Its blog HTML contains the same 48 permalinks. Page 2 returns HTTP 400 with rest_post_invalid_page_number. The legacy Medium feed does not provide a historical terminal.",
+  "gaps": [
+    "Ten Medium publication feed entries expose full content, imported from the already fetched public RSS bytes. This recovers those bodies without proving older feed or archive completeness.",
+    "Legacy Medium lifetime history remains unenumerated. A recent publication feed and a union with the earlier 71 URL inventory do not prove historical archive exhaustion.",
+    "The current site contains 48 public posts. This does not establish that every historical Medium post was migrated. Mirrored Medium and current site URLs are distinct transport URLs and are not asserted to be distinct intellectual articles.",
+    "Current sitemap requests redirect to unavailable wp-sitemap.xml. Current post enumeration is independently bounded by API totals and terminal pagination.",
+    "Initial current site body attempts hit the collector redirect normalization bug. Failed attempts are retained."
+  ],
+  "read_articles": [
+    {
+      "url": "https://airbnb.tech/infrastructure/safeguarding-dynamic-configuration-changes-at-scale/",
+      "reading_scope": "Complete main prose from modern config platform essentials through conclusions and acknowledgements. Architecture image was not separately visually inspected.",
+      "retrieval_source": "web tool",
+      "diagrams_visually_inspected": false
+    },
+    {
+      "url": "https://airbnb.tech/infrastructure/beyond-synthetic-testing-capturing-and-replaying-real-database-workloads-at-airbnb/",
+      "reading_scope": "Complete main prose from introduction through conclusion and acknowledgements, including Log Processor, replay timing and upgrade limitations. Diagrams were not separately visually inspected.",
+      "retrieval_source": "web tool",
+      "diagrams_visually_inspected": false
+    }
+  ],
+  "all_article_bodies_read": false,
+  "sources": [
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-index.json",
+      "receipt_sha256": "a437e15ba0369d6e236fbee336bcf6642ec3d3dab5a8f024071e21e8751e60b5",
+      "url": "https://airbnb.tech/blog/",
+      "http_status": 200,
+      "response_sha256": "fb79eba11339926f92f4c86dc6252bdb8d6e5d75936f12cab037afc164e80dac"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-api.json",
+      "receipt_sha256": "04fbcd190cae253c214b0495d2484afcc60806c3aafacc86fe3adbfa107cf52c",
+      "url": "https://airbnb.tech/wp-json/wp/v2/posts?per_page=100&page=1&_fields=id,date,link,title,categories",
+      "http_status": 200,
+      "response_sha256": "567e868c5d4ae8fd8808e6b054fe8fcddd0a0b44db2ef004afbb1d96a4c35c40"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-terminal.json",
+      "receipt_sha256": "ec1587315db91b114d9e46afffda5407ed02c785b15e218f05c717131527cb78",
+      "url": "https://airbnb.tech/wp-json/wp/v2/posts?per_page=100&page=2&_fields=id,date,link,title,categories",
+      "http_status": 400,
+      "response_sha256": "b6714928c361e00376c3eda08eef1f4fcc3343bd71d9be2bde61ca1eee190c26"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-types.json",
+      "receipt_sha256": "a2688582ce0a73edf89ea9935003407a0ed6821f5d23ed2055fd4608bd7277c6",
+      "url": "https://airbnb.tech/wp-json/wp/v2/types",
+      "http_status": 200,
+      "response_sha256": "9a14d6fa78b1b9d4ff98a4f50b573c564f56aa11033eb380090916c5dc8e153c"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-robots.json",
+      "receipt_sha256": "25803bae8bbea245ea7dcebc8dc8f27eb107ea5c32e100a1e147530166e5addd",
+      "url": "https://airbnb.tech/robots.txt",
+      "http_status": 200,
+      "response_sha256": "9311bab30d8b5d05f5fa5563a251b8c96b8470873bb77c62d3d17c146d7acab7"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-sitemap.json",
+      "receipt_sha256": "ce60617cd0f8a39f4dbb367f0e3e4a598ca563957700b008c6fee31f7eb8f367",
+      "url": "https://airbnb.tech/wp-sitemap.xml",
+      "http_status": 404,
+      "response_sha256": "d8c71977add2c2be6646439a4916b5c9b6355d34ab093b6ffe180e5217be8682"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-tech-sitemapindex.json",
+      "receipt_sha256": "6d02ffd003c3c4a6b0640d04cad7d4c2f4890cf9fb0e5da332c86eb87f61625c",
+      "url": "https://airbnb.tech/sitemap.xml",
+      "http_status": 404,
+      "response_sha256": "66d59893ba52f25a394ba97a4b9e839629cfc84aa53129469ba5ceddf497f9da"
+    },
+    {
+      "receipt_path": "backend-b-discovery/airbnb-feed.json",
+      "receipt_sha256": "bcfd6b31ea149383029f3cd02cd31d40a6edce684765d50a2acbef88922d46ae",
+      "url": "https://medium.com/feed/airbnb-engineering",
+      "http_status": 200,
+      "response_sha256": "bf81ac5286781242b53608bdb5a5a4573160570b407729282a3b04698d8bea9f"
+    },
+    {
+      "receipt_path": "backend-b-discovery/medium-robots.json",
+      "receipt_sha256": "c5c4dab7ffe332ba76e5fb6d23bbdc04c3e570246f15bdf4d2874ffa6faefced",
+      "url": "https://medium.com/robots.txt",
+      "http_status": 200,
+      "response_sha256": "fe87c9fc79edeba118b4f5184b2472913f4057172783cf4bd4dae7c997c16e74"
+    }
+  ],
+  "recommendations": [
+    "Add production database traffic replay guidance to load-testing and database-performance.",
+    "Extend configuration distribution with emergency change version and audit checks."
+  ],
+  "behavioral_evaluation_status": "Proposed cases only. No revised skill candidate was authored or evaluated by this publisher research task."
+}

@@ -93,6 +93,11 @@ they do not establish guarantees for a different system.
 
 - [Research ledger](engineering-toolkit/README.md): the 60-publisher survey, book access, selected readings, and adoption decisions.
 - [October archive review](engineering-toolkit/2026-10-01/README.md): 58,178 metadata URLs, 29 selected article-body readings, terminal collection evidence, and explicit historical/access gaps. Metadata enumeration is separate from article reading.
+- [October 14 company blog refresh](company-blog-refresh/2026-10-14/README.md): resumed discovery and body collection, deliberate reading scopes, source backed opportunities and separately evaluated instruction changes. Historical records remain unchanged.
+- [Additional retrieval continuation](company-blog-refresh/2026-10-14/continuations/r01/README.md): publisher feeds, original page data, public content APIs and primary reader transcripts, with independent gap reconciliation in progress.
+- [Current continuation index](company-blog-refresh/2026-10-14/continuations/README.md): the latest verified availability composition, implemented skill additions, independent behavior reviews and remaining research or crawl gaps.
+- [Final refresh report](company-blog-refresh/2026-10-14/continuations/r55/final-repository-report.md): one new skill, six existing skill extensions, 59,196 available bodies or source fields and 4,091 known gaps, with exact candidate and evaluation limits.
+- [Archive12 retention closure](company-blog-refresh/2026-10-14/continuations/r56/archive12-retention-closure.md): 27,825 independently verified archive members, exact final namespace evidence and an additive publication epilogue, with lifetime and host gaps preserved.
 - [Performance research](performance-capacity/README.md): measurement, capacity, overload, database work, and conditional Go/Python data-layout experiments.
 - [Temporal story review](../docs/temporal/README.md): all 70 customer-index entries, with written-story and talk-summary scope distinguished.
 - [Runnable examples](../examples/README.md): TypeScript, Python, and Go backend contracts plus messaging, cache races, worker handoffs, recovery, protocols, and retry coordination.
